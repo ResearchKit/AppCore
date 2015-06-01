@@ -34,7 +34,10 @@
 
 #import "APCOnboardingManager.h"
 #import "APCPermissionsManager.h"
+#import "APCUserInfoConstants.h"
 #import "APCLog.h"
+
+#import <HealthKit/HealthKit.h>
 
 
 NSString * const kAPCOnboardingStoryboardName = @"APCOnboarding";
@@ -47,6 +50,8 @@ NSString * const kAPCOnboardingStoryboardName = @"APCOnboarding";
 @property (strong, nonatomic, readwrite) APCUser *user;
 
 @property (strong, nonatomic, readwrite) APCPermissionsManager *permissionsManager;
+
+@property (copy, nonatomic, readwrite) NSArray *userProfileElements;
 
 @end
 
@@ -125,7 +130,47 @@ NSString * const kAPCOnboardingStoryboardName = @"APCOnboarding";
 }
 
 - (APCPermissionsManager *)createPermissionsManager {
-    return [APCPermissionsManager new];
+    APCPermissionsManager *manager = [APCPermissionsManager new];
+    
+    // set HealthKit characteristic types to read
+    NSMutableArray *types = [NSMutableArray arrayWithCapacity:3];
+    for (NSNumber *type in self.userProfileElements) {
+        switch (type.integerValue) {
+            case kAPCUserInfoItemTypeBiologicalSex:
+                [types addObject:HKCharacteristicTypeIdentifierBiologicalSex];
+                break;
+            case kAPCUserInfoItemTypeDateOfBirth:
+                [types addObject:HKCharacteristicTypeIdentifierDateOfBirth];
+                break;
+            case kAPCUserInfoItemTypeBloodType:
+                [types addObject:HKCharacteristicTypeIdentifierBloodType];
+                break;
+        }
+    }
+    manager.healthKitCharacteristicTypesToRead = types;
+    
+    return manager;
+}
+
+
+#pragma mark - User Profile
+
+- (NSArray *)userProfileElements {
+    if (!_userProfileElements) {
+        self.userProfileElements = [self createUserProfileElements];
+    }
+    return _userProfileElements;
+}
+
+- (NSArray *)createUserProfileElements {
+    return @[
+        @(kAPCUserInfoItemTypeEmail),
+        @(kAPCUserInfoItemTypeBiologicalSex),
+        @(kAPCUserInfoItemTypeHeight),
+        @(kAPCUserInfoItemTypeWeight),
+        @(kAPCUserInfoItemTypeWakeUpTime),
+        @(kAPCUserInfoItemTypeSleepTime),
+    ];
 }
 
 

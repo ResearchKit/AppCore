@@ -178,29 +178,11 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             NSMutableArray *dataTypesToRead = [NSMutableArray new];
             
             // Add Characteristic types
-            NSDictionary *initialOptions = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).initializationOptions;
-            NSArray *profileElementsList = initialOptions[kAppProfileElementsListKey];
-            
-            for (NSNumber *profileType in profileElementsList) {
-                APCUserInfoItemType type = profileType.integerValue;
-                switch (type) {
-                    case kAPCUserInfoItemTypeBiologicalSex:
-                        [dataTypesToRead addObject:[HKCharacteristicType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierBiologicalSex]];
-                        break;
-                    case kAPCUserInfoItemTypeDateOfBirth:
-                        [dataTypesToRead addObject:[HKCharacteristicType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierDateOfBirth]];
-                        break;
-                    case kAPCUserInfoItemTypeBloodType:
-                        [dataTypesToRead addObject:[HKCharacteristicType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierBloodType]];
-                        break;
-                        
-                    default:
-                        break;
-                }
+            for (NSString *typeIdentifier in _healthKitCharacteristicTypesToRead) {
+                [dataTypesToRead addObject:[HKCharacteristicType characteristicTypeForIdentifier:typeIdentifier]];
             }
             
             //Add other quantity types
-            
             for (id typeIdentifier in _healthKitTypesToRead) {
                 if ([typeIdentifier isKindOfClass:[NSString class]]) {
                     [dataTypesToRead addObject:[HKQuantityType quantityTypeForIdentifier:typeIdentifier]];

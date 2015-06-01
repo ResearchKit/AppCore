@@ -38,8 +38,6 @@
 #import "APCOnboardingManager.h"
 #import "APCLog.h"
 
-#import "APCAppDelegate.h"
-
 #import "UIColor+APCAppearance.h"
 #import "NSDate+Helper.h"
 #import "NSString+Helper.h"
@@ -186,9 +184,7 @@ static CGFloat kHeaderHeight = 157.0f;
 }
 
 - (NSArray *)prepareContent {
-    
-    NSDictionary *initialOptions = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).initializationOptions;
-    NSArray *profileElementsList = initialOptions[kAppProfileElementsListKey];
+    NSArray *profileElementsList = [self onboardingManager].userProfileElements;
     
     NSMutableArray *items = [NSMutableArray new];
     NSMutableArray *rowItems = [NSMutableArray new];
@@ -275,9 +271,12 @@ static CGFloat kHeaderHeight = 157.0f;
     return [NSArray arrayWithArray:items];
 }
 
-- (APCOnboarding *)onboarding
-{
-    return [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager].onboarding;
+- (APCOnboardingManager *)onboardingManager {
+    return [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager];
+}
+
+- (APCOnboarding *)onboarding {
+    return [self onboardingManager].onboarding;
 }
 
 #pragma mark - UITextFieldDelegate methods

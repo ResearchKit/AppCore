@@ -87,7 +87,7 @@ FOUNDATION_EXPORT NSString *const kHKWritePermissionsKey;
 FOUNDATION_EXPORT NSString *const kHKReadPermissionsKey;
 FOUNDATION_EXPORT NSString *const kAppServicesListRequiredKey      DEPRECATED_MSG_ATTRIBUTE("Assign APCPermissionManager.requiredServiceTypes from within APCOnboardingManager.createPermissionsManager()");
 FOUNDATION_EXPORT NSString *const kAppServicesDescriptionsKey      DEPRECATED_MSG_ATTRIBUTE("Use APCPermissionManager.permissionDescriptionForType()");
-FOUNDATION_EXPORT NSString *const kAppProfileElementsListKey;
+FOUNDATION_EXPORT NSString *const kAppProfileElementsListKey       DEPRECATED_MSG_ATTRIBUTE("Use APCOnboardingManager.userProfileElements");
 FOUNDATION_EXPORT NSString *const kVideoURLKey;
 FOUNDATION_EXPORT NSString *const kTaskReminderStartupDefaultOnOffKey;
 FOUNDATION_EXPORT NSString *const kTaskReminderStartupDefaultTimeKey;

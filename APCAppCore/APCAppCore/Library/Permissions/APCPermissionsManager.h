@@ -46,6 +46,9 @@ typedef NS_ENUM(NSUInteger, APCPermissionStatus) {
 
 @property (copy, nonatomic) NSArray *requiredServiceTypes;
 
+/// Array of HKCharacteristicTypeIdentifierXy strings to request read access to.
+@property (copy, nonatomic) NSArray *healthKitCharacteristicTypesToRead;
+
 @property (copy, nonatomic) NSArray *healthKitTypesToRead;
 
 @property (copy, nonatomic) NSArray *healthKitTypesToWrite;

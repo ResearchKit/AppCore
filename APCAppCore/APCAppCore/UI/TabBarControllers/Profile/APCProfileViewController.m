@@ -45,12 +45,12 @@
 #import "APCTableViewItem.h"
 #import "APCAppDelegate.h"
 #import "APCTasksReminderManager.h"
+#import "APCOnboardingManager.h"
 #import "APCUserInfoConstants.h"
 #import "APCDataSubstrate.h"
 #import "APCConstants.h"
 #import "APCUtilities.h"
 #import "APCUser.h"
-#import "APCTasksReminderManager.h"
 #import "APCLog.h"
 
 #ifndef APC_HAVE_CONSENT
@@ -404,8 +404,8 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
 - (NSArray *)prepareContent
 {
-    NSDictionary *initialOptions = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).initializationOptions;
-    NSArray *profileElementsList = initialOptions[kAppProfileElementsListKey];
+    APCOnboardingManager *manager = [(id<APCOnboardingManagerProvider>)[[UIApplication sharedApplication] delegate] onboardingManager];
+    NSArray *profileElementsList = manager.userProfileElements;
     
     NSMutableArray *items = [NSMutableArray new];
     

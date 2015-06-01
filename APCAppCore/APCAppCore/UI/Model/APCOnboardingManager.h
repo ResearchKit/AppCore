@@ -82,6 +82,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// The permissions manager defining and requesting needed permissions.
 @property (strong, nonatomic, readonly) APCPermissionsManager *permissionsManager;
 
+/// Array of `kAPCUserInfoItemType` as NSNumber to specify which profile elements about a user should be collected.
+@property (copy, nonatomic, readonly) NSArray *userProfileElements;
+
 /// Whether a sign-in action, to resume a study previously enrolled in, is supported. Defaults to YES.
 @property (nonatomic, getter=isSignInSupported) BOOL signInSupported;
 
@@ -92,8 +95,23 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)instantiateOnboardingForType:(APCOnboardingTaskType)type;
 
-/** Subclasses can override to provide their own permissions manager. */
+
+#pragma mark Subclass Override Points
+
+/**
+ *  Subclasses can override to provide their own permissions manager. Default implementation creates an APCPermissionsManager and sets that
+ *  instance's `userProfileElements` to match the types specified in `userProfileElements`.
+ */
 - (APCPermissionsManager *)createPermissionsManager;
+
+/**
+ *  Subclasses can override to specify their own user profile elements. Default implementation creates an array with Email, BiologicalSex,
+ *  Height, Weight, UpTime and SleepTime.
+ */
+- (NSArray *)createUserProfileElements;
+
+
+#pragma mark Onboarding
 
 /** Called when the user has agreed to and completed all consenting steps. */
 - (void)userDidConsentWithResult:(ORKConsentSignatureResult *)consentResult sharingScope:(APCUserConsentSharingScope)sharingScope;
