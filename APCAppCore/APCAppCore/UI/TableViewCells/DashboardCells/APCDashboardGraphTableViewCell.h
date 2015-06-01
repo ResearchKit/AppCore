@@ -36,6 +36,7 @@
 
 @class APCLineGraphView;
 @class APCDiscreteGraphView;
+@class APCNormalDistributionGraphView;
 
 FOUNDATION_EXPORT NSString * const kAPCDashboardGraphTableViewCellIdentifier;
 
