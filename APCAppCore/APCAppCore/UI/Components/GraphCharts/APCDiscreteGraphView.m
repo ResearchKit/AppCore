@@ -361,7 +361,10 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
         
         if ([self.datasource respondsToSelector:@selector(discreteGraph:plot:valueForPointAtIndex:)]) {
             APCRangePoint *value = [self.datasource discreteGraph:self plot:plotIndex valueForPointAtIndex:i];
-            [self.dataPoints addObject:value];
+            
+            if (value) {
+                [self.dataPoints addObject:value];
+            }
             
             if (!value.isEmpty){
                 self.hasDataPoint = YES;
@@ -506,7 +509,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     [self.referenceLines removeAllObjects];
     
     UIBezierPath *referenceLinePath = [UIBezierPath bezierPath];
-    [referenceLinePath moveToPoint:CGPointMake(kAPCGraphLeftPadding, kAPCGraphTopPadding + CGRectGetHeight(self.plotsView.frame)/2)];
+    [referenceLinePath moveToPoint:CGPointMake(0, kAPCGraphTopPadding + CGRectGetHeight(self.plotsView.frame)/2)];
     [referenceLinePath addLineToPoint:CGPointMake(CGRectGetWidth(self.frame), kAPCGraphTopPadding + CGRectGetHeight(self.plotsView.frame)/2)];
     
     CAShapeLayer *referenceLineLayer = [CAShapeLayer layer];
@@ -565,7 +568,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
             
             {
                 APCCircleView *point = [[APCCircleView alloc] initWithFrame:CGRectMake(0, 0, pointSize, pointSize)];
-                point.tintColor = (plotIndex == 0) ? self.tintColor : self.referenceLineColor;
+                point.tintColor = (plotIndex == 0) ? self.tintColor : self.secondaryTintColor;
                 point.center = CGPointMake(positionOnXAxis, positionOnYAxis.minimumValue);
                 [self.plotsView.layer addSublayer:point.layer];
                 
@@ -580,7 +583,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
                 
                 CGFloat pointSize = self.isLandscapeMode ? 10.0f : 8.0f;
                 APCCircleView *point = [[APCCircleView alloc] initWithFrame:CGRectMake(0, 0, pointSize, pointSize)];
-                point.tintColor = (plotIndex == 0) ? self.tintColor : self.referenceLineColor;
+                point.tintColor = (plotIndex == 0) ? self.tintColor : self.secondaryTintColor;
                 point.center = CGPointMake(positionOnXAxis, positionOnYAxis.maximumValue);
                 [self.plotsView.layer addSublayer:point.layer];
                 
@@ -620,7 +623,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
             CAShapeLayer *plotLineLayer = [CAShapeLayer layer];
             plotLineLayer.path = plotLinePath.CGPath;
             plotLineLayer.fillColor = [UIColor clearColor].CGColor;
-            plotLineLayer.strokeColor = (plotIndex == 0) ? self.tintColor.CGColor : self.referenceLineColor.CGColor;
+            plotLineLayer.strokeColor = (plotIndex == 0) ? self.tintColor.CGColor : self.secondaryTintColor.CGColor;
             plotLineLayer.lineJoin = kCALineJoinRound;
             plotLineLayer.lineCap = kCALineCapRound;
             plotLineLayer.lineWidth = self.isLandscapeMode ? 10.0 : 8.0;

@@ -54,6 +54,8 @@
 
 @property (nonatomic, strong) UIColor *tintColor;
 
+@property (nonatomic, strong) UIColor *secondaryTintColor;
+
 @property (nonatomic, strong) UIColor *axisColor;
 
 @property (nonatomic, strong) UIColor *axisTitleColor;

@@ -32,6 +32,7 @@
 // 
  
 #import "APCBaseGraphView.h"
+#import "UIColor+APCAppearance.h"
 
 @implementation APCBaseGraphView
 
@@ -59,7 +60,8 @@
     _axisTitleColor = [UIColor colorWithRed:142/255.f green:142/255.f blue:147/255.f alpha:1.f];
     _axisTitleFont = [UIFont fontWithName:@"HelveticaNeue" size:11.0f];
     
-    _referenceLineColor = [UIColor colorWithRed:225/255.f green:225/255.f blue:229/255.f alpha:1.f];
+    _referenceLineColor = [UIColor colorWithRed:225/255.f green:225/255.f blue:225/255.f alpha:1.f];
+    _secondaryTintColor = [UIColor appTertiaryBlueColor];
     
     _scrubberLineColor = [UIColor grayColor];
     _scrubberThumbColor = [UIColor colorWithWhite:1 alpha:1.0];

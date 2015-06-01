@@ -33,6 +33,7 @@
  
 #import "APCTableViewItem.h"
 #import "UIColor+APCAppearance.h"
+#import "UIFont+APCAppearance.h"
 
 @implementation APCTableViewItem
 
@@ -154,6 +155,37 @@
 
 @implementation APCTableViewDashboardGraphItem
 
++(NSAttributedString *)legendForSeries1:(NSString *) series1 series2:(NSString *)series2
+{
+    
+    NSAssert(series1 != nil, @"Pass a valid series 1 name");
+    
+    UIFont *font = [UIFont appLightFontWithSize:14.0f];
+    UIColor *blue = [UIColor appTertiaryBlueColor];
+    UIColor *orange = [UIColor appTertiaryYellowColor];
+    UIColor *darkGray = [UIColor darkGrayColor];
+    
+    NSAttributedString *indexOf = [[NSAttributedString alloc]initWithString:NSLocalizedString(@"Index of", nil) attributes:@{NSFontAttributeName : font, NSForegroundColorAttributeName : darkGray }];
+    NSAttributedString *s1 = [[NSMutableAttributedString alloc]initWithString:series1 attributes:@{NSFontAttributeName : font, NSForegroundColorAttributeName : orange, NSUnderlineStyleAttributeName : @1 }];
+    NSAttributedString *space = [[NSAttributedString alloc]initWithString:@" "];
+    NSAttributedString *versus = [[NSAttributedString alloc]initWithString:NSLocalizedString(@"vs", nil) attributes:@{NSFontAttributeName : font, NSForegroundColorAttributeName : darkGray }];
+    
+    NSMutableAttributedString *legend = [[NSMutableAttributedString alloc]initWithAttributedString:indexOf];
+    [legend appendAttributedString:space];
+    [legend appendAttributedString:s1];
+    [legend appendAttributedString:space];
+    [legend appendAttributedString:versus];
+    [legend appendAttributedString:space];
+    
+    if (series2) {
+        NSAttributedString *s2 = [[NSMutableAttributedString alloc]initWithString:series2 attributes:@{NSFontAttributeName : font, NSForegroundColorAttributeName : blue, NSUnderlineStyleAttributeName : @1 }];
+        
+        [legend appendAttributedString:s2];
+    }
+    
+    return legend;
+    
+}
 @end
 
 @implementation APCTableViewDashboardMessageItem
