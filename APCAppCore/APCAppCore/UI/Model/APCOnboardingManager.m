@@ -187,7 +187,7 @@ NSString * const kAPCOnboardingStoryboardName = @"APCOnboarding";
 }
 
 - (NSInteger)numberOfServicesInPermissionsListForOnboardingTask:(APCOnboardingTask *)__unused task {
-    return [_provider numberOfServicesInPermissionsList];
+    return [self.permissionsManager.requiredServiceTypes count];
 }
 
 @end

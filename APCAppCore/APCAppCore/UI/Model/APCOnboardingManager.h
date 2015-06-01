@@ -50,9 +50,6 @@ NS_ASSUME_NONNULL_BEGIN
 /** The onboarding manager for the app. */
 - (APCOnboardingManager *)onboardingManager;
 
-/** TODO: Refactor after initializationOptions refactoring. */
-- (NSInteger)numberOfServicesInPermissionsList;
-
 @optional
 /**
  *  Kept for backwards compatibility: return the inclusion criteria scene.

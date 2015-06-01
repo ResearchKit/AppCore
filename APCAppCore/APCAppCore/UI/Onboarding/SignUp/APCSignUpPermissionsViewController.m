@@ -125,10 +125,9 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
     NSMutableArray *items = [NSMutableArray new];
     
     NSDictionary *initialOptions = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).initializationOptions;
-    NSArray *servicesArray = initialOptions[kAppServicesListRequiredKey];
     NSDictionary *servicesDescrtiptions = initialOptions[kAppServicesDescriptionsKey];
     
-    for (NSNumber *type in servicesArray) {
+    for (NSNumber *type in _permissionsManager.requiredServiceTypes) {
         
         APCSignUpPermissionsType permissionType = type.integerValue;
         
