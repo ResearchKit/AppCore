@@ -170,6 +170,10 @@
 		5B4574CC1ABFD07A00601DCC /* License_ZipZap.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5B4574C91ABFD07A00601DCC /* License_ZipZap.txt */; };
 		5B5523AA1AC915140068B51D /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B5523A91AC915140068B51D /* Social.framework */; };
 		5B73CAF21A8B3B8C00FFE79C /* APCDashboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5B73CAF11A8B3B8C00FFE79C /* APCDashboard.storyboard */; };
+		5B7D471C1B0549FA00958921 /* APCCubicCurveAlgorithm.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B7D47181B0549FA00958921 /* APCCubicCurveAlgorithm.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5B7D471D1B0549FA00958921 /* APCCubicCurveAlgorithm.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B7D47191B0549FA00958921 /* APCCubicCurveAlgorithm.m */; };
+		5B7D471E1B0549FA00958921 /* APCNormalDistributionGraphView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B7D471A1B0549FA00958921 /* APCNormalDistributionGraphView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5B7D471F1B0549FA00958921 /* APCNormalDistributionGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B7D471B1B0549FA00958921 /* APCNormalDistributionGraphView.m */; };
 		5B7EA0231A44C21200924DEE /* APCFormTextField.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B7EA0211A44C21200924DEE /* APCFormTextField.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B7EA0241A44C21200924DEE /* APCFormTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B7EA0221A44C21200924DEE /* APCFormTextField.m */; };
 		5B827B4C1A80A39900C685A3 /* APCDashboardMoreInfoViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B827B4A1A80A39900C685A3 /* APCDashboardMoreInfoViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -862,6 +866,10 @@
 		5B4574C91ABFD07A00601DCC /* License_ZipZap.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = License_ZipZap.txt; sourceTree = "<group>"; };
 		5B5523A91AC915140068B51D /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		5B73CAF11A8B3B8C00FFE79C /* APCDashboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = APCDashboard.storyboard; sourceTree = "<group>"; };
+		5B7D47181B0549FA00958921 /* APCCubicCurveAlgorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCCubicCurveAlgorithm.h; sourceTree = "<group>"; };
+		5B7D47191B0549FA00958921 /* APCCubicCurveAlgorithm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCCubicCurveAlgorithm.m; sourceTree = "<group>"; };
+		5B7D471A1B0549FA00958921 /* APCNormalDistributionGraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCNormalDistributionGraphView.h; sourceTree = "<group>"; };
+		5B7D471B1B0549FA00958921 /* APCNormalDistributionGraphView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCNormalDistributionGraphView.m; sourceTree = "<group>"; };
 		5B7EA0211A44C21200924DEE /* APCFormTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCFormTextField.h; sourceTree = "<group>"; };
 		5B7EA0221A44C21200924DEE /* APCFormTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCFormTextField.m; sourceTree = "<group>"; };
 		5B827B4A1A80A39900C685A3 /* APCDashboardMoreInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDashboardMoreInfoViewController.h; sourceTree = "<group>"; };
@@ -2530,6 +2538,10 @@
 		F5F1292F1A2F78490015982C /* GraphCharts */ = {
 			isa = PBXGroup;
 			children = (
+				5B7D47181B0549FA00958921 /* APCCubicCurveAlgorithm.h */,
+				5B7D47191B0549FA00958921 /* APCCubicCurveAlgorithm.m */,
+				5B7D471A1B0549FA00958921 /* APCNormalDistributionGraphView.h */,
+				5B7D471B1B0549FA00958921 /* APCNormalDistributionGraphView.m */,
 				F5F129341A2F78490015982C /* APCGraph.h */,
 				5BD6EBB31A9C77D900C3BFB0 /* APCBaseGraphView.h */,
 				5BD6EBB41A9C77D900C3BFB0 /* APCBaseGraphView.m */,
@@ -3107,6 +3119,7 @@
 				F5B947D31A73272C0034C522 /* UIScrollView+Helper.h in Headers */,
 				F5F12A811A2F78490015982C /* APCPresentAnimator.h in Headers */,
 				F5B9462B1A7309A20034C522 /* ZZConstants.h in Headers */,
+				5B7D471C1B0549FA00958921 /* APCCubicCurveAlgorithm.h in Headers */,
 				F5B9480A1A73272C0034C522 /* APCScheduleExpressionToken.h in Headers */,
 				F5F12AD01A2F78490015982C /* APCWithdrawSurveyViewController.h in Headers */,
 				368BAFE91A9AD91A00F04ABB /* APCMedTrackerDailyDosageRecord.h in Headers */,
@@ -3182,6 +3195,7 @@
 				089465521A8C211100A983AC /* APCInsights.h in Headers */,
 				F5B947ED1A73272C0034C522 /* APCParameters+Settings.h in Headers */,
 				712AB44E1A9E692400556DA2 /* APCMotionHistoryReporter.h in Headers */,
+				5B7D471E1B0549FA00958921 /* APCNormalDistributionGraphView.h in Headers */,
 				CFFDED701A95731F00B25581 /* APCMedicationTrackerCalendarViewController.h in Headers */,
 				369E28081A96B7A200D35DFA /* APCMedTrackerMedication+Helper.h in Headers */,
 				F5F12A021A2F78490015982C /* APCScheduledTask.h in Headers */,
@@ -3477,6 +3491,7 @@
 				F5F12AFE1A2F78490015982C /* APCIntroductionViewController.m in Sources */,
 				F5F12ADD1A2F78490015982C /* APCSegmentedTableViewCell.m in Sources */,
 				F50738C11A682E12004CF100 /* APCDateRange.m in Sources */,
+				5B7D471D1B0549FA00958921 /* APCCubicCurveAlgorithm.m in Sources */,
 				369B47561A853E8500777639 /* APCUtilities.m in Sources */,
 				089465461A8C179700A983AC /* APCDashboardInsightsTableViewCell.m in Sources */,
 				CFFDEDE71A95734000B25581 /* APCMedicationColorViewController.m in Sources */,
@@ -3587,6 +3602,7 @@
 				7BF54F981AA158E50081C935 /* APCHorizontalBottomThinLineView.m in Sources */,
 				369E27FB1A96B7A200D35DFA /* APCMedicationUltraSimpleSelfInflator.m in Sources */,
 				F5F12ABB1A2F78490015982C /* APCActivitiesViewController.m in Sources */,
+				5B7D471F1B0549FA00958921 /* APCNormalDistributionGraphView.m in Sources */,
 				5BB10C141A91F970002D2DD2 /* APCWebViewController.m in Sources */,
 				F5B948011A73272C0034C522 /* APCDayOfMonthSelector.m in Sources */,
 				F5F12AC41A2F78490015982C /* APCLearnMasterViewController.m in Sources */,

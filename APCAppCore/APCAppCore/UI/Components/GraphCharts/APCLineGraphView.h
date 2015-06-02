@@ -44,6 +44,10 @@ FOUNDATION_EXPORT NSString * const kAPCLineGraphViewRefreshNotification;
 
 @property (nonatomic, weak) IBOutlet id <APCLineGraphViewDataSource> datasource;
 
+@property (nonatomic, strong) UIView *plotsView;
+@property (nonatomic) BOOL smoothLines;
+@property (nonatomic) BOOL showsFillPath;
+
 @end
 
 @protocol APCLineGraphViewDataSource <NSObject>
