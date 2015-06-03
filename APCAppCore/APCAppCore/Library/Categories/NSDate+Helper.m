@@ -32,12 +32,21 @@
 // 
  
 #import "NSDate+Helper.h"
+#import "NSDateComponents+Helper.h"
 
-NSString * const NSDateDefaultDateFormat            = @"MMM dd, yyyy";
+
+NSString * const NSDateDefaultDateFormat = @"MMM dd, yyyy";
 
 
 /**
- Sage requires our dates to be in "ISO-8601" format,
+ For formatting dates we send to the server, and
+ interpreting inbound date strings.
+ */
+static NSString * const kAPCDateFormatLocaleEN_US_POSIX = @"en_US_POSIX";
+
+
+/**
+ Sage requires our dates to be in "ISO 8601" format,
  like this:
 
  2015-02-25T16:42:11+00:00
@@ -47,9 +56,44 @@ NSString * const NSDateDefaultDateFormat            = @"MMM dd, yyyy";
  */
 static NSString * const kDateFormatISO8601 = @"yyyy-MM-dd'T'HH:mm:ssZZZZZ";
 
+/**
+ The possible ways we might receive an ISO8601 date.
+ Filled in during +initialize.
+ */
+static NSArray * kAPCDateFormatISO8601InputOptions = nil;
+
+
+
+/**
+ Makes some of the method calls below more explicit.
+ */
+typedef enum : NSUInteger {
+    APCDateDirectionForwards,
+    APCDateDirectionBackwards,
+}   APCDateDirection;
+
 
 
 @implementation NSDate (Helper)
+
++ (void) initialize
+{
+    /*
+     For more options, see http://www.unicode.org/reports/tr35/tr35-31/tr35-dates.html#Date_Format_Patterns
+     */
+    kAPCDateFormatISO8601InputOptions = @[@"yyyy-MM-dd",
+                                          @"yyyy-MM-dd'T'HH:mm",
+                                          @"yyyy-MM-dd'T'HH:mmZZZZZ",
+                                          @"yyyy-MM-dd'T'HH:mm:ssZZZZZ",
+                                          @"yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ",
+                                          ];
+}
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Strings and Printouts
+// ---------------------------------------------------------
 
 - (NSString *) toStringWithFormat:(NSString *)format {
     if (!format) {
@@ -128,11 +172,42 @@ static NSString * const kDateFormatISO8601 = @"yyyy-MM-dd'T'HH:mm:ssZZZZZ";
      locale ("en_US_POSIX"), instead of the simpler "en-US",
      see:  http://blog.gregfiumara.com/archives/245
      */
-    [formatter setLocale: [[NSLocale alloc] initWithLocaleIdentifier: @"en_US_POSIX"]];
+    [formatter setLocale: [[NSLocale alloc] initWithLocaleIdentifier: kAPCDateFormatLocaleEN_US_POSIX]];
 
     NSString *result = [formatter stringFromDate: self];
     return result;
 }
+
++ (NSDate *) dateWithISO8601String: (NSString *) iso8601string
+{
+    NSDate *result = nil;
+
+    if (iso8601string.length)
+    {
+        NSDateFormatter *formatter = [NSDateFormatter new];
+        [formatter setLocale: [[NSLocale alloc] initWithLocaleIdentifier: kAPCDateFormatLocaleEN_US_POSIX]];
+
+        for (NSUInteger formatIndex = 0; formatIndex < kAPCDateFormatISO8601InputOptions.count; formatIndex ++)
+        {
+            NSString *dateFormat = kAPCDateFormatISO8601InputOptions [formatIndex];
+            [formatter setDateFormat: dateFormat];
+            result = [formatter dateFromString: iso8601string];
+
+            if (result)
+            {
+                break;
+            }
+        }
+    }
+
+    return result;
+}
+
+
+
+// ---------------------------------------------------------
+#pragma mark - General (Uncategorized) utility functions and "properties"
+// ---------------------------------------------------------
 
 + (NSUInteger)ageFromDateOfBirth:(NSDate *)dateOfBirth
 {
@@ -172,6 +247,16 @@ static NSString * const kDateFormatISO8601 = @"yyyy-MM-dd'T'HH:mm:ssZZZZZ";
     components.minute = 59;
     components.second = 59;
     return [cal dateFromComponents:components];
+}
+
+- (instancetype) dayBefore
+{
+    return [self dateByAddingDays: -1];
+}
+
+- (instancetype) dayAfter
+{
+    return [self dateByAddingDays: 1];
 }
 
 + (instancetype) startOfTomorrow: (NSDate*) date
@@ -259,60 +344,223 @@ static NSString * const kDateFormatISO8601 = @"yyyy-MM-dd'T'HH:mm:ssZZZZZ";
     return result;
 }
 
-+ (NSTimeInterval) parseISO8601DurationString: (NSString*) duration {
-    
-    float i = 0, years = 0, months = 0, weeks = 0, days = 0, hours = 0, minutes = 0, seconds = 0;
-    BOOL timeStarted = NO;
-    
-    while(i < duration.length)
-    {
-        NSString *str = [duration substringWithRange:NSMakeRange(i, duration.length-i)];
-        
-        i++;
-        
-        if([str hasPrefix:@"P"]) continue;
-        
-        if ([str hasPrefix:@"T"]) {
-            timeStarted = YES;
-            continue;
-        }
-        
-        
-        NSScanner *sc = [NSScanner scannerWithString:str];
-        float value = 0;
-        
-        if ([sc scanFloat:&value])
-        {
-            i += [sc scanLocation]-1;
-            
-            str = [duration substringWithRange:NSMakeRange(i, duration.length-i)];
-            
-            i++;
-            
-            if([str hasPrefix:@"Y"])
-                years = value;
-            else if([str hasPrefix:@"M"] && !timeStarted)
-                months = value;
-            else if([str hasPrefix:@"W"])
-                weeks = value;
-            else if([str hasPrefix:@"D"])
-                days = value;
-            else if([str hasPrefix:@"H"])
-                hours = value;
-            else if([str hasPrefix:@"M"] && timeStarted)
-                minutes = value;
-            else if([str hasPrefix:@"S"])
-                seconds = value;
-        }
-    }
-    
-//    NSLog(@"%@", [NSString stringWithFormat:@"%0.2f years, %0.2f months, %0.2f weeks, %0.2f days, %0.2f hours, %0.2f mins, %0.2f seconds", years, months, weeks, days, hours, minutes, seconds]);
-    NSTimeInterval interval = 0;
-    interval = years * 365 + months * 30 + weeks * 7 + days; //Days
-    interval = (interval * 24) + hours; //Hours
-    interval = (interval * 60) + minutes; //Minutes
-    interval = (interval * 60) + seconds; //Seconds
-    return interval;
+- (BOOL) isSameDayAsDate: (NSDate *) otherDate
+{
+    BOOL result = ([self isLaterThanOrEqualToDate: otherDate.startOfDay] &&
+                   [self isEarlierOrEqualToDate: otherDate.endOfDay]);
+
+    return result;
 }
 
+
+
+// ---------------------------------------------------------
+#pragma mark - ISO 8601 conversion
+// ---------------------------------------------------------
+
++ (NSTimeInterval) timeIntervalByAddingISO8601Duration: (NSString *) duration
+                                                toDate: (NSDate *) startDate
+                                        addInDirection: (APCDateDirection) dateDirection
+{
+    float characterIndex = 0, years = 0, months = 0, weeks = 0, days = 0, hours = 0, minutes = 0, seconds = 0;
+    BOOL timeStarted = NO;
+    
+    while (characterIndex < duration.length)
+    {
+        NSString *substring = [duration substringWithRange: NSMakeRange (characterIndex, duration.length - characterIndex)];
+
+        characterIndex++;
+        
+        if ([substring hasPrefix: @"P"])
+        {
+            // Expected prefix to everything.  Keep going.
+        }
+        
+        else if ([substring hasPrefix: @"T"])
+        {
+            timeStarted = YES;
+        }
+
+        else
+        {
+            NSScanner *scanner = [NSScanner scannerWithString: substring];
+            float value = 0;
+
+            if ([scanner scanFloat: & value])
+            {
+                characterIndex  += [scanner scanLocation] - 1;
+                substring        = [duration substringWithRange: NSMakeRange (characterIndex, duration.length - characterIndex)];
+                characterIndex  ++;
+
+                if      ([substring hasPrefix: @"Y"])                  { years   = value; }
+                else if ([substring hasPrefix: @"M"] && ! timeStarted) { months  = value; }
+                else if ([substring hasPrefix: @"W"])                  { weeks   = value; }
+                else if ([substring hasPrefix: @"D"])                  { days    = value; }
+                else if ([substring hasPrefix: @"H"])                  { hours   = value; }
+                else if ([substring hasPrefix: @"M"] && timeStarted)   { minutes = value; }
+                else if ([substring hasPrefix: @"S"])                  { seconds = value; }
+
+                else
+                {
+                    // TODO:  handle this.
+                }
+            }
+            else
+            {
+                // TODO:  handle this.
+            }
+        }
+    }
+
+    if (dateDirection == APCDateDirectionForwards)
+    {
+        // Actually, that's the default.
+    }
+    else
+    {
+        seconds = - seconds;
+        minutes = - minutes;
+        hours   = - hours;
+        days    = - days;
+        weeks   = - weeks;
+        months  = - months;
+        years   = - years;
+    }
+
+    NSTimeInterval elapsedTimeInterval = 0;
+
+    if ((months != 0 || years != 0) && startDate != nil)
+    {
+        NSDateComponents *components = [NSDateComponents components: @[ @(NSCalendarUnitDay), @(NSCalendarUnitMonth), @(NSCalendarUnitYear) ]
+                                           inGregorianLocalFromDate: startDate];
+
+        components.month    += months;
+        components.year     += years;
+        components.day      += days;
+        components.hour     += hours;
+        components.minute   += minutes;
+        components.second   += seconds;
+        NSDate *newDate     = components.date;
+        elapsedTimeInterval = [newDate timeIntervalSinceDate: startDate];
+    }
+    else
+    {
+        /*
+         If we get here, either we don't have a startDate --
+         so we don't know where to start counting, which means
+         we'll use 30 days for "days per month" and 365 for
+         "days per year" -- or the user didn't specify months
+         and/or years, which means those will zero out.
+         */
+        elapsedTimeInterval = years * 365 + months * 30 + weeks * 7 + days;
+        elapsedTimeInterval = (elapsedTimeInterval * 24) + hours;
+        elapsedTimeInterval = (elapsedTimeInterval * 60) + minutes;
+        elapsedTimeInterval = (elapsedTimeInterval * 60) + seconds;
+    }
+
+    return elapsedTimeInterval;
+}
+
++ (NSTimeInterval) timeIntervalByAddingISO8601Duration: (NSString *) duration
+                                                toDate: (NSDate *) date
+{
+    NSTimeInterval result = [self timeIntervalByAddingISO8601Duration: duration
+                                                               toDate: date
+                                                       addInDirection: APCDateDirectionForwards];
+    return result;
+}
+
++ (NSTimeInterval) timeIntervalBySubtractingISO8601Duration: (NSString *) duration
+                                                   fromDate: (NSDate *) date
+{
+    NSTimeInterval result = [self timeIntervalByAddingISO8601Duration: duration
+                                                               toDate: date
+                                                       addInDirection: APCDateDirectionBackwards];
+    return result;
+}
+
+- (NSTimeInterval) timeIntervalByAddingISO8601Duration: (NSString *) duration
+{
+    NSTimeInterval time = [[self class] timeIntervalByAddingISO8601Duration: duration toDate: self];
+
+    return time;
+}
+
+- (NSTimeInterval) timeIntervalBySubtractingISO8601Duration: (NSString *) duration
+{
+    NSTimeInterval time = [[self class] timeIntervalBySubtractingISO8601Duration: duration fromDate: self];
+
+    return time;
+}
+
++ (NSDate *) dateByAddingISO8601Duration: (NSString *) duration
+                                  toDate: (NSDate *) date
+                          addInDirection: (APCDateDirection) dateDirection
+{
+    NSTimeInterval timeToAdd = [self timeIntervalByAddingISO8601Duration: duration
+                                                                  toDate: date
+                                                          addInDirection: dateDirection];
+
+    if (date == nil)
+    {
+        date = [NSDate date];
+    }
+
+    NSDate *result = [date dateByAddingTimeInterval: timeToAdd];
+
+    return result;
+}
+
++ (NSDate *) dateByAddingISO8601Duration: (NSString *) duration
+                                  toDate: (NSDate *) date
+{
+    NSDate *result = [self dateByAddingISO8601Duration: duration
+                                                toDate: date
+                                        addInDirection: APCDateDirectionForwards];
+    return result;
+}
+
++ (NSDate *) dateBySubtractingISO8601Duration: (NSString *) duration
+                                     fromDate: (NSDate *) date
+{
+    NSDate *result = [self dateByAddingISO8601Duration: duration
+                                                toDate: date
+                                        addInDirection: APCDateDirectionBackwards];
+    return result;
+}
+
+- (NSDate *) dateByAddingISO8601Duration: (NSString *) durationString
+{
+    NSDate *result = [[self class] dateByAddingISO8601Duration: durationString toDate: self];
+
+    return result;
+}
+
+- (NSDate *) dateBySubtractingISO8601Duration: (NSString *) durationString
+{
+    NSDate *result = [[self class] dateBySubtractingISO8601Duration: durationString fromDate: self];
+
+    return result;
+}
+
+
 @end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

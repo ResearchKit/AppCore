@@ -221,6 +221,16 @@
 
 - (void)postMessageForServiceType:(NSString *)type
 {
+    NSString *serviceName;
+    
+    if ([type isEqualToString:SLServiceTypeTwitter]){
+        serviceName = @"Twitter";
+    } else if ([type isEqualToString:SLServiceTypeFacebook]) {
+        serviceName = @"Facebook";
+    } else {
+        serviceName = @"";
+    }
+    
     SLComposeViewController *composeViewController = [SLComposeViewController composeViewControllerForServiceType:type];
     
     if (composeViewController) {

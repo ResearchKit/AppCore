@@ -61,7 +61,7 @@ FOUNDATION_EXPORT NSString * const kAPCDiscreteGraphViewRefreshNotification;
 
 - (NSInteger)numberOfPlotsInDiscreteGraph:(APCDiscreteGraphView *)graphView;
 
-- (NSInteger)numberOfDivisionsInXAxisForGraph:(APCDiscreteGraphView *)graphView;
+- (NSInteger)numberOfDivisionsInXAxisForDiscreteGraph:(APCDiscreteGraphView *)graphView;
 
 - (CGFloat)maximumValueForDiscreteGraph:(APCDiscreteGraphView *)graphView;
 

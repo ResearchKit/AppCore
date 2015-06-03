@@ -29,20 +29,32 @@
 // CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, 
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
-// 
- 
+//
+
+
 
 /*
  Only allow this file to exist in the compiled code if
  we're diagnosting stuff, in-house.
+ see:
+
+ https://ymedialabs.atlassian.net/wiki/display/APPLE/How+to+see+the+data+we+send+to+Sage
  */
+
 // ---------------------------------------------------------
-#ifdef USE_DATA_VERIFICATION_CLIENT
+#import "APCDataVerificationServerAccessControl.h"
+
+#ifdef USE_DATA_VERIFICATION_SERVER
 // ---------------------------------------------------------
 
 
 
+/*
+ Normal #imports go here.
+ */
 #import <Foundation/Foundation.h>
+
+
 
 /*
  Uploads files and text to a matching
@@ -50,6 +62,9 @@
  running on a specific machine.  (We're
  still evolving how to specify the IP
  address.)
+ 
+ For documentation, please see
+ https://ymedialabs.atlassian.net/wiki/display/APPLE/How+to+see+the+data+we+send+to+Sage
  */
 @interface APCDataVerificationClient : NSObject
 
@@ -85,7 +100,7 @@
 
 
 // ---------------------------------------------------------
-#endif  // USE_DATA_VERIFICATION_CLIENT
+#endif  // USE_DATA_VERIFICATION_SERVER
 // ---------------------------------------------------------
 
 

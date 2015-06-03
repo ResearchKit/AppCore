@@ -35,14 +35,11 @@
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
 
-NSString * const kAPCActivitiesSectionHeaderViewIdentifier = @"APCActivitiesSectionHeaderView";
-
 @implementation APCActivitiesSectionHeaderView
 
-- (void)awakeFromNib
+- (void) awakeFromNib
 {
     [super awakeFromNib];
-    
     [self setupAppearance];
 }
 

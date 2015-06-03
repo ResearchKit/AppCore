@@ -85,7 +85,7 @@
     return self;
 }
 
-- (NSEnumerator*)enumeratorBeginningAtTime:(NSDate*)start
+- (APCScheduleEnumerator*)enumeratorBeginningAtTime:(NSDate*)start
 {
     NSParameterAssert(start != nil);
     
@@ -98,11 +98,11 @@
                                          originalCronExpression:self.originalCronExpression];
 }
 
-- (NSEnumerator*)enumeratorBeginningAtTime:(NSDate*)start endingAtTime:(NSDate*)end
+- (APCScheduleEnumerator*)enumeratorBeginningAtTime:(NSDate*)start endingAtTime:(NSDate*)end
 {
     NSParameterAssert(start != nil);
     NSParameterAssert(end != nil);
-    
+
     return [[APCScheduleEnumerator alloc] initWithBeginningTime:start
                                                      endingTime:end
                                                  minuteSelector:self.minuteSelector

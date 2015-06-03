@@ -56,6 +56,7 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
 
 @implementation APCStudyOverviewViewController
 
+
 #pragma mark - Lifecycle
 
 - (void)viewDidLoad {
@@ -220,6 +221,9 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
             break;
             
         case kAPCTableViewStudyItemTypeReviewConsent:
+        {
+            [self showConsent];
+        }
             break;
             
         default:
@@ -227,6 +231,17 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     }
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+#pragma mark - Consent
+
+- (void)showConsent
+{
+    ORKTaskViewController *consentVC = [((APCAppDelegate *)[UIApplication sharedApplication].delegate) consentViewController];
+    
+    consentVC.delegate = self;
+    [self presentViewController:consentVC animated:YES completion:nil];
+    
 }
 
 #pragma mark - TaskViewController Delegate methods

@@ -34,16 +34,80 @@
 #import "APCSchedule.h"
 #import "APCScheduleExpression.h"
 
+
+@class APCTopLevelScheduleEnumerator;
+@class APCTask;
+@class APCDateRange;
+
+
+
+/**
+ We enumerate the dates in a schedule differently based on
+ this style.
+ */
+typedef enum : NSUInteger {
+
+    /** The schedule specifies a single occurrence. */
+    APCScheduleRecurrenceStyleExactlyOnce,
+
+    /** The schedule recurs according to the rules of 
+     a Unix-style cron expression. */
+    APCScheduleRecurrenceStyleCronExpression,
+
+    /** The schedule recurs according to a (human-readable)
+     ISO8601 time interval, like "every 90 days," and
+     an optional list of times in a given day. */
+    APCScheduleRecurrenceStyleInterval,
+
+}   APCScheduleRecurrenceStyle;
+
+
+/**
+ Used in the very occasional place we need to know one
+ specific value of the scheduleType field outside this
+ category.  For the most part, we can get more and
+ better information from schedule.recurrenceStyle.
+ */
+FOUNDATION_EXPORT NSString * const kAPCScheduleTypeValueOneTimeSchedule;
+
+
+
 @interface APCSchedule (AddOn)
 
-//Synchronous Method Call
-+ (void) createSchedulesFromJSON: (NSArray*) schedulesArray inContext: (NSManagedObjectContext*) context;
-+ (void) updateSchedulesFromJSON: (NSArray *)schedulesArray inContext:(NSManagedObjectContext *)context;
 
-- (BOOL) isOneTimeSchedule;
+
+// ---------------------------------------------------------
+#pragma mark - version 1, where we schedule tasks into the future
+// ---------------------------------------------------------
+
 @property (nonatomic, readonly) APCScheduleExpression * scheduleExpression;
-- (NSTimeInterval) expiresInterval;
 
 + (APCSchedule*) cannedScheduleForTaskID: (NSString*) taskID inContext:(NSManagedObjectContext *)context;
 
+
+
+// ---------------------------------------------------------
+#pragma mark - version 2, where we only generate tasks if the user touches them
+// ---------------------------------------------------------
+
+
+@property (readonly) APCScheduleRecurrenceStyle recurrenceStyle;
+@property (readonly) NSString *firstTaskTitle;
+@property (readonly) NSString *firstTaskId;
+
+/** Quick accessors for the different types of recurrenceStyle.
+ Mostly for debugging, so we can test for these easy-to-read
+ items in the "Edit Breakpoints" window.  :-) */
+@property (readonly) BOOL isOneTimeSchedule;
+@property (readonly) BOOL isRecurringCronSchedule;
+@property (readonly) BOOL isRecurringIntervalSchedule;
+
+- (APCTopLevelScheduleEnumerator *) enumeratorFromDate: (NSDate *) startDate
+                                                toDate: (NSDate *) endDate;
+
+- (APCTopLevelScheduleEnumerator *) enumeratorOverDateRange: (APCDateRange *) dateRange;
+
+- (NSComparisonResult) compareWithSchedule: (APCSchedule *) otherSchedule;
+
 @end
+

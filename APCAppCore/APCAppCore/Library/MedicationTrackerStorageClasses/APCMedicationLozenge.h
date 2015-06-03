@@ -39,8 +39,8 @@
 @interface APCMedicationLozenge : NSObject
 
 @property (nonatomic, strong) APCMedicationWeeklySchedule *schedule;
-@property (nonatomic, assign) NSNumber *dosesTakenSoFar;
-@property (nonatomic, assign) NSNumber *maxNumberOfDoses;
+@property (nonatomic, strong) NSNumber *dosesTakenSoFar;
+@property (nonatomic, strong) NSNumber *maxNumberOfDoses;
 @property (nonatomic, strong) NSNumber *zeroBasedDayOfTheWeek;
 @property (readonly) BOOL isComplete;
 

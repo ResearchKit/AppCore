@@ -42,7 +42,6 @@ typedef NS_ENUM(NSInteger, APCUserConsentSharingScope) {
     APCUserConsentSharingScopeAll,
 };
 
-
 @interface APCUser : NSObject
 
 /*********************************************************************************/
@@ -117,5 +116,24 @@ typedef NS_ENUM(NSInteger, APCUserConsentSharingScope) {
 @property (nonatomic, getter=isSignedIn) BOOL signedIn;
 
 - (BOOL) isLoggedOut;
+
+/**
+ Returns our best approximation of the user's "date of
+ consent" -- the date they agreed to start the study.
+ 
+ These days, we track the date the user signs up.  In
+ earlier versions of the apps, we didn't.  This method
+ represents a set of nest-best-guesses about that date.
+ */
+@property (readonly) NSDate *estimatedConsentDate;
+
+/**
+ Returns the best approximation we have for a user-consent
+ date if we don't yet have any user data.  This is a
+ static method so that it can be used during database
+ migration, for attaching start dates to new schedules,
+ as well as during normal operation.
+ */
++ (NSDate *) proxyForConsentDate;
 
 @end

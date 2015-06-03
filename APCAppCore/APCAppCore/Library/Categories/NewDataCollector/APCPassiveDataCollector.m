@@ -40,8 +40,6 @@ static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminate
 
 @interface APCPassiveDataCollector ()
 
-@property (nonatomic, strong)  NSMutableArray*  dataSinkList;
-
 @end
 
 
@@ -67,7 +65,7 @@ static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminate
 - (void)stopCollecting
 {
     NSArray*    sinkListCopy = [self.dataSinkList copy];
-    
+
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^
                    {
                        [sinkListCopy enumerateObjectsUsingBlock:^(APCDataCollector* collector, NSUInteger __unused idx, BOOL* __unused stop)
@@ -80,7 +78,7 @@ static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminate
 - (void)startCollecting
 {
     NSArray*    sinkListCopy = [self.dataSinkList copy];
-
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^
                    {
                        [sinkListCopy enumerateObjectsUsingBlock:^(APCDataCollector* collector, NSUInteger __unused idx, BOOL* __unused stop)

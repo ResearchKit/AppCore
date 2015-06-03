@@ -62,7 +62,7 @@ FOUNDATION_EXPORT NSString * const kAPCLineGraphViewRefreshNotification;
 
 - (NSInteger)numberOfPlotsInLineGraph:(APCLineGraphView *)graphView;
 
-- (NSInteger)numberOfDivisionsInXAxisForGraph:(APCLineGraphView *)graphView;
+- (NSInteger)numberOfDivisionsInXAxisForLineGraph:(APCLineGraphView *)graphView;
 
 - (CGFloat)maximumValueForLineGraph:(APCLineGraphView *)graphView;
 

@@ -32,6 +32,7 @@
 // 
  
 #import <Foundation/Foundation.h>
+#import "APCAppCore.h"
 #import "APCConstants.h"
 
 typedef void(^APCPermissionsBlock)(BOOL granted, NSError *error);

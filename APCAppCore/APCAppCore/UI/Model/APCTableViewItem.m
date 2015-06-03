@@ -155,8 +155,7 @@
 
 @implementation APCTableViewDashboardGraphItem
 
-+(NSAttributedString *)legendForSeries1:(NSString *) series1 series2:(NSString *)series2
-{
++(NSAttributedString *)legendForSeries1:(NSString *) series1 series2:(NSString *)series2{
     
     NSAssert(series1 != nil, @"Pass a valid series 1 name");
     

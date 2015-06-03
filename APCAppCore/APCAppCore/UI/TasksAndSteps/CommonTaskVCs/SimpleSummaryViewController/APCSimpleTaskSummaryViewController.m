@@ -53,22 +53,6 @@
     [self.view setBackgroundColor:viewBackgroundColor];
     self.navigationItem.leftBarButtonItem = nil;
     self.navigationItem.hidesBackButton = YES;
-    
-    APCAppDelegate *appDelegate = (APCAppDelegate *)[[UIApplication sharedApplication] delegate];
-    
-    NSUInteger allScheduledTasks = appDelegate.dataSubstrate.countOfAllScheduledTasksForToday;
-    NSUInteger completedScheduledTasks = appDelegate.dataSubstrate.countOfCompletedScheduledTasksForToday;
-    
-    NSNumber *remainingTasks = (completedScheduledTasks < allScheduledTasks) ? @(allScheduledTasks - completedScheduledTasks) : @(0);
-    
-    UITabBarItem *activitiesTab = appDelegate.tabster.tabBar.selectedItem;
-    
-    if ([remainingTasks integerValue] != 0) {
-        activitiesTab.badgeValue = [remainingTasks stringValue];
-    } else {
-        activitiesTab.badgeValue = nil;
-    }
-    
     self.confirmation.completed = YES;
     
     [self setUpAppearance];

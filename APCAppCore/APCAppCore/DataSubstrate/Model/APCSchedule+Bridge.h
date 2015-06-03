@@ -32,7 +32,3 @@
 // 
  
 #import "APCSchedule.h"
-
-@interface APCSchedule (Bridge)
-+ (void) updateSchedulesOnCompletion: (void (^)(NSError * error)) completionBlock;
-@end

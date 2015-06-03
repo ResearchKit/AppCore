@@ -48,6 +48,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCDataMonitor+Bridge.h>
 #import <APCAppCore/APCDataSubstrate.h>
 #import <APCAppCore/APCDataSubstrate+ResearchKit.h>
+#import <APCAppCore/APCDataSubstrate+HealthKit.h>
 #import <APCAppCore/APCModel.h>
 #import <APCAppCore/APCParameters.h>
 #import <APCAppCore/APCPermissionsManager.h>
@@ -58,6 +59,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCTasksReminderManager.h>
 #import <APCAppCore/APCUtilities.h>
 #import <APCAppCore/APCCorrelationsSelectorViewController.h>
+#import <APCAppCore/APCActivitiesDateState.h>
 
 //  Tasks
 #import <APCAppCore/APCConsentTask.h>
@@ -73,6 +75,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCDataArchiverAndUploader.h>
 #import <APCAppCore/APCDataArchiver.h>
 #import <APCAppCore/APCPassiveDataCollector.h>
+#import <APCAppCore/APCDataUploader.h>
 #import <APCAppCore/zipzap.h>
 #import <APCAppCore/ZZArchive.h>
 #import "APCAppCore/ZZArchiveEntry.h"
@@ -93,6 +96,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
  ------------------------- */
 #import <APCAppCore/APCLog.h>
 #import <APCAppCore/APCDataVerificationClient.h>
+#import <APCAppCore/APCDataVerificationServerAccessControl.h>
 
 /* UI */
 /* -------------------------
@@ -273,6 +277,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
  ------------------------- */
 #import <APCAppCore/APCTableViewItem.h>
 #import <APCAppCore/APCGroupedScheduledTask.h>
+#import <APCAppCore/APCKeychainStore.h>
 #import <APCAppCore/APCKeychainStore+Passcode.h>
 #import <APCAppCore/APCPresentAnimator.h>
 #import <APCAppCore/APCFadeAnimator.h>
@@ -310,6 +315,8 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/HKWorkout+APCHelper.h>
 #import <APCAppCore/CLLocation+APCAdditions.h>
 #import <APCAppCore/NSDictionary+APCStringify.h>
+#import <APCAppCore/HKWorkout+APCHelper.h>
+
 /* -------------------------
  Appearance
  ------------------------- */
@@ -321,14 +328,21 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 /* -------------------------
  Schedule and ScheduleExpression components
  ------------------------- */
-#import <APCAppCore/APCScheduler.h>
-#import <APCAppCore/APCScheduleExpression.h>
 #import <APCAppCore/APCDayOfMonthSelector.h>
 #import <APCAppCore/APCListSelector.h>
 #import <APCAppCore/APCPointSelector.h>
+#import <APCAppCore/APCPotentialScheduledTask.h>
 #import <APCAppCore/APCScheduleEnumerator.h>
+#import <APCAppCore/APCScheduleExpression.h>
 #import <APCAppCore/APCScheduleExpressionParser.h>
 #import <APCAppCore/APCScheduleExpressionToken.h>
 #import <APCAppCore/APCScheduleExpressionTokenizer.h>
+#import <APCAppCore/APCScheduler.h>
+#import <APCAppCore/APCTaskGroup.h>
 #import <APCAppCore/APCTimeSelector.h>
 #import <APCAppCore/APCTimeSelectorEnumerator.h>
+#import <APCAppCore/APCTopLevelScheduleEnumerator.h>
+
+
+
+

@@ -40,8 +40,10 @@
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
 #import "APCKeychainStore+Passcode.h"
+#import "APCKeychainStore.h"
 #import "APCUserInfoConstants.h"
 #import "UIImage+APCHelper.h"
+#import "APCAppCore.h"
 
 @interface APCPasscodeViewController ()<APCPasscodeViewDelegate>
 
@@ -85,6 +87,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+
     APCLogViewControllerAppeared();
 }
 
@@ -188,7 +191,7 @@
                                     reply:^(BOOL success, NSError *error) {
                                         
                                         if (success) {
-                                            dispatch_async(dispatch_get_main_queue(), ^{
+                                            dispatch_sync(dispatch_get_main_queue(), ^{
                                                 if ([weakSelf.delegate respondsToSelector:@selector(passcodeViewControllerDidSucceed:)]) {
                                                     [weakSelf.delegate passcodeViewControllerDidSucceed:weakSelf];
                                                 }

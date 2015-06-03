@@ -39,5 +39,6 @@
 + (BOOL)setString:(NSString *)value forKey:(NSString *)key;
 + (void)removeValueForKey:(NSString *)key;
 + (void)resetKeyChain;
++ (NSDate *)modifiedDateForKey:(NSString *)key; //kSecAttrModificationDate
 
 @end

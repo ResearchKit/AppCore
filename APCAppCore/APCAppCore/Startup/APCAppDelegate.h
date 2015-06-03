@@ -44,8 +44,13 @@ extern NSUInteger   const kTheEntireDataModelOfTheApp;
 
 @interface APCAppDelegate : UIResponder <UIApplicationDelegate, APCOnboardingDelegate, APCOnboardingTaskDelegate, APCPasscodeViewControllerDelegate>
 
+/**
+ Casts the main application's app delegate as this type.
+ */
++ (instancetype) sharedAppDelegate;
+
 @property (nonatomic, strong) APCFitnessAllocation *sevenDayFitnessAllocationData;
-@property (strong, nonatomic) UITabBarController *tabster;
+@property (strong, nonatomic) UITabBarController *tabBarController;
 
 //APC Related Properties & Methods
 @property (strong, nonatomic) APCDataSubstrate * dataSubstrate;
@@ -65,7 +70,6 @@ extern NSUInteger   const kTheEntireDataModelOfTheApp;
 
 @property  (nonatomic, strong)  NSArray  *storyboardIdInfo;
 
-- (void)loadStaticTasksAndSchedulesIfNecessary;  //For resetting app
 - (void) updateDBVersionStatus;
 - (void) clearNSUserDefaults; //For resetting app
 
@@ -79,7 +83,7 @@ extern NSUInteger   const kTheEntireDataModelOfTheApp;
 - (void) showNeedsEmailVerification;
 - (void) setUpRootViewController: (UIViewController*) viewController;
 - (void) setUpTasksReminder;
-- (NSDictionary *) tasksAndSchedulesWillBeLoaded;
+
 - (void)performMigrationFrom:(NSInteger)previousVersion currentVersion:(NSInteger)currentVersion;
 - (void)performMigrationAfterDataSubstrateFrom:(NSInteger)previousVersion currentVersion:(NSInteger)currentVersion;
 - (NSString *) applicationDocumentsDirectory;
@@ -90,16 +94,13 @@ extern NSUInteger   const kTheEntireDataModelOfTheApp;
 - (void) setUpAppAppearance;
 - (void) registerCatastrophicStartupError: (NSError *) error;
 
-//For User in Subclasses
 - (void) signedInNotification:(NSNotification *)notification;
 - (void) signedUpNotification: (NSNotification*) notification;
 - (void) logOutNotification:(NSNotification *)notification;
-
-- (NSArray *)offsetForTaskSchedules;
 - (void)afterOnBoardProcessIsFinished;
 - (NSArray *)reviewConsentActions;
 - (NSArray *)allSetTextBlocks;
-- (NSDictionary *)configureTasksForActivities;
+- (BOOL)hideEmailOnWelcomeScreen;
 
 //To be called from Datasubstrate
 - (void) setUpCollectors;

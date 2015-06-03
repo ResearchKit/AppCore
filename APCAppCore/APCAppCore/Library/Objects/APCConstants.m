@@ -36,33 +36,80 @@
 
 
 // ---------------------------------------------------------
-#pragma mark - Constants
+#pragma mark - Enum Translation Functions
 // ---------------------------------------------------------
 
-NSString *const APCUserSignedUpNotification   = @"APCUserSignedUpNotification";
-NSString *const APCUserSignedInNotification   = @"APCUserSignedInNotification";
-NSString *const APCUserLogOutNotification     = @"APCUserLogOutNotification";
-NSString *const APCUserWithdrawStudyNotification     = @"APCUserWithdrawStudyNotification";
-NSString *const APCUserDidConsentNotification = @"APCUserDidConsentNotification";
+NSString *NSStringFromAPCScheduleSource (APCScheduleSource scheduleSource)
+{
+    NSString *result = nil;
 
-NSString *const APCScheduleUpdatedNotification      = @"APCScheduleUpdatedNotification";
-NSString *const APCUpdateActivityNotification       = @"APCUpdateActivityNotification";
-NSString *const APCDayChangedNotification           = @"APCDayChangedNotification";
+    switch (scheduleSource)
+    {
+        case APCScheduleSourceAll:                  result = @"APCScheduleSourceAll";               break;
+        case APCScheduleSourceLocalDisk:            result = @"APCScheduleSourceLocalDisk";         break;
+        case APCScheduleSourceServer:               result = @"APCScheduleSourceServer";            break;
+        case APCScheduleSourceGlucoseLog:           result = @"APCScheduleSourceGlucoseLog";        break;
+        case APCScheduleSourceMedicationTracker:    result = @"APCScheduleSourceMedicationTracker"; break;
 
-NSString *const APCAppDidRegisterUserNotification            = @"APCAppDidRegisterUserNotification";
-NSString *const APCAppDidFailToRegisterForRemoteNotification = @"APCAppDidFailToRegisterForRemoteNotifications";
+        default: result = @"Unknown"; break;
+    }
 
-NSString *const APCScoringHealthKitDataIsAvailableNotification = @"APCScoringHealthKitDataIsAvailableNotification";
-NSString *const APCTaskResultsProcessedNotification = @"APCTaskResultsProcessedNotification";
+    return result;
+}
 
-NSString *const APCUpdateTasksReminderNotification = @"APCUpdateTasksReminderNotification";
+NSString *NSStringFromAPCScheduleSourceAsNumber (NSNumber *scheduleSourceAsNumber)
+{
+    return NSStringFromAPCScheduleSource (scheduleSourceAsNumber.integerValue);
+}
 
-NSString *const APCConsentCompletedWithDisagreeNotification = @"goToSignInJoinScreen";
+NSString *NSStringShortFromAPCScheduleSource (APCScheduleSource scheduleSource)
+{
+    NSString *result = NSStringFromAPCScheduleSource (scheduleSource);
+    result = [result substringFromIndex: @"APCScheduleSource".length];
+    return result;
+}
 
-NSString *const APCMotionHistoryReporterDoneNotification = @"APCMotionHistoryReporterDoneNotification";
+NSString *NSStringShortFromAPCScheduleSourceAsNumber (NSNumber *scheduleSourceAsNumber)
+{
+    return NSStringShortFromAPCScheduleSource (scheduleSourceAsNumber.integerValue);
+}
 
-NSString *const APCHealthKitObserverQueryUpdateForSampleTypeNotification = @"APCHealthKitObserverQueryUpdateForSampleTypeNotification";
 
+
+// ---------------------------------------------------------
+#pragma mark - Notifications
+// ---------------------------------------------------------
+
+/*
+ Please keep alphabetized.
+ */
+
+NSString *const APCActivityCompletionNotification               = @"APCActivityCompletionNotification";
+NSString *const APCAppDidFailToRegisterForRemoteNotification    = @"APCAppDidFailToRegisterForRemoteNotifications";
+NSString *const APCAppDidRegisterUserNotification               = @"APCAppDidRegisterUserNotification";
+NSString *const APCConsentCompletedWithDisagreeNotification     = @"goToSignInJoinScreen";
+NSString *const APCDayChangedNotification                       = @"APCDayChangedNotification";
+NSString *const APCMotionHistoryReporterDoneNotification        = @"APCMotionHistoryReporterDoneNotification";
+NSString *const APCScheduleUpdatedNotification                  = @"APCScheduleUpdatedNotification";
+NSString *const APCSchedulerUpdatedScheduledTasksNotification   = @"APCSchedulerUpdatedScheduledTasksNotification";
+NSString *const APCScoringHealthKitDataIsAvailableNotification  = @"APCScoringHealthKitDataIsAvailableNotification";
+NSString *const APCTaskResultsProcessedNotification             = @"APCTaskResultsProcessedNotification";
+NSString *const APCUpdateActivityNotification                   = @"APCUpdateActivityNotification";
+NSString *const APCUpdateChartsNotification                     = @"APCUpdateChartsNotification";
+NSString *const APCUpdateTasksReminderNotification              = @"APCUpdateTasksReminderNotification";
+NSString *const APCUserDidConsentNotification                   = @"APCUserDidConsentNotification";
+NSString *const APCUserLogOutNotification                       = @"APCUserLogOutNotification";
+NSString *const APCUserSignedInNotification                     = @"APCUserSignedInNotification";
+NSString *const APCUserSignedUpNotification                     = @"APCUserSignedUpNotification";
+NSString *const APCUserWithdrawStudyNotification                = @"APCUserWithdrawStudyNotification";
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Uncategorized Constants
+// ---------------------------------------------------------
+
+NSString *const kAnonDemographicDataUploadedKey     = @"kAnonDemographicDataUploadedKey";
 NSString *const kStudyIdentifierKey                 = @"StudyIdentifierKey";
 NSString *const kAppPrefixKey                       = @"AppPrefixKey";
 NSString *const kBridgeEnvironmentKey               = @"BridgeEnvironmentKey";
@@ -85,15 +132,14 @@ NSString *const kShareMessageKey                    = @"ShareMessageKey";
 
 NSString *const kHKQuantityTypeKey          = @"HKQuantityType";
 NSString *const kHKCategoryTypeKey          = @"HKCategoryType";
+NSString *const kHKWorkoutTypeKey          = @"HKWorkoutType";
 NSString *const kHKCharacteristicTypeKey    = @"HKCharacteristicType";
 NSString *const kHKCorrelationTypeKey       = @"HKCorrelationType";
-NSString *const kHKWorkoutTypeKey       = @"HKWorkoutType";
-
 
 NSString * const kPasswordKey                    = @"Password";
 NSString * const kNumberOfMinutesForPasscodeKey  = @"NumberOfMinutesForPasscodeKey";
 
-NSUInteger     const kIndexOfActivitesTab                                   = 0;
+NSUInteger     const kAPCActivitiesTabIndex                                 = 0;
 NSInteger      const kAPCSigninErrorCode_NotSignedIn                        = 404;
 NSUInteger     const kAPCSigninNumRetriesBeforePause                        = 10;
 NSTimeInterval const kAPCSigninNumSecondsBetweenRetries                     = 10;
@@ -143,8 +189,30 @@ NSString *const kAllSetDashboardTextAdditional  = @"allSetDashboardTextAdditiona
 NSString *const kActivitiesSectionKeepGoing     = @"activitiesSectionKeepGoing";
 NSString *const kActivitiesSectionYesterday     = @"activitiesSectionYesterday";
 NSString *const kActivitiesSectionToday         = @"activitiesSectionToday";
+NSString *const kActivitiesQueryKeyToday        = @"today";
+NSString *const kActivitiesQueryKeyYesterday    = @"yesterday";
 
 NSString *const kActivitiesRequiresMotionSensor = @"activitiesRequireMotionSensor";
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Known Times and Dates
+// ---------------------------------------------------------
+
+NSTimeInterval const kAPCTimeOneHour                    = 60 * 60;  // seconds * minutes = 1 hour.
+NSTimeInterval const kAPCTimeOneMinute                  = 60;       // seconds per minute.
+NSUInteger     const kAPCTimeFirstLegalISO8601HourOfDay = 0;        // midnight on a given morning.
+NSUInteger     const kAPCTimeLastLegalISO8601HourOfDay  = 24;       // midnight on a given evening.
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Fonts and Font Sizes
+// ---------------------------------------------------------
+
+float const kAPCActivitiesNormalFontSize = 16.0;
+float const kAPCActivitiesSmallFontSize  = 14.0;
 
 
 

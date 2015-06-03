@@ -366,7 +366,7 @@ static NSUInteger       kDaysPerWeek        = 7;
     NSString*   csvFilePath = [self.folder stringByAppendingPathComponent:kCSVFilename];
 
     BOOL success = [APCDataArchiverAndUploader uploadFileAtPath:csvFilePath
-                                             withTaskIdentifier:kItemIdentifier
+                                             withTaskIdentifier:self.identifier
                                                  andTaskRunUuid:nil
                                                  returningError:&error];
     

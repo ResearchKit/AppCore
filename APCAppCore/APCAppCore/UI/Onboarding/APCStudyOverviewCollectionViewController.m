@@ -209,6 +209,7 @@ static NSString *kConsentEmailSubject = @"Consent Document";
         landingCell.titleLabel.text = studyDetails.caption;
         landingCell.subTitleLabel.text = studyDetails.detailText;
         landingCell.readConsentButton.hidden = YES;
+        landingCell.emailConsentButton.hidden = [((APCAppDelegate *)[UIApplication sharedApplication].delegate) hideEmailOnWelcomeScreen];
         
         if ([MFMailComposeViewController canSendMail]) {
             [landingCell.emailConsentButton setTitleColor:[UIColor appPrimaryColor] forState:UIControlStateNormal];
@@ -260,6 +261,17 @@ static NSString *kConsentEmailSubject = @"Consent Document";
 {
     CGFloat pageWidth = self.collectionView.frame.size.width;
     self.pageControl.currentPage = (self.collectionView.contentOffset.x + pageWidth / 2) / pageWidth;
+}
+
+#pragma mark - Consent
+
+- (void)showConsent
+{
+    ORKTaskViewController *consentVC = [((APCAppDelegate *)[UIApplication sharedApplication].delegate) consentViewController];
+    
+    consentVC.delegate = self;
+    [self presentViewController:consentVC animated:YES completion:nil];
+    
 }
 
 #pragma mark - TaskViewController Delegate methods

@@ -63,6 +63,15 @@ static NSString *_defaultService;
     [self removeAllItemsForService:[self defaultService] accessGroup:nil];
 }
 
++ (NSDate *)modifiedDateForKey:(NSString *)key
+{
+    NSDictionary *keyAttrs = [self _itemAttributesAndDataForKey:key forService:[self defaultService] inAccessGroup:nil];
+    
+    NSDate *keyModifiedDate = keyAttrs[(__bridge id)kSecAttrModificationDate];
+    
+    return keyModifiedDate;
+}
+
 /*********************************************************************************/
 #pragma mark - Private Methods
 /*********************************************************************************/
@@ -76,6 +85,67 @@ static NSString *_defaultService;
     return _defaultService;
 }
 
++ (NSMutableDictionary *)_baseQueryDictionaryForKey: (NSString *)key
+                                         forService: (NSString *)service
+                                      inAccessGroup: (NSString *) __unused accessGroup
+{
+    // Create dictionary that will be the basis for all queries against the keychain.
+    NSMutableDictionary *baseQueryDictionary = [[NSMutableDictionary alloc]
+                                                initWithCapacity: 4];
+    
+    [baseQueryDictionary setObject: (__bridge id)kSecClassGenericPassword
+                            forKey: (__bridge id)kSecClass];
+    
+    [baseQueryDictionary setObject: key
+                            forKey: (__bridge id)kSecAttrAccount];
+    
+    [baseQueryDictionary setObject: service
+                            forKey: (__bridge id)kSecAttrService];
+    
+#if TARGET_IPHONE_SIMULATOR
+    // Note: If we are running in the Simulator we cannot set the access group. Apps running in the Simulator are not signed so there is no access group for them to check. All apps running in the simulator can see all the keychain items. If you need to test apps that share access groups you will need to install the apps on a device.
+#else
+    if ([accessGroup length] > 0)
+    {
+        [baseQueryDictionary setObject: accessGroup 
+                                forKey: (__bridge id)kSecAttrAccessGroup];
+    }
+#endif
+    
+    return baseQueryDictionary;
+}
+
++ (NSDictionary *)_itemAttributesAndDataForKey: (NSString *)key
+                                    forService: (NSString *)service
+                                 inAccessGroup: (NSString *)accessGroup
+{
+    // Load the item from the keychain that matches the key, service and access group.
+    NSMutableDictionary *queryDictionary = [self _baseQueryDictionaryForKey: key
+                                                                 forService: service
+                                                              inAccessGroup: accessGroup];
+    
+    [queryDictionary setObject: (__bridge id)kSecMatchLimitOne
+                        forKey: (__bridge id)kSecMatchLimit];
+    [queryDictionary setObject: (id)kCFBooleanTrue
+                        forKey: (__bridge id)kSecReturnAttributes];
+    [queryDictionary setObject: (id)kCFBooleanTrue
+                        forKey: (__bridge id)kSecReturnData];
+    
+    CFTypeRef itemAttributesAndDataTypeRef = nil;
+    
+    OSStatus resultCode = SecItemCopyMatching((__bridge CFDictionaryRef)queryDictionary, &itemAttributesAndDataTypeRef);
+    
+    NSDictionary *itemAttributesAndData = nil;
+    
+    if (resultCode != errSecSuccess)
+    {
+        APCLogDebug(@"Error getting data from keychain: %lii", resultCode);
+    } else {
+        itemAttributesAndData = (__bridge_transfer NSDictionary *)itemAttributesAndDataTypeRef;
+    }
+    
+    return itemAttributesAndData;
+}
 
 + (NSData *) dataForKey: (NSString *) key
                 service: (NSString *) service
@@ -125,7 +195,6 @@ static NSString *_defaultService;
         NSMutableDictionary *query = [[NSMutableDictionary alloc] init];
         [query setObject:(__bridge id)kSecClassGenericPassword forKey:(__bridge id)kSecClass];
         [query setObject:service forKey:(__bridge id)kSecAttrService];
-        [query setObject:key forKey:(__bridge id)kSecAttrGeneric];
         [query setObject:key forKey:(__bridge id)kSecAttrAccount];
 #if !TARGET_IPHONE_SIMULATOR && defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
         if (accessGroup) {
@@ -150,7 +219,6 @@ static NSString *_defaultService;
             NSMutableDictionary *attributes = [[NSMutableDictionary alloc] init];
             [attributes setObject:(__bridge id)kSecClassGenericPassword forKey:(__bridge id)kSecClass];
             [attributes setObject:service forKey:(__bridge id)kSecAttrService];
-            [attributes setObject:key forKey:(__bridge id)kSecAttrGeneric];
             [attributes setObject:key forKey:(__bridge id)kSecAttrAccount];
 #if TARGET_OS_IPHONE || (defined(MAC_OS_X_VERSION_10_9) && MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_9)
             [attributes setObject:(__bridge id)kSecAttrAccessibleAfterFirstUnlock forKey:(__bridge id)kSecAttrAccessible];
@@ -191,7 +259,6 @@ errReturn:
         NSMutableDictionary *itemToDelete = [[NSMutableDictionary alloc] init];
         [itemToDelete setObject:(__bridge id)kSecClassGenericPassword forKey:(__bridge id)kSecClass];
         [itemToDelete setObject:service forKey:(__bridge id)kSecAttrService];
-        [itemToDelete setObject:key forKey:(__bridge id)kSecAttrGeneric];
         [itemToDelete setObject:key forKey:(__bridge id)kSecAttrAccount];
 #if !TARGET_IPHONE_SIMULATOR && defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
         if (accessGroup) {

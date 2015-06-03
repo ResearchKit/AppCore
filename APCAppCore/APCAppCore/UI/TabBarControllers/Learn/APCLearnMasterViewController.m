@@ -1,4 +1,4 @@
-// 
+//
 //  APCLearnMasterViewController.m 
 //  APCAppCore 
 // 
@@ -144,6 +144,9 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
         }
             break;
         case kAPCTableViewLearnItemTypeReviewConsent:
+        {
+            [self showConsent];
+        }
             break;
             
         case kAPCTableViewLearnItemTypeOtherDetails:
@@ -180,6 +183,17 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
     }
     
     return height;
+}
+
+#pragma mark - Consent
+
+- (void)showConsent
+{
+    self.consentVC = [((APCAppDelegate *)[UIApplication sharedApplication].delegate) consentViewController];
+    
+    self.consentVC.delegate = self;
+    [self presentViewController:self.consentVC animated:YES completion:nil];
+    
 }
 
 #pragma mark - TaskViewController Delegate methods

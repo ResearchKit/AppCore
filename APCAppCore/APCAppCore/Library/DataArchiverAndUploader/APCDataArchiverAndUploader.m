@@ -36,6 +36,7 @@
 #import "APCAppDelegate.h"
 #import "APCCMS.h"
 #import "APCDataVerificationClient.h"
+#import "APCDataVerificationServerAccessControl.h"
 #import "APCJSONSerializer.h"
 #import "APCLog.h"
 #import "APCUtilities.h"
@@ -262,6 +263,8 @@ static NSString *folderPathForUploadOperations = nil;
 // ---------------------------------------------------------
 
 /**
+ Set global, static values the first time anyone calls this class.
+
  By definition, this method is called once per class, in a thread-safe
  way, the first time the class is sent a message -- basically, the first
  time we refer to the class.  That means we can use this to set up stuff
@@ -1765,7 +1768,7 @@ static NSString *folderPathForUploadOperations = nil;
      to Bad Guys in production.  Even if the code isn't called,
      if it's in RAM at all, it can be exploited.
      */
-    #ifdef USE_DATA_VERIFICATION_CLIENT
+    #ifdef USE_DATA_VERIFICATION_SERVER
 
         [APCDataVerificationClient uploadDataFromFileAtPath: self.unencryptedZipPath];
         

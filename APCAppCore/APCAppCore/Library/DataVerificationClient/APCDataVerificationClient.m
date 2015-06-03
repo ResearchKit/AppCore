@@ -36,11 +36,15 @@
  Only allow this file to exist in the compiled code if
  we're diagnosing stuff, in-house.  For documentation,
  see:
+ 
+ https://ymedialabs.atlassian.net/wiki/display/APPLE/How+to+see+the+data+we+send+to+Sage
  */
 
 
 // ---------------------------------------------------------
-#ifdef USE_DATA_VERIFICATION_CLIENT
+#import "APCDataVerificationServerAccessControl.h"
+
+#ifdef USE_DATA_VERIFICATION_SERVER
 // ---------------------------------------------------------
 
 
@@ -92,6 +96,8 @@ static NSString * const DATA_VERIFICATION_SERVER_API_UPLOAD_COMMAND = @"upload";
 @implementation APCDataVerificationClient
 
 /**
+ Set global, static values the first time anyone calls this class.
+
  By definition, this method is called once per class, in a thread-safe
  way, the first time the class is sent a message -- basically, the first
  time we refer to the class.  That means we can use this to set up stuff
@@ -282,7 +288,7 @@ static NSString * const DATA_VERIFICATION_SERVER_API_UPLOAD_COMMAND = @"upload";
 
 
 // ---------------------------------------------------------
-#endif  // USE_DATA_VERIFICATION_CLIENT
+#endif  // USE_DATA_VERIFICATION_SERVER
 // ---------------------------------------------------------
 
 

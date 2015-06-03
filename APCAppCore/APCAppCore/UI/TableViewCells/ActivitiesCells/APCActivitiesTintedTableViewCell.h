@@ -34,29 +34,25 @@
 #import <UIKit/UIKit.h>
 #import "APCActivitiesTableViewCell.h"
 #import "APCBadgeLabel.h"
+#import "APCConstants.h"
+
+@class APCTaskGroup;
+
 
 FOUNDATION_EXPORT NSString * const kAPCActivitiesTintedTableViewCellIdentifier;
 
-typedef NS_ENUM(NSUInteger, APCTintColorType) {
-    kAPCTintColorTypeGreen,
-    kAPCTintColorTypeRed,
-    kAPCTintColorTypeYellow,
-    kAPCTintColorTypePurple,
-    kAPCTintColorTypeBlue
-};
 
 @interface APCActivitiesTintedTableViewCell : APCActivitiesTableViewCell
 
-@property (weak, nonatomic) IBOutlet UILabel *subTitleLabel;
-@property (weak, nonatomic) IBOutlet UIView *tintView;
-@property (weak, nonatomic) IBOutlet APCBadgeLabel *countLabel;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *titleLabelCenterYConstraint;
+/**
+ This is fundamentally what this cell does (now, anyway): 
+ displays a taskGroup.  A TaskGroup can contain one or
+ more tasks, categorized in specific ways -- basically,
+ "potential" or "completed," although that will evolve.
+ */
+- (void) configureWithTaskGroup: (APCTaskGroup *) taskGroup
+                    isTodayCell: (BOOL) cellRepresentsToday
+              showDebuggingInfo: (BOOL) shouldShowDebuggingInfo;
 
-@property (strong, nonatomic) UIColor *tintColor;
-
-@property (nonatomic) BOOL hidesSubTitle;
-
-- (void)setupAppearance;
-- (void)setupIncompleteAppearance;
 
 @end

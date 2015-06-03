@@ -41,5 +41,6 @@
 - (void)stopCollecting;
 
 @property (nonatomic, strong)  NSDate*          terminationDate;
+@property (nonatomic, strong)  NSMutableArray*  dataSinkList;
 
 @end

@@ -37,4 +37,7 @@
 
 @interface APCMedicationTrackerCalendarViewController : ORKStepViewController
 
+@property (nonatomic, strong) NSBundle *resourceBundle;
+@property (nonatomic, strong) NSDictionary *resourceNames;
+
 @end

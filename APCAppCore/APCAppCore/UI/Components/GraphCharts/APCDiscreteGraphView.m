@@ -1,36 +1,36 @@
-// 
-//  APCDiscreteGraphView.m 
-//  APCAppCore 
-// 
-// Copyright (c) 2015, Apple Inc. All rights reserved. 
-// 
+//
+//  APCDiscreteGraphView.m
+//  APCAppCore
+//
+// Copyright (c) 2015, Apple Inc. All rights reserved.
+//
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
-// 
+//
 // 1.  Redistributions of source code must retain the above copyright notice, this
 // list of conditions and the following disclaimer.
-// 
-// 2.  Redistributions in binary form must reproduce the above copyright notice, 
-// this list of conditions and the following disclaimer in the documentation and/or 
-// other materials provided with the distribution. 
-// 
-// 3.  Neither the name of the copyright holder(s) nor the names of any contributors 
-// may be used to endorse or promote products derived from this software without 
-// specific prior written permission. No license is granted to the trademarks of 
-// the copyright holders even if such marks are included in this software. 
-// 
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
-// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
-// ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE 
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL 
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR 
-// SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
-// CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, 
-// OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
-// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
-// 
- 
+//
+// 2.  Redistributions in binary form must reproduce the above copyright notice,
+// this list of conditions and the following disclaimer in the documentation and/or
+// other materials provided with the distribution.
+//
+// 3.  Neither the name of the copyright holder(s) nor the names of any contributors
+// may be used to endorse or promote products derived from this software without
+// specific prior written permission. No license is granted to the trademarks of
+// the copyright holders even if such marks are included in this software.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+// SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+// CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+// OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+
 #import "APCDiscreteGraphView.h"
 #import "APCCircleView.h"
 #import "APCAxisView.h"
@@ -81,7 +81,9 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 @synthesize maximumValue = _maximumValue;
 @synthesize minimumValue = _minimumValue;
 
+/********************************/
 #pragma mark - Init
+/********************************/
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -190,7 +192,9 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     return formattedNumber;
 }
 
+/********************************/
 #pragma mark - Appearance
+/********************************/
 
 - (void)updateScrubberLabel
 {
@@ -214,8 +218,9 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     return thumbSize;
 }
 
-
+/********************************/
 #pragma mark - View Layout
+/********************************/
 
 - (void)layoutSubviews
 {
@@ -297,7 +302,9 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     [self addSubview:_emptyLabel];
 }
 
+/********************************/
 #pragma mark - Data
+/********************************/
 
 - (NSInteger)numberOfPlots
 {
@@ -326,8 +333,8 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 {
     _numberOfXAxisTitles = 0;
     
-    if ([self.datasource respondsToSelector:@selector(numberOfDivisionsInXAxisForGraph:)]) {
-        _numberOfXAxisTitles = [self.datasource numberOfDivisionsInXAxisForGraph:self];
+    if ([self.datasource respondsToSelector:@selector(numberOfDivisionsInXAxisForDiscreteGraph:)]) {
+        _numberOfXAxisTitles = [self.datasource numberOfDivisionsInXAxisForDiscreteGraph:self];
     } else {
         _numberOfXAxisTitles = [self numberOfPointsinPlot:0];
     }
@@ -339,7 +346,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 {
     [self.xAxisPoints removeAllObjects];
     
-    for (int i=0 ; i<[self numberOfXAxisTitles]; i++) {
+    for (NSUInteger i=0 ; i<[self.dataPoints count]; i++) {
         
         CGFloat positionOnXAxis = ((CGRectGetWidth(self.plotsView.frame) / (self.yAxisPoints.count - 1)) * i);
         positionOnXAxis = round(positionOnXAxis);
@@ -370,7 +377,9 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     [self.yAxisPoints addObjectsFromArray:[self normalizeCanvasPoints:self.dataPoints forRect:self.plotsView.frame.size]];
 }
 
+/********************************/
 #pragma mark - Draw
+/********************************/
 
 - (void)drawXAxis
 {
@@ -605,10 +614,10 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
         if (!dataPointVal.isEmpty && !dataPointVal.isRangeZero) {
             
             UIBezierPath *plotLinePath = [UIBezierPath bezierPath];
-            
+
             positionOnXAxis = [self.xAxisPoints[i] floatValue];
             positionOnXAxis += [self offsetForPlotIndex:plotIndex];
-                
+            
             positionOnYAxis = ((APCRangePoint *)self.yAxisPoints[i]);
             
             [plotLinePath moveToPoint:CGPointMake(positionOnXAxis, positionOnYAxis.minimumValue)];
@@ -757,7 +766,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
         value = ((APCRangePoint *)self.dataPoints[positionIndex]).maximumValue;
         
     }
-
+    
     return value;
 }
 
@@ -836,7 +845,9 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     return xPosition;
 }
 
+/********************************/
 #pragma mark - Animations
+/********************************/
 
 - (void)animateLayersSequentially
 {
@@ -874,7 +885,9 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     }
 }
 
+/********************************/
 #pragma mark - Touch
+/********************************/
 
 - (void)handlePanGesture:(UIPanGestureRecognizer *)gestureRecognizer
 {
@@ -942,7 +955,9 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     }
 }
 
+/********************************/
 #pragma mark - Public Methods
+/********************************/
 
 - (void)scrubReferenceLineForXPosition:(CGFloat)xPosition
 {

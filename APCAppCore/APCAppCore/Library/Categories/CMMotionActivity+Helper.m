@@ -46,6 +46,15 @@ typedef enum : NSUInteger {
 
 @implementation CMMotionActivity (Helper)
 
+- (NSString *) confidenceName
+{
+    NSString *name = (self.confidence == CMMotionActivityConfidenceHigh ? @"high" :
+                      self.confidence == CMMotionActivityConfidenceMedium ? @"medium" :
+                      @"low");
+
+    return name;
+}
+
 - (APCCMMotionActivityType) activityType
 {
     APCCMMotionActivityType type = (self.stationary ? APCCMMotionActivityTypeStationary :

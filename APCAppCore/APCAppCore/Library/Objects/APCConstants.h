@@ -33,6 +33,13 @@
  
 #import <Foundation/Foundation.h>
 
+
+
+// ---------------------------------------------------------
+#pragma mark - Enums
+// ---------------------------------------------------------
+
+
 typedef NS_ENUM(NSUInteger, APCSignUpPermissionsType) {
     kAPCSignUpPermissionsTypeNone = 0,
     kAPCSignUpPermissionsTypeHealthKit,
@@ -54,29 +61,106 @@ typedef NS_ENUM(NSUInteger, APCDashboardGraphType) {
     kAPCDashboardGraphTypeDiscrete,
 };
 
-FOUNDATION_EXPORT NSString *const APCUserSignedUpNotification;
-FOUNDATION_EXPORT NSString *const APCUserSignedInNotification;
-FOUNDATION_EXPORT NSString *const APCUserLogOutNotification;
-FOUNDATION_EXPORT NSString *const APCUserWithdrawStudyNotification;
-FOUNDATION_EXPORT NSString *const APCUserDidConsentNotification;
+/**
+ Indicates where we're getting each batch of schedules and
+ tasks:  from the server, from disk, or from various
+ application-specific areas.
 
-FOUNDATION_EXPORT NSString *const APCScheduleUpdatedNotification;
-FOUNDATION_EXPORT NSString *const APCUpdateActivityNotification;
-FOUNDATION_EXPORT NSString *const APCDayChangedNotification;
+ Please feel free to add your own sources, here.  If you
+ do, please respect the following:
+ -  Make them bitmask-friendly, using the examples below.
+ -  Do NOT change the values of the existing items.
+    Those are values in our users' current databases.
+ -  Add your enum name to the switch() statement in the
+    function NSStringFromAPCScheduleSource(), in this .m
+    file.
 
-FOUNDATION_EXPORT NSString *const APCAppDidRegisterUserNotification;
+ @details
+ A key point: as of this writing, EVERY IMPORT of schedules
+ and tasks from a given source will SUPPLANT all schedules
+ and tasks from that same source.  Details are managed by
+ the Scheduler class.
+ 
+ Here's an example.  Let's say you get 2 schedules from
+ the server, and one from disk:
+ 
+ 1) server:  take out the trash every day at 5pm
+ 2)          do push-ups every morning at 10am
+ 3) disk:    fill in your monthly survey on the first of each month
+ 
+ One day, you do a pull-to-refresh, and you get only ONE
+ schedule from the server:
+ 
+ 4) server:  take out the trash twice a week at 9pm
+ 
+ In this case:  schedule #4 will replace BOTH schedule #1
+ and #2, but won't touch schedule #3.  And by "replace,"
+ we mean specifically:  those older schedules will get an
+ end date of midnight on the day before the pull-to-refresh
+ happened.  This means that the user will be able to see
+ the old schedule if she walks back into the past, and see
+ the new schedule if she walks forward.
+ */
+typedef enum : NSUInteger {
+    APCScheduleSourceAll                = 0,
+    APCScheduleSourceLocalDisk          = 1 << 0,   // 0000 0000 0000 0001
+    APCScheduleSourceServer             = 1 << 1,   // 0000 0000 0000 0010
+    APCScheduleSourceGlucoseLog         = 1 << 2,   // 0000 0000 0000 0100
+    APCScheduleSourceMedicationTracker  = 1 << 3,   // 0000 0000 0000 1000
+}   APCScheduleSource;
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Enum Translation Functions
+// ---------------------------------------------------------
+
+/**
+ Converts an APCScheduleSource object to a string.
+ 
+ @see APCScheduleSource
+ */
+NSString *NSStringFromAPCScheduleSource (APCScheduleSource scheduleSource);
+NSString *NSStringFromAPCScheduleSourceAsNumber (NSNumber *scheduleSourceAsNumber);
+NSString *NSStringShortFromAPCScheduleSource (APCScheduleSource scheduleSource);
+NSString *NSStringShortFromAPCScheduleSourceAsNumber (NSNumber *scheduleSourceAsNumber);
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Notifications
+// ---------------------------------------------------------
+
+/*
+ Please keep alphabetized.
+ */
+
+FOUNDATION_EXPORT NSString *const APCActivityCompletionNotification;
 FOUNDATION_EXPORT NSString *const APCAppDidFailToRegisterForRemoteNotification;
-
+FOUNDATION_EXPORT NSString *const APCAppDidRegisterUserNotification;
+FOUNDATION_EXPORT NSString *const APCConsentCompletedWithDisagreeNotification;
+FOUNDATION_EXPORT NSString *const APCDayChangedNotification;
+FOUNDATION_EXPORT NSString *const APCHealthKitObserverQueryUpdateForSampleTypeNotification;
+FOUNDATION_EXPORT NSString *const APCMotionHistoryReporterDoneNotification;
+FOUNDATION_EXPORT NSString *const APCScheduleUpdatedNotification;
+FOUNDATION_EXPORT NSString *const APCSchedulerUpdatedScheduledTasksNotification;
 FOUNDATION_EXPORT NSString *const APCScoringHealthKitDataIsAvailableNotification;
 FOUNDATION_EXPORT NSString *const APCTaskResultsProcessedNotification;
+FOUNDATION_EXPORT NSString *const APCUpdateActivityNotification;
+FOUNDATION_EXPORT NSString *const APCUpdateChartsNotification;
 FOUNDATION_EXPORT NSString *const APCUpdateTasksReminderNotification;
+FOUNDATION_EXPORT NSString *const APCUserDidConsentNotification;
+FOUNDATION_EXPORT NSString *const APCUserLogOutNotification;
+FOUNDATION_EXPORT NSString *const APCUserSignedInNotification;
+FOUNDATION_EXPORT NSString *const APCUserSignedUpNotification;
+FOUNDATION_EXPORT NSString *const APCUserWithdrawStudyNotification;
 
-FOUNDATION_EXPORT NSString *const APCConsentCompletedWithDisagreeNotification;
 
-FOUNDATION_EXPORT NSString *const APCMotionHistoryReporterDoneNotification;
+// ---------------------------------------------------------
+#pragma mark - Uncategorized Constants
+// ---------------------------------------------------------
 
-FOUNDATION_EXPORT NSString *const APCHealthKitObserverQueryUpdateForSampleTypeNotification;
-
+FOUNDATION_EXPORT NSString *const kAnonDemographicDataUploadedKey;
 FOUNDATION_EXPORT NSString *const kStudyIdentifierKey;
 FOUNDATION_EXPORT NSString *const kAppPrefixKey;
 FOUNDATION_EXPORT NSString *const kBridgeEnvironmentKey;
@@ -106,7 +190,7 @@ FOUNDATION_EXPORT NSString *const kHKWorkoutTypeKey;
 FOUNDATION_EXPORT NSString * const kPasswordKey;
 FOUNDATION_EXPORT NSString * const kNumberOfMinutesForPasscodeKey;
 
-FOUNDATION_EXPORT NSUInteger     const kIndexOfActivitesTab;
+FOUNDATION_EXPORT NSUInteger     const kAPCActivitiesTabIndex;
 FOUNDATION_EXPORT NSInteger      const kAPCSigninErrorCode_NotSignedIn;
 FOUNDATION_EXPORT NSUInteger     const kAPCSigninNumRetriesBeforePause;
 FOUNDATION_EXPORT NSTimeInterval const kAPCSigninNumSecondsBetweenRetries;
@@ -157,8 +241,30 @@ FOUNDATION_EXPORT NSString *const kAllSetDashboardTextAdditional;
 FOUNDATION_EXPORT NSString *const kActivitiesSectionKeepGoing;
 FOUNDATION_EXPORT NSString *const kActivitiesSectionYesterday;
 FOUNDATION_EXPORT NSString *const kActivitiesSectionToday;
+FOUNDATION_EXPORT NSString *const kActivitiesQueryKeyToday;
+FOUNDATION_EXPORT NSString *const kActivitiesQueryKeyYesterday;
 
 FOUNDATION_EXPORT NSString *const kActivitiesRequiresMotionSensor;
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Known Times and Dates
+// ---------------------------------------------------------
+
+FOUNDATION_EXPORT NSTimeInterval const kAPCTimeOneHour;
+FOUNDATION_EXPORT NSTimeInterval const kAPCTimeOneMinute;
+FOUNDATION_EXPORT NSUInteger     const kAPCTimeFirstLegalISO8601HourOfDay;
+FOUNDATION_EXPORT NSUInteger     const kAPCTimeLastLegalISO8601HourOfDay;
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Fonts and Font Sizes
+// ---------------------------------------------------------
+
+FOUNDATION_EXPORT float const kAPCActivitiesNormalFontSize;
+FOUNDATION_EXPORT float const kAPCActivitiesSmallFontSize;
 
 
 

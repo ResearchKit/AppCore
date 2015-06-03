@@ -1,5 +1,5 @@
 // 
-//  APCScheduleEnumerator.m 
+//  APCScheduleEnumerator.m
 //  APCAppCore 
 // 
 // Copyright (c) 2015, Apple Inc. All rights reserved. 
@@ -141,7 +141,12 @@ typedef enum : NSUInteger {
 	return self;
 }
 
-- (NSDate*) nextObject
+- (id) nextObject
+{
+    return self.nextScheduledDate;
+}
+
+- (NSDate *) nextScheduledDate
 {
 	NSDate* result = nil;
 
@@ -173,7 +178,7 @@ typedef enum : NSUInteger {
 	NSNumber* minute	= self.minuteSelector.initialValue;
 	NSNumber* hour		= self.hourSelector.initialValue;
 	NSNumber* month		= self.monthSelector.initialValue;
-	NSNumber* year		= self.yearSelector.initialValue;
+	NSNumber* year		= self.yearSelector.initialValue;       // TODO.  This may be wrong and irrelevant -- it was computed based on "this year."  It needs to reflect the passed-in start and end years.  ...back in -init; we're too late, here.
 
 	[self.daySelector recomputeDaysBasedOnMonth:month year:year];
 	NSNumber* day		= self.daySelector.initialValue;
@@ -222,7 +227,9 @@ typedef enum : NSUInteger {
  month-and-year combination, so that the day-of-the-week
  rules are applied correctly (e.g., getting the right date
  for "the first Friday of the month") and so that we have
- the right number of days per month (28, 31, etc.).
+ the right number of days per month (28, 31, etc.).  We thus
+ also have to check whether the new month has ANY legal days
+ in it at all, and move to the next month if not.
  
  This method is also used when determining the first legal
  date for this enumerator.  See -firstDate.
@@ -295,7 +302,7 @@ typedef enum : NSUInteger {
 	DateField dateFieldIndex = DateFieldMinute;
 
     while (dateFieldIndex <= DateFieldYear && shouldInspectNextField)
-	{
+    {
 		APCTimeSelector* dateFieldSelector = self.selectors [dateFieldIndex];
 		NSNumber* prevFieldValue = self.dateComponents [dateFieldIndex];
 		NSNumber* newFieldValue = [dateFieldSelector nextMomentAfter: prevFieldValue];
@@ -306,24 +313,25 @@ typedef enum : NSUInteger {
             self.dateComponents [dateFieldIndex] = firstFieldValue;
 			shouldInspectNextField = YES;
 		}
+
         else if (dateFieldIndex < DateFieldMonth)
-		{
+        {
             self.dateComponents [dateFieldIndex] = newFieldValue;
 			shouldInspectNextField = NO;
-		}
+        }
 
         else  // dateFieldIndex == Month or Year
         {
             // Record the fact that we looked at this month or year.
             self.dateComponents [dateFieldIndex] = newFieldValue;
-            // Recompute the days in this new month.
 
+            // Recompute the days in this new month.
             NSNumber* month = self.dateComponents [DateFieldMonth];
             NSNumber* year  = self.dateComponents [DateFieldYear];
 
             [self.daySelector recomputeDaysBasedOnMonth: month
                                                    year: year];
-
+            
             if (self.daySelector.hasAnyLegalDays)
             {
                 NSNumber *firstDayValue = self.daySelector.initialValue;
@@ -331,12 +339,12 @@ typedef enum : NSUInteger {
                 shouldInspectNextField = NO;
             }
             else
-		{
+            {
                 // Go to the next month.  I.e., keep cycling on the current "date field."
                 dateFieldIndex = DateFieldMonth - (DateField) 1;
                 shouldInspectNextField = YES;
             }
-		}
+        }
 
         // Move to the next field.
         dateFieldIndex ++;
@@ -349,7 +357,7 @@ typedef enum : NSUInteger {
 	else
 	{
 		result = [self componentsAsDate];
-
+		
 		if ([result isLaterThanDate: self.endingMoment])
 		{
 			result = nil;

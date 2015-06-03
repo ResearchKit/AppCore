@@ -150,6 +150,8 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
                                                           
                                                            NSMutableArray *motionDayValues = [NSMutableArray new];
                                                           
+                                                          BOOL activityRangeTimeFound = NO;
+                                                          
                                                           for(CMMotionActivity *activity in activities)
                                                           {
                                                               
@@ -173,6 +175,8 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
                                                                       removeThis = [midnight timeIntervalSinceDate:lastActivity_started];
                                                                       
                                                                       activityLengthTime = activityLengthTime - removeThis;
+                                                                      
+                                                                      activityRangeTimeFound = YES;
                                                                   }
                                                                   
                                                                   //Look for walking moderate and high confidence
@@ -205,7 +209,7 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
                                                                   
                                                                   if(activity.confidence == CMMotionActivityConfidenceMedium || activity.confidence == CMMotionActivityConfidenceHigh) // 45 seconds
                                                                   {
-                                                                      totalModerateTime += fabs(activityLength);
+                                                                      totalModerateTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
                                                                    
                                                                   }
                                                                 
@@ -256,37 +260,42 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
                                                               }
                                                               else if(lastMotionActivityType == MotionActivityUnknown)
                                                               {
-																  NSTimeInterval lastActivityDuration = fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
-																  
                                                                   if (activity.stationary)
                                                                   {
-                                                                      totalSedentaryTime += lastActivityDuration;
+                                                                      totalSedentaryTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
+                                                                      
+                                                                      lastMotionActivityType = MotionActivityStationary;
                                                                       lastActivity_started = activity.startDate;
                                                                   }
                                                                   else if (activity.walking && activity.confidence == CMMotionActivityConfidenceLow)
                                                                   {
-                                                                      totalLightActivityTime += lastActivityDuration;
+                                                                      totalLightActivityTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
+                                                                      lastMotionActivityType = MotionActivityWalking;
                                                                       lastActivity_started = activity.startDate;
                                                                   }
                                                                   else if (activity.walking)
                                                                   {
-																	  totalModerateTime += lastActivityDuration;
+                                                                      totalModerateTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
+                                                                      lastMotionActivityType = MotionActivityWalking;
                                                                       lastActivity_started = activity.startDate;
                                                                   }
                                                                   else if (activity.running)
                                                                   {
-																	  totalRunningTime += lastActivityDuration;
+                                                                      totalRunningTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
+                                                                      lastMotionActivityType = MotionActivityRunning;
                                                                       lastActivity_started = activity.startDate;
                                                                   }
                                                                   
                                                                   else if (activity.cycling)
                                                                   {
-																	  totalRunningTime += lastActivityDuration;
+                                                                      totalRunningTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
+                                                                      lastMotionActivityType = MotionActivityCycling;
                                                                       lastActivity_started = activity.startDate;
                                                                   }
                                                                   else if (activity.automotive)
                                                                   {
-																	  totalSedentaryTime += lastActivityDuration;
+                                                                      totalSedentaryTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
+                                                                      lastMotionActivityType = MotionActivityAutomotive;
                                                                       lastActivity_started = activity.startDate;
                                                                   }
                                                                   
@@ -302,6 +311,13 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
                                                                   
                                                               }
                                                               else if (activity.walking)
+                                                              {
+                                                                  lastMotionActivityType = MotionActivityWalking;
+                                                                  lastActivity_started = activity.startDate;
+                                                                  
+                                                              }
+                                                              
+                                                              else if (activity.walking && activity.confidence == CMMotionActivityConfidenceLow)
                                                               {
                                                                   lastMotionActivityType = MotionActivityWalking;
                                                                   lastActivity_started = activity.startDate;

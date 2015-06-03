@@ -35,6 +35,7 @@
 #import "APCLog.h"
 #import "UIColor+APCAppearance.h"
 #import "NSBundle+Helper.h"
+#import "APCSpinnerViewController.h"
 
 
 @implementation APCSpinnerViewController

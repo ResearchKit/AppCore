@@ -172,16 +172,44 @@ static NSInteger const kRegularFontSize = 17;
 - (IBAction)handleDays:(UISegmentedControl *)sender
 {
     APCAppDelegate *appDelegate = (APCAppDelegate *)[[UIApplication sharedApplication] delegate];
+    NSDate *startDate = nil;
+    NSDate *endDate = nil;
     
     switch (sender.selectedSegmentIndex) {
         case 0:
             self.allocationDataset = [appDelegate.sevenDayFitnessAllocationData yesterdaysAllocation];
+            
+            startDate = [[NSCalendar currentCalendar] dateBySettingHour:0
+                                                                         minute:0
+                                                                         second:0
+                                                                         ofDate:[self dateForSpan:-1]
+                                                                        options:0];
+            endDate = [[NSCalendar currentCalendar] dateBySettingHour:23
+                                                               minute:59
+                                                               second:0
+                                                               ofDate:startDate
+                                                              options:0];
+            
             break;
         case 1:
             self.allocationDataset = [appDelegate.sevenDayFitnessAllocationData todaysAllocation];
+            startDate = [[NSCalendar currentCalendar] dateBySettingHour:0
+                                                                 minute:0
+                                                                 second:0
+                                                                 ofDate:[NSDate date]
+                                                                options:0];
+
             break;
         default:
             self.allocationDataset = [appDelegate.sevenDayFitnessAllocationData weeksAllocation];
+            
+            startDate = [[NSCalendar currentCalendar] dateBySettingHour:0
+                                                                 minute:0
+                                                                 second:0
+                                                                 ofDate:self.allocationStartDate
+                                                                options:0];
+            
+
             break;
     }
     

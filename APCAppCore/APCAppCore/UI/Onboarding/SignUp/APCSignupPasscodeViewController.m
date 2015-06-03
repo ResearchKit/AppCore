@@ -31,6 +31,9 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 // 
  
+#import "APCUser.h"
+#import "APCPasscodeView.h"
+#import "UIAlertController+Helper.h"
 #import "APCSignupPasscodeViewController.h"
 #import "APCSignUpPermissionsViewController.h"
 #import "APCAppDelegate.h"
@@ -46,6 +49,7 @@
 #import "UIView+Helper.h"
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
+#import "APCKeychainStore.h"
 #import "UIAlertController+Helper.h"
 #import "APCKeychainStore+Passcode.h"
 
@@ -157,9 +161,10 @@
         UIViewController *viewController = [[self onboarding] nextScene];
         [self.navigationController pushViewController:viewController animated:YES];
     }
+    
 }
 
-- (void)showFirstTry
+- (void) showFirstTry
 {
     self.passcodeView.hidden = NO;
     self.retryPasscodeView.hidden = YES;
@@ -170,7 +175,7 @@
     [self.passcodeView reset];
 }
 
-- (void)showRetry
+- (void) showRetry
 {
     self.passcodeView.hidden = YES;
     self.retryPasscodeView.hidden = NO;

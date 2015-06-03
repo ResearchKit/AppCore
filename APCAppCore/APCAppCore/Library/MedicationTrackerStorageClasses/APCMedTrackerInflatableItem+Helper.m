@@ -67,9 +67,18 @@
 
 + (NSArray *) reloadAllObjectsFromPlistFileNamed: (NSString *) fileName
                                     usingContext: (NSManagedObjectContext *) context
+                                        inBundle: (NSBundle *) bundle
 {
     NSMutableArray *inflatedObjects = [NSMutableArray new];
-    NSURL *fileUrl = [self urlForBundleFileWithName: fileName];
+    NSURL *fileUrl = nil;
+    
+    if (bundle) {
+        fileUrl = [bundle URLForResource:fileName
+                           withExtension:@"plist"];
+    } else {
+        fileUrl = [self urlForBundleFileWithName: fileName];
+    }
+    
     NSArray *rawData = [NSArray arrayWithContentsOfURL: fileUrl];
 
     for (id probablyDictionary in rawData)
@@ -109,12 +118,13 @@
                         [generatedObject setValue: value forKey: key];
                     }
                 }
-				
+
+                APCMedTrackerInflatableItem *itemToSave = generatedObject;
                 APCMedTrackerInflatableItem *existingObjectWithThisName = [self itemWithSameNameAs: generatedObject
                                                                                          inContext: context];
                 if (existingObjectWithThisName)
                 {
-                    APCMedTrackerInflatableItem *itemToSave = existingObjectWithThisName;
+                    itemToSave = existingObjectWithThisName;
 
                     for (NSString *key in incomingData.allKeys)
                     {
