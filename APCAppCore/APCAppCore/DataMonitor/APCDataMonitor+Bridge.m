@@ -32,7 +32,7 @@
 // 
  
 #import "APCDataMonitor+Bridge.h"
-// #import "APCSchedule+Bridge.h"
+#import "APCSchedule+Bridge.h"
 #import "APCAppCore.h"
 
 NSString *const kFirstTimeRefreshToday = @"FirstTimeRefreshToday";

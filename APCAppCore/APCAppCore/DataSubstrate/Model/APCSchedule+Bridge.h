@@ -31,5 +31,5 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 // 
  
-#import <APCAppCore/APCAppCore.h>
+#import "APCSchedule.h"
 

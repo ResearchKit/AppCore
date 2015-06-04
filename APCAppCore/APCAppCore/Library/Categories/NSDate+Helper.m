@@ -399,15 +399,6 @@ typedef enum : NSUInteger {
                 else if ([substring hasPrefix: @"H"])                  { hours   = value; }
                 else if ([substring hasPrefix: @"M"] && timeStarted)   { minutes = value; }
                 else if ([substring hasPrefix: @"S"])                  { seconds = value; }
-
-                else
-                {
-                    // TODO:  handle this.
-                }
-            }
-            else
-            {
-                // TODO:  handle this.
             }
         }
     }

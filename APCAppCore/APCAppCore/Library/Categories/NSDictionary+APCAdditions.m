@@ -34,9 +34,9 @@
 #import "NSDictionary+APCAdditions.h"
 #import "APCAppCore.h"
 
-static  NSString    *daysOfWeekNames[]      = { @"Monday", @"Tuesday", @"Wednesday", @"Thursday", @"Friday", @"Saturday", @"Sunday" };
-static  NSUInteger  numberOfDaysOfWeek      = (sizeof(daysOfWeekNames) / sizeof(NSString *));
-static  NSString    *oneThroughFiveNames[]  = { @"Once", @"Two times", @"Three times", @"Four times", @"Five times" };
+static  NSString  *daysOfWeekNames[]     = { @"Monday", @"Tuesday", @"Wednesday", @"Thursday", @"Friday", @"Saturday", @"Sunday" };
+static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSString *));
+static  NSString  *oneThroughFiveNames[] = { @"Once", @"Two times", @"Three times", @"Four times", @"Five times" };
 
 static NSString * const APCErrorDomainLoadingDictionary             = @"APCErrorDomainLoadingDictionary";
 static NSInteger  const APCErrorLoadingJsonNoFileCode               = 1;
@@ -87,7 +87,7 @@ static NSString * const APCErrorLoadingJsonNoDictionarySuggestion   = @"We were 
     }
     
     NSString  *result = @"";
-    if (everyday == YES) {
+    if (everyday) {
         if ([saved unsignedIntegerValue] > 5) {
             result = [NSString stringWithFormat:@"%lu times Every Day", (unsigned long)[saved unsignedIntegerValue]];
         } else {

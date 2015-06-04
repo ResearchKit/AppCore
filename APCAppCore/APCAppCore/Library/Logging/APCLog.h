@@ -42,7 +42,7 @@
 // ---------------------------------------------------------
 
 /*
- These macros wrap NSLog. Evolving.
+ These macros wrap NSLog.
  
  You can also just call the Objective-C versions yourself.
  The reasons to use the macros are:

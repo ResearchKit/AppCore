@@ -58,7 +58,6 @@ NSString * const kAPCScheduleTypeValueOneTimeSchedule = @"once";
 
 - (APCScheduleExpression *) scheduleExpression
 {
-    //TODO: Schedule interval is 0
     return [[APCScheduleExpression alloc] initWithExpression:self.scheduleString timeZero:0];
 }
 

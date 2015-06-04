@@ -472,8 +472,10 @@ static NSString * const kAPCErrorFetchingUsersSuggestion = @"Unable to fetch use
     NSNumber *result = nil;
     APCScheduleSource scheduleSource = APCScheduleSourceLocalDisk;
 
-    /* TODO:  Is there a way to get compiler help with this name, if the
-     field I'm trying to access has been physically removed from the app? */
+    /*
+     This refers to the property -[APCSchedule remoteUpdatable]
+     in the code we're migrating from.
+     */
     id maybeRemoteUpdatable = [scheduleFromV4 valueForKey: @"remoteUpdatable"];
 
     if (maybeRemoteUpdatable != nil && [maybeRemoteUpdatable isKindOfClass: [NSNumber class]])

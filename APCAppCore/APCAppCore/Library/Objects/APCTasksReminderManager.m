@@ -32,10 +32,20 @@
 // 
  
 #import "APCTasksReminderManager.h"
-#import "APCAppCore.h"
+#import "APCAppDelegate.h"
+#import "APCScheduledTask+AddOn.h"
+#import "APCResult+AddOn.h"
+
 #import "APCConstants.h"
-#import "APCScheduler.h"
-#import "APCActivitiesViewSection.h"
+#import "APCLog.h"
+#import "NSDate+Helper.h"
+#import "NSDictionary+APCAdditions.h"
+#import "NSManagedObject+APCHelper.h"
+#import "APCTask.h"
+#import "APCTaskGroup.h"
+
+#import <UIKit/UIKit.h>
+
 
 NSString * const kTaskReminderUserInfo = @"CurrentTaskReminder";
 NSString * const kSubtaskReminderUserInfo = @"CurrentSubtaskReminder";
