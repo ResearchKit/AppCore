@@ -483,7 +483,6 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
 
 - (void)appDidRegisterForRemoteNotifications: (NSNotification *)notification
 {
-    
     UIUserNotificationSettings *settings = (UIUserNotificationSettings *)notification.object;
     
     if (settings.types != 0) {

@@ -304,7 +304,7 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
         [graphView setNeedsLayout];
         [graphView layoutIfNeeded];
         [graphView refreshGraph];
-    }
+}
 }
 
 #pragma mark - APCBaseGraphViewDelegate methods

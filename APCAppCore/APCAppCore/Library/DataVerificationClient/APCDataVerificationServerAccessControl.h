@@ -34,10 +34,13 @@
 
 
 /*
- Uncomment this line in order to use the data-verification server.
+ Uncomment this line in order to use the data-verification
+ server.
  
- If you do that:  do NOT push that change to Git!  It allows
- the app to broadcast its unencrypted content to a local IP address.
+ If you do that:  consider carefully whether you want to
+ push this change to Git.  It allows the app to broadcast
+ its unencrypted content to a local IP address.  (It's very
+ helpful during debugging.)
  */
 
 #if DEBUG

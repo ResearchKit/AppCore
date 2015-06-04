@@ -41,8 +41,8 @@
 #import "APCUtilities.h"
 
 
-static CGFloat kTintedCellHeight = 65;
-static CGFloat kTableViewSectionHeaderHeight = 77;
+static CGFloat    const kTintedCellHeight                           = 65;
+static CGFloat    const kTableViewSectionHeaderHeight               = 77;
 static NSString * const kAPCSampleGlucoseLogTaskAndScheduleFileName = @"APHSampleGlucoseLogTaskAndSchedule.json";
 static NSString * const kAPCListOfTimesMarker                       = @"LIST_OF_TIMES";
 static NSString * const kAPCListOfWeekdaysMarker                    = @"LIST_OF_WEEKDAYS";
@@ -51,21 +51,21 @@ static NSString * const kAPCScheduleStringKey                       = @"schedule
 
 @interface APCActivitiesViewController ()
 
-@property (nonatomic, strong) IBOutlet UITableView *tableView;
-@property (nonatomic, weak)   IBOutlet UILabel *noTasksLabel;
+@property (nonatomic, strong) IBOutlet UITableView  *tableView;
+@property (nonatomic, weak)   IBOutlet UILabel      *noTasksLabel;
 
-@property (readonly) APCAppDelegate *appDelegate;
-@property (readonly) APCActivitiesViewSection *todaySection;
-@property (readonly) NSUInteger countOfRequiredTasksToday;
-@property (readonly) NSUInteger countOfCompletedTasksToday;
-@property (readonly) NSUInteger countOfRemainingTasksToday;
-@property (readonly) UITabBarItem *myTabBarItem;
+@property (readonly) APCAppDelegate                 *appDelegate;
+@property (readonly) APCActivitiesViewSection       *todaySection;
+@property (readonly) NSUInteger                     countOfRequiredTasksToday;
+@property (readonly) NSUInteger                     countOfCompletedTasksToday;
+@property (readonly) NSUInteger                     countOfRemainingTasksToday;
+@property (readonly) UITabBarItem                   *myTabBarItem;
 
-@property (strong, nonatomic) NSDateFormatter *dateFormatter;
-@property (nonatomic, strong) NSDate *lastKnownSystemDate;                  // to check for a change when we reappear
-@property (nonatomic, strong) NSArray *sections;
-@property (nonatomic, assign) BOOL isFetchingFromCoreDataRightNow;
-@property (nonatomic, strong) UIRefreshControl *refreshControl;
+@property (nonatomic, strong) NSDateFormatter       *dateFormatter;
+@property (nonatomic, strong) NSDate                *lastKnownSystemDate;
+@property (nonatomic, strong) NSArray               *sections;
+@property (nonatomic, assign) BOOL                  isFetchingFromCoreDataRightNow;
+@property (nonatomic, strong) UIRefreshControl      *refreshControl;
 
 @property (readonly) NSDate *dateWeAreUsingForToday;
 
@@ -74,6 +74,7 @@ static NSString * const kAPCScheduleStringKey                       = @"schedule
 
 @implementation APCActivitiesViewController
 
+
 #pragma mark - Lifecycle
 
 - (void) viewDidLoad
@@ -81,21 +82,14 @@ static NSString * const kAPCScheduleStringKey                       = @"schedule
     [super viewDidLoad];
 
     self.navigationItem.title = NSLocalizedString(@"Activities", @"Activities");
-
     self.tableView.backgroundColor = [UIColor appSecondaryColor4];
 
     NSString *headerViewNibName = NSStringFromClass ([APCActivitiesSectionHeaderView class]);
-
-    UINib *nib = [UINib nibWithNibName: headerViewNibName
-                                bundle: [NSBundle appleCoreBundle]];
-
+    UINib *nib = [UINib nibWithNibName:headerViewNibName bundle:[NSBundle appleCoreBundle]];
     [self.tableView registerNib: nib forHeaderFooterViewReuseIdentifier: headerViewNibName];
 
     self.dateFormatter = [NSDateFormatter new];
-
     [self configureRefreshControl];
-
-    // Set this to nil to trigger a refresh at the first opportunity.
     self.lastKnownSystemDate = nil;
 }
 
@@ -186,12 +180,7 @@ static NSString * const kAPCScheduleStringKey                       = @"schedule
             APCLogDebug (@"Handling date changes (Activities): Last-known date has changed. Resetting dates, refreshing server content, and refreshing UI.");
 
             self.lastKnownSystemDate = now;
-
-            // First, get the current stuff from CoreData.
-            // Then we'll also check with the server.
             [self reloadTasksFromCoreData];
-
-            // And now go grab the newest copy of data from the world.
             [self fetchNewestSurveysAndTasksFromServer: nil];
         }
     }];
@@ -225,8 +214,7 @@ static NSString * const kAPCScheduleStringKey                       = @"schedule
 
     [cell configureWithTaskGroup: taskGroupForThisRow
                      isTodayCell: section.isTodaySection
-               showDebuggingInfo: NO
-     ];
+               showDebuggingInfo: NO];
 
     return cell;
 }
@@ -421,13 +409,13 @@ static NSString * const kAPCScheduleStringKey                       = @"schedule
 // ---------------------------------------------------------
 
 /*
- This view does a query that other people need.
- One thing they need is the number of required and
- completed tasks for "today."  Update them.
+ This viewController does a query that other people need.
+ One aspect of the information they need is the number of
+ required and completed tasks for "today."  Update them.
  */
 - (void) reportNewTaskTotals
 {
-    NSUInteger requiredTasks = self.countOfRequiredTasksToday;
+    NSUInteger requiredTasks  = self.countOfRequiredTasksToday;
     NSUInteger completedTasks = self.countOfCompletedTasksToday;
 
     [self.appDelegate.dataSubstrate updateCountOfTotalRequiredTasksForToday: requiredTasks
@@ -440,10 +428,6 @@ static NSString * const kAPCScheduleStringKey                       = @"schedule
 #pragma mark - Reloading data from Sage
 // ---------------------------------------------------------
 
-/**
- The method called by this method sends a notification 
- which has us update the screen.
- */
 - (void) fetchNewestSurveysAndTasksFromServer: (id) __unused sender
 {
     __weak APCActivitiesViewController * weakSelf = self;
@@ -452,7 +436,6 @@ static NSString * const kAPCScheduleStringKey                       = @"schedule
 
         if (error != nil)
         {
-            // TODO:  handle this error alert more intelligently.
             UIAlertController * alert = [UIAlertController simpleAlertWithTitle: @"Error"
                                                                         message: error.localizedDescription];
 
@@ -471,24 +454,17 @@ static NSString * const kAPCScheduleStringKey                       = @"schedule
 #pragma mark - Repainting the UI
 // ---------------------------------------------------------
 
-/**
- This is just the "reload the UI" bit.  It gets called when
- the view loads (or will soon) and after each server load.
- It does NOT do a server call itself (or, by the time I'm
- done with it, a database call).
- */
 - (void) updateWholeUI
 {
     [self.refreshControl endRefreshing];
     [self performSelector:@selector(dismiss) withObject:self afterDelay:0.5];
     [self configureNoTasksView];
     [self updateBadge];
-    
     [self.tableView reloadData];
     
 }
 
-- (void)dismiss
+- (void) dismiss
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
@@ -514,15 +490,19 @@ static NSString * const kAPCScheduleStringKey                       = @"schedule
 
 - (void) configureNoTasksView
 {
-    //only add the noTasksView if there are no activities to show
-    if (self.sections.count == 0 && ! self.isFetchingFromCoreDataRightNow) {
+    // Only add the noTasksView if there are no activities to show.
+    if (self.sections.count == 0 && ! self.isFetchingFromCoreDataRightNow)
+    {
         [self.view bringSubviewToFront:self.noTasksLabel];
         [self.noTasksLabel setHidden:NO];
-    }else{
+    }
+    else
+    {
         [self.noTasksLabel setHidden:YES];
     }
-    
 }
+
+
 
 // ---------------------------------------------------------
 #pragma mark - Fetching current tasks from CoreData (NOT from server)
@@ -541,7 +521,7 @@ static NSString * const kAPCScheduleStringKey                       = @"schedule
     NSPredicate *filterForRequiredTasks = [NSPredicate predicateWithFormat: @"%K == nil || %K == %@",
                                            NSStringFromSelector(@selector(taskIsOptional)),
                                            NSStringFromSelector(@selector(taskIsOptional)),
-                                            @(NO)];
+                                           @(NO)];
 
     NSDate *today = self.dateWeAreUsingForToday;
     NSDate *yesterday = today.dayBefore;
@@ -599,11 +579,12 @@ static NSString * const kAPCScheduleStringKey                       = @"schedule
          }
 
          /*
-          Now that we've gotten all tasks for all the dates we care about,
-          get the "optional" tasks for "today" (or the date we formally
-          believe is "today"), and insert them between "today" and
-          "yesterday" (if available, or at the bottom of the list of
-          sections, if not).
+          Now that we've gotten all tasks for all the dates
+          we care about, get the "optional" tasks for
+          "today" (or the date we formally believe is
+          "today"), and insert them between "today" and
+          "yesterday" (if available, or at the bottom of
+          the list of sections, if not).
           */
          [[APCScheduler defaultScheduler] fetchTaskGroupsFromDate: today
                                                            toDate: today
@@ -640,12 +621,24 @@ static NSString * const kAPCScheduleStringKey                       = @"schedule
 
 
              //
+             // Regenerate reminders for all these things.
+             //
+             NSArray *taskGroupsForToday = todaySection.taskGroups;
+             [weakSelf.appDelegate.tasksReminder handleActivitiesUpdateWithTodaysTaskGroups: taskGroupsForToday];
+
+
+             //
              // Update central data points, so other screens
              // can draw their graphics and whatnot.
              //
              [weakSelf reportNewTaskTotals];
-             
-             //we always fetch optional tasks. When this second fetch is complete, updateWholeUI
+
+
+             //
+             // Per the above:  we always fetch optional tasks.
+             // Now that the second fetch is complete:
+             // update the UI.
+             //
              weakSelf.isFetchingFromCoreDataRightNow = NO;
              [weakSelf updateWholeUI];
 
@@ -672,7 +665,7 @@ static NSString * const kAPCScheduleStringKey                       = @"schedule
 - (UITabBarItem *) myTabBarItem
 {
     UITabBarItem *activitiesTab = nil;
-    UITabBar *tabBar = self.appDelegate.tabBarController.tabBar;
+    UITabBar *tabBar = self.appDelegate.tabster.tabBar;
 
     for (UITabBarItem *item in tabBar.items)
     {

@@ -82,8 +82,7 @@ NSString *const kTasksAndSchedulesJSONFileName   = @"APHTasksAndSchedules";
     return taskAndSchedules;
 }
 
-- (void) migrateScheduleAndTasks
-{
+- (void)migrateScheduleAndTasks {
 }
 
 @end

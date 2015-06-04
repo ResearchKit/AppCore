@@ -200,6 +200,9 @@
     return computedDate;
 }
 
+/**
+ This method is very similar to a method in APCScheduler.m.
+ */
 - (NSArray *) deserializedArrayOfDurationsSinceMidnightFromISO8601TimesOfDayString: (NSString *) serializedTimesOfDayString
 {
     NSMutableArray *result = nil;
@@ -253,7 +256,7 @@
     {
         // The result array is a bunch of NSNumbers.
         // Sort them from midnight-before to midnight-after
-        // using the -[NSNumber compare:].
+        // using -[NSNumber compare:].
         [result sortUsingSelector: @selector (compare:)];
     }
     

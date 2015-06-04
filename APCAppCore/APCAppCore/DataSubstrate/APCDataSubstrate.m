@@ -32,64 +32,61 @@
 // 
  
 #import "APCDataSubstrate.h"
-#import "APCDataSubstrate+ResearchKit.h"
 #import "APCConstants.h"
 #import "APCUser.h"
 #import "APCAppDelegate.h"		// should be replaced
 #import "APCLog.h"
+
 #import "NSDate+Helper.h"
 #import "APCTask+AddOn.h"
-#import "APCDataSubstrate+HealthKit.h"
-#import "APCModel.h"
 #import "APCSchedule+AddOn.h"
 #import "APCScheduledTask+AddOn.h"
 #import "NSError+APCAdditions.h"
+#import "APCScheduler.h"
+
 
 static int dateCheckTimeInterval = 60;
 
-static NSString * const kCoreDataErrorDomain                = @"kAPCError_CoreData_Domain";
+static NSString * const kCoreDataErrorDomain                   = @"kAPCError_CoreData_Domain";
 
-static NSInteger  const kErrorCantCreateDatabase_Code       = 1;
-static NSString * const kErrorCantCreateDatabase_Reason     = @"Unable to Create Database";
-static NSString * const kErrorCantCreateDatabase_Suggestion = (@"We were unable to create a place to "
-                                                               "save your data. Please exit the app and "
-                                                               "try again. If the problem reoccurs, please "
-                                                               "uninstall the app and try once more.");
+static NSInteger  const kErrorCantCreateDatabase_Code          = 1;
+static NSString * const kErrorCantCreateDatabase_Reason        = @"Unable to Create Database";
+static NSString * const kErrorCantCreateDatabase_Suggestion    = (@"We were unable to create a place to "
+                                                                  "save your data. Please exit the app and "
+                                                                  "try again. If the problem reoccurs, please "
+                                                                  "uninstall the app and try once more.");
 
-static NSInteger  const kErrorCantOpenDatabase_Code         = 2;
-static NSString * const kErrorCantOpenDatabase_Reason       = @"Unable to Open Database";
-static NSString * const kErrorCantOpenDatabase_Suggestion   = (@"Unable to open your existing data file. "
-                                                               "Please exit the app and try again. If the "
-                                                               "problem reoccurs, please uninstall and "
-                                                               "reinstall the app.");
+static NSInteger  const kErrorCantOpenDatabase_Code            = 2;
+static NSString * const kErrorCantOpenDatabase_Reason          = @"Unable to Open Database";
+static NSString * const kErrorCantOpenDatabase_Suggestion      = (@"Unable to open your existing data file. "
+                                                                  "Please exit the app and try again. If the "
+                                                                  "problem reoccurs, please uninstall and "
+                                                                  "reinstall the app.");
 
-static NSString * const kAPCJSONFileKeySchedules            = @"schedules";
-static NSString * const kAPCJSONFileKeyTasks                = @"tasks";
-
+static NSString * const kAPCJSONFileKeySchedules = @"schedules";
+static NSString * const kAPCJSONFileKeyTasks     = @"tasks";
 
 
 @interface APCDataSubstrate ()
-@property (strong, nonatomic) NSTimer *dateChangeTestTimer;
-@property (strong, nonatomic) NSDate *lastKnownDate;
+@property (nonatomic, strong) NSTimer *dateChangeTestTimer;
+@property (nonatomic, strong) NSDate *lastKnownDate;
 @property (nonatomic, assign) NSUInteger countOfTotalRequiredTasksForToday;
 @property (nonatomic, assign) NSUInteger countOfTotalCompletedTasksForToday;
 @end
 
 @implementation APCDataSubstrate
 
+- (void)dealloc
+{
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
-// ---------------------------------------------------------
-#pragma mark - Setup
-// ---------------------------------------------------------
-
-- (instancetype) initWithPersistentStorePath: (NSString*) storePath
-                            additionalModels: (NSManagedObjectModel *) mergedModels
-                             studyIdentifier: (NSString *) __unused studyIdentifier
+- (instancetype)initWithPersistentStorePath:(NSString *)storePath
+						   additionalModels:(NSManagedObjectModel *)mergedModels
+                            studyIdentifier:(NSString *)__unused studyIdentifier
 {
     self = [super init];
-
-    if (self)
-    {
+    if (self) {
         _dateChangeTestTimer = nil;
         _lastKnownDate = [NSDate date];
         _countOfTotalCompletedTasksForToday = 0;
@@ -101,11 +98,10 @@ static NSString * const kAPCJSONFileKeyTasks                = @"tasks";
         [self setupParameters];
         [self setupNotifications];
     }
-
     return self;
 }
 
-- (void) setUpCurrentUser: (NSManagedObjectContext*) context
+- (void)setUpCurrentUser:(NSManagedObjectContext *)context
 {
     if (!_currentUser) {
         static dispatch_once_t onceToken;
@@ -115,13 +111,13 @@ static NSString * const kAPCJSONFileKeyTasks                = @"tasks";
     }
 }
 
-- (void) setupParameters
+- (void)setupParameters
 {
     self.parameters = [[APCParameters alloc] initWithFileName:@"APCParameters.json"];
     [self.parameters setDelegate:self];
 }
 
-- (void) setupNotifications
+- (void)setupNotifications
 {
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector (appCameToForeground:)
@@ -139,22 +135,8 @@ static NSString * const kAPCJSONFileKeyTasks                = @"tasks";
                                                object: nil];
 }
 
-- (void) parameters: (APCParameters *) __unused parameters
-   didFailWithError: (NSError *) error
-{
-    NSAssert(error, @"parameters are not loaded");
-}
 
-- (void) dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver: self];
-}
-
-
-
-// ---------------------------------------------------------
 #pragma mark - HealthKit
-// ---------------------------------------------------------
 
 - (void)setUpHealthKit
 {
@@ -163,19 +145,16 @@ static NSString * const kAPCJSONFileKeyTasks                = @"tasks";
 
 
 
-// ---------------------------------------------------------
-#pragma mark - CoreData
-// ---------------------------------------------------------
+#pragma mark - Core Data Subsystem
 
-- (void) setUpCoreDataStackWithPersistentStorePath: (NSString*) storePath
-                                  additionalModels: (NSManagedObjectModel *) mergedModels
+- (void)setUpCoreDataStackWithPersistentStorePath:(NSString *)storePath additionalModels:(NSManagedObjectModel *)mergedModels
 {
     [self loadManagedObjectModel:mergedModels];
     [self initializePersistentStoreCoordinator:storePath];
     [self createManagedObjectContexts];
 }
 
-- (void) loadManagedObjectModel: (NSManagedObjectModel*) mergedModels
+- (void)loadManagedObjectModel:(NSManagedObjectModel *)mergedModels
 {
     NSBundle *bundle = [NSBundle bundleForClass:[self class]];
     
@@ -189,19 +168,19 @@ static NSString * const kAPCJSONFileKeyTasks                = @"tasks";
     self.managedObjectModel = model;
 }
 
-- (void) initializePersistentStoreCoordinator: (NSString*) storePath
+- (void)initializePersistentStoreCoordinator:(NSString *)storePath
 {
     self.storePath = storePath;
     self.persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:self.managedObjectModel];
     [self setUpPersistentStore];
 }
 
-- (void) setUpPersistentStore
+- (void)setUpPersistentStore
 {
     NSError *errorOpeningOrCreatingCoreDataFile = nil;
-    NSURL   *persistentStoreUrl  = [NSURL fileURLWithPath: self.storePath];
-    BOOL    fileAlreadyExists    = [[NSFileManager defaultManager] fileExistsAtPath: self.storePath];
-
+    NSURL *persistentStoreUrl = [NSURL fileURLWithPath:self.storePath];
+    BOOL fileAlreadyExists = [[NSFileManager defaultManager] fileExistsAtPath:self.storePath];
+    
     NSDictionary *options = @{ NSMigratePersistentStoresAutomaticallyOption : @(YES),
                                NSInferMappingModelAutomaticallyOption       : @(YES)
                                };
@@ -212,12 +191,10 @@ static NSString * const kAPCJSONFileKeyTasks                = @"tasks";
                                                                                              options: options
                                                                                                error: & errorOpeningOrCreatingCoreDataFile];
     
-    if (persistentStore)
-    {
+    if (persistentStore) {
         // Great!  Everything worked.  (Sound of whistling)
     }
-    else
-    {
+    else {
         /*
          In case we want to switch() on them, the list of possible
          CoreData errors is here:
@@ -226,8 +203,7 @@ static NSString * const kAPCJSONFileKeyTasks                = @"tasks";
          */
         NSError *catastrophe = nil;
         
-        if (fileAlreadyExists)
-        {
+        if (fileAlreadyExists) {
             catastrophe = [NSError errorWithCode: kErrorCantOpenDatabase_Code
                                           domain: kCoreDataErrorDomain
                                    failureReason: kErrorCantOpenDatabase_Reason
@@ -236,8 +212,7 @@ static NSString * const kAPCJSONFileKeyTasks                = @"tasks";
                                       relatedURL: persistentStoreUrl
                                      nestedError: errorOpeningOrCreatingCoreDataFile];
         }
-        else
-        {
+        else {
             catastrophe = [NSError errorWithCode: kErrorCantCreateDatabase_Code
                                           domain: kCoreDataErrorDomain
                                    failureReason: kErrorCantCreateDatabase_Reason
@@ -261,9 +236,9 @@ static NSString * const kAPCJSONFileKeyTasks                = @"tasks";
     }
 }
 
-- (void) removeSqliteStore
+- (void)removeSqliteStore
 {
-    NSError *localError = nil;
+    NSError *localError;
     [[NSFileManager defaultManager] removeItemAtPath:self.storePath error:&localError];
     APCLogError2(localError);
 }
@@ -279,12 +254,15 @@ static NSString * const kAPCJSONFileKeyTasks                = @"tasks";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(mergeChangesToMainContext:) name:NSManagedObjectContextDidSaveNotification object:self.persistentContext];
 }
 
-- (void) mergeChangesToMainContext: (NSNotification*) notification
+- (void)mergeChangesToMainContext:(NSNotification*) notification
 {
-    [self.mainContext performBlock: ^{
+    [self.mainContext performBlock:^{
         [self.mainContext mergeChangesFromContextDidSaveNotification:notification];
     }];
 }
+
+
+#pragma mark - Core Data Public Methods
 
 - (void)resetCoreData
 {
@@ -297,12 +275,14 @@ static NSString * const kAPCJSONFileKeyTasks                = @"tasks";
     APCLogError2 (error);
     [self removeSqliteStore];
     [self setUpPersistentStore];
-
-    APCAppDelegate * appDelegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
+    APCAppDelegate * appDelegate = [APCAppDelegate sharedAppDelegate];
     [appDelegate.scheduler loadTasksAndSchedulesFromDiskAndThenUseThisQueue: nil toDoThisWhenDone: nil];
 }
 
-- (NSFetchRequest*) requestForScheduledTasksDueFrom:(NSDate *)fromDate toDate:(NSDate *)toDate sortDescriptors: (NSArray*) sortDescriptors
+
+#pragma mark - Core Data Helpers - ONLY RETURNS in NSManagedObjects in mainContext
+
+- (NSFetchRequest*)requestForScheduledTasksDueFrom:(NSDate *)fromDate toDate:(NSDate *)toDate sortDescriptors:(NSArray *)sortDescriptors
 {
     NSFetchRequest *request = [APCScheduledTask request];
     request.predicate = [NSPredicate predicateWithFormat:@"dueOn >= %@ and dueOn < %@", fromDate, toDate];
@@ -344,13 +324,37 @@ static NSString * const kAPCJSONFileKeyTasks                = @"tasks";
     return nil;
 }
 
+- (void) updateCountOfTotalRequiredTasksForToday: (NSUInteger) countOfRequiredTasks
+                     andTotalCompletedTasksToday: (NSUInteger) countOfCompletedTasks
+{
+    self.countOfTotalRequiredTasksForToday = countOfRequiredTasks;
+    self.countOfTotalCompletedTasksForToday = countOfCompletedTasks;
+}
+
+// This method is deprecated. See .h file for details.
+- (NSUInteger)countOfAllScheduledTasksForToday
+{
+    return self.countOfTotalRequiredTasksForToday;
+}
+
+// This method is deprecated. See .h file for details.
+- (NSUInteger)countOfCompletedScheduledTasksForToday
+{
+    return self.countOfTotalCompletedTasksForToday;
+}
 
 
-// ---------------------------------------------------------
-#pragma mark - Date-Change Test Timer
-// ---------------------------------------------------------
+#pragma mark - Properties & Methods meant only for Categories
 
-- (void) appCameToForeground: (NSNotification *) __unused notification
+- (void)parameters:(APCParameters *)__unused parameters didFailWithError:(NSError *)error
+{
+    NSAssert(error, @"parameters are not loaded");
+}
+
+
+#pragma mark - Date Change Test Timer
+
+- (void)appCameToForeground:(NSNotification *)__unused notification
 {
     APCLogDebug (@"Handling date changes (DataSubstrate): The app is back in the foreground. Restarting the date-change timer, and checking immediately for a date change.");
 
@@ -358,14 +362,14 @@ static NSString * const kAPCJSONFileKeyTasks                = @"tasks";
     [self startTimer];
 }
 
-- (void) appWentToBackground: (NSNotification *) __unused notification
+- (void)appWentToBackground:(NSNotification *)__unused notification
 {
     APCLogDebug (@"Handling date changes (DataSubstrate): The app has moved to the background. Cancelling the date-change timer.");
 
     [self stopTimer];
 }
 
-- (void) startTimer
+- (void)startTimer
 {
     /*
      We can only stop a timer on the thread from which
@@ -384,7 +388,7 @@ static NSString * const kAPCJSONFileKeyTasks                = @"tasks";
     }];
 }
 
-- (void) stopTimer
+- (void)stopTimer
 {
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
 
@@ -397,7 +401,7 @@ static NSString * const kAPCJSONFileKeyTasks                = @"tasks";
  Intended to be called only from within the above
  -startTimer and -stopTimer methods, above.
  */
-- (void) stopTimerInternal
+- (void)stopTimerInternal
 {
     if (self.dateChangeTestTimer != nil)
     {
@@ -406,7 +410,7 @@ static NSString * const kAPCJSONFileKeyTasks                = @"tasks";
     }
 }
 
-- (void) hootAndHollerIfTheDateCrossedMidnight
+- (void)hootAndHollerIfTheDateCrossedMidnight
 {
     [[NSOperationQueue mainQueue] addOperationWithBlock: ^{
 
@@ -429,48 +433,5 @@ static NSString * const kAPCJSONFileKeyTasks                = @"tasks";
         }
     }];
 }
-
-
-
-// ---------------------------------------------------------
-#pragma mark - The count of required tasks
-// ---------------------------------------------------------
-
-/**
- Called by the Activities screen, or the CoreData method
- called by that screen, whenever appropriate.  Updates the
- two -count properties on this object, so objects that
- need the count can read it without running a CoreData
- query and lots of calendar math.
- */
-- (void) updateCountOfTotalRequiredTasksForToday: (NSUInteger) countOfRequiredTasks
-                     andTotalCompletedTasksToday: (NSUInteger) countOfCompletedTasks
-{
-    self.countOfTotalRequiredTasksForToday = countOfRequiredTasks;
-    self.countOfTotalCompletedTasksForToday = countOfCompletedTasks;
-}
-
-
-
-// ---------------------------------------------------------
-#pragma mark - Deprecated count methods
-// ---------------------------------------------------------
-
-/*
- These methods are deprecated.  Their replacement methods,
- -countOfTotalRequiredTasksForToday and
- -countOfTotalCompletedTasksForToday, are more accurate
- and centrally managed.
- */
-- (NSUInteger) countOfAllScheduledTasksForToday
-{
-    return self.countOfTotalRequiredTasksForToday;
-}
-
-- (NSUInteger) countOfCompletedScheduledTasksForToday
-{
-    return self.countOfTotalCompletedTasksForToday;
-}
-
 
 @end

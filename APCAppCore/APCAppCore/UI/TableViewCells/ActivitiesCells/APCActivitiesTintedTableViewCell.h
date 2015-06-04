@@ -54,5 +54,4 @@ FOUNDATION_EXPORT NSString * const kAPCActivitiesTintedTableViewCellIdentifier;
                     isTodayCell: (BOOL) cellRepresentsToday
               showDebuggingInfo: (BOOL) shouldShowDebuggingInfo;
 
-
 @end

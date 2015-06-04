@@ -321,7 +321,7 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
     _numberOfDays = numberOfDays;
     
     __weak typeof(self) weakSelf = self;
-
+    
     // Update the generated dataset to be inline with the timeline.
     self.dataPoints = [self dataPointsArrayForDays:_numberOfDays groupBy:_groupBy];
     
@@ -348,7 +348,7 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
                latestOnly:self.latestOnly
                   groupBy:groupBy
                completion:^{
-                    [weakSelf updateCharts];
+                   [weakSelf updateCharts];
                }];
     }
     
@@ -356,7 +356,7 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
     if (self.correlatedScoring) {
         [self.correlatedScoring updatePeriodForDays:numberOfDays groupBy:groupBy];
     }
-
+    
 }
 
 //should only be called by parent self of correlated data source
@@ -369,6 +369,7 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
     [self indexDataSeries:self.correlatedScoring.dataPoints];
 }
 
+//Called when user selects a new date range
 - (void)updateCharts{
     
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -378,7 +379,11 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
             [self.weakParentScoring correlateDataSources];
         }
         
-        [[NSNotificationCenter defaultCenter]postNotificationName:APCUpdateChartsNotification object:self];
+        //tell the APCGraphViewController to update its chart
+        if ([self.scoringDelegate respondsToSelector:@selector(graphViewControllerShouldUpdateChartWithScoring:)])
+        {
+            [self.scoringDelegate graphViewControllerShouldUpdateChartWithScoring:self];
+        }
     });
 }
 
@@ -387,16 +392,17 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
 /**
  @brief Add a series to correlate with an initialized APCScoring object's TaskId data series
  */
--(void)correlateWithScoringObject:(APCScoring *)scoring
+- (void)correlateWithScoringObject:(APCScoring *)scoring
 {
     self.correlatedScoring = scoring;
     self.correlatedScoring.weakParentScoring = self;
     [self correlateDataSources];
 }
 
--(void)discardIncongruentArrayElements{
+- (void)discardIncongruentArrayElements
+{
     //arrays are NOT guaranteed to be the same length if queried with the same date range when one or more series is data from HealthKit
-
+    
     //find the shortest array and difference in their counts
     NSMutableArray *shortestArray = self.dataPoints.count <= self.correlatedScoring.dataPoints.count ? self.dataPoints : self.correlatedScoring.dataPoints;
     NSMutableArray *longestArray = self.dataPoints.count >= self.correlatedScoring.dataPoints.count ? self.dataPoints : self.correlatedScoring.dataPoints;
@@ -428,7 +434,7 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
             return NO;
         }
     }];
-                                  
+    
     NSUInteger correlatedDataPointsIndex = [self.correlatedScoring.dataPoints indexOfObjectPassingTest:^BOOL(id obj, NSUInteger __unused idx, BOOL *stop) {
         if (![[(NSDictionary *)obj objectForKey:kDatasetValueKey] isEqualToNumber: @(NSNotFound)]) {
             *stop = YES;
@@ -437,7 +443,7 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
             return NO;
         }
     }];
-        
+    
     NSUInteger highestIndex = 0;
     if (dataPointsIndex >= correlatedDataPointsIndex) {
         highestIndex = dataPointsIndex;
@@ -459,7 +465,8 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
     }
 }
 
--(void)indexDataSeries:(NSMutableArray *)series{
+- (void)indexDataSeries:(NSMutableArray *)series
+{
     
     NSDictionary *basePointObject;
     NSNumber *basePointValue = @0;
@@ -476,11 +483,13 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
     //loop over all elements calculating the point index
     NSNumber *index;
     for (NSUInteger i = 0; i < series.count; i++) {
-        NSMutableDictionary *dictionary = [[series objectAtIndex:i] mutableCopy];
-        NSNumber *dataPoint = [dictionary valueForKey:kDatasetValueKey];
+        
+        NSNumber *dataPoint = [(NSDictionary *)[series objectAtIndex:i] valueForKey:kDatasetValueKey];
         float ind = dataPoint.floatValue / basePointValue.floatValue * 100;
         index = [NSNumber numberWithFloat:ind];
+        
         if (![dataPoint isEqual: @(NSNotFound)]) {
+            NSMutableDictionary *dictionary = [[series objectAtIndex:i] mutableCopy];
             [dictionary setValue:index forKey:kDatasetValueKey];
             APCRangePoint *point = [[APCRangePoint alloc]initWithMinimumValue:ind maximumValue:ind];
             [dictionary setValue:point forKey:kDatasetRangeValueKey];
@@ -490,7 +499,8 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
 }
 
 //Notification added in correlateWithScoringObject()
--(void)dealloc{
+- (void)dealloc
+{
     [[NSNotificationCenter defaultCenter]removeObserver:self];
 }
 
@@ -803,13 +813,13 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
         if (filteredDataPoints.count != 0) {
             dayAverage = itemSum / filteredDataPoints.count;
         }
-
+        
         if (dayAverage == 0) {
             dayAverage = NSNotFound;
         }
-
+        
         APCRangePoint *rangePoint = [APCRangePoint new];
-
+        
         if (dayAverage != NSNotFound) {
             NSNumber *minValue = [filteredDataPoints valueForKeyPath:@"@min.datasetValueKey"];
             NSNumber *maxValue = [filteredDataPoints valueForKeyPath:@"@max.datasetValueKey"];
@@ -834,6 +844,7 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
 - (NSDictionary *)groupByKeyPath:(NSString *)key dataset:(NSArray *)dataset
 {
     NSMutableDictionary *groups = [NSMutableDictionary new];
+    //I'm not quite sure I follow why we're using integer values for specific keypaths for this, when we could much more easily use the timestamp on the object (which I hope exists) directly. Was this an attempt at a performance fix?
     
     for (id object in dataset) {
         id value = [object valueForKeyPath:key];
@@ -1131,7 +1142,7 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
 - (NSNumber *)maximumDataPointInSeries:(NSArray *)series
 {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K <> %@", kDatasetValueKey, @(NSNotFound)];
-
+    
     NSArray *filteredArray = [series filteredArrayUsingPredicate:predicate];
     NSArray *rangeArray = [filteredArray valueForKey:kDatasetRangeValueKey];
     NSPredicate *rangePredicate = [NSPredicate predicateWithFormat:@"SELF <> %@", [NSNull null]];
@@ -1186,7 +1197,7 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
         self.current = 0;
         nextPoint = [self.dataPoints objectAtIndex:self.current++];
     }
-
+    
     return nextPoint;
 }
 
@@ -1209,7 +1220,8 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
 #pragma mark - Common Graph Datasource
 /*********************************************************************************/
 
-- (NSInteger)numberOfPointsInPlot:(NSInteger)plotIndex{
+- (NSInteger)numberOfPointsInPlot:(NSInteger)plotIndex
+{
     NSInteger numberOfPoints = 0;
     
     if (plotIndex == 0) {
@@ -1222,7 +1234,8 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
     return numberOfPoints;
 }
 
-- (NSInteger)numberOfDivisionsInXAxis{
+- (NSInteger)numberOfDivisionsInXAxis
+{
     NSInteger numberOfDivs = [self.dataPoints count];
     
     if (self.numberOfDays == -(kNumberOfDaysIn3Months - 1)) {
@@ -1234,7 +1247,8 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
     return numberOfDivs;
 }
 
-- (NSInteger)numberOfPlotsInGraph{
+- (NSInteger)numberOfPlotsInGraph
+{
     NSUInteger numberOfPlots = 1;
     
     if (self.correlatedScoring.dataPoints.count > 0) {
@@ -1353,7 +1367,7 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
 #pragma mark  APCDiscreteGraphViewDataSource
 /*********************************************************************************/
 
--(NSInteger)numberOfPlotsInDiscreteGraph:(APCDiscreteGraphView *)__unused graphView
+- (NSInteger)numberOfPlotsInDiscreteGraph:(APCDiscreteGraphView *)__unused graphView
 {
     return [self numberOfPlotsInGraph];
 }
@@ -1366,7 +1380,7 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
 - (APCRangePoint *)discreteGraph:(APCDiscreteGraphView *) __unused graphView plot:(NSInteger) plotIndex valueForPointAtIndex:(NSInteger) __unused pointIndex
 {
     
-    APCRangePoint *value = nil;
+    APCRangePoint *value;
     NSDictionary *point = [NSDictionary new];
     
     if (plotIndex == 0) {

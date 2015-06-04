@@ -361,7 +361,7 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
     APCLogDebug(@"Insights: %@", insightPoints);
     
     NSString *caption = NSLocalizedString(@"Not enough data", @"Not enough data");
-    NSNumber *pointValue = @(0);
+    NSNumber *pointValue = nil;
     
     NSArray *goodPoints = [insightPoints filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(%K == %@) AND (%K <> %@)",
                                                                       kInsightDatasetIsGoodDayKey, @(YES),

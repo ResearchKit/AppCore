@@ -39,9 +39,9 @@
 
 @interface APCConsentTask : NSObject <ORKTask>
 
-@property (nonatomic, strong) ORKConsentDocument*       consentDocument;
-@property (nonatomic, strong) id<APCConsentRedirector>  redirector;
-@property (nonatomic, strong) NSString*                 failedMessageTag;
+@property (nonatomic, strong) ORKConsentDocument *consentDocument;
+@property (nonatomic, strong) id<APCConsentRedirector> redirector;
+@property (nonatomic, strong) NSString *failedMessageTag;
 
 @property (nonatomic, strong, readonly) ORKConsentSharingStep *sharingStep;
 

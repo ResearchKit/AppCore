@@ -265,9 +265,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
          if (error != nil) {
              APCLogError2(error);
          } else {
-             NSSortDescriptor *nameSorter = [NSSortDescriptor sortDescriptorWithKey:@"name"
-                                                                          ascending:YES
-                                                                           selector:@selector(caseInsensitiveCompare:)];
+             NSSortDescriptor *nameSorter = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
              NSArray  *descriptors = @[ nameSorter ];
              NSArray  *sorted = [arrayOfGeneratedObjects sortedArrayUsingDescriptors:descriptors];
              

@@ -3,7 +3,7 @@
 //  APCAppCore
 //
 //  Copyright (c) 2015, Apple Inc. All rights reserved. 
-//  
+//
 //  Redistribution and use in source and binary forms, with or without modification,
 //  are permitted provided that the following conditions are met:
 //  
@@ -121,7 +121,6 @@
                 if (_originalCronExpression.length)
                 {
                     _apcCronExpression = schedule.scheduleExpression;
-
                     _apcCronExpressionEnumerator = [_apcCronExpression enumeratorBeginningAtTime: startDate
                                                                                     endingAtTime: endDate];
                 }

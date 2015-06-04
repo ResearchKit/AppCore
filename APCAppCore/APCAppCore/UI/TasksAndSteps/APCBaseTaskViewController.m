@@ -38,11 +38,9 @@
 #import "APCDataVerificationServerAccessControl.h"
 
 @interface APCBaseTaskViewController () <UIViewControllerRestoration>
-
 @property (strong, nonatomic) ORKStepViewController * stepVC;
 @property (nonatomic, strong) ORKStep * step;
 @property (nonatomic, strong) NSData * localRestorationData;
-
 @end
 
 
@@ -117,10 +115,10 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
     APCBaseTaskViewController *viewController   = nil;
     
     /*
-     It's a fundamental business requirement that our users can
-     do *more* than the required number of tasks.  This object
-     lets us do that, if they've gone through all the actually-
-     required tasks for this date.
+     It's a fundamental business requirement that our users
+     can do *more* than the required number of tasks.  This
+     object lets us do that, if they've gone through all
+     the actually- required tasks for this date.
      */
     if (potentialTask == nil)
     {
@@ -193,9 +191,10 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
     }
 
     /*
-     Most results have common behaviors, below this switch() statement:
-     log the fact that we're here, log an error if needed, and close the
-     window.  For those with specific behaviors, add them to this switch().
+     Most results have common behaviors, below this
+     switch() statement: log the fact that we're here, log
+     an error if needed, and close the window.  For those
+     with specific behaviors, add them to this switch().
      */
     switch (reason)
     {

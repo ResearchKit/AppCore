@@ -35,11 +35,5 @@
 
 @interface APCMedicationTrackerSetupViewController : UIViewController
 
-- (instancetype)initWithNibName:(NSString *)nibNameOrNil
-                         bundle:(NSBundle *)nibBundleOrNil
-             withResourceBundle:(NSBundle *)resourceBundle
-               andResourceNames:(NSDictionary *)resourceNames;
-
-
 @end
 

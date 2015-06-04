@@ -87,7 +87,7 @@ static NSString * const APCErrorLoadingJsonNoDictionarySuggestion   = @"We were 
     }
     
     NSString  *result = @"";
-    if (everyday) {
+    if (everyday == YES) {
         if ([saved unsignedIntegerValue] > 5) {
             result = [NSString stringWithFormat:@"%lu times Every Day", (unsigned long)[saved unsignedIntegerValue]];
         } else {

@@ -93,7 +93,7 @@
 - (void)doneButtonTapped:(UIBarButtonItem *) __unused sender
 {
     if (self.delegate != nil) {
-        if ([self.delegate respondsToSelector:@selector(stepViewController:didFinishWithNavigationDirection:)]) {
+        if ([self.delegate respondsToSelector:@selector(stepViewController:didFinishWithNavigationDirection:)] == YES) {
             [self.delegate stepViewController:self didFinishWithNavigationDirection: ORKStepViewControllerNavigationDirectionForward];
         }
     }

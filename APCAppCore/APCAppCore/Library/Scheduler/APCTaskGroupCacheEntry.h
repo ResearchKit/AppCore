@@ -38,18 +38,6 @@
 /**
  Caches the taskGroups retrieved from CoreData for a
  specific date range and filter.
-
- We need this because our main way of delivering lists of
- tasks to the UI involves walking through the list of
- active Schedules, and asking each schedule for the dates
- and times its tasks should appear.  At the lowest levels
- of these calls, some operations are invoked tens of
- thousands of times.  This cache means we only need to
- perform those operations a dozen times or so.  The cache
- is cleared when new schedules are retrieved from the
- server, loaded from disk, computed, or otherwise
- generated, as long as the call goes through our central
- -processSchedulesAndTasks method.
  */
 @interface APCTaskGroupCacheEntry : NSObject
 

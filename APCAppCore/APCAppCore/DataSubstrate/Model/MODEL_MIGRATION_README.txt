@@ -50,9 +50,6 @@ A. Add a new data model
 
 For simple stuff, this is all you'll need.  For more complex stuff, you'll also need the stuff in section B.
 
-(...as long as YOU care about the things it's complaining about.  For example, it once "complained" that it couldn't generate unique values for a certain string.  It was right:  I had made that string "required."  But that actually made me realize I wanted that string to be "optional."  I made that attribute optional, and presto, automatic conversion worked great!)
-
-
 Let's say we're on model version 4, and you're creating model version 5.
 
 1.  Create the model file:
@@ -91,6 +88,10 @@ So here's how I fixed it.  I learned this mostly from:
     https://developer.apple.com/library/ios/documentation/Cocoa/Reference/NSMigrationManager_class/
 
 
+Note:  before doing this, make sure YOU care about the things it's complaining about.  For example, for me, it once "complained" that it couldn't generate unique values for a certain string.  It was right:  I had made that string "required."  But that actually made me realize I wanted that string to be "optional."  I made that attribute optional, and presto, automatic conversion worked perfectly!
+
+
+
 - - - - - - - -
 Summary of what we're about to do
 - - - - - - - -
@@ -113,10 +114,12 @@ Details
 - - - - - - - -
 
 1.  Create a new Mapping Model:
+
     a.  Create a new Mapping Model file:  File > New > CoreData > MappingModel.
     b.  When it asks, tell it the version you're migrating from:  version 4.
     c.  When it asks, tell it the version you're migrating to:  version 5.
     d.  Save that file.  Name it after the versions you're mapping:  perhaps "APCMappingModel4ToModel5".  Use the default extension, ".xcmappingmodel".
+
 
 2.  Inspect that file.  Here's what you'll see:
 
@@ -124,7 +127,9 @@ Details
 
     b.  You might ask:  why can't I delete the entities and attributes that I *don't* want it to convert?  In theory, you can.  In practice, if any OTHER attributes relate to those, the automatic conversions may not do what you expect, or may not happen at all.  It's probably easier to just leave the file the way it is.
 
+
 3.  Create a class to perform the "hard parts" of the migration:
+
     a.  Create a new class
     b.  Make it a subclass of NSEntityMigrationPolicy
     c.  Give it an appropriate name.  I called mine:
@@ -132,6 +137,7 @@ Details
             APCDataMigrationPolicy_from_APCMedTrackerPrescription_v4_to_APCMedTrackerPrescription_v5
 
             (meaning:  "a bunch of methods for converting Prescription v4 objects to Prescription v5")
+
 
 4.  In that class, write a method to generate the new attribute (or relationship) from the old one, or from the old object.  Presume you'll receive a pointer to the old object, and will return the value of the new attribute/relationship.  I'll show you how to send those values in a moment.  For example, if you're generating a new Color field, you might make a method called
 
@@ -142,10 +148,13 @@ Details
                 // return the new color
             }
 
+
 5.  Tell the mapping model to use your new class:
+
     a.  Click the Mapping Model file.
     b.  In the list of entities, click the entity you're about to convert.
     c.  In the data inspector (command-option-3), enter your new class as the "custom policy."
+
 
 6.  Tell the mapping model to use your new method:
 
@@ -198,14 +207,3 @@ For more information, I used these sources:
 
 
 Have fun, and good luck!
-
-
-
-
-
-
-
-
-
-
-

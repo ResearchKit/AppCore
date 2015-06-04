@@ -88,14 +88,14 @@ static NSString * const kScheduledTaskIDKey = @"scheduledTaskID";
 {
     APCResult * retValue = nil;
     @synchronized(self){
-    if (self.results.count == 1) {
-        retValue = [self.results anyObject];
-    }
-    else if(self.results.count > 1)
-    {
-        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"endDate" ascending:NO];
-        NSArray * sortedArray = [self.results sortedArrayUsingDescriptors:@[sortDescriptor]];
-        retValue = [sortedArray firstObject];
+        if (self.results.count == 1) {
+            retValue = [self.results anyObject];
+        }
+        else if(self.results.count > 1)
+        {
+            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"endDate" ascending:NO];
+            NSArray * sortedArray = [self.results sortedArrayUsingDescriptors:@[sortDescriptor]];
+            retValue = [sortedArray firstObject];
         }
     }
     return  retValue;
@@ -197,22 +197,5 @@ static NSString * const kScheduledTaskIDKey = @"scheduledTaskID";
     self.startOn = dateRange.startDate;
     self.endOn = dateRange.endDate;
 }
-
-
-
-
-// ---------------------------------------------------------
-#pragma mark - v2 stuff, where all tasks are virtual until touched
-// ---------------------------------------------------------
-
-+ (instancetype) newObjectForContext: (NSManagedObjectContext *) context
-{
-    APCLogDebug (@"HEY HEY HEY HEY HEY!  Somebody's creating a scheduledTask!");
-
-    id thingy = [super newObjectForContext: context];
-
-    return thingy;
-}
-
 
 @end

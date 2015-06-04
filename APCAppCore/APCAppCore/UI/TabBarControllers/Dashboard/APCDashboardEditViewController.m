@@ -103,7 +103,7 @@
     [self.rowItemsOrder removeObjectAtIndex:sourceIndexPath.row];
     [self.rowItemsOrder insertObject:rowTypeNumber atIndex:destinationIndexPath.row];
     
-    // Update the order of the items array to match the updated row order.
+    // update the items array to reflect the updated item order.
     APCTableViewDashboardItem *selectedItem = [self.items objectAtIndex:sourceIndexPath.row];
     
     [self.items removeObjectAtIndex:sourceIndexPath.row];

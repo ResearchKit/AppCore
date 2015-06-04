@@ -43,15 +43,8 @@ static NSTimeZone *_localTimeZone = nil;
 
 + (NSCalendar *) gregorianCalendar
 {
-    /*
-     Please leave the debugging statements in this method.
-     */
-    // NSLog (@"+gregorianCalendar: accessed. isMainThread = %@", @([NSThread isMainThread]));
-
 	if (_gregorianCalendar == nil)
 	{
-        // NSLog (@"+gregorianCalendar: creating (!). isMainThread = %@", @([NSThread isMainThread]));
-
 		_gregorianCalendar = [NSCalendar calendarWithIdentifier: NSCalendarIdentifierGregorian];
 	}
 

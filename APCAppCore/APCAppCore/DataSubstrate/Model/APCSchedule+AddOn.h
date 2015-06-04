@@ -74,30 +74,10 @@ FOUNDATION_EXPORT NSString * const kAPCScheduleTypeValueOneTimeSchedule;
 
 @interface APCSchedule (AddOn)
 
-
-
-// ---------------------------------------------------------
-#pragma mark - version 1, where we schedule tasks into the future
-// ---------------------------------------------------------
-
-@property (nonatomic, readonly) APCScheduleExpression * scheduleExpression;
-
-+ (APCSchedule*) cannedScheduleForTaskID: (NSString*) taskID inContext:(NSManagedObjectContext *)context;
-
-
-
-// ---------------------------------------------------------
-#pragma mark - version 2, where we only generate tasks if the user touches them
-// ---------------------------------------------------------
-
-
+@property (readonly) APCScheduleExpression * scheduleExpression;
 @property (readonly) APCScheduleRecurrenceStyle recurrenceStyle;
 @property (readonly) NSString *firstTaskTitle;
 @property (readonly) NSString *firstTaskId;
-
-/** Quick accessors for the different types of recurrenceStyle.
- Mostly for debugging, so we can test for these easy-to-read
- items in the "Edit Breakpoints" window.  :-) */
 @property (readonly) BOOL isOneTimeSchedule;
 @property (readonly) BOOL isRecurringCronSchedule;
 @property (readonly) BOOL isRecurringIntervalSchedule;

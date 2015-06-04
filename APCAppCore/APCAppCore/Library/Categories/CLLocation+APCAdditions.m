@@ -52,19 +52,6 @@ static double RadiansToDegrees(double radians) {return radians * 180/M_PI;};
     return RadiansToDegrees(radiansBearing);
 }
 
-- (double)calculateMagnitudeToLocation:(CLLocation*)destinationLocation
-{
-    double lat1             = DegreesToRadians(self.coordinate.latitude);
-    double lon1             = DegreesToRadians(self.coordinate.longitude);
-    double lat2             = DegreesToRadians(destinationLocation.coordinate.latitude);
-    double lon2             = DegreesToRadians(destinationLocation.coordinate.longitude);
-    double latDeltaSquared  = pow(lat2 - lat1, 2);
-    double lonDeltaSquared  = pow(lon2 - lon1, 2);
-    double latLonSummed     = latDeltaSquared + lonDeltaSquared;
-
-    return sqrt(latLonSummed);
-}
-
 - (double)calculateDirectionFromLocation:(CLLocation*)destinationLocation
 {
     double lat1             = DegreesToRadians(self.coordinate.latitude);

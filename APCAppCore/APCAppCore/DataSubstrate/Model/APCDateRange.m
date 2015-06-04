@@ -32,7 +32,7 @@
 // 
  
 #import "APCDateRange.h"
-#import "NSDate+Helper.h"
+#import "APCAppCore.h"
 
 @implementation APCDateRange
 

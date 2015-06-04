@@ -112,27 +112,9 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Select F
 
 @property  (nonatomic, strong)          APCMedTrackerPossibleDosage     *defaultPossibleDosage;
 
-@property  (nonatomic, strong)          NSBundle                        *resourceBundle;
-@property  (nonatomic, strong)          NSDictionary                    *resourceNames;
-
 @end
 
 @implementation APCMedicationTrackerSetupViewController
-
-- (instancetype)initWithNibName:(NSString *)nibNameOrNil
-                         bundle:(NSBundle *)nibBundleOrNil
-             withResourceBundle:(NSBundle *)resourceBundle
-               andResourceNames:(NSDictionary *)resourceNames
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    
-    if (self) {
-        _resourceBundle = resourceBundle;
-        _resourceNames = resourceNames;
-    }
-    
-    return self;
-}
 
 #pragma  mark  -  Table View Data Source Methods
 
@@ -418,16 +400,7 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Select F
     
     self.currentMedicationRecords = [NSMutableArray array];
     
-    
-    if (self.resourceBundle && self.resourceNames) {
-        [APCMedTrackerDataStorageManager startupWithCustomDataInBundle:self.resourceBundle
-                                                     withResourceNames:self.resourceNames
-                                                   andThenUseThisQueue:nil
-                                                              toDoThis:NULL];
-    } else {
-        [APCMedTrackerDataStorageManager startupReloadingDefaults:YES andThenUseThisQueue:nil toDoThis:NULL];
-    }
-    
+    [APCMedTrackerDataStorageManager startupReloadingDefaults:YES andThenUseThisQueue:nil toDoThis:NULL];
     self.theMedicationObject = nil;
     
     self.doneButton.enabled = NO;

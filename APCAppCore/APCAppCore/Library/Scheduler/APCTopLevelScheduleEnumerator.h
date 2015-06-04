@@ -47,9 +47,7 @@
  We had a previous "schedule enumerator" which was as 
  appropriately generalized as we knew how to make it.
  However, we now realize better and more appropriate
- ways to generalize this.  Soon, we'll rename all the
- classes appropriately.  In the meantime, this naming
- convention doesn't lie, and helps us get there.
+ ways to generalize this.
  */
 @interface APCTopLevelScheduleEnumerator : NSEnumerator
 

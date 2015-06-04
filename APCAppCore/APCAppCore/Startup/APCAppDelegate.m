@@ -1,4 +1,4 @@
-//
+// 
 //  APCAppDelegate.m 
 //  APCAppCore 
 // 
@@ -45,8 +45,10 @@
 #import "APCDemographicUploader.h"
 #import "APCConstants.h"
 
-#warning Be sure to set the CORRECT current version before releasing to production
-NSUInteger   const kTheEntireDataModelOfTheApp              = 4;
+/*
+ Be sure to set the CORRECT current version before releasing to production
+ */
+NSUInteger   const kTheEntireDataModelOfTheApp              = 3;
 
 /*********************************************************************************/
 #pragma mark - Initializations Option Defaults
@@ -69,22 +71,28 @@ static NSString *const kHealthProfileStoryBoardKey = @"APCProfile";
 /*********************************************************************************/
 #pragma mark - User Defaults Keys
 /*********************************************************************************/
+
+static NSString*    const kDemographicDataWasUploadedKey    = @"kDemographicDataWasUploadedKey";
 static NSString*    const kLastUsedTimeKey                  = @"APHLastUsedTime";
 static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterForegroundTime";
+static NSUInteger   const kIndexOfProfileTab                = 3;
+
 
 @interface APCAppDelegate  ( )  <UITabBarControllerDelegate>
 
 @property (nonatomic) BOOL isPasscodeShowing;
 @property (nonatomic, strong) UIView *secureView;
 @property (nonatomic, strong) NSError *catastrophicStartupError;
+
 @property (nonatomic, strong) NSOperationQueue *healthKitCollectorQueue;
 @property (nonatomic, strong) APCDemographicUploader  *demographicUploader;
 
-@end 
+@end
+
 
 @implementation APCAppDelegate
 
-+ (instancetype) sharedAppDelegate
++ (instancetype)sharedAppDelegate
 {
     APCAppDelegate *appDelegate = (APCAppDelegate *) [[UIApplication sharedApplication] delegate];
     return appDelegate;
@@ -119,6 +127,7 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
     [self performDemographicUploadIfRequired];
     [self showAppropriateVC];
     
+    [self.dataMonitor appFinishedLaunching];
     
     return YES;
 }
@@ -144,11 +153,13 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
         //
     APCUser  *user = self.dataSubstrate.currentUser;
     if (user.isConsented) {
-        BOOL  demographicDataWasUploaded = [defaults boolForKey:kAnonDemographicDataUploadedKey];
+        BOOL  demographicDataWasUploaded = [defaults boolForKey:kDemographicDataWasUploadedKey];
         if (demographicDataWasUploaded == NO) {
             self.demographicUploader = [[APCDemographicUploader alloc] initWithUser:user];
+            [defaults setBool:YES forKey:kDemographicDataWasUploadedKey];
+            [defaults synchronize];
             [self.demographicUploader uploadNonIdentifiableDemographicData];
-        }
+}
     }
 }
 
@@ -169,7 +180,6 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
 
 - (BOOL)application:(UIApplication *) __unused application didFinishLaunchingWithOptions:(NSDictionary *) __unused launchOptions
 {
-    [self.dataMonitor appFinishedLaunching];
     return YES;
 }
 
@@ -257,6 +267,7 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
     
     if (fileSecurityPermissionsResetSuccessful == NO)
     {
+        APCLogDebug(@"Incomplete reset of file system security permissions");
         APCLogError2(error);
     }
     
@@ -307,7 +318,7 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
 
 - (BOOL)application:(UIApplication *) __unused application shouldRestoreApplicationState:(NSCoder *) __unused coder
 {
-    return NO;
+    return self.dataSubstrate.currentUser.isSignedIn;
 }
 
 - (UIViewController *)application:(UIApplication *) __unused application viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *) __unused coder
@@ -317,12 +328,12 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
     }
     else if ([identifierComponents.lastObject isEqualToString:@"ActivitiesNavController"])
     {
-        return self.tabBarController.viewControllers[kAPCActivitiesTabIndex];
+        return self.tabster.viewControllers[kAPCActivitiesTabIndex];
     }
     else if ([identifierComponents.lastObject isEqualToString:@"APCActivityVC"])
     {
-        if ( [self.tabBarController.viewControllers[kAPCActivitiesTabIndex] respondsToSelector:@selector(topViewController)]) {
-            return [(UINavigationController*) self.tabBarController.viewControllers[kAPCActivitiesTabIndex] topViewController];
+        if ( [self.tabster.viewControllers[kAPCActivitiesTabIndex] respondsToSelector:@selector(topViewController)]) {
+            return [(UINavigationController*) self.tabster.viewControllers[kAPCActivitiesTabIndex] topViewController];
         }
     }
     
@@ -361,6 +372,10 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
     
     self.scheduler = [[APCScheduler alloc] initWithDataSubstrate:self.dataSubstrate];
     self.dataMonitor = [[APCDataMonitor alloc] initWithDataSubstrate:self.dataSubstrate scheduler:self.scheduler];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        self.passiveDataCollector = [[APCPassiveDataCollector alloc] init];
+    });
+
     
     //Setup AuthDelegate for SageSDK
     SBBAuthManager * manager = (SBBAuthManager*) SBBComponent(SBBAuthManager);
@@ -543,7 +558,7 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
             NSURL*      url   = [[NSBundle mainBundle] URLForResource:nameWithScaleFactor withExtension:@"m4v"];
             NSError*    error = nil;
             
-            NSAssert([url checkResourceIsReachableAndReturnError:&error] == YES, @"Animation file--%@--not reachable: %@", animationUrl, error);
+            NSAssert([url checkResourceIsReachableAndReturnError:&error], @"Animation file--%@--not reachable: %@", animationUrl, error);
             section.customAnimationURL = url;
         }
         
@@ -562,18 +577,12 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
 - (void) setUpTasksReminder {/*Abstract Implementation*/}
 
 -(void)application:(UIApplication *)__unused application handleActionWithIdentifier:(NSString *)identifier forLocalNotification:(UILocalNotification *)notification completionHandler:(void (^)())completionHandler{
-    
+
     if ([identifier isEqualToString:kDelayReminderIdentifier]) {
         notification.fireDate = [notification.fireDate dateByAddingTimeInterval:3600];
         [[UIApplication sharedApplication] scheduleLocalNotification:notification];
     }
     completionHandler();
-}
-
-- (NSArray *)offsetForTaskSchedules
-{
-    //TODO: Number of days should be zero based. If I want something to show up on day 2 then the offset is 1
-    return nil;
 }
 
 - (void)afterOnBoardProcessIsFinished
@@ -607,11 +616,9 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
     return nil;
 }
 
-// Ron: moving this to Schedule/Scheduler...
-/*
 - (NSDictionary *)configureTasksForActivities
 {
-    / * Abstract implementation. Subclass to override.
+    /* Abstract implementation. Subclass to override.
      *
      * Use this to properly group your tasks into the three groups
      * that are now shown on the Activities tab.
@@ -621,18 +628,8 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
      * 3. Yesterday's incomplete tasks
      *
      * Note: This needs to be refactored
-     * /
-    return nil;
-}
-*/
-
-- (BOOL)hideEmailOnWelcomeScreen
-{
-    /* Abstract implementation. Subclass to override.
-     *
-     * To hide the email consent button on the Welcome screen return YES.
      */
-    return NO;
+    return nil;
 }
 
 /*********************************************************************************/
@@ -736,6 +733,7 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
     return nil;
 }
 
+
 /*********************************************************************************/
 #pragma mark - Public Helpers
 /*********************************************************************************/
@@ -769,101 +767,88 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
 /*********************************************************************************/
 #pragma mark - Tab Bar Stuff
 /*********************************************************************************/
+- (NSArray *)storyboardIdInfo
+{
+    if (!_storyboardIdInfo) {
+        _storyboardIdInfo = @[
+                            @{@"name": kActivitiesStoryBoardKey, @"bundle" : [NSBundle appleCoreBundle]},
+                            @{@"name": kDashBoardStoryBoardKey, @"bundle" : [NSBundle mainBundle]},
+                            @{@"name": kLearnStoryBoardKey, @"bundle" : [NSBundle appleCoreBundle]},
+                            @{@"name": kHealthProfileStoryBoardKey, @"bundle" : [NSBundle appleCoreBundle]}
+                              ];
+    }
+    return _storyboardIdInfo;
+}
 
 - (void)showTabBar
 {
-    APCTabBarViewController *tabBarController = [[APCTabBarViewController alloc] init];
-
+    UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"TabBar" bundle:[NSBundle appleCoreBundle]];
+    
+    UITabBarController *tabBarController = (UITabBarController *)[storyBoard instantiateInitialViewController];
+    self.window.rootViewController = tabBarController;
+    self.tabster = tabBarController;
+    tabBarController.delegate = self;
+    
+    NSArray       *items = tabBarController.tabBar.items;
+    
     NSUInteger     selectedItemIndex = kAPCActivitiesTabIndex;
     
-    NSMutableArray *tabBarItems = [NSMutableArray new];
-    NSMutableArray *viewControllers = [NSMutableArray new];
-    
-    {
-        //Activities Tab
-        UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Activities", nil) image:[UIImage imageNamed:@"tab_activities"] selectedImage:[UIImage imageNamed:@"tab_activities_selected"]];
-        [tabBarItems addObject:item];
-        
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"APCActivities" bundle:[NSBundle appleCoreBundle]];
-        UIViewController *viewController = [storyboard instantiateInitialViewController];
-        [viewControllers addObject:viewController];
-    }
-    
-    {
-        //Dashboard Tab
-        UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Dashboard", nil) image:[UIImage imageNamed:@"tab_dashboard"] selectedImage:[UIImage imageNamed:@"tab_dashboard_selected"]];
-        [tabBarItems addObject:item];
-        
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"APHDashboard" bundle:[NSBundle mainBundle]];
-        UIViewController *viewController = [storyboard instantiateInitialViewController];
-        [viewControllers addObject:viewController];
-    }
-    
-    {
-        //Learn Tab
-        UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Learn", nil) image:[UIImage imageNamed:@"tab_learn"] selectedImage:[UIImage imageNamed:@"tab_learn_selected"]];
-        [tabBarItems addObject:item];
-        
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"APCLearn" bundle:[NSBundle appleCoreBundle]];
-        UIViewController *viewController = [storyboard instantiateInitialViewController];
-        [viewControllers addObject:viewController];
-    }
-    
-    {
-        //Profile Tab
-        UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Profile", nil) image:[UIImage imageNamed:@"tab_profile"] selectedImage:[UIImage imageNamed:@"tab_profile_selected"]];
-        [tabBarItems addObject:item];
-        
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]];
-        UIViewController *viewController = [storyboard instantiateInitialViewController];
-        [viewControllers addObject:viewController];
-    }
-    
-    [tabBarController setViewControllers:[NSArray arrayWithArray:viewControllers]];
-    
-    NSArray *items = tabBarController.tabBar.items;
+    NSArray  *deselectedImageNames = @[ @"tab_activities", @"tab_dashboard", @"tab_learn", @"tab_profile" ];
+    NSArray  *selectedImageNames   = @[ @"tab_activities_selected", @"tab_dashboard_selected", @"tab_learn_selected",  @"tab_profile_selected" ];
+    NSArray  *tabBarTitles         = @[ @"Activities", @"Dashboard", @"Learn",  @"Profile"];
     
     for (NSUInteger i=0; i<items.count; i++) {
-        UITabBarItem *item = items[i];
-        UITabBarItem *tabBarItem = tabBarItems[i];
-        
-        item.image = tabBarItem.image;
-        item.selectedImage = tabBarItem.selectedImage;
-        item.title = tabBarItem.title;
+        UITabBarItem  *item = items[i];
+        item.image = [UIImage imageNamed:deselectedImageNames[i]];
+        item.selectedImage = [[UIImage imageNamed:selectedImageNames[i]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        item.title = tabBarTitles[i];
         item.tag = i;
     }
     
-    //The tab bar icons take the default tint color from UIView Appearance tintin iOS8. In order to fix this for we are selecting each of the tabs.
-    {
-        [tabBarController setSelectedIndex:0];
-        [tabBarController setSelectedIndex:1];
-        [tabBarController setSelectedIndex:2];
-        [tabBarController setSelectedIndex:3];
-    }
+    NSArray  *controllers = tabBarController.viewControllers;
     
-    
+    //These need to be "Selected" one by one it silly but I remember this from a pass issue.
+    //We can hard code this as long as it matches the tab count above
+    // Might want to refactor this more hwne we have time
+    [tabBarController setSelectedIndex:selectedItemIndex + 1];
+    [tabBarController setSelectedIndex:selectedItemIndex + 2];
+    [tabBarController setSelectedIndex:selectedItemIndex + 3];
     [tabBarController setSelectedIndex:selectedItemIndex];
-    tabBarController.delegate = self;
-    tabBarController.tabBar.translucent = NO;
     
-    self.tabBarController = tabBarController;
-    self.window.rootViewController = tabBarController;
+    [self tabBarController:tabBarController didSelectViewController:controllers[selectedItemIndex]];
 }
 
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
 {
-    if ([viewController isKindOfClass:[UIViewController class]]) {
+    NSArray  *deselectedImageNames = @[ @"tab_activities",          @"tab_dashboard",           @"tab_learn",           @"tab_profile" ];
+    NSArray  *selectedImageNames   = @[ @"tab_activities_selected", @"tab_dashboard_selected",  @"tab_learn_selected",  @"tab_profile_selected" ];
+    NSArray  *tabBarTitles         = @[ @"Activities",              @"Dashboard",               @"Learn",               @"Profile"];
+    
+    if ([viewController isMemberOfClass: [UIViewController class]]) {
         
-        NSUInteger  controllerIndex = [tabBarController.viewControllers indexOfObject:viewController];
+        NSMutableArray  *controllers = [tabBarController.viewControllers mutableCopy];
+        NSUInteger  controllerIndex = [controllers indexOfObject:viewController];
         
-        NSUInteger indexOfProfileTab = 3;
+        NSString  *name = [self.storyboardIdInfo objectAtIndex:controllerIndex][@"name"];
+        UIStoryboard  *storyboard = [UIStoryboard storyboardWithName:name bundle:[self.storyboardIdInfo objectAtIndex:controllerIndex][@"bundle"]];
+        UIViewController  *controller = [storyboard instantiateInitialViewController];
+        [controllers replaceObjectAtIndex:controllerIndex withObject:controller];
         
-        if (controllerIndex == indexOfProfileTab)
+        [self.tabster setViewControllers:controllers animated:NO];
+        self.tabster.tabBar.tintColor = [UIColor appPrimaryColor];
+        UITabBarItem  *item = self.tabster.tabBar.selectedItem;
+        item.image = [UIImage imageNamed:deselectedImageNames[controllerIndex]];
+        item.selectedImage = [[UIImage imageNamed:selectedImageNames[controllerIndex]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        item.title = tabBarTitles[controllerIndex];
+        
+        if (controllerIndex == kIndexOfProfileTab)
         {
-            UINavigationController * profileNavigationController = (UINavigationController *) viewController;
+            
+            UINavigationController * profileNavigationController = (UINavigationController *) controller;
             
             if ( [profileNavigationController.childViewControllers[0] isKindOfClass:[APCProfileViewController class]])
             {
+                
                 self.profileViewController = (APCProfileViewController *) profileNavigationController.childViewControllers[0];
                 
                 self.profileViewController.delegate = [self profileExtenderDelegate];
@@ -1000,6 +985,9 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
 
 - (void)passcodeViewControllerDidSucceed:(APCPasscodeViewController *) __unused viewController
 {
+	[[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kLastUsedTimeKey];
+	[[NSUserDefaults standardUserDefaults] synchronize];
+	
     self.isPasscodeShowing = NO;
 }
 

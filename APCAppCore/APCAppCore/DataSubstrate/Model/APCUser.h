@@ -42,6 +42,7 @@ typedef NS_ENUM(NSInteger, APCUserConsentSharingScope) {
     APCUserConsentSharingScopeAll,
 };
 
+
 @interface APCUser : NSObject
 
 /*********************************************************************************/

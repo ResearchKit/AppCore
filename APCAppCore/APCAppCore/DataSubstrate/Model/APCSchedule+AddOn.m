@@ -33,12 +33,9 @@
  
 #import "APCSchedule+AddOn.h"
 #import "APCModel.h"
-#import "APCLog.h"
-#import "NSDate+Helper.h"
 #import "APCTopLevelScheduleEnumerator.h"
 #import "APCTask+AddOn.h"
 #import "APCDateRange.h"
-#import "APCConstants.h"
 
 
 static NSString * const kScheduleShouldRemindKey    = @"shouldRemind";
@@ -59,38 +56,11 @@ NSString * const kAPCScheduleTypeValueOneTimeSchedule = @"once";
 
 @implementation APCSchedule (AddOn)
 
-//Returns only local canned schedule
-+ (APCSchedule*) cannedScheduleForTaskID: (NSString*) taskID inContext:(NSManagedObjectContext *)context
-{
-    __block APCSchedule * retSchedule;
-    [context performBlockAndWait:^{
-        NSFetchRequest * request = [APCSchedule request];
-
-        request.predicate = [NSPredicate predicateWithFormat: @"%K == %@  && (%K == %@ || %K == nil)",
-                             NSStringFromSelector(@selector(taskID)),
-                             taskID,
-                             NSStringFromSelector(@selector(scheduleSource)),
-                             NSStringFromSelector(@selector(scheduleSource)),
-                             @(APCScheduleSourceLocalDisk)
-                             ];
-
-        NSError * error;
-        retSchedule = [[context executeFetchRequest:request error:&error]firstObject];
-    }];
-    return retSchedule;
-}
-
-- (APCScheduleExpression *)scheduleExpression
+- (APCScheduleExpression *) scheduleExpression
 {
     //TODO: Schedule interval is 0
     return [[APCScheduleExpression alloc] initWithExpression:self.scheduleString timeZero:0];
 }
-
-
-
-// ---------------------------------------------------------
-#pragma mark - Data Validation
-// ---------------------------------------------------------
 
 + (NSString *) safeScheduleIdFromDictionaryValue: (id) dictionaryValue
 {
@@ -127,13 +97,6 @@ NSString * const kAPCScheduleTypeValueOneTimeSchedule = @"once";
     return result;
 }
 
-
-
-
-// ---------------------------------------------------------
-#pragma mark - Life Cycle Methods
-// ---------------------------------------------------------
-
 - (void)awakeFromInsert
 {
     [super awakeFromInsert];
@@ -144,12 +107,6 @@ NSString * const kAPCScheduleTypeValueOneTimeSchedule = @"once";
 {
     [self setPrimitiveValue:[NSDate date] forKey:@"updatedAt"];
 }
-
-
-
-// ---------------------------------------------------------
-#pragma mark - version 2, where we only generate tasks if the user touches them
-// ---------------------------------------------------------
 
 - (APCTopLevelScheduleEnumerator *) enumeratorFromDate: (NSDate *) startDate
                                                 toDate: (NSDate *) endDate
@@ -263,21 +220,3 @@ NSString * const kAPCScheduleTypeValueOneTimeSchedule = @"once";
 }
 
 @end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

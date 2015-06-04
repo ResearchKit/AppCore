@@ -36,7 +36,6 @@
 #import "APCAppDelegate.h"
 #import "APCCMS.h"
 #import "APCDataVerificationClient.h"
-#import "APCDataVerificationServerAccessControl.h"
 #import "APCJSONSerializer.h"
 #import "APCLog.h"
 #import "APCUtilities.h"
@@ -263,8 +262,6 @@ static NSString *folderPathForUploadOperations = nil;
 // ---------------------------------------------------------
 
 /**
- Set global, static values the first time anyone calls this class.
-
  By definition, this method is called once per class, in a thread-safe
  way, the first time the class is sent a message -- basically, the first
  time we refer to the class.  That means we can use this to set up stuff

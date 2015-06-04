@@ -79,7 +79,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
         if (self.delegate != nil) {
             if ([self.delegate respondsToSelector:@selector(colorController:didSelectColorLabelName:)]) {
                 APCMedTrackerPrescriptionColor  *schedulColor = self.colorsList[self.selectedIndex.row];
-                [self.delegate performSelector:@selector(colorController:didSelectColorLabelName:) withObject:self withObject:schedulColor];
+                [self.delegate colorController:self didSelectColorLabelName:schedulColor];
             }
         }
     }
@@ -144,7 +144,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
         if (self.delegate != nil) {
             if ([self.delegate respondsToSelector:@selector(colorController:didSelectColorLabelName:)]) {
                 APCMedTrackerPrescriptionColor  *schedulColor = self.colorsList[indexPath.row];
-                [self.delegate performSelector:@selector(colorController:didSelectColorLabelName:) withObject:self withObject:schedulColor];
+                [self.delegate colorController:self didSelectColorLabelName:schedulColor];
             }
         }
     }

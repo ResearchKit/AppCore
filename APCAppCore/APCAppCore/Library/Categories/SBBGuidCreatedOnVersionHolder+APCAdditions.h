@@ -32,9 +32,3 @@
 // 
  
 #import <BridgeSDK/BridgeSDK.h>
-
-//    @interface SBBGuidCreatedOnVersionHolder (APCAdditions)
-//
-//    - (NSString*) uniqueID;
-//
-//    @end

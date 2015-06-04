@@ -89,7 +89,6 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-
 - (void)performCoreDataBlockInBackground:(void (^)(NSManagedObjectContext *))coreDataBlock
 {
     NSManagedObjectContext * privateContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];

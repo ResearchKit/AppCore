@@ -41,14 +41,14 @@
 #pragma mark - Class Methods
 // ---------------------------------------------------------
 
-+ (instancetype) newObjectForContext: (NSManagedObjectContext*) context;
++ (instancetype)newObjectForContext:(NSManagedObjectContext*)context;
 
-+ (NSFetchRequest*) request;
++ (NSFetchRequest*)request;
 
-+ (NSFetchRequest*) requestWithPredicate: (NSPredicate *) predicate;
++ (NSFetchRequest*)requestWithPredicate:(NSPredicate *)predicate;
 
-+ (NSFetchRequest*) requestWithPredicate: (NSPredicate *) predicate
-                         sortDescriptors: (NSArray *) sortDescriptors;
++ (NSFetchRequest*)requestWithPredicate:(NSPredicate *)predicate
+                        sortDescriptors:(NSArray *)sortDescriptors;
 
 
 

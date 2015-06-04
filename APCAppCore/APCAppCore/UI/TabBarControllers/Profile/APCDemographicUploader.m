@@ -32,10 +32,11 @@
 //
 
 #import "APCDemographicUploader.h"
+
 #import "APCAppCore.h"
 #import "APCAllSetTableViewCell.h"
+#import "APCDataArchiverAndUploader.h"
 #import "NSDate+Helper.h"
-#import "APCDataUploader.h"
 
 static  NSString  *kTaskIdentifierKey              = @"NonIdentifiableDemographicsTask";
 
@@ -48,7 +49,6 @@ static  NSString  *kPatientHeightInchesKey         = @"patientHeightInches";
 static  NSString  *kPatientWeightPoundsKey         = @"patientWeightPounds";
 static  NSString  *kPatientWakeUpTimeKey           = @"patientWakeUpTime";
 static  NSString  *kPatientGoSleepTimeKey          = @"patientGoSleepTime";
-static  NSString  *kuploadRef                      = @"Demographic Data";
 
 @interface APCDemographicUploader ( )
 
@@ -109,20 +109,10 @@ static  NSString  *kuploadRef                      = @"Demographic Data";
         demographics[kPatientWeightPoundsKey] = @(weightInPounds);
     }
     
-    //Upload
-    APCDataUploader *uploader = [[APCDataUploader alloc]initWithUploadReference:kuploadRef];
-    
-    dispatch_async(dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0), ^{
-        
-        [uploader insertIntoZipArchive:demographics filename:kNonIdentifiableDemographicsKey];
-        
-        [uploader uploadWithCompletion:^{
-            
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kAnonDemographicDataUploadedKey];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-            
-        }];
-    });
+    [APCDataArchiverAndUploader uploadDictionary:demographics
+                                withTaskIdentifier:kTaskIdentifierKey
+                                andTaskRunUuid:nil];
+
 }
 
 @end

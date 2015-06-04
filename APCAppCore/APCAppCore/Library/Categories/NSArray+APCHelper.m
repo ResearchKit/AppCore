@@ -42,15 +42,16 @@
     NSMutableArray *result = nil;
 
     /*
-     I found a tantalizing suggestion of a built-in Objective-C
-     way of doing this:  a call to -valueForKeyPath which runs a
-     "collection" operation on the thing you pass it.  There are
-     several such operations having to do with the "unions" of
-     arrays.  However, they had specific limitations:  "raises
-     an exception if such-and-such is nil."  I prefer to write
+     I found a tantalizing suggestion of a built-in
+     Objective-C way of doing this: a call to
+     -valueForKeyPath which runs a "collection" operation
+     on the thing you pass it.  There are several such
+     operations having to do with the "unions" of arrays.
+     However, they had specific limitations: "raises an
+     exception if such-and-such is nil." I prefer to write
      stuff so that it never crashes, or appears to crash.
-     
-     For your information, though, I found it here:
+
+     For your information, I found it here:
      http://stackoverflow.com/a/17091443
      
      ...which pointed to this official documentation:
@@ -71,103 +72,6 @@
 
     return result;
 }
-
-//    - (NSArray *) arrayBySubtractingObjectsInArray: (NSArray *) otherArray
-//    {
-//        NSArray *result = nil;
-//
-//        if (self.count == 0)
-//        {
-//            result = [NSArray new];
-//        }
-//        else if (otherArray.count == 0)
-//        {
-//            result = [NSArray arrayWithArray: self];
-//        }
-//        else
-//        {
-//            NSMutableArray *workZone = [NSMutableArray new];
-//
-//            for (id item in self)
-//            {
-//                /*
-//                 Note that -contains uses -isEqual, which might be expensive,
-//                 depending on the objects we're comparing.  This is always
-//                 true with doing array operations; it's still worth noting.
-//                 */
-//                if (! [otherArray containsObject: item])
-//                {
-//                    [workZone addObject: item];
-//                }
-//            }
-//
-//            result = [NSArray arrayWithArray: workZone];
-//        }
-//
-//        return result;
-//    }
-
-//    - (NSArray *) arrayBySubtractingObjectsInArrays: (NSArray *) firstArray, ...
-//    {
-//        NSArray *inboundArrays = NSArrayFromVariadicArguments (firstArray);
-//        NSArray *result = nil;
-//
-//        if (self.count == 0)
-//        {
-//            result = [NSArray new];
-//        }
-//
-//        else
-//        {
-//            NSMutableArray *workZone = [NSMutableArray new];
-//
-//            for (id maybeArray in inboundArrays)
-//            {
-//                if ([maybeArray isKindOfClass: [NSArray class]])
-//                {
-//                    [workZone addObjectsFromArray: maybeArray];
-//                }
-//            }
-//
-//            result = [NSArray arrayWithArray: workZone];
-//        }
-//
-//        return result;
-//    }
-
-//    - (NSArray *) arrayByInsersectingArray: (NSArray *) otherArray
-//                   usingComparisonSelector: (SEL) comparisonSelector
-//    {
-//        NSArray *intersection = nil;
-//
-//        if (self.count == 0 || otherArray.count == 0)
-//        {
-//            intersection = [NSArray new];
-//        }
-//        else
-//        {
-//            NSMutableArray *temp = [NSMutableArray new];
-//
-//            for (id item in self)
-//            {
-//                for (id )
-//            }
-//
-//
-//
-//
-//
-//            /*
-//             Thanks to http://stackoverflow.com/a/12174070 .
-//             */
-//            NSMutableSet *mySet = [NSMutableSet setWithArray: self];
-//            NSSet *otherSet = [NSSet setWithArray: otherArray];
-//            [mySet intersectSet: otherSet];
-//            intersection = mySet.allObjects;
-//        }
-//
-//        return intersection;
-//    }
 
 - (id) secondObject
 {

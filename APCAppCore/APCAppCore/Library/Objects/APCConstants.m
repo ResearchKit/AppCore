@@ -80,28 +80,33 @@ NSString *NSStringShortFromAPCScheduleSourceAsNumber (NSNumber *scheduleSourceAs
 #pragma mark - Notifications
 // ---------------------------------------------------------
 
-/*
- Please keep alphabetized.
- */
+NSString *const APCUserSignedUpNotification                     = @"APCUserSignedUpNotification";
+NSString *const APCUserSignedInNotification                     = @"APCUserSignedInNotification";
+NSString *const APCUserLogOutNotification                       = @"APCUserLogOutNotification";
+NSString *const APCUserWithdrawStudyNotification                = @"APCUserWithdrawStudyNotification";
+NSString *const APCUserDidConsentNotification                   = @"APCUserDidConsentNotification";
 
-NSString *const APCActivityCompletionNotification               = @"APCActivityCompletionNotification";
-NSString *const APCAppDidFailToRegisterForRemoteNotification    = @"APCAppDidFailToRegisterForRemoteNotifications";
-NSString *const APCAppDidRegisterUserNotification               = @"APCAppDidRegisterUserNotification";
-NSString *const APCConsentCompletedWithDisagreeNotification     = @"goToSignInJoinScreen";
-NSString *const APCDayChangedNotification                       = @"APCDayChangedNotification";
-NSString *const APCMotionHistoryReporterDoneNotification        = @"APCMotionHistoryReporterDoneNotification";
 NSString *const APCScheduleUpdatedNotification                  = @"APCScheduleUpdatedNotification";
-NSString *const APCSchedulerUpdatedScheduledTasksNotification   = @"APCSchedulerUpdatedScheduledTasksNotification";
+NSString *const APCUpdateActivityNotification                   = @"APCUpdateActivityNotification";
+NSString *const APCDayChangedNotification                       = @"APCDayChangedNotification";
+
+NSString *const APCAppDidRegisterUserNotification               = @"APCAppDidRegisterUserNotification";
+NSString *const APCAppDidFailToRegisterForRemoteNotification    = @"APCAppDidFailToRegisterForRemoteNotifications";
+
 NSString *const APCScoringHealthKitDataIsAvailableNotification  = @"APCScoringHealthKitDataIsAvailableNotification";
 NSString *const APCTaskResultsProcessedNotification             = @"APCTaskResultsProcessedNotification";
-NSString *const APCUpdateActivityNotification                   = @"APCUpdateActivityNotification";
-NSString *const APCUpdateChartsNotification                     = @"APCUpdateChartsNotification";
+
 NSString *const APCUpdateTasksReminderNotification              = @"APCUpdateTasksReminderNotification";
-NSString *const APCUserDidConsentNotification                   = @"APCUserDidConsentNotification";
-NSString *const APCUserLogOutNotification                       = @"APCUserLogOutNotification";
-NSString *const APCUserSignedInNotification                     = @"APCUserSignedInNotification";
-NSString *const APCUserSignedUpNotification                     = @"APCUserSignedUpNotification";
-NSString *const APCUserWithdrawStudyNotification                = @"APCUserWithdrawStudyNotification";
+
+NSString *const APCConsentCompletedWithDisagreeNotification     = @"goToSignInJoinScreen";
+
+NSString *const APCMotionHistoryReporterDoneNotification        = @"APCMotionHistoryReporterDoneNotification";
+
+NSString *const APCHealthKitObserverQueryUpdateForSampleTypeNotification = @"APCHealthKitObserverQueryUpdateForSampleTypeNotification";
+
+NSString *const APCActivityCompletionNotification               = @"APCActivityCompletionNotification";
+NSString *const APCSchedulerUpdatedScheduledTasksNotification   = @"APCSchedulerUpdatedScheduledTasksNotification";
+NSString *const APCUpdateChartsNotification                     = @"APCUpdateChartsNotification";
 
 
 
@@ -139,7 +144,9 @@ NSString *const kHKCorrelationTypeKey       = @"HKCorrelationType";
 NSString * const kPasswordKey                    = @"Password";
 NSString * const kNumberOfMinutesForPasscodeKey  = @"NumberOfMinutesForPasscodeKey";
 
-NSUInteger     const kAPCActivitiesTabIndex                                 = 0;
+NSUInteger     const kAPCActivitiesTabIndex                                   = 0;
+NSUInteger     const kAPCNewsFeedTabIndex                                   = 2;
+
 NSInteger      const kAPCSigninErrorCode_NotSignedIn                        = 404;
 NSUInteger     const kAPCSigninNumRetriesBeforePause                        = 10;
 NSTimeInterval const kAPCSigninNumSecondsBetweenRetries                     = 10;

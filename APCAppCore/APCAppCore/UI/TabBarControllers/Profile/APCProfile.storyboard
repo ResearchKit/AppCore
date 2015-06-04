@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14E11f" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="u6G-bF-12V">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="u6G-bF-12V">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -151,6 +151,7 @@
                                             <rect key="frame" x="20" y="21" width="183" height="21"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="21" id="guh-9s-rcq"/>
+                                                <constraint firstAttribute="width" constant="183" id="ieh-Jc-qi5"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="highlightedColor"/>
@@ -159,14 +160,13 @@
                                             <rect key="frame" x="196" y="17" width="110" height="30"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="30" id="JVW-p5-bat"/>
-                                                <constraint firstAttribute="width" constant="110" id="hFV-FD-zQg"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits" keyboardAppearance="light"/>
                                         </textField>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="dxl-CJ-CsB" firstAttribute="leading" secondItem="olN-SL-drS" secondAttribute="leading" constant="20" id="HJy-34-6Hg"/>
+                                        <constraint firstItem="dxl-CJ-CsB" firstAttribute="leading" secondItem="olN-SL-drS" secondAttribute="leadingMargin" constant="12" id="HJy-34-6Hg"/>
                                         <constraint firstAttribute="centerY" secondItem="1g6-nj-qsu" secondAttribute="centerY" id="QRY-w3-28e"/>
                                         <constraint firstItem="dxl-CJ-CsB" firstAttribute="trailing" secondItem="1g6-nj-qsu" secondAttribute="leading" constant="7" id="VcN-bl-SnP"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="1g6-nj-qsu" secondAttribute="trailing" constant="6" id="W4W-0G-6b1"/>
@@ -176,6 +176,7 @@
                                 <connections>
                                     <outlet property="textField" destination="1g6-nj-qsu" id="Ey6-8Z-Uq5"/>
                                     <outlet property="textLabel" destination="dxl-CJ-CsB" id="pJt-0H-Idb"/>
+                                    <outlet property="textLabelWidthConstraint" destination="ieh-Jc-qi5" id="Ea7-LO-qg3"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="APCDefaultTableViewCell" id="wbA-db-hz4" customClass="APCDefaultTableViewCell">
@@ -204,7 +205,7 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstAttribute="centerY" secondItem="v3i-D8-I5m" secondAttribute="centerY" constant="-1" id="BOq-w4-LkQ"/>
-                                        <constraint firstItem="v3i-D8-I5m" firstAttribute="leading" secondItem="L11-hb-f8A" secondAttribute="leading" constant="20" id="FY8-xn-Jdd"/>
+                                        <constraint firstItem="v3i-D8-I5m" firstAttribute="leading" secondItem="L11-hb-f8A" secondAttribute="leadingMargin" constant="12" id="FY8-xn-Jdd"/>
                                         <constraint firstAttribute="centerY" secondItem="bZk-oc-H5i" secondAttribute="centerY" constant="-1" id="nsz-vg-bSX"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="bZk-oc-H5i" secondAttribute="trailing" constant="6" id="qD3-MP-Xs4"/>
                                     </constraints>
@@ -212,43 +213,6 @@
                                 <connections>
                                     <outlet property="detailTextLabel" destination="bZk-oc-H5i" id="fS7-5T-HN1"/>
                                     <outlet property="textLabel" destination="v3i-D8-I5m" id="gsJ-y8-Y7a"/>
-                                </connections>
-                            </tableViewCell>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="APCSwitchTableViewCell" id="XjR-k1-ssh" customClass="APCSwitchTableViewCell">
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XjR-k1-ssh" id="R7Y-lH-nIr">
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AuT-nK-R7J">
-                                            <rect key="frame" x="20" y="22" width="185" height="21"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="21" id="UCw-3X-AVs"/>
-                                            </constraints>
-                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hhu-Za-IMS">
-                                            <rect key="frame" x="257" y="16" width="51" height="31"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="31" id="Ae4-Zm-QqF"/>
-                                                <constraint firstAttribute="width" constant="49" id="rYb-0R-hf7"/>
-                                            </constraints>
-                                            <connections>
-                                                <action selector="switchChanged:" destination="XjR-k1-ssh" eventType="valueChanged" id="ZGi-Yz-vmV"/>
-                                            </connections>
-                                        </switch>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstAttribute="trailingMargin" secondItem="Hhu-Za-IMS" secondAttribute="trailing" constant="6" id="MOx-cK-MEA"/>
-                                        <constraint firstItem="AuT-nK-R7J" firstAttribute="leading" secondItem="R7Y-lH-nIr" secondAttribute="leading" constant="20" id="SRW-GO-RtG"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="AuT-nK-R7J" secondAttribute="trailing" constant="107" id="WKy-4W-yzM"/>
-                                        <constraint firstAttribute="centerY" secondItem="AuT-nK-R7J" secondAttribute="centerY" constant="-1" id="a5E-yV-HZL"/>
-                                        <constraint firstAttribute="centerY" secondItem="Hhu-Za-IMS" secondAttribute="centerY" id="nYI-4Z-Geh"/>
-                                    </constraints>
-                                </tableViewCellContentView>
-                                <connections>
-                                    <outlet property="cellSwitch" destination="Hhu-Za-IMS" id="uZs-Mv-jU5"/>
-                                    <outlet property="textLabel" destination="AuT-nK-R7J" id="CA8-cc-NjC"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="APCPickerTableViewCell" rowHeight="164" id="iny-eu-p9q" customClass="APCPickerTableViewCell">
@@ -285,6 +249,43 @@
                                 <connections>
                                     <outlet property="datePicker" destination="VOQ-Xa-Vg4" id="9kX-cH-Sf8"/>
                                     <outlet property="pickerView" destination="E6X-tR-sIe" id="uZ0-Ho-l8W"/>
+                                </connections>
+                            </tableViewCell>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="APCSwitchTableViewCell" id="XjR-k1-ssh" customClass="APCSwitchTableViewCell">
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XjR-k1-ssh" id="R7Y-lH-nIr">
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AuT-nK-R7J">
+                                            <rect key="frame" x="20" y="22" width="185" height="21"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="21" id="UCw-3X-AVs"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hhu-Za-IMS">
+                                            <rect key="frame" x="257" y="16" width="51" height="31"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="31" id="Ae4-Zm-QqF"/>
+                                                <constraint firstAttribute="width" constant="49" id="rYb-0R-hf7"/>
+                                            </constraints>
+                                            <connections>
+                                                <action selector="switchChanged:" destination="XjR-k1-ssh" eventType="valueChanged" id="ZGi-Yz-vmV"/>
+                                            </connections>
+                                        </switch>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="trailingMargin" secondItem="Hhu-Za-IMS" secondAttribute="trailing" constant="6" id="MOx-cK-MEA"/>
+                                        <constraint firstItem="AuT-nK-R7J" firstAttribute="leading" secondItem="R7Y-lH-nIr" secondAttribute="leadingMargin" constant="12" id="SRW-GO-RtG"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="AuT-nK-R7J" secondAttribute="trailing" constant="107" id="WKy-4W-yzM"/>
+                                        <constraint firstAttribute="centerY" secondItem="AuT-nK-R7J" secondAttribute="centerY" constant="-1" id="a5E-yV-HZL"/>
+                                        <constraint firstAttribute="centerY" secondItem="Hhu-Za-IMS" secondAttribute="centerY" id="nYI-4Z-Geh"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="cellSwitch" destination="Hhu-Za-IMS" id="uZs-Mv-jU5"/>
+                                    <outlet property="textLabel" destination="AuT-nK-R7J" id="CA8-cc-NjC"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>

@@ -32,7 +32,6 @@
 // 
  
 #import <Foundation/Foundation.h>
-#import <ResearchKit/ResearchKit.h>
 #import <CoreData/CoreData.h>
 #import <HealthKit/HealthKit.h>
 #import "APCParameters.h"
@@ -42,80 +41,40 @@
 @interface APCDataSubstrate : NSObject <APCParametersDelegate>
 
 
-
-// ---------------------------------------------------------
-#pragma mark - Setup
-// ---------------------------------------------------------
+#pragma mark - Initializer
 
 - (instancetype)initWithPersistentStorePath:(NSString *)storePath additionalModels:(NSManagedObjectModel *)mergedModels studyIdentifier:(NSString *)studyIdentifier;
 
-- (void) setUpCoreDataStackWithPersistentStorePath:(NSString*) storePath additionalModels: (NSManagedObjectModel*) mergedModels;
 
-
-
-// ---------------------------------------------------------
-#pragma mark - ResearchKit
-// ---------------------------------------------------------
+#pragma mark - ResearchKit Subsystem Public Properties & Passive Location Tracking
 
 @property (assign) BOOL justJoined;
 @property (strong, nonatomic) NSString *logDirectory;
 @property (nonatomic, strong) APCUser *currentUser;
 
 
-
-// ---------------------------------------------------------
-#pragma mark - HealthKit
-// ---------------------------------------------------------
-
-@property (nonatomic, strong) HKHealthStore *healthStore;
-@property (strong, nonatomic) APCParameters *parameters;
-
-
-
-// ---------------------------------------------------------
 #pragma mark - CoreData
-// ---------------------------------------------------------
 
 @property (nonatomic, strong) NSString *storePath;
 @property (nonatomic, strong) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (nonatomic, strong) NSManagedObjectModel *managedObjectModel;
 
-/**
- Main context for use in View Controllers, Fetch Results Controllers etc.
- */
+/** Main context for use in View Controllers, Fetch Results Controllers etc. */
 @property (nonatomic, strong) NSManagedObjectContext * mainContext;
 
-/**
- Persistent context: Parent of main context.
- Please create a child context of persistentContext for any background processing tasks.
+/** Persistent context: Parent of main context.
+ *  Please create a child context of persistentContext for any background processing tasks.
  */
 @property (nonatomic, strong) NSManagedObjectContext * persistentContext;
+
+
+#pragma mark - Core Data Public Methods
 
 /** EXERCISE CAUTION IN CALLING THIS METHOD. */
 - (void)resetCoreData;
 
-/**
- Former name for -countOfTotalRequiredTasksForToday.
- Please use that method instead.
 
- This method used to run a CoreData query which counted
- today's total (completed + uncompleted) tasks.  The
- replacement method, in contrast, simply tracks the most
- recent stuff appearing on the Activities screen, which
- was the point.
- */
-- (NSUInteger) countOfAllScheduledTasksForToday  __attribute__((deprecated("Please use -countOfTotalRequiredTasksForToday instead.")));
-
-/**
- Former name for -countOfTotalCompletedTasksForToday.
- Please use that method instead.
-
- This method used to run a CoreData query which counted
- today's completed tasks.  The replacement method, in
- contrast, simply tracks the most recent stuff appearing
- on the Activities screen, which was the point.
- */
-- (NSUInteger) countOfCompletedScheduledTasksForToday  __attribute__((deprecated("Please use -countOfTotalCompletedTasksForToday instead.")));
+#pragma mark - Core Data Helpers - ONLY RETURNS in NSManagedObjects in mainContext
 
 /**
  Tracks the total number of required tasks for "today," whenever
@@ -139,5 +98,37 @@
 - (void) updateCountOfTotalRequiredTasksForToday: (NSUInteger) countOfRequiredTasks
                      andTotalCompletedTasksToday: (NSUInteger) countOfCompletedTasks;
 
+/**
+ Former name for -countOfTotalRequiredTasksForToday.
+ Please use that method instead.
+
+ This method used to run a CoreData query which counted
+ today's total (completed + uncompleted) tasks.  The
+ replacement method, in contrast, simply tracks the most
+ recent stuff appearing on the Activities screen, which
+ was the point.
+ */
+- (NSUInteger)countOfAllScheduledTasksForToday  __attribute__((deprecated("Please use -countOfTotalRequiredTasksForToday instead.")));
+
+/**
+ Former name for -countOfTotalCompletedTasksForToday.
+ Please use that method instead.
+
+ This method used to run a CoreData query which counted
+ today's completed tasks.  The replacement method, in
+ contrast, simply tracks the most recent stuff appearing
+ on the Activities screen, which was the point.
+ */
+- (NSUInteger) countOfCompletedScheduledTasksForToday  __attribute__((deprecated("Please use -countOfTotalCompletedTasksForToday instead.")));
+
+
+#pragma mark - HealthKit
+
+@property (nonatomic, strong) HKHealthStore *healthStore;
+
+
+#pragma mark - Parameters
+
+@property (strong, nonatomic) APCParameters *parameters;
 
 @end

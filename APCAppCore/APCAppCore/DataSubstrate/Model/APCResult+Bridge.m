@@ -35,7 +35,9 @@
 #import "APCAppDelegate.h"
 #import "APCLog.h"
 #import "NSManagedObject+APCHelper.h"
+
 #import <BridgeSDK/BridgeSDK.h>
+
 
 @implementation APCResult (Bridge)
 

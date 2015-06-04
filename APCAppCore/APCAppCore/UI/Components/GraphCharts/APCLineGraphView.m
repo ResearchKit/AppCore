@@ -83,10 +83,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 @synthesize maximumValue = _maximumValue;
 @synthesize minimumValue = _minimumValue;
 
-
-/********************************/
 #pragma mark - Init
-/********************************/
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -199,9 +196,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     return formattedNumber;
 }
 
-/********************************/
 #pragma mark - Appearance
-/********************************/
 
 - (void)updateScrubberLabel
 {
@@ -225,9 +220,8 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     return thumbSize;
 }
 
-/********************************/
+
 #pragma mark - View Layout
-/********************************/
 
 - (void)layoutSubviews
 {
@@ -310,9 +304,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     [self addSubview:_emptyLabel];
 }
 
-/********************************/
 #pragma mark - Data
-/********************************/
 
 - (NSInteger)numberOfPlots
 {
@@ -341,8 +333,8 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 {
     _numberOfXAxisTitles = 0;
     
-    if ([self.datasource respondsToSelector:@selector(numberOfDivisionsInXAxisForLineGraph:)]) {
-        _numberOfXAxisTitles = [self.datasource numberOfDivisionsInXAxisForLineGraph:self];
+    if ([self.datasource respondsToSelector:@selector(numberOfDivisionsInXAxisForGraph:)]) {
+        _numberOfXAxisTitles = [self.datasource numberOfDivisionsInXAxisForGraph:self];
     } else {
         _numberOfXAxisTitles = [self numberOfPointsinPlot:0];
     }
@@ -386,9 +378,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     [self.yAxisPoints addObjectsFromArray:[self normalizeCanvasPoints:self.dataPoints forRect:self.plotsView.frame.size]];
 }
 
-/********************************/
 #pragma mark - Draw
-/********************************/
 
 - (void)drawXAxis
 {
@@ -697,9 +687,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     }
 }
 
-/********************************/
 #pragma mark - Graph Calculations
-/********************************/
 
 - (NSInteger)numberOfValidValues
 {
@@ -907,9 +895,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     return xPosition;
 }
 
-/********************************/
 #pragma mark - Animations
-/********************************/
 
 - (void)animateLayersSequentially
 {
@@ -953,9 +939,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     }
 }
 
-/********************************/
 #pragma mark - Touch
-/********************************/
 
 - (void)handlePanGesture:(UIPanGestureRecognizer *)gestureRecognizer
 {
@@ -1023,9 +1007,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     }
 }
 
-/********************************/
 #pragma mark - Public Methods
-/********************************/
 
 - (void)scrubReferenceLineForXPosition:(CGFloat)xPosition
 {

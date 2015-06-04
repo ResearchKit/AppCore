@@ -45,6 +45,7 @@
  declare this; I just wanted to make that fact explicit.
  */
 - (NSDate *) nextObject;
+
 - (NSDate *) nextScheduledDate;
 
 @end

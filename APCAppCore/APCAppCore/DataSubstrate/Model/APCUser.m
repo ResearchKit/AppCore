@@ -32,14 +32,14 @@
 // 
  
 #import "APCUser.h"
-#import <HealthKit/HealthKit.h>
+#import "APCStoredUserData.h"
 #import "APCAppDelegate.h"
+#import "APCDataSubstrate.h"
 #import "APCKeychainStore.h"
 #import "APCLog.h"
-#import "APCStoredUserData.h"
 #import "APCUtilities.h"
-#import "HKHealthStore+APCExtensions.h"
 #import "NSManagedObject+APCHelper.h"
+#import "HKHealthStore+APCExtensions.h"
 
 
 static NSString *const kNamePropertytName = @"name";
@@ -84,13 +84,11 @@ static NSString *const kSignedInKey = @"SignedIn";
 
 @interface APCUser ()
 {
-    NSDate * _birthDate;
+    NSDate *_birthDate;
     HKBiologicalSex _biologicalSex;
     HKBloodType _bloodType;
 }
-
 @property (nonatomic, readonly) HKHealthStore *healthStore;
-
 @end
 
 
@@ -133,7 +131,7 @@ static NSString *const kSignedInKey = @"SignedIn";
             ", self.name, self.email, self.birthDate, (int) self.biologicalSex, @(self.isSignedUp), @(self.isUserConsented), @(self.isSignedIn), @(self.isConsented), self.medicalConditions, self.medications, (int) self.bloodType, self.height, self.weight, self.wakeUpTime, self.sleepTime, self.homeLocationAddress, self.homeLocationLat, self.homeLocationLong];
 }
 
-- (void)loadStoredUserData:(NSManagedObjectContext*)context
+- (void)loadStoredUserData:(NSManagedObjectContext *)context
 {
     [context performBlockAndWait:^{
         APCStoredUserData * storedUserData = [self loadStoredUserDataInContext:context];
@@ -141,7 +139,7 @@ static NSString *const kSignedInKey = @"SignedIn";
     }];
 }
 
-- (APCStoredUserData*)loadStoredUserDataInContext:(NSManagedObjectContext*)context
+- (APCStoredUserData *)loadStoredUserDataInContext:(NSManagedObjectContext *)context
 {
     NSFetchRequest *request = [APCStoredUserData request];
     NSError *error;
@@ -292,12 +290,7 @@ static NSString *const kSignedInKey = @"SignedIn";
 
 + (NSDate *) proxyForConsentDate
 {
-    NSDate *bestGuessConsentDate = [APCKeychainStore modifiedDateForKey: kEmailPropertyName];
-
-    if (! bestGuessConsentDate)
-    {
-        bestGuessConsentDate = [APCUtilities firstKnownFileAccessDate];
-    }
+    NSDate *bestGuessConsentDate = [APCUtilities firstKnownFileAccessDate];
 
     if (! bestGuessConsentDate)
     {

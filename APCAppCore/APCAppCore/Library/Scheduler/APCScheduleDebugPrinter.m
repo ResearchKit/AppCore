@@ -164,7 +164,7 @@ static NSDateFormatter *debugDateFormatter = nil;
 // ---------------------------------------------------------
 
 /*
- For some reason, I can't get to the APCSchedule+AddOn
+ For some reason, we can't get to the APCSchedule+AddOn
  category during a database migration.  These methods let
  us work around that fact.  They depend on
  

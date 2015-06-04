@@ -57,35 +57,4 @@
  */
 + (instancetype) arrayWithObjectsFromArrays: (NSArray *) firstArray, ...;
 
-//    /**
-//     Creates a new array containing the elements of self which are
-//     NOT in otherArray.  Never returns nil (unless self is nil).
-//     */
-//    - (NSArray *) arrayBySubtractingObjectsInArray: (NSArray *) otherArray;
-
-//    /**
-//     Creates a new array containing the elements of self which are
-//     also in otherArray.
-//     */
-//    - (NSArray *) arrayByInsersectingArray: (NSArray *) otherArray
-//                   usingComparisonSelector: (SEL) comparisonSelector;
-
-//    /**
-//     Creates a new array containing the elements of self which are
-//     NOT in any of the specified arrays.  Never returns nil (unless
-//     self is nil).
-//     
-//     Usage:
-//
-//     @code
-//     NSArray *stuffIWantToKeep     = [self getStuffToKeep];
-//     NSArray *someStuffIDontWant   = [self getGarbage];
-//     NSArray *moreStuffIDontWant   = [self getMoreGarbage];
-//     NSArray *lotsOfStuffIDontWant = [self getYetMoreGarbage];
-//
-//     NSArray *finalList = [stuffIWantToKeep arrayBySubtractingObjectsInArrays: someStuffIDontWant, moreStuffIDontWant, lotsOfStuffIDontWant];
-//     @endcode
-//     */
-//    - (NSArray *) arrayBySubtractingObjectsInArrays: (NSArray *) firstArray, ... ;
-
 @end

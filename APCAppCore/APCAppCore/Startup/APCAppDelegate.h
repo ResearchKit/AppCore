@@ -44,13 +44,10 @@ extern NSUInteger   const kTheEntireDataModelOfTheApp;
 
 @interface APCAppDelegate : UIResponder <UIApplicationDelegate, APCOnboardingDelegate, APCOnboardingTaskDelegate, APCPasscodeViewControllerDelegate>
 
-/**
- Casts the main application's app delegate as this type.
- */
-+ (instancetype) sharedAppDelegate;
-
 @property (nonatomic, strong) APCFitnessAllocation *sevenDayFitnessAllocationData;
-@property (strong, nonatomic) UITabBarController *tabBarController;
+@property (strong, nonatomic) UITabBarController *tabster;
+
++ (instancetype) sharedAppDelegate;
 
 //APC Related Properties & Methods
 @property (strong, nonatomic) APCDataSubstrate * dataSubstrate;
@@ -94,13 +91,15 @@ extern NSUInteger   const kTheEntireDataModelOfTheApp;
 - (void) setUpAppAppearance;
 - (void) registerCatastrophicStartupError: (NSError *) error;
 
+//For User in Subclasses
 - (void) signedInNotification:(NSNotification *)notification;
 - (void) signedUpNotification: (NSNotification*) notification;
 - (void) logOutNotification:(NSNotification *)notification;
+
 - (void)afterOnBoardProcessIsFinished;
 - (NSArray *)reviewConsentActions;
 - (NSArray *)allSetTextBlocks;
-- (BOOL)hideEmailOnWelcomeScreen;
+- (NSDictionary *)configureTasksForActivities;
 
 //To be called from Datasubstrate
 - (void) setUpCollectors;

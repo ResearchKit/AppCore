@@ -32,17 +32,10 @@
 // 
  
 #import "APCTasksReminderManager.h"
-#import "APCAppDelegate.h"
-#import "APCScheduledTask+AddOn.h"
-#import "APCResult+AddOn.h"
-
+#import "APCAppCore.h"
 #import "APCConstants.h"
-#import "APCLog.h"
-#import "NSDate+Helper.h"
-#import "NSDictionary+APCAdditions.h"
-#import "NSManagedObject+APCHelper.h"
-
-#import <UIKit/UIKit.h>
+#import "APCScheduler.h"
+#import "APCActivitiesViewSection.h"
 
 NSString * const kTaskReminderUserInfo = @"CurrentTaskReminder";
 NSString * const kSubtaskReminderUserInfo = @"CurrentSubtaskReminder";
@@ -57,7 +50,7 @@ NSString * const kTaskReminderMessage = @"Please complete your %@ activities tod
 NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
 
 @interface APCTasksReminderManager ()
-
+@property (strong, nonatomic) NSArray *taskGroups;
 @property (strong, nonatomic) NSMutableDictionary *remindersToSend;
 @end
 
@@ -66,7 +59,11 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
 - (instancetype)init {
     self = [super init];
     if (self) {
+        //posted by APCSettingsViewController on turning reminders on/off
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateTasksReminder) name:APCUpdateTasksReminderNotification object:nil];
+        //posted by APCBaseTaskViewController when user completes an activity
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateTasksReminder) name:APCActivityCompletionNotification object:nil];
+        
         self.reminders = [NSMutableArray new];
         self.remindersToSend = [NSMutableDictionary new];
         [self updateTasksReminder];
@@ -93,6 +90,13 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
 /*********************************************************************************/
 #pragma mark - Local Notification Scheduling
 /*********************************************************************************/
+
+//updated in parallel with ActivitiesViewController
+-(void)handleActivitiesUpdateWithTodaysTaskGroups: (NSArray *) todaysTaskGroups {
+    self.taskGroups = todaysTaskGroups;
+    [self updateTasksReminder];
+}
+
 - (void) updateTasksReminder
 {
     
@@ -167,7 +171,7 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
             UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert
                                                                                                  |UIUserNotificationTypeBadge
                                                                                                  |UIUserNotificationTypeSound)
-																					 categories:[APCTasksReminderManager taskReminderCategories]];
+                                                                                     categories:[APCTasksReminderManager taskReminderCategories]];
             
             [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
             [[NSUserDefaults standardUserDefaults]synchronize];
@@ -299,14 +303,16 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
         //default to on if user has given Notification permissions
         if ([[UIApplication sharedApplication] currentUserNotificationSettings].types != UIUserNotificationTypeNone){
             flag = @YES;
-            [self updateReminderOn:flag];
+            [[NSUserDefaults standardUserDefaults] setObject:flag forKey:kTasksReminderDefaultsOnOffKey];
+            [[NSUserDefaults standardUserDefaults] synchronize];
         }
     }
     
     //if Notifications are not enabled, set Reminders to off
     if ([[UIApplication sharedApplication] currentUserNotificationSettings].types == UIUserNotificationTypeNone) {
         flag = @NO;
-        [self updateReminderOn:flag];
+        [[NSUserDefaults standardUserDefaults] setObject:flag forKey:kTasksReminderDefaultsOnOffKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
     }
     
     return [flag boolValue];
@@ -437,18 +443,28 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
         //the reminder for this task is off
         return includeTask;
     }
-
-    NSArray *completedTasks = [APCTasksReminderManager scheduledTasksForTaskID:taskReminder.taskID completed:@1];
-    NSArray *scheduledTasks = [APCTasksReminderManager scheduledTasksForTaskID:taskReminder.taskID completed:nil];
     
-    if(completedTasks.count < scheduledTasks.count){//if this task has not been completed but was scheduled, include it in the reminder
+    APCTaskGroup *groupForTaskID;
+    for (APCTaskGroup *group in self.taskGroups) {
+        
+        if ([group.task.taskID isEqualToString:taskReminder.taskID]) {
+            groupForTaskID = group;
+            break;
+        }
+    }
+    
+    if (!groupForTaskID) {
+        includeTask = NO;
+    }else if (!groupForTaskID.isFullyCompleted ) {//if this task has not been completed but was required, include it in the reminder
         includeTask = YES;
-    }else if (completedTasks.count > 0 && taskReminder.resultsSummaryKey != nil) {
-        for (APCScheduledTask *task in completedTasks) {
-            
-            //get the result summary for this daily prompt task
-            if (task.lastResult) {
-                NSString * resultSummary = task.lastResult.resultSummary;
+    }else if (taskReminder.resultsSummaryKey != nil) {
+        //we have a completed task with a subtask reminder. Get the results object from task.
+        NSArray *allCompletedActivitiesForTaskID = [groupForTaskID.requiredCompletedTasks arrayByAddingObjectsFromArray:groupForTaskID.gratuitousCompletedTasks];
+        
+        for (APCScheduledTask *subtask in allCompletedActivitiesForTaskID) {
+            if (subtask.results.count > 0) {
+                includeTask = NO;
+                NSString * resultSummary = subtask.lastResult.resultSummary;
                 
                 NSDictionary * dictionary = resultSummary ? [NSDictionary dictionaryWithJSONString:resultSummary] : nil;
                 
@@ -468,45 +484,5 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
     
     return includeTask;
 }
-//Pass in a taskID
-+ (NSArray *)scheduledTasksForTaskID:(NSString *)taskID completed:(NSNumber *)completed
-{
-   
-    APCDateRange *dateRange = [[APCDateRange alloc]initWithStartDate:[NSDate todayAtMidnight] endDate:[NSDate tomorrowAtMidnight]];
-    NSManagedObjectContext *context = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.mainContext;
-    
-    NSFetchRequest * request = [APCScheduledTask request];
-    request.shouldRefreshRefetchedObjects = YES;
-    
-    NSPredicate * datePredicate = [NSPredicate predicateWithFormat:@"endOn >= %@ AND task.taskID == %@", dateRange.startDate, taskID];
-    
-    NSPredicate * completionPredicate = nil;
-    if (completed != nil) {
-        completionPredicate = [completed isEqualToNumber:@YES] ? [NSPredicate predicateWithFormat:@"completed == %@", completed] :[NSPredicate predicateWithFormat:@"completed == nil ||  completed == %@", completed] ;
-    }
-    
-    NSPredicate * finalPredicate = completionPredicate ? [NSCompoundPredicate andPredicateWithSubpredicates:@[datePredicate, completionPredicate]] : datePredicate;
-    request.predicate = finalPredicate;
-    
-    NSSortDescriptor *titleSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"task.taskTitle" ascending:YES];
-    NSSortDescriptor * completedSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"completed" ascending:YES];
-    request.sortDescriptors = @[completedSortDescriptor, titleSortDescriptor];
-    
-    NSError * error;
-    NSArray * array = [context executeFetchRequest:request error:&error];
-    if (array == nil) {
-        APCLogError2 (error);
-    }
-    
-    NSMutableArray * filteredArray = [NSMutableArray array];
-    
-    for (APCScheduledTask * scheduledTask in array) {
-        if ([scheduledTask.dateRange compare:dateRange] != kAPCDateRangeComparisonOutOfRange) {
-            [filteredArray addObject:scheduledTask];
-        }
-    }
-    return filteredArray.count ? filteredArray : nil;
-}
-
 
 @end

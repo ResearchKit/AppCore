@@ -665,40 +665,7 @@ static CGFloat kHeaderHeight = 157.0f;
 - (void) secretButton
 {
     // Disable the secret button to do nothing.
-    
-    NSUInteger randomInteger = arc4random();
-    self.emailTextField.text = [NSString stringWithFormat:@"dhanush.balachandran+%@@ymedialabs.com", @(randomInteger)];
-    
-    for (NSUInteger j=0; j<self.items.count; j++) {
-        
-        APCTableViewSection *section = self.items[j];
-        
-        for (NSUInteger i = 0; i < section.rows.count; i++) {
-            
-            APCTableViewRow *row = section.rows[i];
-            
-            APCTableViewTextFieldItem *item = (APCTableViewTextFieldItem *)row.item;
-            APCTableViewItemType itemType = row.itemType;
-            
-            switch (itemType) {
-                case kAPCUserInfoItemTypePassword:
-                    item.value = @"Password123";
-                    break;
-                    
-                default:
-                {
-                    //Do nothing for some types
-                }
     return;
-            }
-        }
-    }
-    
-    [self.tableView reloadData];
-    
-    [self.permissionButton setSelected:YES];
-    
-    [self.nextBarButton setEnabled:[self isContentValid:nil]];
 }
 
 - (IBAction)next
