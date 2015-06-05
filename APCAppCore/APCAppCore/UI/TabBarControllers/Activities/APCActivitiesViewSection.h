@@ -33,6 +33,10 @@
 
 #import <Foundation/Foundation.h>
 
+/**
+ Data and metadata describing one literal and conceptual
+ section of the tableView on the ActivitiesViewController.
+ */
 @interface APCActivitiesViewSection : NSObject
 
 @property (nonatomic, strong) NSDate *date;

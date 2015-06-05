@@ -35,6 +35,14 @@
 @class APCSchedule;
 @class APCTask;
 
+
+/**
+ In the Activities view, serves as a placeholder for a task
+ that the user *could* do, but has not yet done.  Contains
+ enough information to generate a real user-data task
+ (a ScheduledTask) at a specific date and time, according
+ to the Schedule for that Task.
+ */
 @interface APCPotentialTask : NSObject
 
 @property (nonatomic, strong) APCSchedule *schedule;

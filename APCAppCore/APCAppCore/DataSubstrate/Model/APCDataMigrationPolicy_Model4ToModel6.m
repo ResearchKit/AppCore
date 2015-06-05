@@ -151,7 +151,7 @@ static NSString * const kAPCErrorFetchingUsersSuggestion = @"Unable to fetch use
 
 - (NSNumber *) generateNewTaskVersionNumberFromOldTaskId: (id) maybeTaskIdFromTaskV4
 {
-    // May be nil.
+    // May be nil.  No problem.
     NSNumber *versionNumber = [self extractSageVersionNumberFromV4TaskId: maybeTaskIdFromTaskV4];
 
     return versionNumber;
@@ -368,13 +368,14 @@ static NSString * const kAPCErrorFetchingUsersSuggestion = @"Unable to fetch use
  a date, and version number if it was available.  We ignore
  the date, and use the task ID and version number directly.
  
- Compare with -extractNewVersionNumberFromMaybeOldTaskId:.
+ Compare with -extractSageVersionNumberFromV4TaskId:.
  This method extracts the leading "id" part; that method
  extracts the trailing version-number part.
 
  Here was the original method that converted the ID, date,
  and version into a single string.  This is what we need
- to undo.
+ to undo.  This method was in a category we'd written around
+ a Sage-provided class, SBBGuidCreatedOnVersionHolder:
 
      - (NSString*) uniqueID
      {
@@ -392,9 +393,6 @@ static NSString * const kAPCErrorFetchingUsersSuggestion = @"Unable to fetch use
          }
          return retValue;
      }
- 
- This was in a category we'd written around a Sage-provided
- class, SBBGuidCreatedOnVersionHolder.
  */
 - (NSString *) extractSageStyleTaskIdFromV4TaskId: (id) maybeTaskIdFromTaskV4
 {
@@ -403,11 +401,8 @@ static NSString * const kAPCErrorFetchingUsersSuggestion = @"Unable to fetch use
     if (maybeTaskIdFromTaskV4 != nil && [maybeTaskIdFromTaskV4 isKindOfClass: [NSString class]])
     {
         /*
-         Sample Sage ID:  88e6db5b-0afa-499f-88e5-83465471be3d
-
-         If you know a one-character replacement for "hex digits"
-         ([a-fA-F0-9]), please replace each of the "[a-fA-F0-9]" below
-         with that character.  (Maybe \x?  \h?)
+         A regular expression to recognize task IDs.
+         Sample format:  88e6db5b-0afa-499f-88e5-83465471be3d
          */
         NSString *uuidRegex = (@""
                                "[a-fA-F0-9]{8}\\-"      // 8 hex chars + literal hyphen
@@ -422,7 +417,8 @@ static NSString * const kAPCErrorFetchingUsersSuggestion = @"Unable to fetch use
                                                 options: NSRegularExpressionSearch | NSCaseInsensitiveSearch];
 
         /*
-         This is part of the analysis:  the task ID has to be the first part of the string.
+         This is part of the analysis: the task ID has to
+         be the first part of the string.
          */
         if (uuidRange.location == 0)
         {
@@ -434,7 +430,7 @@ static NSString * const kAPCErrorFetchingUsersSuggestion = @"Unable to fetch use
 }
 
 /**
- See comments on -extractNewTaskIdFromMaybeOldTaskId:. 
+ See comments on -extractSageStyleTaskIdFromV4TaskId:.
  That method extracts the leading "id" part; this method
  extracts the trailing version-number part.
 
@@ -525,7 +521,7 @@ static NSString * const kAPCErrorFetchingUsersSuggestion = @"Unable to fetch use
     [printout replaceOccurrencesOfString: @"\\\"" withString: @"\"" options: 0 range: NSMakeRange (0, printout.length)];
 
     APCLogDebug (@"%@", printout);
-    APCLogDebug (@"");      // someplace to put a breakpoint
+    APCLogDebug (@"");      // easy place to put a breakpoint, in order to inspect the printout
 }
 
 

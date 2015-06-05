@@ -42,13 +42,19 @@
 FOUNDATION_EXPORT NSString * const kAPCActivitiesTintedTableViewCellIdentifier;
 
 
+/**
+ Displays a single row in the main TableView on the
+ ActivitiesViewController.  Each such row describes the 
+ state of a certain Task the user can perform on a given
+ day.
+ */
 @interface APCActivitiesTintedTableViewCell : APCActivitiesTableViewCell
 
 /**
- This is fundamentally what this cell does (now, anyway): 
- displays a taskGroup.  A TaskGroup can contain one or
- more tasks, categorized in specific ways -- basically,
- "potential" or "completed," although that will evolve.
+ Configure this cell to display its TaskGroup:  a single
+ conceptual activity the user can perform, with various
+ pieces of metadata describing the present, past, and
+ future state of that activity.
  */
 - (void) configureWithTaskGroup: (APCTaskGroup *) taskGroup
                     isTodayCell: (BOOL) cellRepresentsToday

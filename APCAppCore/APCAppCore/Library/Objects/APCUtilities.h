@@ -110,6 +110,8 @@
 
 /**
  Returns the file-creation date on our database file.
+ A good approximation of the first time the user ran the
+ app.
  */
 + (NSDate *) firstKnownFileAccessDate;
 
@@ -128,6 +130,9 @@
  minValue, maxValue if valueToTest if greater than
  maxValue, and valueToTest itself if it's between those
  two values.
+ 
+ This macro name is in ALL CAPS simply to be consistent
+ with MIN() and MAX().
  */
 #define CLAMP( minValue, valueToTest, maxValue ) (MIN (MAX (valueToTest, minValue), maxValue))
 

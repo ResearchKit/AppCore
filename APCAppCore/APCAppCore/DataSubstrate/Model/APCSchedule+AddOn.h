@@ -42,8 +42,9 @@
 
 
 /**
- We enumerate the dates in a schedule differently based on
- this style.
+ Describes the enumeration style of a particular Schedule.
+ Also determines which techniques we employ when enumerating
+ the date/time values represented by that Schedule.
  */
 typedef enum : NSUInteger {
 
@@ -55,7 +56,7 @@ typedef enum : NSUInteger {
     APCScheduleRecurrenceStyleCronExpression,
 
     /** The schedule recurs according to a (human-readable)
-     ISO8601 time interval, like "every 90 days," and
+     ISO 8601 time interval, like "every 90 days," and
      an optional list of times in a given day. */
     APCScheduleRecurrenceStyleInterval,
 

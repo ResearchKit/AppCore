@@ -68,12 +68,15 @@ typedef NS_ENUM(NSUInteger, APCDashboardGraphType) {
 
  Please feel free to add your own sources, here.  If you
  do, please respect the following:
+
  -  Make them bitmask-friendly, using the examples below.
- -  Do NOT change the values of the existing items.
-    Those are values in our users' current databases.
+
+ -  Do NOT change the values of the existing items. Those
+    are values in our users' current databases.
+
  -  Add your enum name to the switch() statement in the
-    function NSStringFromAPCScheduleSource(), in this .m
-    file.
+    function NSStringFromAPCScheduleSource(), inside
+    APCConstants.m.
  */
 typedef enum : NSUInteger {
     APCScheduleSourceAll                = 0,
@@ -169,7 +172,6 @@ FOUNDATION_EXPORT NSString * const kPasswordKey;
 FOUNDATION_EXPORT NSString * const kNumberOfMinutesForPasscodeKey;
 
 FOUNDATION_EXPORT NSUInteger     const kAPCActivitiesTabIndex;
-FOUNDATION_EXPORT NSUInteger     const kAPCNewsFeedTabIndex;
 FOUNDATION_EXPORT NSInteger      const kAPCSigninErrorCode_NotSignedIn;
 FOUNDATION_EXPORT NSUInteger     const kAPCSigninNumRetriesBeforePause;
 FOUNDATION_EXPORT NSTimeInterval const kAPCSigninNumSecondsBetweenRetries;

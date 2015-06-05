@@ -577,7 +577,7 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 - (void) setUpTasksReminder {/*Abstract Implementation*/}
 
 -(void)application:(UIApplication *)__unused application handleActionWithIdentifier:(NSString *)identifier forLocalNotification:(UILocalNotification *)notification completionHandler:(void (^)())completionHandler{
-
+    
     if ([identifier isEqualToString:kDelayReminderIdentifier]) {
         notification.fireDate = [notification.fireDate dateByAddingTimeInterval:3600];
         [[UIApplication sharedApplication] scheduleLocalNotification:notification];

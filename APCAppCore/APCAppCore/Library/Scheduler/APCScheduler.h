@@ -65,12 +65,12 @@ typedef void (^APCSchedulerCallbackForFetchingCount) (NSUInteger count, NSError 
  
  Specifically, manages the processes of downloading tasks
  and schedules, merging them with existing ones, figuring
- out which ones are "active" or "current," figuring out
- which to display on a given day, whether future, past, or
- present.  Maintains a cache of the query results for each
+ out which ones are "active" or "current," and figuring out
+ which to display on a given day, whether present, past, or
+ future.  Maintains a cache of the query results for each
  type of query, because each query is time-consuming: we
  not only pull stuff from CoreData, but do a fair amount of
- math to figure out how to project schedules onto a human
+ math to figure out how to map schedules onto a human
  calendar.
  */
 @interface APCScheduler : NSObject
@@ -152,25 +152,3 @@ typedef void (^APCSchedulerCallbackForFetchingCount) (NSUInteger count, NSError 
 
 
 @end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

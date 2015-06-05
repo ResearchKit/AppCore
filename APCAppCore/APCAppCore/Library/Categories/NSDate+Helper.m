@@ -57,7 +57,7 @@ static NSString * const kAPCDateFormatLocaleEN_US_POSIX = @"en_US_POSIX";
 static NSString * const kDateFormatISO8601 = @"yyyy-MM-dd'T'HH:mm:ssZZZZZ";
 
 /**
- The possible ways we might receive an ISO8601 date.
+ The possible ways we might receive an ISO 8601 date.
  Filled in during +initialize.
  */
 static NSArray * kAPCDateFormatISO8601InputOptions = nil;
@@ -65,7 +65,8 @@ static NSArray * kAPCDateFormatISO8601InputOptions = nil;
 
 
 /**
- Makes some of the method calls below more explicit.
+ Makes some of the method calls below more explicit than
+ using a Boolean to indicate "backwards" or "forwards."
  */
 typedef enum : NSUInteger {
     APCDateDirectionForwards,
@@ -76,9 +77,23 @@ typedef enum : NSUInteger {
 
 @implementation NSDate (Helper)
 
+/**
+ Set global, static values the first time anyone calls this class.
+
+ By definition, this method is called once per class, in a thread-safe
+ way, the first time the class is sent a message -- basically, the first
+ time we refer to the class.  That means we can use this to set up stuff
+ that applies to all objects (instances) of this class.
+
+ Documentation:  See +initialize in the NSObject Class Reference.  Currently, that's here:
+ https://developer.apple.com/library/ios/documentation/Cocoa/Reference/Foundation/Classes/NSObject_Class/index.html#//apple_ref/occ/clm/NSObject/initialize
+ */
 + (void) initialize
 {
     /*
+     The list of formats we'll use when trying to interpret
+     an ISO 8601 date string.  Add any others you need.
+
      For more options, see http://www.unicode.org/reports/tr35/tr35-31/tr35-dates.html#Date_Format_Patterns
      */
     kAPCDateFormatISO8601InputOptions = @[@"yyyy-MM-dd",
@@ -206,7 +221,7 @@ typedef enum : NSUInteger {
 
 
 // ---------------------------------------------------------
-#pragma mark - General (Uncategorized) utility functions and "properties"
+#pragma mark - Uncategorized utility functions and "computed properties"
 // ---------------------------------------------------------
 
 + (NSUInteger)ageFromDateOfBirth:(NSDate *)dateOfBirth
@@ -536,22 +551,3 @@ typedef enum : NSUInteger {
 
 
 @end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

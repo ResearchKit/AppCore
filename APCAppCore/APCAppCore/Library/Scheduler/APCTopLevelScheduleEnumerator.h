@@ -73,6 +73,3 @@
 - (NSDate *) nextScheduledAppearance;
 
 @end
-
-
-

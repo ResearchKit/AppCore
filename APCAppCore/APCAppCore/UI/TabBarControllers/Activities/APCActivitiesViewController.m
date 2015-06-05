@@ -435,7 +435,7 @@ static NSString * const kAPCScheduleStringKey                       = @"schedule
 
 
 // ---------------------------------------------------------
-#pragma mark - Reloading data from Sage
+#pragma mark - Reloading data from the server
 // ---------------------------------------------------------
 
 - (void) fetchNewestSurveysAndTasksFromServer: (id) __unused sender

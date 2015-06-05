@@ -34,6 +34,15 @@
 #import <Foundation/Foundation.h>
 @class APCSchedule;
 
+/**
+ Emits the dates and times in a Schedule when the schedule
+ is of APCScheduleRecurrenceStyleInterval.
+ 
+ This is used internally to APCTopLevelScheduleEnumerator.
+ If you're trying to enumerate the date/time values in a
+ Schedule, you probably want that class instead, which you
+ can get most easily from the APCSchedule object itself.
+ */
 @interface APCScheduleIntervalEnumerator : NSEnumerator
 
 - (instancetype) initWithSchedule: (APCSchedule *) schedule

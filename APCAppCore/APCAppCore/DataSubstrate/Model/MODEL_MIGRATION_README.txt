@@ -106,7 +106,7 @@ Summary of what we're about to do
 
 5.  Tell the Mapping Model to use your new conversion method.
 
-6.  Repeat steps 1-5 for every version of the model you might encounter.  For example, if your customers are using versions 1, 2, and 3 of your data model -- if you've released all those versions to the App Store -- you'll need to write Mapping Models converting EACH of those versions to version 5.
+6.  Repeat steps 1-5 for every version of the model you might encounter.  For example, if your customers are using versions 1, 2, and 3 of your data model -- if you've released all those versions to the App Store -- and you're changing to version 5, you'll need to write Mapping Models converting EACH of those earlier versions to version 5.
 
 
 - - - - - - - -
@@ -116,16 +116,16 @@ Details
 1.  Create a new Mapping Model:
 
     a.  Create a new Mapping Model file:  File > New > CoreData > MappingModel.
-    b.  When it asks, tell it the version you're migrating from:  version 4.
-    c.  When it asks, tell it the version you're migrating to:  version 5.
+    b.  When it asks, tell it the version you're migrating from:  say, version 4.
+    c.  When it asks, tell it the version you're migrating to:  say, version 5.
     d.  Save that file.  Name it after the versions you're mapping:  perhaps "APCMappingModel4ToModel5".  Use the default extension, ".xcmappingmodel".
 
 
 2.  Inspect that file.  Here's what you'll see:
 
-    a.  The file contains every entity and every attribute from version 4, and, by default, says to copy that data over to the same field in version 5.  THAT'S GREAT, and that's what we want.  The catch will be:  for NEW attributes, it won't know what values to give them.  And for attributes that have changed, its assumptions will be wrong.  So we'll write methods to generate, or fix, JUST THOSE ATTRIBUTES.  Leave everything else the way it is.
+    a.  The file contains every entity, attribute, and relationship from version 4, and, by default, says to copy that data over to the same field or relationship in version 5.  THAT'S GREAT, and that's what we want.  The catch will be:  for NEW attributes and relationships, it won't know what values to give them.  And for attributes that have changed, its assumptions will be wrong.  So we'll write methods to generate, or fix, JUST THOSE ATTRIBUTES and relationships.  Leave everything else the way it is.
 
-    b.  You might ask:  why can't I delete the entities and attributes that I *don't* want it to convert?  In theory, you can.  In practice, if any OTHER attributes relate to those, the automatic conversions may not do what you expect, or may not happen at all.  It's probably easier to just leave the file the way it is.
+    b.  You might ask:  why can't I delete the entities, attributes, and relationships that I *don't* want it to convert, to make the file cleaner and simpler?  In theory, you can.  In practice, if any OTHER attributes relate to those, the automatic conversions may not do what you expect, or may not happen at all.  It's probably easier to just leave the file the way it is.
 
 
 3.  Create a class to perform the "hard parts" of the migration:
@@ -154,6 +154,8 @@ Details
     a.  Click the Mapping Model file.
     b.  In the list of entities, click the entity you're about to convert.
     c.  In the data inspector (command-option-3), enter your new class as the "custom policy."
+
+        (This shows us why this class is called a "policy."  Your "policy" class is a physical embodiment of a set of principles and rules for converting something into something else.  The migration manager will instantiate one of these rule-beasties so that it (the manager) can follow those rules.)
 
 
 6.  Tell the mapping model to use your new method:

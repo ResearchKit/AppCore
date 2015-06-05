@@ -178,7 +178,7 @@ typedef enum : NSUInteger {
 	NSNumber* minute	= self.minuteSelector.initialValue;
 	NSNumber* hour		= self.hourSelector.initialValue;
 	NSNumber* month		= self.monthSelector.initialValue;
-	NSNumber* year		= self.yearSelector.initialValue;       // TODO.  This may be wrong and irrelevant -- it was computed based on "this year."  It needs to reflect the passed-in start and end years.  ...back in -init; we're too late, here.
+	NSNumber* year		= self.yearSelector.initialValue;
 
 	[self.daySelector recomputeDaysBasedOnMonth:month year:year];
 	NSNumber* day		= self.daySelector.initialValue;
@@ -302,7 +302,7 @@ typedef enum : NSUInteger {
 	DateField dateFieldIndex = DateFieldMinute;
 
     while (dateFieldIndex <= DateFieldYear && shouldInspectNextField)
-    {
+	{
 		APCTimeSelector* dateFieldSelector = self.selectors [dateFieldIndex];
 		NSNumber* prevFieldValue = self.dateComponents [dateFieldIndex];
 		NSNumber* newFieldValue = [dateFieldSelector nextMomentAfter: prevFieldValue];
@@ -313,12 +313,11 @@ typedef enum : NSUInteger {
             self.dateComponents [dateFieldIndex] = firstFieldValue;
 			shouldInspectNextField = YES;
 		}
-
         else if (dateFieldIndex < DateFieldMonth)
-        {
+		{
             self.dateComponents [dateFieldIndex] = newFieldValue;
 			shouldInspectNextField = NO;
-        }
+		}
 
         else  // dateFieldIndex == Month or Year
         {
@@ -331,7 +330,7 @@ typedef enum : NSUInteger {
 
             [self.daySelector recomputeDaysBasedOnMonth: month
                                                    year: year];
-            
+
             if (self.daySelector.hasAnyLegalDays)
             {
                 NSNumber *firstDayValue = self.daySelector.initialValue;
@@ -339,12 +338,12 @@ typedef enum : NSUInteger {
                 shouldInspectNextField = NO;
             }
             else
-            {
+		{
                 // Go to the next month.  I.e., keep cycling on the current "date field."
                 dateFieldIndex = DateFieldMonth - (DateField) 1;
                 shouldInspectNextField = YES;
             }
-        }
+		}
 
         // Move to the next field.
         dateFieldIndex ++;
@@ -357,7 +356,7 @@ typedef enum : NSUInteger {
 	else
 	{
 		result = [self componentsAsDate];
-		
+
 		if ([result isLaterThanDate: self.endingMoment])
 		{
 			result = nil;

@@ -55,7 +55,7 @@ extern NSString * const NSDateDefaultDateFormat;
 
 /**
  Tries to interpret the specified string with any of
- several legal ISO8601 formats.
+ several legal ISO 8601 formats.
  
  To add formats, modify the +initialize method in this
  category.
@@ -103,7 +103,7 @@ extern NSString * const NSDateDefaultDateFormat;
 
 /**
  Adds the specified duration string to the specified
- date.  Duration strings follow the ISO8601 standard.
+ date.  Duration strings follow the ISO 8601 standard.
  Some examples:
 
  @code
@@ -131,7 +131,7 @@ extern NSString * const NSDateDefaultDateFormat;
  of nil, you'll get 30 days per month and 365 days per
  year.
 
- @param duration An ISO8601 duration string, as described
+ @param duration An ISO 8601 duration string, as described
  above.
 
  @param date A date from which to start counting.  Mostly
@@ -180,7 +180,7 @@ extern NSString * const NSDateDefaultDateFormat;
 
 /**
  Adds the specified duration string to the specified
- date.  Duration strings follow the ISO8601 standard.
+ date.  Duration strings follow the ISO 8601 standard.
  Some examples:
 
  @code
@@ -209,7 +209,7 @@ extern NSString * const NSDateDefaultDateFormat;
  This method calls
  +timeIntervalByAddingISO8601Duration:toDate.
 
- @param durationString An ISO8601 duration string, as
+ @param durationString An ISO 8601 duration string, as
  described above.
 
  @see -dateBySubtractingISO8601Duration:

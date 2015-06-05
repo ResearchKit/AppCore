@@ -36,19 +36,9 @@
 @interface NSArray (APCHelper)
 
 /**
- Because, sometimes, the second object in an array has
- real, meaningful value, such as the 2nd day in a month,
- the 2nd item in a start-and-stop-value array, etc.  In
- those cases, having this -secondObject property avoids
- having "magic numbers" in the code:  hard-coding a "1"
- to access that second array element.
- */
-@property (readonly) id secondObject;
+ Creates a new array containing the contents of the
+ specified arrays.  Does not remove duplicates.
 
-/**
- Creates a new array containing the contents of the specified arrays.
- Does not remove duplicates.
- 
  Usage:
 
  @code
@@ -56,5 +46,19 @@
  @endcode
  */
 + (instancetype) arrayWithObjectsFromArrays: (NSArray *) firstArray, ...;
+
+/**
+ Returns the second object in self, or nil if there is no
+ second object.
+ 
+ This method/property is useful because, sometimes,
+ the second object in an array has a meaningful purpose:
+ the 2nd day in a list of selected days in a month, the
+ 2nd item in a two-item array of start-and-stop values,
+ etc.  In those cases, having this -secondObject property
+ avoids having "magic numbers" in the code: hard-coding
+ a "1" to access that second array element.
+ */
+@property (readonly) id secondObject;
 
 @end

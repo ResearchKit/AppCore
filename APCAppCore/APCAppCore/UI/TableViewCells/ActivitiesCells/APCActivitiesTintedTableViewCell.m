@@ -46,19 +46,19 @@ NSString * const kAPCActivitiesTintedTableViewCellIdentifier = @"APCActivitiesTi
 static CGFloat const kTitleLabelCenterYConstant = 10.5f;
 
 @interface APCActivitiesTintedTableViewCell ()
-@property (weak, nonatomic) IBOutlet UILabel *subTitleLabel;
-@property (weak, nonatomic) IBOutlet UIView *tintView;
-@property (weak, nonatomic) IBOutlet APCBadgeLabel *countLabel;
-@property (nonatomic, strong) APCTaskGroup *taskGroup;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *titleLabelCenterYConstraint;
+@property (nonatomic, weak)   IBOutlet  UILabel            *subTitleLabel;
+@property (nonatomic, weak)   IBOutlet  UIView             *tintView;
+@property (nonatomic, weak)   IBOutlet  APCBadgeLabel      *countLabel;
+@property (nonatomic, weak)   IBOutlet  NSLayoutConstraint *titleLabelCenterYConstraint;
+@property (nonatomic, strong)           APCTaskGroup       *taskGroup;
 @end
 
 
 @implementation APCActivitiesTintedTableViewCell
 
-- (void) configureWithTaskGroup: (APCTaskGroup *) taskGroup
-                    isTodayCell: (BOOL) cellRepresentsToday
-              showDebuggingInfo: (BOOL) shouldShowDebuggingInfo
+- (void)configureWithTaskGroup:(APCTaskGroup *)taskGroup
+                   isTodayCell:(BOOL)cellRepresentsToday
+             showDebuggingInfo:(BOOL)shouldShowDebuggingInfo
 {
     //
     // General configuration data.

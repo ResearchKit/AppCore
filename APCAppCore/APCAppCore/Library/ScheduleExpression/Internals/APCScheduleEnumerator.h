@@ -55,10 +55,17 @@
                          yearSelector:(APCTimeSelector *) yearSelector
                originalCronExpression: (NSString *) originalExpression;
 
-/** Simply calls -nextScheduledDate.  Provided for the ability to enumerate using fast enumeration (i.e., inside a for loop). */
+/**
+ Simply calls -nextScheduledDate.  Provided for the ability
+ to enumerate using fast enumeration (i.e., inside a for
+ loop).
+ */
 - (id) nextObject;
 
-/** The next date being emitted by this enumerator.  If this is the first time being called, returns the first date. */
+/** 
+ The next date being emitted by this enumerator.  If this
+ is the first time being called, returns the first date.
+ */
 @property (readonly) NSDate *nextScheduledDate;
 
 

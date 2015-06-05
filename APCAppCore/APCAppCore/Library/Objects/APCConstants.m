@@ -137,16 +137,15 @@ NSString *const kShareMessageKey                    = @"ShareMessageKey";
 
 NSString *const kHKQuantityTypeKey          = @"HKQuantityType";
 NSString *const kHKCategoryTypeKey          = @"HKCategoryType";
-NSString *const kHKWorkoutTypeKey          = @"HKWorkoutType";
 NSString *const kHKCharacteristicTypeKey    = @"HKCharacteristicType";
 NSString *const kHKCorrelationTypeKey       = @"HKCorrelationType";
+NSString *const kHKWorkoutTypeKey       = @"HKWorkoutType";
+
 
 NSString * const kPasswordKey                    = @"Password";
 NSString * const kNumberOfMinutesForPasscodeKey  = @"NumberOfMinutesForPasscodeKey";
 
-NSUInteger     const kAPCActivitiesTabIndex                                   = 0;
-NSUInteger     const kAPCNewsFeedTabIndex                                   = 2;
-
+NSUInteger     const kAPCActivitiesTabIndex                                 = 0;
 NSInteger      const kAPCSigninErrorCode_NotSignedIn                        = 404;
 NSUInteger     const kAPCSigninNumRetriesBeforePause                        = 10;
 NSTimeInterval const kAPCSigninNumSecondsBetweenRetries                     = 10;

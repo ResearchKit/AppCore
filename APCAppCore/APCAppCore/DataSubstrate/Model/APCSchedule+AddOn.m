@@ -66,7 +66,7 @@ NSString * const kAPCScheduleTypeValueOneTimeSchedule = @"once";
     NSString *result = nil;
 
     result = [self safeStringFromDictionaryValue: dictionaryValue
-                                        allowNil: YES       // for now?  schedule IDs are optional -- we're phasing them in.
+                                        allowNil: YES   // schedule IDs are optional -- we're phasing them in.
                                   trimWhitespace: YES];
 
     return result;

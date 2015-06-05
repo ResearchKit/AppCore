@@ -46,7 +46,14 @@
  */
 @interface APCTaskGroup : NSObject
 
-/** The task mentioned by all tasks in this group. */
+/**
+ The Task mentioned by all everything else in this group.
+ A Task is our main template for "something the user
+ should do." Other properties on this Group reflect
+ different aspects of that to-do concept: stuff that's
+ already been done, stuff that could be done at a specific
+ date and time, etc.
+ */
 @property (nonatomic, strong) APCTask *task;
 
 /**

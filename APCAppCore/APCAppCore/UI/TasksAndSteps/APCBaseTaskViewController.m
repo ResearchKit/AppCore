@@ -67,6 +67,10 @@
  ResearchKit, making it a part of the same class or file
  where the enum itself is declared.
  
+ This is a function, not a method, so that it can follow
+ Apple's convention for functions which convert various
+ objects to strings:  NSStringFromClassName(), etc.
+ 
  @return A human-readable string for the FinishReason.
  If the finishReason can't be identified -- if you pass
  a random integer, for example, or if the source enum
