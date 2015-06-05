@@ -38,11 +38,16 @@
 
 
 /**
- A bunch of tasks with the same ID, grouped by some ways
- we typically need to group them.  The tasks in each group
- are NOT subclasses of the of the same superclass:  some
- are memory-only objects, some are CoreData objects, and
- there may be further subdivisions of types.
+ Represents everything we know about a single Task --
+ something the user can do -- on a given day:
+ 
+ - how many times the user has done that task
+ - links to the data representing the stuff the user has
+   already done
+ - the number of times the task's Schedule says the user
+   should do that task
+ - links to objects we can use to generate more user data
+   for that task
  */
 @interface APCTaskGroup : NSObject
 

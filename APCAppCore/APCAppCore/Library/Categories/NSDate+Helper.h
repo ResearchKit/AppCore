@@ -94,7 +94,8 @@ extern NSString * const NSDateDefaultDateFormat;
 - (BOOL) isInThePast;
 - (BOOL) isInTheFuture;
 
-/** Returns YES if self and otherDate are on the same
+/**
+ Returns YES if self and otherDate are on the same
  human-perceived day -- if they're both between midnight
  and midnight on the same date.
  */

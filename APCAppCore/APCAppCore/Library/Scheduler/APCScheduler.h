@@ -48,11 +48,6 @@ typedef NS_ENUM(NSUInteger, APCSchedulerDateRange) {
     kAPCSchedulerDateRangeTomorrow
 };
 
-typedef enum : NSUInteger {
-    APCDateGroupInstants,
-    APCDateGroupHours,
-    APCDateGroupDays,
-} APCDateGroup;
 
 
 typedef void (^APCSchedulerCallbackForTaskGroupQueries) (NSDictionary *taskGroups, NSError *queryError);
@@ -60,18 +55,39 @@ typedef void (^APCSchedulerCallbackForFetchAndLoadOperations) (NSError *errorFet
 typedef void (^APCSchedulerCallbackForFetchingCount) (NSUInteger count, NSError *errorFetchingOrLoading);
 
 
+
 /**
  Manages tasks and schedules.
  
  Specifically, manages the processes of downloading tasks
  and schedules, merging them with existing ones, figuring
- out which ones are "active" or "current," and figuring out
+ out which ones are active on a given day, and figuring out
  which to display on a given day, whether present, past, or
  future.  Maintains a cache of the query results for each
  type of query, because each query is time-consuming: we
  not only pull stuff from CoreData, but do a fair amount of
  math to figure out how to map schedules onto a human
  calendar.
+ 
+ Combines features formerly in several other classes, so
+ we can see and debug them in the same place.  These
+ features are those which either query or manipulate 
+ tasks, schedules, PotentialTasks, and some aspects of
+ ScheduledTasks.
+
+ In former versions of the app, tasks were "scheduled" out
+ into the future, based on their projected dates of
+ appearance.  When their schedules changed, those
+ ScheduledTask objects were modified.  This new Scheduler
+ class represents a different paradigm: instead of
+ scheduling tasks into the future, we simply maintain a
+ Schedule -- a set of rules about when tasks should appear
+ on a user's calendar.  Whenever we want to display the
+ calendar, we query the schedule.  Only when the user wants
+ to actually *perform* one of those tasks do we create a
+ ScheduledTask object representing the task being performed
+ and/or completed, and if the user cancels the task, we
+ delete that ScheduledTask.
  */
 @interface APCScheduler : NSObject
 
@@ -82,8 +98,18 @@ typedef void (^APCSchedulerCallbackForFetchingCount) (NSUInteger count, NSError 
 @property (readonly) NSManagedObjectContext * managedObjectContext;
 
 
+
+// ---------------------------------------------------------
+#pragma mark - Setup
+// ---------------------------------------------------------
+
 - (instancetype) initWithDataSubstrate: (APCDataSubstrate *) dataSubstrate;
 
+
+
+// ---------------------------------------------------------
+#pragma mark - Querying
+// ---------------------------------------------------------
 
 - (void) fetchTaskGroupsFromDate: (NSDate *) startDate
                           toDate: (NSDate *) endDate
@@ -97,6 +123,11 @@ typedef void (^APCSchedulerCallbackForFetchingCount) (NSUInteger count, NSError 
                  toReportResults: (APCSchedulerCallbackForTaskGroupQueries) callbackBlock;
 
 
+
+// ---------------------------------------------------------
+#pragma mark - Importing
+// ---------------------------------------------------------
+
 - (void) fetchTasksAndSchedulesFromServerAndThenUseThisQueue: (NSOperationQueue *) queue
                                             toDoThisWhenDone: (APCSchedulerCallbackForFetchAndLoadOperations) callbackBlock;
 
@@ -109,13 +140,18 @@ typedef void (^APCSchedulerCallbackForFetchingCount) (NSUInteger count, NSError 
                      toDoThisWhenDone: (APCSchedulerCallbackForFetchAndLoadOperations) callbackBlock;
 
 
+
+// ---------------------------------------------------------
+#pragma mark - Converting PotentialTasks to ScheduledTasks
+// ---------------------------------------------------------
+
 /**
  We only save ScheduledTasks when the user actually does
  something with them.  The -fetch methods above return
  (among other things) PotentialTask objects which show when
  a user *could* perform a task.  This method lets us
  convert from one of those PotentialTasks to a
- ScheduledTask, representing the user's real work.  please
+ ScheduledTask, representing the user's real work.  Please
  be sure to call -deleteScheduledTask: if the user cancels
  that operation.
  */
@@ -127,6 +163,12 @@ typedef void (^APCSchedulerCallbackForFetchingCount) (NSUInteger count, NSError 
  the task from the database.  This method lets us do that.
  */
 - (void) deleteScheduledTask: (APCScheduledTask *) scheduledTask;
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Debugging
+// ---------------------------------------------------------
 
 /**
  Used for debugging and testing.  Inside this class,
