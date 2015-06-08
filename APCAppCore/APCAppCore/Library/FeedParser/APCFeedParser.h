@@ -47,22 +47,22 @@ typedef void (^APCFeedParserCompletionBlock)(NSArray* results, NSError *error);
 
 @interface APCFeedItem : NSObject
 
-@property (nonatomic, strong) NSString *title;
+@property (nonatomic, copy) NSString *title;
 
-@property (nonatomic, strong) NSString *link;
+@property (nonatomic, copy) NSString *link;
 
-@property (nonatomic, strong) NSString *itemDescription;
+@property (nonatomic, copy) NSString *itemDescription;
 
-@property (nonatomic, strong) NSString *content;
+@property (nonatomic, copy) NSString *content;
 
 @property (nonatomic, strong) NSDate *pubDate;
 
-@property (strong,nonatomic) NSString *author;
+@property (nonatomic, copy) NSString *author;
 
-@property (strong,nonatomic) NSString *guid;
+@property (nonatomic, copy) NSString *guid;
 
-- (NSArray *)imagesFromContent;
+- (NSArray *)imageURLsFromContent;
 
-- (NSArray *)imagesFromItemDescription;
+- (NSArray *)imageURLsFromItemDescription;
 
 @end

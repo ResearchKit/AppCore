@@ -33,6 +33,8 @@
 
 #import "APCFeedParser.h"
 
+static NSString * const kAPCDateFormatLocale_EN_US_POSIX = @"en_US_POSIX";
+
 @interface APCFeedParser() <NSXMLParserDelegate>
 
 @property (nonatomic, copy) APCFeedParserCompletionBlock completionBlock;
@@ -63,7 +65,7 @@
         _results = [NSMutableArray new];
         
         _dateFormatter = [NSDateFormatter new];
-        [_dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_EN"]];
+        [_dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:kAPCDateFormatLocale_EN_US_POSIX]];
         _dateFormatter.dateFormat = @"EEE, dd MMM yyyy HH:mm:ss Z";
     }
     return self;
@@ -88,14 +90,12 @@
     
     self.completionBlock = completion;
     
-    __weak typeof(self) weakSelf = self;
-    
-    BOOL success = [weakSelf.parser parse];
+    BOOL success = [self.parser parse];
     
     if (!success) {
         
-        if (weakSelf.completionBlock) {
-            weakSelf.completionBlock(nil, weakSelf.parser.parserError);
+        if (self.completionBlock) {
+            self.completionBlock(nil, self.parser.parserError);
         }
     }
 }
@@ -158,8 +158,11 @@
     __weak typeof(self) weakSelf = self;
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (weakSelf.completionBlock) {
-            weakSelf.completionBlock([NSArray arrayWithArray:self.results], nil);
+        
+        __strong typeof(self) strongSelf = weakSelf;
+        
+        if (strongSelf.completionBlock) {
+            strongSelf.completionBlock([NSArray arrayWithArray:strongSelf.results], nil);
         }
     });
 }
@@ -208,23 +211,23 @@
     return self;
 }
 
-- (NSArray *)imagesFromItemDescription
+- (NSArray *)imageURLsFromItemDescription
 {
     NSArray *images = nil;
     
     if (self.itemDescription) {
-        images = [self imagesFromHTMLString:self.itemDescription];
+        images = [self imageURLsFromHTMLString:self.itemDescription];
     }
     
     return images;
 }
 
-- (NSArray *)imagesFromContent
+- (NSArray *)imageURLsFromContent
 {
     NSArray *images = nil;
     
     if (self.content) {
-        images = [self imagesFromHTMLString:self.content];
+        images = [self imageURLsFromHTMLString:self.content];
     }
     
     return images;
@@ -232,7 +235,7 @@
 
 #pragma mark - retrieve images from html string using regexp
 
-- (NSArray *)imagesFromHTMLString:(NSString *)htmlstr
+- (NSArray *)imageURLsFromHTMLString:(NSString *)htmlstr
 {
     NSMutableArray *imagesURLStringArray = [NSMutableArray new];
     

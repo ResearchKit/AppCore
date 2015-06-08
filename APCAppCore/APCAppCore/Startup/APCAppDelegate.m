@@ -134,11 +134,11 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
         //    we run this code iff the user has previously consented,
         //    indicating that this is an update to a previously installed version of the application
         //
-    APCUser  *user = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.currentUser;
+    APCUser  *user = self.dataSubstrate.currentUser;
     if (user.isConsented) {
         BOOL  demographicDataWasUploaded = [defaults boolForKey:kDemographicDataWasUploadedKey];
         if (demographicDataWasUploaded == NO) {
-            self.demographicUploader = [[APCDemographicUploader alloc] init];
+            self.demographicUploader = [[APCDemographicUploader alloc] initWithUser:user];
             [defaults setBool:YES forKey:kDemographicDataWasUploadedKey];
             [defaults synchronize];
             [self.demographicUploader uploadNonIdentifiableDemographicData];
@@ -745,7 +745,7 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 - (void)newsFeedUpdated:(NSNotification *)__unused notification
 {
     if ([self.window.rootViewController isKindOfClass:[UITabBarController class]]) {
-        UITabBarController *tabBarController = (UITabBarController  *)self.window.rootViewController;
+        UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
         
         BOOL newsFeedTab = [self.initializationOptions[kNewsFeedTabKey] boolValue];
         
@@ -821,7 +821,7 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 
 - (void)showTabBar
 {
-    APCTabBarViewController *tabBarController = [[APCTabBarViewController alloc] init];
+    self.tabBarController = [[APCTabBarViewController alloc] init];
     
     NSUInteger     selectedItemIndex = kAPCActivitiesTabIndex;
     
@@ -833,7 +833,7 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
         UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Activities", nil) image:[UIImage imageNamed:@"tab_activities"] selectedImage:[UIImage imageNamed:@"tab_activities_selected"]];
         [tabBarItems addObject:item];
         
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"APCActivities" bundle:[NSBundle appleCoreBundle]];
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:kActivitiesStoryBoardKey bundle:[NSBundle appleCoreBundle]];
         UIViewController *viewController = [storyboard instantiateInitialViewController];
         [viewControllers addObject:viewController];
     }
@@ -843,7 +843,7 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
         UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Dashboard", nil) image:[UIImage imageNamed:@"tab_dashboard"] selectedImage:[UIImage imageNamed:@"tab_dashboard_selected"]];
         [tabBarItems addObject:item];
         
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"APHDashboard" bundle:[NSBundle mainBundle]];
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:kDashBoardStoryBoardKey bundle:[NSBundle mainBundle]];
         UIViewController *viewController = [storyboard instantiateInitialViewController];
         [viewControllers addObject:viewController];
     }
@@ -853,7 +853,7 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
         UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"News Feed", nil) image:[UIImage imageNamed:@"tab_newsfeed"] selectedImage:[UIImage imageNamed:@"tab_newsfeed_selected"]];
         [tabBarItems addObject:item];
         
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"APCNewsFeed" bundle:[NSBundle appleCoreBundle]];
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:kNewsFeedStoryBoardKey bundle:[NSBundle appleCoreBundle]];
         UIViewController *viewController = [storyboard instantiateInitialViewController];
         [viewControllers addObject:viewController];
     }
@@ -863,7 +863,7 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
         UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Learn", nil) image:[UIImage imageNamed:@"tab_learn"] selectedImage:[UIImage imageNamed:@"tab_learn_selected"]];
         [tabBarItems addObject:item];
         
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"APCLearn" bundle:[NSBundle appleCoreBundle]];
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:kLearnStoryBoardKey bundle:[NSBundle appleCoreBundle]];
         UIViewController *viewController = [storyboard instantiateInitialViewController];
         [viewControllers addObject:viewController];
     }
@@ -873,14 +873,14 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
         UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Profile", nil) image:[UIImage imageNamed:@"tab_profile"] selectedImage:[UIImage imageNamed:@"tab_profile_selected"]];
         [tabBarItems addObject:item];
         
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]];
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:kHealthProfileStoryBoardKey bundle:[NSBundle appleCoreBundle]];
         UIViewController *viewController = [storyboard instantiateInitialViewController];
         [viewControllers addObject:viewController];
     }
     
-    [tabBarController setViewControllers:[NSArray arrayWithArray:viewControllers]];
+    [self.tabBarController setViewControllers:[NSArray arrayWithArray:viewControllers]];
     
-    NSArray *items = tabBarController.tabBar.items;
+    NSArray *items = self.tabBarController.tabBar.items;
     
     for (NSUInteger i=0; i<items.count; i++) {
         UITabBarItem *item = items[i];
@@ -892,35 +892,27 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
         item.tag = i;
         
         if (i == kAPCNewsFeedTabIndex && newsFeedTab){
-            NSUInteger unreadPostsCount = [self.dataSubstrate.newsFeedManager unreadPostsCount];
-            NSNumber *unreadValue = @(unreadPostsCount);
-            
-            if (unreadPostsCount != 0) {
-                item.badgeValue = [unreadValue stringValue];
-            } else {
-                item.badgeValue = nil;
-            }
+            [self updateNewsFeedBadgeCount];
         }
     }
     
     //The tab bar icons take the default tint color from UIView Appearance tintin iOS8. In order to fix this for we are selecting each of the tabs.
     {
-        [tabBarController setSelectedIndex:0];
-        [tabBarController setSelectedIndex:1];
-        [tabBarController setSelectedIndex:2];
-        [tabBarController setSelectedIndex:3];
+        [self.tabBarController setSelectedIndex:0];
+        [self.tabBarController setSelectedIndex:1];
+        [self.tabBarController setSelectedIndex:2];
+        [self.tabBarController setSelectedIndex:3];
         if (newsFeedTab) {
-            [tabBarController setSelectedIndex:4];
+            [self.tabBarController setSelectedIndex:4];
         }
     }
     
     
-    [tabBarController setSelectedIndex:selectedItemIndex];
-    tabBarController.delegate = self;
-    tabBarController.tabBar.translucent = NO;
+    [self.tabBarController setSelectedIndex:selectedItemIndex];
+    self.tabBarController.delegate = self;
+    self.tabBarController.tabBar.translucent = NO;
     
-    self.tabBarController = tabBarController;
-    self.window.rootViewController = tabBarController;
+    self.window.rootViewController = self.tabBarController;
 }
 
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
@@ -945,17 +937,22 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
         }
         
         if(controllerIndex == kAPCNewsFeedTabIndex && newsFeedTab){
-            NSUInteger unreadPostsCount = [self.dataSubstrate.newsFeedManager unreadPostsCount];
-            NSNumber *unreadValue = @(unreadPostsCount);
-            
-            UITabBarItem  *item = tabBarController.tabBar.selectedItem;
-            
-            if (unreadPostsCount != 0) {
-                item.badgeValue = [unreadValue stringValue];
-            } else {
-                item.badgeValue = nil;
-            }
+            [self updateNewsFeedBadgeCount];
         }
+    }
+}
+
+- (void)updateNewsFeedBadgeCount
+{
+    NSUInteger unreadPostsCount = [self.dataSubstrate.newsFeedManager unreadPostsCount];
+    NSNumber *unreadValue = @(unreadPostsCount);
+    
+    UITabBarItem *item = self.tabBarController.tabBar.items[kAPCNewsFeedTabIndex];
+    
+    if (unreadPostsCount != 0) {
+        item.badgeValue = [unreadValue stringValue];
+    } else {
+        item.badgeValue = nil;
     }
 }
 

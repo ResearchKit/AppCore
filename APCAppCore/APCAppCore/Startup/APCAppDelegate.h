@@ -114,4 +114,7 @@ extern NSUInteger   const kTheEntireDataModelOfTheApp;
 - (void)instantiateOnboardingForType:(APCOnboardingTaskType)type;
 
 - (NSDate*)applicationBecameActiveDate;
+
+- (void)updateNewsFeedBadgeCount;
+
 @end

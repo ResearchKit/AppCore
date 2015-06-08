@@ -81,19 +81,12 @@
     
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
     
-    NSUInteger unreadCount = [[self newsFeedManager] unreadPostsCount];
-    NSNumber *unreadValue = @(unreadCount);
-    
-    APCAppDelegate *appDelegate = (APCAppDelegate *)[[UIApplication sharedApplication] delegate];
-    
-    UITabBarItem *newsFeedTab = appDelegate.tabBarController.tabBar.selectedItem;
-    if (newsFeedTab.tag == (NSInteger)kAPCNewsFeedTabIndex) {
-        if (unreadCount != 0) {
-            newsFeedTab.badgeValue = [unreadValue stringValue];
-        } else {
-            newsFeedTab.badgeValue = nil;
-        }
-    }
+    [[self appDelegate] updateNewsFeedBadgeCount];
+}
+
+- (APCAppDelegate *)appDelegate
+{
+    return (APCAppDelegate *)[[UIApplication sharedApplication] delegate];
 }
 
 - (APCNewsFeedManager *)newsFeedManager
@@ -138,6 +131,7 @@
     [self.navigationController pushViewController:webViewVC animated:YES];
     
     [[self newsFeedManager] userDidReadPostWithURL:item.link];
+    [[self appDelegate] updateNewsFeedBadgeCount];
 }
 
 - (void)refreshFeed
