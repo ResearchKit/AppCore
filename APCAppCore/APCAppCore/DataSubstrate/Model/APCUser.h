@@ -124,7 +124,7 @@ typedef NS_ENUM(NSInteger, APCUserConsentSharingScope) {
  
  These days, we track the date the user signs up.  In
  earlier versions of the apps, we didn't.  This method
- represents a set of nest-best-guesses about that date,
+ represents a set of next-best-guesses about that date,
  for users who signed up before we started tracking it.
  */
 @property (readonly) NSDate *estimatedConsentDate;

@@ -32,7 +32,6 @@
 // 
  
 #import "APCDataMonitor+Bridge.h"
-#import "APCSchedule+Bridge.h"
 #import "APCAppCore.h"
 
 NSString *const kFirstTimeRefreshToday = @"FirstTimeRefreshToday";
@@ -43,20 +42,22 @@ NSString *const kFirstTimeRefreshToday = @"FirstTimeRefreshToday";
 {
     if (self.dataSubstrate.currentUser.isConsented)
     {
+        __weak typeof(self) weakSelf = self;
+
         [[APCScheduler defaultScheduler] fetchTasksAndSchedulesFromServerAndThenUseThisQueue: [NSOperationQueue mainQueue]
                                                                             toDoThisWhenDone: ^(NSError *errorFromServerFetch)
          {
              if (errorFromServerFetch)
              {
-                 [self finishRefreshCommandPassingError: errorFromServerFetch
-                                      toCompletionBlock: completionBlock];
+                 [weakSelf finishRefreshCommandPassingError: errorFromServerFetch
+                                          toCompletionBlock: completionBlock];
              }
              else
              {
                  [APCTask refreshSurveysOnCompletion: ^(NSError *errorFromRefreshingSurveys) {
 
-                     [self finishRefreshCommandPassingError: errorFromRefreshingSurveys
-                                          toCompletionBlock: completionBlock];
+                     [weakSelf finishRefreshCommandPassingError: errorFromRefreshingSurveys
+                                              toCompletionBlock: completionBlock];
 
                  }];
              }
