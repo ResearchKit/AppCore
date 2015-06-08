@@ -45,7 +45,9 @@
 #import "APCDemographicUploader.h"
 #import "APCConstants.h"
 
-#warning Be sure to set the CORRECT current version before releasing to production
+/*
+ Be sure to set the CORRECT current version before releasing to production
+ */
 NSUInteger   const kTheEntireDataModelOfTheApp              = 3;
 
 /*********************************************************************************/
@@ -73,6 +75,7 @@ static NSString *const kNewsFeedStoryBoardKey      = @"APCNewsFeed";
 
 static NSString*    const kDemographicDataWasUploadedKey    = @"kDemographicDataWasUploadedKey";
 static NSString*    const kLastUsedTimeKey                  = @"APHLastUsedTime";
+static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterForegroundTime";
 static NSUInteger   const kIndexOfProfileTab                = 3;
 
 @interface APCAppDelegate  ( )  <UITabBarControllerDelegate>
@@ -175,6 +178,7 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 
 - (void)applicationDidBecomeActive:(UIApplication *) __unused application
 {
+    [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kAppWillEnterForegroundTimeKey];
 #ifndef DEVELOPMENT
     if (self.dataSubstrate.currentUser.signedIn) {
         [SBBComponent(SBBAuthManager) ensureSignedInWithCompletion: ^(NSURLSessionDataTask * __unused task,
@@ -203,6 +207,11 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     
+}
+
+- (NSDate*)applicationBecameActiveDate
+{
+    return [[NSUserDefaults standardUserDefaults] objectForKey:kAppWillEnterForegroundTimeKey];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *) __unused application
@@ -348,6 +357,10 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     
     self.scheduler = [[APCScheduler alloc] initWithDataSubstrate:self.dataSubstrate];
     self.dataMonitor = [[APCDataMonitor alloc] initWithDataSubstrate:self.dataSubstrate scheduler:self.scheduler];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        self.passiveDataCollector = [[APCPassiveDataCollector alloc] init];
+    });
+    
     
     //Setup AuthDelegate for SageSDK
     SBBAuthManager * manager = (SBBAuthManager*) SBBComponent(SBBAuthManager);
@@ -575,7 +588,7 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
             NSURL*      url   = [[NSBundle mainBundle] URLForResource:nameWithScaleFactor withExtension:@"m4v"];
             NSError*    error = nil;
             
-            NSAssert([url checkResourceIsReachableAndReturnError:&error] == YES, @"Animation file--%@--not reachable: %@", animationUrl, error);
+            NSAssert([url checkResourceIsReachableAndReturnError:&error], @"Animation file--%@--not reachable: %@", animationUrl, error);
             section.customAnimationURL = url;
         }
         
@@ -1084,6 +1097,9 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 
 - (void)passcodeViewControllerDidSucceed:(APCPasscodeViewController *) __unused viewController
 {
+    [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kLastUsedTimeKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
     self.isPasscodeShowing = NO;
 }
 
