@@ -34,6 +34,7 @@
 #import "APCFeedParser.h"
 
 static NSString * const kAPCDateFormatLocale_EN_US_POSIX = @"en_US_POSIX";
+static NSString * const kAPCFeedDateFormat               = @"EEE, dd MMM yyyy HH:mm:ss Z";
 
 @interface APCFeedParser() <NSXMLParserDelegate>
 
@@ -66,7 +67,7 @@ static NSString * const kAPCDateFormatLocale_EN_US_POSIX = @"en_US_POSIX";
         
         _dateFormatter = [NSDateFormatter new];
         [_dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:kAPCDateFormatLocale_EN_US_POSIX]];
-        _dateFormatter.dateFormat = @"EEE, dd MMM yyyy HH:mm:ss Z";
+        _dateFormatter.dateFormat = kAPCFeedDateFormat;
     }
     return self;
 }
@@ -135,7 +136,7 @@ static NSString * const kAPCDateFormatLocale_EN_US_POSIX = @"en_US_POSIX";
         } else if ([elementName isEqualToString:@"link"]) {
             self.feedItem.link = self.parsedString;
         } else if ([elementName isEqualToString:@"pubDate"]) {
-            _dateFormatter.dateFormat = @"EEE, dd MMM yyyy HH:mm:ss Z";
+            _dateFormatter.dateFormat = kAPCFeedDateFormat;
             self.feedItem.pubDate = [self.dateFormatter dateFromString:self.parsedString];
         } else if ([elementName isEqualToString:@"dc:creator"]) {
             self.feedItem.author = self.parsedString;
