@@ -43,6 +43,8 @@
 
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
 
+@property (nonatomic, strong) UILabel *emptyLabel;
+
 @end
 
 @implementation APCNewsFeedViewController
@@ -57,6 +59,8 @@
     self.dateFormatter.dateFormat = @"MM/dd/yy";
     
     self.title = NSLocalizedString(@"News Feed", nil);
+    
+    [self setupAppearance];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -68,20 +72,24 @@
     if (self.posts.count > 0) {
         self.tableView.backgroundView = nil;
     } else {
-        UILabel *emptyLabel = [UILabel new];
-        emptyLabel.frame = self.tableView.bounds;
-        
-        emptyLabel.text = NSLocalizedString(@"There's nothing here yet.", nil);
-        emptyLabel.textColor = [UIColor appSecondaryColor3];
-        emptyLabel.textAlignment = NSTextAlignmentCenter;
-        emptyLabel.font = [UIFont appMediumFontWithSize:22];
-        
-        self.tableView.backgroundView = emptyLabel;
+        self.emptyLabel.frame = self.tableView.bounds;
+        self.tableView.backgroundView = self.emptyLabel;
     }
     
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
     
     [[self appDelegate] updateNewsFeedBadgeCount];
+}
+
+- (void)setupAppearance
+{
+    self.emptyLabel = [UILabel new];
+    self.emptyLabel.frame = self.tableView.bounds;
+    
+    self.emptyLabel.text = NSLocalizedString(@"There's nothing here yet.", nil);
+    self.emptyLabel.textColor = [UIColor appSecondaryColor3];
+    self.emptyLabel.textAlignment = NSTextAlignmentCenter;
+    self.emptyLabel.font = [UIFont appMediumFontWithSize:22];
 }
 
 - (APCAppDelegate *)appDelegate
@@ -139,30 +147,26 @@
     __weak typeof(self) weakSelf = self;
     
     [[self newsFeedManager] fetchFeedWithCompletion:^(NSArray *posts, NSError *error) {
-        [weakSelf.refreshControl endRefreshing];
+        
+        __strong typeof(self) strongSelf = weakSelf;
+        
+        [strongSelf.refreshControl endRefreshing];
         
         if (!error) {
-            weakSelf.posts = posts;
+            strongSelf.posts = posts;
         } else {
             UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Fetch Error",nil) message:NSLocalizedString(@"An error occured while fetching news feed.",nil)];
-            [weakSelf presentViewController:alert animated:YES completion:nil];
+            [strongSelf presentViewController:alert animated:YES completion:nil];
         }
         
-        if (weakSelf.posts.count > 0) {
-            weakSelf.tableView.backgroundView = nil;
+        if (strongSelf.posts.count > 0) {
+            strongSelf.tableView.backgroundView = nil;
         } else {
-            UILabel *emptyLabel = [UILabel new];
-            emptyLabel.frame = weakSelf.tableView.bounds;
-            
-            emptyLabel.text = NSLocalizedString(@"There's nothing here yet.", nil);
-            emptyLabel.textColor = [UIColor appSecondaryColor3];
-            emptyLabel.textAlignment = NSTextAlignmentCenter;
-            emptyLabel.font = [UIFont appMediumFontWithSize:22];
-            
-            weakSelf.tableView.backgroundView = emptyLabel;
+            strongSelf.emptyLabel.frame = strongSelf.tableView.bounds;
+            strongSelf.tableView.backgroundView = strongSelf.emptyLabel;
         }
         
-        [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [strongSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
     }];
 }
 

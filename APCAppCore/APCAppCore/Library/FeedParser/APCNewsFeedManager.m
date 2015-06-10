@@ -83,7 +83,9 @@ static NSString * const kAPCBlogUrlKey   = @"BlogUrlKey";
     
     [self.feedParser fetchFeedWithCompletion:^(NSArray *results, NSError *error) {
         
-        weakSelf.feedPosts = results;
+        __strong typeof(self) strongSelf = weakSelf;
+        
+        strongSelf.feedPosts = results;
         
         APCLogError2(error);
         
