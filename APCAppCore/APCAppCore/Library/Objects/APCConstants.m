@@ -223,6 +223,14 @@ float const kAPCActivitiesSmallFontSize  = 14.0;
 
 
 // ---------------------------------------------------------
+#pragma mark - Locales
+// ---------------------------------------------------------
+
+NSString *const kAPCDateFormatLocaleEN_US_POSIX = @"en_US_POSIX";
+
+
+
+// ---------------------------------------------------------
 #pragma mark - Events
 // ---------------------------------------------------------
 

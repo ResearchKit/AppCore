@@ -2826,7 +2826,7 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
 - (NSString *) serializedTimesOfDayStringFromISO8601TimesOfDayInArray: (NSArray *) timesOfDay
 {
     NSDateFormatter *formatter = [NSDateFormatter new];
-    formatter.locale = [NSLocale localeWithLocaleIdentifier: @"en_US_POSIX"];
+    formatter.locale = [NSLocale localeWithLocaleIdentifier: kAPCDateFormatLocaleEN_US_POSIX];
 
     NSArray *legalFormats = @[@"H",
                               @"HH",
@@ -2910,7 +2910,7 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
 - (NSArray *) deserializedArrayOfDurationsSinceMidnightFromISO8601TimesOfDayString: (NSString *) serializedTimesOfDayString
 {
     NSDateFormatter *formatter = [NSDateFormatter new];
-    formatter.locale = [NSLocale localeWithLocaleIdentifier: @"en_US_POSIX"];
+    formatter.locale = [NSLocale localeWithLocaleIdentifier: kAPCDateFormatLocaleEN_US_POSIX];
 
     NSArray *legalFormats = @[@"H",
                               @"HH",

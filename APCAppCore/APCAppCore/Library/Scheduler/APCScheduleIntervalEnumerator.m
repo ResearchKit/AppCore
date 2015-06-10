@@ -32,6 +32,7 @@
 //
 
 #import "APCScheduleIntervalEnumerator.h"
+#import "APCConstants.h"
 #import "APCSchedule+AddOn.h"
 #import "NSDate+Helper.h"
 
@@ -210,7 +211,7 @@
     if (serializedTimesOfDayString.length > 0)
     {
         NSDateFormatter *formatter = [NSDateFormatter new];
-        formatter.locale = [NSLocale localeWithLocaleIdentifier: @"en_US_POSIX"];
+        formatter.locale = [NSLocale localeWithLocaleIdentifier: kAPCDateFormatLocaleEN_US_POSIX];
 
         NSArray *legalFormats = @[@"H",
                                   @"HH",

@@ -250,6 +250,14 @@ FOUNDATION_EXPORT float const kAPCActivitiesSmallFontSize;
 
 
 // ---------------------------------------------------------
+#pragma mark - Locales
+// ---------------------------------------------------------
+
+FOUNDATION_EXPORT NSString *const kAPCDateFormatLocaleEN_US_POSIX;
+
+
+
+// ---------------------------------------------------------
 #pragma mark - Events
 // ---------------------------------------------------------
 
@@ -304,15 +312,3 @@ FOUNDATION_EXPORT NSString * const kAPCContentType_UnknownData;
 @interface APCConstants : NSObject
 
 @end
-
-
-
-
-
-
-
-
-
-
-
-

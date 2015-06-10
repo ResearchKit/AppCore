@@ -32,17 +32,11 @@
 // 
  
 #import "NSDate+Helper.h"
+#import "APCConstants.h"
 #import "NSDateComponents+Helper.h"
 
 
 NSString * const NSDateDefaultDateFormat = @"MMM dd, yyyy";
-
-
-/**
- For formatting dates we send to the server, and
- interpreting inbound date strings.
- */
-static NSString * const kAPCDateFormatLocaleEN_US_POSIX = @"en_US_POSIX";
 
 
 /**
