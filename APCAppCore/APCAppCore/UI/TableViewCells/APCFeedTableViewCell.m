@@ -48,24 +48,18 @@ NSString *kAPCFeedTableViewCellIdentifier = @"APCFeedTableViewCell";
 - (void)setupAppearanceForRead:(BOOL)read
 {
     if (read) {
-        self.titleLabel.textColor = [UIColor appSecondaryColor1];
         self.titleLabel.font = [UIFont appRegularFontWithSize:19.0f];
-
-        self.descriptionLabel.textColor = [UIColor appSecondaryColor2];
         self.descriptionLabel.font = [UIFont appRegularFontWithSize:16.0f];
-        
-        self.dateLabel.textColor = [UIColor appSecondaryColor3];
         self.dateLabel.font = [UIFont appRegularFontWithSize:14.0f];
     } else {
-        self.titleLabel.textColor = [UIColor appSecondaryColor1];
         self.titleLabel.font = [UIFont appMediumFontWithSize:19.0f];
-        
-        self.descriptionLabel.textColor = [UIColor appSecondaryColor2];
         self.descriptionLabel.font = [UIFont appMediumFontWithSize:16.0f];
-        
-        self.dateLabel.textColor = [UIColor appSecondaryColor3];
         self.dateLabel.font = [UIFont appMediumFontWithSize:14.0f];
     }
+    
+    self.titleLabel.textColor = [UIColor appSecondaryColor1];
+    self.descriptionLabel.textColor = [UIColor appSecondaryColor2];
+    self.dateLabel.textColor = [UIColor appSecondaryColor3];
 }
 
 @end
