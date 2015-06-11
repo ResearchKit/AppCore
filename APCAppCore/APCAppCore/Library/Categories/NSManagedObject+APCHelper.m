@@ -46,6 +46,21 @@
     return [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([self class])];
 }
 
++ (NSFetchRequest *)requestWithPredicate:(NSPredicate *)predicate
+{
+    NSFetchRequest *request = [self request];
+    request.predicate = predicate;
+    return request;
+}
+
++ (NSFetchRequest *)requestWithPredicate:(NSPredicate *)predicate
+                         sortDescriptors:(NSArray *)sortDescriptors
+{
+    NSFetchRequest *request = [self requestWithPredicate: predicate];
+    request.sortDescriptors = sortDescriptors;
+    return request;
+}
+
 - (BOOL)saveToPersistentStore:(NSError *__autoreleasing *)error
 {
     __block NSError *localError = nil;

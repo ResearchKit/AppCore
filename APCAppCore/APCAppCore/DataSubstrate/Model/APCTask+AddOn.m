@@ -35,6 +35,8 @@
 #import "APCAppCore.h"
 #import <ResearchKit/ResearchKit.h>
 
+static NSArray *defaultSortDescriptorsInternal = nil;
+
 static NSString * const kTaskIDKey = @"taskID";
 static NSString * const kTaskTitleKey = @"taskTitle";
 static NSString * const kTaskClassNameKey = @"taskClassName";
@@ -43,71 +45,67 @@ static NSString * const kTaskFileNameKey = @"taskFileName";
 
 @implementation APCTask (AddOn)
 
-+ (void)createTasksFromJSON:(NSArray *)tasksArray inContext:(NSManagedObjectContext *)context
+/**
+ Sets global, static values the first time anyone calls this category.
+
+ By definition, this method is called once per category, in a thread-safe
+ way, the first time the category is sent a message -- basically, the first
+ time we refer to any method declared in that category.
+
+ Documentation:  the key sentence is actually in the documentation for
+ +initialize:  "initialize is invoked only once per class. If you want
+ to perform independent initialization for the class and for categories
+ of the class, you should implement +load methods."
+
+ I learned that from:
+ http://stackoverflow.com/q/13326435
+
+ The official +load documentation:
+ https://developer.apple.com/library/ios/documentation/Cocoa/Reference/Foundation/Classes/NSObject_Class/index.html#//apple_ref/occ/clm/NSObject/load
+
+ The official +initialize documentation, with that key sentence:
+ https://developer.apple.com/library/ios/documentation/Cocoa/Reference/Foundation/Classes/NSObject_Class/index.html#//apple_ref/occ/clm/NSObject/initialize
+ */
++ (void) load
 {
-  [context performBlockAndWait:^{
-      for (NSDictionary * taskDict in tasksArray) {
-          APCTask * task = [APCTask newObjectForContext:context];
-          task.taskID = taskDict[kTaskIDKey];
-          task.taskTitle = taskDict[kTaskTitleKey];
-          task.taskClassName = taskDict[kTaskClassNameKey];
-          task.taskCompletionTimeString = taskDict[kTaskCompletionTimeStringKey];
-          
-          if (taskDict[kTaskFileNameKey]) {
-              NSString *resource = [[NSBundle mainBundle] pathForResource:taskDict[kTaskFileNameKey] ofType:@"json"];
-              NSData *jsonData = [NSData dataWithContentsOfFile:resource];
-              NSError * error;
-              NSDictionary * dictionary = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&error];
-              id manager = SBBComponent(SBBSurveyManager);
-              SBBSurvey * survey = [[manager objectManager] objectFromBridgeJSON:dictionary];
-              task.rkTask = [APCTask rkTaskFromSBBSurvey:survey];
-          }
-          NSError * error;
-          [task saveToPersistentStore:&error];
-          APCLogError2 (error);
-      }
-  }];
+    defaultSortDescriptorsInternal = @[[NSSortDescriptor sortDescriptorWithKey: @"sortString" ascending: YES],
+                                       [NSSortDescriptor sortDescriptorWithKey: @"taskTitle"  ascending: YES],
+                                       [NSSortDescriptor sortDescriptorWithKey: @"updatedAt"  ascending: NO]];
 }
 
-+ (void) updateTasksFromJSON: (NSArray*) tasksArray inContext:(NSManagedObjectContext *)context
++ (NSArray *) defaultSortDescriptors
 {
-    [context performBlockAndWait:^{
-        for (NSDictionary * taskDict in tasksArray) {
-            APCTask * task = [APCTask taskWithTaskID:taskDict[kTaskIDKey] inContext:context];
-            if (task == nil) {
-                task = [APCTask newObjectForContext:context];
-                task.taskID = taskDict[kTaskIDKey];
-            }
-            task.taskTitle = taskDict[kTaskTitleKey];
-            task.taskClassName = taskDict[kTaskClassNameKey];
-            task.taskCompletionTimeString = taskDict[kTaskCompletionTimeStringKey];
-            
-            if (taskDict[kTaskFileNameKey]) {
-                NSString *resource = [[NSBundle mainBundle] pathForResource:taskDict[kTaskFileNameKey] ofType:@"json"];
-                NSData *jsonData = [NSData dataWithContentsOfFile:resource];
-                NSError * error;
-                NSDictionary * dictionary = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&error];
-                id manager = SBBComponent(SBBSurveyManager);
-                SBBSurvey * survey = [[manager objectManager] objectFromBridgeJSON:dictionary];
-                task.rkTask = [APCTask rkTaskFromSBBSurvey:survey];
-            }
-            NSError * error;
-            [task saveToPersistentStore:&error];
-            APCLogError2 (error);
+    return defaultSortDescriptorsInternal;
+}
+
++ (APCTask *) taskWithTaskID: (NSString *) taskID
+                   inContext: (NSManagedObjectContext *) context
+{
+    __block APCTask *taskToReturn = nil;
+
+    [context performBlockAndWait: ^{
+
+        NSFetchRequest *request = [APCTask request];
+        request.predicate = [NSPredicate predicateWithFormat: @"%K == %@",
+                             NSStringFromSelector (@selector (taskID)),
+                             taskID];
+
+        NSError * errorRetrievingTasks = nil;
+        NSArray *possibleTasks = [context executeFetchRequest: request
+                                                        error: & errorRetrievingTasks];
+
+        if (possibleTasks == nil)
+        {
+            APCLogError2 (errorRetrievingTasks);
+        }
+
+        else
+        {
+            taskToReturn = possibleTasks.firstObject;
         }
     }];
-}
 
-+ (APCTask*) taskWithTaskID: (NSString*) taskID inContext:(NSManagedObjectContext *)context
-{
-    __block APCTask * retTask;
-    [context performBlockAndWait:^{
-        NSFetchRequest * request = [APCTask request];
-        request.predicate = [NSPredicate predicateWithFormat:@"taskID == %@",taskID];
-        NSError * error;
-        retTask = [[context executeFetchRequest:request error:&error]firstObject];
-    }];
-    return retTask;
+    return taskToReturn;
 }
 
 - (id<ORKTask>)rkTask

@@ -2,10 +2,6 @@
 Setting up Encryption
 -------------------------------
 
-(Placeholder.  This ReadMe presumes some knowledge of how
-this project uses encryption.  We're still evolving this.)
-
-
 How to use these files:
 - Pick the encryption .m file you want to use, or make your own (examples below)
 - Add only ONE of those files to the AppCore target.

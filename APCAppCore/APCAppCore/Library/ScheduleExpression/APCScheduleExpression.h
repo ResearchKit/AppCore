@@ -33,6 +33,8 @@
  
 #import <Foundation/Foundation.h>
 
+@class APCScheduleEnumerator;
+
 
 
 /**
@@ -105,7 +107,7 @@
  *
  *  @return An enumerator; returns NSDate(s) that satisfies `self`
  */
-- (NSEnumerator*)enumeratorBeginningAtTime:(NSDate*)start;
+- (APCScheduleEnumerator*)enumeratorBeginningAtTime:(NSDate*)start;
 
 /**
  *  An enumerator that provides a finite sequence of NSDates from `start` to `end` that satifisies `self`
@@ -115,6 +117,6 @@
  *
  *  @return An enumerator, returns NSDate(s) that satisfies `self`
  */
-- (NSEnumerator*)enumeratorBeginningAtTime:(NSDate*)start endingAtTime:(NSDate*)end;
+- (APCScheduleEnumerator*)enumeratorBeginningAtTime:(NSDate*)start endingAtTime:(NSDate*)end;
 
 @end

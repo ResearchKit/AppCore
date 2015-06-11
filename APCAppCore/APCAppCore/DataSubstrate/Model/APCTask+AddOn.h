@@ -36,13 +36,26 @@
 @protocol ORKTask;
 @interface APCTask (AddOn)
 
-//Synchronous Method Call
-+ (void) createTasksFromJSON: (NSArray*) tasksArray inContext: (NSManagedObjectContext*) context;
-+ (void) updateTasksFromJSON: (NSArray*) tasksArray inContext:(NSManagedObjectContext *)context;
+/**
+ Runs a CoreData query in the specified context retrieving a task with 
+ the specified ID.  Returns nil if there was an error, or if there was
+ no task with such an ID.
+ 
+ If we need the error from this method, we'll have to make an overload
+ of the method which returns an error parameter; several parts of our
+ world are already using this method as-is.
+ */
++ (APCTask *) taskWithTaskID: (NSString *) taskID
+                   inContext: (NSManagedObjectContext *) context;
 
-+ (APCTask*) taskWithTaskID: (NSString*) taskID inContext: (NSManagedObjectContext*) context;
-
+/**
+ Stores and retrieves the binary, encoded content of the
+ survey itself represented by this task.
+ 
+ The data is stored in CoreData as an NSData blob.
+ */
 @property (nonatomic, strong) id<ORKTask> rkTask;
 
++ (NSArray *) defaultSortDescriptors;
 
 @end

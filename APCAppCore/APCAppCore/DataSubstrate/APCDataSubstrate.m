@@ -42,6 +42,8 @@
 #import "APCSchedule+AddOn.h"
 #import "APCScheduledTask+AddOn.h"
 #import "NSError+APCAdditions.h"
+#import "APCScheduler.h"
+
 
 static int dateCheckTimeInterval = 60;
 
@@ -61,13 +63,15 @@ static NSString * const kErrorCantOpenDatabase_Suggestion      = (@"Unable to op
                                                                   "problem reoccurs, please uninstall and "
                                                                   "reinstall the app.");
 
+static NSString * const kAPCJSONFileKeySchedules = @"schedules";
+static NSString * const kAPCJSONFileKeyTasks     = @"tasks";
 
 
 @interface APCDataSubstrate ()
-
-@property (strong, nonatomic) NSTimer *dateChangeTestTimer;//refreshes Activities if the date crosses midnight.
-@property (strong, nonatomic) NSDate *tomorrowAtMidnight;
-
+@property (nonatomic, strong) NSTimer *dateChangeTestTimer;
+@property (nonatomic, strong) NSDate *lastKnownDate;
+@property (nonatomic, assign) NSUInteger countOfTotalRequiredTasksForToday;
+@property (nonatomic, assign) NSUInteger countOfTotalCompletedTasksForToday;
 @end
 
 @implementation APCDataSubstrate
@@ -83,6 +87,11 @@ static NSString * const kErrorCantOpenDatabase_Suggestion      = (@"Unable to op
 {
     self = [super init];
     if (self) {
+        _dateChangeTestTimer = nil;
+        _lastKnownDate = [NSDate date];
+        _countOfTotalCompletedTasksForToday = 0;
+        _countOfTotalCompletedTasksForToday = 0;
+
         [self setUpCoreDataStackWithPersistentStorePath:storePath additionalModels:mergedModels];
         [self setUpCurrentUser:self.persistentContext];
         [self setUpHealthKit];
@@ -110,8 +119,20 @@ static NSString * const kErrorCantOpenDatabase_Suggestion      = (@"Unable to op
 
 - (void)setupNotifications
 {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(instantiateTimer:) name:UIApplicationWillEnterForegroundNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(instantiateTimer:) name:UIApplicationDidFinishLaunchingNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector (appCameToForeground:)
+                                                 name: UIApplicationDidFinishLaunchingNotification
+                                               object: nil];
+
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector (appCameToForeground:)
+                                                 name: UIApplicationWillEnterForegroundNotification
+                                               object: nil];
+
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector (appWentToBackground:)
+                                                 name: UIApplicationDidEnterBackgroundNotification
+                                               object: nil];
 }
 
 
@@ -243,12 +264,6 @@ static NSString * const kErrorCantOpenDatabase_Suggestion      = (@"Unable to op
 
 #pragma mark - Core Data Public Methods
 
-- (void)loadStaticTasksAndSchedules:(NSDictionary *)jsonDictionary
-{
-    [APCTask createTasksFromJSON:jsonDictionary[@"tasks"] inContext:self.persistentContext];
-    [APCSchedule createSchedulesFromJSON:jsonDictionary[@"schedules"] inContext:self.persistentContext];
-}
-
 - (void)resetCoreData
 {
     //EXERCISE CAUTION IN CALLING THIS METHOD
@@ -260,8 +275,8 @@ static NSString * const kErrorCantOpenDatabase_Suggestion      = (@"Unable to op
     APCLogError2 (error);
     [self removeSqliteStore];
     [self setUpPersistentStore];
-    APCAppDelegate * appDelegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
-    [appDelegate loadStaticTasksAndSchedulesIfNecessary];
+    APCAppDelegate * appDelegate = [APCAppDelegate sharedAppDelegate];
+    [appDelegate.scheduler loadTasksAndSchedulesFromDiskAndThenUseThisQueue: nil toDoThisWhenDone: nil];
 }
 
 
@@ -309,14 +324,23 @@ static NSString * const kErrorCantOpenDatabase_Suggestion      = (@"Unable to op
     return nil;
 }
 
-- (NSUInteger)countOfAllScheduledTasksForToday
+- (void) updateCountOfTotalRequiredTasksForToday: (NSUInteger) countOfRequiredTasks
+                     andTotalCompletedTasksToday: (NSUInteger) countOfCompletedTasks
 {
-    return [APCScheduledTask countOfAllScheduledTasksTodayInContext:self.mainContext];
+    self.countOfTotalRequiredTasksForToday = countOfRequiredTasks;
+    self.countOfTotalCompletedTasksForToday = countOfCompletedTasks;
 }
 
+// This method is deprecated. See .h file for details.
+- (NSUInteger)countOfAllScheduledTasksForToday
+{
+    return self.countOfTotalRequiredTasksForToday;
+}
+
+// This method is deprecated. See .h file for details.
 - (NSUInteger)countOfCompletedScheduledTasksForToday
 {
-    return [APCScheduledTask countOfAllCompletedTasksTodayInContext:self.mainContext];
+    return self.countOfTotalCompletedTasksForToday;
 }
 
 
@@ -330,18 +354,84 @@ static NSString * const kErrorCantOpenDatabase_Suggestion      = (@"Unable to op
 
 #pragma mark - Date Change Test Timer
 
-- (void)instantiateTimer:(NSNotification *)__unused notification
+- (void)appCameToForeground:(NSNotification *)__unused notification
 {
-    self.tomorrowAtMidnight = [NSDate tomorrowAtMidnight];
-    self.dateChangeTestTimer = [NSTimer scheduledTimerWithTimeInterval:dateCheckTimeInterval target:self selector:@selector(didDateCrossMidnight:) userInfo:nil repeats:YES];
+    APCLogDebug (@"Handling date changes (DataSubstrate): The app is back in the foreground. Restarting the date-change timer, and checking immediately for a date change.");
+
+    [self hootAndHollerIfTheDateCrossedMidnight];
+    [self startTimer];
 }
 
-- (void)didDateCrossMidnight:(NSNotification *)__unused notification
+- (void)appWentToBackground:(NSNotification *)__unused notification
 {
-    if ([[NSDate new] compare:self.tomorrowAtMidnight] == NSOrderedDescending || [[NSDate new] compare:self.tomorrowAtMidnight] == NSOrderedSame) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:APCDayChangedNotification object:nil];
-        self.tomorrowAtMidnight = [NSDate tomorrowAtMidnight];
+    APCLogDebug (@"Handling date changes (DataSubstrate): The app has moved to the background. Cancelling the date-change timer.");
+
+    [self stopTimer];
+}
+
+- (void)startTimer
+{
+    /*
+     We can only stop a timer on the thread from which
+     we started it.  Since this block of code is
+     very small, the main thread is fine.
+     */
+    [[NSOperationQueue mainQueue] addOperationWithBlock: ^{
+
+        [self stopTimerInternal];
+
+        self.dateChangeTestTimer = [NSTimer scheduledTimerWithTimeInterval: dateCheckTimeInterval
+                                                                    target: self
+                                                                  selector: @selector (hootAndHollerIfTheDateCrossedMidnight)
+                                                                  userInfo: nil
+                                                                   repeats: YES];
+    }];
+}
+
+- (void)stopTimer
+{
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+
+        [self stopTimerInternal];
+
+    }];
+}
+
+/**
+ Intended to be called only from within the above
+ -startTimer and -stopTimer methods, above.
+ */
+- (void)stopTimerInternal
+{
+    if (self.dateChangeTestTimer != nil)
+    {
+        [self.dateChangeTestTimer invalidate];
+        self.dateChangeTestTimer = nil;
     }
+}
+
+- (void)hootAndHollerIfTheDateCrossedMidnight
+{
+    [[NSOperationQueue mainQueue] addOperationWithBlock: ^{
+
+        NSDate *now = [NSDate date];
+
+        /**
+         This calcluation handles the date moving both
+         forward and backward, so it handles normal
+         calendar-day turnovers as well as debugging
+         situations.
+         */
+        if (! [now isSameDayAsDate: self.lastKnownDate])
+        {
+            APCLogDebug (@"Handling date changes (DataSubstrate): The date has changed. Sending notification.");
+
+            self.lastKnownDate = now;
+
+            [[NSNotificationCenter defaultCenter] postNotificationName: APCDayChangedNotification
+                                                                object: nil];
+        }
+    }];
 }
 
 @end

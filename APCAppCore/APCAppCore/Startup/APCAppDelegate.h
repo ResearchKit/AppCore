@@ -47,6 +47,8 @@ extern NSUInteger   const kTheEntireDataModelOfTheApp;
 @property (nonatomic, strong) APCFitnessAllocation *sevenDayFitnessAllocationData;
 @property (strong, nonatomic) UITabBarController *tabster;
 
++ (instancetype) sharedAppDelegate;
+
 //APC Related Properties & Methods
 @property (strong, nonatomic) APCDataSubstrate * dataSubstrate;
 @property (strong, nonatomic) APCDataMonitor * dataMonitor;
@@ -65,7 +67,6 @@ extern NSUInteger   const kTheEntireDataModelOfTheApp;
 
 @property  (nonatomic, strong)  NSArray  *storyboardIdInfo;
 
-- (void)loadStaticTasksAndSchedulesIfNecessary;  //For resetting app
 - (void) updateDBVersionStatus;
 - (void) clearNSUserDefaults; //For resetting app
 
@@ -79,7 +80,7 @@ extern NSUInteger   const kTheEntireDataModelOfTheApp;
 - (void) showNeedsEmailVerification;
 - (void) setUpRootViewController: (UIViewController*) viewController;
 - (void) setUpTasksReminder;
-- (NSDictionary *) tasksAndSchedulesWillBeLoaded;
+
 - (void)performMigrationFrom:(NSInteger)previousVersion currentVersion:(NSInteger)currentVersion;
 - (void)performMigrationAfterDataSubstrateFrom:(NSInteger)previousVersion currentVersion:(NSInteger)currentVersion;
 - (NSString *) applicationDocumentsDirectory;
@@ -95,7 +96,6 @@ extern NSUInteger   const kTheEntireDataModelOfTheApp;
 - (void) signedUpNotification: (NSNotification*) notification;
 - (void) logOutNotification:(NSNotification *)notification;
 
-- (NSArray *)offsetForTaskSchedules;
 - (void)afterOnBoardProcessIsFinished;
 - (NSArray *)reviewConsentActions;
 - (NSArray *)allSetTextBlocks;

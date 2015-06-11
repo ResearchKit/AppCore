@@ -34,15 +34,28 @@
 #import <CoreData/CoreData.h>
 
 @interface NSManagedObject (APCHelper)
-/*********************************************************************************/
+
+
+
+// ---------------------------------------------------------
 #pragma mark - Class Methods
-/*********************************************************************************/
+// ---------------------------------------------------------
+
 + (instancetype)newObjectForContext:(NSManagedObjectContext*)context;
+
 + (NSFetchRequest*)request;
 
-/*********************************************************************************/
++ (NSFetchRequest*)requestWithPredicate:(NSPredicate *)predicate;
+
++ (NSFetchRequest*)requestWithPredicate:(NSPredicate *)predicate
+                        sortDescriptors:(NSArray *)sortDescriptors;
+
+
+
+// ---------------------------------------------------------
 #pragma mark - Instance Methods
-/*********************************************************************************/
+// ---------------------------------------------------------
+
 - (BOOL)saveToPersistentStore:(NSError *__autoreleasing *)error;
 
 @end

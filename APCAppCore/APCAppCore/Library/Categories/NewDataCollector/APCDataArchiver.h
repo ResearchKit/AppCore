@@ -33,6 +33,7 @@
  
 #import <Foundation/Foundation.h>
 #import <ResearchKit/ResearchKit.h>
+#import "APCDataVerificationServerAccessControl.h"
 
 @class ORKTaskResult;
 
@@ -71,7 +72,7 @@
  Make sure crackers (Bad Guys) don't know these features
  exist, and (also) cannot use them, even by accident.
  */
-#ifdef USE_DATA_VERIFICATION_CLIENT
+#ifdef USE_DATA_VERIFICATION_SERVER
 
 	/**
 	 Should we save the unencrypted .zip file?  Specifically

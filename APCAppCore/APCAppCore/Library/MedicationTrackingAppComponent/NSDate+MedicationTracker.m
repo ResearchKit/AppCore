@@ -32,9 +32,8 @@
 // 
  
 #import "NSDate+MedicationTracker.h"
+#import "APCConstants.h"
 #import "NSDate+Helper.h"
-
-static  NSString  *kDefaultLocale = @"en_US_POSIX";
 
 @implementation NSDate (MedicationTracker)
 
@@ -61,7 +60,7 @@ static  NSString  *kDefaultLocale = @"en_US_POSIX";
 
     if (formatter == nil) {
         formatter = [[NSDateFormatter alloc] init];
-        NSLocale  *locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+        NSLocale  *locale = [[NSLocale alloc] initWithLocaleIdentifier: kAPCDateFormatLocaleEN_US_POSIX];
         [formatter setLocale:locale];
         [formatter setDateFormat:@"E"];
     }
@@ -73,7 +72,7 @@ static  NSString  *kDefaultLocale = @"en_US_POSIX";
     static  NSDateFormatter  *formatter;
     if (formatter == nil) {
         formatter = [[NSDateFormatter alloc] init];
-        NSLocale  *en_US_POSIX = [[NSLocale alloc] initWithLocaleIdentifier:kDefaultLocale];
+        NSLocale  *en_US_POSIX = [[NSLocale alloc] initWithLocaleIdentifier: kAPCDateFormatLocaleEN_US_POSIX];
         [formatter setLocale:en_US_POSIX];
         [formatter setDateFormat:@"d"];
     }

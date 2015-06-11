@@ -91,6 +91,14 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 
 
 @implementation APCAppDelegate
+
++ (instancetype)sharedAppDelegate
+{
+    APCAppDelegate *appDelegate = (APCAppDelegate *) [[UIApplication sharedApplication] delegate];
+    return appDelegate;
+}
+
+
 /*********************************************************************************/
 #pragma mark - App Delegate Methods
 /*********************************************************************************/
@@ -108,7 +116,10 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     [self doGeneralInitialization];
     [self initializeBridgeServerConnection];
     [self initializeAppleCoreStack];
-    [self loadStaticTasksAndSchedulesIfNecessary];
+
+    [self.scheduler loadTasksAndSchedulesFromDiskAndThenUseThisQueue: nil
+                                                    toDoThisWhenDone: nil];
+
     [self registerNotifications];
     [self setUpHKPermissions];
     [self setUpAppAppearance];
@@ -317,12 +328,12 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     }
     else if ([identifierComponents.lastObject isEqualToString:@"ActivitiesNavController"])
     {
-        return self.tabster.viewControllers[kIndexOfActivitesTab];
+        return self.tabster.viewControllers[kAPCActivitiesTabIndex];
     }
     else if ([identifierComponents.lastObject isEqualToString:@"APCActivityVC"])
     {
-        if ( [self.tabster.viewControllers[kIndexOfActivitesTab] respondsToSelector:@selector(topViewController)]) {
-            return [(UINavigationController*) self.tabster.viewControllers[kIndexOfActivitesTab] topViewController];
+        if ( [self.tabster.viewControllers[kAPCActivitiesTabIndex] respondsToSelector:@selector(topViewController)]) {
+            return [(UINavigationController*) self.tabster.viewControllers[kAPCActivitiesTabIndex] topViewController];
         }
     }
     
@@ -371,54 +382,9 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     manager.authDelegate = self.dataSubstrate.currentUser;
 }
 
-- (void)loadStaticTasksAndSchedulesIfNecessary
-{
-    if (![APCDBStatus isSeedLoadedWithContext:self.dataSubstrate.persistentContext]) {
-        [APCDBStatus setSeedLoaded:self.initializationOptions[kDBStatusVersionKey] WithContext:self.dataSubstrate.persistentContext];
-        NSString *resource = [[NSBundle mainBundle] pathForResource:self.initializationOptions[kTasksAndSchedulesJSONFileNameKey] ofType:@"json"];
-        NSData *jsonData = [NSData dataWithContentsOfFile:resource];
-        NSError * error;
-        NSDictionary * dictionary = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&error];
-        APCLogError2 (error);
-        
-        NSDictionary *manipulatedDictionary = [(APCAppDelegate*)[UIApplication sharedApplication].delegate tasksAndSchedulesWillBeLoaded];
-        
-        if (manipulatedDictionary != nil) {
-            dictionary = manipulatedDictionary;
-        }
-        
-        [self.dataSubstrate loadStaticTasksAndSchedules:dictionary];
-        [APCKeychainStore resetKeyChain];
-    }
-    else
-    {
-        NSString * dbVersionStr = [APCDBStatus dbStatusVersionwithContext:self.dataSubstrate.persistentContext];
-        if (![dbVersionStr isEqualToString:self.initializationOptions[kDBStatusVersionKey]]) {
-            [self updateDBVersionStatus];
-        }
-    }
-}
-
 //This method is overridable from each app
 - (void) updateDBVersionStatus
 {
-    NSString *resource = [[NSBundle mainBundle] pathForResource:self.initializationOptions[kTasksAndSchedulesJSONFileNameKey] ofType:@"json"];
-    NSData *jsonData = [NSData dataWithContentsOfFile:resource];
-    NSError * error;
-    NSDictionary * dictionary = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&error];
-    APCLogError2 (error);
-    
-    //Deeper investigation needed for enabling tasksAndSchedulesWillBeLoaded
-    /*NSDictionary *manipulatedDictionary = [(APCAppDelegate*)[UIApplication sharedApplication].delegate tasksAndSchedulesWillBeLoaded];
-    
-    if (manipulatedDictionary != nil) {
-        dictionary = manipulatedDictionary;
-    }*/
-    
-    //Enabling refreshing of tasks JSON only. Schedules might be tricky as Apps could manipulate schedules after creation.
-    //More investigation needed
-    [APCTask updateTasksFromJSON:dictionary[@"tasks"] inContext:self.dataSubstrate.persistentContext];
-    //[APCSchedule updateSchedulesFromJSON:dictionary[@"schedules"] inContext:self.dataSubstrate.persistentContext];
     [APCDBStatus updateSeedLoaded:self.initializationOptions[kDBStatusVersionKey] WithContext:self.dataSubstrate.persistentContext];
 }
 
@@ -617,13 +583,6 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
         [[UIApplication sharedApplication] scheduleLocalNotification:notification];
     }
     completionHandler();
-        }
-        
-            
-- (NSArray *)offsetForTaskSchedules
-{
-    //TODO: Number of days should be zero based. If I want something to show up on day 2 then the offset is 1
-    return nil;
 }
 
 - (void)afterOnBoardProcessIsFinished
@@ -774,9 +733,6 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     return nil;
 }
 
-- (NSDictionary *) tasksAndSchedulesWillBeLoaded {
-    return nil;
-}
 
 /*********************************************************************************/
 #pragma mark - Public Helpers
@@ -830,11 +786,12 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     
     UITabBarController *tabBarController = (UITabBarController *)[storyBoard instantiateInitialViewController];
     self.window.rootViewController = tabBarController;
+    self.tabster = tabBarController;
     tabBarController.delegate = self;
     
     NSArray       *items = tabBarController.tabBar.items;
     
-    NSUInteger     selectedItemIndex = kIndexOfActivitesTab;
+    NSUInteger     selectedItemIndex = kAPCActivitiesTabIndex;
     
     NSArray  *deselectedImageNames = @[ @"tab_activities", @"tab_dashboard", @"tab_learn", @"tab_profile" ];
     NSArray  *selectedImageNames   = @[ @"tab_activities_selected", @"tab_dashboard_selected", @"tab_learn_selected",  @"tab_profile_selected" ];
@@ -846,18 +803,6 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
         item.selectedImage = [[UIImage imageNamed:selectedImageNames[i]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         item.title = tabBarTitles[i];
         item.tag = i;
-        if (i == kIndexOfActivitesTab) {
-            NSUInteger allScheduledTasks = self.dataSubstrate.countOfAllScheduledTasksForToday;
-            NSUInteger completedScheduledTasks = self.dataSubstrate.countOfCompletedScheduledTasksForToday;
-            
-            NSNumber *activitiesBadgeValue = (completedScheduledTasks < allScheduledTasks) ? @(allScheduledTasks - completedScheduledTasks) : @(0);
-            
-            if ([activitiesBadgeValue integerValue] != 0) {
-                item.badgeValue = [activitiesBadgeValue stringValue];
-            } else {
-                item.badgeValue = nil;
-            }
-        }
     }
     
     NSArray  *controllers = tabBarController.viewControllers;
@@ -875,7 +820,6 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
 {
-    self.tabster = (UITabBarController  *)self.window.rootViewController;
     NSArray  *deselectedImageNames = @[ @"tab_activities",          @"tab_dashboard",           @"tab_learn",           @"tab_profile" ];
     NSArray  *selectedImageNames   = @[ @"tab_activities_selected", @"tab_dashboard_selected",  @"tab_learn_selected",  @"tab_profile_selected" ];
     NSArray  *tabBarTitles         = @[ @"Activities",              @"Dashboard",               @"Learn",               @"Profile"];
@@ -908,19 +852,6 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
                 self.profileViewController = (APCProfileViewController *) profileNavigationController.childViewControllers[0];
                 
                 self.profileViewController.delegate = [self profileExtenderDelegate];
-            }
-        }
-        
-        if (controllerIndex == kIndexOfActivitesTab) {
-            NSUInteger allScheduledTasks = self.dataSubstrate.countOfAllScheduledTasksForToday;
-            NSUInteger completedScheduledTasks = self.dataSubstrate.countOfCompletedScheduledTasksForToday;
-            
-            NSNumber *remainingTasks = (completedScheduledTasks < allScheduledTasks) ? @(allScheduledTasks - completedScheduledTasks) : @(0);
-            
-            if ([remainingTasks integerValue] != 0) {
-                item.badgeValue = [remainingTasks stringValue];
-            } else {
-                item.badgeValue = nil;
             }
         }
     }

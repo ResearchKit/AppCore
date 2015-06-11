@@ -34,13 +34,12 @@
 
 /*
  Only allow this file to exist in the compiled code if
- we're diagnosing stuff, in-house.  For documentation,
- see:
+ we're diagnosing stuff, in-house.
  */
 
-
 // ---------------------------------------------------------
-#ifdef USE_DATA_VERIFICATION_CLIENT
+#import "APCDataVerificationServerAccessControl.h"
+#ifdef USE_DATA_VERIFICATION_SERVER
 // ---------------------------------------------------------
 
 
@@ -282,7 +281,7 @@ static NSString * const DATA_VERIFICATION_SERVER_API_UPLOAD_COMMAND = @"upload";
 
 
 // ---------------------------------------------------------
-#endif  // USE_DATA_VERIFICATION_CLIENT
+#endif  // USE_DATA_VERIFICATION_SERVER
 // ---------------------------------------------------------
 
 

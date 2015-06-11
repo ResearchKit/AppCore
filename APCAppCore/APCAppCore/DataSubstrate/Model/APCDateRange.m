@@ -52,9 +52,15 @@
 - (instancetype) initWithStartDate:(NSDate *)startDate durationString: (NSString*) durationString {
     
     NSParameterAssert(startDate);
-    NSParameterAssert(durationString);
+
+    NSTimeInterval delta = 0;
+
+    if (durationString.length > 0)
+    {
+        delta = [NSDate timeIntervalByAddingISO8601Duration: durationString
+                                                     toDate: startDate];
+    }
     
-    NSTimeInterval delta = [NSDate parseISO8601DurationString: durationString];
     self = [self initWithStartDate:startDate durationInterval:delta];
     return self;
 }

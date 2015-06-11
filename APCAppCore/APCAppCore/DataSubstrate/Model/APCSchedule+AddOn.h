@@ -34,16 +34,61 @@
 #import "APCSchedule.h"
 #import "APCScheduleExpression.h"
 
+
+@class APCTopLevelScheduleEnumerator;
+@class APCTask;
+@class APCDateRange;
+
+
+
+/**
+ Describes the enumeration style of a particular Schedule.
+ Also determines which techniques we employ when enumerating
+ the date/time values represented by that Schedule.
+ */
+typedef enum : NSUInteger {
+
+    /** The schedule specifies a single occurrence. */
+    APCScheduleRecurrenceStyleExactlyOnce,
+
+    /** The schedule recurs according to the rules of 
+     a Unix-style cron expression. */
+    APCScheduleRecurrenceStyleCronExpression,
+
+    /** The schedule recurs according to a (human-readable)
+     ISO 8601 time interval, like "every 90 days," and
+     an optional list of times in a given day. */
+    APCScheduleRecurrenceStyleInterval,
+
+}   APCScheduleRecurrenceStyle;
+
+
+/**
+ Used in the very occasional place we need to know one
+ specific value of the scheduleType field outside this
+ category.  For the most part, we can get more and
+ better information from schedule.recurrenceStyle.
+ */
+FOUNDATION_EXPORT NSString * const kAPCScheduleTypeValueOneTimeSchedule;
+
+
+
 @interface APCSchedule (AddOn)
 
-//Synchronous Method Call
-+ (void) createSchedulesFromJSON: (NSArray*) schedulesArray inContext: (NSManagedObjectContext*) context;
-+ (void) updateSchedulesFromJSON: (NSArray *)schedulesArray inContext:(NSManagedObjectContext *)context;
+@property (readonly) APCScheduleExpression * scheduleExpression;
+@property (readonly) APCScheduleRecurrenceStyle recurrenceStyle;
+@property (readonly) NSString *firstTaskTitle;
+@property (readonly) NSString *firstTaskId;
+@property (readonly) BOOL isOneTimeSchedule;
+@property (readonly) BOOL isRecurringCronSchedule;
+@property (readonly) BOOL isRecurringIntervalSchedule;
 
-- (BOOL) isOneTimeSchedule;
-@property (nonatomic, readonly) APCScheduleExpression * scheduleExpression;
-- (NSTimeInterval) expiresInterval;
+- (APCTopLevelScheduleEnumerator *) enumeratorFromDate: (NSDate *) startDate
+                                                toDate: (NSDate *) endDate;
 
-+ (APCSchedule*) cannedScheduleForTaskID: (NSString*) taskID inContext:(NSManagedObjectContext *)context;
+- (APCTopLevelScheduleEnumerator *) enumeratorOverDateRange: (APCDateRange *) dateRange;
+
+- (NSComparisonResult) compareWithSchedule: (APCSchedule *) otherSchedule;
 
 @end
+
