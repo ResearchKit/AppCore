@@ -30,14 +30,16 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 // 
- 
+
+
 
 /*
  Only allow this file to exist in the compiled code if
  we're diagnosting stuff, in-house.
  */
 // ---------------------------------------------------------
-#ifdef USE_DATA_VERIFICATION_CLIENT
+#import "APCDataVerificationServerAccessControl.h"
+#ifdef USE_DATA_VERIFICATION_SERVER
 // ---------------------------------------------------------
 
 
@@ -85,7 +87,7 @@
 
 
 // ---------------------------------------------------------
-#endif  // USE_DATA_VERIFICATION_CLIENT
+#endif  // USE_DATA_VERIFICATION_SERVER
 // ---------------------------------------------------------
 
 

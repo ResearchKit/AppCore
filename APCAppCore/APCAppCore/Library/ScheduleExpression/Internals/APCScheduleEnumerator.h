@@ -1,5 +1,5 @@
 // 
-//  APCScheduleEnumerator.h 
+//  APCScheduleEnumerator.h
 //  APCAppCore 
 // 
 // Copyright (c) 2015, Apple Inc. All rights reserved. 
@@ -54,5 +54,19 @@
                         monthSelector:(APCTimeSelector *) monthSelector
                          yearSelector:(APCTimeSelector *) yearSelector
                originalCronExpression: (NSString *) originalExpression;
+
+/**
+ Simply calls -nextScheduledDate.  Provided for the ability
+ to enumerate using fast enumeration (i.e., inside a for
+ loop).
+ */
+- (id) nextObject;
+
+/** 
+ The next date being emitted by this enumerator.  If this
+ is the first time being called, returns the first date.
+ */
+@property (readonly) NSDate *nextScheduledDate;
+
 
 @end

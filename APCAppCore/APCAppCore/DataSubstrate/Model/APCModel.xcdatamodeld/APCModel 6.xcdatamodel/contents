@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="7549" systemVersion="14D136" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="APCDBStatus" representedClassName="APCDBStatus" syncable="YES">
+        <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="APCMedTrackerDailyDosageRecord" representedClassName="APCMedTrackerDailyDosageRecord" syncable="YES">
+        <attribute name="dateThisRecordRepresents" attributeType="Date" indexed="YES" syncable="YES"/>
+        <attribute name="numberOfDosesTakenForThisDate" attributeType="Integer 16" minValueString="0" defaultValueString="0" syncable="YES"/>
+        <relationship name="prescriptionIAmBasedOn" maxCount="1" deletionRule="Nullify" destinationEntity="APCMedTrackerPrescription" inverseName="actualDosesTaken" inverseEntity="APCMedTrackerPrescription" syncable="YES"/>
+    </entity>
+    <entity name="APCMedTrackerInflatableItem" representedClassName="APCMedTrackerInflatableItem" syncable="YES">
+        <attribute name="name" attributeType="String" minValueString="1" indexed="YES" syncable="YES"/>
+    </entity>
+    <entity name="APCMedTrackerMedication" representedClassName="APCMedTrackerMedication" parentEntity="APCMedTrackerInflatableItem" syncable="YES">
+        <relationship name="prescriptionsWhereIAmUsed" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="APCMedTrackerPrescription" inverseName="medication" inverseEntity="APCMedTrackerPrescription" syncable="YES"/>
+    </entity>
+    <entity name="APCMedTrackerPossibleDosage" representedClassName="APCMedTrackerPossibleDosage" parentEntity="APCMedTrackerInflatableItem" syncable="YES">
+        <attribute name="amount" optional="YES" attributeType="Float" minValueString="0" syncable="YES"/>
+        <relationship name="prescriptionsWhereIAmUsed" optional="YES" toMany="YES" minCount="1" deletionRule="Nullify" destinationEntity="APCMedTrackerPrescription" inverseName="dosage" inverseEntity="APCMedTrackerPrescription" syncable="YES"/>
+    </entity>
+    <entity name="APCMedTrackerPrescription" representedClassName="APCMedTrackerPrescription" syncable="YES">
+        <attribute name="dateStartedUsing" attributeType="Date" syncable="YES"/>
+        <attribute name="dateStoppedUsing" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="didStopUsingOnDoctorsOrders" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="numberOfTimesPerDay" attributeType="Integer 16" minValueString="0" defaultValueString="0" syncable="YES"/>
+        <attribute name="zeroBasedDaysOfTheWeek" attributeType="String" syncable="YES"/>
+        <relationship name="actualDosesTaken" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="APCMedTrackerDailyDosageRecord" inverseName="prescriptionIAmBasedOn" inverseEntity="APCMedTrackerDailyDosageRecord" syncable="YES"/>
+        <relationship name="color" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="APCMedTrackerPrescriptionColor" inverseName="prescriptionsWhereIAmUsed" inverseEntity="APCMedTrackerPrescriptionColor" syncable="YES"/>
+        <relationship name="dosage" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="APCMedTrackerPossibleDosage" inverseName="prescriptionsWhereIAmUsed" inverseEntity="APCMedTrackerPossibleDosage" syncable="YES"/>
+        <relationship name="medication" maxCount="1" deletionRule="Nullify" destinationEntity="APCMedTrackerMedication" inverseName="prescriptionsWhereIAmUsed" inverseEntity="APCMedTrackerMedication" syncable="YES"/>
+    </entity>
+    <entity name="APCMedTrackerPrescriptionColor" representedClassName="APCMedTrackerPrescriptionColor" parentEntity="APCMedTrackerInflatableItem" syncable="YES">
+        <attribute name="alphaAsFloat" attributeType="Float" minValueString="0" maxValueString="1" defaultValueString="1" syncable="YES"/>
+        <attribute name="blueAsInteger" attributeType="Integer 16" minValueString="0" maxValueString="255" defaultValueString="50" syncable="YES"/>
+        <attribute name="greenAsInteger" optional="YES" attributeType="Integer 16" minValueString="0" maxValueString="255" defaultValueString="50" syncable="YES"/>
+        <attribute name="naturalSortOrder" optional="YES" attributeType="Integer 16" minValueString="0" defaultValueString="0" indexed="YES" syncable="YES"/>
+        <attribute name="redAsInteger" optional="YES" attributeType="Integer 16" minValueString="0" maxValueString="255" defaultValueString="50" syncable="YES"/>
+        <relationship name="prescriptionsWhereIAmUsed" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="APCMedTrackerPrescription" inverseName="color" inverseEntity="APCMedTrackerPrescription" syncable="YES"/>
+    </entity>
+    <entity name="APCResult" representedClassName="APCResult" syncable="YES">
+        <attribute name="archiveFilename" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="endDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="metaData" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="resultSummary" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="startDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="taskID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="taskRunID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="updatedAt" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="uploaded" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <relationship name="scheduledTask" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="APCScheduledTask" inverseName="results" inverseEntity="APCScheduledTask" syncable="YES"/>
+    </entity>
+    <entity name="APCSchedule" representedClassName="APCSchedule" syncable="YES">
+        <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="delay" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="effectiveEndDate" optional="YES" attributeType="Date" indexed="YES" syncable="YES"/>
+        <attribute name="effectiveStartDate" optional="YES" attributeType="Date" indexed="YES" syncable="YES"/>
+        <attribute name="endsOn" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="expires" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="inActive" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="interval" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="maxCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="notes" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="reminderMessage" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="reminderOffset" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="scheduleSource" optional="YES" attributeType="Integer 32" syncable="YES"/>
+        <attribute name="scheduleString" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="scheduleType" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="shouldRemind" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="startsOn" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="timesOfDay" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="updatedAt" optional="YES" attributeType="Date" syncable="YES"/>
+        <relationship name="scheduledTasks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="APCScheduledTask" inverseName="generatedSchedule" inverseEntity="APCScheduledTask" syncable="YES"/>
+        <relationship name="tasks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="APCTask" inverseName="schedules" inverseEntity="APCTask" syncable="YES"/>
+    </entity>
+    <entity name="APCScheduledTask" representedClassName="APCScheduledTask" syncable="YES">
+        <attribute name="completed" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="endOn" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="startOn" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="updatedAt" optional="YES" attributeType="Date" syncable="YES"/>
+        <relationship name="generatedSchedule" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="APCSchedule" inverseName="scheduledTasks" inverseEntity="APCSchedule" syncable="YES"/>
+        <relationship name="results" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="APCResult" inverseName="scheduledTask" inverseEntity="APCResult" syncable="YES"/>
+        <relationship name="task" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="APCTask" inverseName="scheduledTasks" inverseEntity="APCTask" syncable="YES"/>
+    </entity>
+    <entity name="APCStoredUserData" representedClassName="APCStoredUserData" syncable="YES">
+        <attribute name="allowContact" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="biologicalSex" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="birthDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="bloodType" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="consentSignatureDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="consentSignatureImage" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
+        <attribute name="consentSignatureName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="customSurveyQuestion" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="dailyScalesCompletionCounter" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="ethnicity" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="glucoseLevels" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="hasHeartDisease" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="homeLocationAddress" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="homeLocationLat" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="homeLocationLong" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="medicalConditions" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="medications" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="phoneNumber" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="profileImage" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
+        <attribute name="secondaryInfoSaved" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="serverConsented" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="sharedOptionSelection" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="sleepTime" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="taskCompletion" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="userConsented" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="wakeUpTime" optional="YES" attributeType="Date" syncable="YES"/>
+    </entity>
+    <entity name="APCTask" representedClassName="APCTask" syncable="YES">
+        <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="sortString" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="taskClassName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="taskCompletionTimeString" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="taskContentFileName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="taskDescription" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="taskHRef" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="taskID" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="taskIsOptional" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="taskTitle" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="taskVersionNumber" optional="YES" attributeType="Integer 32" defaultValueString="0" indexed="YES" syncable="YES"/>
+        <attribute name="updatedAt" optional="YES" attributeType="Date" syncable="YES"/>
+        <relationship name="scheduledTasks" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="APCScheduledTask" inverseName="task" inverseEntity="APCScheduledTask" syncable="YES"/>
+        <relationship name="schedules" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="APCSchedule" inverseName="tasks" inverseEntity="APCSchedule" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="APCDBStatus" positionX="-1341" positionY="72" width="171" height="58"/>
+        <element name="APCMedTrackerDailyDosageRecord" positionX="-1188" positionY="621" width="216" height="88"/>
+        <element name="APCMedTrackerInflatableItem" positionX="-965" positionY="1080" width="299" height="58"/>
+        <element name="APCMedTrackerMedication" positionX="-1260" positionY="935" width="180" height="58"/>
+        <element name="APCMedTrackerPossibleDosage" positionX="-1269" positionY="758" width="216" height="73"/>
+        <element name="APCMedTrackerPrescription" positionX="-938" positionY="764" width="218" height="178"/>
+        <element name="APCMedTrackerPrescriptionColor" positionX="-666" positionY="729" width="207" height="133"/>
+        <element name="APCResult" positionX="-1359" positionY="297" width="171" height="208"/>
+        <element name="APCSchedule" positionX="-594" positionY="71" width="207" height="358"/>
+        <element name="APCScheduledTask" positionX="-1125" positionY="297" width="171" height="178"/>
+        <element name="APCStoredUserData" positionX="-1593" positionY="72" width="200" height="435"/>
+        <element name="APCTask" positionX="-873" positionY="71" width="207" height="253"/>
+    </elements>
+</model>

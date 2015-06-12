@@ -32,7 +32,6 @@
 // 
  
 #import "APCAppCore.h"
-#import "APCSchedule+Bridge.h"
 #import "APCDataMonitor+Bridge.h"
 
 @interface APCDataMonitor ()
@@ -47,7 +46,6 @@
     if (self) {
         self.dataSubstrate = dataSubstrate;
         self.scheduler = scheduler;
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateScheduledTasks) name:APCScheduleUpdatedNotification object:nil];
     }
     return self;
 }
@@ -78,25 +76,17 @@
 - (void) userConsented
 {
     [(APCAppDelegate*)[UIApplication sharedApplication].delegate setUpCollectors];
-    [self.scheduler updateScheduledTasksIfNotUpdatingWithRange:kAPCSchedulerDateRangeToday];
-    [self.scheduler updateScheduledTasksIfNotUpdatingWithRange:kAPCSchedulerDateRangeTomorrow];
+
     [self refreshFromBridgeOnCompletion:^(NSError *error) {
         APCLogError2 (error);
         [self batchUploadDataToBridgeOnCompletion:NULL];
     }];
 }
 
-- (void) updateScheduledTasks
-{
-    [self.scheduler updateScheduledTasksIfNotUpdatingWithRange:kAPCSchedulerDateRangeToday];
-    [self.scheduler updateScheduledTasksIfNotUpdatingWithRange:kAPCSchedulerDateRangeTomorrow];
-}
-
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
-
 
 - (void)performCoreDataBlockInBackground:(void (^)(NSManagedObjectContext *))coreDataBlock
 {

@@ -48,7 +48,6 @@
 #import "APCTask+AddOn.h"
 #import "APCTask+Bridge.h"
 #import "APCSchedule+AddOn.h"
-#import "APCSchedule+Bridge.h"
 #import "APCScheduledTask+AddOn.h"
 #import "APCDBStatus+AddOn.h"
 

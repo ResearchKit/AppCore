@@ -89,6 +89,14 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 @end 
 
 @implementation APCAppDelegate
+
++ (instancetype)sharedAppDelegate
+{
+    APCAppDelegate *appDelegate = (APCAppDelegate *) [[UIApplication sharedApplication] delegate];
+    return appDelegate;
+}
+
+
 /*********************************************************************************/
 #pragma mark - App Delegate Methods
 /*********************************************************************************/
@@ -106,7 +114,10 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     [self doGeneralInitialization];
     [self initializeBridgeServerConnection];
     [self initializeAppleCoreStack];
-    [self loadStaticTasksAndSchedulesIfNecessary];
+
+    [self.scheduler loadTasksAndSchedulesFromDiskAndThenUseThisQueue: nil
+                                                    toDoThisWhenDone: nil];
+
     [self registerNotifications];
     [self setUpHKPermissions];
     [self setUpAppAppearance];
@@ -367,54 +378,9 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     manager.authDelegate = self.dataSubstrate.currentUser;
 }
 
-- (void)loadStaticTasksAndSchedulesIfNecessary
-{
-    if (![APCDBStatus isSeedLoadedWithContext:self.dataSubstrate.persistentContext]) {
-        [APCDBStatus setSeedLoaded:self.initializationOptions[kDBStatusVersionKey] WithContext:self.dataSubstrate.persistentContext];
-        NSString *resource = [[NSBundle mainBundle] pathForResource:self.initializationOptions[kTasksAndSchedulesJSONFileNameKey] ofType:@"json"];
-        NSData *jsonData = [NSData dataWithContentsOfFile:resource];
-        NSError * error;
-        NSDictionary * dictionary = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&error];
-        APCLogError2 (error);
-        
-        NSDictionary *manipulatedDictionary = [(APCAppDelegate*)[UIApplication sharedApplication].delegate tasksAndSchedulesWillBeLoaded];
-        
-        if (manipulatedDictionary != nil) {
-            dictionary = manipulatedDictionary;
-        }
-        
-        [self.dataSubstrate loadStaticTasksAndSchedules:dictionary];
-        [APCKeychainStore resetKeyChain];
-    }
-    else
-    {
-        NSString * dbVersionStr = [APCDBStatus dbStatusVersionwithContext:self.dataSubstrate.persistentContext];
-        if (![dbVersionStr isEqualToString:self.initializationOptions[kDBStatusVersionKey]]) {
-            [self updateDBVersionStatus];
-        }
-    }
-}
-
 //This method is overridable from each app
 - (void) updateDBVersionStatus
 {
-    NSString *resource = [[NSBundle mainBundle] pathForResource:self.initializationOptions[kTasksAndSchedulesJSONFileNameKey] ofType:@"json"];
-    NSData *jsonData = [NSData dataWithContentsOfFile:resource];
-    NSError * error;
-    NSDictionary * dictionary = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&error];
-    APCLogError2 (error);
-    
-    //Deeper investigation needed for enabling tasksAndSchedulesWillBeLoaded
-    /*NSDictionary *manipulatedDictionary = [(APCAppDelegate*)[UIApplication sharedApplication].delegate tasksAndSchedulesWillBeLoaded];
-    
-    if (manipulatedDictionary != nil) {
-        dictionary = manipulatedDictionary;
-    }*/
-    
-    //Enabling refreshing of tasks JSON only. Schedules might be tricky as Apps could manipulate schedules after creation.
-    //More investigation needed
-    [APCTask updateTasksFromJSON:dictionary[@"tasks"] inContext:self.dataSubstrate.persistentContext];
-    //[APCSchedule updateSchedulesFromJSON:dictionary[@"schedules"] inContext:self.dataSubstrate.persistentContext];
     [APCDBStatus updateSeedLoaded:self.initializationOptions[kDBStatusVersionKey] WithContext:self.dataSubstrate.persistentContext];
 }
 
@@ -794,9 +760,6 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     return nil;
 }
 
-- (NSDictionary *) tasksAndSchedulesWillBeLoaded {
-    return nil;
-}
 
 /*********************************************************************************/
 #pragma mark - Public Helpers
@@ -918,6 +881,7 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
         if (newsFeedTab) {
             [self.tabBarController setSelectedIndex:4];
         }
+
     }
     
     

@@ -38,6 +38,14 @@ static  NSString  *daysOfWeekNames[]     = { @"Monday", @"Tuesday", @"Wednesday"
 static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSString *));
 static  NSString  *oneThroughFiveNames[] = { @"Once", @"Two times", @"Three times", @"Four times", @"Five times" };
 
+static NSString * const APCErrorDomainLoadingDictionary             = @"APCErrorDomainLoadingDictionary";
+static NSInteger  const APCErrorLoadingJsonNoFileCode               = 1;
+static NSString * const APCErrorLoadingJsonNoFileReason             = @"Can't Find JSON File";
+static NSString * const APCErrorLoadingJsonNoFileSuggestion         = @"We were unable to find a file with the specified filename.";
+static NSInteger  const APCErrorLoadingJsonNoDictionaryCode         = 2;
+static NSString * const APCErrorLoadingJsonNoDictionaryReason       = @"Can't Understand JSON File";
+static NSString * const APCErrorLoadingJsonNoDictionarySuggestion   = @"We were unable to find a dictionary at the top level of the JSON file at the specified path.";
+
 @implementation NSDictionary (APCAdditions)
 
 - (NSString *)JSONString
@@ -110,4 +118,78 @@ static  NSString  *oneThroughFiveNames[] = { @"Once", @"Two times", @"Three time
     }
     return  result;
 }
+
++ (NSDictionary *) dictionaryWithContentsOfJSONFileWithName: (NSString *) filename
+                                                   inBundle: (NSBundle *) bundle
+                                             returningError: (NSError * __autoreleasing *) errorToReturn
+{
+    if (bundle == nil)
+    {
+        bundle = [NSBundle mainBundle];
+    }
+
+    NSError *localError = nil;
+    NSDictionary *jsonDictionary = nil;
+    NSString *extension = filename.pathExtension;
+    NSString *basename = [filename substringToIndex: filename.length - extension.length - 1];
+
+    NSString *pathToJSONFile = [bundle pathForResource: basename
+                                                ofType: extension];
+
+    if (! pathToJSONFile)
+    {
+        localError = [NSError errorWithCode: APCErrorLoadingJsonNoFileCode
+                                     domain: APCErrorDomainLoadingDictionary
+                              failureReason: APCErrorLoadingJsonNoFileReason
+                         recoverySuggestion: APCErrorLoadingJsonNoFileSuggestion
+                            relatedFilePath: filename];
+    }
+    else
+    {
+        NSError *errorReadingFile = nil;
+        NSData *maybeJsonData = [NSData dataWithContentsOfFile: pathToJSONFile
+                                                       options: 0
+                                                         error: & errorReadingFile];
+
+        if (! maybeJsonData)
+        {
+            localError = errorReadingFile;
+        }
+        else
+        {
+            NSError *errorConvertingToJSON = nil;
+            id maybeJsonDictionary = [NSJSONSerialization JSONObjectWithData: maybeJsonData
+                                                                     options: NSJSONReadingMutableContainers
+                                                                       error: & errorConvertingToJSON];
+
+            if (! maybeJsonDictionary)
+            {
+                localError = errorConvertingToJSON;
+            }
+
+            else if (! [maybeJsonDictionary isKindOfClass: [NSDictionary class]])
+            {
+                localError = [NSError errorWithCode: APCErrorLoadingJsonNoDictionaryCode
+                                             domain: APCErrorDomainLoadingDictionary
+                                      failureReason: APCErrorLoadingJsonNoDictionaryReason
+                                 recoverySuggestion: APCErrorLoadingJsonNoDictionarySuggestion
+                                    relatedFilePath: pathToJSONFile];
+            }
+            
+            else
+            {
+                // Done!
+                jsonDictionary = maybeJsonDictionary;
+            }
+        }
+    }
+
+    if (errorToReturn != nil)
+    {
+        * errorToReturn = localError;
+    }
+    
+    return jsonDictionary;
+}
+
 @end
