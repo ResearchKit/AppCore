@@ -45,7 +45,7 @@ extern NSUInteger   const kTheEntireDataModelOfTheApp;
 @interface APCAppDelegate : UIResponder <UIApplicationDelegate, APCOnboardingDelegate, APCOnboardingTaskDelegate, APCPasscodeViewControllerDelegate>
 
 @property (nonatomic, strong) APCFitnessAllocation *sevenDayFitnessAllocationData;
-@property (strong, nonatomic) UITabBarController *tabster;
+@property (strong, nonatomic) UITabBarController *tabBarController;
 
 + (instancetype) sharedAppDelegate;
 
@@ -114,4 +114,7 @@ extern NSUInteger   const kTheEntireDataModelOfTheApp;
 - (void)instantiateOnboardingForType:(APCOnboardingTaskType)type;
 
 - (NSDate*)applicationBecameActiveDate;
+
+- (void)updateNewsFeedBadgeCount;
+
 @end

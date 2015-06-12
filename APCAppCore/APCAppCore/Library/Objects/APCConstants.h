@@ -145,6 +145,7 @@ FOUNDATION_EXPORT NSString *const kAnonDemographicDataUploadedKey;
 FOUNDATION_EXPORT NSString *const kStudyIdentifierKey;
 FOUNDATION_EXPORT NSString *const kAppPrefixKey;
 FOUNDATION_EXPORT NSString *const kBridgeEnvironmentKey;
+FOUNDATION_EXPORT NSString *const kNewsFeedTabKey;
 FOUNDATION_EXPORT NSString *const kExampleConsentKey;
 FOUNDATION_EXPORT NSString *const kDatabaseNameKey;
 FOUNDATION_EXPORT NSString *const kTasksAndSchedulesJSONFileNameKey;
@@ -172,6 +173,8 @@ FOUNDATION_EXPORT NSString * const kPasswordKey;
 FOUNDATION_EXPORT NSString * const kNumberOfMinutesForPasscodeKey;
 
 FOUNDATION_EXPORT NSUInteger     const kAPCActivitiesTabIndex;
+FOUNDATION_EXPORT NSUInteger     const kAPCNewsFeedTabIndex;
+
 FOUNDATION_EXPORT NSInteger      const kAPCSigninErrorCode_NotSignedIn;
 FOUNDATION_EXPORT NSUInteger     const kAPCSigninNumRetriesBeforePause;
 FOUNDATION_EXPORT NSTimeInterval const kAPCSigninNumSecondsBetweenRetries;

@@ -135,6 +135,12 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCDashboardMoreInfoViewController.h>
 
 /*--------------------------
+ NewsFeed ViewControllers
+ -------------------------*/
+#import <APCAppCore/APCNewsFeedViewController.h>
+
+
+/*--------------------------
  Learn ViewControllers
  -------------------------*/
 #import <APCAppCore/APCLearnMasterViewController.h>
@@ -268,6 +274,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCActivitiesBasicTableViewCell.h>
 #import <APCAppCore/APCActivitiesTintedTableViewCell.h>
 #import <APCAppCore/APCActivitiesSectionHeaderView.h>
+#import <APCAppCore/APCFeedTableViewCell.h>
 
 /* -------------------------
  Objects
@@ -286,6 +293,8 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCMotionHistoryReporter.h>
 #import <APCAppCore/APCJSONSerializer.h>
 #import <APCAppCore/APCTaskReminder.h>
+#import <APCAppCore/APCFeedParser.h>
+#import <APCAppCore/APCNewsFeedManager.h>
 
 /* -------------------------
  Categories

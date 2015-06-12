@@ -675,7 +675,7 @@ static NSString * const kAPCScheduleStringKey                       = @"schedule
 - (UITabBarItem *) myTabBarItem
 {
     UITabBarItem *activitiesTab = nil;
-    UITabBar *tabBar = self.appDelegate.tabster.tabBar;
+    UITabBar *tabBar = self.appDelegate.tabBarController.tabBar;
 
     for (UITabBarItem *item in tabBar.items)
     {

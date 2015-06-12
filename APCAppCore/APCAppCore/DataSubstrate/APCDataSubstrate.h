@@ -35,6 +35,7 @@
 #import <CoreData/CoreData.h>
 #import <HealthKit/HealthKit.h>
 #import "APCParameters.h"
+#import "APCNewsFeedManager.h"
 
 @class APCUser;
 
@@ -130,5 +131,9 @@
 #pragma mark - Parameters
 
 @property (strong, nonatomic) APCParameters *parameters;
+
+#pragma mark - News Feed
+
+@property (strong, nonatomic) APCNewsFeedManager *newsFeedManager;
 
 @end

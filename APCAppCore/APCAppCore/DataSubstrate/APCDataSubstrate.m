@@ -97,6 +97,7 @@ static NSString * const kAPCJSONFileKeyTasks     = @"tasks";
         [self setUpHealthKit];
         [self setupParameters];
         [self setupNotifications];
+        [self setupNewsFeedManager];
     }
     return self;
 }
@@ -135,6 +136,11 @@ static NSString * const kAPCJSONFileKeyTasks     = @"tasks";
                                                object: nil];
 }
 
+- (void)setupNewsFeedManager
+{
+    _newsFeedManager = [[APCNewsFeedManager alloc] init];
+    [_newsFeedManager fetchFeedWithCompletion:nil];
+}
 
 #pragma mark - HealthKit
 
