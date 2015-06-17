@@ -45,11 +45,9 @@ static NSString *const  kEndDateKey         = @"endDate";
 static NSString *const  kInfoFilename       = @"info.json";
 static NSString *const  kCSVFilename        = @"data.csv";
 static long long        kKBPerMB            = 1024;
-static long long        kBytesPerKB         = 1024;
 static NSUInteger       kSecsPerMin         = 60;
 static NSUInteger       kMinsPerHour        = 60;
 static NSUInteger       kHoursPerDay        = 24;
-static NSUInteger       kDaysPerWeek        = 7;
 
 @implementation APCPassiveDataSink
 
