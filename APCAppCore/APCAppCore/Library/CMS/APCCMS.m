@@ -32,6 +32,7 @@
 // 
  
 #import "APCCMS.h"
+#import "APCCMSSupport.h"
 
 /**
  Remember, only include ONE of these encryption .m files
@@ -42,10 +43,17 @@ NSData * cmsEncrypt (NSData *data,
                      NSString * __unused identityPath,
                      NSError **error)
 {
+    NSData *encryptedData = data;
+    
     if (error != nil)
     {
         *error = nil;
     }
+    
+    Class support = NSClassFromString(@"APCCMSSupport");
+    if (support != Nil) {
+        encryptedData = [support cmsEncrypt:data identityPath:identityPath error:error];
+    }
 
-    return data;
+    return encryptedData;
 }
