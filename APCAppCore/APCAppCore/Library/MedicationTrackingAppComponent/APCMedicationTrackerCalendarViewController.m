@@ -492,7 +492,10 @@ static  CGFloat    kAPCMedicationRowHeight = 64.0;
 
 - (void)addMedicationWasTapped:(id)__unused sender
 {
-    APCMedicationTrackerSetupViewController  *controller = [[APCMedicationTrackerSetupViewController alloc] initWithNibName:nil bundle:[NSBundle appleCoreBundle]];
+    APCMedicationTrackerSetupViewController *controller = [[APCMedicationTrackerSetupViewController alloc] initWithNibName:nil
+                                                                                                                    bundle:[NSBundle appleCoreBundle]
+                                                                                                        withResourceBundle:self.resourceBundle
+                                                                                                          andResourceNames:self.resourceNames];
     [self.navigationController pushViewController:controller animated:YES];
 }
 
@@ -621,7 +624,14 @@ static  CGFloat    kAPCMedicationRowHeight = 64.0;
     
     self.exScrolliburScrolledByUser = NO;
     
-    [APCMedTrackerDataStorageManager startupReloadingDefaults:YES andThenUseThisQueue:nil toDoThis:NULL];
+    if (self.resourceBundle && self.resourceNames) {
+        [APCMedTrackerDataStorageManager startupWithCustomDataInBundle:self.resourceBundle
+                                                     withResourceNames:self.resourceNames
+                                                   andThenUseThisQueue:nil
+                                                              toDoThis:NULL];
+    } else {
+        [APCMedTrackerDataStorageManager startupReloadingDefaults:YES andThenUseThisQueue:nil toDoThis:NULL];
+    }
 
     self.navigationItem.title = viewControllerTitle;
     
