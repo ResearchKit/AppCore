@@ -39,4 +39,32 @@
 + (instancetype) dictionaryWithJSONString: (NSString *) string;
 - (NSString *)formatNumbersAndDays;
 
+
+/**
+ Loads the specified file from disk, attempts to interpret
+ it as a JSON dictionary, and returns the resulting
+ NSDictionary.  If it encounters a problem, stops, returns
+ nil, and optionally returns an error in the specified
+ error object.
+
+ @param filename The normal-looking name of a file in the
+ specified bundle, like "temp.json".
+
+ @param bundle The application bundle in which to search
+ for this file.  Pass nil to use the "main" bundle
+ [NSBundle mainBundle].
+
+ @param errorToReturn Will contain the error results, if
+ any, or will be set to nil if there was no error.  Pass
+ nil if you want to ignore this value.  You can still check
+ the result value for nil to see if there was a problem.
+
+ @return an NSDictionary containing the contents of the
+ specified file, or nil if there was a problem.
+ */
++ (NSDictionary *) dictionaryWithContentsOfJSONFileWithName: (NSString *) filename
+                                                   inBundle: (NSBundle *) bundle
+                                             returningError: (NSError * __autoreleasing *) errorToReturn;
+
+
 @end

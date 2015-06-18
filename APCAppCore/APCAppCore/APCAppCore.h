@@ -32,6 +32,8 @@
 // 
  
 #import <UIKit/UIKit.h>
+#import <BridgeSDK/BridgeSDK.h>
+
 
 //! Project version number for APCAppCore.
 FOUNDATION_EXPORT double APCAppCoreVersionNumber;
@@ -39,9 +41,10 @@ FOUNDATION_EXPORT double APCAppCoreVersionNumber;
 //! Project version string for APCAppCore.
 FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 
-#import <BridgeSDK/BridgeSDK.h>
 
-//Headers
+/* -------------------------------------
+ Headers
+ --------------------------------------- */
 #import <APCAppCore/APCConstants.h>
 #import <APCAppCore/APCAppDelegate.h>
 #import <APCAppCore/APCDataMonitor.h>
@@ -59,7 +62,9 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCUtilities.h>
 #import <APCAppCore/APCCorrelationsSelectorViewController.h>
 
-//  Tasks
+/* -------------------------------------
+ Tasks
+ --------------------------------------- */
 #import <APCAppCore/APCConsentTask.h>
 #import <APCAppCore/APCConsentQuestion.h>
 #import <APCAppCore/APCConsentBooleanQuestion.h>
@@ -94,7 +99,6 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCLog.h>
 #import <APCAppCore/APCDataVerificationClient.h>
 
-/* UI */
 /* -------------------------
  Onboarding ViewControllers
  ------------------------- */
@@ -131,6 +135,12 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCDashboardMoreInfoViewController.h>
 
 /*--------------------------
+ NewsFeed ViewControllers
+ -------------------------*/
+#import <APCAppCore/APCNewsFeedViewController.h>
+
+
+/*--------------------------
  Learn ViewControllers
  -------------------------*/
 #import <APCAppCore/APCLearnMasterViewController.h>
@@ -162,7 +172,6 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 /* -------------------------
  Medication Tracking Setup Controllers
  ------------------------- */
-
 #import <APCAppCore/APCMedicationTrackerSetupViewController.h>
 #import <APCAppCore/APCMedicationDosageViewController.h>
 #import <APCAppCore/APCFrequencyDayTableViewCell.h>
@@ -182,7 +191,6 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 /* -------------------------
  Medication Tracking App Level Components
  ------------------------- */
-
 #import <APCAppCore/APCMedicationTrackerCalendarViewController.h>
 #import <APCAppCore/APCMedicationTrackerCalendarDailyView.h>
 #import <APCAppCore/APCMedicationDetailsTableViewCell.h>
@@ -214,7 +222,6 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 /* -------------------------
  Views
  ------------------------- */
-	 
 #import <APCAppCore/APCHorizontalThinLineView.h>
 #import <APCAppCore/APCHorizontalBottomThinLineView.h>
 #import <APCAppCore/APCVerticalThinLineView.h>
@@ -267,6 +274,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCActivitiesBasicTableViewCell.h>
 #import <APCAppCore/APCActivitiesTintedTableViewCell.h>
 #import <APCAppCore/APCActivitiesSectionHeaderView.h>
+#import <APCAppCore/APCFeedTableViewCell.h>
 
 /* -------------------------
  Objects
@@ -285,6 +293,8 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCMotionHistoryReporter.h>
 #import <APCAppCore/APCJSONSerializer.h>
 #import <APCAppCore/APCTaskReminder.h>
+#import <APCAppCore/APCFeedParser.h>
+#import <APCAppCore/APCNewsFeedManager.h>
 
 /* -------------------------
  Categories
@@ -300,7 +310,6 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/HKHealthStore+APCExtensions.h>
 #import <APCAppCore/UIImage+APCHelper.h>
 #import <APCAppCore/APCParameters+Settings.h>
-#import <APCAppCore/SBBGuidCreatedOnVersionHolder+APCAdditions.h>
 #import <APCAppCore/UIView+Helper.h>
 #import <APCAppCore/NSDictionary+APCAdditions.h>
 #import <APCAppCore/APCDeviceHardware+APCHelper.h>
@@ -310,6 +319,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/HKWorkout+APCHelper.h>
 #import <APCAppCore/CLLocation+APCAdditions.h>
 #import <APCAppCore/NSDictionary+APCStringify.h>
+
 /* -------------------------
  Appearance
  ------------------------- */
@@ -319,7 +329,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCStepProgressBar+Appearance.h>
 
 /* -------------------------
- Schedule and ScheduleExpression components
+ Scheduler
  ------------------------- */
 #import <APCAppCore/APCScheduler.h>
 #import <APCAppCore/APCScheduleExpression.h>

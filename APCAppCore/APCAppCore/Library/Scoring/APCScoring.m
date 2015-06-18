@@ -47,11 +47,11 @@ static NSString *const kDatasetGroupByWeek    = @"datasetGroupByWeek";
 static NSString *const kDatasetGroupByMonth   = @"datasetGroupByMonth";
 static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
 
-static NSInteger const kNumberOfDaysInWeek    = 7;
-static NSInteger const kNumberOfDaysInMonth   = 30;
-static NSInteger const kNumberOfDaysIn3Months = 90;
-static NSInteger const kNumberOfDaysIn6Months = 180;
-static NSInteger const kNumberOfDaysInYear    = 365;
+static NSInteger const          kNumberOfDaysInWeek    = 7;
+static NSInteger const          kNumberOfDaysInMonth   = 30;
+static NSInteger const          kNumberOfDaysIn3Months = 90;
+static NSInteger const __unused kNumberOfDaysIn6Months = 180;
+static NSInteger const          kNumberOfDaysInYear    = 365;
 
 @interface APCScoring()
 @property (nonatomic, strong) APCScoring *correlatedScoring;

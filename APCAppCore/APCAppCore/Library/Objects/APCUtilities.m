@@ -33,6 +33,7 @@
  
 #import "APCUtilities.h"
 #import "APCDeviceHardware.h"
+#import "APCLog.h"
 
 /**
  These are fixed per launch of the app.  They're also
@@ -139,6 +140,17 @@ static NSString *       _realApplicationName = nil;
 	return _appName;
 }
 
++ (BOOL) isInDebuggingMode
+{
+    BOOL result = NO;
+
+    #if DEBUG
+        result = YES;
+    #endif
+
+    return result;
+}
+
 /**
  Trims whitespace from someString and returns it.
  If the trimmed string has length 0, returns nil.
@@ -175,6 +187,32 @@ static NSString *       _realApplicationName = nil;
     }
 
     return tempDirectory;
+}
+
++ (NSDate *) firstKnownFileAccessDate
+{
+    NSDate *result = nil;
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *applicationDocumentsDirectory = ([paths count] > 0) ? paths[0] : nil;
+    NSFileManager*  fileManager = [NSFileManager defaultManager];
+    NSString*       filePath    = [applicationDocumentsDirectory stringByAppendingPathComponent:@"db.sqlite"];
+    
+    if ([fileManager fileExistsAtPath:filePath])
+    {
+        NSError*        error       = nil;
+        NSDictionary*   attributes  = [fileManager attributesOfItemAtPath:filePath error:&error];
+        
+        if (error)
+        {
+            APCLogError2(error);
+        }
+        else
+        {
+            result = [attributes fileCreationDate];
+        }
+    }
+
+    return result;
 }
 
 @end

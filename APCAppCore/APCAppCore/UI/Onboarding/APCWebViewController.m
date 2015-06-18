@@ -35,26 +35,27 @@
 
 @interface APCWebViewController ()
 
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *backBarButtonItem;
+
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *refreshBarButtonItem;
+
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *stopBarButtonItem;
+
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *forwardBarButtonItem;
+
 @end
 
 @implementation APCWebViewController
 
-- (void)dealloc {
-    _webview.delegate = nil;
-}
-
--(void)viewDidLoad {
-	[super viewDidLoad];
-    self.webview.delegate = self;
-    self.webview.alpha = 0.0;
+-(void)viewDidLoad{
     
-    self.webview.scalesPageToFit = YES;
-}
-
--(void)webViewDidFinishLoad:(UIWebView *) __unused webView{
-    [UIView animateWithDuration:1.0 animations:^{
-        self.webview.alpha = 1.0;
-    }];
+    self.webView.delegate = self;
+    self.webView.scalesPageToFit = YES;
+    
+    if (self.link.length > 0) {
+        NSString *encodedURLString=[self.link stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:encodedURLString]]];
+    }
 }
 
 - (UIRectEdge)edgesForExtendedLayout
@@ -67,14 +68,26 @@
     return YES;
 }
 
-- (IBAction)close:(id) __unused sender
+/*********************************************************************************/
+#pragma mark - UIWebViewDelegate methods
+/*********************************************************************************/
+
+- (void)webViewDidStartLoad:(UIWebView *)__unused webView
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self updateToolbarButtons];
 }
 
-- (BOOL)               webView: (UIWebView *) __unused webView
-    shouldStartLoadWithRequest: (NSURLRequest*)request
-                navigationType: (UIWebViewNavigationType)navigationType
+- (void)webViewDidFinishLoad:(UIWebView *)__unused webView
+{
+    [self updateToolbarButtons];
+}
+
+- (void)webView:(UIWebView *)__unused webView didFailLoadWithError:(NSError *)__unused error
+{
+    [self updateToolbarButtons];
+}
+
+- (BOOL)webView:(UIWebView *)__unused webView shouldStartLoadWithRequest:(NSURLRequest*)request navigationType:(UIWebViewNavigationType)navigationType
 {
     BOOL    shouldLoad = NO;
     
@@ -89,5 +102,49 @@
     
     return shouldLoad;
 }
+
+
+/*********************************************************************************/
+#pragma mark - Helper methods
+/*********************************************************************************/
+
+- (void)updateToolbarButtons
+{
+    self.refreshBarButtonItem.enabled = !self.webView.isLoading;
+    self.stopBarButtonItem.enabled = !self.webView.isLoading;
+    
+    self.backBarButtonItem.enabled = self.webView.canGoBack;
+    self.forwardBarButtonItem.enabled = self.webView.canGoForward;
+}
+
+/*********************************************************************************/
+#pragma mark - IBActions
+/*********************************************************************************/
+
+- (IBAction)back:(id)__unused sender
+{
+    [self.webView goBack];
+}
+
+- (IBAction)refresh:(id)__unused sender
+{
+    [self.webView reload];
+}
+
+- (IBAction)stop:(id)__unused sender
+{
+    [self.webView stopLoading];
+}
+
+- (IBAction)forward:(id)__unused sender
+{
+    [self.webView goForward];
+}
+
+- (IBAction)close:(id) __unused sender
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 
 @end

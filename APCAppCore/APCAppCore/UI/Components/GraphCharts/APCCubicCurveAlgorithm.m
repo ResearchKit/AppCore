@@ -57,7 +57,7 @@
 {
     NSMutableArray *emptyArray = [NSMutableArray new];
     
-    for (int i=0; i<length; i++) {
+    for (NSUInteger i=0; i<length; i++) {
         [emptyArray addObject:[NSNull null]];
     }
     

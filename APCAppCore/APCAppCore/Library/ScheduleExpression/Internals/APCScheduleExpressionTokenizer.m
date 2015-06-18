@@ -52,8 +52,15 @@ static NSArray* kWeekdayNames = nil;
 @implementation APCScheduleExpressionTokenizer
 
 /**
- This method runs exactly once, in a thread-safe way,
- the first time the class is referenced in the code.
+ Set global, static values the first time anyone calls this class.
+
+ By definition, this method is called once per class, in a thread-safe
+ way, the first time the class is sent a message -- basically, the first
+ time we refer to the class.  That means we can use this to set up stuff
+ that applies to all objects (instances) of this class.
+
+ Documentation:  See +initialize in the NSObject Class Reference.  Currently, that's here:
+ https://developer.apple.com/library/ios/documentation/Cocoa/Reference/Foundation/Classes/NSObject_Class/index.html#//apple_ref/occ/clm/NSObject/initialize
  */
 + (void) initialize
 {

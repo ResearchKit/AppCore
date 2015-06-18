@@ -42,18 +42,8 @@
 - (BOOL)removeScheduledTask:(NSError **)taskError;
 
 @property (nonatomic, readonly) APCResult* lastResult;
-
 @property (nonatomic, readonly) NSString * completeByDateString;
 
-+ (NSDictionary*) APCActivityVCScheduledTasksInContext: (NSManagedObjectContext*) context;
-+ (instancetype) scheduledTaskForStartOnDate: (NSDate *) startOn schedule: (APCSchedule*) schedule inContext: (NSManagedObjectContext*) context;
-
-+ (NSArray *)allScheduledTasksForDateRange: (APCDateRange*) dateRange completed: (NSNumber*) completed inContext: (NSManagedObjectContext*) context;
-/*********************************************************************************/
-#pragma mark - Counts
-/*********************************************************************************/
-+ (NSUInteger)countOfAllScheduledTasksTodayInContext: (NSManagedObjectContext*) context;
-+ (NSUInteger)countOfAllCompletedTasksTodayInContext: (NSManagedObjectContext*) context;
 
 /*********************************************************************************/
 #pragma mark - Reminder 

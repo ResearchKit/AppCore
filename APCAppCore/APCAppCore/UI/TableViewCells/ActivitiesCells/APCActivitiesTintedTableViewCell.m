@@ -34,70 +34,150 @@
 #import "APCActivitiesTintedTableViewCell.h"
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
+#import "APCUtilities.h"
+#import "APCTaskGroup.h"
+#import "APCLog.h"
+#import "APCSchedule+AddOn.h"
+#import "APCTask+AddOn.h"
+
 
 NSString * const kAPCActivitiesTintedTableViewCellIdentifier = @"APCActivitiesTintedTableViewCell";
 
 static CGFloat const kTitleLabelCenterYConstant = 10.5f;
 
+@interface APCActivitiesTintedTableViewCell ()
+@property (nonatomic, weak)   IBOutlet  UILabel            *subTitleLabel;
+@property (nonatomic, weak)   IBOutlet  UIView             *tintView;
+@property (nonatomic, weak)   IBOutlet  APCBadgeLabel      *countLabel;
+@property (nonatomic, weak)   IBOutlet  NSLayoutConstraint *titleLabelCenterYConstraint;
+@property (nonatomic, strong)           APCTaskGroup       *taskGroup;
+@end
+
+
 @implementation APCActivitiesTintedTableViewCell
 
-- (void)awakeFromNib {
-    
-    [super awakeFromNib];
-    
-    [self setupAppearance];
-    
-    self.countLabel.text = @"";
-    
-    self.hidesSubTitle = NO;
-}
-
-- (void)setupAppearance
+- (void)configureWithTaskGroup:(APCTaskGroup *)taskGroup
+                   isTodayCell:(BOOL)cellRepresentsToday
+             showDebuggingInfo:(BOOL)shouldShowDebuggingInfo
 {
-    self.titleLabel.textColor = [UIColor appSecondaryColor1];
-    self.titleLabel.font = [UIFont appRegularFontWithSize:16.f];
-    
-    self.subTitleLabel.textColor = [UIColor appSecondaryColor3];
-    self.subTitleLabel.font = [UIFont appRegularFontWithSize:14.f];
-}
+    //
+    // General configuration data.
+    //
 
-- (void)setHidesSubTitle:(BOOL)hidesSubTitle
-{
-    _hidesSubTitle = hidesSubTitle;
-    
-    self.subTitleLabel.hidden = hidesSubTitle;
-    
-    if (hidesSubTitle) {
-        self.titleLabelCenterYConstraint.constant = 0;
-    } else {
-        self.titleLabelCenterYConstraint.constant = kTitleLabelCenterYConstant;
+    NSCharacterSet  *whitespace                     = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+    NSString        *subtitle                       = [taskGroup.task.taskCompletionTimeString stringByTrimmingCharactersInSet: whitespace];
+    NSUInteger      countOfRemainingRequiredTasks   = taskGroup.requiredRemainingTasks.count;
+    NSUInteger      countOfCompletedTasks           = taskGroup.requiredCompletedTasks.count + taskGroup.gratuitousCompletedTasks.count;
+    BOOL            isOptionalTask                  = taskGroup.task.taskIsOptional.boolValue;
+
+
+    //
+    // Tint color.
+    //
+
+    self.tintColor = (cellRepresentsToday ?
+                      [UIColor colorForTaskId: taskGroup.task.taskID] :
+                      [UIColor appTertiaryGrayColor]);
+
+    if (self.tintColor == nil)
+    {
+        self.tintColor = [UIColor lightGrayColor];
     }
     
+
+
+    //
+    // General settings.
+    //
+
+    self.taskGroup                  = taskGroup;
+    self.titleLabel.text            = taskGroup.task.taskTitle;
+    self.titleLabel.textColor       = (cellRepresentsToday || isOptionalTask) ? [UIColor appSecondaryColor1] : [UIColor appSecondaryColor3];
+    self.subTitleLabel.textColor    = [UIColor appSecondaryColor3];
+    self.titleLabel.font            = [UIFont appRegularFontWithSize: kAPCActivitiesNormalFontSize];
+    self.subTitleLabel.font         = [UIFont appRegularFontWithSize: kAPCActivitiesSmallFontSize];
+    self.tintView.backgroundColor   = self.tintColor;
+    self.countLabel.tintColor       = cellRepresentsToday ? [UIColor appPrimaryColor] : [UIColor appSecondaryColor3];
+
+
+    //
+    // The "to do" count in this cell (like, "4 tasks of this type to do today").
+    // Note that the tint color is set above.
+    //
+
+    if (taskGroup.totalRequiredTasksForThisTimeRange > 1 &&
+        ! taskGroup.isFullyCompleted)
+    {
+        self.countLabel.text    = @(countOfRemainingRequiredTasks).stringValue;
+        self.countLabel.hidden  = NO;
+    }
+    else
+    {
+        self.countLabel.text    = nil;
+        self.countLabel.hidden  = YES;
+    }
+
+
+    //
+    // The checkmark.
+    //
+
+    self.confirmationView.completed = ! isOptionalTask && taskGroup.isFullyCompleted;
+    self.confirmationView.hidden    = isOptionalTask;
+
+
+
+    //
+    // The subtitle.
+    // If needed, hide the subtitle and vertically center the title.
+    //
+
+    if (subtitle.length == 0)
+    {
+        self.subTitleLabel.text                     = nil;
+        self.subTitleLabel.hidden                   = YES;
+        self.titleLabelCenterYConstraint.constant   = 0;
+    }
+    else
+    {
+        self.subTitleLabel.text                     = subtitle;
+        self.subTitleLabel.hidden                   = NO;
+        self.titleLabelCenterYConstraint.constant   = kTitleLabelCenterYConstant;
+    }
+
+
+
+    //
+    // Debugging info, if requested.
+    //
+
+    if ([APCUtilities isInDebuggingMode] && shouldShowDebuggingInfo)
+    {
+        BOOL isServerTask = NO;
+
+        if (taskGroup.task.schedules.count)
+        {
+            APCSchedule *anySchedule = taskGroup.task.schedules.anyObject;
+            isServerTask = ((APCScheduleSource) anySchedule.scheduleSource.integerValue) == APCScheduleSourceServer;
+        }
+
+        if (isServerTask)
+        {
+            self.titleLabel.text = [NSString stringWithFormat: @"%@ (server)", self.titleLabel.text];
+            self.titleLabel.textColor = [UIColor blueColor];
+        }
+
+        self.countLabel.hidden = NO;
+        self.countLabel.text = [NSString stringWithFormat: @"%@/%@", @(countOfCompletedTasks), @(taskGroup.totalRequiredTasksForThisTimeRange)];
+    }
+
+
+    //
+    // Draw the cell border -- the colored strip that shows
+    // how this cell maps to the Dashboard.
+    //
+
     [self setNeedsDisplay];
-}
-
-- (void)setTintColor:(UIColor *)tintColor
-{
-    if (!tintColor) {
-        // default to the lightgray system color.
-        tintColor = [UIColor lightGrayColor];
-    }
-    
-    _tintColor = tintColor;
-    
-    self.tintView.backgroundColor = tintColor;
-}
-
-- (void)setupIncompleteAppearance
-{
-    self.titleLabel.textColor = [UIColor appSecondaryColor3];
-    
-    self.subTitleLabel.textColor = [UIColor appSecondaryColor3];
-    
-    self.countLabel.hidden = YES;
-    
-    self.tintView.backgroundColor = [UIColor appTertiaryGrayColor];
-    
 }
 
 - (void)drawRect:(CGRect)rect
