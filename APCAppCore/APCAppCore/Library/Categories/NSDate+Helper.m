@@ -36,8 +36,8 @@
 #import "NSDateComponents+Helper.h"
 
 
-NSString * const NSDateDefaultDateFormat = @"MMM dd, yyyy";
-
+NSString * const NSDateDefaultDateFormat   = @"MMM dd, yyyy";
+NSString * const DateFormatISO8601DateOnly = @"yyyy-MM-dd";
 
 /**
  Sage requires our dates to be in "ISO 8601" format,

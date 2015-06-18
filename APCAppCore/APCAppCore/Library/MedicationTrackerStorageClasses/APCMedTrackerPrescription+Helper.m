@@ -777,7 +777,7 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek             = @",";
     NSDictionary *result = @{
                              kAPCSerializedDataKey_Item      : kUploadablePackageRecordDosesFileName,
                              kUploadableFieldUniqueIdKey   : prescription.objectID,
-                             kUploadableFieldDosageDateKey : [date toStringWithFormat:@"yyyy-MM-dd"],
+                             kUploadableFieldDosageDateKey : [date toStringWithFormat:DateFormatISO8601DateOnly],
                              kUploadableFieldDosesTakenKey : numberOfDosesTaken
                              };
 
