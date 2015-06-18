@@ -112,8 +112,8 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Select F
 
 @property  (nonatomic, strong)          APCMedTrackerPossibleDosage     *defaultPossibleDosage;
 
-@property  (nonatomic, strong)          NSBundle                        *resourceBundle;
-@property  (nonatomic, strong)          NSDictionary                    *resourceNames;
+@property  (nonatomic, copy)            NSBundle                        *resourceBundle;
+@property  (nonatomic, copy)            NSDictionary                    *resourceNames;
 
 @end
 
