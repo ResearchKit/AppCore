@@ -34,6 +34,7 @@
 @import Foundation;
 
 extern NSString * const NSDateDefaultDateFormat;
+extern NSString * const DateFormatISO8601DateOnly;
 
 @interface NSDate (Helper)
 
