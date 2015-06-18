@@ -43,12 +43,15 @@
 
 static APCMedTrackerDataStorageManager *_defaultManager = nil;
 
+NSString *const kAPCMedicationTrackerResourceNameMedication = @"medications";
+NSString *const kAPCMedicationTrackerResourceNameDosages    = @"dosages";
+NSString *const kAPCMedicationTrackerResourceNameColors     = @"colors";
+
 static NSString * const FILE_WITH_PREDEFINED_MEDICATIONS = @"APCMedTrackerPredefinedMedications.plist";
 static NSString * const FILE_WITH_PREDEFINED_POSSIBLE_DOSAGES = @"APCMedTrackerPredefinedPossibleDosages.plist";
 static NSString * const FILE_WITH_PREDEFINED_PRESCRIPTION_COLORS = @"APCMedTrackerPredefinedPrescriptionColors.plist";
 static NSString * const QUEUE_NAME = @"MedicationTracker query queue";
 static dispatch_once_t _startupComplete = 0;
-
 
 
 @interface APCMedTrackerDataStorageManager ()
@@ -65,26 +68,60 @@ static dispatch_once_t _startupComplete = 0;
               andThenUseThisQueue: (NSOperationQueue *) queue
                          toDoThis: (APCMedTrackerGenericCallback) callbackBlock
 {
+    [self sharedStartupWithDefaults: shouldReloadPlistFiles
+                           inBundle: nil
+                  withResourceNames: nil
+                andThenUseThisQueue: queue
+                           toDoThis: callbackBlock];
+}
+
++ (void) startupWithCustomDataInBundle: (NSBundle *) bundle
+                     withResourceNames: (NSDictionary *) resourceNames
+                   andThenUseThisQueue: (NSOperationQueue *) queue
+                              toDoThis: (APCMedTrackerGenericCallback) callbackBlock
+{
+    [self sharedStartupWithDefaults: NO
+                           inBundle: bundle
+                  withResourceNames: resourceNames
+                andThenUseThisQueue: queue
+                           toDoThis: callbackBlock];
+}
+
++ (void) sharedStartupWithDefaults: (BOOL) shouldReloadPlistFiles
+                          inBundle: (NSBundle *) bundle
+                 withResourceNames: (NSDictionary *) resourceNames
+               andThenUseThisQueue: (NSOperationQueue *) queue
+                          toDoThis: (APCMedTrackerGenericCallback) callbackBlock
+{
     if (! _defaultManager)
     {
         dispatch_once (& _startupComplete, ^{
-
+            
             APCMedTrackerDataStorageManager *__block manager = [APCMedTrackerDataStorageManager new];
             _defaultManager = manager;
-
+            
             manager.masterQueue = [NSOperationQueue sequentialOperationQueueWithName: QUEUE_NAME];
             
             [manager.masterQueue addOperationWithBlock:^{
-
+                
                 manager.masterContext = [manager newContextOnCurrentQueue];
-
+                
                 APCLogDebug (@"MedTracker defaultManager has been created.");
                 
                 if (shouldReloadPlistFiles)
                 {
-                    [self reloadStaticContentFromPlistFiles];
+                    [self reloadStaticContentFromPlistFilesUsingBundle:nil withResourceNames:nil];
                 }
-
+                else if (bundle && resourceNames)
+                {
+                    // load the data using the bundle that is provided.
+                    [self reloadStaticContentFromPlistFilesUsingBundle:bundle withResourceNames:resourceNames];
+                }
+                else
+                {
+                    APCLogError(@"We are here because neither the default nor custom resources were asked to be loaded.");
+                }
+                
                 [self doThis: callbackBlock onThisQueue: queue];
             }];
         });
@@ -115,7 +152,8 @@ static dispatch_once_t _startupComplete = 0;
  This is called from within a block on our special
  queue.
  */
-+ (void) reloadStaticContentFromPlistFiles
++ (void) reloadStaticContentFromPlistFilesUsingBundle: (NSBundle *) bundle
+                                    withResourceNames: (NSDictionary *) resourceNames
 {
     APCMedTrackerDataStorageManager *manager = [self defaultManager];
     NSManagedObjectContext *context = manager.masterContext;
@@ -127,10 +165,55 @@ static dispatch_once_t _startupComplete = 0;
      because I designed them to be called from this
      method.
      */
-    [allInflatedObjects addObjectsFromArray: [APCMedTrackerMedication reloadAllObjectsFromPlistFileNamed: FILE_WITH_PREDEFINED_MEDICATIONS usingContext: context]];
-    [allInflatedObjects addObjectsFromArray: [APCMedTrackerPossibleDosage reloadAllObjectsFromPlistFileNamed: FILE_WITH_PREDEFINED_POSSIBLE_DOSAGES usingContext: context]];
-    [allInflatedObjects addObjectsFromArray: [APCMedTrackerPrescriptionColor reloadAllObjectsFromPlistFileNamed: FILE_WITH_PREDEFINED_PRESCRIPTION_COLORS usingContext: context]];
-
+    
+    NSString *medResourceName = nil;
+    NSString *doseResourceName = nil;
+    NSString *colorResourceName = nil;
+    
+    if (resourceNames[kAPCMedicationTrackerResourceNameMedication])
+    {
+        medResourceName = resourceNames[kAPCMedicationTrackerResourceNameMedication];
+    }
+    else
+    {
+        medResourceName = FILE_WITH_PREDEFINED_MEDICATIONS;
+        // The default files are in the AppCore bundle, that why we need to set it to nil
+        bundle = nil;
+    }
+    
+    [allInflatedObjects addObjectsFromArray: [APCMedTrackerMedication reloadAllObjectsFromPlistFileNamed: medResourceName
+                                                                                            usingContext: context
+                                                                                                inBundle: bundle]];
+    
+    if (resourceNames[kAPCMedicationTrackerResourceNameDosages])
+    {
+        doseResourceName = resourceNames[kAPCMedicationTrackerResourceNameDosages];
+    }
+    else
+    {
+        doseResourceName = FILE_WITH_PREDEFINED_POSSIBLE_DOSAGES;
+        // The default files are in the AppCore bundle, that why we need to set it to nil
+        bundle = nil;
+    }
+    
+    [allInflatedObjects addObjectsFromArray: [APCMedTrackerPossibleDosage reloadAllObjectsFromPlistFileNamed: doseResourceName
+                                                                                                usingContext: context
+                                                                                                    inBundle: bundle]];
+    
+    if (resourceNames[kAPCMedicationTrackerResourceNameColors])
+    {
+        colorResourceName = resourceNames[kAPCMedicationTrackerResourceNameColors];
+    }
+    else
+    {
+        colorResourceName = FILE_WITH_PREDEFINED_PRESCRIPTION_COLORS;
+        // The default files are in the AppCore bundle, that why we need to set it to nil
+        bundle = nil;
+    }
+    
+    [allInflatedObjects addObjectsFromArray: [APCMedTrackerPrescriptionColor reloadAllObjectsFromPlistFileNamed: colorResourceName
+                                                                                                   usingContext: context
+                                                                                                       inBundle: bundle]];
 
     /*
      Save to CoreData.

@@ -75,7 +75,8 @@ typedef void (^APCMedTrackerQueryCallback) (NSArray *arrayOfGeneratedObjects,
  code.
  */
 + (NSArray *) reloadAllObjectsFromPlistFileNamed: (NSString *) fileName
-                                    usingContext: (NSManagedObjectContext *) context;
+                                    usingContext: (NSManagedObjectContext *) context
+                                        inBundle: (NSBundle *) bundle;
 
 /**
  Runs a query which loads all objects of this class in CoreData.

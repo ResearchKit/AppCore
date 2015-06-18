@@ -36,12 +36,15 @@
 
 
 
+extern NSString *const kAPCMedicationTrackerResourceNameMedication;
+extern NSString *const kAPCMedicationTrackerResourceNameDosages;
+extern NSString *const kAPCMedicationTrackerResourceNameColors;
+
 /**
  I need an asynchronous callback for one of the methods
  in this file.  This fits the bill.
  */
 typedef void (^APCMedTrackerGenericCallback) (void);
-
 
 
 @interface APCMedTrackerDataStorageManager : NSObject
@@ -54,6 +57,26 @@ typedef void (^APCMedTrackerGenericCallback) (void);
 + (void) startupReloadingDefaults: (BOOL) shouldReloadPlistFiles
               andThenUseThisQueue: (NSOperationQueue *) queue
                          toDoThis: (APCMedTrackerGenericCallback) callbackBlock;
+
+/**
+  * @brief  Use this to initialize the storage manager with custom medication
+  *         data. Optionally, pass a block and a queue to do something immediately afterward.
+  *
+  * @param  bundle          The bundle that will be used for loading the files.
+  * 
+  * @param  resourceNames   A dictionary of resource names that will be used for loading information.
+  *
+  * @param  queue           A queue that will be used to do something immediately afterwards, can be nil.
+  *
+  * @param  callbackBlock   A block to do something afterwards on the queue that is provided, can be NULL.
+  *
+  * @note   In order to execute the callback block, a queue must be provided.
+  *         Otherwise the block will not be executed.
+  */
++ (void) startupWithCustomDataInBundle: (NSBundle *) bundle
+                     withResourceNames: (NSDictionary *) resourceNames
+                   andThenUseThisQueue: (NSOperationQueue *) queue
+                              toDoThis: (APCMedTrackerGenericCallback) callbackBlock;
 
 /**
  Get our singleton data-storage manager.
