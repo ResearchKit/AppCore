@@ -32,37 +32,53 @@
 // 
  
 #import "APCDataMonitor+Bridge.h"
-#import "APCSchedule+Bridge.h"
 #import "APCAppCore.h"
 
 NSString *const kFirstTimeRefreshToday = @"FirstTimeRefreshToday";
 
 @implementation APCDataMonitor (Bridge)
 
-- (void) refreshFromBridgeOnCompletion: (void (^)(NSError * error)) completionBlock
+- (void) refreshFromBridgeOnCompletion: (APCDataMonitorResponseHandler) completionBlock
 {
-    if (self.dataSubstrate.currentUser.isConsented) {
-        [APCSchedule updateSchedulesOnCompletion:^(NSError *error) {
-            if (!error) {
-                [self.scheduler updateScheduledTasksIfNotUpdatingWithRange:kAPCSchedulerDateRangeToday];
-                [self.scheduler updateScheduledTasksIfNotUpdatingWithRange:kAPCSchedulerDateRangeTomorrow];
-                [APCTask refreshSurveysOnCompletion:^(NSError *error) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [[NSNotificationCenter defaultCenter] postNotificationName:APCUpdateActivityNotification object:self userInfo:NULL];
-                    });
-                    if (completionBlock) {
-                        completionBlock(error);
-                    }
-                }];
+    if (self.dataSubstrate.currentUser.isConsented)
+    {
+        __weak typeof(self) weakSelf = self;
 
-            }
-            else {
-                if (completionBlock) {
-                    completionBlock(error);
-                }
-            }
-        }];
+        [[APCScheduler defaultScheduler] fetchTasksAndSchedulesFromServerAndThenUseThisQueue: [NSOperationQueue mainQueue]
+                                                                            toDoThisWhenDone: ^(NSError *errorFromServerFetch)
+         {
+             if (errorFromServerFetch)
+             {
+                 [weakSelf finishRefreshCommandPassingError: errorFromServerFetch
+                                          toCompletionBlock: completionBlock];
+             }
+             else
+             {
+                 [APCTask refreshSurveysOnCompletion: ^(NSError *errorFromRefreshingSurveys) {
+
+                     [weakSelf finishRefreshCommandPassingError: errorFromRefreshingSurveys
+                                              toCompletionBlock: completionBlock];
+
+                 }];
+             }
+         }];
     }
+}
+
+- (void) finishRefreshCommandPassingError: (NSError *) error
+                        toCompletionBlock: (APCDataMonitorResponseHandler) completionBlock
+{
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+
+        if (completionBlock)
+        {
+            completionBlock (error);
+        }
+
+        [[NSNotificationCenter defaultCenter] postNotificationName: APCUpdateActivityNotification
+                                                            object: self
+                                                          userInfo: nil];
+    }];
 }
 
 - (void) batchUploadDataToBridgeOnCompletion: (void (^)(NSError * error)) completionBlock

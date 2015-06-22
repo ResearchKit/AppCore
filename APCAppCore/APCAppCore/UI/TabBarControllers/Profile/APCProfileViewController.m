@@ -32,22 +32,45 @@
 // 
  
 #import "APCProfileViewController.h"
-#import "APCAppCore.h"
+#import "APCPermissionsManager.h"
+#import "APCSharingOptionsViewController.h"
+#import "APCLicenseInfoViewController.h"
+#import "APCIntroVideoViewController.h"
+#import "APCSignUpPermissionsViewController.h"
+#import "APCChangePasscodeViewController.h"
+#import "APCWithdrawCompleteViewController.h"
+#import "APCWebViewController.h"
+#import "APCSettingsViewController.h"
+#import "APCSpinnerViewController.h"
 #import "APCTableViewItem.h"
 #import "APCAppDelegate.h"
 #import "APCUserInfoConstants.h"
+#import "APCDataSubstrate.h"
 #import "APCConstants.h"
+#import "APCUtilities.h"
+#import "APCUser.h"
+#import "APCTasksReminderManager.h"
+#import "APCLog.h"
+
+#ifndef APC_HAVE_CONSENT
+#import "APCExampleLabel.h"
+#endif
 
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
 #import "NSDate+Helper.h"
 #import "NSBundle+Helper.h"
-#import "APCWithdrawCompleteViewController.h"
-#import "APCSettingsViewController.h"
+#import "NSError+APCAdditions.h"
 #import "APCUser+UserData.h"
+#import "APCUser+Bridge.h"
+#import "UIAlertController+Helper.h"
 #import "APCPermissionsManager.h"
 #import "APCSharingOptionsViewController.h"
 #import "APCLicenseInfoViewController.h"
+#import "APCDemographicUploader.h"
+
+#import <ResearchKit/ResearchKit.h>
+#import <BridgeSDK/BridgeSDK.h>
 
 static CGFloat const kSectionHeaderHeight = 40.f;
 static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
@@ -68,20 +91,28 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
 @property (weak, nonatomic) IBOutlet UILabel *participationLabel;
 
+@property (strong, nonatomic) APCDemographicUploader  *demographicUploader;
+@property (nonatomic, assign) BOOL                    profileEditsWerePerformed;
+
 @end
 
 @implementation APCProfileViewController
 
-- (void)dealloc {
+- (void)dealloc
+{
     _nameTextField.delegate = nil;
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     NSString *build = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
     NSString *version = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
     self.versionLabel.text = [NSString stringWithFormat:@"Version: %@ (Build %@)", version, build];
-    // Do any additional setup after loading the view.
+    
+    APCAppDelegate *appDelegate = (APCAppDelegate *)[UIApplication sharedApplication].delegate;
+    APCUser  *user = appDelegate.dataSubstrate.currentUser;
+    self.demographicUploader = [[APCDemographicUploader alloc] initWithUser:user];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -93,7 +124,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     self.headerView.frame = headerRect;
     
     self.tableView.tableHeaderView = self.tableView.tableHeaderView;
-  APCLogViewControllerAppeared();
+    APCLogViewControllerAppeared();
     
     
     [self setupAppearance];
@@ -124,21 +155,27 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     
     [self setupDataFromJSONFile:@"StudyOverview"];
     
-    if (self.user.sharedOptionSelection && self.user.sharedOptionSelection.integerValue == 0) {
+    if (APCUserConsentSharingScopeNone == self.user.sharingScope) {
         self.participationLabel.text = NSLocalizedString(@"Your data is no longer being used for this study.", @"");
         self.leaveStudyButton.hidden = YES;
     }
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    if (self.profileEditsWerePerformed != NO) {
+        self.profileEditsWerePerformed = NO;
+        [self.demographicUploader uploadNonIdentifiableDemographicData];
+    }
+}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     NSInteger count = self.items.count;
-    
     NSInteger profileExtenderSections = 0;
     
-    if ([self.delegate respondsToSelector:@selector(numberOfSectionsInTableView:)] && count != 0)
-    {
+    if ([self.delegate respondsToSelector:@selector(numberOfSectionsInTableView:)] && count != 0) {
         profileExtenderSections = [self.delegate numberOfSectionsInTableView:tableView];
     }
     
@@ -151,29 +188,24 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    
     NSInteger count = 0;
     
-    if ( (NSUInteger)section >= self.items.count )
-    {
+    if ( (NSUInteger)section >= self.items.count ) {
         
-        if ([self.delegate respondsToSelector:@selector(tableView:numberOfRowsInAdjustedSection:)])
-        {
+        if ([self.delegate respondsToSelector:@selector(tableView:numberOfRowsInAdjustedSection:)]) {
             NSInteger adjustedSectionForExtender = section - self.items.count;
             
             count = [self.delegate tableView:tableView numberOfRowsInAdjustedSection:adjustedSectionForExtender];
         }
         
     }
-    else
-    {
+    else {
 
         APCTableViewSection *itemsSection = self.items[section];
         
         count = itemsSection.rows.count;
         
-        if (self.isPickerShowing && self.pickerIndexPath.section == section)
-        {
+        if (self.isPickerShowing && self.pickerIndexPath.section == section) {
             count ++;
         }
     }
@@ -188,23 +220,15 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     if ((NSUInteger)indexPath.section >= self.items.count) {
         
         if (!cell) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+            cell = [tableView dequeueReusableCellWithIdentifier:kAPCDefaultTableViewCellIdentifier forIndexPath:indexPath];
         }
         
-        UITableViewCell *view = nil;
-        if ([self.delegate respondsToSelector:@selector(cellForRowAtAdjustedIndexPath:)])
+        if ([self.delegate respondsToSelector:@selector(decorateCell:atIndexPath:)])
         {
-            NSInteger adjustedSectionForExtender = indexPath.section - self.items.count;
-            
-            NSIndexPath *newIndex = [NSIndexPath indexPathForRow:indexPath.row inSection:adjustedSectionForExtender];
-            
-            cell = [self.delegate cellForRowAtAdjustedIndexPath:newIndex];
+            //the delegate should set fields on the cell as required for any preparedContent
+            cell = [self.delegate decorateCell:cell atIndexPath:indexPath];
         }
-    
-        if (view) {
-            [cell.contentView addSubview:view];
-        }
-        
+
     } else {
         
         if (self.pickerIndexPath && [self.pickerIndexPath isEqual:indexPath]) {
@@ -234,8 +258,8 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 pickerCell.delegate = self;
                 
                 [self setupPickerCellAppeareance:pickerCell];
-                
-            } else if ([field isKindOfClass:[APCTableViewCustomPickerItem class]]){
+            }
+            else if ([field isKindOfClass:[APCTableViewCustomPickerItem class]]){
                 
                 APCTableViewCustomPickerItem *customPickerField = (APCTableViewCustomPickerItem *)field;
                 pickerCell.type = kAPCPickerCellTypeCustom;
@@ -246,9 +270,8 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 
                 [self setupPickerCellAppeareance:pickerCell];
             }
-            
-        } else {
-            
+        }
+        else {
             APCTableViewItem *field = [self itemForIndexPath:indexPath];
             
             if ([field.caption isEqualToString:@"What time do you generally go to sleep?"]) {
@@ -256,7 +279,6 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             }
             
             if (field) {
-                
                 cell = [tableView dequeueReusableCellWithIdentifier:field.identifier];
                 
                 cell.selectionStyle = field.selectionStyle;
@@ -291,7 +313,8 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     
                     if (field.textAlignnment == NSTextAlignmentRight) {
                         textFieldCell.type = kAPCTextFieldCellTypeRight;
-                    } else {
+                    }
+                    else {
                         textFieldCell.type = kAPCTextFieldCellTypeLeft;
                     }
                     
@@ -304,7 +327,8 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                         textFieldCell.textField.textColor = [UIColor lightGrayColor];
                         textFieldCell.textField.userInteractionEnabled = NO;
                     
-                    } else {
+                    }
+                    else {
                         textFieldCell.textField.textColor = [UIColor blackColor];
                     }
                     
@@ -323,7 +347,8 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                         NSString *dateWithFormat = [datePickerField.date toStringWithFormat:datePickerField.dateFormat];
                         defaultCell.detailTextLabel.text = dateWithFormat;
                         defaultCell.detailTextLabel.textColor = [UIColor appSecondaryColor1];
-                    } else {
+                    }
+                    else {
                         defaultCell.detailTextLabel.text = field.placeholder;
                         defaultCell.detailTextLabel.textColor = [UIColor appSecondaryColor3];
                     }
@@ -340,7 +365,8 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
                     [self setupDefaultCellAppearance:defaultCell];
                     
-                } else if ([field isKindOfClass:[APCTableViewSegmentItem class]]) {
+                }
+                else if ([field isKindOfClass:[APCTableViewSegmentItem class]]) {
                     
                     APCTableViewSegmentItem *segmentPickerField = (APCTableViewSegmentItem *)field;
                     APCSegmentedTableViewCell *segmentedCell = (APCSegmentedTableViewCell *)cell;
@@ -348,7 +374,8 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     segmentedCell.selectedSegmentIndex = segmentPickerField.selectedIndex;
                     segmentedCell.userInteractionEnabled = segmentPickerField.editable;
                     
-                } else if ([field isKindOfClass:[APCTableViewSwitchItem class]]) {
+                }
+                else if ([field isKindOfClass:[APCTableViewSwitchItem class]]) {
                     
                     APCTableViewSwitchItem *switchField = (APCTableViewSwitchItem *)field;
                     APCSwitchTableViewCell *switchCell = (APCSwitchTableViewCell *)cell;
@@ -357,20 +384,18 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     switchCell.delegate = self;
                     
                     [self setupSwitchCellAppearance:switchCell];
-                } else {
+                }
+                else {
                     if (!cell) {
                         cell = [[UITableViewCell alloc] initWithStyle:field.style reuseIdentifier:field.identifier];
                         
                         cell.textLabel.frame = CGRectMake(12.0, cell.textLabel.frame.origin.y, cell.textLabel.frame.size.width, cell.textLabel.frame.size.height);
-
                     }
                     [self setupBasicCellAppearance:cell];
                 }
             }
         }
     }
-
-
     return cell;
 }
 
@@ -387,7 +412,6 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         NSMutableArray *rowItems = [NSMutableArray new];
         
         for (NSNumber *type in profileElementsList) {
-            
             APCUserInfoItemType itemType = type.integerValue;
             
             switch (itemType) {
@@ -407,8 +431,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     [rowItems addObject:row];
                 }
                     break;
-                    
-                    
+                
                 case kAPCUserInfoItemTypeDateOfBirth:
                 {
                     APCTableViewItem *field = [APCTableViewItem new];
@@ -423,10 +446,9 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     row.item = field;
                     row.itemType = kAPCUserInfoItemTypeDateOfBirth;
                     [rowItems addObject:row];
-                    
                 }
                     break;
-                    
+                
                 case kAPCUserInfoItemTypeCustomSurvey:
                 {
                     APCTableViewTextFieldItem *field = [APCTableViewTextFieldItem new];
@@ -446,9 +468,9 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     row.item = field;
                     row.itemType = kAPCUserInfoItemTypeCustomSurvey;
                     [rowItems addObject:row];
-
                 }
                     break;
+                
                 case kAPCUserInfoItemTypeMedicalCondition:
                 {
                     APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
@@ -471,9 +493,8 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     row.itemType = kAPCUserInfoItemTypeMedicalCondition;
                     [rowItems addObject:row];
                 }
-                    
                     break;
-                    
+                
                 case kAPCUserInfoItemTypeMedication:
                 {
                     APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
@@ -497,7 +518,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     [rowItems addObject:row];
                 }
                     break;
-                    
+                
                 case kAPCUserInfoItemTypeHeight:
                 {
 
@@ -526,13 +547,11 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                         NSInteger indexOfMyHeightInFeet = [allPossibleHeightsInFeet indexOfObject: feet];
                         NSInteger indexOfMyHeightInInches = [allPossibleHeightsInInches indexOfObject: inches];
                         
-                        if (indexOfMyHeightInFeet == NSNotFound)
-                        {
+                        if (indexOfMyHeightInFeet == NSNotFound) {
                             indexOfMyHeightInFeet = defaultIndexOfMyHeightInFeet;
                         }
                         
-                        if (indexOfMyHeightInInches == NSNotFound)
-                        {
+                        if (indexOfMyHeightInInches == NSNotFound) {
                             indexOfMyHeightInInches = defaultIndexOfMyHeightInInches;
                         }
                         
@@ -546,7 +565,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     [rowItems addObject:row];
                 }
                     break;
-                    
+                
                 case kAPCUserInfoItemTypeWeight:
                 {
                     APCTableViewTextFieldItem *field = [APCTableViewTextFieldItem new];
@@ -571,7 +590,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     [rowItems addObject:row];
                 }
                     break;
-                    
+                
                 case kAPCUserInfoItemTypeWakeUpTime:
                 {
                     APCTableViewDatePickerItem *field = [APCTableViewDatePickerItem new];
@@ -597,7 +616,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     [rowItems addObject:row];
                 }
                     break;
-                    
+                
                 case kAPCUserInfoItemTypeSleepTime:
                 {
                     APCTableViewDatePickerItem *field = [APCTableViewDatePickerItem new];
@@ -623,6 +642,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     [rowItems addObject:row];
                 }
                     break;
+                
                 default:
                     break;
             }
@@ -657,32 +677,29 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     */
     
     
-     {
-     NSMutableArray *rowItems = [NSMutableArray new];
-     
-     {
-         APCTableViewItem *field = [APCTableViewItem new];
-         field.caption = NSLocalizedString(@"Activity Reminders", @"");
-         field.identifier = kAPCDefaultTableViewCellIdentifier;
-         field.editable = NO;
-         field.showChevron = YES;
-         field.selectionStyle = self.isEditing ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleGray;
-         
-         APCTableViewRow *row = [APCTableViewRow new];
-         row.item = field;
-         row.itemType = kAPCSettingsItemTypeReminderOnOff;
-         [rowItems addObject:row];
-     }
-
-
-     APCTableViewSection *section = [APCTableViewSection new];
-
-     section.rows = [NSArray arrayWithArray:rowItems];
-     [items addObject:section];
-     }
-
-
+    {
+    NSMutableArray *rowItems = [NSMutableArray new];
     
+    {
+        APCTableViewItem *field = [APCTableViewItem new];
+        field.caption = NSLocalizedString(@"Activity Reminders", @"");
+        field.identifier = kAPCDefaultTableViewCellIdentifier;
+        field.editable = NO;
+        field.showChevron = YES;
+        field.selectionStyle = self.isEditing ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleGray;
+        
+        APCTableViewRow *row = [APCTableViewRow new];
+        row.item = field;
+        row.itemType = kAPCSettingsItemTypeReminderOnOff;
+        [rowItems addObject:row];
+    }
+    
+    APCTableViewSection *section = [APCTableViewSection new];
+
+    section.rows = [NSArray arrayWithArray:rowItems];
+    [items addObject:section];
+    }
+
     {
         NSMutableArray *rowItems = [NSMutableArray new];
         
@@ -699,8 +716,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             
             NSNumber *numberOfMinutes = [[NSUserDefaults standardUserDefaults] objectForKey:kNumberOfMinutesForPasscodeKey];
             
-            if ( numberOfMinutes != nil)
-            {
+            if ( numberOfMinutes != nil) {
                 NSInteger index = [[APCProfileViewController autoLockValues] indexOfObject:numberOfMinutes];
                 field.selectedRowIndices = @[@(index)];
             }
@@ -725,8 +741,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             [rowItems addObject:row];
         }
         
-        if (self.user.sharedOptionSelection != [NSNumber numberWithInteger:SBBConsentShareScopeNone])
-        {
+        if (APCUserConsentSharingScopeNone != self.user.sharingScope) {
             //  Instead of prevent the row from being added to the table, a better option would be to
             //  disable the row (grey it out and don't respond to taps)
             APCTableViewItem *field = [APCTableViewItem new];
@@ -749,7 +764,6 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
     {
         NSMutableArray *rowItems = [NSMutableArray new];
-        
         {
             APCTableViewItem *field = [APCTableViewItem new];
             field.caption = NSLocalizedString(@"Permissions", @"");
@@ -786,7 +800,6 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     
     {
         NSMutableArray *rowItems = [NSMutableArray new];
-        
         {
             APCTableViewItem *field = [APCTableViewItem new];
             field.caption = NSLocalizedString(@"Privacy Policy", @"");
@@ -823,8 +836,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     }
 
     NSArray *newArray = nil;
-    if ([self.delegate respondsToSelector:@selector(preparedContent:)])
-    {
+    if ([self.delegate respondsToSelector:@selector(preparedContent:)]) {
         newArray = [self.delegate preparedContent:[NSArray arrayWithArray:items]];
     }
     
@@ -845,6 +857,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     if (indexPath.section == 1 && indexPath.row == 0) {
+        // TODO: move to NSUserDefaults category, managed by APCTasksReminderManager
         APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
         appDelegate.tasksReminder.reminderOn = on;
     }
@@ -852,11 +865,11 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
 #pragma mark - Getter Methods
 
-- (APCUser *) user {
+- (APCUser *)user
+{
     if (!_user) {
         _user = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.currentUser;
     }
-    
     return _user;
 }
 
@@ -927,22 +940,17 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     CGFloat height = tableView.rowHeight;
     
     if ((NSUInteger)indexPath.section >= self.items.count) {
-        
-
-        
-        if ([self.delegate respondsToSelector:@selector(tableView:heightForRowAtAdjustedIndexPath:)])
-        {
+        if ([self.delegate respondsToSelector:@selector(tableView:heightForRowAtAdjustedIndexPath:)]) {
             NSInteger adjustedSectionForExtender = indexPath.section - self.items.count;
             NSIndexPath *newIndex = [NSIndexPath indexPathForRow:indexPath.row inSection:adjustedSectionForExtender];
             height = [self.delegate tableView:tableView heightForRowAtAdjustedIndexPath:newIndex];
         }
-    } else {
-        
+    }
+    else {
         if (self.isPickerShowing && [indexPath isEqual:self.pickerIndexPath]) {
             height = kPickerCellHeight;
         }
     }
-
     
     return height;
 }
@@ -951,16 +959,14 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 {
 
     if ((NSUInteger)indexPath.section >= self.items.count) {
-        
-        if ([self.delegate respondsToSelector:@selector(navigationController:didSelectRowAtIndexPath:)])
-        {
+        if ([self.delegate respondsToSelector:@selector(navigationController:didSelectRowAtIndexPath:)]) {
 
             NSInteger adjustedSectionForExtender = indexPath.section - self.items.count;
             NSIndexPath *newIndex = [NSIndexPath indexPathForRow:indexPath.row inSection:adjustedSectionForExtender];
             [self.delegate navigationController:self.navigationController didSelectRowAtIndexPath:newIndex];
         }
-    } else {
-        
+    }
+    else {
         APCTableViewItemType type = [self itemTypeForIndexPath:indexPath];
         UIStoryboard *onboarding = [UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]];
         APCSignUpPermissionsViewController *signUpPermissions = [onboarding instantiateViewControllerWithIdentifier:@"APCSignUpPermissionsViewController"];
@@ -975,18 +981,19 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 //            [self.navigationController pushViewController:shareViewController animated:YES];
             }
                 break;
-                
+            
             case kAPCSettingsItemTypePasscode:
             {
                 if (!self.isEditing) {
                     APCChangePasscodeViewController *changePasscodeViewController = [[UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"ChangePasscodeVC"];
                     [self.navigationController presentViewController:changePasscodeViewController animated:YES completion:nil];
-                } else {
+                }
+                else {
                     [tableView deselectRowAtIndexPath:indexPath animated:YES];
                 }
-                
             }
                 break;
+            
             case kAPCSettingsItemTypePermissions:
             {
                 [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -998,6 +1005,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 
             }
                 break;
+            
             case kAPCUserInfoItemTypeReviewConsent:
             {
                 if (!self.isEditing){
@@ -1006,9 +1014,8 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 [tableView deselectRowAtIndexPath:indexPath animated:YES];
                 
             }
-                
                 break;
-                
+            
             case kAPCSettingsItemTypeReminderOnOff:
             {
                 if (!self.isEditing){
@@ -1021,6 +1028,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 
             }
                 break;
+            
             case kAPCSettingsItemTypePrivacyPolicy:
             {
                 if (!self.isEditing){
@@ -1030,7 +1038,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 }
             }
                 break;
-                
+            
             case kAPCSettingsItemTypeLicenseInformation:
             {
                 if (!self.isEditing){
@@ -1043,7 +1051,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 }
             }
                 break;
-                
+            
             case kAPCSettingsItemTypeSharingOptions:
             {
                 if (!self.isEditing){
@@ -1056,7 +1064,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 }
             }
                 break;
-                
+            
             default:{
                 [super tableView:tableView didSelectRowAtIndexPath:indexPath];
             }
@@ -1065,17 +1073,16 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     }
 }
 
-- (CGFloat)        tableView: (UITableView *) __unused tableView
-    heightForHeaderInSection: (NSInteger) section
+- (CGFloat)tableView: (UITableView *) __unused tableView heightForHeaderInSection: (NSInteger) section
 {
     CGFloat height;
     
     if (section == 0) {
         height = 0;
-    } else {
+    }
+    else {
         height = kSectionHeaderHeight;
     }
-    
     return height;
 }
 
@@ -1083,23 +1090,15 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 {
     UITableViewHeaderFooterView *headerView;
     
-    if ((NSUInteger)section >= self.items.count )
-    {
-        
-        if ([self.delegate respondsToSelector:@selector(tableView:numberOfRowsInSection:)])
-        {
+    if ((NSUInteger)section >= self.items.count ) {
+        if ([self.delegate respondsToSelector:@selector(tableView:numberOfRowsInSection:)]) {
             headerView = [[UITableViewHeaderFooterView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(tableView.frame), kSectionHeaderHeight)];
             headerView.contentView.backgroundColor = [UIColor appSecondaryColor4];
         }
-        
     }
-    else
-    {
-        
+    else {
         APCTableViewSection *sectionItem = self.items[section];
-        
         if (sectionItem.sectionTitle.length > 0) {
-            
             headerView = [[UITableViewHeaderFooterView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(tableView.frame), kSectionHeaderHeight)];
             headerView.contentView.backgroundColor = [UIColor appSecondaryColor4];
             
@@ -1135,8 +1134,8 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     }
 }
 
-- (BOOL) textFieldShouldReturn:(UITextField *)textField {
-    
+- (BOOL) textFieldShouldReturn:(UITextField *)textField
+{
     if ((textField == self.nameTextField) && self.emailTextField) {
         [self nextResponderForIndexPath:nil];
     }
@@ -1159,7 +1158,8 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
 #pragma mark - UIImagePickerControllerDelegate
 
-- (void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+- (void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
     UIImage *image = info[UIImagePickerControllerEditedImage];
     if (!image) {
         image = info[UIImagePickerControllerOriginalImage];
@@ -1183,23 +1183,18 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
 - (void)taskViewController:(ORKTaskViewController *) __unused taskViewController didFinishWithReason:(ORKTaskViewControllerFinishReason)reason error:(nullable NSError *)error
 {
-    if (reason == ORKTaskViewControllerFinishReasonCompleted)
-    {
+    if (reason == ORKTaskViewControllerFinishReasonCompleted) {
         [self dismissViewControllerAnimated:YES completion:nil];
     }
-    else if (reason == ORKTaskViewControllerFinishReasonDiscarded)
-    {
+    else if (reason == ORKTaskViewControllerFinishReasonDiscarded) {
         [self dismissViewControllerAnimated:YES completion:nil];
     }
-    else if (reason == ORKTaskViewControllerFinishReasonSaved)
-    {
+    else if (reason == ORKTaskViewControllerFinishReasonSaved) {
         [self dismissViewControllerAnimated:YES completion:nil];
     }
-    else if (reason == ORKTaskViewControllerFinishReasonFailed)
-    {
+    else if (reason == ORKTaskViewControllerFinishReasonFailed) {
         APCLogError2(error);
     }
-    
 }
 
 #pragma mark - Public methods
@@ -1213,11 +1208,9 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     }
     
     for (NSUInteger j=0; j<self.items.count; j++) {
-        
         APCTableViewSection *section = self.items[j];
         
         for (NSUInteger i = 0; i < section.rows.count; i++) {
-            
             APCTableViewRow *row = section.rows[i];
             
             APCTableViewItem *item = row.item;
@@ -1225,7 +1218,6 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             
             switch (itemType) {
                 case kAPCUserInfoItemTypeCustomSurvey:
-                    
                 {
                     NSLog(@"%@",[(APCTableViewTextFieldItem *)item value]);
                     
@@ -1235,14 +1227,15 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     }
                 }
                     break;
+                
                 case kAPCUserInfoItemTypeMedicalCondition:
                     self.user.medicalConditions = [(APCTableViewCustomPickerItem *)item stringValue];
                     break;
-                    
+                
                 case kAPCUserInfoItemTypeMedication:
                     self.user.medications = [(APCTableViewCustomPickerItem *)item stringValue];
                     break;
-                    
+                
                 case kAPCUserInfoItemTypeHeight:
                 {
                     APCTableViewCustomPickerItem *heightPicker = (APCTableViewCustomPickerItem *)item;
@@ -1253,9 +1246,8 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     
                     self.user.height = heightQuantity;
                 }
-                    
                     break;
-                    
+                
                 case kAPCUserInfoItemTypeWeight:
                 {
                     double weight = [[(APCTableViewTextFieldItem *)item value] floatValue];
@@ -1265,54 +1257,44 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     self.user.weight = weightQuantity;
                 }
                     break;
-                    
+                
                 case kAPCUserInfoItemTypeSleepTime:
                     self.user.sleepTime = [(APCTableViewDatePickerItem *)item date];
                     break;
-                    
+                
                 case kAPCUserInfoItemTypeWakeUpTime:
                     self.user.wakeUpTime = [(APCTableViewDatePickerItem *)item date];
                     break;
-                    
-                case kAPCSettingsItemTypeAutoLock:
-
-                    break;
-
-                case kAPCSettingsItemTypePasscode:
-
-                    break;
-                    
-                case kAPCSettingsItemTypeReminderOnOff:
-
-                    break;
-                    
-                case kAPCSettingsItemTypeReminderTime:
-
-                    break;
-                    
-                case kAPCSettingsItemTypePermissions:
-
-                    break;
-                    
-                case kAPCUserInfoItemTypeReviewConsent:
-                    
-                    break;
-                    
-                case kAPCSettingsItemTypePrivacyPolicy:
-                    
-                    break;
-                    
-                case kAPCSettingsItemTypeSharingOptions:
-                    
-                    break;
-                default:
                 
+                case kAPCSettingsItemTypeAutoLock:
+                    break;
+                
+                case kAPCSettingsItemTypePasscode:
+                    break;
+                
+                case kAPCSettingsItemTypeReminderOnOff:
+                    break;
+                
+                case kAPCSettingsItemTypeReminderTime:
+                    break;
+                
+                case kAPCSettingsItemTypePermissions:
+                    break;
+                
+                case kAPCUserInfoItemTypeReviewConsent:
+                    break;
+                
+                case kAPCSettingsItemTypePrivacyPolicy:
+                    break;
+                
+                case kAPCSettingsItemTypeSharingOptions:
+                    break;
+                
+                default:
                     break;
             }
         }
-        
     }
-    
 }
 
 - (void)setupDataFromJSONFile:(NSString *)jsonFileName
@@ -1324,7 +1306,6 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:[JSONString dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:&parseError];
     
     if (!parseError) {
-        
         self.diseaseLabel.text = jsonDictionary[@"disease_name"];
         
         self.studyDetailsViewHeightConstraint.constant = kStudyDetailsViewHeightConstant;
@@ -1333,36 +1314,13 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     }
 }
 
-- (void)logOut
-{
-    APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
-    [self presentViewController:spinnerController animated:YES completion:nil];
-    
-    typeof(self) __weak weakSelf = self;
-    
-    [self.user signOutOnCompletion:^(NSError *error) {
-        if (error) {
-            APCLogError2 (error);
-            [spinnerController dismissViewControllerAnimated:NO completion:^{
-                UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Sign Out", @"") message:error.message];
-                [weakSelf presentViewController:alert animated:YES completion:nil];
-            }];
-        } else {
-            [spinnerController dismissViewControllerAnimated:NO completion:^{
-                [[NSNotificationCenter defaultCenter] postNotificationName:APCUserLogOutNotification object:self];
-            }];
-        }
-    }];
-    
-}
-
 - (void)withdraw
 {
     APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
     [self presentViewController:spinnerController animated:YES completion:nil];
     
     typeof(self) __weak weakSelf = self;
-    self.user.sharedOptionSelection = [NSNumber numberWithInteger:SBBConsentShareScopeNone];
+    self.user.sharingScope = APCUserConsentSharingScopeNone;
     [self.user withdrawStudyOnCompletion:^(NSError *error) {
         if (error) {
             APCLogError2 (error);
@@ -1370,7 +1328,8 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Withdraw", @"") message:error.message];
                 [weakSelf presentViewController:alert animated:YES completion:nil];
             }];
-        } else {
+        }
+        else {
             [spinnerController dismissViewControllerAnimated:NO completion:^{
                 APCWithdrawCompleteViewController *viewController = [[UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCWithdrawCompleteViewController"];
                 UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:viewController];
@@ -1382,39 +1341,57 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
 #pragma mark - IBActions/Selectors
 
-- (IBAction) signOut: (id) __unused sender
+- (BOOL)canSignOut
 {
-    UIAlertController *alertContorller = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Sign Out", @"") message:NSLocalizedString(@"Are you sure you want to sign out?", nil) preferredStyle:UIAlertControllerStyleActionSheet];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
+    if ([self respondsToSelector:@selector(logOut)]) {
+        return YES;
+    }
+#pragma clang diagnostic pop
+    return NO;
+}
+
+- (IBAction)signOut:(id) __unused sender
+{
+    if (![self canSignOut]) {
+        return;
+    }
+    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Sign Out", @"") message:NSLocalizedString(@"Are you sure you want to sign out?", nil) preferredStyle:UIAlertControllerStyleActionSheet];
     UIAlertAction *signOutAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Sign Out", @"") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * __unused action) {
-        [self logOut];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
+        [self performSelector:@selector(logOut)];
+#pragma clang diagnostic pop
     }];
-    [alertContorller addAction:signOutAction];
+    [alertController addAction:signOutAction];
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
        
     }];
-    [alertContorller addAction:cancelAction];
+    [alertController addAction:cancelAction];
     
-    [self.navigationController presentViewController:alertContorller animated:YES completion:nil];
+    [self.navigationController presentViewController:alertController animated:YES completion:nil];
     
 }
 
-- (IBAction) leaveStudy: (id) __unused sender
+- (IBAction)leaveStudy:(id) __unused sender
 {
-    UIAlertController *alertContorller = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Withdraw", @"") message:NSLocalizedString(@"Are you sure you want to completely withdraw from the study?\nThis action cannot be undone.", nil) preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Withdraw", @"") message:NSLocalizedString(@"Are you sure you want to completely withdraw from the study?\nThis action cannot be undone.", nil) preferredStyle:UIAlertControllerStyleActionSheet];
     UIAlertAction *withdrawAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Withdraw", @"") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * __unused action) {
         [self withdraw];
     }];
-    [alertContorller addAction:withdrawAction];
+    [alertController addAction:withdrawAction];
     
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
-        
+		
     }];
-    [alertContorller addAction:cancelAction];
+    [alertController addAction:cancelAction];
     
-    [self.navigationController presentViewController:alertContorller animated:YES completion:nil];
+    [self.navigationController presentViewController:alertController animated:YES completion:nil];
 }
 
-- (IBAction) changeProfileImage: (id) __unused sender
+- (IBAction)changeProfileImage:(id) __unused sender
 {
     if (self.isEditing) {
         __weak typeof(self) weakSelf = self;
@@ -1422,7 +1399,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
         UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Take Photo", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
             
-            [self.permissionManager requestForPermissionForType:kSignUpPermissionsTypeCamera withCompletion:^(BOOL granted, NSError *error) {
+            [self.permissionManager requestForPermissionForType:kAPCSignUpPermissionsTypeCamera withCompletion:^(BOOL granted, NSError *error) {
                 if (granted) {
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [weakSelf openCamera];
@@ -1439,7 +1416,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         }
         
         UIAlertAction *libraryAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Choose from Library", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
-            [self.permissionManager requestForPermissionForType:kSignUpPermissionsTypePhotoLibrary withCompletion:^(BOOL granted, NSError *error) {
+            [self.permissionManager requestForPermissionForType:kAPCSignUpPermissionsTypePhotoLibrary withCompletion:^(BOOL granted, NSError *error) {
                 if (granted) {
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [weakSelf openPhotoLibrary];
@@ -1497,10 +1474,9 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     [self.navigationController presentViewController:alertContorller animated:YES completion:nil];
 }
 
-- (IBAction)editFields:(UIBarButtonItem *)sender {
-    
+- (IBAction)editFields:(UIBarButtonItem *)sender
+{
     if (self.isEditing) {
-        
         if (self.isPickerShowing) {
             [self hidePickerCell];
         }
@@ -1518,11 +1494,11 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 row.item.selectionStyle = UITableViewCellSelectionStyleNone;
             }];
         }];
-        
-    } else{
-        
+    }
+    else {
         sender.title = NSLocalizedString(@"Done", @"Done");
         sender.style = UIBarButtonItemStyleDone;
+        self.profileEditsWerePerformed = YES;
         
         self.navigationItem.leftBarButtonItem.enabled = NO;
         [self.items enumerateObjectsUsingBlock:^(id obj, NSUInteger  __unused idx, BOOL * __unused stop) {
@@ -1537,13 +1513,12 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     self.editing = !self.editing;
     
     if (self.isEditing) {
-        if ([self.delegate respondsToSelector:@selector(hasStartedEditing)])
-        {
+        if ([self.delegate respondsToSelector:@selector(hasStartedEditing)]) {
             [self.delegate hasStartedEditing];
         }
-    } else {
-        if ([self.delegate respondsToSelector:@selector(hasFinishedEditing)])
-        {
+    }
+    else {
+        if ([self.delegate respondsToSelector:@selector(hasFinishedEditing)]) {
             [self.delegate hasFinishedEditing];
         }
     }
@@ -1567,7 +1542,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     
     UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:webViewController];
     [self.navigationController presentViewController:navController animated:YES completion:^{
-        [webViewController.webview loadRequest:request];
+        [webViewController.webView loadRequest:request];
     }];
 }
 
@@ -1580,7 +1555,6 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     __weak typeof(self) weakSelf = self;
     
     APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
-    
     NSArray *consentReviewActions = [appDelegate reviewConsentActions];
     
     if (!consentReviewActions) {
@@ -1590,47 +1564,41 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Review Consent" message:@"" preferredStyle:UIAlertControllerStyleActionSheet];
     
     if ([consentReviewActions containsObject:kReviewConsentActionPDF]) {
-        {
-            UIAlertAction *pdfAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"View PDF", @"View PDF") style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
-                
-                APCWebViewController *webViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCWebViewController"];
-                NSString *filePath = [[NSBundle mainBundle] pathForResource:@"consent" ofType:@"pdf"];
-                NSData *data = [NSData dataWithContentsOfFile:filePath];
-                [webViewController.webview setDataDetectorTypes:UIDataDetectorTypeAll];
-                webViewController.title = NSLocalizedString(@"Consent", @"Consent");
-                
-                UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:webViewController];
-                [weakSelf.navigationController presentViewController:navController animated:YES completion:^{
-                    [webViewController.webview loadData:data MIMEType:@"application/pdf" textEncodingName:@"utf-8" baseURL:nil];
-                }];
-                
+        UIAlertAction *pdfAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"View PDF", @"View PDF") style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
+            
+            APCWebViewController *webViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCWebViewController"];
+            NSString *filePath = [[NSBundle mainBundle] pathForResource:@"consent" ofType:@"pdf"];
+            NSData *data = [NSData dataWithContentsOfFile:filePath];
+            [webViewController.webView setDataDetectorTypes:UIDataDetectorTypeAll];
+            webViewController.title = NSLocalizedString(@"Consent", @"Consent");
+            
+            UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:webViewController];
+            [weakSelf.navigationController presentViewController:navController animated:YES completion:^{
+                [webViewController.webView loadData:data MIMEType:@"application/pdf" textEncodingName:@"utf-8" baseURL:nil];
             }];
-            [alertController addAction:pdfAction];
-        }
+            
+        }];
+        [alertController addAction:pdfAction];
     }
     
     if ([consentReviewActions containsObject:kReviewConsentActionVideo]) {
-        {
-            UIAlertAction *videoAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Watch Video", @"Watch Video") style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
-                
-                NSURL *fileURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"Intro" ofType:@"mp4"]];
-                APCIntroVideoViewController *introVideoViewController = [[APCIntroVideoViewController alloc] initWithContentURL:fileURL];
-                
-                UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:introVideoViewController];
-                navController.navigationBarHidden = YES;
-                [weakSelf presentViewController:navController animated:YES completion:nil];
-            }];
-            [alertController addAction:videoAction];
-        }
+        UIAlertAction *videoAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Watch Video", @"Watch Video") style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
+            
+            NSURL *fileURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"Intro" ofType:@"mp4"]];
+            APCIntroVideoViewController *introVideoViewController = [[APCIntroVideoViewController alloc] initWithContentURL:fileURL];
+            
+            UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:introVideoViewController];
+            navController.navigationBarHidden = YES;
+            [weakSelf presentViewController:navController animated:YES completion:nil];
+        }];
+        [alertController addAction:videoAction];
     }
     
     if ([consentReviewActions containsObject:kReviewConsentActionSlides]) {
-        {
-            UIAlertAction *slidesAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"View Slides", @"View Slides") style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
-                [weakSelf showConsentSlides];
-            }];
-            [alertController addAction:slidesAction];
-        }
+        UIAlertAction *slidesAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"View Slides", @"View Slides") style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
+            [weakSelf showConsentSlides];
+        }];
+        [alertController addAction:slidesAction];
     }
     
     {
@@ -1660,21 +1628,19 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     
     [consent addSignature:signature];
     
-    
     ORKVisualConsentStep*   step         = [[ORKVisualConsentStep alloc] initWithIdentifier:@"visual" document:consent];
-    
     ORKOrderedTask* task = [[ORKOrderedTask alloc] initWithIdentifier:@"consent" steps:@[step]];
-    
     ORKTaskViewController*  consentVC = [[ORKTaskViewController alloc] initWithTask:task taskRunUUID:[NSUUID UUID]];
     
     consentVC.navigationBar.topItem.title = NSLocalizedString(@"Consent", nil);
 	consentVC.delegate = self;
     
-    NSUInteger subviewsCount = consentVC.view.subviews.count;
+#ifndef APC_HAVE_CONSENT
+#warning Adding watermark label until you define "APC_HAVE_CONSENT" to indicate that you have a real consenting document
     UILabel *watermarkLabel = [APCExampleLabel watermarkInRect:consentVC.view.bounds
                                                     withCenter:consentVC.view.center];
-    
-    [consentVC.view insertSubview:watermarkLabel atIndex:subviewsCount];
+    [consentVC.view insertSubview:watermarkLabel atIndex:NSUIntegerMax];
+#endif
     
     [self presentViewController:consentVC animated:YES completion:nil];
 }
@@ -1689,7 +1655,6 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 + (NSArray *)autoLockOptionStrings
 {
     NSArray *values = [APCProfileViewController autoLockValues];
-    
     NSMutableArray *options = [NSMutableArray new];
     
     for (NSNumber *val in values) {

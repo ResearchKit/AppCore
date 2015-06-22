@@ -34,6 +34,7 @@
 #import "APCDashboardGraphTableViewCell.h"
 #import "APCLineGraphView.h"
 #import "APCDiscreteGraphView.h"
+#import "APCNormalDistributionGraphView.h"
 #import "UIFont+APCAppearance.h"
 #import "UIColor+APCAppearance.h"
 
@@ -55,6 +56,7 @@ NSString * const kAPCDashboardGraphTableViewCellIdentifier = @"APCDashboardLineG
 -(void)layoutSubviews
 {
     [super layoutSubviews];
+    
     for (UIView *subview in self.subviews) {
         [subview layoutSubviews];
     }
@@ -63,6 +65,7 @@ NSString * const kAPCDashboardGraphTableViewCellIdentifier = @"APCDashboardLineG
 - (void)setTintColor:(UIColor *)tintColor
 {
     [super setTintColor:tintColor];
+    
     self.lineGraphView.tintColor = tintColor;
     self.discreteGraphView.tintColor = tintColor;
 }

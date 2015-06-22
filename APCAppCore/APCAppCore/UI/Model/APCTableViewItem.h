@@ -186,6 +186,10 @@
 
 @property (nonatomic, strong) UIImage *averageImage;
 
+@property (nonatomic, strong) NSAttributedString *legend;
+
++(NSAttributedString *)legendForSeries1:(NSString *)series1 series2:(NSString *)series2;
+
 @end
 
 @interface APCTableViewDashboardMessageItem : APCTableViewDashboardItem

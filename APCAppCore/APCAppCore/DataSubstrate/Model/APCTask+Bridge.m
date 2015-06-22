@@ -32,10 +32,16 @@
 // 
  
 #import "APCTask+Bridge.h"
+#import "APCSmartSurveyTask.h"
+#import "APCAppDelegate.h"
+#import "APCLog.h"
+
+#import "APCTask+AddOn.h"
+#import "NSManagedObject+APCHelper.h"
+
 #import <ResearchKit/ResearchKit.h>
 #import <BridgeSDK/BridgeSDK.h>
 #import <Foundation/Foundation.h>
-#import "APCSmartSurveyTask.h"
 
 @implementation APCTask (Bridge)
 

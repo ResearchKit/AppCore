@@ -35,15 +35,30 @@
 
 @implementation NSManagedObject (APCHelper)
 
-+ (instancetype) newObjectForContext: (NSManagedObjectContext*) context
++ (instancetype)newObjectForContext:(NSManagedObjectContext*)context
 {
     return  [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([self class]) inManagedObjectContext:context];
     
 }
 
-+(NSFetchRequest *)request
++ (NSFetchRequest *)request
 {
     return [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([self class])];
+}
+
++ (NSFetchRequest *)requestWithPredicate:(NSPredicate *)predicate
+{
+    NSFetchRequest *request = [self request];
+    request.predicate = predicate;
+    return request;
+}
+
++ (NSFetchRequest *)requestWithPredicate:(NSPredicate *)predicate
+                         sortDescriptors:(NSArray *)sortDescriptors
+{
+    NSFetchRequest *request = [self requestWithPredicate: predicate];
+    request.sortDescriptors = sortDescriptors;
+    return request;
 }
 
 - (BOOL)saveToPersistentStore:(NSError *__autoreleasing *)error

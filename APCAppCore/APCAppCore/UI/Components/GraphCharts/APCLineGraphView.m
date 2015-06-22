@@ -34,6 +34,7 @@
 #import "APCLineGraphView.h"
 #import "APCCircleView.h"
 #import "APCAxisView.h"
+#import "APCCubicCurveAlgorithm.h"
 
 NSString * const kAPCLineGraphViewTriggerAnimationsNotification = @"APCLineGraphViewTriggerAnimationsNotification";
 NSString * const kAPCLineGraphViewRefreshNotification = @"APCLineGraphViewRefreshNotification";
@@ -42,13 +43,6 @@ static CGFloat const kYAxisPaddingFactor = 0.15f;
 static CGFloat const kAPCGraphLeftPadding = 10.f;
 static CGFloat const kAxisMarkingRulerLength = 8.0f;
 
-static NSString * const kFadeAnimationKey = @"LayerFadeAnimation";
-static NSString * const kGrowAnimationKey = @"LayerGrowAnimation";
-
-static CGFloat const kFadeAnimationDuration = 0.2;
-static CGFloat const kGrowAnimationDuration = 0.1;
-static CGFloat const kPopAnimationDuration  = 0.3;
-
 static CGFloat const kSnappingClosenessFactor = 0.3f;
 
 @interface APCLineGraphView ()
@@ -56,8 +50,6 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 @property (nonatomic, strong) NSMutableArray *dataPoints;//actual data
 @property (nonatomic, strong) NSMutableArray *xAxisPoints;
 @property (nonatomic, strong) NSMutableArray *yAxisPoints;//normalised for this view
-
-@property (nonatomic, strong) UIView *plotsView; //Holds the plots
 
 @property (nonatomic, strong) APCAxisView *xAxisView;
 @property (nonatomic, strong) UIView *yAxisView;
@@ -80,6 +72,8 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 @property (nonatomic, strong) NSMutableArray *fillLayers;
 
 @property (nonatomic) BOOL shouldAnimate;
+
+@property (nonatomic, strong) APCCubicCurveAlgorithm *smoothCurveGenerator;
 
 @end
 
@@ -126,11 +120,14 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     _shouldAnimate = YES;
     
     _hasDataPoint = NO;
+    _showsFillPath = NO;
     
     [self setupViews];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(animateLayersSequentially) name:kAPCLineGraphViewTriggerAnimationsNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshGraph) name:kAPCLineGraphViewRefreshNotification object:nil];
+    
+    _smoothCurveGenerator = [APCCubicCurveAlgorithm new];
 }
 
 - (void)setupViews
@@ -259,7 +256,9 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     [self drawXAxis];
     [self drawYAxis];
     
-    [self drawhorizontalReferenceLines];
+    if (self.showsHorizontalReferenceLines) {
+        [self drawhorizontalReferenceLines];
+    }
     
     if (self.showsVerticalReferenceLines) {
         [self drawVerticalReferenceLines];
@@ -347,7 +346,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 {
     [self.xAxisPoints removeAllObjects];
     
-    for (int i=0 ; i<[self numberOfXAxisTitles]; i++) {
+    for (NSUInteger i=0 ; i < [self.dataPoints count]; i++) {
         
         CGFloat positionOnXAxis = ((CGRectGetWidth(self.plotsView.frame) / (self.yAxisPoints.count - 1)) * i);
         positionOnXAxis = round(positionOnXAxis);
@@ -364,7 +363,10 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
         
         if ([self.datasource respondsToSelector:@selector(lineGraph:plot:valueForPointAtIndex:)]) {
             CGFloat value = [self.datasource lineGraph:self plot:plotIndex valueForPointAtIndex:i];
-            [self.dataPoints addObject:@(value)];
+            
+            if (value) {
+                [self.dataPoints addObject:@(value)];
+            }
             
             if (value != NSNotFound){
                 self.hasDataPoint = YES;
@@ -399,6 +401,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     self.xAxisView = [[APCAxisView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.plotsView.frame), CGRectGetWidth(self.plotsView.frame), kXAxisHeight)];
     self.xAxisView.landscapeMode = self.landscapeMode;
     self.xAxisView.tintColor = self.tintColor;
+    self.xAxisView.shouldHighlightLastLabel = self.shouldHighlightXaxisLastTitle;
     [self.xAxisView setupLabels:self.xAxisTitles forAxisType:kAPCGraphAxisTypeX];
     self.xAxisView.leftOffset = kAPCGraphLeftPadding;
     [self insertSubview:self.xAxisView belowSubview:self.plotsView];
@@ -503,6 +506,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
         }
     }
     
+    self.yAxisView.hidden = self.hidesYAxis;
 }
 
 - (void)drawhorizontalReferenceLines
@@ -510,7 +514,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     [self.referenceLines removeAllObjects];
     
     UIBezierPath *referenceLinePath = [UIBezierPath bezierPath];
-    [referenceLinePath moveToPoint:CGPointMake(kAPCGraphLeftPadding, kAPCGraphTopPadding + CGRectGetHeight(self.plotsView.frame)/2)];
+    [referenceLinePath moveToPoint:CGPointMake(0, kAPCGraphTopPadding + CGRectGetHeight(self.plotsView.frame)/2)];
     [referenceLinePath addLineToPoint:CGPointMake(CGRectGetWidth(self.frame), kAPCGraphTopPadding + CGRectGetHeight(self.plotsView.frame)/2)];
     
     CAShapeLayer *referenceLineLayer = [CAShapeLayer layer];
@@ -549,12 +553,18 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     if ([self numberOfValidValues] > 1) {
         [self drawLinesForPlotIndex:plotIndex];
     }
-    [self drawPointCirclesForPlotIndex:plotIndex];
+    
+    if (!self.hidesDataPoints) {
+        [self drawPointCirclesForPlotIndex:plotIndex];
+    }
 }
 
 - (void)drawPointCirclesForPlotIndex:(NSInteger)plotIndex
 {
-    for (NSUInteger i=0 ; i<self.yAxisPoints.count; i++) {
+    
+    NSUInteger smallestArrayCount = self.yAxisPoints.count < self.xAxisPoints.count ?: self.xAxisPoints.count;
+
+    for (NSUInteger i=0 ; i< smallestArrayCount; i++) {
         
         CGFloat dataPointVal = [self.dataPoints[i] floatValue];
         
@@ -565,7 +575,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
             
             CGFloat pointSize = self.isLandscapeMode ? 10.0f : 8.0f;
             APCCircleView *point = [[APCCircleView alloc] initWithFrame:CGRectMake(0, 0, pointSize, pointSize)];
-            point.tintColor = (plotIndex == 0) ? self.tintColor : self.referenceLineColor;
+            point.tintColor = (plotIndex == 0) ? self.tintColor : self.secondaryTintColor;
             point.center = CGPointMake(positionOnXAxis, positionOnYAxis);
             [self.plotsView.layer addSublayer:point.layer];
             
@@ -582,12 +592,23 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 {
     UIBezierPath *fillPath = [UIBezierPath bezierPath];
     
-    CGFloat positionOnXAxis = CGFLOAT_MAX;
-    CGFloat positionOnYAxis = CGFLOAT_MAX;
+    CGPoint position = CGPointMake(CGFLOAT_MAX, CGFLOAT_MAX);
+    CGPoint prevPosition = CGPointMake(CGFLOAT_MAX, CGFLOAT_MAX);
+    
+    NSMutableArray *pointsArray = [NSMutableArray new];
+    
+    NSUInteger smallestArrayCount = self.yAxisPoints.count < self.xAxisPoints.count ?: self.xAxisPoints.count;
+    
+    for (NSUInteger i=0; i< smallestArrayCount; i++) {
+        CGPoint point = CGPointMake([self.xAxisPoints[i] doubleValue], [self.yAxisPoints[i] doubleValue]);
+        [pointsArray addObject:[NSValue valueWithCGPoint:point]];
+    }
+    
+    NSArray *controlPoints = [self.smoothCurveGenerator controlPointsFromPoints:pointsArray];
     
     BOOL emptyDataPresent = NO;
     
-    for (NSUInteger i=0; i<self.yAxisPoints.count; i++) {
+    for (NSUInteger i=0; i<smallestArrayCount; i++) {
         
         CGFloat dataPointVal = [self.dataPoints[i] floatValue];
         
@@ -595,25 +616,35 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
             
             UIBezierPath *plotLinePath = [UIBezierPath bezierPath];
             
-            if (positionOnXAxis != CGFLOAT_MAX) {
+            position = CGPointMake([self.xAxisPoints[i] floatValue], [self.yAxisPoints[i] floatValue]);
+            
+            if (prevPosition.x != CGFLOAT_MAX) {
                 //Prev point exists
-                [plotLinePath moveToPoint:CGPointMake(positionOnXAxis, positionOnYAxis)];
+                [plotLinePath moveToPoint:prevPosition];
                 if ([fillPath isEmpty]) {
-                    [fillPath moveToPoint:CGPointMake(positionOnXAxis, CGRectGetHeight(self.plotsView.frame))];
-                }
-                [fillPath addLineToPoint:CGPointMake(positionOnXAxis, positionOnYAxis)];
+                    [fillPath moveToPoint:CGPointMake(prevPosition.x, CGRectGetHeight(self.plotsView.frame))];
+                    [fillPath addLineToPoint:prevPosition];
+                } 
             }
-            positionOnXAxis = [self.xAxisPoints[i] floatValue];
-            positionOnYAxis = [self.yAxisPoints[i] floatValue];
             
             if (![plotLinePath isEmpty]) {
-                [plotLinePath addLineToPoint:CGPointMake(positionOnXAxis, positionOnYAxis)];
-                [fillPath addLineToPoint:CGPointMake(positionOnXAxis, positionOnYAxis)];
+                
+                if (self.smoothLines && (self.yAxisPoints.count>2)) {
+                    
+                    APCCubicCurveSegment *segment = controlPoints[i-1];
+                    
+                    [plotLinePath addCurveToPoint:position controlPoint1:segment.controlPoint1 controlPoint2:segment.controlPoint2];
+                    [fillPath addCurveToPoint:position controlPoint1:segment.controlPoint1 controlPoint2:segment.controlPoint2];
+                    
+                } else {
+                    [plotLinePath addLineToPoint:position];
+                    [fillPath addLineToPoint:position];
+                }
                 
                 CAShapeLayer *plotLineLayer = [CAShapeLayer layer];
                 plotLineLayer.path = plotLinePath.CGPath;
                 plotLineLayer.fillColor = [UIColor clearColor].CGColor;
-                plotLineLayer.strokeColor = (plotIndex == 0) ? self.tintColor.CGColor : self.referenceLineColor.CGColor;
+                plotLineLayer.strokeColor = (plotIndex == 0) ? self.tintColor.CGColor : self.secondaryTintColor.CGColor;
                 plotLineLayer.lineJoin = kCALineJoinRound;
                 plotLineLayer.lineCap = kCALineCapRound;
                 plotLineLayer.lineWidth = self.isLandscapeMode ? 3.0 : 2.0;
@@ -636,20 +667,24 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
         } else {
             emptyDataPresent = YES;
         }
+        
+        prevPosition = position;
     }
     
-    [fillPath addLineToPoint:CGPointMake(positionOnXAxis, CGRectGetHeight(self.plotsView.frame))];
+    [fillPath addLineToPoint:CGPointMake(position.x, CGRectGetHeight(self.plotsView.frame))];
     
     CAShapeLayer *fillPathLayer = [CAShapeLayer layer];
     fillPathLayer.path = fillPath.CGPath;
-    fillPathLayer.fillColor = (plotIndex == 0) ? [self.tintColor colorWithAlphaComponent:0.4].CGColor : [self.referenceLineColor colorWithAlphaComponent:0.2].CGColor;
+    fillPathLayer.fillColor = (plotIndex == 0) ? [self.tintColor colorWithAlphaComponent:0.4].CGColor : [self.secondaryTintColor colorWithAlphaComponent:0.2].CGColor;
     [self.plotsView.layer addSublayer:fillPathLayer];
     
     if (self.shouldAnimate) {
         fillPathLayer.opacity = 0;
     }
     
-    [self.fillLayers addObject:fillPathLayer];
+    if (self.showsFillPath) {
+        [self.fillLayers addObject:fillPathLayer];
+    }
 }
 
 #pragma mark - Graph Calculations
@@ -868,76 +903,20 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     
     for (NSUInteger i=0; i<self.dots.count; i++) {
         CAShapeLayer *layer = [self.dots[i] shapeLayer];
-        [self animateLayer:layer withAnimationType:kAPCGraphAnimationTypeFade startDelay:delay];
+        [self animateLayer:layer withAnimationType:kAPCGraphAnimationTypeFade toValue:1.0 startDelay:delay];
         delay += 0.1;
     }
     
     for (NSUInteger i=0; i<self.pathLines.count; i++) {
         CAShapeLayer *layer = self.pathLines[i];
-        [self animateLayer:layer withAnimationType:kAPCGraphAnimationTypeGrow startDelay:delay];
-        delay += kGrowAnimationDuration;
+        [self animateLayer:layer withAnimationType:kAPCGraphAnimationTypeGrow toValue:1.0 startDelay:delay];
+        delay += kAPCGrowAnimationDuration;
     }
     
     for (NSUInteger i=0; i<self.fillLayers.count; i++) {
         CAShapeLayer *layer = self.fillLayers[i];
-        [self animateLayer:layer withAnimationType:kAPCGraphAnimationTypeFade startDelay:delay];
-        delay += kGrowAnimationDuration;
-    }
-}
-
-- (void)animateLayer:(CAShapeLayer *)shapeLayer withAnimationType:(APCGraphAnimationType)animationType
-{
-    [self animateLayer:shapeLayer withAnimationType:animationType toValue:1.0];
-}
-
-- (void)animateLayer:(CAShapeLayer *)shapeLayer withAnimationType:(APCGraphAnimationType)animationType toValue:(CGFloat)toValue
-{
-    [self animateLayer:shapeLayer withAnimationType:animationType toValue:toValue startDelay:0.0];
-}
-
-- (void)animateLayer:(CAShapeLayer *)shapeLayer withAnimationType:(APCGraphAnimationType)animationType startDelay:(CGFloat)delay
-{
-    [self animateLayer:shapeLayer withAnimationType:animationType toValue:1.0 startDelay:delay];
-}
-
-- (void)animateLayer:(CAShapeLayer *)shapeLayer withAnimationType:(APCGraphAnimationType)animationType toValue:(CGFloat)toValue startDelay:(CGFloat)delay
-{
-    if (animationType == kAPCGraphAnimationTypeFade) {
-        
-        CABasicAnimation *fadeAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
-        fadeAnimation.beginTime = CACurrentMediaTime() + delay;
-        fadeAnimation.fromValue = @0;
-        fadeAnimation.toValue = @(toValue);
-        fadeAnimation.duration = kFadeAnimationDuration;
-        fadeAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
-        fadeAnimation.fillMode = kCAFillModeForwards;
-        fadeAnimation.removedOnCompletion = NO;
-        [shapeLayer addAnimation:fadeAnimation forKey:kFadeAnimationKey];
-        
-    } else if (animationType == kAPCGraphAnimationTypeGrow) {
-        
-        CABasicAnimation *growAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
-        growAnimation.beginTime = CACurrentMediaTime() + delay;
-        growAnimation.fromValue = @0;
-        growAnimation.toValue = @(toValue);
-        growAnimation.duration = kGrowAnimationDuration;
-        growAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
-        growAnimation.fillMode = kCAFillModeForwards;
-        growAnimation.removedOnCompletion = NO;
-        [shapeLayer addAnimation:growAnimation forKey:kGrowAnimationKey];
-        
-    } else if (animationType == kAPCGraphAnimationTypePop) {
-        
-        CABasicAnimation *popAnimation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
-        popAnimation.beginTime = CACurrentMediaTime() + delay;
-        popAnimation.fromValue = @0;
-        popAnimation.toValue = @(toValue);
-        popAnimation.duration = kPopAnimationDuration;
-        popAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
-        popAnimation.fillMode = kCAFillModeForwards;
-        popAnimation.removedOnCompletion = NO;
-        [shapeLayer addAnimation:popAnimation forKey:kGrowAnimationKey];
-        
+        [self animateLayer:layer withAnimationType:kAPCGraphAnimationTypeFade toValue:1.0 startDelay:delay];
+        delay += kAPCGrowAnimationDuration;
     }
 }
 

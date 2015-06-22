@@ -41,7 +41,8 @@ static const CGFloat kTitleLabelHeight = 26.0f;
 
 @synthesize tintColor = _tintColor;
 
-- (void)awakeFromNib {
+- (void)awakeFromNib
+{
     [super awakeFromNib];
     
     [self setup];
@@ -95,6 +96,14 @@ static const CGFloat kTitleLabelHeight = 26.0f;
 {
     if ([self.delegate respondsToSelector:@selector(dashboardTableViewCellDidTapExpand:)]) {
         [self.delegate dashboardTableViewCellDidTapExpand:self];
+    }
+}
+
+- (IBAction)legendLabelTapped:(id)__unused sender
+{
+    
+    if ([self.delegate respondsToSelector:@selector(dashboardTableViewCellDidTapLegendTitle:)]) {
+        [self.delegate dashboardTableViewCellDidTapLegendTitle:self];
     }
 }
 

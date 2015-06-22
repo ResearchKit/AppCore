@@ -1,5 +1,5 @@
 // 
-//  APCScheduleEnumerator.m 
+//  APCScheduleEnumerator.m
 //  APCAppCore 
 // 
 // Copyright (c) 2015, Apple Inc. All rights reserved. 
@@ -141,7 +141,12 @@ typedef enum : NSUInteger {
 	return self;
 }
 
-- (NSDate*) nextObject
+- (id) nextObject
+{
+    return self.nextScheduledDate;
+}
+
+- (NSDate *) nextScheduledDate
 {
 	NSDate* result = nil;
 
@@ -222,7 +227,9 @@ typedef enum : NSUInteger {
  month-and-year combination, so that the day-of-the-week
  rules are applied correctly (e.g., getting the right date
  for "the first Friday of the month") and so that we have
- the right number of days per month (28, 31, etc.).
+ the right number of days per month (28, 31, etc.).  We thus
+ also have to check whether the new month has ANY legal days
+ in it at all, and move to the next month if not.
  
  This method is also used when determining the first legal
  date for this enumerator.  See -firstDate.
@@ -316,8 +323,8 @@ typedef enum : NSUInteger {
         {
             // Record the fact that we looked at this month or year.
             self.dateComponents [dateFieldIndex] = newFieldValue;
-            // Recompute the days in this new month.
 
+            // Recompute the days in this new month.
             NSNumber* month = self.dateComponents [DateFieldMonth];
             NSNumber* year  = self.dateComponents [DateFieldYear];
 

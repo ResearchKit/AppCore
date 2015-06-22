@@ -2,440 +2,2957 @@
 //  APCScheduler.m 
 //  APCAppCore 
 // 
-// Copyright (c) 2015, Apple Inc. All rights reserved. 
-// 
-// Redistribution and use in source and binary forms, with or without modification,
-// are permitted provided that the following conditions are met:
-// 
-// 1.  Redistributions of source code must retain the above copyright notice, this
-// list of conditions and the following disclaimer.
-// 
-// 2.  Redistributions in binary form must reproduce the above copyright notice, 
-// this list of conditions and the following disclaimer in the documentation and/or 
-// other materials provided with the distribution. 
-// 
-// 3.  Neither the name of the copyright holder(s) nor the names of any contributors 
-// may be used to endorse or promote products derived from this software without 
-// specific prior written permission. No license is granted to the trademarks of 
-// the copyright holders even if such marks are included in this software. 
-// 
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
-// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
-// ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE 
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL 
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR 
-// SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
-// CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, 
-// OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
-// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
-// 
+//  Copyright (c) 2015, Apple Inc. All rights reserved.
+//
+//  Redistribution and use in source and binary forms, with or without modification,
+//  are permitted provided that the following conditions are met:
+//
+//  1.  Redistributions of source code must retain the above copyright notice, this
+//  list of conditions and the following disclaimer.
+//
+//  2.  Redistributions in binary form must reproduce the above copyright notice,
+//  this list of conditions and the following disclaimer in the documentation and/or
+//  other materials provided with the distribution.
+//
+//  3.  Neither the name of the copyright holder(s) nor the names of any contributors
+//  may be used to endorse or promote products derived from this software without
+//  specific prior written permission. No license is granted to the trademarks of
+//  the copyright holders even if such marks are included in this software.
+//
+//  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+//  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+//  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+//  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
+//  FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+//  DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+//  SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+//  CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+//  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+//  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
  
 
 #import "APCScheduler.h"
-#import "APCAppCore.h"
-#import "APCDateRange.h"
 
-static NSString * const kOneTimeSchedule = @"once";
+#import "APCAppDelegate.h"
+#import "APCDataSubstrate.h"
+#import "APCDateRange.h"
+#import "APCGenericSurveyTaskViewController.h"
+#import "APCPotentialScheduledTask.h"
+#import "APCSchedule+AddOn.h"
+#import "APCScheduleDebugPrinter.h"
+#import "APCTask+AddOn.h"
+#import "APCTaskGroup.h"
+#import "APCTaskGroupCacheEntry.h"
+#import "APCTopLevelScheduleEnumerator.h"
+#import "APCUser.h"
+#import "APCUtilities.h"
+#import "NSArray+APCHelper.h"
+#import "NSDate+Helper.h"
+#import "NSDictionary+APCAdditions.h"
+#import "NSOperationQueue+Helper.h"
+#import "SBBSchedule+APCHelper.h"
+
+
+/**
+ Controls whether we compute and show (very) detailed
+ debugging printouts.  Becomes NO in a release build.
+ Turn this on to see this class analyze each download
+ or import of tasks and schedules, and merge them with
+ the existing ones in CoreData.
+ */
+static BOOL const kAPCShowDebugPrintouts = NO;
+
+
+/**
+ If we import multiple tasks with an ID of "null," this
+ value will appear in the list of duplicate IDs.
+ */
+static NSString * const kAPCNullTaskIdString = @"(this task ID was null)";
+
+
+/**
+ Location of the static tasks-and-schedules file on disk,
+ and dictionary keys in that file.
+ */
+static NSString * const kAPCStaticJSONTasksAndSchedulesFileName      = @"APHTasksAndSchedules.json";
+static NSString * const kAPCStaticJSONTasksAndSchedulesSchedulesKey  = @"schedules";
+static NSString * const kAPCStaticJSONTasksAndSchedulesTasksKey      = @"tasks";            // Deprecated.
+
+
+/**
+ Error codes and messages generated by this class.
+ */
+typedef enum : NSUInteger {
+    APCErrorCouldntFetchActiveSchedulesForDateCode,
+    APCErrorCouldntFetchVisibleSchedulesForDateCode,
+    APCErrorCouldntFindSurveyFileCode,
+    APCErrorDeletingTaskCode,
+    APCErrorInboundListOfSchedulesAndTasksIssuesCode,
+    APCErrorJSONTasksAndScheduleIsNotAnArrayCode,
+    APCErrorJSONTasksAndSchedulesIsEmptyCode,
+    APCErrorJSONTasksAndSchedulesNilValueForKeyCode,
+    APCErrorLoadingJsonFromDiskCode,
+    APCErrorLoadingJsonNoDictionaryCode,
+    APCErrorLoadingNativeBridgeSurveyObjectCode,
+    APCErrorLoadingSurveyFileCode,
+    APCErrorMoreThanOneScheduleWithSameTaskIDCode,
+    APCErrorMoreThanOneTaskWithIdAndVersionCode,
+    APCErrorParsingSurveyContentCode,
+    APCErrorSavingEverythingCode,
+    APCErrorSavingToPeristentStoreCode,
+    APCErrorSearchingForTaskWithIDCode,
+    APCErrorServerDisabledCode,
+    APCErrorTooManyTasksWithSameIDCode
+}   APCError;
+
+static NSString * const APCErrorDomainLoadingTasksAndSchedules                      = @"kAPCErrorDomainLoadingTasksAndSchedules";
+
+static NSString * const APCErrorCouldntFetchActiveSchedulesForDateReason            = @"Couldn't fetch active schedules for given date";
+static NSString * const APCErrorCouldntFetchActiveSchedulesForDateSuggestion        = @"There was an error executing a fetch request for active APCSchedules with this date.";
+static NSString * const APCErrorCouldntFetchVisibleSchedulesForDateReason           = @"Couldn't fetch visible schedules for given date";
+static NSString * const APCErrorCouldntFetchVisibleSchedulesForDateSuggestion       = @"There was an error executing a fetch request for visible APCSchedules with this date.";
+static NSString * const APCErrorCouldntFindSurveyFileReason                         = @"Can't Find Survey File";
+static NSString * const APCErrorCouldntFindSurveyFileSuggestion                     = @"We couldn't find the specified survey file on the phone.  Did you misspell the filename, perhaps?";
+static NSString * const APCErrorDeletingTaskReason                                  = @"Error attempting to delete task.";
+static NSString * const APCErrorDeletingTaskSuggestion                              = @"Error attempting to delete task. This may give the user unexpected results.";
+static NSString * const APCErrorInboundListOfSchedulesAndTasksIssuesReason          = @"Inbound list of schedules and task have issues";
+static NSString * const APCErrorInboundListOfSchedulesAndTasksIssuesSuggestion      = @"Inbound list of schedules and task ID's or versions conflict.";
+static NSString * const APCErrorJSONTasksAndScheduleIsNotAnArrayReason              = @"The JSON tasks and schedules key is returning an incorrect type";
+static NSString * const APCErrorJSONTasksAndScheduleIsNotAnArraySuggestion          = @"The expected type from the JSON tasks and schedules key is an array.";
+static NSString * const APCErrorJSONTasksAndSchedulesIsEmptyReason                  = @"The JSON tasks and schedules key is returning an empty array";
+static NSString * const APCErrorJSONTasksAndSchedulesIsEmptySuggestion              = @"The JSON tasks and schedules may be incomplete because the array count is zero.";
+static NSString * const APCErrorJSONTasksAndSchedulesNilValueForKeyReason           = @"The JSON tasks and schedules key returns nil";
+static NSString * const APCErrorJSONTasksAndSchedulesNilValueForKeySuggestion       = @"The JSON tasks and schedules key returns nil. The key may be incorrect or the file is empty.";
+static NSString * const APCErrorLoadingJsonFromDiskReason                           = @"Can't Open JSON File";
+static NSString * const APCErrorLoadingJsonFromDiskSuggestion                       = @"We were unable to open the specified file as JSON.";
+static NSString * const APCErrorLoadingJsonNoDictionaryReason                       = @"Can't Understand JSON File";
+static NSString * const APCErrorLoadingJsonNoDictionarySuggestion                   = @"We were unable to find a dictionary at the top level of the JSON file at the specified path.";
+static NSString * const APCErrorLoadingNativeBridgeSurveyObjectReason               = @"Can't Find Survey File";
+static NSString * const APCErrorLoadingNativeBridgeSurveyObjectSuggestion           = @"We couldn't find the specified survey file on the phone.  Did you misspell the filename, perhaps?";
+static NSString * const APCErrorLoadingSurveyFileReason                             = @"There was an error serializing the contents of a survey file";
+static NSString * const APCErrorLoadingSurveyFileSuggestion                         = @"There was an error serializing the contents of a survey file. ";
+static NSString * const APCErrorMoreThanOneScheduleWithSameTaskIDReason             = @"More than one schedule with this ID";
+static NSString * const APCErrorMoreThanOneScheduleWithSameTaskIDSuggestion         = @"We found more than one schedule managing a task with this ID. This will give the user unexpected results.";
+static NSString * const APCErrorMoreThanOneTaskWithIdAndVersionReason               = @"More than one task with this ID";
+static NSString * const APCErrorMoreThanOneTaskWithIdAndVersionSuggestion           = @"We found more than one task with the specified ID, and we're not sure how to choose just one.";
+static NSString * const APCErrorParsingSurveyContentReason                          = @"There was an error parsing the contents of a survey file";
+static NSString * const APCErrorParsingSurveyContentSuggestion                      = @"There was an error parsing the contents of a survey file.";
+static NSString * const APCErrorSavingEverythingReason                              = @"Error Saving New Schedules";
+static NSString * const APCErrorSavingEverythingSuggestion                          = @"There was an error attempting to save the new schedules.";
+static NSString * const APCErrorSavingToPeristentStoreReason                        = @"Error attempting to save new APCScheduledTask";
+static NSString * const APCErrorSavingToPeristentStoreSuggestion                    = @"Error attempting to save new APCScheduledTask. This may give the user unexpected results.";
+static NSString * const APCErrorSearchingForTaskWithIDReason                        = @"Couldn't fetch APCTask with ID";
+static NSString * const APCErrorSearchingForTasksWithIDSuggestion                   = @"There was an error executing a fetch request for APCTasks with ID.";
+static NSString * const APCErrorServerDisabledReason                                = @"Server disabled";
+static NSString * const APCErrorServerDisabledSuggestion                            = @"The server is disabled.";
+static NSString * const APCErrorTooManyTasksWithSameIDReason                        = @"More than one task with this ID";
+static NSString * const APCErrorTooManyTasksWithSameIDSuggestion                    = @"We found more than one task with this ID. This will give the user unexpected results.";
+
+
+/**
+ Keys in the user-info dictionary for our custom NSErrors.
+ */
+static NSString * const kAPCErrorUserInfoKeyListOfDuplicatedTaskIDs                 = @"ListOfDuplicatedTaskIDs";
+
+
+/**
+ Keys and special values in the JSON dictionaries representing
+ tasks and schedules.
+ */
+static NSString * const kScheduleDelayKey                      = @"delay";
+static NSString * const kScheduleEndDateKey                    = @"endOn";
+static NSString * const kScheduleExpiresKey                    = @"expires";
+static NSString * const kScheduleIDValueLocallyGeneratedPrefix = @"autogenerated";
+static NSString * const kScheduleIntervalKey                   = @"interval";
+static NSString * const kScheduleListOfTasksKey                = @"tasks";
+static NSString * const kScheduleMaxCountKey                   = @"maxCount";
+static NSString * const kScheduleNotesKey                      = @"notes";
+static NSString * const kScheduleReminderMessageKey            = @"reminderMessage";
+static NSString * const kScheduleReminderOffsetKey             = @"reminderOffset";
+static NSString * const kScheduleShouldRemindKey               = @"shouldRemind";
+static NSString * const kScheduleStartDateKey                  = @"startOn";
+static NSString * const kScheduleStringKey                     = @"scheduleString";
+static NSString * const kScheduleTimesOfDayKey                 = @"times";
+static NSString * const kScheduleTypeKey                       = @"scheduleType";
+static NSString * const kScheduleTypeValueOnce                 = @"once";
+static NSString * const kTaskClassNameKey                      = @"taskClassName";
+static NSString * const kTaskCompletionTimeStringKey           = @"taskCompletionTimeString";
+static NSString * const kTaskFileNameKey                       = @"taskFileName";
+static NSString * const kTaskIDKey                             = @"taskID";
+static NSString * const kTaskIsOptionalKey                     = @"optional";
+static NSString * const kTaskSortStringKey                     = @"sortString";
+static NSString * const kTaskTitleKey                          = @"taskTitle";
+static NSString * const kTaskTypeKey                           = @"taskType";
+static NSString * const kTaskTypeValueSurvey                   = @"survey";
+static NSString * const kTaskUrlKey                            = @"taskUrl";
+static NSString * const kTaskVersionNumberKey                  = @"version";
+
+
+/**
+ The name of the queue where this class does most of its work.
+ */
+static NSString * const kQueueName = @"APCScheduler CoreData query queue";
+
 
 @interface APCScheduler()
-@property  (weak, nonatomic)     APCDataSubstrate        *dataSubstrate;
-@property  (strong, nonatomic)   NSManagedObjectContext  *scheduleMOC;
-@property  (nonatomic) BOOL isUpdating;
-
-
-@property (nonatomic, strong) NSDateFormatter * dateFormatter;
-
-//Properties that need to be cleaned after every upate
-@property (nonatomic, strong) NSMutableArray * allScheduledTasksForReferenceDate;
-@property (nonatomic, strong) NSMutableArray * validatedScheduledTasksForReferenceDate;
-
+@property (nonatomic, weak)   APCDataSubstrate        *dataSubstrate;
+@property (nonatomic, strong) NSManagedObjectContext  *scheduleMOC;
+@property (nonatomic, strong) NSOperationQueue        *queryQueue;
+@property (nonatomic, assign) BOOL                    isUpdating;
+@property (nonatomic, strong) NSDateFormatter         *dateFormatter;
+@property (nonatomic, strong) NSMutableArray          *taskGroupCache;
+@property (nonatomic, strong) NSObject                *taskGroupCacheMutex;
+@property (readonly)          APCAppDelegate          *appDelegate;
+@property (readonly)          NSDate                  *systemDate;
 @end
 
 @implementation APCScheduler
 
-- (NSDateFormatter *)dateFormatter {
-    if (_dateFormatter == nil) {
-        _dateFormatter = [NSDateFormatter new];
-        [_dateFormatter setDateStyle:NSDateFormatterMediumStyle];
-        [_dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
-    }
-    return _dateFormatter;
+
+
+// =========================================================
+#pragma mark - I. SETUP -
+// =========================================================
+
++ (APCScheduler *) defaultScheduler
+{
+    APCAppDelegate *app = [APCAppDelegate sharedAppDelegate];
+    APCScheduler *scheduler = app.scheduler;
+    return scheduler;
 }
 
-- (instancetype)initWithDataSubstrate: (APCDataSubstrate*) dataSubstrate
+- (instancetype) initWithDataSubstrate: (APCDataSubstrate *) dataSubstrate
 {
     self = [super init];
-    if (self) {
-        self.dataSubstrate = dataSubstrate;
-        self.scheduleMOC = self.dataSubstrate.persistentContext;
+
+    if (self)
+    {
+        _dataSubstrate              = dataSubstrate;
+        _scheduleMOC                = _dataSubstrate.persistentContext;
+        _queryQueue                 = [NSOperationQueue sequentialOperationQueueWithName: kQueueName];
+        _isUpdating                 = NO;
+        _dateFormatter              = [NSDateFormatter new];
+        _dateFormatter.dateStyle    = NSDateFormatterMediumStyle;
+        _dateFormatter.timeStyle    = NSDateFormatterMediumStyle;
+        _fakeSystemDate             = nil;
+        _taskGroupCache             = [NSMutableArray new];
+        _taskGroupCacheMutex        = [NSObject new];
     }
+
     return self;
 }
 
-- (void)updateScheduledTasksIfNotUpdating: (BOOL) today
+
+
+// =========================================================
+#pragma mark - II. QUERYING -
+// =========================================================
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Fetching tasks for all days in a range
+// ---------------------------------------------------------
+
+- (void) fetchTaskGroupsFromDate: (NSDate *) startDate
+                          toDate: (NSDate *) endDate
+                      usingQueue: (NSOperationQueue *) queue
+                 toReportResults: (APCSchedulerCallbackForTaskGroupQueries) callbackBlock
 {
-    [self updateScheduledTasksIfNotUpdatingWithRange:today? kAPCSchedulerDateRangeToday : kAPCSchedulerDateRangeTomorrow];
+    [self fetchTaskGroupsFromDate: startDate
+                           toDate: endDate
+           forTasksMatchingFilter: nil
+                       usingQueue: queue
+                  toReportResults: callbackBlock];
 }
 
--(void)updateScheduledTasksIfNotUpdatingWithRange:(APCSchedulerDateRange)range
+- (void) fetchTaskGroupsFromDate: (NSDate *) startDate
+                          toDate: (NSDate *) endDate
+          forTasksMatchingFilter: (NSPredicate *) taskFilter
+                      usingQueue: (NSOperationQueue *) queue
+                 toReportResults: (APCSchedulerCallbackForTaskGroupQueries) callbackBlock
 {
-    if (!self.isUpdating) {
-        self.isUpdating = YES;
-        switch (range) {
-            case kAPCSchedulerDateRangeYesterday:
-                self.referenceRange = [APCDateRange yesterdayRange];
-                break;
-            case kAPCSchedulerDateRangeToday:
-                self.referenceRange = [APCDateRange todayRange];
-                break;
-                
-            case kAPCSchedulerDateRangeTomorrow:
-                self.referenceRange = [APCDateRange tomorrowRange];
-                break;
+    [self.queryQueue addOperationWithBlock: ^{
+
+        NSMutableDictionary *results = [NSMutableDictionary new];
+        NSDate *dayAfterEndDate = endDate.dayAfter.startOfDay;
+        NSDate *date = startDate.startOfDay;
+
+        for (date = startDate.startOfDay; [date isEarlierThanDate: dayAfterEndDate]; date = [date dateByAddingDays: 1])
+        {
+            NSArray *taskGroups = [self taskGroupsForDayOfDate: date
+                                        forTasksMatchingFilter: taskFilter];
+            
+            if (taskGroups.count > 0) {
+                results [date] = taskGroups;
+            }
         }
-        [self updateScheduledTasks];
+
+        if (queue != nil && callbackBlock != nil)
+        {
+            [queue addOperationWithBlock:^{
+                callbackBlock (results, nil);
+            }];
+        }
+    }];
+}
+
+- (NSArray *) taskGroupsForDayOfDate: (NSDate *) date
+              forTasksMatchingFilter: (NSPredicate *) taskFilter
+{
+    NSArray *taskGroupsToReport = nil;
+
+    NSArray *cachedTaskGroups = [self cachedTaskGroupsForDayOfDate: date
+                                            forTasksMatchingFilter: taskFilter];
+
+    if (cachedTaskGroups)
+    {
+        taskGroupsToReport = cachedTaskGroups;
     }
-}
 
-- (void) updateScheduledTasks
-{
-    [self.scheduleMOC performBlockAndWait:^{
-        
-        //STEP 1: Update inActive property of schedules based on endOn date.
-        [self updateSchedulesAsInactiveIfNecessary];
-        
-        //STEP 2: Disable one time tasks if they are already completed
-        [self disableOneTimeTasksIfAlreadyCompleted];
-        
-        //STEP 3: Get all the current scheduled tasks relevant to reference daterange
-        [self filterAllScheduledTasksInReferenceDate];
-        
-        //STEP 4: Update scheduled tasks
-        [self updateScheduledTasksBasedOnActiveSchedules];
-        
-        //STEP 5: Validate all completed tasks
-        [self validateAllCompletedTasks];
-        
-        //STEP 6: Delete non-validated schedules
-        [self deleteAllNonvalidatedScheduledTasks];
-        
-        //STEP 7: Notify APCTasksReminderManager that we've completed a survey
-        [[NSNotificationCenter defaultCenter]postNotificationName:APCUpdateTasksReminderNotification object:nil];
-        
-        self.isUpdating = NO;
-        APCLogEventWithData(kSchedulerEvent, (@{@"event_detail":[NSString stringWithFormat:@"Updated Schedule For %@", self.referenceRange.startDate]}));
-    }];
-}
+    else
+    {
+        taskGroupsToReport = [self uncachedTaskGroupsForDayOfDate: date
+                                           forTasksMatchingFilter: taskFilter];
 
-/*********************************************************************************/
-#pragma mark - Methods Inside MOC
-/*********************************************************************************/
-- (void) updateSchedulesAsInactiveIfNecessary
-{
-    NSFetchRequest * request = [APCSchedule request];
-    NSDate * lastEndOnDate = [NSDate yesterdayAtMidnight];
-    NSDate * earliestStartOnDate = [NSDate endOfDay:[NSDate tomorrowAtMidnight]];
-    request.predicate = [NSPredicate predicateWithFormat:@"(endsOn <= %@) || (startsOn > %@)", lastEndOnDate, earliestStartOnDate];
-    NSError * error;
-    NSArray * array = [self.scheduleMOC executeFetchRequest:request error:&error];
-    APCLogError2 (error);
-    [array enumerateObjectsUsingBlock:^(APCSchedule * schedule, NSUInteger __unused idx, BOOL * __unused stop) {
-        schedule.inActive = @(YES);
-        NSError * saveError;
-        [schedule saveToPersistentStore:&saveError];
-        APCLogError2 (saveError);
-    }];
-}
-
-- (void) disableOneTimeTasksIfAlreadyCompleted
-{
-    //List remoteupdatable, one time tasks
-    NSFetchRequest * request = [APCSchedule request];
-    request.predicate = [NSPredicate predicateWithFormat:@"remoteUpdatable == %@ && scheduleType == %@", @(YES), kOneTimeSchedule];
-    NSError * error;
-    NSArray * scheduleArray = [self.scheduleMOC executeFetchRequest:request error:&error];
-    APCLogError2 (error);
+        
+        /*
+         Lastly:  cache these results, because of the performance problem
+         mentioned at the top of this method.
+         
+         Note that another thread might have come through here and
+         cache this same list of stuff while we were working.  That's
+         fine.  The cachcing mechanism is thread-safe, and stores the
+         first set of results matching this date range and filter, so
+         even if a bunch of threads try to do this simultaneously,
+         only one will win, and every subsequent request will use
+         that cached value.
+         */
+        [self cacheTaskGroups: taskGroupsToReport
+                      forDate: date
+                    andFilter: taskFilter];
+    }
     
-    //Get completed scheduled tasks with that one time task. If they exist make the schedule inactive
-    [scheduleArray enumerateObjectsUsingBlock:^(APCSchedule * obj, NSUInteger __unused idx, BOOL * __unused stop) {
-        NSFetchRequest * request = [APCScheduledTask request];
-        request.predicate = [NSPredicate predicateWithFormat:@"completed == %@ && task.taskID == %@", @(YES), obj.taskID];
-        NSError * error;
-        NSArray * scheduledTaskArray = [self.scheduleMOC executeFetchRequest:request error:&error];
-        if (scheduledTaskArray.count > 0) { obj.inActive = @(YES);}
-        APCLogError2 (error);
-    }];
-    
-    APCSchedule * lastSchedule = [scheduleArray lastObject];
-    NSError * saveError;
-    [lastSchedule saveToPersistentStore:&saveError];
-    APCLogError2 (saveError);
+    return taskGroupsToReport;
 }
 
-- (void) filterAllScheduledTasksInReferenceDate {
-    NSFetchRequest * request = [APCScheduledTask request];
-    NSDate * startOfDay = [NSDate startOfDay:self.referenceRange.startDate];
-    request.predicate = [NSPredicate predicateWithFormat:@"endOn > %@", startOfDay];
-    NSError * error;
-    NSArray * array = [self.scheduleMOC executeFetchRequest:request error:&error];
-    APCLogError2 (error);
-    NSMutableArray * filteredArray = [NSMutableArray array];
-    
-    for (APCScheduledTask * scheduledTask in array) {
-        if ([scheduledTask.dateRange compare:self.referenceRange] != kAPCDateRangeComparisonOutOfRange) {
-            [filteredArray addObject:scheduledTask];
+/**
+ Retrieves all tasks scheduled for the specified day,
+ whether completed, not-yet-completed, missed, or any other
+ status.  "The specified day" means, specifically,
+ midnight to midnight on that date in the user's time zone.
+
+ This method does not manage threading.  It expects
+ to be called from a background thread -- in particular,
+ a private queue managed by self.  However, it works fine
+ if called from the main thread, or any other thread.
+
+ The query turns out to be a little tricky, because of how
+ we want to think about dates.  We want schedules that are
+ "active on this day."  That means we want schedules whose
+ start date is earlier than midnight on the specified date,
+ and whose end date is later than midnight on that date.
+ 
+ Here's the pseudocode.  The leading "."s are to preserve
+ the indentation.
+ 
+ .   -  theSpecifiedDate = the date passed to this method.
+ .   
+ .   -  get schedules active between morning-midnight and evening-midnight on
+ .      theSpecifiedDate.  This may be a long list, including schedules that start
+ .      today, schedules that end today, and schedules with either of those values
+ .      set to nil.
+ .   
+ .   -  for each of those schedules:
+ .   
+ .      -   get the times of day the schedule wants to appear on this date.
+ .   
+ .      -   if none (if the schedule doesn't want to appear today):
+ .   
+ .          -   get the times of day the schedule wants to appear on the next closest
+ .              previous day for that schedule.  Example:  if the schedule says "every
+ .              monday and wednesday at noon and 3pm," and today is Tuesday, we'll get
+ .              "noon and 3pm" for Monday.
+ .
+ .          -   if we got anything:  remove dates and times that specify an expired task
+ .              (its grace period has run over).  We'll keep this list of times if either
+ .              (a) the schedule's expiration period is nil, or (b) if the expiration
+ .              period + those dates means tasks with those dates will last through
+ .              theScheduledDate.
+ .
+ .      -   now we have a list of times of day that tasks should happen, either on
+ .          theSpecifiedDate or the next-closest previous date specified by this schedule.
+ .   
+ .      -   if the list is non-empty:
+ .   
+ .          -   for each task managed by this schedule: create a TaskGroup containing all
+ .              the related objects.  Specifically:
+ .   
+ .              -   for each of the found time slots:
+ .   
+ .                  -   gather any completed items for this time slot (should be at most
+ .                      one, but we'll take 'em all just in case)
+ .   
+ .                  -   if no completed items for this time slot, create a PotentialTask
+ .                      for this slot
+ .
+ .              -   gather any completed gratuitious items for the scheduled date of the
+ .                  times in this list
+ .
+ .              -   create a sample Potential gratuitous item for that scheduled date
+ .
+ .              -   package all that up into a TaskGroup, and add it to the list of results.
+ .
+ .              -   but wait!  if the task has been "fully completed," and the current
+ .                  system date is later than the date on which it reached Fully Completed
+ .                  status, we have to remove the taskGroup from the list. This real-life
+ .                  situation is: you keep a reminder on your fridge until you've
+ .                  remembered to do that thing; then you take it off the fridge.
+ .                  The catch is: we're creating the ability for user to scroll backward
+ .                  or forward in time and see what sticky notes *were* or *should be* on
+ .                  the fridge on a given date. This boils down to:
+ .
+ .                  -   if the taskGroup's dateFullyCompleted is set, and the current
+ .                      system date is greater than midnight on the evening of that date,
+ .                      remove the taskGroup from the list of results.
+ .
+ .  -   (repeat for every schedule overlapping theSpecifiedDate.)
+
+ Here we go.
+ */
+- (NSArray *) uncachedTaskGroupsForDayOfDate: (NSDate *) theSpecifiedDate
+                      forTasksMatchingFilter: (NSPredicate *) taskFilter
+{
+    NSMutableString *printout = nil;
+    APCScheduleDebugPrinter *printer = nil;
+
+#if DEBUG
+    if (kAPCShowDebugPrintouts)
+    {
+        printout = [NSMutableString new];
+        printer = [APCScheduleDebugPrinter new];
+    }
+#endif
+
+    [printout appendFormat: @"\n\n-------------- Fetching uncached task groups for %@ using filter [%@]. --------------\n",
+     [printer stringFromDate: theSpecifiedDate],
+     taskFilter];
+
+    NSDate *theSpecifiedMorningAtMidnight   = theSpecifiedDate.startOfDay;
+    NSDate *theSpecifiedNightAtMidnight     = theSpecifiedDate.endOfDay;
+    NSMutableArray *resultingTaskGroups     = [NSMutableArray new];
+    NSManagedObjectContext *context         = self.scheduleMOC;
+    NSError *errorFetchingSchedules         = nil;
+    NSArray *activeSchedules                = [self schedulesVisibleOnDayOfDate: theSpecifiedDate
+                                                                   usingContext: context
+                                                                 returningError: & errorFetchingSchedules];
+
+    if (activeSchedules == nil)   // checking for errors, not an empty list.
+    {
+        [printout appendFormat: @"Whoops! Failed to load schedules. Error:\n%@\n", errorFetchingSchedules.friendlyFormattedString];
+    }
+
+    else
+    {
+        activeSchedules = [activeSchedules sortedArrayUsingSelector: @selector (compareWithSchedule:)];
+
+        [printer printArrayOfSchedules: activeSchedules
+                             withLabel: [NSString stringWithFormat:
+                                         @"\nSchedules POTENTIALLY visible between %@ and %@",
+                                         [printer stringFromDate: theSpecifiedMorningAtMidnight],
+                                         [printer stringFromDate: theSpecifiedNightAtMidnight]]
+                     intoMutableString: printout];
+
+        for (APCSchedule *schedule in activeSchedules)
+        {
+            NSArray *timestamps = [self visibleTimesOfDayForSchedule: schedule
+                                                         onDayOfDate: theSpecifiedDate
+                                         addingDiagnosticsToPrintout: printout
+                                                        usingPrinter: printer];
+
+            /*
+             While the specified schedule may be active on this
+             day, it may not actually emit any date values for
+             this day.
+             */
+            if (timestamps.count)
+            {
+                NSSet *filteredTasks = [self filterTasksFromSchedule: schedule
+                                                      withTaskFilter: taskFilter
+                                         addingDiagnosticsToPrintout: printout
+                                                        usingPrinter: printer];
+
+                for (APCTask *task in filteredTasks)
+                {
+                    APCTaskGroup *taskGroup = [self computeAndGenerateTaskGroupForTask: task
+                                                                           andSchedule: schedule
+                                                                          atTheseTimes: timestamps
+                                                                            onThisDate: theSpecifiedDate
+                                                           addingDiagnosticsToPrintout: printout
+                                                                          usingPrinter: printer];
+
+                    if (taskGroup != nil)
+                    {
+                        /*
+                         Spelling out the criteria that tell us whether or not
+                         to include a task in the "today" list (whatever day
+                         "today" is):
+                         */
+                        BOOL          isCompleted               = taskGroup.isFullyCompleted;
+                        NSDate        *dateCompleted            = taskGroup.dateFullyCompleted;
+                        BOOL __unused wasCompletedInThePast     = (isCompleted && [dateCompleted isEarlierThanDate: theSpecifiedMorningAtMidnight]);
+                        BOOL          wasCompletedOnThisDate    = (isCompleted && [dateCompleted isLaterThanOrEqualToDate: theSpecifiedMorningAtMidnight] && [dateCompleted isEarlierOrEqualToDate: theSpecifiedNightAtMidnight]);
+                        BOOL          wasCompletedInTheFuture   = (isCompleted && [dateCompleted isLaterThanDate: theSpecifiedNightAtMidnight]);
+                        BOOL          shouldShowThisTaskToday   = (! isCompleted) || wasCompletedOnThisDate || wasCompletedInTheFuture;
+
+                        if (shouldShowThisTaskToday)
+                        {
+                            [resultingTaskGroups addObject: taskGroup];
+                        }
+                    }
+                }
+            }
         }
     }
-    self.allScheduledTasksForReferenceDate = filteredArray;
+
+
+    NSArray *sortedGroups = [resultingTaskGroups sortedArrayUsingSelector: @selector(compareWithTaskGroup:)];
+
+    [printout appendString: @"\n----------\nTotal list of taskGroups found:\n----------\n"];
+
+    for (APCTaskGroup *taskGroup in sortedGroups)
+    {
+        [printout appendFormat: @"- %@\n", taskGroup];
+    }
+
+    [printout appendFormat: @"\n-------------- Done fetching uncached task groups for %@ using filter %@. --------------\n\n",
+     [printer stringFromDate: theSpecifiedDate],
+     taskFilter
+     ];
+
+    APCLogDebug (@"%@", printout);
+
+
+    return sortedGroups;
 }
 
-- (void) updateScheduledTasksBasedOnActiveSchedules
+/**
+ Returns the times of day that the specified schedule
+ says a task should appear on the given date.  This happens
+ in one of exactly two situations:  the schedule says stuff
+ should appear on exactly that date; or the schedule says
+ stuff should appear on a previous date, and those items
+ haven't "expired" yet, according to the schedule's
+ expiration rule.
+ */
+- (NSArray *) visibleTimesOfDayForSchedule: (APCSchedule *) schedule
+                               onDayOfDate: (NSDate *) theSpecifiedDate
+               addingDiagnosticsToPrintout: (NSMutableString *) printout
+                              usingPrinter: (APCScheduleDebugPrinter *) printer
 {
-    NSArray * activeSchedules = [self readActiveSchedules];
-    [activeSchedules enumerateObjectsUsingBlock:^(APCSchedule * schedule, NSUInteger __unused idx, BOOL * __unused stop) {
-        [self updateScheduledTasksForSchedule:schedule];
+    [printer printArrayOfSchedules: @[schedule]
+                         withLabel: @"\nAnalyzing schedule"
+                 intoMutableString: printout];
+
+    NSDate          *theSpecifiedMorningAtMidnight   = theSpecifiedDate.startOfDay;
+    NSDate          *theSpecifiedEveningAtMidnight   = theSpecifiedDate.endOfDay;
+    NSMutableArray  *timesOfDayForThisDay            = [NSMutableArray new];
+    NSMutableArray  *timesOfDayForDayBeforeThisDay   = [NSMutableArray new];
+    NSDate          *startDate                       = schedule.effectiveStartDate;
+
+    if (startDate == nil)
+    {
+        startDate = [APCUtilities firstKnownFileAccessDate];
+
+        if (startDate == nil)
+        {
+            startDate = [NSDate date];
+        }
+    }
+
+    APCTopLevelScheduleEnumerator *enumerator = [schedule enumeratorFromDate: startDate.startOfDay
+                                                                      toDate: theSpecifiedEveningAtMidnight];
+
+    /*
+     We want to get "today" and "the day before today" from
+     the Schedule.  To do that, we'll walk forward through
+     all dates generated by this schedule until we hit
+     "today" and "the day before today" (which could be,
+     like a month ago).  If we find "today," we'll keep it.
+     If not, we'll use the day- before-today.  This will
+     tell us the list of times that tasks SHOULD appear....
+     if the schedule's expiration ("grace period") rules
+     allow it.  We'll address expiration in a moment.
+     */
+    for (NSDate *nextAppearance in enumerator)
+    {
+        if ([nextAppearance isLaterThanOrEqualToDate: theSpecifiedMorningAtMidnight])
+        {
+            [timesOfDayForThisDay addObject: nextAppearance];
+        }
+        else
+        {
+            if (timesOfDayForDayBeforeThisDay.count)
+            {
+                NSDate *maybeSometimeOnPreviousDay = timesOfDayForDayBeforeThisDay.firstObject;
+
+                if ([nextAppearance.startOfDay isLaterThanDate: maybeSometimeOnPreviousDay.endOfDay])
+                {
+                    [timesOfDayForDayBeforeThisDay removeAllObjects];
+                }
+            }
+
+            [timesOfDayForDayBeforeThisDay addObject: nextAppearance];
+        }
+    }
+
+    [printout appendFormat: @"    Found times of day for that date            : %@\n", [printer stringsFromArrayOfDates: timesOfDayForThisDay]];
+    [printout appendFormat: @"    Found times of day for preceding legal date : %@\n", [printer stringsFromArrayOfDates: timesOfDayForDayBeforeThisDay]];
+
+    if (timesOfDayForThisDay.count)
+    {
+        /*
+         Today turns out to be on the schedule.  Our rules
+         say: only one copy of a scheduled item appears on
+         a schedule at a time.  Therefore we don't need any
+         enumerated dates from the previous day.
+         */
+        timesOfDayForDayBeforeThisDay = nil;
+    }
+
+    else if (timesOfDayForDayBeforeThisDay.count)
+    {
+        if (schedule.expires == nil)
+        {
+            // The times from the previous date are allowed.
+        }
+        else
+        {
+            NSDate *sometimeOnPrevousDate     = timesOfDayForDayBeforeThisDay.firstObject;
+            NSDate *expirationTimeForThatDate = [sometimeOnPrevousDate dateByAddingISO8601Duration: schedule.expires];
+            NSDate *expirationDateAtMidnight  = expirationTimeForThatDate.endOfDay.dayBefore;
+
+            // Expiration items should be at least one day long.
+            if ([expirationDateAtMidnight isLaterThanDate: theSpecifiedEveningAtMidnight])
+            {
+                expirationDateAtMidnight = theSpecifiedEveningAtMidnight;
+            }
+
+            if ([expirationDateAtMidnight isLaterThanOrEqualToDate: theSpecifiedMorningAtMidnight])
+            {
+                // We're within the expiration period.  This date is legal.  Leave it.
+            }
+            else
+            {
+                // These dates are too far in the past:  they've expired.  Trash 'em.
+                timesOfDayForDayBeforeThisDay = nil;
+                [printout appendFormat: @"    Stuff on the previous day has expired. Ignoring.\n"];
+            }
+        }
+    }
+
+    else
+    {
+        // We have no schedule items for this date or
+        // any previous date -- meaning, this date is
+        // before the schedule says it's allowed to run.
+        // No problem.
+    }
+
+    // What'd we get?
+    NSArray *chosenTimestamps = (timesOfDayForThisDay.count > 0 ?
+                                 timesOfDayForThisDay :
+                                 timesOfDayForDayBeforeThisDay);
+
+
+    [printout appendFormat: @"    Chosen array of times                       : %@\n", [printer stringsFromArrayOfDates: chosenTimestamps]];
+
+    if (chosenTimestamps.count == 0)
+    {
+        [printout appendFormat: @"    ...which has no times of day in it. Not getting tasks for this schedule. Moving to next schedule.\n"];
+
+        chosenTimestamps = nil;
+    }
+
+    return chosenTimestamps;
+}
+
+- (NSSet *) filterTasksFromSchedule: (APCSchedule *) schedule
+                     withTaskFilter: (NSPredicate *) taskFilter
+        addingDiagnosticsToPrintout: (NSMutableString *) printout
+                       usingPrinter: (APCScheduleDebugPrinter *) __unused printer
+{
+    NSSet *result = nil;
+
+    if (schedule == nil)
+    {
+        // This call turned out to be meaningless.  Return nil.
+        result = nil;
+    }
+
+    else
+    {
+        NSSet *unfilteredTasks = schedule.tasks;
+
+        if (unfilteredTasks.count == 0)
+        {
+            // No tasks.  Return nil.
+            result = nil;
+        }
+
+        else
+        {
+            [printout appendString: @"\n    Schedule has this set of tasks:\n"];
+
+            for (APCTask *task in unfilteredTasks)
+            {
+                [printout appendFormat: @"    - title: %@, optional: %@\n", task.taskTitle, task.taskIsOptional];
+            }
+
+            if (taskFilter == nil)
+            {
+                result = unfilteredTasks;
+            }
+            else
+            {
+                NSSet *filteredTasks = [unfilteredTasks filteredSetUsingPredicate: taskFilter];
+
+                if (filteredTasks.count == unfilteredTasks.count)
+                {
+                    // Nothing happened.
+                    result = unfilteredTasks;
+                }
+                else
+                {
+                    result = filteredTasks;
+
+                    [printout appendString: @"\n    Filtering down to this list of tasks:\n"];
+
+                    for (APCTask *task in filteredTasks)
+                    {
+                        [printout appendFormat: @"    - title: %@, optional: %@\n", task.taskTitle, task.taskIsOptional];
+                    }
+                }
+            }
+        }
+    }
+    
+    return result;
+}
+
+- (APCTaskGroup *) computeAndGenerateTaskGroupForTask: (APCTask *) task
+                                          andSchedule: (APCSchedule *) schedule
+                                         atTheseTimes: (NSArray *) timestamps
+                                           onThisDate: (NSDate *) theSpecifiedDate
+                          addingDiagnosticsToPrintout: (NSMutableString *) printout
+                                         usingPrinter: (APCScheduleDebugPrinter *) printer
+{
+    APCTaskGroup *taskGroup = nil;
+
+    if (timestamps.count)
+    {
+        [printout appendFormat: @"\n    ------------\n    Analyzing task:  title: %@, optional: %@\n    ------------\n",
+         task.taskTitle,
+         task.taskIsOptional
+         ];
+        
+        NSArray *completedTasks = [self completedOrPartlyCompletedTasksForTask: task
+                                                                  asOfThisDate: theSpecifiedDate
+                                                   scheduledForOneOfTheseTimes: timestamps
+                                                   addingDiagnosticsToPrintout: printout
+                                                                  usingPrinter: printer];
+
+        NSArray *remainingTasks = [self generatePotentialTasksForTask: task
+                                                          andSchedule: schedule
+                                             givenThesePotentialTimes: timestamps
+                                               andTheseCompletedTasks: completedTasks
+                                          addingDiagnosticsToPrintout: printout
+                                                         usingPrinter: printer];
+
+        NSDate *generalGratuitousTaskTimestamp = [timestamps.firstObject startOfDay];
+
+        APCPotentialTask *sampleGratuitousPotentialTask = [[APCPotentialTask alloc] initWithTask: task
+                                                                                      onSchedule: schedule
+                                                                          appearingAtDateAndTime: generalGratuitousTaskTimestamp];
+
+        NSArray *completedGratuitousTasks = [self completedGratuitousTasksForTask: task
+                                                      withGratuitousTaskTimestamp: generalGratuitousTaskTimestamp
+                                                      addingDiagnosticsToPrintout: printout
+                                                                     usingPrinter: printer];
+
+        if (completedTasks.count == 0) { completedTasks = nil; }
+        if (remainingTasks.count == 0) { remainingTasks = nil; }
+        if (completedGratuitousTasks.count == 0) { completedGratuitousTasks = nil; }
+
+        NSUInteger totalCountOfRequiredTasks = timestamps.count;
+
+        taskGroup = [[APCTaskGroup alloc] initWithTask: task
+                       requiredRemainingPotentialTasks: remainingTasks
+                                requiredCompletedTasks: completedTasks
+                              gratuitousCompletedTasks: completedGratuitousTasks
+                                   samplePotentialTask: sampleGratuitousPotentialTask
+                                    totalRequiredTasks: totalCountOfRequiredTasks
+                                               forDate: theSpecifiedDate];
+
+
+        [printout appendFormat: @"\n        Resulting taskGroup: %@\n", taskGroup];
+
+        if (taskGroup.isFullyCompleted && [theSpecifiedDate isLaterThanDate: taskGroup.dateFullyCompleted.endOfDay])
+        {
+            [printout appendFormat: @"\n        Group was fully completed on [%@].  Current system date is [%@], which is past that date.  Omitting this group.\n", taskGroup.dateFullyCompleted, self.systemDate];
+        }
+        else
+        {
+            // Ship it!
+        }
+    }
+
+    return taskGroup;
+}
+
+- (NSArray *) completedOrPartlyCompletedTasksForTask: (APCTask *) task
+                                        asOfThisDate: (NSDate *) theSpecifiedDate
+                         scheduledForOneOfTheseTimes: (NSArray *) timestamps
+                         addingDiagnosticsToPrintout: (NSMutableString *) printout
+                                        usingPrinter: (APCScheduleDebugPrinter *) printer
+{
+    NSPredicate *filterForCompletedTasks = [NSPredicate predicateWithFormat: @"%K in %@ && %K <= %@",
+                                            NSStringFromSelector (@selector (startOn)),
+                                            timestamps,
+                                            NSStringFromSelector (@selector (updatedAt)),
+                                            theSpecifiedDate.endOfDay
+                                            ];
+
+    NSSet *scheduledTasks = [task.scheduledTasks filteredSetUsingPredicate: filterForCompletedTasks];
+
+    NSArray *scheduledTasksSortedByTimeScheduled = [scheduledTasks.allObjects sortedArrayUsingComparator:
+                                                    ^NSComparisonResult (APCScheduledTask *scheduledTask1,
+                                                                         APCScheduledTask *scheduledTask2)
+                                                    {
+                                                        return [scheduledTask1.startOn compare: scheduledTask2.startOn];
+                                                    }];
+
+
+    [printout appendString: @"        Found these probably-completed tasks:\n"];
+
+    for (APCScheduledTask *completedTask in scheduledTasksSortedByTimeScheduled)
+    {
+        [printout appendFormat: @"        - scheduled for: %@  completedOn: %@\n", [printer stringFromDate: completedTask.startOn], [printer stringFromDate: completedTask.updatedAt]];
+    }
+
+    return scheduledTasksSortedByTimeScheduled;
+}
+
+- (NSArray *) completedGratuitousTasksForTask: (APCTask *) task
+                  withGratuitousTaskTimestamp: (NSDate *) timestamp
+                  addingDiagnosticsToPrintout: (NSMutableString *) printout
+                                 usingPrinter: (APCScheduleDebugPrinter *) printer
+{
+    NSSet *gratuitousTasks = [task.scheduledTasks filteredSetUsingPredicate: [NSPredicate predicateWithFormat: @"%K == %@",
+                                                                              NSStringFromSelector (@selector (startOn)),
+                                                                              timestamp]];
+
+    NSArray *sortedTasks = [gratuitousTasks.allObjects sortedArrayUsingComparator:
+                            ^NSComparisonResult (APCScheduledTask *scheduledTask1,
+                                                 APCScheduledTask *scheduledTask2)
+                            {
+                                return [scheduledTask1.updatedAt compare: scheduledTask2.updatedAt];
+                            }];
+
+    [printout appendString: @"\n        Found these gratuitous completed tasks:\n"];
+
+    for (APCScheduledTask *gratuitousTask in sortedTasks)
+    {
+        [printout appendFormat: @"        - completedOn: %@\n", [printer stringFromDate: gratuitousTask.updatedAt]];
+    }
+
+    return sortedTasks;
+}
+
+- (NSArray *) generatePotentialTasksForTask: (APCTask *) task
+                                andSchedule: (APCSchedule *) schedule
+                   givenThesePotentialTimes: (NSArray *) timestamps
+                     andTheseCompletedTasks: (NSArray *) completedTasks
+                addingDiagnosticsToPrintout: (NSMutableString *) printout
+                               usingPrinter: (APCScheduleDebugPrinter *) printer
+{
+    NSMutableArray *result = nil;
+
+    if (timestamps.count)
+    {
+        result = [NSMutableArray new];
+
+        [printout appendString: @"\n        Generating these potentialTasks:\n"];
+
+        for (NSDate *time in timestamps)
+        {
+            NSArray *completedTasksForThisTime = [completedTasks filteredArrayUsingPredicate: [NSPredicate predicateWithFormat: @"%K == %@",
+                                                                                               NSStringFromSelector (@selector (startOn)),
+                                                                                               time]];
+
+            if (completedTasksForThisTime.count == 0)
+            {
+                APCPotentialTask *potentialTask = [[APCPotentialTask alloc] initWithTask: task
+                                                                              onSchedule: schedule
+                                                                  appearingAtDateAndTime: time];
+                [result addObject: potentialTask];
+                [printout appendFormat: @"        - scheduled for: %@\n", [printer stringFromDate: time]];
+            }
+        }
+    }
+
+    return result;
+}
+
+/**
+ Returns the schedules that are, or were, in their
+ "started" state on the specified date.  This is NOT the
+ schedules VISIBLE on that date; rather, this is schedules
+ whose "start dates" are equal to or later than this date.
+
+ This is used when importing new schedules, in
+ - processSchedulesAndTasks.
+
+ You might note that this method looks nearly identical
+ to -schedulesVisibleOnDayOfDate:.  They are indeed very
+ similar.  I tried parameterizing them, to make sure we
+ ran the same query and same type of query in both
+ cases...  and it took nearly as much code to do that as
+ it took to have two separate methods.  And the separate
+ methods are much more readable, because the code does
+ exactly what it says it does.  (In the parameterized
+ version, the code was so abstract I found it hard to
+ visually verify that the query was doing what it needed
+ to do.)  So two methods it is.
+
+ @see -schedulesVisibleOnDayOfDate:
+ */
+- (NSArray *) schedulesActiveOnDayOfDate: (NSDate *) dateWhenThingsShouldBeActive
+                              fromSource: (APCScheduleSource) scheduleSource
+                               inContext: (NSManagedObjectContext *) context
+                          returningError: (NSError * __autoreleasing *) errorToReturn
+{
+    NSDate *          midnightThisMorning = dateWhenThingsShouldBeActive.startOfDay;
+    NSDate * __unused midnightThisEvening = dateWhenThingsShouldBeActive.endOfDay;    // for debugging
+
+    NSPredicate *filter = [NSPredicate predicateWithFormat:
+                           @"%K == %@ && (%K == nil || %K <= %@) && (%K == nil || %K >= %@)",
+                           NSStringFromSelector (@selector (scheduleSource)),
+                           @(scheduleSource),
+                           NSStringFromSelector (@selector (startsOn)),             // -[APCSchedule startsOn]
+                           NSStringFromSelector (@selector (startsOn)),             // -[APCSchedule startsOn]
+                           midnightThisEvening,
+                           NSStringFromSelector (@selector (effectiveEndDate)),     // -[APCSchedule effectiveEndDate]
+                           NSStringFromSelector (@selector (effectiveEndDate)),     // -[APCSchedule effectiveEndDate]
+                           midnightThisMorning
+                           ];
+
+    NSFetchRequest *request = [APCSchedule requestWithPredicate: filter];
+    NSError *errorFetchingSchedules = nil;
+    NSArray *schedules = [context executeFetchRequest: request error: & errorFetchingSchedules];
+
+    if (errorToReturn != nil)
+    {
+        * errorToReturn = [NSError errorWithCode: APCErrorCouldntFetchActiveSchedulesForDateCode
+                                          domain: APCErrorDomainLoadingTasksAndSchedules
+                                   failureReason: APCErrorCouldntFetchActiveSchedulesForDateReason
+                              recoverySuggestion: APCErrorCouldntFetchActiveSchedulesForDateSuggestion
+                                     nestedError: errorFetchingSchedules];
+    }
+
+    return schedules;
+}
+
+
+/**
+ Returns the schedules that are, or were, actually visible
+ on the user's screen on the specified date.  This is a
+ subset of the schedules that were ACTIVE on that date: a
+ schedule can be active-but-not-visible if it has a non-nil
+ "delay" value.
+
+ This is used when fetching CoreData items to show on the
+ screen, during -uncachedTaskGroups.
+
+ You might note that this method looks nearly identical to
+ -schedulesActiveOnDayOfDate:.  They are indeed very
+ similar.  I tried parameterizing them, to make sure we ran
+ the same query and same type of query in both cases...
+ and it took nearly as much code to do that as it took to
+ have two separate methods.  And the separate methods are
+ much more readable, because the code does exactly what it
+ says it does.  (In the parameterized version, the code was
+ so abstract I found it hard to visually verify that the
+ query was doing what it needed to do.) So two methods it
+ is.
+
+ @see -schedulesActiveOnDayOfDate:
+ */
+- (NSArray *) schedulesVisibleOnDayOfDate: (NSDate *) dateWhenThingsShouldBeVisible
+                             usingContext: (NSManagedObjectContext *) context
+                           returningError: (NSError * __autoreleasing *) errorToReturn
+{
+    NSDate *midnightThisMorning = dateWhenThingsShouldBeVisible.startOfDay;
+    NSDate *midnightThisEvening = dateWhenThingsShouldBeVisible.endOfDay;
+
+    NSPredicate *filterForThisDay = [NSPredicate predicateWithFormat:
+                                     @"(%K == nil || %K <= %@) && (%K == nil || %K >= %@)",
+                                     NSStringFromSelector (@selector (effectiveStartDate)),       // -[APCSchedule effectiveStartDate]
+                                     NSStringFromSelector (@selector (effectiveStartDate)),       // -[APCSchedule effectiveStartDate]
+                                     midnightThisEvening,
+                                     NSStringFromSelector (@selector (effectiveEndDate)),         // -[APCSchedule effectiveEndDate]
+                                     NSStringFromSelector (@selector (effectiveEndDate)),         // -[APCSchedule effectiveEndDate]
+                                     midnightThisMorning
+                                     ];
+
+    NSFetchRequest *scheduleQuery = [APCSchedule requestWithPredicate: filterForThisDay];
+    NSError *errorFetchingSchedules = nil;
+    NSArray *schedules = [context executeFetchRequest: scheduleQuery
+                                                error: & errorFetchingSchedules];
+    
+    if (errorToReturn != nil)
+    {
+        * errorToReturn = [NSError errorWithCode: APCErrorCouldntFetchVisibleSchedulesForDateCode
+                                          domain: APCErrorDomainLoadingTasksAndSchedules
+                                   failureReason: APCErrorCouldntFetchVisibleSchedulesForDateReason
+                              recoverySuggestion: APCErrorCouldntFetchVisibleSchedulesForDateSuggestion
+                                     nestedError: errorFetchingSchedules];
+    }
+    
+    return schedules;
+}
+
+
+
+
+// =========================================================
+#pragma mark - III. IMPORTING -
+// =========================================================
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Downloading tasks and schedules from the server
+// ---------------------------------------------------------
+
+/**
+ This method and -loadTasksAndSchedulesFromDisk do
+ analogous things: get a list of schedules-and-tasks from a
+ source (server or disk).  Then they call a central method
+ to delete old versions, add the new versions, and save
+ everything to disk.
+
+ This method (-fetch) differs from -load because it has to
+ extract Sage's data into an array of data with the
+ key-value pairs we need.
+
+ Both methods put the specified work onto a (private,
+ serial) operation queue, and so can return to the calling
+ method immediately.
+
+ Both methods are immediately followed by methods for
+ handling errors and success specific to that download
+ type.  Both "success" methods call the same internal
+ method for processing schedules.
+ */
+- (void) fetchTasksAndSchedulesFromServerAndThenUseThisQueue: (NSOperationQueue *) queue
+                                            toDoThisWhenDone: (APCSchedulerCallbackForFetchAndLoadOperations) callbackBlock
+{
+    /*
+     Get off whatever thread we were called on.  For this outer "if"
+     statement, we'll only be here for an instant, but for consistency
+     in all our data-handling, we'll do everything on the same thread.
+     */
+    [self.queryQueue addOperationWithBlock:^{
+
+        if (self.isServerDisabled)
+        {
+            NSError *errorFetchingSchedules = [NSError errorWithCode: APCErrorServerDisabledCode
+                                                              domain: APCErrorDomainLoadingTasksAndSchedules
+                                                       failureReason: APCErrorServerDisabledReason
+                                                  recoverySuggestion: APCErrorServerDisabledSuggestion];
+
+            [self handleErrorFetchingTasksAndSchedulesFromServer: errorFetchingSchedules
+                                             andThenUseThisQueue: queue
+                                                        toDoThis: callbackBlock];
+        }
+        else
+        {
+            /*
+             Bounce over to the Sage SDK's thread, call the server, and then come
+             back to our thread a while later.
+             */
+            [SBBComponent (SBBScheduleManager) getSchedulesWithCompletion: ^(SBBResourceList *schedulesList,
+                                                                             NSError *errorFetchingSchedules)
+             {
+                 /*
+                  Immediately get off the Sage queue and back onto ours,
+                  so we know and can control what's happening and what
+                  resources are being used.
+                  */
+                 [self.queryQueue addOperationWithBlock: ^{
+
+                     [self handleSuccessfullyFetchedTasksAndSchedulesFromServer: schedulesList
+                                   givenThisPossibleErrorFromTheDownloadProcess: errorFetchingSchedules
+                                                            andThenUseThisQueue: queue
+                                                                       toDoThis: callbackBlock];
+                 }];
+             }];
+        }
     }];
 }
 
-- (NSArray*) readActiveSchedules
-{
-    NSFetchRequest * request = [APCSchedule request];
-    NSDate * lastStartOnDate = [NSDate startOfTomorrow:self.referenceRange.startDate];
-    request.predicate = [NSPredicate predicateWithFormat:@"(inActive == nil || inActive == %@) && (startsOn == nil || startsOn < %@)", @(NO), lastStartOnDate];
-    NSError * error;
-    NSArray * array = [self.scheduleMOC executeFetchRequest:request error:&error];
-    APCLogError2 (error);
-    return array.count ? array : nil;
-}
+/**
+ Convert inbound Sage server data to an NSDictionary of
+ keys we know how to look for.
 
--(NSArray *) allScheduledTasks{
-    __block NSArray * scheduledTaskArray;
-    NSFetchRequest * request = [APCScheduledTask request];
-    [request setShouldRefreshRefetchedObjects:YES];
-    NSError * error;
-    scheduledTaskArray = [self.scheduleMOC executeFetchRequest:request error:&error];
-    if (scheduledTaskArray.count == 0) {
-        APCLogError2 (error);
+ This lets us use the same method to process data
+ downloaded from the server as we do data pulled from a
+ local JSON file.
+ */
+- (NSDictionary *) extractJsonDataFromIncomingSageSchedule: (SBBSchedule *) sageSchedule
+{
+    NSNull *null                                    = [NSNull null];
+    NSMutableDictionary *scheduleData               = [NSMutableDictionary new];
+    NSMutableArray *activities                      = [NSMutableArray new];
+
+    scheduleData [kScheduleReminderMessageKey]      = [self nullIfNil: sageSchedule.label];
+    scheduleData [kScheduleTypeKey]                 = [self nullIfNil: sageSchedule.scheduleType];
+    scheduleData [kScheduleStartDateKey]            = [self nullIfNil: sageSchedule.startsOn];
+    scheduleData [kScheduleStringKey]               = [self nullIfNil: sageSchedule.cronTrigger];
+    scheduleData [kScheduleExpiresKey]              = [self nullIfNil: sageSchedule.expires];
+    scheduleData [kScheduleEndDateKey]              = [self nullIfNil: sageSchedule.endsOn];
+    scheduleData [kScheduleListOfTasksKey]          = activities;
+
+    // As a reminder to get these when Sage has a chance to add them.
+    scheduleData [kScheduleIntervalKey]             = null; // [self nullIfNil: sageSchedule.interval];
+    scheduleData [kScheduleTimesOfDayKey]           = null; // [self nullIfNil: sageSchedule.times];
+    scheduleData [kScheduleMaxCountKey]             = null; // [self nullIfNil: sageSchedule.maxCount];
+
+
+    for (SBBActivity *activity in sageSchedule.activities)
+    {
+        NSMutableDictionary *activityData = [NSMutableDictionary new];
+
+        activityData [kTaskTitleKey]            = [self nullIfNil: activity.label];
+        activityData [kTaskTypeKey]             = [self nullIfNil: activity.activityType];
+        activityData [kTaskIDKey]               = [self nullIfNil: activity.survey.guid];
+        activityData [kTaskVersionNumberKey]    = [self nullIfNil: activity.survey.version];
+        activityData [kTaskUrlKey]              = [self nullIfNil: activity.ref];
+        activityData [kTaskClassNameKey]        = NSStringFromClass ([APCGenericSurveyTaskViewController class]);
+
+        // When we start getting these from Sage, we'll use them.
+        // In the mean time, noting them here, because we're using
+        // them from our local disk files.
+        activityData [kTaskCompletionTimeStringKey] = null;
+        activityData [kTaskFileNameKey]             = null;
+        activityData [kTaskSortStringKey]           = null;
+
+        [activities addObject: activityData];
     }
-    
-    return scheduledTaskArray;
+
+    return scheduleData;
 }
 
-
-- (void) updateScheduledTasksForSchedule: (APCSchedule*) schedule
+/**
+ By the time we get here, we're safely on our private thread
+ (a private serial queue).
+ */
+- (void) handleErrorFetchingTasksAndSchedulesFromServer: (NSError *) errorFetchingSchedules
+                                    andThenUseThisQueue: (NSOperationQueue *) queue
+                                               toDoThis: (APCSchedulerCallbackForFetchAndLoadOperations) callbackBlock
 {
-    APCTask * task = [APCTask taskWithTaskID:schedule.taskID inContext:self.scheduleMOC];
-    NSAssert(task,@"Task is nil");
-    if (schedule.isOneTimeSchedule) {
-        [self findOrCreateOneTimeScheduledTask:schedule task:task];
+    APCLogError2 (errorFetchingSchedules);
+
+    [self performFetchAndLoadCallback: callbackBlock
+                              onQueue: queue
+                         sendingError: errorFetchingSchedules];
+}
+
+/**
+ By the time we get here, we're safely on our private thread
+ (a private serial queue).
+ */
+- (void) handleSuccessfullyFetchedTasksAndSchedulesFromServer: (SBBResourceList *) schedulesAndTasks
+                 givenThisPossibleErrorFromTheDownloadProcess: (NSError *) errorFetchingSchedules
+                                          andThenUseThisQueue: (NSOperationQueue *) queue
+                                                     toDoThis: (APCSchedulerCallbackForFetchAndLoadOperations) callbackBlock
+{
+
+    if (errorFetchingSchedules)
+    {
+        [self handleErrorFetchingTasksAndSchedulesFromServer: errorFetchingSchedules
+                                         andThenUseThisQueue: queue
+                                                    toDoThis: callbackBlock];
     }
     else
     {
-        APCScheduleExpression * scheduleExpression = schedule.scheduleExpression;
-        NSDate * beginningTime = (schedule.expires !=nil) ? [self.referenceRange.startDate dateByAddingTimeInterval:(-1*schedule.expiresInterval)] : self.referenceRange.startDate;
-        
-        NSEnumerator*   enumerator = [scheduleExpression enumeratorBeginningAtTime:beginningTime endingAtTime:self.referenceRange.endDate];
-        NSDate * startOnDate;
-        while ((startOnDate = enumerator.nextObject))
+        NSMutableArray *jsonCopyOfSageSchdulesAndTasks = nil;
+
+        if (! errorFetchingSchedules)
         {
-            APCDateRange * range;
-            BOOL doFindOrCreate = NO;
-            if (schedule.expires != nil) {
-                range = [[APCDateRange alloc] initWithStartDate:startOnDate durationInterval:schedule.expiresInterval];
-                if ([range compare:self.referenceRange] != kAPCDateRangeComparisonOutOfRange) {
-                    doFindOrCreate = YES;
-                }
-                else {
-                    APCLogDebug(@"Created out of range dateRange: %@ for %@", range, task.taskTitle);
-                }
-            }
-            else {
-                range = [[APCDateRange alloc] initWithStartDate:startOnDate endDate:self.referenceRange.endDate];
-                doFindOrCreate = YES;
-            }
-            if (doFindOrCreate) {
-                [self findOrCreateRecurringScheduledTask:schedule task:task dateRange:range];
+            jsonCopyOfSageSchdulesAndTasks = [NSMutableArray new];
+            NSArray *sageSchedules = schedulesAndTasks.items;
+
+            for (SBBSchedule *sageSchedule in sageSchedules)
+            {
+                NSDictionary *sageScheduleData = [self extractJsonDataFromIncomingSageSchedule: sageSchedule];
+
+                [jsonCopyOfSageSchdulesAndTasks addObject: sageScheduleData];
             }
         }
+
+        /*
+         Loop through the incoming items and save/udpate everything.
+         Both -fetch and -load boil down to this one call.
+         */
+        [self processSchedulesAndTasks: jsonCopyOfSageSchdulesAndTasks
+                            fromSource: APCScheduleSourceServer
+                   andThenUseThisQueue: queue
+                      toDoThisWhenDone: callbackBlock];
     }
 }
 
-- (void) validateAllCompletedTasks
+
+
+// ---------------------------------------------------------
+#pragma mark - Loading tasks and schedules from disk
+// ---------------------------------------------------------
+
+/**
+ This method and -fetchSchedulesFromServer do the same
+ thing: get a list of schedules-and-tasks from a source
+ (server or disk).  Then they call a central method to
+ delete old versions, add the new versions, and save
+ everything to disk.
+
+ This method (-load) differs from -fetchFromServer because
+ it has to extract the appropriate array from a loaded JSON
+ file.
+
+ Both methods put the specified work onto a (private,
+ serial) dispatch queue, and so can return to the calling
+ method immediately.
+
+ Both methods are immediately followed by methods for
+ handling errors and success specific to that download
+ type.  Both "success" methods call the same internal
+ method for processing schedules.
+ */
+- (void) loadTasksAndSchedulesFromDiskAndThenUseThisQueue: (NSOperationQueue *) queue
+                                         toDoThisWhenDone: (APCSchedulerCallbackForFetchAndLoadOperations) callbackBlock
 {
-    NSArray * filteredArray = [self.allScheduledTasksForReferenceDate filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"completed == %@", @YES]];
-    
-    [self.validatedScheduledTasksForReferenceDate addObjectsFromArray:filteredArray];
-    [self.allScheduledTasksForReferenceDate removeObjectsInArray:filteredArray];
-}
+    [self.queryQueue addOperationWithBlock: ^{
 
-/*********************************************************************************/
-#pragma mark - One Time Task Find Or Create
-/*********************************************************************************/
-- (void) findOrCreateOneTimeScheduledTask:(APCSchedule *) schedule task: (APCTask*) task {
+        // Was:
+        // [self.appDelegate.dataSubstrate loadStaticTasksAndSchedules: jsonDictionary];
 
-     NSArray * scheduledTasksArray = [[self allScheduledTasks] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"task.taskID == %@", task.taskID]];
-    
-    if (scheduledTasksArray.count > 0){
-        APCLogDebug(@"task already scheduled: %@", task);
-        APCScheduledTask * validatedTask = scheduledTasksArray.firstObject;
-        [self validateScheduledTask:validatedTask];
-    }else{
-        //One time not created, create it        
-        NSDate *startOnDate = [self.referenceRange.startDate startOfDay];
-        
-        NSDate * endDate = (schedule.expires !=nil) ? [startOnDate dateByAddingTimeInterval:schedule.expiresInterval] : [startOnDate dateByAddingTimeInterval:[NSDate parseISO8601DurationString:@"P2Y"]];
-        endDate = [NSDate endOfDay:endDate];
-        [self createScheduledTask:schedule task:task dateRange:[[APCDateRange alloc] initWithStartDate:startOnDate endDate:endDate]];
-    }
-}
+        NSArray *schedulesArray = nil;
+        NSError *errorToReport = nil;
+        NSError *errorLoadingTasksAndSchedulesFile = nil;
+        NSDictionary *jsonDictionary = [NSDictionary dictionaryWithContentsOfJSONFileWithName: kAPCStaticJSONTasksAndSchedulesFileName
+                                                                                     inBundle: nil
+                                                                               returningError: & errorLoadingTasksAndSchedulesFile];
+        if (! jsonDictionary)
+        {
+            errorToReport = [NSError errorWithCode: APCErrorLoadingJsonFromDiskCode
+                                            domain: APCErrorDomainLoadingTasksAndSchedules
+                                     failureReason: APCErrorLoadingJsonFromDiskReason
+                                recoverySuggestion: APCErrorLoadingJsonFromDiskSuggestion
+                                   relatedFilePath: kAPCStaticJSONTasksAndSchedulesFileName
+                                        relatedURL: nil
+                                       nestedError: errorLoadingTasksAndSchedulesFile];
+        }
+        else
+        {
+            id maybeSchedulesArray = jsonDictionary [kAPCStaticJSONTasksAndSchedulesSchedulesKey];
 
-- (void) findOrCreateOneTimeScheduledTask:(APCSchedule *) schedule task: (APCTask*) task andStartDateReference: (NSDate *)startOn {
-    
-    NSArray * scheduledTasksArray = [[self allScheduledTasks] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"task.taskID == %@", task.taskID]];
-    
-    if (scheduledTasksArray.count > 0){
-        APCLogDebug(@"task already scheduled: %@", task);
-        APCScheduledTask * validatedTask = scheduledTasksArray.firstObject;
-        [self validateScheduledTask:validatedTask];
-    }else{
-        //One time not created, create it
-        NSDate *startOnDate = [startOn startOfDay];
-        
-        NSDate * endDate = (schedule.expires !=nil) ? [startOnDate dateByAddingTimeInterval:schedule.expiresInterval] : [startOnDate dateByAddingTimeInterval:[NSDate parseISO8601DurationString:@"P2Y"]];
-        endDate = [NSDate endOfDay:endDate];
-        [self createScheduledTask:schedule task:task dateRange:[[APCDateRange alloc] initWithStartDate:startOnDate endDate:endDate]];
-    }
-    
-}
+            /* To test each condition, use or do one of the following:
+                 1. maybeSchedulesArray = nil;
+                 2. Set the check for whether the object isKindOf: NSArray
+                 3. [maybeSchedulesArray removeAllObjects]
+            */
 
-/*********************************************************************************/
-#pragma mark - Recurring Task Find or Create
-/*********************************************************************************/
-- (void) findOrCreateRecurringScheduledTask: (APCSchedule*) schedule task: (APCTask*) task dateRange: (APCDateRange*) range {
-    
-    NSArray * scheduledTasksArray = [self.allScheduledTasksForReferenceDate filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"task == %@", task]];
-    
-    NSMutableArray * filteredArray = [NSMutableArray array];
-    [scheduledTasksArray enumerateObjectsUsingBlock:^(APCScheduledTask * scheduledTask, NSUInteger __unused idx, BOOL * __unused stop) {
-        if ([scheduledTask.dateRange compare:range] == kAPCDateRangeComparisonSameRange) {
-            [filteredArray addObject:scheduledTask];
+            if (maybeSchedulesArray == nil)
+            {
+                errorToReport = [NSError errorWithCode: APCErrorJSONTasksAndSchedulesNilValueForKeyCode
+                                                domain: APCErrorDomainLoadingTasksAndSchedules
+                                         failureReason: APCErrorJSONTasksAndSchedulesNilValueForKeyReason
+                                    recoverySuggestion: APCErrorJSONTasksAndSchedulesNilValueForKeySuggestion];
+            }
+
+            else if (! [maybeSchedulesArray isKindOfClass: [NSArray class]])
+            {
+                errorToReport = [NSError errorWithCode: APCErrorJSONTasksAndScheduleIsNotAnArrayCode
+                                                domain: APCErrorDomainLoadingTasksAndSchedules
+                                         failureReason: APCErrorJSONTasksAndScheduleIsNotAnArrayReason
+                                    recoverySuggestion: APCErrorJSONTasksAndScheduleIsNotAnArraySuggestion];
+            }
+
+            else
+            {
+                schedulesArray = maybeSchedulesArray;
+
+                if (schedulesArray.count == 0)
+                {
+                    // This may not be an error, but it probably is.
+                    errorToReport = [NSError errorWithCode: APCErrorJSONTasksAndSchedulesIsEmptyCode
+                                                    domain: APCErrorDomainLoadingTasksAndSchedules
+                                             failureReason: APCErrorJSONTasksAndSchedulesIsEmptyReason
+                                        recoverySuggestion: APCErrorJSONTasksAndSchedulesIsEmptySuggestion];
+                }
+                else
+                {
+                    // Whew.  Looks like we got real data.  Ready to process.
+                }
+            }
+        }
+
+        if (errorToReport != nil)
+        {
+            [self handleErrorLoadingTasksAndSchedulesFromDisk: errorToReport
+                                          andThenUseThisQueue: queue
+                                                     toDoThis: callbackBlock];
+        }
+
+        else
+        {
+            [self handleSuccessfullyLoadedTasksAndSchedulesFromDisk: schedulesArray
+                                                andThenUseThisQueue: queue
+                                                           toDoThis: callbackBlock];
         }
     }];
-    
-    if (filteredArray.count == 0) {
-        //Schedule not created, create it
-        [self createScheduledTask:schedule task:task dateRange:range];
-    }
-    else if (filteredArray.count == 1) {
-        APCScheduledTask * validatedTask = filteredArray.firstObject;
-        [self validateScheduledTask:validatedTask];
-    }
-    else {
-        APCLogError(@"Many recurring scheduled tasks %@ present with the exact same range: %@", task.taskTitle, range);
-    }
 }
 
-/*********************************************************************************/
-#pragma mark - Helpers
-/*********************************************************************************/
-- (void) createScheduledTask:(APCSchedule*) schedule task: (APCTask*) task dateRange: (APCDateRange*) dateRange
+- (void) handleErrorLoadingTasksAndSchedulesFromDisk: (NSError *) errorLoadingFromDisk
+                                 andThenUseThisQueue: (NSOperationQueue *) queue
+                                            toDoThis: (APCSchedulerCallbackForFetchAndLoadOperations) callbackBlock
 {
-    APCAppDelegate * appDelegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
-    
-    NSArray *offsetsForTask = [appDelegate offsetForTaskSchedules];
-    
-    
-    
-    APCScheduledTask * createdScheduledTask = [APCScheduledTask newObjectForContext:self.scheduleMOC];
-    
-    NSDate *taskStartDate = dateRange.startDate;
-    NSDate *taskEndDate = dateRange.endDate;
+    APCLogError2 (errorLoadingFromDisk);
 
-    
-    NSPredicate *predicate = nil;
-    NSArray *matchedTasks = nil;
-    NSNumber *daysToOffset = nil;
-    NSString *currentTaskID = nil;
-    NSDate *offsetStartDate = nil;
-    NSDate *todaysDate = [NSDate todayAtMidnight];
-    
-    if (offsetsForTask) {
-        predicate = [NSPredicate predicateWithFormat:@"%K == %@", kScheduleOffsetTaskIdKey, task.taskID];
-        matchedTasks = [offsetsForTask filteredArrayUsingPredicate:predicate];
-        daysToOffset = nil;
-        
-        if (matchedTasks.count > 0) {
-            daysToOffset = [[matchedTasks firstObject] valueForKey:kScheduleOffsetOffsetKey];
-            currentTaskID = [[matchedTasks firstObject] valueForKey:kScheduleOffsetTaskIdKey];
+
+#if DEBUG
+
+    NSString *errorMessage = [NSString stringWithFormat:
+                              @"\n\n"
+                              "============ error: couldn't open JSON file =============\n"
+                              "We had trouble loading the JSON file.  Maybe there's a copy-and-paste error?  Here's the original error message:\n\n"
+                              "%@\n"
+                              "=========================================================\n",
+                              errorLoadingFromDisk.friendlyFormattedString];
+
+    /*
+     If the app crashes here, we couldn't read the JSON
+     file you're trying to import.  (If you've been editing
+     it, the file probably has a simple typo, like an
+     extra comma.)  See console for details.
+     */
+    APCLogDebug (errorMessage);
+    NSAssert (NO, errorMessage);
+
+#endif
+
+
+    [self performFetchAndLoadCallback: callbackBlock
+                              onQueue: queue
+                         sendingError: errorLoadingFromDisk];
+}
+
+- (void) handleSuccessfullyLoadedTasksAndSchedulesFromDisk: (NSArray *) taskAndSchduleData
+                                       andThenUseThisQueue: (NSOperationQueue *) queue
+                                                  toDoThis: (APCSchedulerCallbackForFetchAndLoadOperations) callbackBlock
+{
+    /*
+     Loop through the incoming items and save/udpate everything.
+     Both -fetch and -load boil down to this one call.
+     */
+    [self processSchedulesAndTasks: taskAndSchduleData
+                        fromSource: APCScheduleSourceLocalDisk
+               andThenUseThisQueue: queue
+                  toDoThisWhenDone: callbackBlock];
+}
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Loading tasks and schedules from in-RAM dictionaries
+// ---------------------------------------------------------
+
+- (void) importScheduleFromDictionary: (NSDictionary *) scheduleContainingTasks
+                      assigningSource: (APCScheduleSource) scheduleSource
+                  andThenUseThisQueue: (NSOperationQueue *) queue
+                     toDoThisWhenDone: (APCSchedulerCallbackForFetchAndLoadOperations) callbackBlock
+{
+    [self.queryQueue addOperationWithBlock:^{
+        [self processSchedulesAndTasks: @[scheduleContainingTasks]
+                            fromSource: scheduleSource
+                   andThenUseThisQueue: queue
+                      toDoThisWhenDone: callbackBlock];
+    }];
+}
+
+
+
+// ---------------------------------------------------------
+#pragma mark - The core import process
+// ---------------------------------------------------------
+
+/**
+ This method is the core of our effort when loading
+ schedules, where we:
+ -  unify the processing for schedules and tasks from Sage
+    and local disk, and
+ -  compute the "effective start" and "effective end" dates
+
+ Here's how the process of creating schedules and tasks
+ works, and why.
+
+ We have (basically) 2 types of schedules: downloaded and
+ local.  As a business requirement, both types COMPLETELY
+ REPLACE any existing schedules of that type.  To expire a
+ schedule, the authors simply don't mention it in the
+ download; and to expire a task, the authors simply don't
+ make a schedule for it.
+
+ The catch is: we need the user to be able to see what was
+ SUPPOSED to happen in the past (again, as a business
+ requirement).  So we have to track schedules that were
+ once visible to the user, but no longer, and show them to
+ the user under certain circumstances.  I.e., we need to
+ show the users what the researchers EXPECTED them to do.
+
+ Example: A researcher schedules a "please enter your
+ weight" task for every Monday.  On Tuesday, March 5, the
+ researcher changes that schedule to be "every Tuesday and
+ Thursday": she wants the user to measure his weight every
+ Tuesday and Thursday.  The user didn't do the task
+ yesterday, Monday, March 5.  So if the user looks at
+ YESTERDAY's calendar: what does he see?  Nothing, because
+ the new schedule for that task says "Tuesday and
+ Thursday"?  Or one missed task, because the schedule AT
+ THAT TIME said "every Monday"?  The answer: we show the
+ user whatever was true FOR HIM, yesterday.  Downloading a
+ schedule shouldn't "rewrite the past." It should simply
+ tell the user what can happen from this day *forward*.
+
+ There are 2 parts to making this happen:
+ -  Downloading tasks and schedules, and then adding,
+    updating, or deleting them in the system.
+ -  Showing tasks appropriately when the user looks
+    at a calendar.
+
+ We'll keep those two issues separate.  This method is the
+ core of the first part: download and update.  Here's how
+ it works:
+
+ 1. The user downloads (from the server) or loads (from
+    disk) some schedules and tasks, either by launching
+    the app or by pull-to-refresh.  We look at the existing
+    schedules, and:
+
+ a. We delete any schedules with start dates of today or
+    later.
+
+ b. If any schedules have effective start AND end dates
+    before midnight tonight, we leave them alone.
+
+ c. If any schedules have effective START dates before
+    midnight tonight, but an END date of today or later,
+    we give them an end date of this morning at midnight.
+
+
+ 2. Each loaded Schedule includes one or more tasks.  For
+    each schedule, we look at each contained task, and:
+
+ a. If the schedule links to a task whose ID/version
+    aren't already here:  simply create the new task.
+
+ b. If a schedule links to a task whose ID and version IS
+    already here: see if the *contents* of that task have
+    changed.  If no change, link to the existing task.  If
+    changed, create a new task with a different locally-
+    created ID and version.
+
+
+ 3. An edge case: the user does a pull-to-refresh several
+    times between 9am and 10am the same day -- say, a
+    minute apart.  At the same time, out in the real world,
+    our friendly researcher is busily playing with tasks
+    and schedules.  So each time the user gets a download,
+    he might get new schedules and new tasks.  In this
+    case: when we're about to delete the schedules that
+    were downloaded earlier today (case 1a, above), we see
+    if the tasks owned by those schedules are owned by any
+    other schedules.  If not -- if the only schedules
+    owning those tasks are the schedules we're about to
+    delete -- delete those tasks, too.
+ */
+- (void) processSchedulesAndTasks: (NSArray *) arrayOfSchedulesAndTasks
+                       fromSource: (APCScheduleSource) scheduleSource
+              andThenUseThisQueue: (NSOperationQueue *) queue
+                 toDoThisWhenDone: (APCSchedulerCallbackForFetchAndLoadOperations) callbackBlock
+{
+    NSMutableString *printout = nil;
+    APCScheduleDebugPrinter *printer = nil;
+
+    #if DEBUG
+        if (kAPCShowDebugPrintouts)
+        {
+            printout = [NSMutableString new];
+            printer = [APCScheduleDebugPrinter new];
         }
-        
-    }
-    
-    if (daysToOffset) {
-        NSDateComponents *components = [[NSDateComponents alloc] init];
-        [components setDay:[daysToOffset integerValue]];
-        
-        offsetStartDate = [[NSCalendar currentCalendar] dateByAddingComponents:components
-                                                                        toDate:task.createdAt
-                                                                       options:0];
-        
-        offsetStartDate = [offsetStartDate startOfDay];
-        
-        APCLogDebug(@"Task %@ scheduled offset by %lu days. New start date is %@", task.taskTitle, [daysToOffset integerValue], taskStartDate);
-    }
-    
-    if (([task.taskID isEqualToString:currentTaskID] && currentTaskID != nil)
-        && (([offsetStartDate isEqualToDate:todaysDate]) ||
-            ([[todaysDate laterDate:offsetStartDate] isEqualToDate:todaysDate])))
+    #endif
+
+    NSManagedObjectContext *context = self.scheduleMOC;
+    NSError *finalErrorFromThisMethod = nil;
+    NSDate *today = self.systemDate;
+    NSDate *morningMidnight = today.startOfDay;
+    NSDate *eveningMidnight = today.endOfDay;
+
+    NSError *errorFetchingCurrentSchedules = nil;
+    NSArray *currentSchedules = [self schedulesActiveOnDayOfDate: today
+                                                      fromSource: scheduleSource
+                                                       inContext: context
+                                                  returningError: & errorFetchingCurrentSchedules];
+
+    if (! currentSchedules)
     {
-        
-        createdScheduledTask.startOn = taskStartDate;
-        createdScheduledTask.endOn = taskEndDate;
-        createdScheduledTask.generatedSchedule = schedule;
-        createdScheduledTask.task = task;
-        
-        NSError * saveError = nil;
-        BOOL saveSuccess = [createdScheduledTask saveToPersistentStore:&saveError];
-        
-        if (!saveSuccess) {
-            APCLogError2 (saveError);
+        finalErrorFromThisMethod = errorFetchingCurrentSchedules;
+    }
+
+    else
+    {
+        NSArray *rawIncomingSchedules = [self createSchedulesAndUpdateTasksFromIncomingData: arrayOfSchedulesAndTasks
+                                                                                  forSource: scheduleSource
+                                                                                  inContext: context];
+        NSArray *uniquifiedIncomingSchedules = nil;
+        NSArray *schedulesWithDuplicateTaskIDs = nil;
+        NSArray *duplicateTaskIds = nil;
+
+        [self findDuplicateTaskIdsInIncomingSchedules: rawIncomingSchedules
+                      returningTheUniquifiedSchedules: & uniquifiedIncomingSchedules
+                                 theDuplicatedTaskIDs: & duplicateTaskIds
+                          andTheSchedulesWeWillIgnore: & schedulesWithDuplicateTaskIDs];
+
+        if (duplicateTaskIds.count)
+        {
+            /*
+             If the app crashes inside this method call, it
+             means your JSON file contains one or more
+             schedules with the same task ID.  See the
+             console for which task IDs are duplicated.
+             */
+            [self reportLoudlyAboutDuplicateTaskIds: duplicateTaskIds
+                      andTheSchedulesContainingThem: schedulesWithDuplicateTaskIDs
+                                         fromSource: scheduleSource];
         }
-        
-        //Validate the task
-        [self.validatedScheduledTasksForReferenceDate addObject:createdScheduledTask];
-        
-    } else if (daysToOffset == nil || daysToOffset <= 0) {
-        createdScheduledTask.startOn = taskStartDate;
-        createdScheduledTask.endOn = taskEndDate;
-        createdScheduledTask.generatedSchedule = schedule;
-        createdScheduledTask.task = task;
-        
-        NSError * saveError = nil;
-        BOOL saveSuccess = [createdScheduledTask saveToPersistentStore:&saveError];
-        
-        if (!saveSuccess) {
-            APCLogError2 (saveError);
+
+
+        /*
+         Take various unions and intersections of the
+         current schedules and the incoming schedules.
+         This is the CORE OF THE BUSINESS LOGIC in this
+         method.
+         */
+        NSArray *schedulesThatAreAlreadyPerfect = [self arrayByFindingCommonElementsInScheduleArray: currentSchedules
+                                                                                   andScheduleArray: uniquifiedIncomingSchedules
+                                                                        comparingObjectsUsingFields: YES];
+
+        NSArray *oldSchedulesToKillOrDelete = [self arrayByRemovingElementsInScheduleArray: uniquifiedIncomingSchedules
+                                                                         fromScheduleArray: currentSchedules
+                                                               comparingObjectsUsingFields: YES];
+
+        NSArray *schedulesFromThisMorningToDelete = [oldSchedulesToKillOrDelete filteredArrayUsingPredicate: [NSPredicate predicateWithFormat: @"%K >= %@ && %K <= %@",
+                                                                                                              NSStringFromSelector (@selector (createdAt)),
+                                                                                                              morningMidnight,
+                                                                                                              NSStringFromSelector (@selector (createdAt)),
+                                                                                                              eveningMidnight]];
+
+        NSArray *oldSchedulesToTerminate = [self arrayByRemovingElementsInScheduleArray: schedulesFromThisMorningToDelete
+                                                                      fromScheduleArray: oldSchedulesToKillOrDelete
+                                                            comparingObjectsUsingFields: NO];
+
+        NSArray *newSchedulesToKeep = [self arrayByRemovingElementsInScheduleArray: schedulesThatAreAlreadyPerfect
+                                                                 fromScheduleArray: uniquifiedIncomingSchedules
+                                                       comparingObjectsUsingFields: YES];
+
+        NSArray *unnecessaryImportedSchedulesToDelete = [self arrayByRemovingElementsInScheduleArray: newSchedulesToKeep
+                                                                                   fromScheduleArray: uniquifiedIncomingSchedules
+                                                                         comparingObjectsUsingFields: NO];
+
+
+        //
+        // For debugging:  sort them by title, so we can see what's going on.
+        // The incoming schedules, unique and duplicated, are already sorted
+        // by the method we used to search for duplicates.
+        //
+        currentSchedules                     = [currentSchedules                     sortedArrayUsingSelector: @selector (compareWithSchedule:)];
+        schedulesThatAreAlreadyPerfect       = [schedulesThatAreAlreadyPerfect       sortedArrayUsingSelector: @selector (compareWithSchedule:)];
+        oldSchedulesToTerminate              = [oldSchedulesToTerminate              sortedArrayUsingSelector: @selector (compareWithSchedule:)];
+        newSchedulesToKeep                   = [newSchedulesToKeep                   sortedArrayUsingSelector: @selector (compareWithSchedule:)];
+        unnecessaryImportedSchedulesToDelete = [unnecessaryImportedSchedulesToDelete sortedArrayUsingSelector: @selector (compareWithSchedule:)];
+        schedulesFromThisMorningToDelete     = [schedulesFromThisMorningToDelete     sortedArrayUsingSelector: @selector (compareWithSchedule:)];
+
+
+        [printout appendFormat:
+         @"\n\n======================= new batch of schedules from %@ =======================\n",
+         NSStringFromAPCScheduleSource (scheduleSource)];
+
+        [printer printArrayOfSchedules: currentSchedules                        withLabel: @"Current Schedules"                                                 intoMutableString: printout];
+        [printer printArrayOfSchedules: uniquifiedIncomingSchedules             withLabel: @"Incoming Schedules with unique task IDs (we'll analyze these)"     intoMutableString: printout];
+        [printer printArrayOfSchedules: schedulesWithDuplicateTaskIDs           withLabel: @"Incoming Schedules with DUPLICATE task IDs (we'll delete these)"   intoMutableString: printout];
+        [printer printArrayOfSchedules: schedulesThatAreAlreadyPerfect          withLabel: @"Current Schedules that are Already Perfect"                        intoMutableString: printout];
+        [printer printArrayOfSchedules: newSchedulesToKeep                      withLabel: @"Incoming Schedules to Keep"                                        intoMutableString: printout];
+        [printer printArrayOfSchedules: schedulesFromThisMorningToDelete        withLabel: @"Schedules imported earlier today to delete"                        intoMutableString: printout];
+        [printer printArrayOfSchedules: oldSchedulesToTerminate                 withLabel: @"Current Schedules to Terminate"                                    intoMutableString: printout];
+        [printer printArrayOfSchedules: unnecessaryImportedSchedulesToDelete    withLabel: @"Unneded Incoming Schedules to Delete"                              intoMutableString: printout];
+
+
+        //
+        // Back to the business logic:
+        //
+
+        [self disableSchedules: oldSchedulesToTerminate];
+
+        [self deleteSchedulesButNotTasks: schedulesFromThisMorningToDelete
+                               inContext: context];
+
+        [self deleteSchedulesButNotTasks: unnecessaryImportedSchedulesToDelete
+                               inContext: context];
+
+        [self deleteSchedulesButNotTasks: schedulesWithDuplicateTaskIDs
+                               inContext: context];
+
+
+        //
+        // Save everything, if needed.
+        //
+
+        if (! context.hasChanges)
+        {
+            [printout appendString: @"\n...which means, all told, there's nothing to save.  We're done.\n\n"];
         }
-        
-        //Validate the task
-        [self.validatedScheduledTasksForReferenceDate addObject:createdScheduledTask];
-    } else {
-        APCLogDebug(@"Nothing should be happening here!");
+        else
+        {
+            NSManagedObject *anySaveableObject = uniquifiedIncomingSchedules.firstObject;
+            NSError *errorSavingEverything = nil;
+            BOOL saved = [anySaveableObject saveToPersistentStore: & errorSavingEverything];
+
+            if (! saved)
+            {
+                finalErrorFromThisMethod = [NSError errorWithCode: APCErrorSavingEverythingCode
+                                                           domain: APCErrorDomainLoadingTasksAndSchedules
+                                                    failureReason: APCErrorSavingEverythingReason
+                                               recoverySuggestion: APCErrorSavingEverythingSuggestion
+                                                      nestedError: errorSavingEverything];
+            }
+        }
+
+
+        //
+        // What happened?
+        //
+
+        NSArray *currentSchedulesAfterImport = [self schedulesActiveOnDayOfDate: today
+                                                                     fromSource: scheduleSource
+                                                                      inContext: context
+                                                                 returningError: & errorFetchingCurrentSchedules];
+
+        currentSchedulesAfterImport = [currentSchedulesAfterImport sortedArrayUsingSelector: @selector (compareWithSchedule:)];
+
+        [printout appendString: @"--------\nResults\n--------\n"];
+
+        [printer printArrayOfSchedules: currentSchedulesAfterImport  withLabel: @"Current schedules after import" intoMutableString: printout];
+
+        [printer printArrayOfSchedules: oldSchedulesToTerminate  withLabel: @"Terminated schedules" intoMutableString: printout];
+
+        [printout appendFormat:
+         @"======================= end batch of schedules from %@ =======================\n\n",
+         NSStringFromAPCScheduleSource (scheduleSource)];
+
+        NSLog (@"%@", printout);
+    }
+
+
+    //
+    // Lastly:  clear the performance cache.
+    //
+
+    [self clearTaskGroupCache];
+
+
+    //
+    // Done.
+    //
+
+    if (finalErrorFromThisMethod)
+    {
+        APCLogError2 (finalErrorFromThisMethod);
+    }
+
+    [self performFetchAndLoadCallback: callbackBlock
+                              onQueue: queue
+                         sendingError: finalErrorFromThisMethod];
+}
+
+- (NSArray *) createSchedulesAndUpdateTasksFromIncomingData: (NSArray *) incomingSchedulesAndTasks
+                                                  forSource: (APCScheduleSource) scheduleSource
+                                                  inContext: (NSManagedObjectContext *) context
+{
+    NSMutableArray *schedules = [NSMutableArray new];
+
+    for (NSDictionary *scheduleData in incomingSchedulesAndTasks)
+    {
+        APCSchedule *schedule = [self createOneScheduleAndItsTasksFromJsonData: scheduleData
+                                                                    fromSource: scheduleSource
+                                                                  usingContext: context];
+
+        [schedules addObject: schedule];
+    }
+
+    return schedules;
+}
+
+- (void) findDuplicateTaskIdsInIncomingSchedules: (NSArray *) incomingSchedulesAndTasks
+                 returningTheUniquifiedSchedules: (NSArray * __autoreleasing * ) uniquifiedSchedulesToReturn
+                            theDuplicatedTaskIDs: (NSArray * __autoreleasing * ) duplicateTaskIdsToReturn
+                     andTheSchedulesWeWillIgnore: (NSArray * __autoreleasing * ) duplicateSchedulesToReturn
+{
+    NSMutableArray *uniqueTaskIds       = [NSMutableArray new];
+    NSMutableArray *duplicateTaskIds    = [NSMutableArray new];
+    NSMutableArray *uniquifiedSchedules = [NSMutableArray new];
+    NSMutableArray *duplicateSchedules  = [NSMutableArray new];
+
+    for (APCSchedule *schedule in incomingSchedulesAndTasks)
+    {
+        BOOL thisScheduleContainsSomeoneElsesTaskId = NO;
+
+        for (APCTask *task in schedule.tasks)
+        {
+            NSString *taskId = task.taskID;
+
+            if (taskId == nil)
+            {
+                taskId = kAPCNullTaskIdString;
+            }
+
+            if ([uniqueTaskIds containsObject: taskId])
+            {
+                thisScheduleContainsSomeoneElsesTaskId = YES;
+                [duplicateTaskIds addObject: taskId];
+                break;
+            }
+            else
+            {
+                [uniqueTaskIds addObject: taskId];
+            }
+        }
+
+        if (thisScheduleContainsSomeoneElsesTaskId)
+        {
+            [duplicateSchedules addObject: schedule];
+        }
+        else
+        {
+            [uniquifiedSchedules addObject: schedule];
+        }
+    }
+
+    /*
+     These results are intended to be human-readable,
+     so sort them.  The task IDs are strings, so we can
+     sort by their -compare: method.  We'll sort the
+     schedules by a comparator we use to sort all lists of
+     schedules when we print them.
+     */
+    [duplicateTaskIds    sortUsingSelector: @selector (compare:)];
+    [uniquifiedSchedules sortUsingSelector: @selector (compareWithSchedule:)];
+    [duplicateSchedules  sortUsingSelector: @selector (compareWithSchedule:)];
+
+    // Ship 'em.
+    if (uniquifiedSchedulesToReturn != nil) { * uniquifiedSchedulesToReturn = uniquifiedSchedules; }
+    if (duplicateTaskIdsToReturn    != nil) { * duplicateTaskIdsToReturn    = duplicateTaskIds;    }
+    if (duplicateSchedulesToReturn  != nil) { * duplicateSchedulesToReturn  = duplicateSchedules;  }
+}
+
+- (void) reportLoudlyAboutDuplicateTaskIds: (NSArray *) duplicateTaskIds
+             andTheSchedulesContainingThem: (NSArray *) schedulesContainingThoseIDs
+                                fromSource: (APCScheduleSource) scheduleSource
+{
+    if (duplicateTaskIds.count)
+    {
+        NSString *errorMessage = nil;
+
+        if (scheduleSource == APCScheduleSourceServer)
+        {
+            errorMessage = APCErrorMoreThanOneScheduleWithSameTaskIDSuggestion;
+        }
+        else
+        {
+            APCScheduleDebugPrinter *printer = [APCScheduleDebugPrinter new];
+
+            NSMutableString *message = [NSMutableString stringWithFormat:
+                                        @"\n\n============ error: duplicate task IDs =============\nMore than one schedule in the imported JSON data is referring to the same task ID.  (Copy-and-paste error?)\n\nHere are the duplicate task IDs:\n"];
+
+            for (NSString *taskId in duplicateTaskIds)
+            {
+                [message appendFormat: @"-  %@\n", taskId];
+            }
+
+            [printer printArrayOfSchedules: schedulesContainingThoseIDs
+                                 withLabel: @"\nHere are the schedules containing those IDs"
+                         intoMutableString: message];
+
+            [message appendString: @"====================================================\n"];
+
+            errorMessage = message;
+        }
+
+        NSError *errorForDuplicateTaskIds = [NSError errorWithCode: APCErrorMoreThanOneScheduleWithSameTaskIDCode
+                                                            domain: APCErrorDomainLoadingTasksAndSchedules
+                                                     failureReason: APCErrorMoreThanOneScheduleWithSameTaskIDReason
+                                                recoverySuggestion: errorMessage
+                                                   relatedFilePath: nil
+                                                        relatedURL: nil
+                                                       nestedError: nil
+                                                     otherUserInfo: @{ kAPCErrorUserInfoKeyListOfDuplicatedTaskIDs : duplicateTaskIds }];
+
+        APCLogError2 (errorForDuplicateTaskIds);
+
+#if DEBUG
+        // If the app crashes here, you have duplicate
+        // task IDs in your JSON file.  See console for
+        // details.
+        NSAssert (NO, errorMessage);
+#endif
+
     }
 }
 
-- (void) validateScheduledTask: (APCScheduledTask*) scheduledTask {
-    [self.validatedScheduledTasksForReferenceDate addObject:scheduledTask];
-    [self.allScheduledTasksForReferenceDate removeObject:scheduledTask];
+- (BOOL) updateTasksInSchedules: (NSArray *) schedulesThatAreAlreadyPerfect
+               fromIncomingData: (NSArray *) incomingScheduleAndTaskData
+{
+    BOOL result = NO;
+
+    for (APCSchedule *schedule in schedulesThatAreAlreadyPerfect)
+    {
+        for (APCTask *task in schedule.tasks)
+        {
+            NSString *taskId = task.taskID;
+            NSNumber *taskVersion = task.taskVersionNumber;
+            NSDictionary *taskData = [self extractTaskDataFromIncomingListOfSchedulesAndTasks: incomingScheduleAndTaskData
+                                                                               withThisTaskId: taskId
+                                                                               andThisVersion: taskVersion];
+            [self updateTask: task
+                    withData: taskData];
+        }
+    }
+
+    return result;
 }
 
-- (void) deleteAllNonvalidatedScheduledTasks {
-    while (self.allScheduledTasksForReferenceDate.count) {
-        APCScheduledTask * task = [self.allScheduledTasksForReferenceDate lastObject];
-        [self.allScheduledTasksForReferenceDate removeLastObject];
-        [task deleteScheduledTask];
+/**
+ Crawls through the dictionaries and arrays in the incoming
+ data until it finds a task dictionary containing the
+ specified id and version.
+ */
+- (NSDictionary *) extractTaskDataFromIncomingListOfSchedulesAndTasks: (NSArray *) incomingScheduleAndTaskData
+                                                       withThisTaskId: (NSString *) taskId
+                                                       andThisVersion: (NSNumber *) taskVersion
+{
+    NSDictionary *foundTaskData = nil;
+    NSMutableArray *taskDataWithSameIdAndVersion = [NSMutableArray new];
+
+    for (NSDictionary *scheduleData in incomingScheduleAndTaskData)
+    {
+        NSArray *tasksForThisSchedule = scheduleData [kScheduleListOfTasksKey];
+
+        for (NSDictionary *taskData in tasksForThisSchedule)
+        {
+            NSString *taskIdFromData      = [self nilIfNull: taskData [kTaskIDKey]];
+            NSNumber *taskVersionFromData = [self nilIfNull: taskData [kTaskVersionNumberKey]];
+
+            if ([self object1: taskId      equalsObject2: taskIdFromData]      &&
+                [self object1: taskVersion equalsObject2: taskVersionFromData] )
+            {
+                [taskDataWithSameIdAndVersion addObject: taskData];
+            }
+        }
+    }
+
+    if (taskDataWithSameIdAndVersion.count == 0)
+    {
+        // Truly should never happen, since we got the taskID
+        // and version from a previous pass through the data.
+    }
+
+    else if (taskDataWithSameIdAndVersion.count == 1)
+    {
+        // This is what we were expecting.
+        foundTaskData = taskDataWithSameIdAndVersion.firstObject;
+    }
+
+    else    // .count > 1
+    {
+        NSError *tooManyTasksWithSameIdAndVersion = [NSError errorWithCode: APCErrorInboundListOfSchedulesAndTasksIssuesCode
+                                                                    domain: APCErrorDomainLoadingTasksAndSchedules
+                                                             failureReason: APCErrorInboundListOfSchedulesAndTasksIssuesReason
+                                                        recoverySuggestion: APCErrorInboundListOfSchedulesAndTasksIssuesSuggestion
+                                                           relatedFilePath: nil
+                                                                relatedURL: nil
+                                                               nestedError: nil
+                                                             otherUserInfo: @{ kTaskIDKey            : [self nullIfNil: taskId],
+                                                                               kTaskVersionNumberKey : [self nullIfNil: taskVersion] }];
+        APCLogError2 (tooManyTasksWithSameIdAndVersion);
+
+        // Therefore, this is kinda undefined:
+        foundTaskData = taskDataWithSameIdAndVersion.firstObject;
+    }
+
+    return foundTaskData;
+}
+
+- (void) disableSchedules: (NSArray *) schedulesToTerminate
+{
+    NSDate *endOfDayYesterday = self.systemDate.dayBefore.endOfDay;   // 23:59:59
+
+    for (APCSchedule *schedule in schedulesToTerminate)
+    {
+        schedule.effectiveEndDate = endOfDayYesterday;
     }
 }
+
+- (void) deleteSchedulesButNotTasks: (NSArray *) schedulesToDelete
+                          inContext: (NSManagedObjectContext *) context
+{
+    for (APCSchedule *schedule in schedulesToDelete)
+    {
+        [context deleteObject: schedule];
+    }
+}
+
+- (APCSchedule *) createOneScheduleAndItsTasksFromJsonData: (NSDictionary *) inboundScheduleData
+                                                fromSource: (APCScheduleSource) scheduleSource
+                                              usingContext: (NSManagedObjectContext *) context
+{
+    APCSchedule *schedule   = [APCSchedule newObjectForContext: context];
+    schedule.scheduleSource = @(scheduleSource);
+
+    NSMutableDictionary *scheduleData = inboundScheduleData.mutableCopy;
+
+
+    //
+    // Pre-import data validation.
+    //
+
+    id requestedStartDate = [self nilIfNull: scheduleData [kScheduleStartDateKey]];
+    id requestedEndDate   = [self nilIfNull: scheduleData [kScheduleEndDateKey]];
+    id timesOfDay         = [self nilIfNull: scheduleData [kScheduleTimesOfDayKey] ];
+
+    if ([requestedStartDate isKindOfClass: [NSString class]])
+    {
+        requestedStartDate = [NSDate dateWithISO8601String: requestedStartDate];
+    }
+
+    if ([requestedEndDate isKindOfClass: [NSString class]])
+    {
+        requestedEndDate = [NSDate dateWithISO8601String: requestedEndDate];
+    }
+
+    if ([timesOfDay isKindOfClass: [NSArray class]])
+    {
+        timesOfDay = [self serializedTimesOfDayStringFromISO8601TimesOfDayInArray: timesOfDay];
+    }
+
+    scheduleData [kScheduleStartDateKey]  = [self nullIfNil: requestedStartDate];
+    scheduleData [kScheduleEndDateKey]    = [self nullIfNil: requestedEndDate];
+    scheduleData [kScheduleTimesOfDayKey] = [self nullIfNil: timesOfDay];
+
+
+
+    //
+    // Copy the data into our local object.
+    //
+
+    schedule.delay                  = [self nilIfNull: scheduleData [kScheduleDelayKey]];
+    schedule.endsOn                 = [self nilIfNull: scheduleData [kScheduleEndDateKey]];
+    schedule.expires                = [self nilIfNull: scheduleData [kScheduleExpiresKey]];
+    schedule.interval               = [self nilIfNull: scheduleData [kScheduleIntervalKey]];
+    schedule.maxCount               = [self nilIfNull: scheduleData [kScheduleMaxCountKey]];
+    schedule.notes                  = [self nilIfNull: scheduleData [kScheduleNotesKey]];
+    schedule.reminderMessage        = [self nilIfNull: scheduleData [kScheduleReminderMessageKey]];         // if from Sage:  "label"
+    schedule.reminderOffset         = [self nilIfNull: scheduleData [kScheduleReminderOffsetKey]];
+    schedule.scheduleString         = [self nilIfNull: scheduleData [kScheduleStringKey]];
+    schedule.scheduleType           = [self nilIfNull: scheduleData [kScheduleTypeKey]];
+    schedule.shouldRemind           = [self nilIfNull: scheduleData [kScheduleShouldRemindKey]];
+    schedule.startsOn               = [self nilIfNull: scheduleData [kScheduleStartDateKey]];
+    schedule.timesOfDay             = [self nilIfNull: scheduleData [kScheduleTimesOfDayKey]];
+
+
+    //
+    // Add data validation, defaults, and calculations.
+    //
+
+    /*
+     Start date:  this morning, at midnight, whenever "this
+     morning" is.  NOT the app-installation time; that might
+     be months ago, which would not reflect the user's
+     experience of this schedule -- it didn't exist back
+     then.
+     */
+    NSDate *beginningOfTime = self.systemDate.startOfDay;
+
+    if (schedule.startsOn == nil)
+    {
+        schedule.startsOn = beginningOfTime;
+    }
+
+
+    /*
+     Effective start date = start date + delay.  Then round
+     to midnight that morning.
+     */
+    schedule.effectiveStartDate = schedule.startsOn;
+
+    if (schedule.delay.length)
+    {
+        schedule.effectiveStartDate = [schedule.effectiveStartDate dateByAddingISO8601Duration: schedule.delay];
+        schedule.effectiveStartDate = schedule.effectiveStartDate.dayBefore;
+    }
+
+    schedule.effectiveStartDate = schedule.effectiveStartDate.startOfDay;
+
+    NSDate *effectiveEndDate = schedule.endsOn;
+
+    if (schedule.expires.length)
+    {
+        effectiveEndDate = [effectiveEndDate dateByAddingISO8601Duration: schedule.expires];
+    }
+
+    effectiveEndDate = effectiveEndDate.endOfDay;
+    schedule.effectiveEndDate = effectiveEndDate;
+
+
+    //
+    // Creating Tasks
+    //
+    NSArray *tasks = scheduleData [kScheduleListOfTasksKey];
+
+    for (NSDictionary *taskData in tasks)
+    {
+        APCTask *task = [self createOrUpdateTaskFromJsonData: taskData
+                                                   inContext: context];
+        if (task)
+        {
+            [schedule addTasksObject: task];
+        }
+    }
+
+
+    //
+    // Done!
+    //
+    return schedule;
+}
+
+/**
+ When we get data from a file or from the server, we first
+ convert it to a set of dictionaries.  Each dictionary
+ contains one Schedule.  That Schedule contains a list of
+ the Tasks the schedule should manage.  Then we loop
+ through those Schedules, creating each one.  Within that
+ "create schedule" method, we then loop through all the
+ Tasks it's supposed to manage, and create each of THOSE.
+ This method does that part: creates a single Task, when
+ we're looping through the list of tasks attached to
+ inbound schedule data.
+ */
+- (APCTask *) createOrUpdateTaskFromJsonData: (NSDictionary *) taskData
+                                   inContext: (NSManagedObjectContext *) context
+{
+    APCTask  *task              = nil;
+    NSString *taskId            = [self nilIfNull: taskData [kTaskIDKey]];
+    NSNumber *taskVersionNumber = [self nilIfNull: taskData [kTaskVersionNumberKey]];
+
+    NSError *errorFindingExistingTask = nil;
+
+    task = [self taskWithId: taskId
+              versionNumber: taskVersionNumber
+                  inContext: context
+             returningError: & errorFindingExistingTask];
+
+    if (task == nil)
+    {
+        task = [APCTask newObjectForContext: context];
+        task.taskID = taskId;
+        task.taskVersionNumber = taskVersionNumber;
+    }
+
+    [self updateTask: task
+            withData: taskData];
+
+    return task;
+}
+
+- (void) updateTask: (APCTask *) task
+           withData: (NSDictionary *) taskData
+{
+    //
+    // Update the task with potentially new data
+    // (or add it for the first time, if we're creating a task).
+    //
+    task.taskHRef                   = [self nilIfNull: taskData [kTaskUrlKey]];                     // Sage-only?
+    task.taskTitle                  = [self nilIfNull: taskData [kTaskTitleKey]];                   // sage and us
+    task.sortString                 = [self nilIfNull: taskData [kTaskSortStringKey]];              // us-only, for now
+    task.taskClassName              = [self nilIfNull: taskData [kTaskClassNameKey]];               // sage and us, because we add to sage
+    task.taskCompletionTimeString   = [self nilIfNull: taskData [kTaskCompletionTimeStringKey]];    // us-only?
+    task.taskContentFileName        = [self nilIfNull: taskData [kTaskFileNameKey]];                // us-only?
+    task.taskIsOptional             = [self nilIfNull: taskData [kTaskIsOptionalKey]];              // us for now, Sage eventually?
+
+
+    if ([task.taskTitle stringByTrimmingCharactersInSet: [NSCharacterSet whitespaceAndNewlineCharacterSet]].length == 0)
+    {
+        APCLogDebug (@"\n-------------\nWARNING!  About to create a Task with an empty title!  taskData and task are:  \n%@\n%@\n----------------", taskData, task);
+        NSLog (@"");
+    }
+
+    /*
+     STRONGLY SUGGESTED: move this to the individual Task
+     view controllers.  This section actually compiles and
+     serializes the content of the survey file.  But those
+     files are just JSON, and can easily and safely be
+     loaded later; we don't have to store them in CoreData.
+     We probably *do* want to *verify* that it can indeed
+     be compiled, though.
+     */
+    if (task.taskContentFileName)
+    {
+        // This method spews errors as needed.
+        id <ORKTask> survey = [self surveyFromFileBaseName: task.taskContentFileName];
+
+        if (survey)
+        {
+            task.rkTask = survey;
+        }
+    }
+}
+
+- (APCTask *) taskWithId: (NSString *) taskId
+           versionNumber: (NSNumber *) versionNumber
+               inContext: (NSManagedObjectContext *) context
+          returningError: (NSError * __autoreleasing *) errorToReturn
+{
+    APCTask *task = nil;
+    NSError *localError = nil;
+    NSFetchRequest *searchForThisExactTask = [APCTask requestWithPredicate: [NSPredicate predicateWithFormat: @"%K == %@ && %K == %@",
+                                                                             NSStringFromSelector (@selector (taskID)),
+                                                                             taskId,
+                                                                             NSStringFromSelector (@selector (taskVersionNumber)),
+                                                                             versionNumber
+                                                                             ]];
+
+    NSError *errorSearchingForTasks = nil;
+    NSArray *possibleCopiesOfThisTask = [context executeFetchRequest: searchForThisExactTask
+                                                               error: & errorSearchingForTasks];
+
+    if (! possibleCopiesOfThisTask)
+    {
+        localError = [NSError errorWithCode: APCErrorSearchingForTaskWithIDCode
+                                     domain: APCErrorDomainLoadingTasksAndSchedules
+                              failureReason: APCErrorSearchingForTaskWithIDReason
+                         recoverySuggestion: APCErrorSearchingForTasksWithIDSuggestion
+                                nestedError: errorSearchingForTasks];
+    }
+    else if (possibleCopiesOfThisTask.count == 0)
+    {
+        // It actually doesn't exist.  No problem.
+    }
+    else if (possibleCopiesOfThisTask.count == 1)
+    {
+        // Whew.  Perfect.
+        task = possibleCopiesOfThisTask.firstObject;
+    }
+    else  // more than one task with this ID and version
+    {
+        /*
+         This should literally never happen, because of
+         this "if" block.  What do we we if it does?
+         For now, yelp and continue.
+         */
+        NSString *nameOfTaskIDField             = NSStringFromSelector (@selector (taskID));
+        NSString *nameOfTaskVersionField        = NSStringFromSelector (@selector (taskVersionNumber));
+
+        NSError  *whoopsTooManyTasksWithThisID  = [NSError errorWithCode: APCErrorMoreThanOneTaskWithIdAndVersionCode
+                                                                  domain: APCErrorDomainLoadingTasksAndSchedules
+                                                           failureReason: APCErrorMoreThanOneTaskWithIdAndVersionReason
+                                                      recoverySuggestion: APCErrorMoreThanOneTaskWithIdAndVersionSuggestion
+                                                         relatedFilePath: nil
+                                                              relatedURL: nil
+                                                             nestedError: nil
+                                                           otherUserInfo: @{ nameOfTaskIDField      : [self nullIfNil: taskId],
+                                                                             nameOfTaskVersionField : [self nullIfNil: versionNumber]
+                                                                             }];
+
+        APCLogError2 (whoopsTooManyTasksWithThisID);
+
+        // ...so this is undefined, kinda:
+        task = possibleCopiesOfThisTask.firstObject;
+
+        // ...and we're about to return an error when we're also
+        // returning a valid object, which means the calling
+        // method won't expect this.  In progress.
+        localError = whoopsTooManyTasksWithThisID;
+    }
+
+    if (errorToReturn != nil)
+    {
+        * errorToReturn = localError;
+    }
+
+    return task;
+}
+
+- (id <ORKTask>) surveyFromFileBaseName: (NSString *) surveyContentFileBaseName
+{
+    id <ORKTask> rkSurvey = nil;
+
+    NSString *surveyFilePath = [[NSBundle mainBundle] pathForResource: surveyContentFileBaseName
+                                                     ofType: kAPCFileExtension_JSON];
+
+    if (! surveyFilePath)
+    {
+        NSString *fullFileName = [NSString stringWithFormat: @"%@.%@", surveyContentFileBaseName, kAPCFileExtension_JSON];
+
+        NSError *errorFindingSurveyFile = [NSError errorWithCode: APCErrorCouldntFindSurveyFileCode
+                                                          domain: APCErrorDomainLoadingTasksAndSchedules
+                                                   failureReason: APCErrorCouldntFindSurveyFileReason
+                                              recoverySuggestion: APCErrorCouldntFindSurveyFileSuggestion
+                                                 relatedFilePath: fullFileName
+                                                      relatedURL: nil
+                                                     nestedError: nil];
+
+        APCLogError2 (errorFindingSurveyFile);
+    }
+
+    else
+    {
+        NSError *errorLoadingSurveyFile = nil;
+        NSData *jsonData = [NSData dataWithContentsOfFile: surveyFilePath
+                                                  options: 0
+                                                    error: & errorLoadingSurveyFile];
+
+        if (! jsonData)
+        {
+            NSError *error = [NSError errorWithCode: APCErrorLoadingSurveyFileCode
+                                             domain: APCErrorDomainLoadingTasksAndSchedules
+                                      failureReason: APCErrorLoadingSurveyFileReason
+                                 recoverySuggestion: APCErrorLoadingSurveyFileSuggestion
+                                        nestedError: errorLoadingSurveyFile];
+            
+            APCLogError2 (error);
+        }
+
+        else
+        {
+            NSError *errorParsingSurveyContent = nil;
+            NSDictionary *surveyContent = [NSJSONSerialization JSONObjectWithData: jsonData
+                                                                          options: 0
+                                                                            error: & errorParsingSurveyContent];
+            if (! surveyContent)
+            {
+                NSError *error = [NSError errorWithCode: APCErrorParsingSurveyContentCode
+                                                 domain: APCErrorDomainLoadingTasksAndSchedules
+                                          failureReason: APCErrorParsingSurveyContentReason
+                                     recoverySuggestion: APCErrorParsingSurveyContentSuggestion
+                                            nestedError: errorParsingSurveyContent];
+                
+                APCLogError2 (error);
+            }
+
+            else
+            {
+                @try
+                {
+                    id manager = SBBComponent(SBBSurveyManager);
+                    SBBSurvey *survey = [[manager objectManager] objectFromBridgeJSON: surveyContent];
+                    rkSurvey = [APCTask rkTaskFromSBBSurvey: survey];
+                }
+                @catch (NSException *exception)
+                {
+                    NSError *error = [NSError errorWithCode: APCErrorLoadingNativeBridgeSurveyObjectCode
+                                                     domain: APCErrorDomainLoadingTasksAndSchedules
+                                              failureReason: APCErrorLoadingNativeBridgeSurveyObjectReason
+                                         recoverySuggestion: APCErrorLoadingNativeBridgeSurveyObjectSuggestion
+                                            relatedFilePath: surveyFilePath
+                                                 relatedURL: nil
+                                                nestedError: nil
+                                              otherUserInfo: @{ @"exception": exception,
+                                                                @"stackTrace": exception.callStackSymbols }];
+
+                    APCLogError2 (error);
+                }
+                @finally
+                {
+
+                }
+            }
+        }
+    }
+
+    return rkSurvey;
+}
+
+
+
+
+// =========================================================
+#pragma mark - IV. MANAGING POTENTIAL AND SCHEDULED TASKS -
+// =========================================================
+
+/**
+ Generates a new Scheduled Task, when the user is about to
+ view it for the first time.
+ */
+- (APCScheduledTask *) createScheduledTaskFromPotentialTask: (APCPotentialTask *) potentialTask
+{
+    APCSchedule *schedule           = potentialTask.schedule;
+    NSDate *startDate               = potentialTask.scheduledAppearanceDate;
+    NSString *expirationPeriod      = schedule.expires;
+    NSDate *endDate                 = nil;
+
+    if (expirationPeriod.length)
+    {
+        endDate = [startDate dateByAddingISO8601Duration: expirationPeriod];
+    }
+
+    APCScheduledTask *scheduledTask = [APCScheduledTask newObjectForContext: self.scheduleMOC];
+    scheduledTask.generatedSchedule = potentialTask.schedule;
+    scheduledTask.task              = potentialTask.task;
+    scheduledTask.startOn           = startDate;
+    scheduledTask.endOn             = endDate;
+
+    NSError *errorSavingTask        = nil;
+    BOOL savedSuccessfully          = [scheduledTask saveToPersistentStore: & errorSavingTask];
+
+    if (! savedSuccessfully)
+    {
+        NSError *error = [NSError errorWithCode: APCErrorSavingToPeristentStoreCode
+                                         domain: APCErrorDomainLoadingTasksAndSchedules
+                                  failureReason: APCErrorSavingToPeristentStoreReason
+                             recoverySuggestion: APCErrorSavingToPeristentStoreSuggestion
+                                    nestedError: errorSavingTask];
+
+        APCLogError2 (error);
+
+        [self deleteScheduledTask: scheduledTask];
+
+        scheduledTask = nil;
+    }
+
+
+    /*
+     Clear the taskGroup cache, so UIs (and anything else
+     depending on the cached taskGroups) draw correctly.
+     This operation is thread-safe.
+     */
+    [self clearTaskGroupCache];
+
+
+    return scheduledTask;
+}
+
+- (void) deleteScheduledTask: (APCScheduledTask *) scheduledTask
+{
+    NSError *errorDeleting = nil;
+    [self.scheduleMOC deleteObject: scheduledTask];
+
+    BOOL deletedSuccessfully = [scheduledTask saveToPersistentStore: & errorDeleting];
+
+    if (! deletedSuccessfully)
+    {
+        NSError* error = [NSError errorWithCode: APCErrorDeletingTaskCode
+                                         domain: APCErrorDomainLoadingTasksAndSchedules
+                                  failureReason: APCErrorDeletingTaskReason
+                             recoverySuggestion: APCErrorDeletingTaskSuggestion
+                                    nestedError: errorDeleting];
+
+        APCLogError2 (error);
+    }
+
+    /*
+     Clear the taskGroup cache, so UIs (and anything else
+     depending on the cached taskGroups) draw correctly.
+     This operation is thread-safe.
+     */
+    [self clearTaskGroupCache];
+}
+
+
+
+
+// =========================================================
+#pragma mark - V. UTILITIES -
+// =========================================================
+
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Replying to the method who called us
+// ---------------------------------------------------------
+
+/**
+ A local utility function, which checks for nil in both the
+ callbackBlock and the queue before queueing that block on
+ that queue, solely so we don't have to repeat those "if"
+ clauses everywhere we do this.
+ */
+- (void) performFetchAndLoadCallback: (APCSchedulerCallbackForFetchAndLoadOperations) callbackBlock
+                             onQueue: (NSOperationQueue *) queue
+                        sendingError: (NSError *) error
+{
+    if (queue != nil && callbackBlock != nil)
+    {
+        [queue addOperationWithBlock: ^{
+            callbackBlock (error);
+        }];
+    }
+}
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Wrapper around system date
+// ---------------------------------------------------------
+
+/**
+ Internal method that returns the fakeSystemDate, if it's
+ been set and if we're in debug mode, or the real system
+ date otherwise.
+ */
+- (NSDate *) systemDate
+{
+    NSDate *date = nil;
+
+    if ([APCUtilities isInDebuggingMode] && self.fakeSystemDate != nil)
+    {
+        date = self.fakeSystemDate;
+    }
+    else
+    {
+        date = [NSDate date];
+    }
+
+    return date;
+}
+
+- (void) clearFakeSystemDate
+{
+    /*
+     queue this along with all other operations on our
+     internal queue.
+     */
+    [self.queryQueue addOperationWithBlock:^{
+
+        self.fakeSystemDate = nil;
+        
+    }];
+}
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Default Values
+// ---------------------------------------------------------
+
+- (NSDictionary *) defaultScheduleValues
+{
+    NSNull *null = [NSNull null];
+
+    return @{
+             kScheduleTypeKey               : kScheduleTypeValueOnce,
+             kScheduleStringKey             : null,
+             kTaskIDKey                     : null,
+             kScheduleExpiresKey            : null,
+             kScheduleDelayKey              : null,
+             kScheduleStartDateKey          : null,
+             kScheduleEndDateKey            : null,
+             };
+}
+
+- (NSDictionary *) defaultTaskValues
+{
+    return @{};
+}
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Are we talkin' to the server?
+// ---------------------------------------------------------
+
+- (BOOL) isServerDisabled
+{
+    APCAppDelegate *app = [APCAppDelegate sharedAppDelegate];
+    BOOL result = app.dataSubstrate.parameters.bypassServer;
+
+#if DEVELOPMENT
+    result = YES;
+#endif
+
+    return result;
+}
+
+
+
+// ---------------------------------------------------------
+#pragma mark - The TaskGroup Cache
+// ---------------------------------------------------------
+
+/*
+ The three methods in this section use the "@synchronized"
+ keyword.  This means precisely the following:
+
+ -  They read and change the same array.
+
+ -  They are called by a couple of methods from at least
+    2 threads, and are frequently called at the same time.
+ 
+ -  Each change to that array takes several steps.
+    Those steps have to happen together if we want the
+    array and its contents to be make sense.
+ */
+
+- (NSArray *) cachedTaskGroupsForDayOfDate: (NSDate *) date
+                    forTasksMatchingFilter: (NSPredicate *) taskFilter
+{
+    APCTaskGroupCacheEntry *foundCacheEntry = nil;
+
+    @synchronized (self.taskGroupCacheMutex)
+    {
+        for (APCTaskGroupCacheEntry *cacheEntry in self.taskGroupCache)
+        {
+            BOOL bothTaskFiltersAreNil          = taskFilter == nil && cacheEntry.taskFilter == nil;
+            BOOL taskFiltersHaveSameDescription = [taskFilter.description isEqualToString: cacheEntry.taskFilter.description];
+
+            if ([date.startOfDay isEqualToDate: cacheEntry.date.startOfDay] &&
+                (bothTaskFiltersAreNil || taskFiltersHaveSameDescription))
+            {
+                foundCacheEntry = cacheEntry;
+                break;
+            }
+        }
+    }
+
+    return foundCacheEntry.taskGroups;
+}
+
+- (void) cacheTaskGroups: (NSArray *) taskGroups
+                 forDate: (NSDate *) date
+               andFilter: (NSPredicate *) taskFilter
+{
+    @synchronized (self.taskGroupCacheMutex)
+    {
+        NSArray *cachedTaskGroups = [self cachedTaskGroupsForDayOfDate: date
+                                                forTasksMatchingFilter: taskFilter];
+
+        if (cachedTaskGroups == nil)
+        {
+            APCTaskGroupCacheEntry *cacheEntry = [[APCTaskGroupCacheEntry alloc] initWithDate: date
+                                                                                   taskFilter: taskFilter
+                                                                                   taskGroups: taskGroups];
+
+            APCLogDebug (@"Caching task groups: %@", cacheEntry);
+
+            [self.taskGroupCache addObject: cacheEntry];
+        }
+    }
+}
+
+- (void) clearTaskGroupCache
+{
+    @synchronized (self.taskGroupCacheMutex)
+    {
+        APCLogDebug (@"Clearing the task-group cache.");
+
+        self.taskGroupCache = [NSMutableArray new];
+    }
+}
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Utility Methods
+// ---------------------------------------------------------
+
+- (APCAppDelegate *) appDelegate
+{
+    return [APCAppDelegate sharedAppDelegate];
+}
+
+- (NSManagedObjectContext *) managedObjectContext
+{
+    return self.scheduleMOC;
+}
+
+/**
+ Performs a "practical" version of "isEqual", returning YES if
+ (a)  both objects are nil, or
+ (b)  [object1 isEqual: object2]
+ */
+- (BOOL) object1: (id) object1
+   equalsObject2: (id) object2
+{
+    return ((object1 == nil && object2 == nil) || [object1 isEqual: object2]);
+}
+
+/**
+ Returns nil if the specified value is [NSNull null].
+ Otherwise, returns the value itself.
+
+ Used to extract values from an NSDictionary and treat
+ them as "nil" when that was the actual intent.
+ */
+- (id) nilIfNull: (id) someInputValue
+{
+    id outputValue = someInputValue;
+
+    if (outputValue == [NSNull null])
+    {
+        outputValue = nil;
+    }
+
+    return outputValue;
+}
+
+/**
+ Returns [NSNull null] if the specified value is
+ [NSNull null], so that we can insert the specified item
+ into a dictionary.  Otherwise, returns the value itself.
+ */
+- (id) nullIfNil: (id) someInputValue
+{
+    id outputValue = someInputValue;
+
+    if (outputValue == nil)
+    {
+        outputValue = [NSNull null];
+    }
+
+    return outputValue;
+}
+
+- (NSArray *) arrayByFindingCommonElementsInScheduleArray: (NSArray *) scheduleList1
+                                         andScheduleArray: (NSArray *) scheduleList2
+                              comparingObjectsUsingFields: (BOOL) shouldComparePointersNotFields
+{
+    //
+    // For debugging:  sort them by title, so we can see what's going on.
+    //
+    scheduleList1 = [scheduleList1 sortedArrayUsingSelector: @selector (compareWithSchedule:)];
+    scheduleList2 = [scheduleList2 sortedArrayUsingSelector: @selector (compareWithSchedule:)];
+
+    NSMutableArray *result = [NSMutableArray new];
+    NSMutableArray *shorterCopyOfList2 = [NSArray arrayWithArray: scheduleList2].mutableCopy;
+
+    for (APCSchedule *schedule1 in scheduleList1)
+    {
+        for (APCSchedule *schedule2 in shorterCopyOfList2)
+        {
+            BOOL theyreTheSame = [self schedule: schedule1
+                         isEquivalentToSchedule: schedule2
+                    comparingObjectsUsingFields: shouldComparePointersNotFields];
+
+            if (theyreTheSame)
+            {
+                [result addObject: schedule1];
+                [shorterCopyOfList2 removeObject: schedule2];
+                break;
+            }
+        }
+    }
+
+    return result;
+}
+
+- (NSArray *) arrayByRemovingElementsInScheduleArray: (NSArray *) stuffToRemove
+                                   fromScheduleArray: (NSArray *) stuffToKeep
+                         comparingObjectsUsingFields: (BOOL) shouldCompareFieldsNotPointers
+{
+
+    //
+    // For debugging:  sort them by title, so we can see what's going on.
+    //
+    stuffToRemove = [stuffToRemove sortedArrayUsingSelector: @selector (compareWithSchedule:)];
+    stuffToKeep   = [stuffToKeep sortedArrayUsingSelector: @selector (compareWithSchedule:)];
+
+    NSMutableArray *result = [NSMutableArray new];
+
+    for (APCSchedule *scheduleToKeep in stuffToKeep)
+    {
+        BOOL found = NO;
+
+        for (APCSchedule *scheduleToRemove in stuffToRemove)
+        {
+            BOOL theyreTheSame = [self schedule: scheduleToKeep
+                         isEquivalentToSchedule: scheduleToRemove
+                    comparingObjectsUsingFields: shouldCompareFieldsNotPointers];
+
+            if (theyreTheSame)
+            {
+                found = YES;
+                break;
+            }
+        }
+
+        if (! found)
+        {
+            [result addObject: scheduleToKeep];
+        }
+    }
+    
+    return result;
+}
+
+- (NSArray *) arrayByRemovingElementsInArray: (NSArray *) stuffToRemove
+                                   fromArray: (NSArray *) stuffToKeep
+                comparingObjectsUsingIsEqual: (BOOL) shouldCompareEqualityNotPointers
+{
+    NSMutableArray *result = [NSMutableArray new];
+
+    for (NSObject *thingyToKeep in stuffToKeep)
+    {
+        BOOL found = NO;
+
+        for (NSObject *thingyToRemove in stuffToRemove)
+        {
+            BOOL theyreTheSame = (shouldCompareEqualityNotPointers ?
+                                  [thingyToKeep isEqual: thingyToRemove] :
+                                  thingyToKeep == thingyToRemove);
+
+            if (theyreTheSame)
+            {
+                found = YES;
+                break;
+            }
+        }
+
+        if (! found)
+        {
+            [result addObject: thingyToKeep];
+        }
+    }
+    
+    return result;
+}
+
+- (BOOL)               schedule: (APCSchedule *) schedule1
+         isEquivalentToSchedule: (APCSchedule *) schedule2
+    comparingObjectsUsingFields: (BOOL) shouldCompareFieldsNotPointers
+{
+    BOOL schedulesAreEquivalent = NO;
+
+    if (! shouldCompareFieldsNotPointers)
+    {
+        schedulesAreEquivalent = (schedule1 == schedule2);
+    }
+    else
+    {
+        BOOL propertiesAreEqual = (
+                                   [self object1: schedule1.scheduleSource      equalsObject2: schedule2.scheduleSource]    &&      // server, disk, glucose log, etc.
+                                   [self object1: schedule1.scheduleType        equalsObject2: schedule2.scheduleType]      &&      // one-time, cron-based, interval-based
+                                   [self object1: schedule1.effectiveEndDate    equalsObject2: schedule2.effectiveEndDate]  &&
+                                   [self object1: schedule1.delay               equalsObject2: schedule2.delay]             &&      // delay before first instance shows up on calendar
+                                   [self object1: schedule1.expires             equalsObject2: schedule2.expires]           &&      // delay before each instance vanishes from calendar
+                                   [self object1: schedule1.maxCount            equalsObject2: schedule2.maxCount]          &&      // max number of occurrences on calendar
+                                   [self object1: schedule1.notes               equalsObject2: schedule2.notes]             &&
+                                   [self object1: schedule1.scheduleString      equalsObject2: schedule2.scheduleString]    &&      // the cron expression
+                                   [self object1: schedule1.shouldRemind        equalsObject2: schedule2.shouldRemind]      &&
+                                   [self object1: schedule1.reminderMessage     equalsObject2: schedule2.reminderMessage]   &&
+                                   [self object1: schedule1.reminderOffset      equalsObject2: schedule2.reminderOffset]    &&
+                                   [self object1: schedule1.interval            equalsObject2: schedule2.interval]          &&      // time between appearances, like "3 months"
+                                   [self object1: schedule1.timesOfDay          equalsObject2: schedule2.timesOfDay]        &&      // list of times of day, if using intervals
+
+                                   true     // leave this at the end, to make it easier to rearrange the lines above
+                                   );
+
+        if (propertiesAreEqual &&
+            (schedule1.tasks.count == schedule2.tasks.count) &&
+            (schedule1.tasks.count > 0))
+        {
+            /*
+             Up to here, they're identical.  Past this point, we'll
+             look for something NOT different, and set this to NO
+             if found:
+             */
+            schedulesAreEquivalent = YES;
+
+            /*
+             We have the same number of tasks.  Let's sort both lists of tasks
+             by ID and version, and then walk through them in order.  If we find
+             any differences, one of the tasks is different from the other, which
+             is all we need to know.
+             
+             Sort them using an array of sort descriptors we declared at the top
+             of this file.  We might call this method hundreds of times for a given
+             schedule download.  We won't do that OFTEN, but there's no reason to
+             keep reallocating those sort descriptors every time that happens.
+             */
+            NSArray *myTasks    = [schedule1.tasks.allObjects sortedArrayUsingDescriptors: [APCTask defaultSortDescriptors]];
+            NSArray *otherTasks = [schedule2.tasks.allObjects sortedArrayUsingDescriptors: [APCTask defaultSortDescriptors]];
+
+            for (NSUInteger taskIndex = 0; taskIndex < myTasks.count; taskIndex ++)
+            {
+                APCTask *myTask = myTasks [taskIndex];
+                APCTask *otherTask = otherTasks [taskIndex];
+
+                if (! [self object1: myTask.taskID            equalsObject2: otherTask.taskID] ||
+                    ! [self object1: myTask.taskVersionNumber equalsObject2: otherTask.taskVersionNumber])
+                {
+                    schedulesAreEquivalent = NO;
+                    break;
+                }
+            }
+        }
+    }
+
+    return schedulesAreEquivalent;
+}
+
+/**
+ These two methods are very similar to a method in APCScheduleIntervalEnumerator.m.
+ */
+- (NSString *) serializedTimesOfDayStringFromISO8601TimesOfDayInArray: (NSArray *) timesOfDay
+{
+    NSDateFormatter *formatter = [NSDateFormatter new];
+    formatter.locale = [NSLocale localeWithLocaleIdentifier: kAPCDateFormatLocaleEN_US_POSIX];
+
+    NSArray *legalFormats = @[@"H",
+                              @"HH",
+                              @"HH:mm",
+                              @"HH:mm:SS",
+                              @"HH:mm:SS.sss"
+                              ];
+
+    NSString *result = nil;
+    NSMutableArray *arrayOfValidStrings = [NSMutableArray new];
+
+    if (timesOfDay != nil && [timesOfDay isKindOfClass: [NSArray class]])
+    {
+        for (id thingy in timesOfDay)
+        {
+            NSString *inboundTimeString = nil;
+
+            /*
+             Allow integers as times of day (3 = 3am, 14 =
+             2pm, etc.) The spec only requests ISO 8601
+             strings, but I think this will make life
+             easier and equally practical, and it doesn't
+             cost us much.
+             */
+            if ([thingy isKindOfClass: [NSNumber class]])
+            {
+                NSNumber *value = thingy;
+                NSUInteger intValue = value.integerValue;
+                float floatValue = value.floatValue;
+                if (floatValue == (float) intValue &&
+                    intValue >= kAPCTimeFirstLegalISO8601HourOfDay &&
+                    intValue <= kAPCTimeLastLegalISO8601HourOfDay)
+                {
+                    inboundTimeString = value.stringValue;
+                }
+            }
+
+            else if ([thingy isKindOfClass: [NSString class]])
+            {
+                inboundTimeString = thingy;
+            }
+
+            else
+            {
+                // Ignore all other data types.
+            }
+
+            if (inboundTimeString != nil)
+            {
+                NSDate *date = nil;
+
+                for (NSString *format in legalFormats)
+                {
+                    formatter.dateFormat = format;
+                    date = [formatter dateFromString: inboundTimeString];
+
+                    if (date != nil)
+                    {
+                        break;
+                    }
+                }
+
+                if (date != nil)
+                {
+                    [arrayOfValidStrings addObject: inboundTimeString];
+                }
+            }
+        }
+    }
+
+    result = [arrayOfValidStrings componentsJoinedByString: @"|"];
+
+    if (result.length == 0)
+    {
+        result = nil;
+    }
+
+    return result;
+}
+
+- (NSArray *) deserializedArrayOfDurationsSinceMidnightFromISO8601TimesOfDayString: (NSString *) serializedTimesOfDayString
+{
+    NSDateFormatter *formatter = [NSDateFormatter new];
+    formatter.locale = [NSLocale localeWithLocaleIdentifier: kAPCDateFormatLocaleEN_US_POSIX];
+
+    NSArray *legalFormats = @[@"H",
+                              @"HH",
+                              @"HH:mm",
+                              @"HH:mm:SS",
+                              @"HH:mm:SS.sss"
+                              ];
+
+    NSMutableArray *result = [NSMutableArray new];
+
+    NSArray *iso8601TimeStrings = [serializedTimesOfDayString componentsSeparatedByString: @"|"];
+
+    for (NSString *iso8601TimeString in iso8601TimeStrings)
+    {
+        NSDate *date = nil;
+
+        for (NSString *format in legalFormats)
+        {
+            formatter.dateFormat = format;
+            date = [formatter dateFromString: iso8601TimeString];
+
+            if (date != nil)
+            {
+                break;
+            }
+        }
+
+        if (date != nil)
+        {
+            NSDate *midnightOnThatDate = date.startOfDay;
+            NSTimeInterval secondsSinceMidnight = [date timeIntervalSinceDate: midnightOnThatDate];
+            [result addObject: @(secondsSinceMidnight)];
+        }
+    }
+
+    if (result.count == 0)
+    {
+        result = nil;
+    }
+
+    return result;
+}
+
 
 @end

@@ -35,7 +35,9 @@
 #import "APCGraph.h"
 #import "APCTableViewItem.h"
 
-@interface APCGraphViewController : UIViewController
+@class APCScoring;
+
+@interface APCGraphViewController : UIViewController <APCScoringDelegate>
 
 @property (weak, nonatomic) IBOutlet APCLineGraphView *lineGraphView;
 @property (weak, nonatomic) IBOutlet APCDiscreteGraphView *discreteGraphView;
@@ -43,6 +45,8 @@
 @property (nonatomic, strong) APCTableViewDashboardGraphItem *graphItem;
 
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *legendLabel;
+
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *titleLabelWidthConstraint;
 
 @property (weak, nonatomic) IBOutlet UILabel *subTitleLabel;

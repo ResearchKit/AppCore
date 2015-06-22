@@ -159,23 +159,24 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
         
         APCTableViewDashboardGraphItem *graphItem = (APCTableViewDashboardGraphItem *)dashboardItem;
         APCDashboardGraphTableViewCell *graphCell = (APCDashboardGraphTableViewCell *)cell;
-        
         APCBaseGraphView *graphView;
         
         if (graphItem.graphType == kAPCDashboardGraphTypeLine) {
             graphView = (APCLineGraphView *)graphCell.lineGraphView;
             graphCell.lineGraphView.datasource = graphItem.graphData;
-            
+            [graphCell.legendButton setAttributedTitle:graphItem.legend forState:UIControlStateNormal];
             graphCell.discreteGraphView.hidden = YES;
             graphCell.lineGraphView.hidden = NO;
             
         } else if (graphItem.graphType == kAPCDashboardGraphTypeDiscrete) {
             graphView = (APCDiscreteGraphView *)graphCell.discreteGraphView;
             graphCell.discreteGraphView.datasource = graphItem.graphData;
-            
+            [graphCell.legendButton setAttributedTitle:graphItem.legend forState:UIControlStateNormal];
             graphCell.lineGraphView.hidden = YES;
             graphCell.discreteGraphView.hidden = NO;
         }
+        
+        [graphCell.legendButton setUserInteractionEnabled:graphItem.legend ? YES : NO];
         
         graphView.delegate = self;
         graphView.tintColor = graphItem.tintColor;
@@ -250,6 +251,7 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
@@ -391,7 +393,9 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
         self.presentAnimator.initialFrame = initialFrame;
         
         APCGraphViewController *graphViewController = [[UIStoryboard storyboardWithName:@"APCDashboard" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCLineGraphViewController"];
+        
         graphViewController.graphItem = graphItem;
+        graphItem.graphData.scoringDelegate = graphViewController;
         [self.navigationController presentViewController:graphViewController animated:YES completion:nil];
     }
 }
@@ -421,24 +425,6 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
     [self.navigationController presentViewController:moreInfoViewController animated:YES completion:^{
         
     }];
-    
-    //ActionSheet implementation
-    /*
-    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    APCTableViewDashboardItem *item = (APCTableViewDashboardItem *)[self itemForIndexPath:indexPath];
-    
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:item.caption message:item.info preferredStyle:UIAlertControllerStyleActionSheet];
-    
-    UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", @"Dismiss") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
-        
-    }];
-    
-    [alertController addAction:dismissAction];
-    
-    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
-    
-    [self presentViewController:alertController animated:YES completion:nil];
-     */
 }
 
 #pragma mark - Public Methods

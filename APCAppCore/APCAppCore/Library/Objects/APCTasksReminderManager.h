@@ -42,4 +42,6 @@
 - (void)manageTaskReminder:(APCTaskReminder *)reminder;
 + (NSArray*) reminderTimesArray;
 + (NSSet *) taskReminderCategories;
+
+- (void)handleActivitiesUpdateWithTodaysTaskGroups:(NSArray *) todaysTaskGroups;
 @end

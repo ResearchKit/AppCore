@@ -33,15 +33,22 @@
  
 #import <Foundation/Foundation.h>
 
+
+
+// ---------------------------------------------------------
+#pragma mark - Enums
+// ---------------------------------------------------------
+
+
 typedef NS_ENUM(NSUInteger, APCSignUpPermissionsType) {
-    kSignUpPermissionsTypeNone = 0,
-    kSignUpPermissionsTypeHealthKit,
-    kSignUpPermissionsTypeLocation,
-    kSignUpPermissionsTypeLocalNotifications,
-    kSignUpPermissionsTypeCoremotion,
-    kSignUpPermissionsTypeMicrophone,
-    kSignUpPermissionsTypeCamera,
-    kSignUpPermissionsTypePhotoLibrary
+    kAPCSignUpPermissionsTypeNone = 0,
+    kAPCSignUpPermissionsTypeHealthKit,
+    kAPCSignUpPermissionsTypeLocation,
+    kAPCSignUpPermissionsTypeLocalNotifications,
+    kAPCSignUpPermissionsTypeCoremotion,
+    kAPCSignUpPermissionsTypeMicrophone,
+    kAPCSignUpPermissionsTypeCamera,
+    kAPCSignUpPermissionsTypePhotoLibrary
 };
 
 typedef NS_ENUM(NSUInteger, APCDashboardMessageType) {
@@ -53,6 +60,53 @@ typedef NS_ENUM(NSUInteger, APCDashboardGraphType) {
     kAPCDashboardGraphTypeLine,
     kAPCDashboardGraphTypeDiscrete,
 };
+
+/**
+ Indicates where we're getting each batch of schedules and
+ tasks:  from the server, from disk, or from various
+ application-specific areas.
+
+ Please feel free to add your own sources, here.  If you
+ do, please respect the following:
+
+ -  Make them bitmask-friendly, using the examples below.
+
+ -  Do NOT change the values of the existing items. Those
+    are values in our users' current databases.
+
+ -  Add your enum name to the switch() statement in the
+    function NSStringFromAPCScheduleSource(), inside
+    APCConstants.m.
+ */
+typedef enum : NSUInteger {
+    APCScheduleSourceAll                = 0,
+    APCScheduleSourceLocalDisk          = 1 << 0,   // 0000 0000 0000 0001
+    APCScheduleSourceServer             = 1 << 1,   // 0000 0000 0000 0010
+    APCScheduleSourceGlucoseLog         = 1 << 2,   // 0000 0000 0000 0100
+    APCScheduleSourceMedicationTracker  = 1 << 3,   // 0000 0000 0000 1000
+}   APCScheduleSource;
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Enum Translation Functions
+// ---------------------------------------------------------
+
+/*
+ Converts an APCScheduleSource object or value to a string.
+ 
+ @see APCScheduleSource
+ */
+NSString *NSStringFromAPCScheduleSource              (APCScheduleSource scheduleSource);
+NSString *NSStringFromAPCScheduleSourceAsNumber      (NSNumber *scheduleSourceAsNumber);
+NSString *NSStringShortFromAPCScheduleSource         (APCScheduleSource scheduleSource);
+NSString *NSStringShortFromAPCScheduleSourceAsNumber (NSNumber *scheduleSourceAsNumber);
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Notifications
+// ---------------------------------------------------------
 
 FOUNDATION_EXPORT NSString *const APCUserSignedUpNotification;
 FOUNDATION_EXPORT NSString *const APCUserSignedInNotification;
@@ -69,7 +123,6 @@ FOUNDATION_EXPORT NSString *const APCAppDidFailToRegisterForRemoteNotification;
 
 FOUNDATION_EXPORT NSString *const APCScoringHealthKitDataIsAvailableNotification;
 FOUNDATION_EXPORT NSString *const APCTaskResultsProcessedNotification;
-
 FOUNDATION_EXPORT NSString *const APCUpdateTasksReminderNotification;
 
 FOUNDATION_EXPORT NSString *const APCConsentCompletedWithDisagreeNotification;
@@ -78,9 +131,22 @@ FOUNDATION_EXPORT NSString *const APCMotionHistoryReporterDoneNotification;
 
 FOUNDATION_EXPORT NSString *const APCHealthKitObserverQueryUpdateForSampleTypeNotification;
 
+FOUNDATION_EXPORT NSString *const APCActivityCompletionNotification;
+FOUNDATION_EXPORT NSString *const APCSchedulerUpdatedScheduledTasksNotification;
+FOUNDATION_EXPORT NSString *const APCUpdateChartsNotification;
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Uncategorized Constants
+// ---------------------------------------------------------
+
+FOUNDATION_EXPORT NSString *const kAnonDemographicDataUploadedKey;
 FOUNDATION_EXPORT NSString *const kStudyIdentifierKey;
 FOUNDATION_EXPORT NSString *const kAppPrefixKey;
 FOUNDATION_EXPORT NSString *const kBridgeEnvironmentKey;
+FOUNDATION_EXPORT NSString *const kNewsFeedTabKey;
+FOUNDATION_EXPORT NSString *const kExampleConsentKey;
 FOUNDATION_EXPORT NSString *const kDatabaseNameKey;
 FOUNDATION_EXPORT NSString *const kTasksAndSchedulesJSONFileNameKey;
 FOUNDATION_EXPORT NSString *const kConsentSectionFileNameKey;
@@ -106,7 +172,9 @@ FOUNDATION_EXPORT NSString *const kHKWorkoutTypeKey;
 FOUNDATION_EXPORT NSString * const kPasswordKey;
 FOUNDATION_EXPORT NSString * const kNumberOfMinutesForPasscodeKey;
 
-FOUNDATION_EXPORT NSUInteger     const kIndexOfActivitesTab;
+FOUNDATION_EXPORT NSUInteger     const kAPCActivitiesTabIndex;
+FOUNDATION_EXPORT NSUInteger     const kAPCNewsFeedTabIndex;
+
 FOUNDATION_EXPORT NSInteger      const kAPCSigninErrorCode_NotSignedIn;
 FOUNDATION_EXPORT NSUInteger     const kAPCSigninNumRetriesBeforePause;
 FOUNDATION_EXPORT NSTimeInterval const kAPCSigninNumSecondsBetweenRetries;
@@ -157,8 +225,38 @@ FOUNDATION_EXPORT NSString *const kAllSetDashboardTextAdditional;
 FOUNDATION_EXPORT NSString *const kActivitiesSectionKeepGoing;
 FOUNDATION_EXPORT NSString *const kActivitiesSectionYesterday;
 FOUNDATION_EXPORT NSString *const kActivitiesSectionToday;
+FOUNDATION_EXPORT NSString *const kActivitiesQueryKeyToday;
+FOUNDATION_EXPORT NSString *const kActivitiesQueryKeyYesterday;
 
 FOUNDATION_EXPORT NSString *const kActivitiesRequiresMotionSensor;
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Known Times and Dates
+// ---------------------------------------------------------
+
+FOUNDATION_EXPORT NSTimeInterval const kAPCTimeOneHour;
+FOUNDATION_EXPORT NSTimeInterval const kAPCTimeOneMinute;
+FOUNDATION_EXPORT NSUInteger     const kAPCTimeFirstLegalISO8601HourOfDay;
+FOUNDATION_EXPORT NSUInteger     const kAPCTimeLastLegalISO8601HourOfDay;
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Fonts and Font Sizes
+// ---------------------------------------------------------
+
+FOUNDATION_EXPORT float const kAPCActivitiesNormalFontSize;
+FOUNDATION_EXPORT float const kAPCActivitiesSmallFontSize;
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Locales
+// ---------------------------------------------------------
+
+FOUNDATION_EXPORT NSString *const kAPCDateFormatLocaleEN_US_POSIX;
 
 
 
@@ -217,15 +315,3 @@ FOUNDATION_EXPORT NSString * const kAPCContentType_UnknownData;
 @interface APCConstants : NSObject
 
 @end
-
-
-
-
-
-
-
-
-
-
-
-

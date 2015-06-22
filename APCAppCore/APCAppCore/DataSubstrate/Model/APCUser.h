@@ -36,6 +36,13 @@
 #import <CoreData/CoreData.h>
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSInteger, APCUserConsentSharingScope) {
+    APCUserConsentSharingScopeNone = 0,
+    APCUserConsentSharingScopeStudy,
+    APCUserConsentSharingScopeAll,
+};
+
+
 @interface APCUser : NSObject
 
 /*********************************************************************************/
@@ -59,6 +66,7 @@
 /*********************************************************************************/
 #pragma mark - Stored Properties in Core Data
 /*********************************************************************************/
+@property (nonatomic) APCUserConsentSharingScope sharingScope;      // NOT stored to CoreData, reflected in "sharedOptionSelection"
 @property (nonatomic) NSNumber *sharedOptionSelection;
 @property (nonatomic, strong) NSData *profileImage;
 
@@ -109,5 +117,25 @@
 @property (nonatomic, getter=isSignedIn) BOOL signedIn;
 
 - (BOOL) isLoggedOut;
+
+/**
+ Returns our best approximation of the user's "date of
+ consent" -- the date they agreed to start the study.
+ 
+ These days, we track the date the user signs up.  In
+ earlier versions of the apps, we didn't.  This method
+ represents a set of next-best-guesses about that date,
+ for users who signed up before we started tracking it.
+ */
+@property (readonly) NSDate *estimatedConsentDate;
+
+/**
+ Returns the best approximation we have for a user-consent
+ date if we don't yet have any user data.  This is a
+ static method so that it can be used during database
+ migration, when we attach start dates to existing
+ schedules, as well as during normal operation.
+ */
++ (NSDate *) proxyForConsentDate;
 
 @end

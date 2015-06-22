@@ -34,6 +34,19 @@
 #import "APCSignUpGeneralInfoViewController.h"
 #import "APCPermissionButton.h"
 #import "APCPermissionsManager.h"
+#import "APCTermsAndConditionsViewController.h"
+#import "APCOnboarding.h"
+#import "APCAppDelegate.h"
+#import "UIColor+APCAppearance.h"
+#import "NSDate+Helper.h"
+#import "NSString+Helper.h"
+#import "UIFont+APCAppearance.h"
+#import "UIAlertController+Helper.h"
+#import "NSBundle+Helper.h"
+#import "APCSpinnerViewController.h"
+#import "APCUser+Bridge.h"
+#import "APCLog.h"
+#import "NSError+APCAdditions.h"
 
 static NSString *kInternetNotAvailableErrorMessage1 = @"Internet Not Connected";
 static NSString *kInternetNotAvailableErrorMessage2 = @"BackendServer Not Reachable";
@@ -74,7 +87,7 @@ static CGFloat kHeaderHeight = 157.0f;
     self.permissionManager = [[APCPermissionsManager alloc] init];
     
     __weak typeof(self) weakSelf = self;
-    [self.permissionManager requestForPermissionForType:kSignUpPermissionsTypeHealthKit withCompletion:^(BOOL granted, NSError * __unused error) {
+    [self.permissionManager requestForPermissionForType:kAPCSignUpPermissionsTypeHealthKit withCompletion:^(BOOL granted, NSError * __unused error) {
         if (granted) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 weakSelf.permissionGranted = YES;
@@ -673,11 +686,11 @@ static CGFloat kHeaderHeight = 157.0f;
                 
                 APCLogError2 (error);
             
-                if ([error.message isEqualToString:kInternetNotAvailableErrorMessage1] || [error.message isEqualToString:kInternetNotAvailableErrorMessage2] || [error.message rangeOfString:kInternalMaxParticipantsMessage].location != NSNotFound) {
+                if (error.code == kSBBInternetNotConnected || error.code == kSBBServerNotReachable || error.code == kSBBServerUnderMaintenance) {
                     [spinnerController dismissViewControllerAnimated:NO completion:^{
                     
                         UIAlertController *alertView = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Sign Up", @"")
-                                                                                            message:error.message
+                                                                                            message:error.localizedDescription
                                                                                      preferredStyle:UIAlertControllerStyleAlert];
 
                         UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
@@ -735,7 +748,7 @@ static CGFloat kHeaderHeight = 157.0f;
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Take Photo", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
         
-        [self.permissionManager requestForPermissionForType:kSignUpPermissionsTypeCamera withCompletion:^(BOOL granted, NSError *error) {
+        [self.permissionManager requestForPermissionForType:kAPCSignUpPermissionsTypeCamera withCompletion:^(BOOL granted, NSError *error) {
             if (granted) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [weakSelf openCamera];
@@ -752,7 +765,7 @@ static CGFloat kHeaderHeight = 157.0f;
     }
     
     UIAlertAction *libraryAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Choose from Library", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
-        [self.permissionManager requestForPermissionForType:kSignUpPermissionsTypePhotoLibrary withCompletion:^(BOOL granted, NSError *error) {
+        [self.permissionManager requestForPermissionForType:kAPCSignUpPermissionsTypePhotoLibrary withCompletion:^(BOOL granted, NSError *error) {
             if (granted) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [weakSelf openPhotoLibrary];

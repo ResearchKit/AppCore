@@ -42,6 +42,8 @@
 
 @property (nonatomic) CGFloat leftOffset;
 
+@property (nonatomic) BOOL shouldHighlightLastLabel;
+
 - (void)setupLabels:(NSArray *)titles forAxisType:(APCGraphAxisType)type;
 
 @end
