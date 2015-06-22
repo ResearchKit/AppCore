@@ -539,7 +539,7 @@ static NSUInteger       kHoursPerDay        = 24;
 {
     if (_stalenessInterval == 0)
     {
-        _stalenessInterval = kHoursPerDay * kMinsPerHour * kSecsPerMin;
+        _stalenessInterval = 1 * kHoursPerDay * kMinsPerHour * kSecsPerMin;
     }
     
     return _stalenessInterval;
