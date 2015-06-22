@@ -39,6 +39,7 @@
 #import "APCConsentTask.h"
 
 extern NSUInteger   const kTheEntireDataModelOfTheApp;
+static NSString*    const kDatabaseName                     = @"db.sqlite";
 
 @class APCDataSubstrate, APCDataMonitor, APCScheduler, APCOnboarding, APCPasscodeViewController, APCTasksReminderManager, APCPassiveDataCollector, APCFitnessAllocation;
 

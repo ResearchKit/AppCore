@@ -54,7 +54,6 @@ NSUInteger   const kTheEntireDataModelOfTheApp              = 3;
 #pragma mark - Initializations Option Defaults
 /*********************************************************************************/
 static NSString*    const kDataSubstrateClassName           = @"APHDataSubstrate";
-static NSString*    const kDatabaseName                     = @"db.sqlite";
 static NSString*    const kTasksAndSchedulesJSONFileName    = @"APHTasksAndSchedules";
 static NSString*    const kConsentSectionFileName           = @"APHConsentSection";
 
