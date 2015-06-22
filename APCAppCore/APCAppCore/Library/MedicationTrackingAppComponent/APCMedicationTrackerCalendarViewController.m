@@ -86,6 +86,7 @@ static  CGFloat    kAPCMedicationRowHeight = 64.0;
 @property (nonatomic, weak)  IBOutlet  UILabel                    *tapItemsLabel;
 @property (nonatomic, weak)  IBOutlet  UIView                     *yourPrescriptionsView;
 @property (nonatomic, weak)  IBOutlet  UIButton                   *editButton;
+@property (nonatomic, assign)          BOOL                        tableViewEditingModeIsExplicit;
 
 @property (nonatomic, weak)            APCMedicationTrackerCalendarWeeklyView  *weeklyCalendar;
 
@@ -151,12 +152,14 @@ static  CGFloat    kAPCMedicationRowHeight = 64.0;
     return  cell;
 }
 
-#pragma  mark  -  Table View Delegate Methods
+#pragma  mark  -  Table View Regular Delegate Methods
 
 - (CGFloat)tableView:(UITableView *) __unused tableView heightForRowAtIndexPath:(NSIndexPath *) __unused indexPath
 {
     return  kAPCMedicationRowHeight;
 }
+
+#pragma  mark  -  Table View Editing Delegate Methods
 
 - (BOOL)tableView:(UITableView *) __unused tableView canEditRowAtIndexPath:(NSIndexPath *) __unused indexPath
 {
@@ -168,6 +171,25 @@ static  CGFloat    kAPCMedicationRowHeight = 64.0;
     return  UITableViewCellEditingStyleDelete;
 }
 
+- (void)tableView:(UITableView *) __unused tableView willBeginEditingRowAtIndexPath:(NSIndexPath *) __unused indexPath
+{
+    if (self.tableViewEditingModeIsExplicit == NO) {
+        self.navigationItem.rightBarButtonItem.enabled = NO;
+        self.editButton.enabled = NO;
+        [self.editButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateDisabled];
+    }
+}
+
+- (void)tableView:(UITableView *) __unused tableView didEndEditingRowAtIndexPath:(NSIndexPath *) __unused indexPath
+{
+    if (self.tableViewEditingModeIsExplicit == NO) {
+        self.navigationItem.rightBarButtonItem.enabled = YES;
+        self.editButton.enabled = YES;
+        [self.editButton setTitleColor:[UIColor appPrimaryColor] forState:UIControlStateNormal];
+        [self.tabulator setEditing:NO animated:YES];
+    }
+}
+
 - (void)tableView:(UITableView *) __unused tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
@@ -175,7 +197,12 @@ static  CGFloat    kAPCMedicationRowHeight = 64.0;
                                        message:NSLocalizedString(@"This Action Cannot Be Undone", nil)
                                 preferredStyle:UIAlertControllerStyleActionSheet];
         UIAlertAction  *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel
-                                                               handler:^(UIAlertAction  __unused *action) {}];
+                                                               handler:^(UIAlertAction  __unused *action)
+        {
+            if (self.tableViewEditingModeIsExplicit == NO) {
+                [self.tabulator setEditing:NO animated:YES];
+            }
+        }];
         [alerter addAction:cancelAction];
         UIAlertAction  *deleteAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Delete", nil) style:UIAlertActionStyleDestructive
                                                                handler:^(UIAlertAction  __unused *action)
@@ -208,7 +235,9 @@ static  CGFloat    kAPCMedicationRowHeight = 64.0;
              } else {
                  [self fetchAllPrescriptions];
                  if ([self.prescriptions count] == 0) {
-                     [self editButtonWasTapped:self.editButton];
+                     if (self.tableViewEditingModeIsExplicit == YES) {
+                         [self editButtonWasTapped:self.editButton];
+                     }
                  }
                  [self.view setNeedsDisplay];
                  [self refreshAllPages];
@@ -448,9 +477,9 @@ static  CGFloat    kAPCMedicationRowHeight = 64.0;
     }
 }
 
-#pragma  mark  -  Done Button Action Method
+#pragma  mark  -  Exit Medication Tracker Action Method
 
-- (void)doneButtonWasTapped:(id)__unused sender
+- (void)exitMedicationTracker:(id)__unused sender
 {
     if (self.delegate != nil) {
         if ([self.delegate respondsToSelector:@selector(stepViewController:didFinishWithNavigationDirection:)]) {
@@ -459,21 +488,32 @@ static  CGFloat    kAPCMedicationRowHeight = 64.0;
     }
 }
 
+#pragma  mark  -  Add Medication Action Method
+
 - (void)addMedicationWasTapped:(id)__unused sender
 {
-    APCMedicationTrackerSetupViewController  *controller = [[APCMedicationTrackerSetupViewController alloc] initWithNibName:nil bundle:[NSBundle appleCoreBundle]];
+    APCMedicationTrackerSetupViewController *controller = [[APCMedicationTrackerSetupViewController alloc] initWithNibName:nil
+                                                                                                                    bundle:[NSBundle appleCoreBundle]
+                                                                                                        withResourceBundle:self.resourceBundle
+                                                                                                          andResourceNames:self.resourceNames];
     [self.navigationController pushViewController:controller animated:YES];
 }
+
+#pragma  mark  -  Edit/Done Button Action Method
 
 - (IBAction)editButtonWasTapped:(UIButton *) __unused sender
 {
     NSString  *title = nil;
     if (self.tabulator.isEditing == NO) {
         [self.tabulator setEditing:YES animated:YES];
-        title = @"Done";
+        self.tableViewEditingModeIsExplicit = YES;
+        title = NSLocalizedString(@"Done", nil);
+        self.navigationItem.rightBarButtonItem.enabled = NO;
     } else {
         [self.tabulator setEditing:NO animated:YES];
-        title = @"Edit";
+        title = NSLocalizedString(@"Edit", nil);
+        self.tableViewEditingModeIsExplicit = NO;
+        self.navigationItem.rightBarButtonItem.enabled = YES;
     }
     [self.editButton setTitle:title forState:UIControlStateNormal];
 }
@@ -524,6 +564,7 @@ static  CGFloat    kAPCMedicationRowHeight = 64.0;
         self.editButton.hidden = NO;
     }
 }
+
 - (void)fetchAllPrescriptions
 {
     [APCMedTrackerPrescription fetchAllFromCoreDataAndUseThisQueue: [NSOperationQueue mainQueue]
@@ -568,10 +609,9 @@ static  CGFloat    kAPCMedicationRowHeight = 64.0;
     [super viewWillAppear:animated];
     
     if (self.navigationItem.leftBarButtonItem == nil) {
-        UIBarButtonItem  *backster = [APCCustomBackButton customBackBarButtonItemWithTarget:self action:@selector(doneButtonWasTapped:) tintColor:[UIColor appPrimaryColor]];
+        UIBarButtonItem  *backster = [APCCustomBackButton customBackBarButtonItemWithTarget:self action:@selector(exitMedicationTracker:) tintColor:[UIColor appPrimaryColor]];
         self.navigationItem.leftBarButtonItem = backster;
     }
-    
     [self fetchAllPrescriptions];
 }
 
@@ -584,7 +624,14 @@ static  CGFloat    kAPCMedicationRowHeight = 64.0;
     
     self.exScrolliburScrolledByUser = NO;
     
-    [APCMedTrackerDataStorageManager startupReloadingDefaults:YES andThenUseThisQueue:nil toDoThis:NULL];
+    if (self.resourceBundle && self.resourceNames) {
+        [APCMedTrackerDataStorageManager startupWithCustomDataInBundle:self.resourceBundle
+                                                     withResourceNames:self.resourceNames
+                                                   andThenUseThisQueue:nil
+                                                              toDoThis:NULL];
+    } else {
+        [APCMedTrackerDataStorageManager startupReloadingDefaults:YES andThenUseThisQueue:nil toDoThis:NULL];
+    }
 
     self.navigationItem.title = viewControllerTitle;
     
@@ -596,7 +643,7 @@ static  CGFloat    kAPCMedicationRowHeight = 64.0;
     
     UINib  *summaryCellNib = [UINib nibWithNibName:kSummaryTableViewCell bundle:[NSBundle appleCoreBundle]];
     [self.tabulator registerNib:summaryCellNib forCellReuseIdentifier:kSummaryTableViewCell];
-};
+}
 
 - (void)didReceiveMemoryWarning
 {
