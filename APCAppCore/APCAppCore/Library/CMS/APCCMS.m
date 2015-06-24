@@ -1,5 +1,5 @@
 // 
-//  APCCMS_NoEncryption_JustAStub.m
+//  APCCMS.m
 //  APCAppCore 
 // 
 // Copyright (c) 2015, Apple Inc. All rights reserved. 
@@ -32,20 +32,23 @@
 // 
  
 #import "APCCMS.h"
+#import "APCCMSSupport.h"
 
-/**
- Remember, only include ONE of these encryption .m files
- in your project.  See ENCRYPTION_README.txt for more
- information.
- */
 NSData * cmsEncrypt (NSData *data,
                      NSString * __unused identityPath,
                      NSError **error)
 {
+    NSData *encryptedData = data;
+    
     if (error != nil)
     {
         *error = nil;
     }
+    
+    Class support = NSClassFromString(@"APCCMSSupport");
+    if (support != Nil) {
+        encryptedData = [support cmsEncrypt:data identityPath:identityPath error:error];
+    }
 
-    return data;
+    return encryptedData;
 }
