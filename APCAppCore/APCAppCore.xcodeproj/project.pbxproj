@@ -100,7 +100,7 @@
 		366345921B1F8627003CC0EF /* NSArray+APCHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 366345901B1F8627003CC0EF /* NSArray+APCHelper.m */; };
 		366345951B1F863A003CC0EF /* SBBSchedule+APCHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 366345931B1F863A003CC0EF /* SBBSchedule+APCHelper.h */; };
 		366345961B1F863A003CC0EF /* SBBSchedule+APCHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 366345941B1F863A003CC0EF /* SBBSchedule+APCHelper.m */; };
-		3663459D1B1F865B003CC0EF /* APCActivitiesDateState.h in Headers */ = {isa = PBXBuildFile; fileRef = 366345971B1F865B003CC0EF /* APCActivitiesDateState.h */; };
+		3663459D1B1F865B003CC0EF /* APCActivitiesDateState.h in Headers */ = {isa = PBXBuildFile; fileRef = 366345971B1F865B003CC0EF /* APCActivitiesDateState.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3663459E1B1F865B003CC0EF /* APCActivitiesDateState.m in Sources */ = {isa = PBXBuildFile; fileRef = 366345981B1F865B003CC0EF /* APCActivitiesDateState.m */; };
 		3663459F1B1F865B003CC0EF /* APCScheduleDebugPrinter.h in Headers */ = {isa = PBXBuildFile; fileRef = 366345991B1F865B003CC0EF /* APCScheduleDebugPrinter.h */; };
 		366345A01B1F865B003CC0EF /* APCScheduleDebugPrinter.m in Sources */ = {isa = PBXBuildFile; fileRef = 3663459A1B1F865B003CC0EF /* APCScheduleDebugPrinter.m */; };
