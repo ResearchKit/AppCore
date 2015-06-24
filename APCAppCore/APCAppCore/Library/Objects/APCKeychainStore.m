@@ -125,7 +125,6 @@ static NSString *_defaultService;
         NSMutableDictionary *query = [[NSMutableDictionary alloc] init];
         [query setObject:(__bridge id)kSecClassGenericPassword forKey:(__bridge id)kSecClass];
         [query setObject:service forKey:(__bridge id)kSecAttrService];
-        [query setObject:key forKey:(__bridge id)kSecAttrGeneric];
         [query setObject:key forKey:(__bridge id)kSecAttrAccount];
 #if !TARGET_IPHONE_SIMULATOR && defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
         if (accessGroup) {
@@ -150,7 +149,6 @@ static NSString *_defaultService;
             NSMutableDictionary *attributes = [[NSMutableDictionary alloc] init];
             [attributes setObject:(__bridge id)kSecClassGenericPassword forKey:(__bridge id)kSecClass];
             [attributes setObject:service forKey:(__bridge id)kSecAttrService];
-            [attributes setObject:key forKey:(__bridge id)kSecAttrGeneric];
             [attributes setObject:key forKey:(__bridge id)kSecAttrAccount];
 #if TARGET_OS_IPHONE || (defined(MAC_OS_X_VERSION_10_9) && MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_9)
             [attributes setObject:(__bridge id)kSecAttrAccessibleAfterFirstUnlock forKey:(__bridge id)kSecAttrAccessible];
@@ -191,7 +189,6 @@ errReturn:
         NSMutableDictionary *itemToDelete = [[NSMutableDictionary alloc] init];
         [itemToDelete setObject:(__bridge id)kSecClassGenericPassword forKey:(__bridge id)kSecClass];
         [itemToDelete setObject:service forKey:(__bridge id)kSecAttrService];
-        [itemToDelete setObject:key forKey:(__bridge id)kSecAttrGeneric];
         [itemToDelete setObject:key forKey:(__bridge id)kSecAttrAccount];
 #if !TARGET_IPHONE_SIMULATOR && defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
         if (accessGroup) {
