@@ -212,8 +212,8 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
                                                            groupBy:APHTimelineGroupForInsights];
     readings = [glucoseReadings allObjects];
     
-    NSPredicate *predicateBefore = [NSPredicate predicateWithFormat:@"%K == %@", @"raw.period", @"before"];
-    NSPredicate *predicateAfter = [NSPredicate predicateWithFormat:@"%K == %@", @"raw.period", @"after"];
+    NSPredicate *predicateBefore = [NSPredicate predicateWithFormat:@"%K == %@", @"datasetRawData.period", @"before"];
+    NSPredicate *predicateAfter = [NSPredicate predicateWithFormat:@"%K == %@", @"datasetRawData.period", @"after"];
     
     NSArray *beforeReadings = [readings filteredArrayUsingPredicate:predicateBefore];
     NSArray *afterReadings  = [readings filteredArrayUsingPredicate:predicateAfter];
@@ -449,7 +449,7 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
             NSMutableDictionary *entry = [NSMutableDictionary dictionary];
             [entry setObject:day forKey:kDatasetDateKey];
             
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(%K = %@) and (%K = %@)", kDatasetDateKey, day, @"raw.period", period];
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(%K = %@) and (%K = %@)", kDatasetDateKey, day, @"datasetRawData.period", period];
             NSArray *groupItems = [dataset filteredArrayUsingPredicate:predicate];
             double itemSum = 0;
             double dayAverage = 0;
