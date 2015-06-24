@@ -307,13 +307,13 @@ static NSString *folderPathForUploadOperations = nil;
 
 + (void) uploadDictionary: (NSDictionary *) dictionary
        withTaskIdentifier: (NSString *) taskIdentifier
-           andTaskRunUuid: (NSUUID *) taskRunUuid
+           andTaskRunUUID: (NSUUID *) taskRunUUID
           completionQueue: (NSOperationQueue *) completionQueue
            withCompletion: (UploaderCallbackWhenCompleted) completion
 {
     APCDataArchiverAndUploader *archiverAndUploader = [[APCDataArchiverAndUploader alloc] initWithDictionariesToUpload: @[dictionary]
                                                                                                         taskIdentifier: taskIdentifier
-                                                                                                           taskRunUuid: taskRunUuid
+                                                                                                           taskRunUUID: taskRunUUID
                                                                                                        completionQueue: completionQueue
                                                                                                         withCompletion: completion];
     
@@ -441,12 +441,12 @@ static NSString *folderPathForUploadOperations = nil;
 
 - (id) initWithDictionariesToUpload: (NSArray *) arrayOfDictionaries
                      taskIdentifier: (NSString *) taskIdentifier
-                        taskRunUuid: (NSUUID *) taskRunUuid
+                        taskRunUUID: (NSUUID *) taskRunUUID
                     completionQueue: (NSOperationQueue *) completionQueue
                      withCompletion: (UploaderCallbackWhenCompleted) completion
 {
     self = [self initWithTaskIdentifier: taskIdentifier
-                         andTaskRunUuid: taskRunUuid];
+                         andTaskRunUuid: taskRunUUID];
 
     if (self)
     {
@@ -1899,7 +1899,7 @@ static NSString *folderPathForUploadOperations = nil;
         }
         else
         {
-            weakSelf.uploaderCompletionCallback(error);
+            self.uploaderCompletionCallback(error);
         }
     }
 

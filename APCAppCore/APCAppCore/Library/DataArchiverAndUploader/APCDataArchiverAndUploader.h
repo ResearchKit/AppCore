@@ -211,7 +211,7 @@ typedef void(^UploaderCallbackWhenCompleted)(NSError *error);
   */
 + (void) uploadDictionary: (NSDictionary *) dictionary
        withTaskIdentifier: (NSString *) taskIdentifier
-           andTaskRunUuid: (NSUUID *) taskRunUuid
+           andTaskRunUUID: (NSUUID *) taskRunUUID
           completionQueue: (NSOperationQueue *) completionQueue
            withCompletion: (UploaderCallbackWhenCompleted) completion;
 
