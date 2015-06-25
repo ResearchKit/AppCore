@@ -1894,12 +1894,14 @@ static NSString *folderPathForUploadOperations = nil;
         if (self.callbackQueue)
         {
             [self.callbackQueue addOperationWithBlock:^{
-                weakSelf.uploaderCompletionCallback(error);
+                __strong typeof(weakSelf) strongSelf = weakSelf;
+                strongSelf.uploaderCompletionCallback(error);
             }];
         }
         else
         {
-            self.uploaderCompletionCallback(error);
+            __strong typeof(weakSelf) strongSelf = weakSelf;
+            strongSelf.uploaderCompletionCallback(error);
         }
     }
 
