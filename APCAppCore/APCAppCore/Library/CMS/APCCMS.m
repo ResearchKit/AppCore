@@ -48,6 +48,8 @@ NSData * cmsEncrypt (NSData *data,
     Class support = NSClassFromString(@"APCCMSSupport");
     if (support != Nil) {
         encryptedData = [support cmsEncrypt:data identityPath:identityPath error:error];
+    } else {
+        NSLog(@"WARNING: APCCMSSupport class not implemented. Your data is not being encrypted. See ENCRYPTION_README.txt and APCCMSSupport.h for details.");
     }
 
     return encryptedData;

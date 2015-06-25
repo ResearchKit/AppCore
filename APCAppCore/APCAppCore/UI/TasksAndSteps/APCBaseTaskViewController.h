@@ -43,6 +43,7 @@
 @property  (nonatomic, strong)  APCScheduledTask  *scheduledTask;
 @property (nonatomic, copy) void (^createResultSummaryBlock) (NSManagedObjectContext* context);
 @property (readonly) APCAppDelegate *appDelegate;
+@property (nonatomic) BOOL canGenerateResult;
 
 /**
  Older, default version of an initialization method.  Initializes
