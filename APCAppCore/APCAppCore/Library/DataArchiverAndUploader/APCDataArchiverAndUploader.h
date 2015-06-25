@@ -149,6 +149,9 @@
  Many thanks to the programmers who started and evolved all
  of the above classes!
  */
+
+typedef void(^UploaderCallbackWhenCompleted)(NSError *error);
+
 @interface APCDataArchiverAndUploader : NSObject
 
 
@@ -197,6 +200,20 @@
        withTaskIdentifier: (NSString *) taskIdentifier
            andTaskRunUuid: (NSUUID *) taskRunUuid;
 
+/**
+  * @brief Same as -uploadDictionary:withTaskIdentifier:andTaskRunUuid
+  *        with additional arguments to supply a queue and a block.
+  *
+  * @param completionQueue   A queue that will be used for executing
+  *                          the block.
+  * @param withCompletion    A block that will be executed upon completion.
+  *
+  */
++ (void) uploadDictionary: (NSDictionary *) dictionary
+       withTaskIdentifier: (NSString *) taskIdentifier
+           andTaskRunUUID: (NSUUID *) taskRunUUID
+          completionQueue: (NSOperationQueue *) completionQueue
+           withCompletion: (UploaderCallbackWhenCompleted) completion;
 
 /**
  .zips and uploads the specified file to Sage.  This method

@@ -101,6 +101,7 @@ static NSString*    const kDatabaseName                     = @"db.sqlite";
 - (NSArray *)reviewConsentActions;
 - (NSArray *)allSetTextBlocks;
 - (NSDictionary *)configureTasksForActivities;
+- (BOOL)hideEmailOnWelcomeScreen;
 
 //To be called from Datasubstrate
 - (void) setUpCollectors;

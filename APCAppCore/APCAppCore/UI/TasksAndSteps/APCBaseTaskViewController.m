@@ -103,13 +103,15 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
 + (instancetype)customTaskViewController: (APCScheduledTask*) scheduledTask
 {
     [[UIView appearance] setTintColor:[UIColor appPrimaryColor]];
+    
     id<ORKTask> task = [self createTask: scheduledTask];
+    
     NSUUID * taskRunUUID = [NSUUID UUID];
+    
     APCBaseTaskViewController * controller = task ? [[self alloc] initWithTask:task taskRunUUID:taskRunUUID] : nil;
-//    controller.restorationIdentifier = [task identifier];
-//    controller.restorationClass = self;
     controller.scheduledTask = scheduledTask;
     controller.delegate = controller;
+    
     return  controller;
 }
 
@@ -149,6 +151,13 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
 {
     //To be overridden by child classes
     return nil;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    self.canGenerateResult = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -203,7 +212,14 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
     switch (reason)
     {
         case ORKTaskViewControllerFinishReasonCompleted:
-            [self processTaskResult];
+            
+            // Only process results when the task is able to
+            // generate them.
+            if (self.canGenerateResult)
+            {
+                [self processTaskResult];
+            }
+            
             [self.scheduledTask completeScheduledTask];
             [[NSNotificationCenter defaultCenter]postNotificationName:APCActivityCompletionNotification object:nil];
             break;

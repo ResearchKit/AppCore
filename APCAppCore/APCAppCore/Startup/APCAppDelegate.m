@@ -633,6 +633,15 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     return nil;
 }
 
+- (BOOL)hideEmailOnWelcomeScreen
+{
+    /* Abstract implementation. Subclass to override.
+     *
+     * To hide the email consent button on the Welcome screen return YES.
+     */
+    return NO;
+}
+
 /*********************************************************************************/
 #pragma mark - Catastrophic startup errors
 /*********************************************************************************/
