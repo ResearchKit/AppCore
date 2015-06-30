@@ -92,7 +92,7 @@
 		366345821B1F857C003CC0EF /* APCDataMigrationPolicy_Model4ToModel6.m in Sources */ = {isa = PBXBuildFile; fileRef = 3663457E1B1F857C003CC0EF /* APCDataMigrationPolicy_Model4ToModel6.m */; };
 		366345841B1F8597003CC0EF /* APCMappingModel4ToModel6.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 366345831B1F8597003CC0EF /* APCMappingModel4ToModel6.xcmappingmodel */; };
 		366345861B1F85B7003CC0EF /* MODEL_MIGRATION_README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 366345851B1F85B7003CC0EF /* MODEL_MIGRATION_README.txt */; };
-		366345891B1F85EA003CC0EF /* APCPotentialScheduledTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 366345871B1F85EA003CC0EF /* APCPotentialScheduledTask.h */; };
+		366345891B1F85EA003CC0EF /* APCPotentialScheduledTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 366345871B1F85EA003CC0EF /* APCPotentialScheduledTask.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3663458A1B1F85EA003CC0EF /* APCPotentialScheduledTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 366345881B1F85EA003CC0EF /* APCPotentialScheduledTask.m */; };
 		3663458D1B1F860A003CC0EF /* APCTaskGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = 3663458B1B1F860A003CC0EF /* APCTaskGroup.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3663458E1B1F860A003CC0EF /* APCTaskGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 3663458C1B1F860A003CC0EF /* APCTaskGroup.m */; };
