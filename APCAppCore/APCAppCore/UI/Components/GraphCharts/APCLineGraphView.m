@@ -271,7 +271,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     [self.fillLayers removeAllObjects];
     
     for (int i=0; i<[self numberOfPlots]; i++) {
-        if ([self numberOfPointsinPlot:i] <= 1) {
+        if ([self numberOfPointsInPlot:i] <= 1) {
             return;
         } else {
             [self drawGraphForPlotIndex:i];
@@ -317,7 +317,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     return numberOfPlots;
 }
 
-- (NSInteger)numberOfPointsinPlot:(NSInteger)plotIndex
+- (NSInteger)numberOfPointsInPlot:(NSInteger)plotIndex
 {
     NSInteger numberOfPoints = 0;
     
@@ -336,7 +336,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     if ([self.datasource respondsToSelector:@selector(numberOfDivisionsInXAxisForGraph:)]) {
         _numberOfXAxisTitles = [self.datasource numberOfDivisionsInXAxisForGraph:self];
     } else {
-        _numberOfXAxisTitles = [self numberOfPointsinPlot:0];
+        _numberOfXAxisTitles = [self numberOfPointsInPlot:0];
     }
     
     return _numberOfXAxisTitles;
@@ -359,7 +359,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     [self.dataPoints removeAllObjects];
     [self.yAxisPoints removeAllObjects];
     self.hasDataPoint = NO;
-    for (int i = 0; i<[self numberOfPointsinPlot:plotIndex]; i++) {
+    for (int i = 0; i<[self numberOfPointsInPlot:plotIndex]; i++) {
         
         if ([self.datasource respondsToSelector:@selector(lineGraph:plot:valueForPointAtIndex:)]) {
             CGFloat value = [self.datasource lineGraph:self plot:plotIndex valueForPointAtIndex:i];

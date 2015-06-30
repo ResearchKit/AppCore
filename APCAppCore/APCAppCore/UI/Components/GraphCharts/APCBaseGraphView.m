@@ -97,7 +97,7 @@ CGFloat const kAPCPopAnimationDuration  = 0.3;
     return 0;
 }
 
-- (NSInteger)numberOfPointsinPlot:(NSInteger) __unused plotIndex
+- (NSInteger)numberOfPointsInPlot:(NSInteger) __unused plotIndex
 {
     [self throwOverrideException];
     
