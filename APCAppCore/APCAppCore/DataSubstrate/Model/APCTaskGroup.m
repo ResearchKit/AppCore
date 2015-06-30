@@ -37,7 +37,7 @@
 #import "APCConstants.h"
 #import "APCScheduledTask+AddOn.h"
 #import "NSDate+Helper.h"
-
+#import "APCPotentialScheduledTask.h"
 
 /**
  We always sort -allCompletedTasks by the same set of

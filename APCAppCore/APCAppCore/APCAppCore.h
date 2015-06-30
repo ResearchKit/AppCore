@@ -336,6 +336,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCDayOfMonthSelector.h>
 #import <APCAppCore/APCListSelector.h>
 #import <APCAppCore/APCPointSelector.h>
+#import <APCAppCore/APCPotentialScheduledTask.h>
 #import <APCAppCore/APCScheduleEnumerator.h>
 #import <APCAppCore/APCScheduleExpressionParser.h>
 #import <APCAppCore/APCScheduleExpressionToken.h>
