@@ -43,6 +43,7 @@
 #import "UIAlertController+Helper.h"
 #import "APCDemographicUploader.h"
 #import "APCConstants.h"
+#import "APCUtilities.h"
 
 /*
  Be sure to set the CORRECT current version before releasing to production
@@ -209,8 +210,7 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 - (void)applicationWillTerminate:(UIApplication *) __unused application
 {
     if (self.dataSubstrate.currentUser.signedIn && !self.isPasscodeShowing) {
-        NSDate *currentTime = [NSDate date];
-        [[NSUserDefaults standardUserDefaults] setObject:currentTime forKey:kLastUsedTimeKey];
+        [[NSUserDefaults standardUserDefaults] setObject: [NSNumber numberWithLong:uptime()] forKey:kLastUsedTimeKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     
@@ -224,8 +224,7 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 - (void)applicationDidEnterBackground:(UIApplication *) __unused application
 {
     if (self.dataSubstrate.currentUser.signedIn && !self.isPasscodeShowing) {
-        NSDate *currentTime = [NSDate date];
-        [[NSUserDefaults standardUserDefaults] setObject:currentTime forKey:kLastUsedTimeKey];
+        [[NSUserDefaults standardUserDefaults] setObject: [NSNumber numberWithLong:uptime()] forKey:kLastUsedTimeKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     self.dataSubstrate.currentUser.sessionToken = nil;
@@ -960,14 +959,12 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 
 - (void)showPasscodeIfNecessary
 {
-    if (self.dataSubstrate.currentUser.isSignedIn) {
-        NSDate *lastUsedTime = [[NSUserDefaults standardUserDefaults] objectForKey:kLastUsedTimeKey];
-        if (lastUsedTime) {
-            NSTimeInterval timeDifference = [[NSDate new] timeIntervalSinceDate:lastUsedTime];
-            NSInteger numberOfMinutes = [self.dataSubstrate.parameters integerForKey:kNumberOfMinutesForPasscodeKey];
-            if (timeDifference > numberOfMinutes * 60) {
-                [self showPasscodeViewController];
-            }
+    if (self.dataSubstrate.currentUser.isSignedIn && !self.isPasscodeShowing) {
+        NSInteger numberOfMinutes = [self.dataSubstrate.parameters integerForKey:kNumberOfMinutesForPasscodeKey];
+        NSNumber *elapsedAtBackground = [[NSUserDefaults standardUserDefaults] objectForKey:kLastUsedTimeKey];
+        long timeSinceBackground = uptime() - elapsedAtBackground.longValue;
+        if (timeSinceBackground > numberOfMinutes * 60) {
+            [self showPasscodeViewController];
         }
     }
 }
@@ -1094,7 +1091,7 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     //set the tabbar controller as the rootViewController
     [self showTabBar];
     self.isPasscodeShowing = NO;
-    [[NSUserDefaults standardUserDefaults] setObject: [NSDate date] forKey:kLastUsedTimeKey];
+    [[NSUserDefaults standardUserDefaults] setObject: [NSNumber numberWithLong:uptime()] forKey:kLastUsedTimeKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
