@@ -58,7 +58,8 @@
 @implementation APCPasscodeViewController
 
 #pragma mark - View Life Cycle
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     
     self.wrongAttemptsCount = 0;
@@ -125,18 +126,20 @@
 
 #pragma mark - APCPasscodeViewDelegate
 
-- (void) passcodeViewDidFinish:(APCPasscodeView *) __unused passcodeView withCode:(NSString *) __unused code {
-
+- (void) passcodeViewDidFinish:(APCPasscodeView *) __unused passcodeView withCode:(NSString *) code
+{
     if (self.passcodeView.code.length > 0) {
-        if ([self.passcodeView.code isEqualToString:[APCKeychainStore passcode]]) {
-            //Authenticate
-            if ([self.delegate respondsToSelector:@selector(passcodeViewControllerDidSucceed:)]) {
-                [self.delegate passcodeViewControllerDidSucceed:self];
+        if ([code isEqualToString:[APCKeychainStore stringForKey:kAPCPasscodeKey]]) {
+            //Authenticated
+            if ([self.passcodeViewControllerDelegate respondsToSelector:@selector(passcodeViewControllerDidSucceed:)]) {
+                [self.passcodeViewControllerDelegate passcodeViewControllerDidSucceed:self];
             }
             
-            self.wrongAttemptsCount = 0;
-            
         } else {
+            
+            if ([self.passcodeViewControllerDelegate respondsToSelector:@selector(passcodeViewControllerDidFail:)]) {
+                [self.passcodeViewControllerDelegate passcodeViewControllerDidFail:self];
+            }
             
             if (self.wrongAttemptsCount < 5) {
                 CAKeyframeAnimation *shakeAnimation = [CAKeyframeAnimation animation];
@@ -159,9 +162,8 @@
                 }];
                 [alert addAction:okAction];
                 [self presentViewController:alert animated:YES completion:nil];
-
+                
             }
-            
         }
     }
 }
@@ -176,55 +178,39 @@
 - (void)promptTouchId
 {
     NSError *error = nil;
-    
+    self.touchContext = [LAContext new];
     if ([self.touchContext canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error]) {
         self.touchContext.localizedFallbackTitle = NSLocalizedString(@"Enter Passcode", @"");
         
         NSString *localizedReason = NSLocalizedString(@"Please authenticate with Touch ID", @"");
         
-        typeof(self) __weak weakSelf = self;
         [self.touchContext evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics
                           localizedReason:localizedReason
-                                    reply:^(BOOL success, NSError *error) {
-                                        
-                                        if (success) {
-                                            dispatch_async(dispatch_get_main_queue(), ^{
-                                                if ([weakSelf.delegate respondsToSelector:@selector(passcodeViewControllerDidSucceed:)]) {
-                                                    [weakSelf.delegate passcodeViewControllerDidSucceed:weakSelf];
-                                                }
-                                            });
-                                            
-                                        } else {
-                                            if (error.code == kLAErrorUserFallback) {
-                                                //Passcode
-                                                
-                                                
-                                            } else if (error.code == kLAErrorUserCancel) {
-                                                //cancel
-                                            } else {
-                                                dispatch_async(dispatch_get_main_queue(), ^{
-                                                    
-                                                    UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Authentication Error", @"") message:NSLocalizedString(@"Failed to authenticate.", @"")];
-                                                    [self presentViewController:alert animated:YES completion:nil];
-                                                });
-                                            }
-                                            
-                                            dispatch_async(dispatch_get_main_queue(), ^{
-                                                
-                                                [UIView animateWithDuration:0.3 animations:^{
-                                                    self.passcodeView.alpha = 1;
-                                                    self.titleLabel.alpha = 1;
-                                                    self.touchIdButton.alpha = 1;
-                                                }];
-                                                
-                                                [self makePasscodeViewBecomeFirstResponder];
-                                            });
-                                            
-                                        }
-                                    }];
+                                    reply:^(BOOL success, NSError __unused *error)
+         {
+             dispatch_sync(dispatch_get_main_queue(), ^{
+                 if (success) {
+                     if ([self.passcodeViewControllerDelegate respondsToSelector:@selector(passcodeViewControllerDidSucceed:)]) {
+                         [self.passcodeViewControllerDelegate passcodeViewControllerDidSucceed:self];
+                     }
+                 } else {
+                     if ([self.passcodeViewControllerDelegate respondsToSelector:@selector(passcodeViewControllerDidFail:)]) {
+                         [self.passcodeViewControllerDelegate passcodeViewControllerDidFail:self];
+                     }
+                     
+                     [UIView animateWithDuration:0.3 animations:^{
+                         self.passcodeView.alpha = 1;
+                         self.titleLabel.alpha = 1;
+                         self.touchIdButton.alpha = 1;
+                     }];
+                     
+                     [self makePasscodeViewBecomeFirstResponder];
+                 }
+             });
+         }];
     }
-    
 }
+
 #pragma mark - Keyboard Notifications
 
 - (void)keyboardWillShow:(NSNotification *)notifcation

@@ -60,10 +60,6 @@ static CGFloat const kAPCPasscodeViewPinLength = 4;
     return self;
 }
 
-- (void)dealloc {
-    _hiddenTextField.delegate = nil;
-}
-
 - (void) addControls {
     _digitViews = [NSMutableArray new];
     
@@ -176,7 +172,7 @@ static CGFloat const kAPCPasscodeViewPinLength = 4;
 
 - (void) textFieldDidEndEditing:(UITextField *)textField {
     self.code = textField.text;
-    
+    textField.text = nil;
     if ([self.delegate respondsToSelector:@selector(passcodeViewDidFinish:withCode:)]) {
         [self.delegate passcodeViewDidFinish:self withCode:self.code];
     }
