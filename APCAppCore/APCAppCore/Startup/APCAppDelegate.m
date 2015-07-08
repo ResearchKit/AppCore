@@ -1091,6 +1091,7 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     //set the tabbar controller as the rootViewController
     [self showTabBar];
     self.isPasscodeShowing = NO;
+    self.passcodeViewController = nil;
     [[NSUserDefaults standardUserDefaults] setObject: [NSNumber numberWithLong:uptime()] forKey:kLastUsedTimeKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
