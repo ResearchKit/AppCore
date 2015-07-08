@@ -961,9 +961,9 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 {
     if (self.dataSubstrate.currentUser.isSignedIn && !self.isPasscodeShowing) {
         NSInteger numberOfMinutes = [self.dataSubstrate.parameters integerForKey:kNumberOfMinutesForPasscodeKey];
-        NSNumber *elapsedAtBackground = [[NSUserDefaults standardUserDefaults] objectForKey:kLastUsedTimeKey];
-        long timeSinceBackground = uptime() - elapsedAtBackground.longValue;
-        if (timeSinceBackground > numberOfMinutes * 60) {
+        NSNumber *lastPasscodeSuccessTime = [[NSUserDefaults standardUserDefaults] objectForKey:kLastUsedTimeKey];
+        long timeDifference = uptime() - lastPasscodeSuccessTime.longValue;
+        if (timeDifference > numberOfMinutes * 60) {
             [self showPasscodeViewController];
         }
     }
