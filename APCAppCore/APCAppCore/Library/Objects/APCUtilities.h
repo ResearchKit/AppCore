@@ -115,6 +115,10 @@
  */
 + (NSDate *) firstKnownFileAccessDate;
 
+/**
+ Returns the number of seconds since the kernel boot time
+ */
+time_t uptime();
 
 @end
 

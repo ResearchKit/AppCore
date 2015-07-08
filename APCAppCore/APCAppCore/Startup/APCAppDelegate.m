@@ -40,10 +40,10 @@
 #import "APCOnboarding.h"
 #import "APCTasksReminderManager.h"
 #import "UIView+Helper.h"
-#import "APCTabBarViewController.h"
 #import "UIAlertController+Helper.h"
 #import "APCDemographicUploader.h"
 #import "APCConstants.h"
+#import "APCUtilities.h"
 
 /*
  Be sure to set the CORRECT current version before releasing to production
@@ -84,8 +84,8 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 @property (nonatomic, strong) NSError *catastrophicStartupError;
 @property (nonatomic, strong) NSOperationQueue *healthKitCollectorQueue;
 @property (nonatomic, strong) APCDemographicUploader  *demographicUploader;
-
-@end 
+@property (nonatomic, strong) APCPasscodeViewController *passcodeViewController;
+@end
 
 @implementation APCAppDelegate
 
@@ -123,8 +123,6 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     [self setUpTasksReminder];
     [self performDemographicUploadIfRequired];
     [self showAppropriateVC];
-    [self.dataMonitor appFinishedLaunching];
-    
     return YES;
 }
 
@@ -176,6 +174,7 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 
 - (BOOL)application:(UIApplication *) __unused application didFinishLaunchingWithOptions:(NSDictionary *) __unused launchOptions
 {
+    [self.dataMonitor appFinishedLaunching];
     return YES;
 }
 
@@ -200,7 +199,6 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 #endif
     
     [self hideSecureView];
-    [self showPasscodeIfNecessary];
     [self.dataMonitor appBecameActive];
 }
 
@@ -212,8 +210,7 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 - (void)applicationWillTerminate:(UIApplication *) __unused application
 {
     if (self.dataSubstrate.currentUser.signedIn && !self.isPasscodeShowing) {
-        NSDate *currentTime = [NSDate date];
-        [[NSUserDefaults standardUserDefaults] setObject:currentTime forKey:kLastUsedTimeKey];
+        [[NSUserDefaults standardUserDefaults] setObject: [NSNumber numberWithLong:uptime()] forKey:kLastUsedTimeKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     
@@ -227,8 +224,7 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 - (void)applicationDidEnterBackground:(UIApplication *) __unused application
 {
     if (self.dataSubstrate.currentUser.signedIn && !self.isPasscodeShowing) {
-        NSDate *currentTime = [NSDate date];
-        [[NSUserDefaults standardUserDefaults] setObject:currentTime forKey:kLastUsedTimeKey];
+        [[NSUserDefaults standardUserDefaults] setObject: [NSNumber numberWithLong:uptime()] forKey:kLastUsedTimeKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     self.dataSubstrate.currentUser.sessionToken = nil;
@@ -805,7 +801,7 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 
 - (void)showTabBar
 {
-    self.tabBarController = [[APCTabBarViewController alloc] init];
+    self.tabBarController = [[UITabBarController alloc] init];
     
     NSUInteger     selectedItemIndex = kAPCActivitiesTabIndex;
     
@@ -889,14 +885,11 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
         if (newsFeedTab) {
             [self.tabBarController setSelectedIndex:4];
         }
-
     }
-    
     
     [self.tabBarController setSelectedIndex:selectedItemIndex];
     self.tabBarController.delegate = self;
     self.tabBarController.tabBar.translucent = NO;
-    
     self.window.rootViewController = self.tabBarController;
 }
 
@@ -952,7 +945,7 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     }
     else if (self.dataSubstrate.currentUser.isSignedIn)
     {
-        [self showTabBar];
+        [self showPasscodeViewController];
     }
     else if (self.dataSubstrate.currentUser.isSignedUp)
     {
@@ -967,28 +960,23 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 - (void)showPasscodeIfNecessary
 {
     if (self.dataSubstrate.currentUser.isSignedIn && !self.isPasscodeShowing) {
-        NSDate *lastUsedTime = [[NSUserDefaults standardUserDefaults] objectForKey:kLastUsedTimeKey];
-        
-        if (lastUsedTime) {
-            NSTimeInterval timeDifference = [lastUsedTime timeIntervalSinceNow];
-            NSInteger numberOfMinutes = [self.dataSubstrate.parameters integerForKey:kNumberOfMinutesForPasscodeKey];
-            
-            if (timeDifference * -1 > numberOfMinutes * 60) {
-
-                [self showPasscode];
-            }
+        NSInteger numberOfMinutes = [self.dataSubstrate.parameters integerForKey:kNumberOfMinutesForPasscodeKey];
+        NSNumber *lastPasscodeSuccessTime = [[NSUserDefaults standardUserDefaults] objectForKey:kLastUsedTimeKey];
+        long timeDifference = uptime() - lastPasscodeSuccessTime.longValue;
+        if (timeDifference > numberOfMinutes * 60) {
+            [self showPasscodeViewController];
         }
     }
 }
 
-- (void)showPasscode
+- (void)showPasscodeViewController
 {
-    if ([self.window.rootViewController isKindOfClass:[APCTabBarViewController class]]) {
-        APCTabBarViewController * tvc = (APCTabBarViewController*) self.window.rootViewController;
-        tvc.passcodeDelegate = self;
-        self.isPasscodeShowing = YES;
-        tvc.showPasscodeScreen = YES;
+    if (!self.passcodeViewController) {
+        self.passcodeViewController = [[UIStoryboard storyboardWithName:@"APCPasscode" bundle:[NSBundle appleCoreBundle]] instantiateInitialViewController];
+        self.passcodeViewController.passcodeViewControllerDelegate = self;
     }
+    
+    self.window.rootViewController = self.passcodeViewController;
 }
 
 - (void) showOnBoarding
@@ -1065,16 +1053,6 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     return servicesArray.count;
 }
 
-#pragma mark - APCPasscodeViewControllerDelegate methods
-
-- (void)passcodeViewControllerDidSucceed:(APCPasscodeViewController *) __unused viewController
-{
-    [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kLastUsedTimeKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    
-    self.isPasscodeShowing = NO;
-}
-
 #pragma mark - Secure View
 
 - (void)showSecureView
@@ -1087,18 +1065,18 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
         UIImage *appIcon = [UIImage imageNamed:@"logo_disease_large" inBundle:[NSBundle mainBundle] compatibleWithTraitCollection:nil];
         UIImageView *blurredImageView = [[UIImageView alloc] initWithImage:blurredImage];
         UIImageView *appIconImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0,0, 180, 180)];
-
+        
         appIconImageView.image = appIcon;
         appIconImageView.center = blurredImageView.center;
         appIconImageView.contentMode = UIViewContentModeScaleAspectFit;
-        
+
         [self.secureView addSubview:blurredImageView];
         [self.secureView addSubview:appIconImageView];
-        
+
         [viewForSnapshot insertSubview:self.secureView atIndex:NSIntegerMax];
     }
 }
-
+        
 - (void)hideSecureView
 {
     if (self.secureView) {
@@ -1106,6 +1084,21 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
         self.secureView = nil;
     }
 }
+        
+#pragma mark PasscodeViewController delegate
+- (void)passcodeViewControllerDidSucceed:(APCPasscodeViewController *)__unused viewController
+{
+    //set the tabbar controller as the rootViewController
+    [self showTabBar];
+    self.isPasscodeShowing = NO;
+    [[NSUserDefaults standardUserDefaults] setObject: [NSNumber numberWithLong:uptime()] forKey:kLastUsedTimeKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
 
+- (void)passcodeViewControllerDidFail:(APCPasscodeViewController *) __unused viewController
+{
+    //retain the passcodeViewController as the Root View Controller and do not reset timeout
+    self.isPasscodeShowing = YES;
+}
 
 @end
