@@ -3,6 +3,7 @@
 //  APCAppCore 
 // 
 // Copyright (c) 2015, Apple Inc. All rights reserved. 
+// Copyright (c) 2015, Boston Children's Hospital. All rights reserved. 
 // 
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
@@ -34,18 +35,23 @@
 
 #import <Foundation/Foundation.h>
 
+/// Callback when motion history reporter is done.
+typedef void (^APCMotionHistoryReporterCallback)(NSArray * __nullable motionReports, NSError * __nullable error);
+
 @interface APCMotionHistoryReporter : NSObject
-{
-    
-}
 
-+(APCMotionHistoryReporter *)sharedInstance;
+NS_ASSUME_NONNULL_BEGIN
++ (APCMotionHistoryReporter *)sharedInstance;
 
+/** Start motion history collection. You will need to listen to the "" notification and call the shared instance's `retrieveMotionReport`. */
+- (void)startMotionCoProcessorDataFrom:(NSDate *)startDate andEndDate:(NSDate *)endDate andNumberOfDays:(NSInteger)numberOfDays;
 
--(void)startMotionCoProcessorDataFrom:(NSDate *)startDate andEndDate:(NSDate *)endDate andNumberOfDays:(NSInteger)numberOfDays;
+/** Start motion history collection and return the report in a callback. */
+- (void)startMotionCoProcessorDataFrom:(NSDate *)startDate andEndDate:(NSDate *)endDate andNumberOfDays:(NSInteger)numberOfDays callback:(APCMotionHistoryReporterCallback)callback;
 
--(BOOL)isDataReady;
+- (BOOL)isDataReady;
 
--(NSArray*)retrieveMotionReport;
+- (NSArray *)retrieveMotionReport;
+NS_ASSUME_NONNULL_END
 
 @end

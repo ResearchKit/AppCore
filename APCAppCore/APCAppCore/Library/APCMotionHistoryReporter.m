@@ -53,10 +53,12 @@ typedef NS_ENUM(NSInteger, MotionActivity)
     CMMotionManager * motionManager;
     NSMutableArray *motionReport;
     BOOL isTheDataReady;
-    
 }
 
+@property (copy, nonatomic) APCMotionHistoryReporterCallback doneCallback;
+
 @end
+
 
 @implementation APCMotionHistoryReporter
 
@@ -64,7 +66,7 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
 
 
 
-+(APCMotionHistoryReporter *) sharedInstance {
++ (APCMotionHistoryReporter *)sharedInstance {
     
     //Thread-Safe version
     static dispatch_once_t pred;
@@ -72,37 +74,50 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
         sharedInstance = [self new];
         
     });
-    
-    
     return sharedInstance;
 }
 
 
-- (id)init
-{
+- (id)init {
     self = [super init];
-    if(self) {
+    if (self) {
         self->motionActivityManager = [CMMotionActivityManager new];
         self->motionReport = [NSMutableArray new];
         self->isTheDataReady = false;
-        
     }
-    
     return self;
 }
 
--(void)startMotionCoProcessorDataFrom:(NSDate *)startDate andEndDate:(NSDate *)endDate andNumberOfDays:(NSInteger)numberOfDays
-{
-    [motionReport removeAllObjects];
-    isTheDataReady = false;
-    
-    [self getMotionCoProcessorDataFrom:startDate andEndDate:endDate andNumberOfDays:numberOfDays];
+- (void)startMotionCoProcessorDataFrom:(NSDate * __nonnull)startDate andEndDate:(NSDate * __nonnull)endDate andNumberOfDays:(NSInteger)numberOfDays {
+	[self startMotionCoProcessorDataFrom:startDate andEndDate:endDate andNumberOfDays:numberOfDays callback:^(NSArray *reports, NSError *error) {
+		if (error) {
+			NSLog(@"ERROR: %@", error.localizedDescription);
+		}
+		else {
+			[[NSNotificationCenter defaultCenter] postNotificationName:APCMotionHistoryReporterDoneNotification object:nil];
+		}
+	}];
+}
+
+- (void)startMotionCoProcessorDataFrom:(NSDate * __nonnull)startDate andEndDate:(NSDate * __nonnull)endDate andNumberOfDays:(NSInteger)numberOfDays callback:(APCMotionHistoryReporterCallback __nonnull)callback{
+	if (_doneCallback) {
+		callback(nil, [NSError errorWithDomain:@"APCAppCoreErrorDomain" code:51 userInfo:@{NSLocalizedDescriptionKey: @"Motion History Reporter is already processing motion history, wait for it to complete"}]);
+		return;
+	}
+	
+	[motionReport removeAllObjects];
+	isTheDataReady = false;
+	
+	self.doneCallback = callback;
+	[self getMotionCoProcessorDataFrom:startDate andEndDate:endDate andNumberOfDays:numberOfDays];
 }
 
 //iOS is collecting activity data in the background whether you ask for it or not, so this feature will give you activity data even if your application as only been installed very recently.
--(void)getMotionCoProcessorDataFrom:(NSDate *)startDate andEndDate:(NSDate *)endDate andNumberOfDays:(NSInteger)numberOfDays
+-(void)getMotionCoProcessorDataFrom:(NSDate * __nonnull)startDate andEndDate:(NSDate * __nonnull)endDate andNumberOfDays:(NSInteger)numberOfDays
 {
-    
+	NSParameterAssert(startDate);
+	NSParameterAssert(endDate);
+	
     NSInteger               numberOfDaysBack = numberOfDays * -1;
     NSDateComponents        *components = [[NSDateComponents alloc] init];
     
@@ -404,15 +419,20 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
                                                           
                                                       }
                                                       
-                                                      if(numberOfDays == 0)
-                                                      {
+                                                      if (numberOfDays == 0) {
                                                           isTheDataReady = true;
-                                                          [[NSNotificationCenter defaultCenter] postNotificationName:APCMotionHistoryReporterDoneNotification object:nil];
-                                                          
+														  [self callDoneCallbackWithReports:[motionReport copy] error:nil];
                                                       }
                                                                                                       
         
     }];
+}
+
+- (void)callDoneCallbackWithReports:(NSArray * __nullable )reports error:(NSError * __nullable )error {
+	if (_doneCallback) {
+		_doneCallback(reports, error);
+		self.doneCallback = nil;
+	}
 }
 
 
