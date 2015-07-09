@@ -55,10 +55,10 @@ static NSString * kItemKey                          = @"item";
 @interface APCDataArchive ()
 
 @property (nonatomic, strong) NSString *reference;
-@property (nonatomic, strong) ZZArchive * zipArchive;
-@property (nonatomic, strong) NSMutableArray * zipEntries;
-@property (nonatomic, strong) NSMutableArray * filesList;
-@property (nonatomic, strong) NSMutableDictionary * infoDict;
+@property (nonatomic, strong) ZZArchive *zipArchive;
+@property (nonatomic, strong) NSMutableArray *zipEntries;
+@property (nonatomic, strong) NSMutableArray *filesList;
+@property (nonatomic, strong) NSMutableDictionary *infoDict;
 
 @end
 
