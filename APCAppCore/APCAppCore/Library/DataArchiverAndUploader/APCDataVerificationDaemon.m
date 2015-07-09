@@ -96,12 +96,13 @@ static NSUInteger callDelay = 5;
 {
     if (self.queue.count > 0) {
         APCTimestampedURL *tURL = [self.queue objectAtIndex:0];
-        NSTimeInterval interval = [tURL.timestamp timeIntervalSinceNow];
-        
-        if (fabs(interval) >= callDelay) {
+        NSTimeInterval interval = [[NSDate new] timeIntervalSinceDate:tURL.timestamp];
+        __weak typeof(self) weakSelf = self;
+        if (interval >= callDelay) {
             [self.queue removeObjectAtIndex:0];
             dispatch_async(dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0), ^{
-                [self callURL:tURL.url];
+                __strong typeof(weakSelf) strongSelf = weakSelf;
+                [strongSelf callURL:tURL.url];
             });
         }
     }
