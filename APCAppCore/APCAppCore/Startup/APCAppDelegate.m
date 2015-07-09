@@ -174,6 +174,7 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 
 - (BOOL)application:(UIApplication *) __unused application didFinishLaunchingWithOptions:(NSDictionary *) __unused launchOptions
 {
+    self.dataUploader = [[APCDataUploader alloc]init];
     [self.dataMonitor appFinishedLaunching];
     return YES;
 }

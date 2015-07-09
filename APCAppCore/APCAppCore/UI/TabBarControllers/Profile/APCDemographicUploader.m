@@ -32,17 +32,15 @@
 //
 
 #import "APCDemographicUploader.h"
-
-#import "APCAppCore.h"
 #import "APCAllSetTableViewCell.h"
-#import "APCDataArchiverAndUploader.h"
 #import "NSDate+Helper.h"
+#import "APCDataArchive.h"
+#import "APCDataArchiveUploader.h"
+#import "APCAppDelegate.h"
 
 static  NSString  *kTaskIdentifierKey              = @"NonIdentifiableDemographicsTask";
-
+static  NSString  *kFileIdentifierKey              = @"NonIdentifiableDemographics";
 static  NSString  *kPatientInformationKey          = @"item";
-static  NSString  *kNonIdentifiableDemographicsKey = @"NonIdentifiableDemographics";
-
 static  NSString  *kPatientCurrentAgeKey           = @"patientCurrentAge";
 static  NSString  *kPatientBiologicalSexKey        = @"patientBiologicalSex";
 static  NSString  *kPatientHeightInchesKey         = @"patientHeightInches";
@@ -63,6 +61,7 @@ static  NSString  *kPatientGoSleepTimeKey          = @"patientGoSleepTime";
     self = [super init];
     if (self != nil) {
         _user = user;
+        
     }
     return  self;
 }
@@ -71,7 +70,7 @@ static  NSString  *kPatientGoSleepTimeKey          = @"patientGoSleepTime";
 {
     NSMutableDictionary  *demographics = [NSMutableDictionary dictionary];
     
-    demographics[kPatientInformationKey] = kNonIdentifiableDemographicsKey;
+    demographics[kPatientInformationKey] = kTaskIdentifierKey;
     
     NSDate  *sleepTime = self.user.sleepTime;
     demographics[kPatientGoSleepTimeKey] = (sleepTime != nil) ? sleepTime : [NSNull null];
@@ -109,10 +108,21 @@ static  NSString  *kPatientGoSleepTimeKey          = @"patientGoSleepTime";
         demographics[kPatientWeightPoundsKey] = @(weightInPounds);
     }
     
-    [APCDataArchiverAndUploader uploadDictionary:demographics
-                                withTaskIdentifier:kTaskIdentifierKey
-                                andTaskRunUuid:nil];
-
+    //Archive and upload
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0), ^{
+        APCDataArchive *archive = [[APCDataArchive alloc]initWithReference:kTaskIdentifierKey];
+        [archive insertIntoArchive:demographics filename:kFileIdentifierKey];
+        
+        APCDataArchiveUploader *archiveUploader = [[APCDataArchiveUploader alloc] init];
+        
+        [archiveUploader encryptAndUploadArchive:archive withCompletion:^(NSError *error) {
+            
+            if (! error) {
+                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kAnonDemographicDataUploadedKey];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+            }
+        }];
+    });
 }
 
 @end
