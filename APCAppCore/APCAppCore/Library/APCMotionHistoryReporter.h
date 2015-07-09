@@ -43,10 +43,18 @@ typedef void (^APCMotionHistoryReporterCallback)(NSArray * __nullable motionRepo
 NS_ASSUME_NONNULL_BEGIN
 + (APCMotionHistoryReporter *)sharedInstance;
 
-/** Start motion history collection. You will need to listen to the "" notification and call the shared instance's `retrieveMotionReport`. */
+/** Start motion history collection. You will need to listen to the "APCMotionHistoryReporterDoneNotification" notification and call the
+ *  shared instance's `retrieveMotionReport`.
+ *
+ *  If you start the history reporter while it hasn't finished a previous run, nothing will happen.
+ */
 - (void)startMotionCoProcessorDataFrom:(NSDate *)startDate andEndDate:(NSDate *)endDate andNumberOfDays:(NSInteger)numberOfDays;
 
-/** Start motion history collection and return the report in a callback. */
+/** Start motion history collection and return the report in a callback.
+ *
+ *  If you start the history reporter while it hasn't finished a previous run, the callback will be called with an error in the
+ *  "APCAppCoreErrorDomain" with error code 51.
+ */
 - (void)startMotionCoProcessorDataFrom:(NSDate *)startDate andEndDate:(NSDate *)endDate andNumberOfDays:(NSInteger)numberOfDays callback:(APCMotionHistoryReporterCallback)callback;
 
 - (BOOL)isDataReady;

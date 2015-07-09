@@ -99,7 +99,10 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
 	}];
 }
 
-- (void)startMotionCoProcessorDataFrom:(NSDate * __nonnull)startDate andEndDate:(NSDate * __nonnull)endDate andNumberOfDays:(NSInteger)numberOfDays callback:(APCMotionHistoryReporterCallback __nonnull)callback{
+- (void)startMotionCoProcessorDataFrom:(NSDate * __nonnull)startDate andEndDate:(NSDate * __nonnull)endDate andNumberOfDays:(NSInteger)numberOfDays callback:(APCMotionHistoryReporterCallback __nonnull)callback {
+	NSParameterAssert(startDate);
+	NSParameterAssert(endDate);
+	NSParameterAssert(callback);
 	if (_doneCallback) {
 		callback(nil, [NSError errorWithDomain:@"APCAppCoreErrorDomain" code:51 userInfo:@{NSLocalizedDescriptionKey: @"Motion History Reporter is already processing motion history, wait for it to complete"}]);
 		return;
@@ -117,6 +120,11 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
 {
 	NSParameterAssert(startDate);
 	NSParameterAssert(endDate);
+	if (numberOfDays == 0) {
+		isTheDataReady = true;
+		[self callDoneCallbackWithReports:[motionReport copy] error:nil];
+		return;
+	}
 	
     NSInteger               numberOfDaysBack = numberOfDays * -1;
     NSDateComponents        *components = [[NSDateComponents alloc] init];
@@ -142,8 +150,6 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
                                                       toQueue:[NSOperationQueue new]
                                                   withHandler:^(NSArray *activities, NSError * __unused error) {
                                                      
-                                                      if (numberOfDays > 0)
-                                                      {
                                                           NSDate *lastActivity_started;
 
                                                           NSTimeInterval totalUnknownTime = 0.0;
@@ -417,14 +423,6 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
                                                           
                                         
                                                           
-                                                      }
-                                                      
-                                                      if (numberOfDays == 0) {
-                                                          isTheDataReady = true;
-														  [self callDoneCallbackWithReports:[motionReport copy] error:nil];
-                                                      }
-                                                                                                      
-        
     }];
 }
 
