@@ -70,7 +70,7 @@ static  NSString  *kPatientGoSleepTimeKey          = @"patientGoSleepTime";
 {
     NSMutableDictionary  *demographics = [NSMutableDictionary dictionary];
     
-    demographics[kPatientInformationKey] = kTaskIdentifierKey;
+    demographics[kPatientInformationKey] = kFileIdentifierKey;
     
     NSDate  *sleepTime = self.user.sleepTime;
     demographics[kPatientGoSleepTimeKey] = (sleepTime != nil) ? sleepTime : [NSNull null];
