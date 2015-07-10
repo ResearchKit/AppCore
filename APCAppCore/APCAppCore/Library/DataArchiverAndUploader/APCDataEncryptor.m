@@ -67,7 +67,7 @@ static NSString * kEncryptedDataFilename            = @"encrypted.zip";
         NSString *encryptedPath = [[self workingDirectoryPath] stringByAppendingPathComponent:kEncryptedDataFilename];
         
         if ([encryptedZipData writeToFile:encryptedPath options:NSDataWritingAtomic error:&encryptionError]) {
-            url = [[NSURL alloc]initFileURLWithPath:encryptedPath];
+            url = [[NSURL alloc] initFileURLWithPath:encryptedPath];
         }
     }
     

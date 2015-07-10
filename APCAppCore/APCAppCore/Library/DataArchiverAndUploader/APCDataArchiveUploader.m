@@ -53,7 +53,7 @@
         
         if (! archiverError) {
             //encrypt the archive
-            APCDataEncryptor *encryptor = [[APCDataEncryptor alloc]init];
+            APCDataEncryptor *encryptor = [[APCDataEncryptor alloc] init];
             [encryptor encryptFileAtURL:archive.unencryptedURL withCompletion:^(NSURL *encryptedURL, NSError *encryptorError) {
                 error = encryptorError;
                 

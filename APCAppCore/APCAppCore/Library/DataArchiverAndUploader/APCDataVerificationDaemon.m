@@ -36,7 +36,7 @@
 #import "APCDataVerificationClient.h"
 #import "APCLog.h"
 
-static const NSUInteger callDelay = 5;
+static const NSUInteger kCallDelay = 5;
 
 //Inner class
 @interface APCTimestampedURL : NSObject
@@ -76,7 +76,7 @@ static const NSUInteger callDelay = 5;
     if (self) {
         
         _queue = [NSMutableArray new];
-        _timer = [NSTimer scheduledTimerWithTimeInterval:callDelay
+        _timer = [NSTimer scheduledTimerWithTimeInterval:kCallDelay
                                                   target:self
                                                 selector:@selector(checkForResponsesOnTimer:)
                                                 userInfo:nil
@@ -98,7 +98,7 @@ static const NSUInteger callDelay = 5;
         APCTimestampedURL *tURL = [self.queue objectAtIndex:0];
         NSTimeInterval interval = [[NSDate new] timeIntervalSinceDate:tURL.timestamp];
         __weak typeof(self) weakSelf = self;
-        if (interval >= callDelay) {
+        if (interval >= kCallDelay) {
             [self.queue removeObjectAtIndex:0];
             dispatch_async(dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0), ^{
                 __strong typeof(weakSelf) strongSelf = weakSelf;
