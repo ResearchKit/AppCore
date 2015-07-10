@@ -50,7 +50,7 @@
     if (self) {
         SBBUploadManager *uploadManager = [SBBUploadManager defaultComponent];
         uploadManager.uploadDelegate = self;
-        self.verificationDaemon = [[APCDataVerificationDaemon alloc]init];
+        self.verificationDaemon = [[APCDataVerificationDaemon alloc] init];
     }
     
     return self;
@@ -81,8 +81,9 @@
 #pragma mark - SBBUploadManager delegate
 
 //required delegate method
-- (void)uploadManager:(SBBUploadManager *)__unused manager uploadOfFile:(NSString *)__unused file completedWithError:(NSError *)__unused error
+- (void)uploadManager:(SBBUploadManager *)__unused manager uploadOfFile:(NSString *)__unused file completedWithError:(NSError *) error
 {
+    APCLogError2(error);
 }
 
 - (void)uploadManager:(SBBUploadManager *)__unused manager uploadOfFile:(NSString *)__unused file completedWithVerificationURL:(NSURL *)url

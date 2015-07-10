@@ -51,6 +51,7 @@ static NSString * kAppNameKey                       = @"appName";
 static NSString * kAppVersionKey                    = @"appVersion";
 static NSString * kPhoneInfoKey                     = @"phoneInfo";
 static NSString * kItemKey                          = @"item";
+static NSString * kJsonPathExtension                = @"json";
 
 @interface APCDataArchive ()
 
@@ -101,11 +102,11 @@ static NSString * kItemKey                          = @"item";
 {
     
     NSString *workingDirectoryPath = [NSTemporaryDirectory() stringByAppendingPathComponent:self.reference];
-    
     if (![[NSFileManager defaultManager] fileExistsAtPath:workingDirectoryPath]) {
         NSError * fileError;
         BOOL created = [[NSFileManager defaultManager] createDirectoryAtPath:workingDirectoryPath withIntermediateDirectories:YES attributes:@{ NSFileProtectionKey : NSFileProtectionComplete } error:&fileError];
         if (!created) {
+            workingDirectoryPath = nil;
             APCLogError2 (fileError);
         }
     }
@@ -115,49 +116,14 @@ static NSString * kItemKey                          = @"item";
 
 - (void)insertDataAtURLIntoArchive: (NSURL*) url fileName: (NSString *) filename extension:(NSString *)extension
 {
-    NSString *fullFilename = [filename stringByAppendingPathExtension:extension];
-
-    [self.zipEntries addObject: [ZZArchiveEntry archiveEntryWithFileName: fullFilename
-                                                                compress:YES
-                                                               dataBlock:^(NSError** error)
-                                 {
-                                     APCLogError2(*error);
-                                     return [NSData dataWithContentsOfURL:url];
-                                 }]];
-    
-    //add the fileInfoEntry
-    NSDictionary *fileInfoEntry = @{ kFileInfoNameKey: fullFilename,
-                                     kFileInfoTimeStampKey: [NSDate date].toStringInISO8601Format,
-                                     kFileInfoContentTypeKey: [self contentTypeForFileExtension:extension] };
-    
-    [self.filesList addObject:fileInfoEntry];
+    NSData *dataToInsert = [NSData dataWithContentsOfURL:url];
+    [self insertDataIntoArchive:dataToInsert filename:filename extension:extension];
 }
 
 - (void)insertJSONDataIntoArchive:(NSData *)jsonData filename:(NSString *)filename
 {
-    
     if (jsonData !=nil) {
-        NSString *extension = @"json";
-        NSString * fullFileName = [filename stringByAppendingPathExtension:extension];
-        
-        APCLogFilenameBeingArchived (fullFileName);
-        
-        id objectToInsert = [ZZArchiveEntry archiveEntryWithFileName: fullFileName
-                                                            compress:YES
-                                                           dataBlock:^(NSError** __unused error){ return jsonData;}];
-        
-        if (objectToInsert) {
-            [self.zipEntries addObject: objectToInsert];
-            
-            NSDictionary *fileInfoEntry = @{ kFileInfoNameKey: fullFileName,
-                                             kFileInfoTimeStampKey: [NSDate date].toStringInISO8601Format,
-                                             kFileInfoContentTypeKey:[self contentTypeForFileExtension:extension] };
-            
-            [self.filesList addObject:fileInfoEntry];
-            
-        }else {
-            APCLogDebug(@"failed to insert %@ into archive", filename);
-        }
+        [self insertDataIntoArchive:jsonData filename:filename extension:kJsonPathExtension];
     }
 }
 
@@ -175,11 +141,31 @@ static NSString * kItemKey                          = @"item";
         jsonData = [NSJSONSerialization dataWithJSONObject:newDictionary options:NSJSONWritingPrettyPrinted error:&serializationError];
         
         if (jsonData !=nil) {
-            [self insertJSONDataIntoArchive:jsonData filename:filename];
+            [self insertDataIntoArchive:jsonData filename:filename extension:kJsonPathExtension];
         }else{
             APCLogError2(serializationError);
         }
     }
+}
+
+- (void)insertDataIntoArchive :(NSData *)data filename: (NSString *)filename extension: (NSString *)extension
+{
+    NSString *fullFilename = [filename stringByAppendingPathExtension:extension];
+    [self.zipEntries addObject: [ZZArchiveEntry archiveEntryWithFileName: fullFilename
+                                                                compress:YES
+                                                               dataBlock:^(NSError** error)
+                                 {
+                                     APCLogError2(*error);
+                                     return data;
+                                 }]];
+    
+    //add the fileInfoEntry
+    NSDictionary *fileInfoEntry = @{ kFileInfoNameKey: fullFilename,
+                                     kFileInfoTimeStampKey: [NSDate date].toStringInISO8601Format,
+                                     kFileInfoContentTypeKey: [self contentTypeForFileExtension:extension] };
+    
+    [self.filesList addObject:fileInfoEntry];
+
 }
 
 //Compiles the final info.json file and inserts it into the zip archive.
@@ -247,7 +233,7 @@ static NSString * kItemKey                          = @"item";
     NSString *pathExtension = [url pathExtension];
     
     //Check for known ResearchKit defined filenames with internal path extension
-    NSArray *RKExtensions = [NSArray arrayWithObjects:@"outbound", @"rest", @"walk", nil];
+    NSArray *RKExtensions = @[@"outbound", @"rest", @"walk"];
     
     //need to use string containsString on each knownFilename or use array with predicate
     NSPredicate *knownExtensionFilter = [NSPredicate predicateWithFormat:@"%@ beginswith SELF", pathExtension];

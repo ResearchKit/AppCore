@@ -80,7 +80,6 @@
  */
 - (void)insertIntoArchive:(NSDictionary *)dictionary filename: (NSString *)filename;
 
-
 /**
  Inserts the data from the file at the url.
  
@@ -89,6 +88,17 @@
  @param     filename                Filename for the json data to be included without path extension (path extension will be preserved from the url).
  */
 - (void)insertDataAtURLIntoArchive: (NSURL*) url fileName: (NSString *) filename extension:(NSString *)extension;
+
+/**
+ Inserts the data with the filename and path extension
+ 
+ @param     url                     URL where the file exists
+ 
+ @param     filename                Filename for the data to be included without path extension (path extension will be preserved from the url)
+ 
+ @param     extension               File extension
+ */
+- (void)insertDataIntoArchive :(NSData *)data filename: (NSString *)filename extension: (NSString *)extension;
 
 /**
  Inserts an info.json file into the archive.

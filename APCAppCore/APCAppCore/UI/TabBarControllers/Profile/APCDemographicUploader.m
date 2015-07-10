@@ -110,7 +110,7 @@ static  NSString  *kPatientGoSleepTimeKey          = @"patientGoSleepTime";
     
     //Archive and upload
     dispatch_async(dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0), ^{
-        APCDataArchive *archive = [[APCDataArchive alloc]initWithReference:kTaskIdentifierKey];
+        APCDataArchive *archive = [[APCDataArchive alloc] initWithReference:kTaskIdentifierKey];
         [archive insertIntoArchive:demographics filename:kFileIdentifierKey];
         
         APCDataArchiveUploader *archiveUploader = [[APCDataArchiveUploader alloc] init];

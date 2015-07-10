@@ -36,7 +36,7 @@
 #import "APCDataVerificationClient.h"
 #import "APCLog.h"
 
-static NSUInteger callDelay = 5;
+static const NSUInteger callDelay = 5;
 
 //Inner class
 @interface APCTimestampedURL : NSObject
@@ -88,7 +88,7 @@ static NSUInteger callDelay = 5;
 
 -(void)queueURL:(NSURL *)url
 {
-    APCTimestampedURL *timestampedURL = [[APCTimestampedURL alloc]initWithURL:url];
+    APCTimestampedURL *timestampedURL = [[APCTimestampedURL alloc] initWithURL:url];
     [self.queue addObject:timestampedURL];
 }
 
