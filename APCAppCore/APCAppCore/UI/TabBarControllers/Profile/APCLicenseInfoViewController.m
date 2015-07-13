@@ -53,6 +53,11 @@ static CGFloat const klabelSidepadding = 30.f;
                          @"title": @"Bridge SDK",
                          @"filename": @"License_BridgeSDK",
                          @"file_type": @"txt"
+                         },
+                     @{
+                         @"title": @"ZipZap",
+                         @"filename": @"License_ZipZap",
+                         @"file_type": @"txt"
                          }
                      ];
     [self prepareContent];
