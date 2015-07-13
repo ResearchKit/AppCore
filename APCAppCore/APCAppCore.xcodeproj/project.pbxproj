@@ -197,7 +197,6 @@
 		5B234E141A329BF300A5A3A0 /* APCWithdrawDescriptionViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B234E121A329BF300A5A3A0 /* APCWithdrawDescriptionViewController.h */; };
 		5B234E151A329BF300A5A3A0 /* APCWithdrawDescriptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B234E131A329BF300A5A3A0 /* APCWithdrawDescriptionViewController.m */; };
 		5B4574CA1ABFD07A00601DCC /* License_BridgeSDK.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5B4574C71ABFD07A00601DCC /* License_BridgeSDK.txt */; };
-		5B4574CB1ABFD07A00601DCC /* License_OpenSSL.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5B4574C81ABFD07A00601DCC /* License_OpenSSL.txt */; };
 		5B4574CC1ABFD07A00601DCC /* License_ZipZap.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5B4574C91ABFD07A00601DCC /* License_ZipZap.txt */; };
 		5B534ED41B2179550049C6AB /* APCNewsFeedManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B534ED21B2179550049C6AB /* APCNewsFeedManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B534ED51B2179550049C6AB /* APCNewsFeedManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B534ED31B2179550049C6AB /* APCNewsFeedManager.m */; };
@@ -930,7 +929,6 @@
 		5B234E121A329BF300A5A3A0 /* APCWithdrawDescriptionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCWithdrawDescriptionViewController.h; sourceTree = "<group>"; };
 		5B234E131A329BF300A5A3A0 /* APCWithdrawDescriptionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCWithdrawDescriptionViewController.m; sourceTree = "<group>"; };
 		5B4574C71ABFD07A00601DCC /* License_BridgeSDK.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = License_BridgeSDK.txt; sourceTree = "<group>"; };
-		5B4574C81ABFD07A00601DCC /* License_OpenSSL.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = License_OpenSSL.txt; sourceTree = "<group>"; };
 		5B4574C91ABFD07A00601DCC /* License_ZipZap.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = License_ZipZap.txt; sourceTree = "<group>"; };
 		5B534ED21B2179550049C6AB /* APCNewsFeedManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCNewsFeedManager.h; sourceTree = "<group>"; };
 		5B534ED31B2179550049C6AB /* APCNewsFeedManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCNewsFeedManager.m; sourceTree = "<group>"; };
@@ -1800,7 +1798,6 @@
 			isa = PBXGroup;
 			children = (
 				5B4574C71ABFD07A00601DCC /* License_BridgeSDK.txt */,
-				5B4574C81ABFD07A00601DCC /* License_OpenSSL.txt */,
 				5B4574C91ABFD07A00601DCC /* License_ZipZap.txt */,
 			);
 			path = Licenses;
@@ -3540,7 +3537,6 @@
 				F5F12AFF1A2F78490015982C /* APCIntroductionViewController.xib in Resources */,
 				08027A811A7319AC00B358CC /* consent_04@3x.png in Resources */,
 				F556549B1A701337003E0B0C /* Localizable.strings in Resources */,
-				5B4574CB1ABFD07A00601DCC /* License_OpenSSL.txt in Resources */,
 				F5F12A921A2F78490015982C /* APCSpinnerViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
