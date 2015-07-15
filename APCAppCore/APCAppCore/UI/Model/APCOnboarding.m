@@ -41,6 +41,7 @@
 #import "APCSignUpPermissionsViewController.h"
 #import "APCThankYouViewController.h"
 #import "APCSignInViewController.h"
+#import "APCShareViewController.h"
 #import "NSBundle+Helper.h"
 
 static NSString * const kOnboardingStoryboardName = @"APCOnboarding";
@@ -168,6 +169,14 @@ static NSString * const kOnboardingStoryboardName = @"APCOnboarding";
         scene.bundle = [NSBundle appleCoreBundle];
         
         [scenes setObject:scene forKey:kAPCSignInStepIdentifier];
+    }
+    {
+        APCScene *scene = [APCScene new];
+        scene.name = NSStringFromClass([APCShareViewController class]);
+        scene.storyboardName = kOnboardingStoryboardName;
+        scene.bundle = [NSBundle appleCoreBundle];
+        
+        [scenes setObject:scene forKey:kAPCSignUpShareAppStepIdentifier];
     }
     
     return scenes;

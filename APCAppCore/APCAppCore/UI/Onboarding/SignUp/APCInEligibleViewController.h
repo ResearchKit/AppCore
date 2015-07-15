@@ -38,5 +38,6 @@
 @property (weak, nonatomic) IBOutlet UIImageView *logoImageView;
 @property (weak, nonatomic) IBOutlet UILabel *label;
 
+- (IBAction)showShare:(id)sender;
 - (IBAction)next:(id)sender;
 @end

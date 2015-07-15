@@ -91,6 +91,8 @@ FOUNDATION_EXPORT NSString *const kAPCSignUpPermissionsPrimingStepIdentifier;
 
 @property (nonatomic, strong) ORKStep *signInStep;
 
+@property (nonatomic, strong) ORKStep *shareAppStep;
+
 @end
 
 @protocol APCOnboardingTaskDelegate <NSObject>

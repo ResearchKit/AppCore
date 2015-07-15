@@ -94,9 +94,18 @@
 }
 
 
+- (IBAction)showShare:(id)sender {
+    UIViewController *viewController = [[self onboarding] nextScene];
+    [self.navigationController pushViewController:viewController animated:YES];
+}
+
 - (IBAction)next:(id) __unused sender
 {
     APCShareViewController *shareViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"ShareVC"];
     [self.navigationController pushViewController:shareViewController animated:YES];
 }
 @end
+
+// for later
+// return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).onboarding;
+// example: APCInclusionCriteriaViewController
