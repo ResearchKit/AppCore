@@ -1637,9 +1637,10 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     
 #ifndef APC_HAVE_CONSENT
 #warning Adding watermark label until you define "APC_HAVE_CONSENT" to indicate that you have a real consenting document
+    NSUInteger subviewsCount = consentVC.view.subviews.count;
     UILabel *watermarkLabel = [APCExampleLabel watermarkInRect:consentVC.view.bounds
                                                     withCenter:consentVC.view.center];
-    [consentVC.view insertSubview:watermarkLabel atIndex:NSUIntegerMax];
+    [consentVC.view insertSubview:watermarkLabel atIndex:subviewsCount];
 #endif
     
     [self presentViewController:consentVC animated:YES completion:nil];
