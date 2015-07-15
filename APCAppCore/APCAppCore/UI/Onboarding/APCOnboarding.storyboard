@@ -377,7 +377,7 @@
                                     <constraint firstAttribute="height" constant="45" id="vbx-ZS-gFI"/>
                                 </constraints>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3EE-a8-1jL" customClass="APCButton">
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3EE-a8-1jL" customClass="APCButton">
                                 <rect key="frame" x="87" y="514" width="146" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="146" id="fw1-oR-wlE"/>
@@ -388,7 +388,7 @@
                                     <action selector="showShare:" destination="hN3-1j-osP" eventType="touchUpInside" id="C6Z-Kh-N27"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="However, you can help spread the word and share the app with others." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KIH-Pl-Nou">
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="However, you can help spread the word and share the app with others." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KIH-Pl-Nou">
                                 <rect key="frame" x="16" y="324" width="288" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="6AW-IE-rI8"/>
@@ -417,6 +417,8 @@
                     <connections>
                         <outlet property="label" destination="OEh-rs-UeO" id="ILt-Jj-to5"/>
                         <outlet property="logoImageView" destination="na1-y1-IGE" id="80o-2J-DJC"/>
+                        <outlet property="shareButton" destination="3EE-a8-1jL" id="Pu8-17-aJx"/>
+                        <outlet property="shareLabel" destination="KIH-Pl-Nou" id="rtS-fB-6yA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Wz3-x5-eoZ" userLabel="First Responder" sceneMemberID="firstResponder"/>

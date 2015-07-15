@@ -71,6 +71,11 @@
 {
     self.label.font = [UIFont appRegularFontWithSize:19.0f];
     self.label.textColor = [UIColor appSecondaryColor1];
+    
+    if (((APCAppDelegate *)[UIApplication sharedApplication].delegate).showShareAppInOnboarding) {
+        self.shareButton.hidden = NO;
+        self.shareLabel.hidden = NO;
+    }
 }
 
 - (void)setupNavAppearance
@@ -94,7 +99,7 @@
 }
 
 
-- (IBAction)showShare:(id)sender {
+- (IBAction)showShare:(id) __unused sender {
     UIViewController *viewController = [[self onboarding] nextScene];
     [self.navigationController pushViewController:viewController animated:YES];
 }
@@ -105,7 +110,3 @@
     [self.navigationController pushViewController:shareViewController animated:YES];
 }
 @end
-
-// for later
-// return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).onboarding;
-// example: APCInclusionCriteriaViewController
