@@ -37,6 +37,7 @@
 
 extern NSString *const kDatasetDateKey;
 extern NSString *const kDatasetValueKey;
+extern NSString *const kDatasetRawDataKey;
 
 typedef NS_ENUM(NSUInteger, APHTimelineGroups)
 {
