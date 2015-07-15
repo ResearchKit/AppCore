@@ -214,6 +214,8 @@ NSString *const kAPCSignUpShareAppStepIdentifier            = @"ShareApp";
     if (!_shareAppStep) {
         _shareAppStep = [[ORKStep alloc] initWithIdentifier:kAPCSignUpShareAppStepIdentifier];
     }
+    
+    return _shareAppStep;
 }
 
 

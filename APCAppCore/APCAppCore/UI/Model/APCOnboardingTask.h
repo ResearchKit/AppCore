@@ -47,6 +47,7 @@ FOUNDATION_EXPORT NSString *const kAPCSignUpPermissionsStepIdentifier;
 FOUNDATION_EXPORT NSString *const kAPCSignUpThankYouStepIdentifier;
 FOUNDATION_EXPORT NSString *const kAPCSignInStepIdentifier;
 FOUNDATION_EXPORT NSString *const kAPCSignUpPermissionsPrimingStepIdentifier;
+FOUNDATION_EXPORT NSString *const kAPCSignUpShareAppStepIdentifier;
 
 @protocol APCOnboardingTaskDelegate;
 
