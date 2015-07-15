@@ -83,7 +83,7 @@ static NSString*    const kDatabaseName                     = @"db.sqlite";
 - (void) showNeedsEmailVerification;
 - (void) setUpRootViewController: (UIViewController*) viewController;
 - (void) setUpTasksReminder;
-
+- (void)performMigrationAfterFirstImport;
 - (void)performMigrationFrom:(NSInteger)previousVersion currentVersion:(NSInteger)currentVersion;
 - (void)performMigrationAfterDataSubstrateFrom:(NSInteger)previousVersion currentVersion:(NSInteger)currentVersion;
 - (NSString *) applicationDocumentsDirectory;
