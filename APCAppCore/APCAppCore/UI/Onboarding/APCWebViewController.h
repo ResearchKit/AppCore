@@ -35,7 +35,10 @@
 
 @interface APCWebViewController : UIViewController <UIWebViewDelegate>
 
-@property (weak, nonatomic) IBOutlet UIWebView *webview;
+@property (weak, nonatomic) IBOutlet UIWebView *webView;
+@property (weak, nonatomic) IBOutlet UIToolbar *webToolBar;
+
+@property (nonatomic, strong) NSString *link;
 
 - (IBAction)close:(id)sender;
 

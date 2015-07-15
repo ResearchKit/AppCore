@@ -33,8 +33,10 @@
  
 #import "APCDataMonitor.h"
 
+typedef void (^APCDataMonitorResponseHandler) (NSError *error);
+
 @interface APCDataMonitor (Bridge)
-- (void) refreshFromBridgeOnCompletion: (void (^)(NSError * error)) completionBlock;
-- (void) batchUploadDataToBridgeOnCompletion: (void (^)(NSError * error)) completionBlock;
-- (void) uploadZipFile:(NSString*) path onCompletion: (void (^)(NSError * error)) completionBlock;
+- (void) refreshFromBridgeOnCompletion: (APCDataMonitorResponseHandler) completionBlock;
+- (void) batchUploadDataToBridgeOnCompletion: (APCDataMonitorResponseHandler) completionBlock;
+- (void) uploadZipFile: (NSString*) path onCompletion: (APCDataMonitorResponseHandler) completionBlock;
 @end

@@ -35,6 +35,7 @@
 #import "APCAppDelegate.h"
 #import "APCAppCore.h"
 #import "APCDataVerificationClient.h"
+#import "APCDataVerificationServerAccessControl.h"
 
 @interface APCBaseTaskViewController () <UIViewControllerRestoration>
 @property (strong, nonatomic) ORKStepViewController * stepVC;
@@ -42,20 +43,102 @@
 @property (nonatomic, strong) NSData * localRestorationData;
 @end
 
+
+
+
+/**
+ Converts the ORKTaskViewControllerFinishReason enum
+ to a string.
+ 
+ Declared in this file because the enum itself is
+ declared in my ORK superclass, ORKTaskViewController.
+ 
+ Contains hard-coded strings because I think is their proper
+ place -- the place where there's a 1:1 mapping between
+ the enum and the string equivalent.
+ 
+ Problems:   Highly dependent on the definition of original
+ enum itself.  If the enum changes, this function instantly
+ starts delivering misleading strings.  Granted, I'm only
+ currently using them internally, but, still.  That's why
+ I'm only declaring this function inside this file, for now.
+ 
+ Suggested Future Changes:  push this function into
+ ResearchKit, making it a part of the same class or file
+ where the enum itself is declared.
+ 
+ This is a function, not a method, so that it can follow
+ Apple's convention for functions which convert various
+ objects to strings:  NSStringFromClassName(), etc.
+ 
+ @return A human-readable string for the FinishReason.
+ If the finishReason can't be identified -- if you pass
+ a random integer, for example, or if the source enum
+ definition is changed -- returns "Unknown FinishReason."
+ 
+ @see ORKTaskViewControllerFinishReason
+ */
+NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerFinishReason reason)
+{
+    NSString *result = nil;
+
+    switch (reason)
+    {
+        case ORKTaskViewControllerFinishReasonSaved:        result = @"Saved";                  break;
+        case ORKTaskViewControllerFinishReasonCompleted:    result = @"Completed";              break;
+        case ORKTaskViewControllerFinishReasonDiscarded:    result = @"Discarded";              break;
+        case ORKTaskViewControllerFinishReasonFailed:       result = @"Failed";                 break;
+        default:                                            result = @"Unknown FinishReason";   break;
+    }
+
+    return result;
+}
+
+
+
+
 @implementation APCBaseTaskViewController
 
 #pragma  mark  -  Instance Initialisation
 + (instancetype)customTaskViewController: (APCScheduledTask*) scheduledTask
 {
     [[UIView appearance] setTintColor:[UIColor appPrimaryColor]];
+    
     id<ORKTask> task = [self createTask: scheduledTask];
+    
     NSUUID * taskRunUUID = [NSUUID UUID];
+    
     APCBaseTaskViewController * controller = task ? [[self alloc] initWithTask:task taskRunUUID:taskRunUUID] : nil;
-//    controller.restorationIdentifier = [task identifier];
-//    controller.restorationClass = self;
     controller.scheduledTask = scheduledTask;
     controller.delegate = controller;
+    
     return  controller;
+}
+
++ (instancetype)configureTaskViewController:(APCTaskGroup *)taskGroup
+{
+    APCPotentialTask *potentialTask             = taskGroup.requiredRemainingTasks.firstObject;
+    APCBaseTaskViewController *viewController   = nil;
+    
+    /*
+     It's a fundamental business requirement that our users
+     can do *more* than the required number of tasks.  This
+     object lets us do that, if they've gone through all
+     the actually- required tasks for this date.
+     */
+    if (potentialTask == nil)
+    {
+        potentialTask = taskGroup.samplePotentialTask;
+    }
+    
+    if (potentialTask != nil) {
+        APCScheduledTask *scheduledTask = [[APCScheduler defaultScheduler] createScheduledTaskFromPotentialTask:potentialTask];
+        
+        viewController = [self customTaskViewController:scheduledTask];
+    }
+    
+    
+    return viewController;
 }
 
 + (id<ORKTask>)createTask: (APCScheduledTask*) __unused scheduledTask
@@ -68,6 +151,13 @@
 {
     //To be overridden by child classes
     return nil;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    self.canGenerateResult = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -84,85 +174,119 @@
                                        @"task_view_controller":NSStringFromClass([self class])
                                        }));
 }
+
+- (APCAppDelegate *) appDelegate
+{
+    return [APCAppDelegate sharedAppDelegate];
+}
+
+
 /*********************************************************************************/
 #pragma mark - ORKOrderedTaskDelegate
 /*********************************************************************************/
-- (void)taskViewController:(ORKTaskViewController *)taskViewController didFinishWithReason:(ORKTaskViewControllerFinishReason)reason error:(nullable NSError *)error
-{
-    
-    NSString *currentStepIdentifier = @"Step identifier not available";
-    
-    if ( self.currentStepViewController.step.identifier != nil)
-    {
-        currentStepIdentifier = self.currentStepViewController.step.identifier;
-    }
-    
-    if (reason == ORKTaskViewControllerFinishReasonCompleted)
-    {
-        [self processTaskResult];
-        
-        [self.scheduledTask completeScheduledTask];
-        APCAppDelegate* appDelegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
-        [appDelegate.scheduler updateScheduledTasksIfNotUpdating:NO];
-        [taskViewController dismissViewControllerAnimated:YES completion:nil];
-        
-        APCLogEventWithData(kTaskEvent, (@{
-                                           @"task_status":@"ResultCompleted",
-                                           @"task_title": self.scheduledTask.task.taskTitle,
-                                           @"task_view_controller":NSStringFromClass([self class]),
-                                           @"task_step" : currentStepIdentifier
-                                           }));
-    }
-    else if (reason == ORKTaskViewControllerFinishReasonFailed)
-    {
-        if (error.code == 4 && error.domain == NSCocoaErrorDomain)
-        {
-            
-        }
-        else if (error.code == 260 && error.domain == NSCocoaErrorDomain)
-        {
-            //  Ignore this condition as it's due to no collected data.
-        }
-        else
-        {
-            [taskViewController dismissViewControllerAnimated:YES completion:nil];
-            APCLogEventWithData(kTaskEvent, (@{
-                                               @"task_status":@"ResultFailed",
-                                               @"task_title": self.scheduledTask.task.taskTitle,
-                                               @"task_view_controller":NSStringFromClass([self class]),
-                                               @"task_step" : currentStepIdentifier
-                                               }));
-            
 
-        }
-        
-        APCLogError2(error);
-    }
-    else if (reason == ORKTaskViewControllerFinishReasonDiscarded)
+- (void) taskViewController: (ORKTaskViewController *) taskViewController
+        didFinishWithReason: (ORKTaskViewControllerFinishReason) reason
+                      error: (nullable NSError *) error
+{
+    NSString *currentStepIdentifier = self.currentStepViewController.step.identifier;
+    NSString *taskTitle = self.scheduledTask.task.taskTitle;
+    BOOL shouldLogError = YES;
+
+    if (currentStepIdentifier == nil)
     {
-        [taskViewController dismissViewControllerAnimated:YES completion:nil];
-        APCLogEventWithData(kTaskEvent, (@{
-                                           @"task_status":@"ResultDiscarded",
-                                           @"task_title": self.scheduledTask.task.taskTitle,
-                                           @"task_view_controller":NSStringFromClass([self class]),
-                                           @"task_step" : currentStepIdentifier
-                                           }));
+        currentStepIdentifier = @"Step identifier not available";
     }
-    else if (reason == ORKTaskViewControllerFinishReasonSaved)
+
+    if (taskTitle == nil)
     {
-        [taskViewController dismissViewControllerAnimated:YES completion:nil];
-        APCLogEventWithData(kTaskEvent, (@{
-                                           @"task_status":@"ResultSaved",
-                                           @"task_title": self.scheduledTask.task.taskTitle,
-                                           @"task_view_controller":NSStringFromClass([self class]),
-                                           @"task_step" : currentStepIdentifier
-                                           }));
+        taskTitle = @"Task Title not available";
     }
-    else
+
+    /*
+     Most results have common behaviors, below this
+     switch() statement: log the fact that we're here, log
+     an error if needed, and close the window.  For those
+     with specific behaviors, add them to this switch().
+     */
+    switch (reason)
     {
-        APCLogError2(error);
-        APCLogEvent(@"The ORKTaskViewControllerFinishReason for this task is not set");
+        case ORKTaskViewControllerFinishReasonCompleted:
+            
+            // Only process results when the task is able to
+            // generate them.
+            if (self.canGenerateResult)
+            {
+                [self processTaskResult];
+            }
+            
+            [self.scheduledTask completeScheduledTask];
+            [[NSNotificationCenter defaultCenter]postNotificationName:APCActivityCompletionNotification object:nil];
+            break;
+
+        case ORKTaskViewControllerFinishReasonFailed:
+
+            if ([error.domain isEqualToString: NSCocoaErrorDomain])
+            {
+                if (error.code == 4)
+                {
+                    shouldLogError = NO;
+                }
+                else if (error.code == 260)
+                {
+                    // Ignore this condition as it's due to no collected data.
+                    shouldLogError = NO;
+                }
+                else
+                {
+                    // Log it and bug out, as usual.
+                }
+            }
+            
+            break;
+
+        case ORKTaskViewControllerFinishReasonDiscarded:
+            /*
+             The user cancelled the operation.  Delete the ScheduledTask.
+
+             In our new world, the theory is:  ScheduledTasks are only created
+             in the database when the user actually chooses to save them.
+             Unfortunately, a lot of existing code depends on ScheduledTasks
+             already having been created before a view appears.  So we'll run
+             with that:  save the task while the views are using it, but then
+             destroy it if the user cancels.
+
+             This should be asynchronous.  For now, it's not, so I can
+             figure out what threads this class (the one you're reading
+             now) is reliably using.  Then I'll fix it to be wholly-
+             asynchronous.
+             */
+            [self.appDelegate.scheduler deleteScheduledTask: self.scheduledTask];
+            break;
+
+        case ORKTaskViewControllerFinishReasonSaved:
+            // Nothing special to do.
+            break;
+
+        default:
+            // We don't recognize this reason.  We'll log an event saying so,
+            // but we don't have anything special to do aside from that.
+            break;
     }
+    
+    APCLogEventWithData (kTaskEvent, (@{
+                                        @"task_status"           : NSStringFromORKTaskViewControllerFinishReason (reason),
+                                        @"task_title"            : taskTitle,
+                                        @"task_view_controller"  : NSStringFromClass (self.class),
+                                        @"task_step"             : currentStepIdentifier
+                                        }));
+
+    if (shouldLogError)
+    {
+        APCLogError2 (error);
+    }
+
+    [taskViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 
@@ -196,7 +320,7 @@
 	/*
 	 See comment at bottom of this method.
 	 */
-	#ifdef USE_DATA_VERIFICATION_CLIENT
+	#ifdef USE_DATA_VERIFICATION_SERVER
 
 		archiver.preserveUnencryptedFile = YES;
 
@@ -215,7 +339,7 @@
 	 the code isn't called, if it's in RAM at all,
      it can be exploited.
 	 */
-	#ifdef USE_DATA_VERIFICATION_CLIENT
+	#ifdef USE_DATA_VERIFICATION_SERVER
 
 		[APCDataVerificationClient uploadDataFromFileAtPath: archiver.unencryptedFilePath];
 
@@ -224,8 +348,12 @@
 
 - (void) storeInCoreDataWithFileName: (NSString *) fileName resultSummary: (NSString *) resultSummary
 {
-    NSManagedObjectContext * context = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.mainContext;
-    
+    // This is a background context, not the main context.
+    // I'm migrating toward doing everything in the background.
+    // Granted, I didn't think I was going to "go there" this
+    // fast.  Still experimenting.
+    NSManagedObjectContext *context = [[APCScheduler defaultScheduler] managedObjectContext];
+
     [self storeInCoreDataWithFileName: fileName resultSummary: resultSummary usingContext: context];
 }
 
@@ -234,19 +362,27 @@
                         usingContext: (NSManagedObjectContext *) context
 {
     NSManagedObjectID * objectID = [APCResult storeTaskResult:self.result inContext:context];
+    APCScheduledTask *localContextScheduledTask = (APCScheduledTask *)[context objectWithID:self.scheduledTask.objectID];
+    
     APCResult * result = (APCResult*)[context objectWithID:objectID];
     result.archiveFilename = fileName;
     result.resultSummary = resultSummary;
-    result.scheduledTask = self.scheduledTask;
-    NSError * error;
-    [result saveToPersistentStore:&error];
-    APCLogError2 (error);
-    APCAppDelegate * appDelegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
-    [appDelegate.dataMonitor batchUploadDataToBridgeOnCompletion:^(NSError *error) {
+    result.scheduledTask = localContextScheduledTask;
+
+    NSError * resultSaveError = nil;
+    BOOL saveSuccess = [result saveToPersistentStore:&resultSaveError];
+    
+    if (!saveSuccess) {
+        APCLogError2 (resultSaveError);
+    }
+    
+    [self.appDelegate.dataMonitor batchUploadDataToBridgeOnCompletion:^(NSError *error)
+    {
         APCLogError2 (error);
     }];
+    
     if (self.createResultSummaryBlock) {
-        [((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataMonitor performCoreDataBlockInBackground:self.createResultSummaryBlock];
+        [self.appDelegate.dataMonitor performCoreDataBlockInBackground:self.createResultSummaryBlock];
     }
 }
 
@@ -274,8 +410,9 @@
 {
     id<ORKTask> task = [coder decodeObjectForKey:@"task"];
     NSString * scheduledTaskID = [coder decodeObjectForKey:@"scheduledTask"];
-    NSManagedObjectID * objID = [((APCAppDelegate*)[UIApplication sharedApplication].delegate).dataSubstrate.persistentStoreCoordinator managedObjectIDForURIRepresentation:[NSURL URLWithString:scheduledTaskID]];
-    APCScheduledTask * scheduledTask = (APCScheduledTask*)[((APCAppDelegate*)[UIApplication sharedApplication].delegate).dataSubstrate.mainContext objectWithID:objID];
+    APCAppDelegate *appDelegate = [APCAppDelegate sharedAppDelegate];
+    NSManagedObjectID * objID = [appDelegate.dataSubstrate.persistentStoreCoordinator managedObjectIDForURIRepresentation:[NSURL URLWithString:scheduledTaskID]];
+    APCScheduledTask * scheduledTask = (APCScheduledTask*)[appDelegate.dataSubstrate.mainContext objectWithID:objID];
     id localRestorationData = [coder decodeObjectForKey:@"restorationData"];
     if (scheduledTask) {
         APCBaseTaskViewController * tvc =[[self alloc] initWithTask:task restorationData:localRestorationData];

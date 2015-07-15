@@ -38,6 +38,10 @@
  *  IMPORTANT: THIS IS AN ABSTRACT CLASS. IT HOLDS PROPERTIES & METHODS COMMON TO CLASSES LIKE APCLineGraphView & APCDiscreteGraphView.
  */
 
+FOUNDATION_EXPORT CGFloat const kAPCFadeAnimationDuration;
+FOUNDATION_EXPORT CGFloat const kAPCGrowAnimationDuration;
+FOUNDATION_EXPORT CGFloat const kAPCPopAnimationDuration;
+
 @protocol APCBaseGraphViewDelegate;
 
 @interface APCBaseGraphView : UIView
@@ -49,6 +53,16 @@
 @property (nonatomic, getter=isLandscapeMode) BOOL landscapeMode;
 
 @property (nonatomic) BOOL showsVerticalReferenceLines;
+
+@property (nonatomic) BOOL showsHorizontalReferenceLines;
+
+@property (nonatomic) BOOL hidesDataPoints;
+
+@property (nonatomic) BOOL hidesYAxis;
+
+@property (nonatomic) BOOL disableScrubbing;
+
+@property (nonatomic) BOOL shouldHighlightXaxisLastTitle;
 
 /* Appearance */
 
@@ -83,13 +97,15 @@
 
 - (NSInteger)numberOfPlots;
 
-- (NSInteger)numberOfPointsinPlot:(NSInteger)plotIndex;
+- (NSInteger)numberOfPointsInPlot:(NSInteger)plotIndex;
 
 - (void)scrubReferenceLineForXPosition:(CGFloat)xPosition;
 
 - (void)setScrubberViewsHidden:(BOOL)hidden animated:(BOOL)animated;
 
 - (void)refreshGraph;
+
+- (void)animateLayer:(CAShapeLayer *)shapeLayer withAnimationType:(APCGraphAnimationType)animationType toValue:(CGFloat)toValue startDelay:(CGFloat)delay;
 
 @end
 

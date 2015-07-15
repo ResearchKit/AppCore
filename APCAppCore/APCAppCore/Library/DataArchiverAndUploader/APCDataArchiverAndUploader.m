@@ -249,6 +249,10 @@ static NSString *folderPathForUploadOperations = nil;
 @property (nonatomic, strong) NSArray               * privateFilePathsToUpload;             // their paths once we put 'em there
 
 @property (nonatomic, assign) NSUInteger            countOfUnknownFileNames;
+
+@property (nonatomic, strong) NSOperationQueue      *callbackQueue;
+@property (nonatomic, strong) UploaderCallbackWhenCompleted uploaderCompletionCallback;
+
 @end
 
 
@@ -300,6 +304,23 @@ static NSString *folderPathForUploadOperations = nil;
 // ---------------------------------------------------------
 #pragma mark - The public API
 // ---------------------------------------------------------
+
++ (void) uploadDictionary: (NSDictionary *) dictionary
+       withTaskIdentifier: (NSString *) taskIdentifier
+           andTaskRunUUID: (NSUUID *) taskRunUUID
+          completionQueue: (NSOperationQueue *) completionQueue
+           withCompletion: (UploaderCallbackWhenCompleted) completion
+{
+    APCDataArchiverAndUploader *archiverAndUploader = [[APCDataArchiverAndUploader alloc] initWithDictionariesToUpload: @[dictionary]
+                                                                                                        taskIdentifier: taskIdentifier
+                                                                                                           taskRunUUID: taskRunUUID
+                                                                                                       completionQueue: completionQueue
+                                                                                                        withCompletion: completion];
+    
+    [self startOneUploadWithUploader: archiverAndUploader];
+    
+}
+
 
 + (void) uploadDictionary: (NSDictionary *) dictionary
        withTaskIdentifier: (NSString *) taskIdentifier
@@ -409,6 +430,29 @@ static NSString *folderPathForUploadOperations = nil;
         _tempFilePathsToUpload              = nil;
         _pathToPrivateFolderOfFilesToUpload = nil;
         _privateFilePathsToUpload           = nil;
+        
+        // Callback properties
+        _uploaderCompletionCallback         = nil;
+        _callbackQueue                      = nil;
+    }
+
+    return self;
+}
+
+- (id) initWithDictionariesToUpload: (NSArray *) arrayOfDictionaries
+                     taskIdentifier: (NSString *) taskIdentifier
+                        taskRunUUID: (NSUUID *) taskRunUUID
+                    completionQueue: (NSOperationQueue *) completionQueue
+                     withCompletion: (UploaderCallbackWhenCompleted) completion
+{
+    self = [self initWithTaskIdentifier: taskIdentifier
+                         andTaskRunUuid: taskRunUUID];
+
+    if (self)
+    {
+        _dictionariesToUpload = [NSArray arrayWithArray: arrayOfDictionaries];
+        _callbackQueue = completionQueue;
+        _uploaderCompletionCallback = completion;
     }
 
     return self;
@@ -420,12 +464,12 @@ static NSString *folderPathForUploadOperations = nil;
 {
     self = [self initWithTaskIdentifier: taskIdentifier
                          andTaskRunUuid: taskRunUuid];
-
+    
     if (self)
     {
         _dictionariesToUpload = [NSArray arrayWithArray: arrayOfDictionaries];
     }
-
+    
     return self;
 }
 
@@ -1765,7 +1809,7 @@ static NSString *folderPathForUploadOperations = nil;
      to Bad Guys in production.  Even if the code isn't called,
      if it's in RAM at all, it can be exploited.
      */
-    #ifdef USE_DATA_VERIFICATION_CLIENT
+    #ifdef USE_DATA_VERIFICATION_SERVER
 
         [APCDataVerificationClient uploadDataFromFileAtPath: self.unencryptedZipPath];
         
@@ -1842,24 +1886,24 @@ static NSString *folderPathForUploadOperations = nil;
     {
         APCLogError2 (error);
     }
-
-
-    /*
-     IMPORTANT!
-     #warning Ron - To Do:  handle "we couldn't upload to Sage" errors.  (How?)
-
-     Perhaps:
-
-     if (error == couldn't upload to Sage)
-     {
-        queue some try-again concept
-     }
-     else
-     {
-        truly clean up
-     }
-     */
-
+    
+    __weak typeof(self) weakSelf = self;
+    
+    if (self.uploaderCompletionCallback)
+    {
+        if (self.callbackQueue)
+        {
+            [self.callbackQueue addOperationWithBlock:^{
+                __strong typeof(weakSelf) strongSelf = weakSelf;
+                strongSelf.uploaderCompletionCallback(error);
+            }];
+        }
+        else
+        {
+            __strong typeof(weakSelf) strongSelf = weakSelf;
+            strongSelf.uploaderCompletionCallback(error);
+        }
+    }
 
     [self cleanUpAndDestroyWorkingDirectory];
 

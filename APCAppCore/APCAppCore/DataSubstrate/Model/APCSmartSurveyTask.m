@@ -96,7 +96,9 @@ static APCDummyObject * _dummyObject;
         self.rkSteps = [NSMutableDictionary dictionary];
         self.staticStepIdentifiers = [NSMutableArray array];
         self.setOfIdentifiers = [NSMutableSet set];
-        NSArray * elements = (survey.questions.count > 0) ? survey.questions : survey.elements;
+        
+        NSArray * elements = survey.elements;
+        
         [elements enumerateObjectsUsingBlock:^(id object, NSUInteger __unused idx, BOOL * __unused stop) {
             if ([object isKindOfClass:[SBBSurveyQuestion class]]) {
                 SBBSurveyQuestion * obj = (SBBSurveyQuestion*) object;
@@ -111,8 +113,10 @@ static APCDummyObject * _dummyObject;
                 }
             }
         }];
+        
         NSAssert(self.staticStepIdentifiers.count > 0, @"Survey does not have any questions");
         NSAssert((self.staticStepIdentifiers.count == self.setOfIdentifiers.count), @"Duplicate Identifiers in Survey! Please rename them!");
+        
         //For Debugging duplicates. Copy paste below commented line in lldb to look for duplicates
         //[self.staticStepIdentifiers sortedArrayUsingSelector: @selector(localizedCaseInsensitiveCompare:)];
         
@@ -435,9 +439,7 @@ static APCDummyObject * _dummyObject;
 + (ORKQuestionStep*) rkStepFromSBBSurveyQuestion: (SBBSurveyQuestion*) question
 {
     ORKQuestionStep * retStep =[ORKQuestionStep questionStepWithIdentifier:question.identifier title:question.prompt answer:[self rkAnswerFormatFromSBBSurveyConstraints:question.constraints uiHint:question.uiHint]];
-    if (question.detail.length > 0) {
-        retStep.text = question.detail;
-    }
+
     if (question.promptDetail.length > 0) {
         retStep.text = question.promptDetail;
     }
@@ -569,7 +571,7 @@ static APCDummyObject * _dummyObject;
                 NSInteger stepValue = (integerConstraint.step != nil && [integerConstraint.step integerValue] > 0) ? [integerConstraint.step integerValue] : 1;
                 NSInteger newStepValue = (NSInteger)((double)[integerConstraint.maxValue integerValue] - (double)[integerConstraint.minValue integerValue]) / 10.0;
                 stepValue = MAX(newStepValue, stepValue);
-                retValue = [ORKScaleAnswerFormat scaleAnswerFormatWithMaxValue:[integerConstraint.maxValue integerValue] minValue:[integerConstraint.minValue integerValue] step:stepValue defaultValue:0];
+                retValue = [ORKScaleAnswerFormat scaleAnswerFormatWithMaximumValue:[integerConstraint.maxValue integerValue] minimumValue:[integerConstraint.minValue integerValue] defaultValue:0 step:stepValue vertical:NO maximumValueDescription:nil minimumValueDescription:nil];
             }
             else {
                 ORKNumericAnswerFormat * format = (integerConstraint.unit.length > 0) ? [ORKNumericAnswerFormat integerAnswerFormatWithUnit:integerConstraint.unit] : [ORKNumericAnswerFormat integerAnswerFormatWithUnit:nil];

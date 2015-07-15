@@ -746,21 +746,14 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek             = @",";
 {
     NSDictionary * result = @{
                               kAPCSerializedDataKey_Item      : kUploadablePackageCreatePrescriptionFileName,
-
-                              kUploadablePackageIdentifierKey : @{ kUploadablePackageCategoryKey     : kUploadablePackageCategory,
-                                                                   kUploadablePackageNameKey         : kUploadablePackageCreatePrescriptionName,
-                                                                   kUploadablePackageVersionKey      : @(kUploadablePackageCreatePrescriptionSchemaVersion)
-                                                                   },
-
-                              kUploadablePackageContents      : @{ kUploadableFieldUniqueIdKey       : prescription.objectID,
-                                                                   kUploadableFieldCreationDateKey   : prescription.dateStartedUsing,
-                                                                   kUploadableFieldWeekdaysKey       : prescription.zeroBasedDaysOfTheWeekAsArrayOfSortedShortNames,
-                                                                   kUploadableFieldTimesPerDayKey    : prescription.numberOfTimesPerDay,
-                                                                   kUploadableFieldMedicationNameKey : prescription.medication.name,
-                                                                   kUploadableFieldDosageAmountKey   : prescription.dosage.amount,
-                                                                   kUploadableFieldDosageNameKey     : prescription.dosage.name,
-                                                                   kUploadableFieldColorNameKey      : prescription.color.name
-                                                                   },
+                              kUploadableFieldUniqueIdKey       : prescription.objectID,
+                              kUploadableFieldCreationDateKey   : prescription.dateStartedUsing,
+                              kUploadableFieldWeekdaysKey       : prescription.zeroBasedDaysOfTheWeekAsArrayOfSortedShortNames,
+                              kUploadableFieldTimesPerDayKey    : prescription.numberOfTimesPerDay,
+                              kUploadableFieldMedicationNameKey : prescription.medication.name,
+                              kUploadableFieldDosageAmountKey   : prescription.dosage.amount,
+                              kUploadableFieldDosageNameKey     : prescription.dosage.name,
+                              kUploadableFieldColorNameKey      : prescription.color.name
                               };
 
     [self sendRecordedActionToSage: result];
@@ -770,15 +763,8 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek             = @",";
 {
     NSDictionary * result = @{
                               kAPCSerializedDataKey_Item      : kUploadablePackageExpirePrescriptionFileName,
-
-                              kUploadablePackageIdentifierKey : @{ kUploadablePackageCategoryKey       : kUploadablePackageCategory,
-                                                                   kUploadablePackageNameKey           : kUploadablePackageExpirePrescriptionName,
-                                                                   kUploadablePackageVersionKey        : @(kUploadablePackageExpirePrescriptionSchemaVersion),
-                                                                   },
-
-                              kUploadablePackageContents      : @{ kUploadableFieldUniqueIdKey         : prescription.objectID,
-                                                                   kUploadableFieldCancellationDateKey : prescription.dateStoppedUsing,
-                                                                   },
+                              kUploadableFieldUniqueIdKey         : prescription.objectID,
+                              kUploadableFieldCancellationDateKey : prescription.dateStoppedUsing
                               };
 
     [self sendRecordedActionToSage: result];
@@ -790,16 +776,9 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek             = @",";
 {
     NSDictionary *result = @{
                              kAPCSerializedDataKey_Item      : kUploadablePackageRecordDosesFileName,
-
-                             kUploadablePackageIdentifierKey : @{ kUploadablePackageCategoryKey  : kUploadablePackageCategory,
-                                                                  kUploadablePackageNameKey      : kUploadablePackageRecordDosesName,
-                                                                  kUploadablePackageVersionKey   : @(kUploadablePackageRecordDosesSchemaVersion),
-                                                                  },
-
-                             kUploadablePackageContents      :  @{ kUploadableFieldUniqueIdKey   : prescription.objectID,
-                                                                   kUploadableFieldDosageDateKey : date,
-                                                                   kUploadableFieldDosesTakenKey : numberOfDosesTaken
-                                                                   },
+                             kUploadableFieldUniqueIdKey   : prescription.objectID,
+                             kUploadableFieldDosageDateKey : [date toStringWithFormat:DateFormatISO8601DateOnly],
+                             kUploadableFieldDosesTakenKey : numberOfDosesTaken
                              };
 
     [self sendRecordedActionToSage: result];

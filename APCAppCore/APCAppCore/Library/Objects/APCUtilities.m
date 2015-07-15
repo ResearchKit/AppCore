@@ -33,6 +33,8 @@
  
 #import "APCUtilities.h"
 #import "APCDeviceHardware.h"
+#import "APCLog.h"
+#import <sys/sysctl.h>
 
 /**
  These are fixed per launch of the app.  They're also
@@ -139,6 +141,17 @@ static NSString *       _realApplicationName = nil;
 	return _appName;
 }
 
++ (BOOL) isInDebuggingMode
+{
+    BOOL result = NO;
+
+    #if DEBUG
+        result = YES;
+    #endif
+
+    return result;
+}
+
 /**
  Trims whitespace from someString and returns it.
  If the trimmed string has length 0, returns nil.
@@ -175,6 +188,64 @@ static NSString *       _realApplicationName = nil;
     }
 
     return tempDirectory;
+}
+
++ (NSDate *) firstKnownFileAccessDate
+{
+    NSDate *result = nil;
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *applicationDocumentsDirectory = ([paths count] > 0) ? paths[0] : nil;
+    NSFileManager*  fileManager = [NSFileManager defaultManager];
+    NSString*       filePath    = [applicationDocumentsDirectory stringByAppendingPathComponent:@"db.sqlite"];
+    
+    if ([fileManager fileExistsAtPath:filePath])
+    {
+        NSError*        error       = nil;
+        NSDictionary*   attributes  = [fileManager attributesOfItemAtPath:filePath error:&error];
+        
+        if (error)
+        {
+            APCLogError2(error);
+        }
+        else
+        {
+            result = [attributes fileCreationDate];
+        }
+    }
+
+    return result;
+}
+
+time_t kernelBootTime()
+{
+    struct timeval bootTime;
+    
+    time_t bootTimeSeconds = -1;
+    int    mib[2] = { CTL_KERN, KERN_BOOTTIME };
+    size_t size   = sizeof(bootTime);
+    
+    if (sysctl(mib, 2, &bootTime, &size, NULL, 0) != -1 && bootTime.tv_sec != 0)
+    {
+        bootTimeSeconds = bootTime.tv_sec;
+    }
+    
+    return bootTimeSeconds;
+}
+
+time_t uptime()
+{
+    time_t bootTime = kernelBootTime();
+    time_t upTime   = -1;
+    
+    if (bootTime != -1)
+    {
+        time_t  now;
+        
+        time(&now);
+        upTime = now - bootTime;
+    }
+    
+    return upTime;
 }
 
 @end

@@ -197,7 +197,7 @@ static NSArray * kAPCKnownJSONFilenamePrefixes = nil;
 		 Make sure crackers (Bad Guys) don't know these features
 		 exist, and (also) cannot use them, even by accident.
 		 */
-		#ifdef USE_DATA_VERIFICATION_CLIENT
+		#ifdef USE_DATA_VERIFICATION_SERVER
 
 			_preserveUnencryptedFile = NO;
 			_unencryptedFilePath = nil;
@@ -705,7 +705,7 @@ static NSArray * kAPCKnownJSONFilenamePrefixes = nil;
 	 Make sure crackers (Bad Guys) don't know these features
 	 exist, and (also) cannot use them, even by accident.
 	 */
-#ifdef USE_DATA_VERIFICATION_CLIENT
+#ifdef USE_DATA_VERIFICATION_SERVER
 
 	NSString * newUnEncryptedPath = [outputDirectory stringByAppendingPathComponent:@"unencrypted.zip"];
 

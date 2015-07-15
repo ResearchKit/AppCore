@@ -34,29 +34,30 @@
 #import <UIKit/UIKit.h>
 #import "APCActivitiesTableViewCell.h"
 #import "APCBadgeLabel.h"
+#import "APCConstants.h"
+
+@class APCTaskGroup;
+
 
 FOUNDATION_EXPORT NSString * const kAPCActivitiesTintedTableViewCellIdentifier;
 
-typedef NS_ENUM(NSUInteger, APCTintColorType) {
-    kAPCTintColorTypeGreen,
-    kAPCTintColorTypeRed,
-    kAPCTintColorTypeYellow,
-    kAPCTintColorTypePurple,
-    kAPCTintColorTypeBlue
-};
 
+/**
+ Displays a single row in the main TableView on the
+ ActivitiesViewController.  Each such row describes the 
+ state of a certain Task the user can perform on a given
+ day.
+ */
 @interface APCActivitiesTintedTableViewCell : APCActivitiesTableViewCell
 
-@property (weak, nonatomic) IBOutlet UILabel *subTitleLabel;
-@property (weak, nonatomic) IBOutlet UIView *tintView;
-@property (weak, nonatomic) IBOutlet APCBadgeLabel *countLabel;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *titleLabelCenterYConstraint;
-
-@property (strong, nonatomic) UIColor *tintColor;
-
-@property (nonatomic) BOOL hidesSubTitle;
-
-- (void)setupAppearance;
-- (void)setupIncompleteAppearance;
+/**
+ Configure this cell to display its TaskGroup:  a single
+ conceptual activity the user can perform, with various
+ pieces of metadata describing the present, past, and
+ future state of that activity.
+ */
+- (void) configureWithTaskGroup: (APCTaskGroup *) taskGroup
+                    isTodayCell: (BOOL) cellRepresentsToday
+              showDebuggingInfo: (BOOL) shouldShowDebuggingInfo;
 
 @end

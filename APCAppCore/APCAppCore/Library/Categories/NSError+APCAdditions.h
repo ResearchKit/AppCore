@@ -59,12 +59,14 @@ FOUNDATION_EXPORT NSString * const kAPCInvalidEmailAddressOrPasswordErrorMessage
 /*********************************************************************************/
 
 /**
- Shortcut for creating an NSError with the specified fields.
- Code and domain are required.  The other fields are optional.
+ Creates an NSError with the specified domain, error code,
+ reason, and suggestion, using Apple's standard keys to
+ store the reason and suggestion in the error's userInfo
+ dictionary.
 
- These convenience methods all call the same, master convenience
- method behind the scenes.  Please add any more such methods
- you need.
+ These convenience methods all call the same, master
+ convenience method behind the scenes.  Please add any
+ more such methods you need.
 
  @param  code       An error code.  Any integer you like.
 
@@ -76,12 +78,14 @@ FOUNDATION_EXPORT NSString * const kAPCInvalidEmailAddressOrPasswordErrorMessage
          recoverySuggestion: (NSString *) localizedRecoverySuggestion;
 
 /**
- Shortcut for creating an NSError with the specified fields.
- Code and domain are required.  The other fields are optional.
+ Creates an NSError with the specified domain, error code,
+ reason, suggestion, and originating error, using Apple's
+ standard keys to store the latter three items in the
+ error's userInfo dictionary.
 
- These convenience methods all call the same, master convenience
- method behind the scenes.  Please add any more such methods
- you need.
+ These convenience methods all call the same, master
+ convenience method behind the scenes.  Please add any
+ more such methods you need.
 
  @param  code           An error code.  Any integer you like.
 
@@ -102,12 +106,14 @@ FOUNDATION_EXPORT NSString * const kAPCInvalidEmailAddressOrPasswordErrorMessage
                 nestedError: (NSError *)  rootCause;
 
 /**
- Shortcut for creating an NSError with the specified fields.
- Code and domain are required.  The other fields are optional.
+ Creates an NSError with the specified domain, error code,
+ reason, suggestion, and a related file path, using Apple's
+ standard keys to store the latter three items in the
+ error's userInfo dictionary.
 
- These convenience methods all call the same, master convenience
- method behind the scenes.  Please add any more such methods
- you need.
+ These convenience methods all call the same, master
+ convenience method behind the scenes.  Please add any
+ more such methods you need.
 
  @param  code       An error code.  Any integer you like.
 
@@ -120,12 +126,14 @@ FOUNDATION_EXPORT NSString * const kAPCInvalidEmailAddressOrPasswordErrorMessage
             relatedFilePath: (NSString *) someFilePath;
 
 /**
- Shortcut for creating an NSError with the specified fields.
- Code and domain are required.  The other fields are optional.
+ Creates an NSError with the specified domain, error code,
+ reason, suggestion, and a related URL, using Apple's
+ standard keys to store the latter three items in the
+ error's userInfo dictionary.
 
- These convenience methods all call the same, master convenience
- method behind the scenes.  Please add any more such methods
- you need.
+ These convenience methods all call the same, master
+ convenience method behind the scenes.  Please add any
+ more such methods you need.
 
  @param  code       An error code.  Any integer you like.
 
@@ -138,12 +146,15 @@ FOUNDATION_EXPORT NSString * const kAPCInvalidEmailAddressOrPasswordErrorMessage
                  relatedURL: (NSURL *)    someURL;
 
 /**
- Shortcut for creating an NSError with the specified fields.
- Code and domain are required.  The other fields are optional.
+ Creates an NSError with the specified domain, error code,
+ reason, suggestion, a related file path, a related URL,
+ and an originating error.  Uses Apple's standard keys to
+ store those latter five items in the error's userInfo
+ dictionary.
 
- These convenience methods all call the same, master convenience
- method behind the scenes.  Please add any more such methods
- you need.
+ These convenience methods all call the same, master
+ convenience method behind the scenes.  Please add any
+ more such methods you need.
 
  @param  code           An error code.  Any integer you like.
 
@@ -166,12 +177,18 @@ FOUNDATION_EXPORT NSString * const kAPCInvalidEmailAddressOrPasswordErrorMessage
                 nestedError: (NSError *)  rootCause;
 
 /**
- Shortcut for creating an NSError with the specified fields.
- Code and domain are required.  The other fields are optional.
+ Creates an NSError with the specified domain, error code,
+ reason, suggestion, a related file path, a related URL, an
+ originating error, and a dictionary of arbitrary other
+ data.  Uses Apple's standard keys to store the reason,
+ suggestion, file path, URL, and originating error in the
+ error's user-info dictionary, and adds any items with
+ non-conflicting keys from your otherUserInfo into that
+ same dictionary.
 
- These convenience methods all call the same, master convenience
- method behind the scenes.  Please add any more such methods
- you need.
+ These convenience methods all call the same, master
+ convenience method behind the scenes.  Please add any
+ more such methods you need.
 
  @param  code           An error code.  Any integer you like.
 
@@ -205,9 +222,9 @@ FOUNDATION_EXPORT NSString * const kAPCInvalidEmailAddressOrPasswordErrorMessage
               otherUserInfo: (NSDictionary *) otherUserInfo;
 
 /**
- Walks through the error and prepares a friendly printout for it,
- specifically so we can print out and format the contents of nested
- errors, arrays, and dictionaries.
+ Walks through the error and prepares a friendly printout
+ for it, specifically so we can print out and format the
+ contents of nested errors, arrays, and dictionaries.
  */
 - (NSString *) friendlyFormattedString;
 

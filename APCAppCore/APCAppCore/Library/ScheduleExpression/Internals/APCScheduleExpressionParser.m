@@ -422,7 +422,7 @@ parseError:
             default:
                 // No changes for the rest of them, yet.
                 break;
-	}
+        }
 	}
 }
 

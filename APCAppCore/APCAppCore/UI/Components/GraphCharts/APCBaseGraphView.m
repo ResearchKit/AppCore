@@ -34,6 +34,13 @@
 #import "APCBaseGraphView.h"
 #import "UIColor+APCAppearance.h"
 
+static NSString * const kFadeAnimationKey = @"LayerFadeAnimation";
+static NSString * const kGrowAnimationKey = @"LayerGrowAnimation";
+
+CGFloat const kAPCFadeAnimationDuration = 0.2;
+CGFloat const kAPCGrowAnimationDuration = 0.1;
+CGFloat const kAPCPopAnimationDuration  = 0.3;
+
 @implementation APCBaseGraphView
 
 #pragma mark - Init
@@ -67,7 +74,13 @@
     _scrubberThumbColor = [UIColor colorWithWhite:1 alpha:1.0];
     
     _showsVerticalReferenceLines = NO;
-
+    _showsHorizontalReferenceLines = YES;
+    
+    _hidesDataPoints = NO;
+    _disableScrubbing = NO;
+    _hidesYAxis = NO;
+    _shouldHighlightXaxisLastTitle = YES;
+    
     _emptyText = NSLocalizedString(@"No Data", @"No Data");
     
 }
@@ -84,7 +97,7 @@
     return 0;
 }
 
-- (NSInteger)numberOfPointsinPlot:(NSInteger) __unused plotIndex
+- (NSInteger)numberOfPointsInPlot:(NSInteger) __unused plotIndex
 {
     [self throwOverrideException];
     
@@ -104,6 +117,70 @@
 - (void)refreshGraph
 {
     [self throwOverrideException];
+}
+
+- (void)setDisableScrubbing:(BOOL)disableScrubbing
+{
+    _disableScrubbing = disableScrubbing;
+    self.panGestureRecognizer.enabled = !disableScrubbing;
+}
+
+#pragma mark - Animations
+
+- (void)animateLayer:(CAShapeLayer *)shapeLayer withAnimationType:(APCGraphAnimationType)animationType
+{
+    [self animateLayer:shapeLayer withAnimationType:animationType toValue:1.0];
+}
+
+- (void)animateLayer:(CAShapeLayer *)shapeLayer withAnimationType:(APCGraphAnimationType)animationType toValue:(CGFloat)toValue
+{
+    [self animateLayer:shapeLayer withAnimationType:animationType toValue:toValue startDelay:0.0];
+}
+
+- (void)animateLayer:(CAShapeLayer *)shapeLayer withAnimationType:(APCGraphAnimationType)animationType startDelay:(CGFloat)delay
+{
+    [self animateLayer:shapeLayer withAnimationType:animationType toValue:1.0 startDelay:delay];
+}
+
+- (void)animateLayer:(CAShapeLayer *)shapeLayer withAnimationType:(APCGraphAnimationType)animationType toValue:(CGFloat)toValue startDelay:(CGFloat)delay
+{
+    if (animationType == kAPCGraphAnimationTypeFade) {
+        
+        CABasicAnimation *fadeAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
+        fadeAnimation.beginTime = CACurrentMediaTime() + delay;
+        fadeAnimation.fromValue = @0;
+        fadeAnimation.toValue = @(toValue);
+        fadeAnimation.duration = kAPCFadeAnimationDuration;
+        fadeAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+        fadeAnimation.fillMode = kCAFillModeForwards;
+        fadeAnimation.removedOnCompletion = NO;
+        [shapeLayer addAnimation:fadeAnimation forKey:kFadeAnimationKey];
+        
+    } else if (animationType == kAPCGraphAnimationTypeGrow) {
+        
+        CABasicAnimation *growAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
+        growAnimation.beginTime = CACurrentMediaTime() + delay;
+        growAnimation.fromValue = @0;
+        growAnimation.toValue = @(toValue);
+        growAnimation.duration = kAPCGrowAnimationDuration;
+        growAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+        growAnimation.fillMode = kCAFillModeForwards;
+        growAnimation.removedOnCompletion = NO;
+        [shapeLayer addAnimation:growAnimation forKey:kGrowAnimationKey];
+        
+    } else if (animationType == kAPCGraphAnimationTypePop) {
+        
+        CABasicAnimation *popAnimation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
+        popAnimation.beginTime = CACurrentMediaTime() + delay;
+        popAnimation.fromValue = @0;
+        popAnimation.toValue = @(toValue);
+        popAnimation.duration = kAPCPopAnimationDuration;
+        popAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+        popAnimation.fillMode = kCAFillModeForwards;
+        popAnimation.removedOnCompletion = NO;
+        [shapeLayer addAnimation:popAnimation forKey:kGrowAnimationKey];
+        
+    }
 }
 
 @end

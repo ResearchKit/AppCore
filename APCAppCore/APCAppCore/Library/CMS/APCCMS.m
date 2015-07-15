@@ -1,5 +1,5 @@
 // 
-//  APCActivitiesViewWithNoTask.h 
+//  APCCMS.m
 //  APCAppCore 
 // 
 // Copyright (c) 2015, Apple Inc. All rights reserved. 
@@ -31,10 +31,26 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 // 
  
-#import <UIKit/UIKit.h>
+#import "APCCMS.h"
+#import "APCCMSSupport.h"
 
-@interface APCActivitiesViewWithNoTask : UIView
-@property (weak, nonatomic) IBOutlet UIImageView *imgView;
+NSData * cmsEncrypt (NSData *data,
+                     NSString * __unused identityPath,
+                     NSError **error)
+{
+    NSData *encryptedData = data;
+    
+    if (error != nil)
+    {
+        *error = nil;
+    }
+    
+    Class support = NSClassFromString(@"APCCMSSupport");
+    if (support != Nil) {
+        encryptedData = [support cmsEncrypt:data identityPath:identityPath error:error];
+    } else {
+        NSLog(@"WARNING: APCCMSSupport class not implemented. Your data is not being encrypted. See ENCRYPTION_README.txt and APCCMSSupport.h for details.");
+    }
 
-@property (weak, nonatomic) IBOutlet UILabel *todaysDate;
-@end
+    return encryptedData;
+}

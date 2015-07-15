@@ -74,6 +74,14 @@
 + (NSString *) phoneInfo;
 
 /**
+ Returns YES if the current build is a "DEBUG" build --
+ i.e., if the DEBUG preprocessor flag is defined.  Lets
+ us use debug-only logic in normal "if" statements,
+ instead of having to use #if statements.
+ */
++ (BOOL) isInDebuggingMode;
+
+/**
  Trims whitespace from someString and returns it.
  If the trimmed string has length 0, returns nil.
  This lets us do simplified "if" statements, evaluating
@@ -100,7 +108,37 @@
 + (NSString *) pathToTemporaryDirectoryAddingUuid: (BOOL) shouldAddUuid;
 
 
+/**
+ Returns the file-creation date on our database file.
+ A good approximation of the first time the user ran the
+ app.
+ */
++ (NSDate *) firstKnownFileAccessDate;
+
+/**
+ Returns the number of seconds since the kernel boot time
+ */
+time_t uptime();
+
 @end
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Other Macros
+// ---------------------------------------------------------
+
+/**
+ Returns valueToTest clamped to minValue and maxValue.
+ I.e., returns minValue if valueToTest is less than
+ minValue, maxValue if valueToTest if greater than
+ maxValue, and valueToTest itself if it's between those
+ two values.
+ 
+ This macro name is in ALL CAPS simply to be consistent
+ with MIN() and MAX().
+ */
+#define CLAMP( minValue, valueToTest, maxValue ) (MIN (MAX (valueToTest, minValue), maxValue))
 
 
 
@@ -134,7 +172,7 @@
  
 		- (void) printMyStuff: (NSString *) messageFormat, ...
 		{
-			NSString extractedString = stringFromVariadicArgumentsAndFormat( messageFormat );
+			NSString extractedString = NSStringFromVariadicArgumentsAndFormat ( messageFormat );
  
 			//
 			// now use the extractedString.  For example:
@@ -190,6 +228,89 @@
 	})
 
 
+
+/**
+ Macro NSArrayFromVariadicArguments()
+
+ This macro converts a bunch of "..." arguments into an NSArray,
+ including the parameter to the left of the "...".  Each argument
+ must be an "id" type, or a subclass of NSObject.
+ 
+ @details
+ To use it: 
+ 
+ First, create a method that ENDS with a "...", like this:
+ 
+ @code
+		- (void) collectMyStuff: (NSNumber *) myAge, ...
+		{
+		}
+ @endcode
+
+ The data type of that parameter doesn't matter for the purpose
+ of this macro.  It only matters that there IS a parameter to the
+ left of the ", ..." (the comma-space-dot-dot-dot).
+ 
+ Inside that method, call this macro, passing it the name of the
+ parameter to the left of the "...".  Using the above method as
+ an example, you might write:
+ 
+ @code
+		- (void) collectMyStuff: (NSNumber *) myAge, ...
+		{
+			NSArray myStuff = NSArrayFromVariadicArguments( myAge );
+ 
+			//
+			// now use myStuff.  For example:
+			//
+			NSLog (@"All my stuff is: %@", myStuff);
+		}
+ @endcode
+ 
+ You might use it like this:
+
+ @code
+        NSString *name = @"Joe";
+        UIColor *favoriteColor = [UIColor blueColor];
+        NSNumber *age = "50";
+
+        [self collectMyStuff: name, favoriteColor, age];
+ @endcode
+
+ Behind the scenes, this macro adds that first parameter to
+ a mutable array.  Then it walks through all the remaining "..."
+ parameters (if any), adding each of them to the same mutable
+ array.  Finally, it slurps the contents of the mutable array
+ into a normal NSArray and returns that.
+ 
+ Note that this macro requires ARC.  (To use it without ARC,
+ you'll need to edit the macro to release and autorelease
+ things appropriately.)
+ 
+ This macro was created with the same research as for
+ NSStringFromVariadicArgumentsAndFormat(), with some additional
+ help regarding this command for accessing individual parameters
+ in the "..." list:
+
+    http://www.cplusplus.com/reference/cstdarg/va_arg/
+
+ For more information, see NSStringFromVariadicArgumentsAndFormat ().
+
+ Other keywords to find this chunk of code:  va_args, varargs,
+ vaargs, variadic arguments, variadic macro, dotdotdot, ellipsis,
+ three dots
+*/
+#define NSArrayFromVariadicArguments( firstArgumentName )                   \
+    ({                                                                      \
+        NSMutableArray *incomingObjects = [NSMutableArray new];             \
+        [incomingObjects addObject: firstArgumentName];                     \
+        va_list arguments;                                                  \
+        va_start (arguments, firstArgumentName);                            \
+        [incomingObjects addObject: va_arg (arguments, id)];                \
+        va_end (arguments);                                                 \
+        NSArray *returnValue = [NSArray arrayWithArray: incomingObjects];   \
+        returnValue; \
+    })
 
 
 

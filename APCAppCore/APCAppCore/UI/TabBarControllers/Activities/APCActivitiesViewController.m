@@ -1,4 +1,4 @@
-// 
+//
 //  APCActivitiesViewController.m 
 //  APCAppCore 
 // 
@@ -32,201 +32,202 @@
 // 
  
 #import "APCActivitiesViewController.h"
-#import "APCAppCore.h"
-#import "APCActivitiesViewWithNoTask.h"
+#import "APCActivitiesViewSection.h"
+#import "APCAppDelegate.h"
+#import "APCBaseTaskViewController.h"
 #import "APCCircularProgressView.h"
+#import "APCConstants.h"
+#import "APCDataMonitor+Bridge.h"
+#import "APCLog.h"
+#import "APCScheduler.h"
+#import "APCSpinnerViewController.h"
+#import "APCTask.h"
+#import "APCTaskGroup.h"
+#import "APCTasksReminderManager.h"
+#import "APCUtilities.h"
+#import "NSBundle+Helper.h"
+#import "NSDate+Helper.h"
+#import "UIAlertController+Helper.h"
 #import "UIColor+APCAppearance.h"
 
-static CGFloat kTintedCellHeight = 65;
 
-static CGFloat kTableViewSectionHeaderHeight = 77;
+static CGFloat    const kTintedCellHeight                           = 65;
+static CGFloat    const kTableViewSectionHeaderHeight               = 77;
+static NSString * const kAPCSampleGlucoseLogTaskAndScheduleFileName = @"APHSampleGlucoseLogTaskAndSchedule.json";
+static NSString * const kAPCListOfTimesMarker                       = @"LIST_OF_TIMES";
+static NSString * const kAPCListOfWeekdaysMarker                    = @"LIST_OF_WEEKDAYS";
+static NSString * const kAPCScheduleStringKey                       = @"scheduleString";
 
-typedef NS_ENUM(NSUInteger, APCActivitiesSections)
-{
-    APCActivitiesSectionToday = 0,
-    APCActivitiesSectionYesterday,
-    APCActivitiesSectionsTotalNumberOfSections
-};
 
 @interface APCActivitiesViewController ()
 
-@property (nonatomic) BOOL taskSelectionDisabled;
+@property (nonatomic, strong) IBOutlet UITableView  *tableView;
+@property (nonatomic, weak)   IBOutlet UILabel      *noTasksLabel;
 
-@property (strong, nonatomic) NSMutableArray *sectionsArray;
-@property (strong, nonatomic) NSMutableArray *scheduledTasksArray;
+@property (readonly) APCAppDelegate                 *appDelegate;
+@property (readonly) APCActivitiesViewSection       *todaySection;
+@property (readonly) NSUInteger                     countOfRequiredTasksToday;
+@property (readonly) NSUInteger                     countOfCompletedTasksToday;
+@property (readonly) NSUInteger                     countOfRemainingTasksToday;
+@property (readonly) UITabBarItem                   *myTabBarItem;
 
-@property (strong, nonatomic) APCActivitiesViewWithNoTask *noTasksView;
+@property (nonatomic, strong) NSDateFormatter       *dateFormatter;
+@property (nonatomic, strong) NSDate                *lastKnownSystemDate;
+@property (nonatomic, strong) NSArray               *sections;
+@property (nonatomic, assign) BOOL                  isFetchingFromCoreDataRightNow;
+@property (nonatomic, strong) UIRefreshControl      *refreshControl;
 
-@property (strong, nonatomic) NSDateFormatter *dateFormatter;
-
-// The below, tasksBySection and keepGoingTasks, are used only
-// for filtering the tasks that should not appear in the 'Yesterday'
-// section. Needless to say, we do need to refactor this bit of
-// logic so that it is more flexible.
-@property (strong, nonatomic) NSDictionary *tasksBySection;
-@property (strong, nonatomic) NSMutableArray *keepGoingTasks;
+@property (readonly) NSDate *dateWeAreUsingForToday;
 
 @end
 
+
 @implementation APCActivitiesViewController
 
-#pragma mark - Lazy Loading
-- (NSMutableArray*) scheduledTasksArray
-{
-    if (!_scheduledTasksArray) {
-        _scheduledTasksArray = [NSMutableArray array];
-    }
-    return _scheduledTasksArray;
-}
-
-- (NSMutableArray *)sectionsArray
-{
-    if (!_sectionsArray) {
-        _sectionsArray = [NSMutableArray array];
-    }
-    return _sectionsArray;
-}
 
 #pragma mark - Lifecycle
 
-- (void)viewDidLoad
+- (void) viewDidLoad
 {
     [super viewDidLoad];
-    [self setupNotifications];
-    
+
     self.navigationItem.title = NSLocalizedString(@"Activities", @"Activities");
     self.tableView.backgroundColor = [UIColor appSecondaryColor4];
-    
-    [self.tableView registerNib:[UINib nibWithNibName:@"APCActivitiesSectionHeaderView" bundle:[NSBundle appleCoreBundle]] forHeaderFooterViewReuseIdentifier:kAPCActivitiesSectionHeaderViewIdentifier];
-    
+
+    NSString *headerViewNibName = NSStringFromClass ([APCActivitiesSectionHeaderView class]);
+    UINib *nib = [UINib nibWithNibName:headerViewNibName bundle:[NSBundle appleCoreBundle]];
+    [self.tableView registerNib: nib forHeaderFooterViewReuseIdentifier: headerViewNibName];
+
     self.dateFormatter = [NSDateFormatter new];
-    
-    self.keepGoingTasks = [NSMutableArray new];
-    
-    APCAppDelegate * appDelegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
-    self.tasksBySection = [appDelegate configureTasksForActivities];
+    [self configureRefreshControl];
+    self.lastKnownSystemDate = nil;
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (void) viewWillAppear: (BOOL) animated
 {
-    [super viewWillAppear:animated];
- 
+    [super viewWillAppear: animated];
+
+    [self setupNotifications];
     [self setUpNavigationBarAppearance];
 
-    [self reloadData];
+    
+    [self reloadTasksFromCoreData];
+    [self checkForAndMaybeRespondToSystemDateChange];
+
     APCLogViewControllerAppeared();
 }
 
--(void) setupNotifications{
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(reloadData)
-                                                 name:APCUpdateActivityNotification object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(updateActivities:)
-                                                 name:APCDayChangedNotification object:nil];
+- (void) viewDidDisappear: (BOOL) animated
+{
+    [super viewDidDisappear: animated];
+
+    [self cancelNotifications];
 }
 
--(void)setUpNavigationBarAppearance{
-    [self.navigationController.navigationBar setBarTintColor:[UIColor whiteColor]];
+- (void) setupNotifications
+{
+    // Fires when one day rolls over to the next.
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector (checkForAndMaybeRespondToSystemDateChange)
+                                                 name: APCDayChangedNotification
+                                               object: nil];
+
+    // ...but that only happens every minute or so.  This lets us respond much faster.
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector (checkForAndMaybeRespondToSystemDateChange)
+                                                 name: UIApplicationWillEnterForegroundNotification
+                                               object: nil];
+
+    // ...but that only happens every minute or so.  This lets us respond much faster.
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector (checkForAndMaybeRespondToSystemDateChange)
+                                                 name: UIApplicationDidBecomeActiveNotification
+                                               object: nil];
+}
+
+- (void) cancelNotifications
+{
+    [[NSNotificationCenter defaultCenter] removeObserver: self];
+}
+
+/**
+ Sets up the pull-to-refresh control at the top of the TableView.
+ If/when we go back to being a subclass of UITableViewController,
+ we can remove this.
+ */
+- (void) configureRefreshControl
+{
+    self.refreshControl = [UIRefreshControl new];
+
+    [self.refreshControl addTarget: self
+                            action: @selector (fetchNewestSurveysAndTasksFromServer:)
+                  forControlEvents: UIControlEventValueChanged];
+
+    [self.tableView addSubview: self.refreshControl];
+}
+
+- (void) setUpNavigationBarAppearance
+{
+    [self.navigationController.navigationBar setBarTintColor: [UIColor whiteColor]];
+
     self.navigationController.navigationBar.translucent = NO;
 }
 
-- (void) viewDidAppear:(BOOL)animated
+
+
+// ---------------------------------------------------------
+#pragma mark - Responding to changes in system state
+// ---------------------------------------------------------
+
+- (void) checkForAndMaybeRespondToSystemDateChange
 {
-    [super viewDidAppear:animated];
-}
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
 
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [super viewDidDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
+        NSDate *now = self.dateWeAreUsingForToday;
 
-#pragma mark - UITableViewDataSource Methods
+        if (self.lastKnownSystemDate == nil || ! [now isSameDayAsDate: self.lastKnownSystemDate])
+        {
+            APCLogDebug (@"Handling date changes (Activities): Last-known date has changed. Resetting dates, refreshing server content, and refreshing UI.");
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *) __unused tableView
-{
-    return self.sectionsArray.count;
-}
-
-- (NSInteger)tableView:(UITableView *) __unused tableView numberOfRowsInSection:(NSInteger)section
-{
-    return ((NSArray*)self.scheduledTasksArray[section]).count;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static  NSString  *medicationTrackerTaskId = @"a-APHMedicationTracker-20EF8ED2-E461-4C20-9024-F43FCAAAF4C3";
-    
-    id task = ((NSArray*)self.scheduledTasksArray[indexPath.section])[indexPath.row];
-    
-    APCGroupedScheduledTask *groupedScheduledTask;
-    APCScheduledTask *scheduledTask;
-    NSString * taskCompletionTimeString;
-    
-    if ([task isKindOfClass:[APCGroupedScheduledTask class]])
-    {
-        groupedScheduledTask = (APCGroupedScheduledTask *)task;
-        taskCompletionTimeString = groupedScheduledTask.taskCompletionTimeString;
-    }
-    else if ([task isKindOfClass:[APCScheduledTask class]])
-    {
-        scheduledTask = (APCScheduledTask *)task;
-        taskCompletionTimeString = scheduledTask.task.taskCompletionTimeString;
-    }
-    
-    APCActivitiesTintedTableViewCell  *cell = [tableView dequeueReusableCellWithIdentifier: kAPCActivitiesTintedTableViewCellIdentifier];
-    
-    if (taskCompletionTimeString) {
-        cell.subTitleLabel.text = taskCompletionTimeString;
-        cell.hidesSubTitle = NO;
-    } else {
-        cell.hidesSubTitle = YES;
-    }
-
-    if ([task isKindOfClass:[APCGroupedScheduledTask class]])
-    {
-        cell.titleLabel.text = groupedScheduledTask.taskTitle;
-        NSUInteger tasksCount = groupedScheduledTask.scheduledTasks.count;
-        NSUInteger completedTasksCount = groupedScheduledTask.completedTasksCount;
-        
-        if (tasksCount == completedTasksCount) {
-            cell.countLabel.text = nil;
-            cell.countLabel.hidden = YES;
-        } else {
-            NSUInteger remaining = tasksCount - completedTasksCount;
-            cell.countLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)remaining];
-            cell.countLabel.hidden = NO;
+            self.lastKnownSystemDate = now;
+            [self reloadTasksFromCoreData];
+            [self fetchNewestSurveysAndTasksFromServer: nil];
         }
-        
-        
-        cell.confirmationView.completed = groupedScheduledTask.complete;
-        
-        APCScheduledTask *firstTask = groupedScheduledTask.scheduledTasks.firstObject;
-        cell.tintColor = [UIColor colorForTaskId:firstTask.task.taskID];
-    }
-    else if ([task isKindOfClass:[APCScheduledTask class]])
-    {        
-        cell.titleLabel.text = scheduledTask.task.taskTitle;
-        if ([scheduledTask.task.taskID isEqualToString:medicationTrackerTaskId] == NO) {
-            cell.confirmationView.completed = scheduledTask.completed.boolValue;
-        }
-        cell.countLabel.text = nil;
-        cell.countLabel.hidden = YES;
-        cell.tintColor = [UIColor colorForTaskId:scheduledTask.task.taskID];
-    }
-    
-    if (indexPath.section == APCActivitiesSectionYesterday) {
-        [cell setupIncompleteAppearance];
-    } else {
-        [cell setupAppearance];
-    }
-    
-    return  cell;
+    }];
 }
 
-#pragma mark - UITableViewDelegate Methods
+
+
+// ---------------------------------------------------------
+#pragma mark - Displaying the table cells
+// ---------------------------------------------------------
+
+- (NSInteger) numberOfSectionsInTableView: (UITableView *) __unused tableView
+{
+    return self.sections.count;
+}
+
+- (NSInteger) tableView: (UITableView *) __unused tableView
+  numberOfRowsInSection: (NSInteger) sectionNumber
+{
+    APCActivitiesViewSection *section = [self sectionForSectionNumber: sectionNumber];
+    NSInteger count = section.taskGroups.count;
+    return count;
+}
+
+- (UITableViewCell *) tableView: (UITableView *) tableView
+          cellForRowAtIndexPath: (NSIndexPath *) indexPath
+{
+    APCActivitiesViewSection *section = [self sectionForCellAtIndexPath: indexPath];
+    APCTaskGroup *taskGroupForThisRow = [self taskGroupForCellAtIndexPath: indexPath];
+    APCActivitiesTintedTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: kAPCActivitiesTintedTableViewCellIdentifier];
+
+    [cell configureWithTaskGroup: taskGroupForThisRow
+                     isTodayCell: section.isTodaySection
+               showDebuggingInfo: NO];
+
+    return cell;
+}
 
 - (CGFloat)       tableView: (UITableView *) __unused tableView
     heightForRowAtIndexPath: (NSIndexPath *) __unused indexPath
@@ -237,370 +238,455 @@ typedef NS_ENUM(NSUInteger, APCActivitiesSections)
 - (CGFloat)        tableView: (UITableView *) __unused tableView
     heightForHeaderInSection: (NSInteger) __unused section
 {
-    CGFloat height = kTableViewSectionHeaderHeight;
-    
-    if (section == APCActivitiesSectionToday) {
-        height -= 15;
-    }
-    return height;
+    return kTableViewSectionHeaderHeight;
 }
 
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+- (UIView *)     tableView: (UITableView *) tableView
+    viewForHeaderInSection: (NSInteger) sectionNumber
 {
-    APCActivitiesSectionHeaderView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kAPCActivitiesSectionHeaderViewIdentifier];
-    
-    
-    switch (section) {
-        case APCActivitiesSectionToday:
-        {
-            [self.dateFormatter setDateFormat:@"MMMM d"];
-            headerView.titleLabel.text = [NSString stringWithFormat:@"%@, %@", NSLocalizedString(@"Today", @""), [self.dateFormatter stringFromDate:[NSDate date]] ];
-            headerView.subTitleLabel.text = NSLocalizedString(@"To start an activity, select from the list below.", @"");
-        }
-            break;
-        case APCActivitiesSectionYesterday:
-        {
-            headerView.titleLabel.text = NSLocalizedString(@"Yesterday", @"");
-            headerView.subTitleLabel.text = NSLocalizedString(@"Below are your incomplete tasks from yesterday. These are for reference only.", @"");
-        }
-            break;
+    NSString *headerViewIdentifier = NSStringFromClass ([APCActivitiesSectionHeaderView class]);
+    APCActivitiesSectionHeaderView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier: headerViewIdentifier];
+    APCActivitiesViewSection *section = [self sectionForSectionNumber: sectionNumber];
 
-            
-        default: // Keep going
-        {
-            headerView.titleLabel.text = NSLocalizedString(@"Keep Going!", @"Keep going");
-            headerView.subTitleLabel.text = NSLocalizedString(@"Try one of these extra activities, to enchance your experience in your study.",
-                                                              @"Try one of these extra activities, to enchance your experience in your study.");
-        }
-            break;
-    }
+    headerView.titleLabel.text = section.title;
+    headerView.subTitleLabel.text = section.subtitle;
     
-
     return headerView;
 }
 
 - (BOOL)                tableView: (UITableView *) __unused tableView
     shouldHighlightRowAtIndexPath: (NSIndexPath *) indexPath
 {
-    return indexPath.section != 1;
+    return [self allowSelectionAtIndexPath: indexPath];
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (BOOL) allowSelectionAtIndexPath: (NSIndexPath *) indexPath
 {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    if (indexPath.section != APCActivitiesSectionYesterday) {
-        if (!self.taskSelectionDisabled) {
-            
-            id task = ((NSArray*)self.scheduledTasksArray[indexPath.section])[indexPath.row];
-            
-            if ([task isKindOfClass:[APCGroupedScheduledTask class]]) {
-                
-                APCGroupedScheduledTask *groupedScheduledTask = (APCGroupedScheduledTask *)task;
-                
-                NSString *taskClass = groupedScheduledTask.taskClassName;
-                
-                Class  class = [NSClassFromString(taskClass) class];
-                
-                if (class != [NSNull class])
-                {
-                    NSInteger taskIndex = -1;
-                    
-                    for (NSUInteger i =0; i<groupedScheduledTask.scheduledTasks.count; i++) {
-                        APCScheduledTask *scheduledTask = groupedScheduledTask.scheduledTasks[i];
-                        if (!scheduledTask.completed.boolValue) {
-                            taskIndex = i;
-                            break;
-                        }
-                    }
-                    APCScheduledTask * taskToPerform = (taskIndex != -1) ? groupedScheduledTask.scheduledTasks[taskIndex] : [groupedScheduledTask.scheduledTasks lastObject];
-                    if (taskToPerform)
-                    {
-                        APCBaseTaskViewController *controller = [class customTaskViewController:taskToPerform];
-                        if (controller) {
-                            [self presentViewController:controller animated:YES completion:nil];
-                        }
-                        
-                    }
-                }
-                
-            } else {
-                APCScheduledTask *scheduledTask = (APCScheduledTask *)task;
-                
-                NSString *taskClass = scheduledTask.task.taskClassName;
-                
-                Class  class = [NSClassFromString(taskClass) class];
-                
-                if (class != [NSNull class]) {
-                    APCBaseTaskViewController *controller = [class customTaskViewController:scheduledTask];
-                    if (controller) {
-                        [self presentViewController:controller animated:YES completion:nil];
-                    }
-                    
-                }
-            }
+    APCActivitiesViewSection *section = [self sectionForCellAtIndexPath: indexPath];
+    BOOL allowSelection = section.isTodaySection || section.isKeepGoingSection;
+    return allowSelection;
+}
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Handling taps in the table
+// ---------------------------------------------------------
+
+- (void)          tableView: (UITableView *) tableView
+    didSelectRowAtIndexPath: (NSIndexPath *) indexPath
+{
+    [tableView deselectRowAtIndexPath: indexPath
+                             animated: YES];
+
+    if ([self allowSelectionAtIndexPath: indexPath])
+    {
+        APCBaseTaskViewController *viewControllerToShowNext = [self viewControllerToShowForCellAtIndexPath: indexPath];
+
+        if (viewControllerToShowNext != nil)
+        {
+            [self presentViewController: viewControllerToShowNext
+                               animated: YES
+                             completion: nil];
         }
     }
 }
 
-#pragma mark - Update methods
-- (IBAction)updateActivities:(id) __unused sender
+
+
+// ---------------------------------------------------------
+#pragma mark - The *real* data-source methods
+// ---------------------------------------------------------
+
+/*
+ The methods in this section describe the *concepts* being
+ represented by cells and rows in the TableView which is
+ the main point of this screen.  Many methods in this file
+ use these methods, not just -cellForRowAtIndexPath:.
+ */
+
+- (APCBaseTaskViewController *) viewControllerToShowForCellAtIndexPath: (NSIndexPath *) indexPath
 {
-    self.taskSelectionDisabled = YES;
-    APCAppDelegate * appDelegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
-    __weak APCActivitiesViewController * weakSelf = self;
-    [appDelegate.dataMonitor refreshFromBridgeOnCompletion:^(NSError *error) {
-        if (error != nil) {
-            UIAlertController * alert = [UIAlertController simpleAlertWithTitle:@"Error" message:error.message];
-            [self presentViewController:alert animated:YES completion:nil];
-        }
-        else
+    APCBaseTaskViewController *viewController   = nil;
+    APCTaskGroup *taskGroup                     = [self taskGroupForCellAtIndexPath: indexPath];
+    APCTask *task                               = taskGroup.task;
+    NSString *viewControllerClassName           = task.taskClassName;
+
+    // This call is safe, because it returns nil if such a class doesn't exist:
+    Class viewControllerClass = NSClassFromString (viewControllerClassName);
+
+    if (viewControllerClass != nil &&
+        viewControllerClass != [NSNull class] &&
+        [viewControllerClass isSubclassOfClass: [APCBaseTaskViewController class]])
+    {
+        viewController = [viewControllerClass configureTaskViewController:taskGroup];
+    }
+
+    return viewController;
+}
+
+- (APCActivitiesViewSection *) todaySection
+{
+    APCActivitiesViewSection *foundSection = nil;
+
+    for (APCActivitiesViewSection *section in self.sections)
+    {
+        if (section.isTodaySection)
         {
-            [appDelegate.scheduler updateScheduledTasksIfNotUpdating:YES];
+            foundSection = section;
+            break;
         }
-        [weakSelf.refreshControl endRefreshing];
-        weakSelf.taskSelectionDisabled = NO;
+    }
+
+    return foundSection;
+}
+
+- (APCActivitiesViewSection *) sectionForCellAtIndexPath: (NSIndexPath *) indexPath
+{
+    return [self sectionForSectionNumber: indexPath.section];
+}
+
+- (APCActivitiesViewSection *) sectionForSectionNumber: (NSUInteger) sectionNumber
+{
+    APCActivitiesViewSection *section = nil;
+
+    if (self.sections.count > sectionNumber)
+    {
+        section = self.sections [sectionNumber];
+    }
+
+    return section;
+}
+
+- (APCTaskGroup *) taskGroupForCellAtIndexPath: (NSIndexPath *) indexPath
+{
+    APCTaskGroup *taskGroup             = nil;
+    NSUInteger indexOfTaskGroupWeWant   = indexPath.row;
+    NSUInteger indexOfSectionWeWant     = indexPath.section;
+    APCActivitiesViewSection *section   = [self sectionForSectionNumber: indexOfSectionWeWant];
+
+    if (section.taskGroups.count > indexOfTaskGroupWeWant)
+    {
+        taskGroup = section.taskGroups [indexOfTaskGroupWeWant];
+    }
+
+    return taskGroup;
+}
+
+- (NSUInteger) countOfRequiredTasksToday
+{
+    NSUInteger result = 0;
+    APCActivitiesViewSection *section = self.todaySection;
+
+    for (APCTaskGroup *group in section.taskGroups)
+    {
+        result += group.totalRequiredTasksForThisTimeRange;
+    }
+
+    return result;
+}
+
+- (NSUInteger) countOfCompletedTasksToday
+{
+    NSUInteger result = 0;
+    APCActivitiesViewSection *section = self.todaySection;
+
+    for (APCTaskGroup *group in section.taskGroups)
+    {
+        result += group.requiredCompletedTasks.count;
+    }
+
+    return result;
+}
+
+- (NSUInteger) countOfRemainingTasksToday
+{
+    NSUInteger result = 0;
+    APCActivitiesViewSection *section = self.todaySection;
+
+    for (APCTaskGroup *group in section.taskGroups)
+    {
+        result += group.requiredRemainingTasks.count;
+    }
+
+    return result;
+}
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Outbound messages
+// ---------------------------------------------------------
+
+/*
+ This viewController does a query that other people need.
+ One aspect of the information they need is the number of
+ required and completed tasks for "today."  Update them.
+ */
+- (void) reportNewTaskTotals
+{
+    NSUInteger requiredTasks  = self.countOfRequiredTasksToday;
+    NSUInteger completedTasks = self.countOfCompletedTasksToday;
+
+    [self.appDelegate.dataSubstrate updateCountOfTotalRequiredTasksForToday: requiredTasks
+                                                andTotalCompletedTasksToday: completedTasks];
+}
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Reloading data from the server
+// ---------------------------------------------------------
+
+- (void) fetchNewestSurveysAndTasksFromServer: (id) __unused sender
+{
+    __weak APCActivitiesViewController * weakSelf = self;
+
+    [self.appDelegate.dataMonitor refreshFromBridgeOnCompletion: ^(NSError *error) {
+
+        if (error != nil)
+        {
+            UIAlertController * alert = [UIAlertController simpleAlertWithTitle: @"Error"
+                                                                        message: error.localizedDescription];
+
+            [weakSelf presentViewController: alert
+                                   animated: YES
+                                 completion: NULL];
+        }
+
+        [weakSelf reloadTasksFromCoreData];
     }];
 }
 
-- (void)reloadData
+
+
+// ---------------------------------------------------------
+#pragma mark - Repainting the UI
+// ---------------------------------------------------------
+
+- (void) updateWholeUI
 {
-    // Update the badge
-    APCAppDelegate *appDelegate = (APCAppDelegate *)[[UIApplication sharedApplication] delegate];
-    
-    NSUInteger allScheduledTasks = appDelegate.dataSubstrate.countOfAllScheduledTasksForToday;
-    NSUInteger completedScheduledTasks = appDelegate.dataSubstrate.countOfCompletedScheduledTasksForToday;
-    
-    NSNumber *remainingTasks = (completedScheduledTasks < allScheduledTasks) ? @(allScheduledTasks - completedScheduledTasks) : @(0);
-    
-    UITabBarItem *activitiesTab = appDelegate.tabster.tabBar.selectedItem;
-    if (activitiesTab.tag == (NSInteger)kIndexOfActivitesTab) {
-        if ([remainingTasks integerValue] != 0) {
-            activitiesTab.badgeValue = [remainingTasks stringValue];
-        } else {
-            activitiesTab.badgeValue = nil;
-        }
-    }
-    
-    [self reloadTableArray];
+    [self.refreshControl endRefreshing];
+    [self performSelector:@selector(dismiss) withObject:self afterDelay:0.5];
+    [self configureNoTasksView];
+    [self updateBadge];
     [self.tableView reloadData];
     
-    //Display a custom view announcing that there are no activities if there are none.
-    if (self.sectionsArray.count == 0) {
-        [self addCustomNoTaskView];
-    } else {
-        if (self.noTasksView) {
-            [self.noTasksView removeFromSuperview];
-        }
+}
+
+- (void) dismiss
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void) updateBadge
+{
+    NSString *badgeValue = nil;
+    NSUInteger remainingTasks = self.countOfRemainingTasksToday;
+
+    if (remainingTasks > 0)
+    {
+        badgeValue = @(remainingTasks).stringValue;
+    }
+
+    self.myTabBarItem.badgeValue = badgeValue;
+}
+
+
+
+// ---------------------------------------------------------
+#pragma mark - The "no tasks at this time" view.
+// ---------------------------------------------------------
+
+- (void) configureNoTasksView
+{
+    // Only add the noTasksView if there are no activities to show.
+    if (self.sections.count == 0 && ! self.isFetchingFromCoreDataRightNow)
+    {
+        [self.view bringSubviewToFront:self.noTasksLabel];
+        [self.noTasksLabel setHidden:NO];
+    }
+    else
+    {
+        [self.noTasksLabel setHidden:YES];
     }
 }
 
-- (void) addCustomNoTaskView {
-    
-    UINib *nib = [UINib nibWithNibName:@"APCActivitiesViewWithNoTask" bundle:[NSBundle appleCoreBundle]];
-    self.noTasksView = [[nib instantiateWithOwner:self options:nil] objectAtIndex:0];
-    
-    [self.view addSubview:self.noTasksView];
-    
-    UIImage *image = [UIImage imageNamed:@"activitieshome_emptystate_asset"];
-    
-    image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    
-    [self.noTasksView.imgView setTintColor:[UIColor appPrimaryColor]];
-    
-    [self.noTasksView.imgView setImage:image];
-    
-    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:[NSDate date]];
-    NSInteger day = [components day];
-    NSInteger month = [components month];
-    
-    NSDateFormatter *df = [[NSDateFormatter alloc] init];
-    NSString *monthName = [[df monthSymbols] objectAtIndex:(month-1)];
-    
-    self.noTasksView.todaysDate.text = [NSString stringWithFormat:@"Today, %@ %ld", monthName, (long)day];
-    
-    [self.noTasksView setTranslatesAutoresizingMaskIntoConstraints:NO];
-    
-    [self.tableView addConstraint:[NSLayoutConstraint constraintWithItem:self.tableView
-                                                               attribute:NSLayoutAttributeTop
-                                                               relatedBy:NSLayoutRelationEqual
-                                                                  toItem:self.noTasksView
-                                                               attribute:NSLayoutAttributeTop
-                                                              multiplier:1
-                                                                constant:0]];
-    
-    [self.tableView addConstraint:[NSLayoutConstraint constraintWithItem:self.tableView
-                                                               attribute:NSLayoutAttributeLeft
-                                                               relatedBy:NSLayoutRelationEqual
-                                                                  toItem:self.noTasksView
-                                                               attribute:NSLayoutAttributeLeft
-                                                              multiplier:1
-                                                                constant:0]];
-    
-    [self.tableView addConstraint:[NSLayoutConstraint constraintWithItem:self.noTasksView
-                                                               attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual
-                                                                  toItem:self.tableView
-                                                               attribute:NSLayoutAttributeHeight
-                                                              multiplier:1
-                                                                constant:0]];
-    
-    [self.tableView addConstraint:[NSLayoutConstraint constraintWithItem:self.tableView
-                                                               attribute:NSLayoutAttributeWidth
-                                                               relatedBy:NSLayoutRelationEqual
-                                                                  toItem:self.noTasksView
-                                                               attribute:NSLayoutAttributeWidth
-                                                              multiplier:1
-                                                                constant:0.0]];
-}
 
-#pragma mark - Sort and Group Task
 
-- (void) reloadTableArray
+// ---------------------------------------------------------
+#pragma mark - Fetching current tasks from CoreData (NOT from server)
+// ---------------------------------------------------------
+
+- (void) reloadTasksFromCoreData
 {
-    [self.scheduledTasksArray removeAllObjects];
-    [self.sectionsArray removeAllObjects];
-    
-    NSDictionary *scheduledTasksDict = [APCScheduledTask APCActivityVCScheduledTasksInContext:((APCAppDelegate*)[UIApplication sharedApplication].delegate).dataSubstrate.mainContext];
-    
-    //create sections
-    if (((NSArray*)scheduledTasksDict[@"today"]).count > 0) {
-        [self.sectionsArray addObject:[self formattedTodaySection]];
-        
-        NSArray *todaysTaskList = [self removeTaskWhenHardwareNotAvailble:scheduledTasksDict[@"today"]];
-        
-        NSArray * groupedArray = [self generateGroupsForTask:todaysTaskList];
+    self.isFetchingFromCoreDataRightNow = YES;
+    APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
+    [self presentViewController:spinnerController animated:YES completion:nil];
 
-        NSArray *sortedTasks = [self sortTasksInArray:groupedArray];
-        
-        [self.scheduledTasksArray addObject:sortedTasks];
-    }
-    
-    if (((NSArray*)scheduledTasksDict[@"yesterday"]).count > 0) {
-        NSArray *yesterdaysTaskList = [self removeTasksFromTaskList:scheduledTasksDict[@"yesterday"]];
-        
-        if (yesterdaysTaskList.count > 0) {
-        [self.sectionsArray addObject:@"Yesterday - Incomplete Tasks"];
-        
-        NSArray * groupedArray = [self generateGroupsForTask:yesterdaysTaskList];
-        
-        NSArray *sortedTasks = [self sortTasksInArray:groupedArray];
-        
-        [self.scheduledTasksArray addObject:sortedTasks];
-}
-    }
-}
+    NSPredicate *filterForOptionalTasks = [NSPredicate predicateWithFormat: @"%K == %@",
+                                           NSStringFromSelector(@selector(taskIsOptional)),
+                                           @(YES)];
 
-- (NSArray *)sortTasksInArray:(NSArray *)unsortedTasks
+    NSPredicate *filterForRequiredTasks = [NSPredicate predicateWithFormat: @"%K == nil || %K == %@",
+                                           NSStringFromSelector(@selector(taskIsOptional)),
+                                           NSStringFromSelector(@selector(taskIsOptional)),
+                                           @(NO)];
+
+    NSDate *today = self.dateWeAreUsingForToday;
+    NSDate *yesterday = today.dayBefore;
+    NSDate *midnightThisMorning = today.startOfDay;
+    BOOL sortNewestToOldest = YES;
+
+    __weak typeof(self) weakSelf = self;
+    
+    [[APCScheduler defaultScheduler] fetchTaskGroupsFromDate: yesterday
+                                                      toDate: today
+                                      forTasksMatchingFilter: filterForRequiredTasks
+                                                  usingQueue: [NSOperationQueue mainQueue]
+                                             toReportResults: ^(NSDictionary *taskGroups, NSError * __unused queryError)
+     {
+         
+         APCActivitiesViewSection *todaySection = nil;
+         NSUInteger indexOfTodaySection = NSNotFound;
+
+         NSMutableArray *sections = [NSMutableArray new];
+
+         NSArray *sortedDates = [taskGroups.allKeys sortedArrayUsingComparator: ^NSComparisonResult (NSDate *date1, NSDate *date2) {
+
+             NSComparisonResult result = (sortNewestToOldest ?
+                                          [date2 compare: date1] :
+                                          [date1 compare: date2] );
+             return result;
+         }];
+
+         for (NSUInteger dateIndex = 0; dateIndex < sortedDates.count; dateIndex ++)
+         {
+             NSDate *date = sortedDates [dateIndex];
+             NSArray *taskGroupsForThisDate = taskGroups [date];
+             APCActivitiesViewSection *section = [[APCActivitiesViewSection alloc] initWithDate: date
+                                                                                          tasks: taskGroupsForThisDate
+                                                                         usingDateForSystemDate: today];
+             
+             if (section.isTodaySection)
+             {
+                 todaySection = section;
+             }
+             else if (section.isYesterdaySection)
+             {
+                 [section removeFullyCompletedTasks];
+             }
+             
+             if (section.taskGroups.count)
+             {
+                 [sections addObject: section];
+             }
+
+             if ([date isEqualToDate: midnightThisMorning])
+             {
+                 indexOfTodaySection = dateIndex;
+             }
+         }
+
+         /*
+          Now that we've gotten all tasks for all the dates
+          we care about, get the "optional" tasks for
+          "today" (or the date we formally believe is
+          "today"), and insert them between "today" and
+          "yesterday" (if available, or at the bottom of
+          the list of sections, if not).
+          */
+         [[APCScheduler defaultScheduler] fetchTaskGroupsFromDate: today
+                                                           toDate: today
+                                           forTasksMatchingFilter: filterForOptionalTasks
+                                                       usingQueue: [NSOperationQueue mainQueue]
+                                                  toReportResults: ^(NSDictionary *taskGroups, NSError * __unused queryError)
+         {
+             /*
+              There should be exactly one date in the list
+              of groups, and thus one list of values.
+              */
+             NSArray *optionalTaskGroups = taskGroups.allValues.firstObject;
+
+             if (optionalTaskGroups.count)
+             {
+                 APCActivitiesViewSection *section = [[APCActivitiesViewSection alloc] initAsKeepGoingSectionWithTasks: optionalTaskGroups];
+
+                 if (indexOfTodaySection == NSNotFound)
+                 {
+                     [sections addObject: section];
+                 }
+                 else
+                 {
+                     [sections insertObject: section atIndex: indexOfTodaySection + 1];
+                 }
+             }
+
+
+             //
+             // Regardless of whether we got any optional
+             // groups, show everything, now.
+             //
+             weakSelf.sections = sections;
+
+
+             //
+             // Regenerate reminders for all these things.
+             //
+             NSArray *taskGroupsForToday = todaySection.taskGroups;
+             [weakSelf.appDelegate.tasksReminder handleActivitiesUpdateWithTodaysTaskGroups: taskGroupsForToday];
+
+
+             //
+             // Update central data points, so other screens
+             // can draw their graphics and whatnot.
+             //
+             [weakSelf reportNewTaskTotals];
+
+
+             //
+             // Per the above:  we always fetch optional tasks.
+             // Now that the second fetch is complete:
+             // update the UI.
+             //
+             weakSelf.isFetchingFromCoreDataRightNow = NO;
+             [weakSelf updateWholeUI];
+
+         }];  // second fetch:  optional tasks
+     }];  // first fetch:  required tasks, for a range of dates
+}  // method reloadFromCoreData
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Utilities
+// ---------------------------------------------------------
+
+- (APCAppDelegate *) appDelegate
 {
-    //NOTE: The task identifiers (taskID) start with a sort field. If you want to change the sort order change the identifiers within the file(s) currently named APHTasksAndSchedules.json and APHTasksAndSchedules_NoM7.json.
-    NSSortDescriptor* descriptorForSorting = [[NSSortDescriptor alloc]initWithKey:@"task.taskID" ascending:YES];
-    NSArray* sortDescriptors = @[descriptorForSorting];
-    NSArray* sortedArray = [unsortedTasks sortedArrayUsingDescriptors:sortDescriptors];
-    
-    return sortedArray;
+    return [APCAppDelegate sharedAppDelegate];
 }
 
-- (NSString*) formattedTodaySection
+- (NSDate *) dateWeAreUsingForToday
 {
-    [self.dateFormatter setDateFormat:@"MMMM d"];
-    
-    return [NSString stringWithFormat:@"Today, %@", [self.dateFormatter stringFromDate:[NSDate date]]];
+    return [NSDate date];
 }
 
-- (NSArray*)generateGroupsForTask:(NSArray *)ungroupedScheduledTasks
+- (UITabBarItem *) myTabBarItem
 {
-    NSMutableArray *taskTypesArray = [[NSMutableArray alloc] init];
-    
-    /* Get the list of task Ids to group */
-    for (APCScheduledTask *scheduledTask in ungroupedScheduledTasks) {
-        NSString *taskId = scheduledTask.task.taskID;
-        
-        if (taskId) {
-            if (![taskTypesArray containsObject:taskId]) {
-                [taskTypesArray addObject:taskId];
-            }
-        }
-    }
-    
-    NSMutableArray * returnArray = [NSMutableArray array];
-    /* group tasks by task Id */
-    for (NSString *taskId in taskTypesArray) {
-        
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"task.taskID == %@", taskId];
-        
-        NSArray *filteredTasksArray = [ungroupedScheduledTasks filteredArrayUsingPredicate:predicate];
-        
-        //if there is more than 1 task for the taskID, create an APCGroupedScheduledTask
-        if (filteredTasksArray.count > 1) {
-            APCScheduledTask *scheduledTask = filteredTasksArray.firstObject;
-            APCGroupedScheduledTask *groupedTask = [[APCGroupedScheduledTask alloc] init];
+    UITabBarItem *activitiesTab = nil;
+    UITabBar *tabBar = self.appDelegate.tabBarController.tabBar;
 
-            groupedTask.scheduledTasks = [NSMutableArray arrayWithArray:filteredTasksArray];
-            groupedTask.taskTitle = scheduledTask.task.taskTitle;
-            groupedTask.taskClassName = scheduledTask.task.taskClassName;
-            groupedTask.taskCompletionTimeString = scheduledTask.task.taskCompletionTimeString;
-            
-            [returnArray addObject:groupedTask];
-        }
-        else if(filteredTasksArray.count == 1)
+    for (UITabBarItem *item in tabBar.items)
+    {
+        if (item.tag == (NSInteger) kAPCActivitiesTabIndex)
         {
-            [returnArray addObject:filteredTasksArray.firstObject];
+            activitiesTab = item;
+            break;
         }
     }
-    return returnArray;
-}
 
-/** @brief   Removes the tasks (provide via the self.tasksBySection property) from the provided task list.
-  *
-  * @param   taskList - Array of APCScheduledTask. This list will be filtered
-  *
-  * @return  A filtered array of APCScheduledTask; otherwise the original array is returned.
-  *
-  * @note    This needs to be refactored.
-  */
-- (NSArray *)removeTasksFromTaskList:(NSArray *)taskList
-{
-    NSArray *keepGoingTasks = self.tasksBySection[kActivitiesSectionKeepGoing];
-    NSMutableArray *filteredList = [taskList mutableCopy];
-    
-    for (APCScheduledTask *scheduledTask in taskList) {
-        if (keepGoingTasks) {
-            if ([keepGoingTasks containsObject:scheduledTask.task.taskID]) {
-                [filteredList removeObject:scheduledTask];
-                [self.keepGoingTasks addObject:scheduledTask];
-            }
-        }
-    }
-    
-    return filteredList;
-}
-
-/** @brief  When the hardware that is required by task that is not present on the device
- *          the task will be removed from the provided task list.
- *
- * @param   taskList - Array of APCScheduledTask. This list will be filtered
- *
- * @return  A filtered array of APCScheduledTask; otherwise the original array is returned.
- *
- * @note    This needs to be refactored.
- */
-- (NSArray *)removeTaskWhenHardwareNotAvailble:(NSArray *)taskList
-{
-    NSMutableArray *filteredList = [taskList mutableCopy];
-    
-    if ([APCDeviceHardware isMotionActivityAvailable] == NO) {
-        NSArray *hardwareDependentTasks = self.tasksBySection[kActivitiesRequiresMotionSensor];
-        
-        for (APCScheduledTask *scheduledTask in taskList) {
-            if (hardwareDependentTasks) {
-                if ([hardwareDependentTasks containsObject:scheduledTask.task.taskID]) {
-                    [filteredList removeObject:scheduledTask];
-                }
-            }
-        }
-    }
-    
-    return filteredList;
+    return activitiesTab;
 }
 
 @end

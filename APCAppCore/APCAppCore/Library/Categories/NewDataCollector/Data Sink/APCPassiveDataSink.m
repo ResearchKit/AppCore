@@ -44,13 +44,10 @@ static NSString *const  kStartDateKey       = @"startDate";
 static NSString *const  kEndDateKey         = @"endDate";
 static NSString *const  kInfoFilename       = @"info.json";
 static NSString *const  kCSVFilename        = @"data.csv";
-static NSString *const  kItemIdentifier     = @"displacement";
 static long long        kKBPerMB            = 1024;
-static long long        kBytesPerKB         = 1024;
 static NSUInteger       kSecsPerMin         = 60;
 static NSUInteger       kMinsPerHour        = 60;
 static NSUInteger       kHoursPerDay        = 24;
-static NSUInteger       kDaysPerWeek        = 7;
 
 @implementation APCPassiveDataSink
 
@@ -366,7 +363,7 @@ static NSUInteger       kDaysPerWeek        = 7;
     NSString*   csvFilePath = [self.folder stringByAppendingPathComponent:kCSVFilename];
 
     BOOL success = [APCDataArchiverAndUploader uploadFileAtPath:csvFilePath
-                                             withTaskIdentifier:kItemIdentifier
+                                             withTaskIdentifier:self.identifier
                                                  andTaskRunUuid:nil
                                                  returningError:&error];
     
@@ -414,6 +411,8 @@ static NSUInteger       kDaysPerWeek        = 7;
                        kIdentifierKey   : sinkIdentifier,
                        kStartDateKey    : dateString
                        };
+    
+    self.infoDictionary = infoDictionary;
     
     NSString*       infoJSON        = [infoDictionary JSONString];
     
@@ -530,7 +529,7 @@ static NSUInteger       kDaysPerWeek        = 7;
 {
     if (_sizeThreshold == 0)
     {
-        _sizeThreshold = 1 * kKBPerMB * kBytesPerKB;
+        _sizeThreshold = 50 * kKBPerMB;
     }
     
     return _sizeThreshold;
@@ -540,7 +539,7 @@ static NSUInteger       kDaysPerWeek        = 7;
 {
     if (_stalenessInterval == 0)
     {
-        _stalenessInterval = 1 * kDaysPerWeek * kHoursPerDay * kMinsPerHour * kSecsPerMin;
+        _stalenessInterval = 1 * kHoursPerDay * kMinsPerHour * kSecsPerMin;
     }
     
     return _stalenessInterval;

@@ -42,13 +42,6 @@ static CGFloat const kYAxisPaddingFactor = 0.15f;
 static CGFloat const kAPCGraphLeftPadding = 10.f;
 static CGFloat const kAxisMarkingRulerLength = 8.0f;
 
-static NSString * const kFadeAnimationKey = @"LayerFadeAnimation";
-static NSString * const kGrowAnimationKey = @"LayerGrowAnimation";
-
-static CGFloat const kFadeAnimationDuration = 0.2;
-static CGFloat const kGrowAnimationDuration = 0.1;
-static CGFloat const kPopAnimationDuration  = 0.3;
-
 static CGFloat const kSnappingClosenessFactor = 0.3f;
 
 @interface APCDiscreteGraphView ()
@@ -257,7 +250,9 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     [self drawXAxis];
     [self drawYAxis];
     
-    [self drawhorizontalReferenceLines];
+    if (self.showsHorizontalReferenceLines) {
+        [self drawhorizontalReferenceLines];
+    }
     
     if (self.showsVerticalReferenceLines) {
         [self drawVerticalReferenceLines];
@@ -269,7 +264,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     [self.pathLines removeAllObjects];
     
     for (int i=0; i<[self numberOfPlots]; i++) {
-        if ([self numberOfPointsinPlot:i] <= 1) {
+        if ([self numberOfPointsInPlot:i] <= 1) {
             return;
         } else {
             [self drawGraphForPlotIndex:i];
@@ -315,7 +310,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     return numberOfPlots;
 }
 
-- (NSInteger)numberOfPointsinPlot:(NSInteger)plotIndex
+- (NSInteger)numberOfPointsInPlot:(NSInteger)plotIndex
 {
     NSInteger numberOfPoints = 0;
     
@@ -334,7 +329,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     if ([self.datasource respondsToSelector:@selector(numberOfDivisionsInXAxisForGraph:)]) {
         _numberOfXAxisTitles = [self.datasource numberOfDivisionsInXAxisForGraph:self];
     } else {
-        _numberOfXAxisTitles = [self numberOfPointsinPlot:0];
+        _numberOfXAxisTitles = [self numberOfPointsInPlot:0];
     }
     
     return _numberOfXAxisTitles;
@@ -357,7 +352,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     [self.dataPoints removeAllObjects];
     [self.yAxisPoints removeAllObjects];
     self.hasDataPoint = NO;
-    for (int i = 0; i<[self numberOfPointsinPlot:plotIndex]; i++) {
+    for (int i = 0; i<[self numberOfPointsInPlot:plotIndex]; i++) {
         
         if ([self.datasource respondsToSelector:@selector(discreteGraph:plot:valueForPointAtIndex:)]) {
             APCRangePoint *value = [self.datasource discreteGraph:self plot:plotIndex valueForPointAtIndex:i];
@@ -849,70 +844,14 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     
     for (NSUInteger i=0; i<self.dots.count; i++) {
         CAShapeLayer *layer = [self.dots[i] shapeLayer];
-        [self animateLayer:layer withAnimationType:kAPCGraphAnimationTypeFade startDelay:delay];
+        [self animateLayer:layer withAnimationType:kAPCGraphAnimationTypeFade toValue:1.0 startDelay:delay];
         delay += 0.1;
     }
     
     for (NSUInteger i=0; i<self.pathLines.count; i++) {
         CAShapeLayer *layer = self.pathLines[i];
-        [self animateLayer:layer withAnimationType:kAPCGraphAnimationTypeGrow startDelay:delay];
-        delay += kGrowAnimationDuration;
-    }
-}
-
-- (void)animateLayer:(CAShapeLayer *)shapeLayer withAnimationType:(APCGraphAnimationType)animationType
-{
-    [self animateLayer:shapeLayer withAnimationType:animationType toValue:1.0];
-}
-
-- (void)animateLayer:(CAShapeLayer *)shapeLayer withAnimationType:(APCGraphAnimationType)animationType toValue:(CGFloat)toValue
-{
-    [self animateLayer:shapeLayer withAnimationType:animationType toValue:toValue startDelay:0.0];
-}
-
-- (void)animateLayer:(CAShapeLayer *)shapeLayer withAnimationType:(APCGraphAnimationType)animationType startDelay:(CGFloat)delay
-{
-    [self animateLayer:shapeLayer withAnimationType:animationType toValue:1.0 startDelay:delay];
-}
-
-- (void)animateLayer:(CAShapeLayer *)shapeLayer withAnimationType:(APCGraphAnimationType)animationType toValue:(CGFloat)toValue startDelay:(CGFloat)delay
-{
-    if (animationType == kAPCGraphAnimationTypeFade) {
-        
-        CABasicAnimation *fadeAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
-        fadeAnimation.beginTime = CACurrentMediaTime() + delay;
-        fadeAnimation.fromValue = @0;
-        fadeAnimation.toValue = @(toValue);
-        fadeAnimation.duration = kFadeAnimationDuration;
-        fadeAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
-        fadeAnimation.fillMode = kCAFillModeForwards;
-        fadeAnimation.removedOnCompletion = NO;
-        [shapeLayer addAnimation:fadeAnimation forKey:kFadeAnimationKey];
-        
-    } else if (animationType == kAPCGraphAnimationTypeGrow) {
-        
-        CABasicAnimation *growAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
-        growAnimation.beginTime = CACurrentMediaTime() + delay;
-        growAnimation.fromValue = @0;
-        growAnimation.toValue = @(toValue);
-        growAnimation.duration = kGrowAnimationDuration;
-        growAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
-        growAnimation.fillMode = kCAFillModeForwards;
-        growAnimation.removedOnCompletion = NO;
-        [shapeLayer addAnimation:growAnimation forKey:kGrowAnimationKey];
-        
-    } else if (animationType == kAPCGraphAnimationTypePop) {
-        
-        CABasicAnimation *popAnimation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
-        popAnimation.beginTime = CACurrentMediaTime() + delay;
-        popAnimation.fromValue = @0;
-        popAnimation.toValue = @(toValue);
-        popAnimation.duration = kPopAnimationDuration;
-        popAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
-        popAnimation.fillMode = kCAFillModeForwards;
-        popAnimation.removedOnCompletion = NO;
-        [shapeLayer addAnimation:popAnimation forKey:kGrowAnimationKey];
-        
+        [self animateLayer:layer withAnimationType:kAPCGraphAnimationTypeGrow toValue:1.0 startDelay:delay];
+        delay += kAPCGrowAnimationDuration;
     }
 }
 

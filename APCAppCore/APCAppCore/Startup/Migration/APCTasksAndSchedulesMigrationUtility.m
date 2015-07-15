@@ -83,34 +83,6 @@ NSString *const kTasksAndSchedulesJSONFileName   = @"APHTasksAndSchedules";
 }
 
 - (void)migrateScheduleAndTasks {
-    //TODO check for tasks that are in the datasubstrate
-    /* Compare schedule expression if they exist */
-    /* Delete if they exist in the datasubstrate and if they are no longer in the JSON */
-    
-    
-    //TODO check for tasks in the dictionary that are not in the datasubstrate
-    /* Create if they are in the JSON and do not exist in the datasubstrate */
-
-    //    jsonDictionary[@"tasks"]
-    //    jsonDictionary[@"schedules"]
-    
-    if (self.needsMigration) {
-        [self.dataSubstrate loadStaticTasksAndSchedules:@{@"BLAH" : @"BLAH"}];
-    }
 }
-
-// This will eventually become code
-//- (void)modifyTask:(NSString *)taskIdentifier scheduleExpression:(NSString *)expression {
-//    
-//}
-//
-//- (void)deleteScheduledTask:(NSString *)taskIdentifier {
-//    
-//}
-//
-//- (void)createTaskAndSchedule:(NSDictionary *)taskAndSchedule {
-//    
-//}
-
 
 @end

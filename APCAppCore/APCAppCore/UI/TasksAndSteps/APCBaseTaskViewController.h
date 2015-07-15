@@ -34,12 +34,34 @@
 #import <Foundation/Foundation.h>
 #import <ResearchKit/ResearchKit.h>
 #import "APCScheduledTask.h"
+#import "APCTaskGroup.h"
+
+@class APCAppDelegate;
 
 @interface APCBaseTaskViewController : ORKTaskViewController <ORKTaskViewControllerDelegate, ORKStepViewControllerDelegate>
+
 @property  (nonatomic, strong)  APCScheduledTask  *scheduledTask;
 @property (nonatomic, copy) void (^createResultSummaryBlock) (NSManagedObjectContext* context);
+@property (readonly) APCAppDelegate *appDelegate;
+@property (nonatomic) BOOL canGenerateResult;
 
+/**
+ Older, default version of an initialization method.  Initializes
+ your subclass of this ViewController with a ScheduledTask.  Compare
+ with +configureTaskViewController:.
+ */
 + (instancetype)customTaskViewController: (APCScheduledTask*) scheduledTask;
+
+/**
+ Initializes an instance of this class with the task
+ represented by the taskGroup.  By default, creates
+ a new ScheduledTask from the TaskGroup, and initializes
+ your subclass with it.  Feel free to override this method
+ if you want to interact directly with the higher-level
+ data in the TaskGroup itself.
+ */
++ (instancetype)configureTaskViewController:(APCTaskGroup *)taskGroup;
+
 - (NSString *) createResultSummary;
 - (void) storeInCoreDataWithFileName: (NSString *) fileName
                        resultSummary: (NSString *) resultSummary

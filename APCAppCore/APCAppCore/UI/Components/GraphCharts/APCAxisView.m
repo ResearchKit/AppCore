@@ -65,6 +65,7 @@
 {
     _titleLabels = [NSMutableArray new];
     _leftOffset = 0;
+    _shouldHighlightLastLabel = YES;
 }
 
 - (void)layoutSubviews
@@ -97,7 +98,7 @@
             label.frame  = CGRectMake(positionX - labelWidth/2, (CGRectGetHeight(self.bounds) - labelHeight)/2, labelWidth, labelHeight);
         }
         
-        if (i == self.titleLabels.count - 1) {
+        if (i == self.titleLabels.count - 1 && self.shouldHighlightLastLabel) {
             //Last label
             
             label.textColor = [UIColor whiteColor];

@@ -37,7 +37,7 @@
 #import "APCDataSubstrate.h"
 #import "APCKeychainStore.h"
 #import "APCLog.h"
-
+#import "APCUtilities.h"
 #import "NSManagedObject+APCHelper.h"
 #import "HKHealthStore+APCExtensions.h"
 
@@ -274,6 +274,30 @@ static NSString *const kSignedInKey = @"SignedIn";
 {
     //TODO: Implement hashing method
     return password;
+}
+
+- (NSDate *) estimatedConsentDate
+{
+    NSDate *consentDate = self.consentSignatureDate;
+
+    if (! consentDate)
+    {
+        consentDate = [[self class] proxyForConsentDate];
+    }
+
+    return consentDate;
+}
+
++ (NSDate *) proxyForConsentDate
+{
+    NSDate *bestGuessConsentDate = [APCUtilities firstKnownFileAccessDate];
+
+    if (! bestGuessConsentDate)
+    {
+        bestGuessConsentDate = [NSDate date];
+    }
+
+    return bestGuessConsentDate;
 }
 
 
