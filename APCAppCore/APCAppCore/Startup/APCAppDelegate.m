@@ -117,7 +117,10 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     [self.scheduler loadTasksAndSchedulesFromDiskAndThenUseThisQueue:[NSOperationQueue mainQueue]
                                                     toDoThisWhenDone:^(NSError* errorFetchingOrLoading)
     {
-        [self performMigrationAfterFirstImport];
+        if(!errorFetchingOrLoading)
+        {
+            [self performMigrationAfterFirstImport];
+        }
     }];
 
     [self registerNotifications];
