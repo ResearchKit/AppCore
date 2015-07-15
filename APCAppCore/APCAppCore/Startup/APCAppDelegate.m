@@ -114,9 +114,8 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     [self initializeBridgeServerConnection];
     [self initializeAppleCoreStack];
 
-    // ...to this:
-    [self.scheduler loadTasksAndSchedulesFromDiskAndThenUseThisQueue: [NSOperationQueue mainQueue]
-                                                    toDoThisWhenDone: ^(NSError *errorFetchingOrLoading)
+    [self.scheduler loadTasksAndSchedulesFromDiskAndThenUseThisQueue:[NSOperationQueue mainQueue]
+                                                    toDoThisWhenDone:^(NSError* errorFetchingOrLoading)
     {
         [self performMigrationAfterFirstImport];
     }];
@@ -127,6 +126,7 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     [self setUpTasksReminder];
     [self performDemographicUploadIfRequired];
     [self showAppropriateVC];
+    
     return YES;
 }
 
