@@ -80,8 +80,7 @@
 
 - (void)setupNavAppearance
 {
-    UIBarButtonItem  *backster = [APCCustomBackButton customBackBarButtonItemWithTarget:self action:@selector(back) tintColor:[UIColor appPrimaryColor]];
-    [self.navigationItem setLeftBarButtonItem:backster];
+    self.navigationItem.hidesBackButton = YES;
 }
 
 - (APCOnboarding *)onboarding

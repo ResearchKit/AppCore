@@ -240,6 +240,11 @@
     }
 }
 
+- (APCOnboarding *)onboarding
+{
+    return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).onboarding;
+}
+
 #pragma mark - MFMailComposeViewControllerDelegate method
 
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
@@ -291,6 +296,8 @@
 - (void)back
 {
     [self.navigationController popViewControllerAnimated:YES];
+    
+    [[self onboarding] popScene];
 }
 
 @end
