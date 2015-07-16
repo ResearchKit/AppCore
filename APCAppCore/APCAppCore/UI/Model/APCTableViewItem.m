@@ -155,8 +155,7 @@
 
 @implementation APCTableViewDashboardGraphItem
 
-+(NSAttributedString *)legendForSeries1:(NSString *) series1 series2:(NSString *)series2
-{
++(NSAttributedString *)legendForSeries1:(NSString *) series1 series2:(NSString *)series2{
     
     NSAssert(series1 != nil, @"Pass a valid series 1 name");
     
@@ -186,6 +185,40 @@
     return legend;
     
 }
+
+- (NSString *)averageValueString
+{
+    double averageValue = [[self.graphData averageDataPoint] doubleValue];
+    
+    HKUnit *unit = self.graphData.unit;
+    NSString *unitString = (self.hidesUnitString || !unit) ? @"" : unit.unitString;
+    NSString *averageString = [NSString stringWithFormat:NSLocalizedString(@"%0.0f %@", nil), averageValue, unitString];
+    
+    return averageString;
+}
+
+- (NSString *)minimumValueString
+{
+    double minValue = [[self.graphData minimumDataPoint] doubleValue];
+    
+    HKUnit *unit = self.graphData.unit;
+    NSString *unitString = (self.hidesUnitString || !unit) ? @"" : unit.unitString;
+    NSString *minString = [NSString stringWithFormat:NSLocalizedString(@"%0.0f %@", nil), minValue, unitString];
+    
+    return minString;
+}
+
+- (NSString *)maximumValueString
+{
+    double maxValue = [[self.graphData maximumDataPoint] doubleValue];
+    
+    HKUnit *unit = self.graphData.unit;
+    NSString *unitString = (self.hidesUnitString || !unit) ? @"" : unit.unitString;
+    NSString *maxString = [NSString stringWithFormat:NSLocalizedString(@"%0.0f %@", nil), maxValue, unitString];
+    
+    return maxString;
+}
+
 @end
 
 @implementation APCTableViewDashboardMessageItem
