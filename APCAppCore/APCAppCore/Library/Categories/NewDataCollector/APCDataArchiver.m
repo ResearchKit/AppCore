@@ -40,7 +40,7 @@
 #import "APCCMS.h"
 #import "NSDate+Helper.h"
 #import "APCJSONSerializer.h"
-
+#import "ORKFileResult+Filename.h"
 
     //
     //    ORK Result Base Class property keys
@@ -285,48 +285,40 @@ static NSArray * kAPCKnownJSONFilenamePrefixes = nil;
                 result.endDate = stepResult.endDate;
             }
             
-            if ([result isKindOfClass:[APCDataResult class]])
-            {
+            if ([result isKindOfClass:[APCDataResult class]]) {
                 APCDataResult * dataResult = (APCDataResult*) result;
                 NSString *fileName = dataResult.identifier?:(stepResult.identifier?:[NSUUID UUID].UUIDString);
                 [self addDataToArchive:dataResult.data fileName:[fileName stringByAppendingString:@"_data"] contentType:@"data" timeStamp:dataResult.endDate];
             }
 
-            else if ([result isKindOfClass:[ORKFileResult class]])
-            {
+            else if ([result isKindOfClass:[ORKFileResult class]]) {
                 ORKFileResult * fileResult = (ORKFileResult*) result;
 
-                NSString *betterFilename = [self friendlyFilenameForFile: fileResult];
+                NSString *translatedFilename = [ORKFileResult filenameForFileResultIdentifier:fileResult.identifier stepIdentifier:stepResult.identifier];
 
-                if ([betterFilename hasSuffix: kAPCFilenameExtensionJSON])
-                {
-                    [self addJSONFileToArchive: fileResult usingFileName: betterFilename];
+                if ([translatedFilename hasSuffix: kAPCFilenameExtensionJSON]) {
+                    [self addJSONFileToArchive:fileResult filename:translatedFilename];
                 }
-                else
-                {
-                    [self addGenericDataFileToArchive: fileResult];
+                else {
+                    [self addGenericDataFileToArchive:fileResult filename:translatedFilename];
                 }
             }
             
-            else if ([result isKindOfClass:[ORKTappingIntervalResult class]])
-            {
+            else if ([result isKindOfClass:[ORKTappingIntervalResult class]]) {
                 ORKTappingIntervalResult  *tappingResult = (ORKTappingIntervalResult *)result;
                 [self addTappingResultsToArchive:tappingResult];
             }
             
-            else if ([result isKindOfClass:[ORKSpatialSpanMemoryResult class]])
-            {
+            else if ([result isKindOfClass:[ORKSpatialSpanMemoryResult class]]) {
                 ORKSpatialSpanMemoryResult  *spatialSpanMemoryResult = (ORKSpatialSpanMemoryResult *)result;
                 [self addSpatialSpanMemoryResultsToArchive:spatialSpanMemoryResult];
             }
 
-            else if ([result isKindOfClass:[ORKQuestionResult class]])
-            {
+            else if ([result isKindOfClass:[ORKQuestionResult class]]) {
                 [self addResultToArchive:result];
             }
 
-            else
-            {
+            else {
                 APCLogError(@"Result not processed for : %@", result.identifier);
             }
         }];
@@ -341,7 +333,7 @@ static NSArray * kAPCKnownJSONFilenamePrefixes = nil;
     [self addFileInfoEntryWithFileName:fileName timeStamp: date.toStringInISO8601Format contentType:contentType];
 }
 
-- (void) addJSONFileToArchive: (ORKFileResult *) file usingFileName: (NSString *) fileName
+- (void) addJSONFileToArchive: (ORKFileResult *) file filename: (NSString *) fileName
 {
     [self addFileToArchiveFromURL: file.fileURL
                     usingFileName: fileName
@@ -349,10 +341,10 @@ static NSArray * kAPCKnownJSONFilenamePrefixes = nil;
                         timeStamp: file.endDate];
 }
 
-- (void) addGenericDataFileToArchive: (ORKFileResult *) file
+- (void) addGenericDataFileToArchive: (ORKFileResult *)file filename: (NSString *)filename
 {
     [self addFileToArchiveFromURL: file.fileURL
-                    usingFileName: file.fileURL.lastPathComponent
+                    usingFileName: filename
                       contentType: @"data"      // Not sure why we're using this particular string.  At the moment, it's historical.
                         timeStamp: file.endDate];
 }
