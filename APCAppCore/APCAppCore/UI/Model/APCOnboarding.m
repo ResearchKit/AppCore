@@ -238,7 +238,7 @@
 
 - (nonnull NSBundle *)bundle {
     if (!_bundle) {
-        self.bundle = [NSBundle bundleForClass:[self class]];
+        _bundle = [NSBundle bundleForClass:[self class]];
     }
     return _bundle;
 }

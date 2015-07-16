@@ -124,7 +124,7 @@ NSString * const kAPCOnboardingStoryboardName = @"APCOnboarding";
 
 - (APCPermissionsManager *)permissionsManager {
     if (!_permissionsManager) {
-        self.permissionsManager = [self createPermissionsManager];
+        _permissionsManager = [self createPermissionsManager];
     }
     return _permissionsManager;
 }
@@ -157,7 +157,7 @@ NSString * const kAPCOnboardingStoryboardName = @"APCOnboarding";
 
 - (NSArray *)userProfileElements {
     if (!_userProfileElements) {
-        self.userProfileElements = [self createUserProfileElements];
+        _userProfileElements = [self createUserProfileElements];
     }
     return _userProfileElements;
 }
