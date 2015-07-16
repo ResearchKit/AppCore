@@ -117,14 +117,21 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     [self initializeBridgeServerConnection];
     [self initializeAppleCoreStack];
 
-    [self.scheduler loadTasksAndSchedulesFromDiskAndThenUseThisQueue: nil
-                                                    toDoThisWhenDone: nil];
+    [self.scheduler loadTasksAndSchedulesFromDiskAndThenUseThisQueue:[NSOperationQueue mainQueue]
+                                                    toDoThisWhenDone:^(NSError* errorFetchingOrLoading)
+    {
+        if(!errorFetchingOrLoading)
+        {
+            [self performMigrationAfterFirstImport];
+        }
+    }];
 
     [self registerNotifications];
     [self setUpAppAppearance];
     [self setUpTasksReminder];
     [self performDemographicUploadIfRequired];
     [self showAppropriateVC];
+    
     return YES;
 }
 
@@ -162,6 +169,11 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 - (NSUInteger)obtainPreviousVersion {
     NSUserDefaults* defaults        = [NSUserDefaults standardUserDefaults];
     return (NSUInteger) [defaults integerForKey:@"previousVersion"];
+}
+
+- (void)performMigrationAfterFirstImport
+{
+    /* abstract implementation */
 }
 
 - (void)performMigrationFrom:(NSInteger) __unused previousVersion currentVersion:(NSInteger)__unused currentVersion

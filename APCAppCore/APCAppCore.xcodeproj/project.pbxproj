@@ -252,6 +252,8 @@
 		6C6AA2841B4E056C0056AD47 /* APCDataVerificationDaemon.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C6AA27C1B4E056C0056AD47 /* APCDataVerificationDaemon.m */; };
 		6C6AA2891B4E057D0056AD47 /* APCDataArchive.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C6AA2851B4E057D0056AD47 /* APCDataArchive.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C6AA28A1B4E057D0056AD47 /* APCDataArchive.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C6AA2861B4E057D0056AD47 /* APCDataArchive.m */; };
+		6C6AA3401B55EA6C0056AD47 /* ORKFileResult+Filename.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C6AA33E1B55EA6C0056AD47 /* ORKFileResult+Filename.h */; };
+		6C6AA3411B55EA6C0056AD47 /* ORKFileResult+Filename.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C6AA33F1B55EA6C0056AD47 /* ORKFileResult+Filename.m */; };
 		6C7346081A7ECD3B00DA9CD8 /* APCConsentTaskViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C7346061A7ECD3B00DA9CD8 /* APCConsentTaskViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C7346091A7ECD3B00DA9CD8 /* APCConsentTaskViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7346071A7ECD3B00DA9CD8 /* APCConsentTaskViewController.m */; };
 		6C8646401AF8077300B46C49 /* APCCorrelationsSelectorViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C86463E1AF8077300B46C49 /* APCCorrelationsSelectorViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -320,7 +322,7 @@
 		7BEFD7E11AD596070087F46C /* APCPassiveDataSink.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BEFD7DA1AD596070087F46C /* APCPassiveDataSink.m */; };
 		7BF54F971AA158E50081C935 /* APCHorizontalBottomThinLineView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7BF54F951AA158E50081C935 /* APCHorizontalBottomThinLineView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7BF54F981AA158E50081C935 /* APCHorizontalBottomThinLineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BF54F961AA158E50081C935 /* APCHorizontalBottomThinLineView.m */; };
-		806F24331B3388E700B50664 /* APCCMSSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 806F24321B3388E700B50664 /* APCCMSSupport.h */; };
+		806F24331B3388E700B50664 /* APCCMSSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 806F24321B3388E700B50664 /* APCCMSSupport.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A7CFE4B51A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = A7CFE4B11A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A7CFE4B61A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7CFE4B21A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.m */; };
 		A7CFE4B71A8B05F4009A171C /* APCStudyOverviewCollectionViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = A7CFE4B31A8B05F4009A171C /* APCStudyOverviewCollectionViewController.h */; };
@@ -986,6 +988,8 @@
 		6C6AA27C1B4E056C0056AD47 /* APCDataVerificationDaemon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDataVerificationDaemon.m; sourceTree = "<group>"; };
 		6C6AA2851B4E057D0056AD47 /* APCDataArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDataArchive.h; sourceTree = "<group>"; };
 		6C6AA2861B4E057D0056AD47 /* APCDataArchive.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDataArchive.m; sourceTree = "<group>"; };
+		6C6AA33E1B55EA6C0056AD47 /* ORKFileResult+Filename.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ORKFileResult+Filename.h"; sourceTree = "<group>"; };
+		6C6AA33F1B55EA6C0056AD47 /* ORKFileResult+Filename.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ORKFileResult+Filename.m"; sourceTree = "<group>"; };
 		6C7346061A7ECD3B00DA9CD8 /* APCConsentTaskViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCConsentTaskViewController.h; sourceTree = "<group>"; };
 		6C7346071A7ECD3B00DA9CD8 /* APCConsentTaskViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCConsentTaskViewController.m; sourceTree = "<group>"; };
 		6C86463E1AF8077300B46C49 /* APCCorrelationsSelectorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCCorrelationsSelectorViewController.h; sourceTree = "<group>"; };
@@ -2393,6 +2397,8 @@
 				F5B947551A73272C0034C522 /* NSString+Helper.m */,
 				36B7D2531A8D848D0043F968 /* ORKAnswerFormat+Helper.h */,
 				36B7D2541A8D848D0043F968 /* ORKAnswerFormat+Helper.m */,
+				6C6AA33E1B55EA6C0056AD47 /* ORKFileResult+Filename.h */,
+				6C6AA33F1B55EA6C0056AD47 /* ORKFileResult+Filename.m */,
 				F5306CCB1A8BE7F600732E60 /* ORKQuestionResult+APCHelper.h */,
 				F5306CCC1A8BE7F600732E60 /* ORKQuestionResult+APCHelper.m */,
 				366345931B1F863A003CC0EF /* SBBSchedule+APCHelper.h */,
@@ -3274,6 +3280,7 @@
 				F5B947D31A73272C0034C522 /* UIScrollView+Helper.h in Headers */,
 				F5F12A811A2F78490015982C /* APCPresentAnimator.h in Headers */,
 				F5B9462B1A7309A20034C522 /* ZZConstants.h in Headers */,
+				6C6AA3401B55EA6C0056AD47 /* ORKFileResult+Filename.h in Headers */,
 				5B7D471C1B0549FA00958921 /* APCCubicCurveAlgorithm.h in Headers */,
 				F5B9480A1A73272C0034C522 /* APCScheduleExpressionToken.h in Headers */,
 				F5F12AD01A2F78490015982C /* APCWithdrawSurveyViewController.h in Headers */,
@@ -3843,6 +3850,7 @@
 				0871A3941A8F4244002EA80D /* APCDashboardFoodInsightTableViewCell.m in Sources */,
 				7BCF70331ACB6C5C00838717 /* APCPassiveDataCollector.m in Sources */,
 				F5F12ACB1A2F78490015982C /* APCProfileViewController.m in Sources */,
+				6C6AA3411B55EA6C0056AD47 /* ORKFileResult+Filename.m in Sources */,
 				F5F12ADF1A2F78490015982C /* APCShareTableViewCell.m in Sources */,
 				08023C541AAA12DF008E6DDA /* APCAllSetTableViewCell.m in Sources */,
 				08EA2AB41A7AD564007549C0 /* UIImage+ImageEffects.m in Sources */,
