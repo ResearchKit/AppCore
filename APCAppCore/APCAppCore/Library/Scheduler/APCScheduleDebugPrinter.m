@@ -62,6 +62,19 @@ static NSDateFormatter *debugDateFormatter = nil;
     debugDateFormatter.timeZone = [NSTimeZone localTimeZone];
 }
 
+- (void) printSetOfSchedules: (NSSet *) schedules
+           intoMutableString: (NSMutableString *) printout
+                   withLabel: (NSString *) label
+{
+    /*
+     -printArray always alphabetizes the array, so we can safely
+     send it the results of this -allObjects call.
+     */
+    [self printArrayOfSchedules: schedules.allObjects
+                      withLabel: label
+              intoMutableString: printout];
+}
+
 - (void) printArrayOfSchedules: (NSArray *) schedules
                      withLabel: (NSString *) label
              intoMutableString: (NSMutableString *) printout
@@ -85,11 +98,17 @@ static NSDateFormatter *debugDateFormatter = nil;
 
     if (schedules.count == 0)
     {
-        [printout appendString: @"- (none)\n"];
+        [printout appendString: @"-  (none)\n"];
     }
 
     else
     {
+        /*
+         We can't get to our managed-object category methods during
+         migration.  This class method lets us get around that.
+         */
+        schedules = [APCSchedule sortSchedules: schedules];
+
         for (APCSchedule *schedule in schedules)
         {
             NSString *source = [NSStringFromAPCScheduleSourceAsNumber (schedule.scheduleSource) substringFromIndex: @"APCScheduleSource".length];
@@ -249,6 +268,11 @@ static NSDateFormatter *debugDateFormatter = nil;
         {
             [result appendString: [NSString stringWithFormat: @"%@", maybeDate]];
         }
+    }
+
+    if (result.length == 0)
+    {
+        [result appendString: @"(none)"];
     }
 
     return result;

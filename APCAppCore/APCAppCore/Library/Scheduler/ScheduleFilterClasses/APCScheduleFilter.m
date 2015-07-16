@@ -1,5 +1,5 @@
 //
-//  APCScheduleDebugPrinter.h
+//  APCScheduleFilter.m
 //  APCAppCore
 //
 //  Copyright (c) 2015, Apple Inc. All rights reserved. 
@@ -31,26 +31,31 @@
 //  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 //
 
-#import <Foundation/Foundation.h>
+#import "APCScheduleFilter.h"
 
-/**
- Utility class that lets us create printouts for Schedules
- and Tasks in a consistent format across classes, so we
- get consistent column spacing, date formatting (including
- time zones), etc.
+@implementation APCScheduleFilter
+
+/*
+ Implement these methods, or others serving the same purpose, in your subclass.
  */
-@interface APCScheduleDebugPrinter : NSObject
 
-- (void) printArrayOfSchedules: (NSArray *) schedules
-                     withLabel: (NSString *) label
-             intoMutableString: (NSMutableString *) printout;
+- (void) split: (NSSet *) __unused setOfSchedules
+{
+    NSAssert (NO, @"The class [%@] hasn't implemented the -split: method.  Maybe it has a -split:with: variant?", NSStringFromClass ([self class]));
+}
 
-- (void) printSetOfSchedules: (NSSet *) schedules
-           intoMutableString: (NSMutableString *) printout
-                   withLabel: (NSString *) label;
+- (NSSet *) passed
+{
+    NSAssert (NO, @"The class [%@] hasn't implemented the -passed: method.  Maybe it has another, similar-sounding property?", NSStringFromClass ([self class]));
 
-+ (NSString *) stringFromDate: (NSDate *) date;
-- (NSString *) stringFromDate: (NSDate *) date;
-- (NSString *) stringsFromArrayOfDates: (NSArray *) arrayOfDates;
+    return nil;
+}
+
+- (NSSet *) failed
+{
+    NSAssert (NO, @"The class [%@] hasn't implemented the -failed: method.  Maybe it has another, similar-sounding property?", NSStringFromClass ([self class]));
+
+    return nil;
+}
 
 @end

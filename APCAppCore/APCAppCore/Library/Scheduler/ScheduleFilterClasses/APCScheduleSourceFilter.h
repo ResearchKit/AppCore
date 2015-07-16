@@ -1,5 +1,5 @@
 //
-//  APCScheduleDebugPrinter.h
+//  APCScheduleSourceFilter.h
 //  APCAppCore
 //
 //  Copyright (c) 2015, Apple Inc. All rights reserved. 
@@ -31,26 +31,27 @@
 //  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 //
 
-#import <Foundation/Foundation.h>
+#import "APCScheduleFilter.h"
+#import "APCConstants.h"
+
 
 /**
- Utility class that lets us create printouts for Schedules
- and Tasks in a consistent format across classes, so we
- get consistent column spacing, date formatting (including
- time zones), etc.
+ Splits the specified set of schedules into two subsets:  those
+ which come from a specified source (-passed) and those which don't
+ (-failed).
  */
-@interface APCScheduleDebugPrinter : NSObject
+@interface APCScheduleSourceFilter : APCScheduleFilter
 
-- (void) printArrayOfSchedules: (NSArray *) schedules
-                     withLabel: (NSString *) label
-             intoMutableString: (NSMutableString *) printout;
 
-- (void) printSetOfSchedules: (NSSet *) schedules
-           intoMutableString: (NSMutableString *) printout
-                   withLabel: (NSString *) label;
+/**
+ Splits the specified set of schedules into two subsets:  those
+ which come from a specified source (-passed) and those which don't
+ (-failed).
 
-+ (NSString *) stringFromDate: (NSDate *) date;
-- (NSString *) stringFromDate: (NSDate *) date;
-- (NSString *) stringsFromArrayOfDates: (NSArray *) arrayOfDates;
+ @param setOfSchedules  The schedules to inspect.
+ @param source          The scheduleSource to check for.
+ */
+- (void) split: (NSSet *) setOfSchedules
+    withSource: (APCScheduleSource) source;
 
 @end

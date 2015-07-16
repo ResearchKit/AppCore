@@ -574,7 +574,7 @@ static NSString * const kAPCScheduleStringKey                       = @"schedule
              }
              else if (section.isYesterdaySection)
              {
-                 [section removeFullyCompletedTasks];
+                 [section reduceToIncompleteTasksOnTheirLastLegalDay];
              }
              
              if (section.taskGroups.count)

@@ -1,5 +1,5 @@
 //
-//  APCScheduleDebugPrinter.h
+//  APCExistingTaskFilter.h
 //  APCAppCore
 //
 //  Copyright (c) 2015, Apple Inc. All rights reserved. 
@@ -31,26 +31,39 @@
 //  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 //
 
-#import <Foundation/Foundation.h>
+#import "APCScheduleFilter.h"
+@class APCScheduleTaskMap;
 
 /**
- Utility class that lets us create printouts for Schedules
- and Tasks in a consistent format across classes, so we
- get consistent column spacing, date formatting (including
- time zones), etc.
+ Splits a set of schedules into two subsets:  those whose task IDs already
+ exist in CoreData -- meaning, a task with that ID has already appeared on
+ this device, at some point in the past -- and those whose task IDs are
+ brand-new.  The former are returned in -passed; the latter are returned in
+ -failed.  If a schedule contains even one task whose ID is in CoreData,
+ it will appear in -passed.
+
+ Allows us to know whether to blindly accept a new schedule (i.e., if it's
+ referring to brand-new tasks) or whether we have to compare it to other
+ schedules before accepting it.
  */
-@interface APCScheduleDebugPrinter : NSObject
+@interface APCExistingTaskFilter : APCScheduleFilter
 
-- (void) printArrayOfSchedules: (NSArray *) schedules
-                     withLabel: (NSString *) label
-             intoMutableString: (NSMutableString *) printout;
 
-- (void) printSetOfSchedules: (NSSet *) schedules
-           intoMutableString: (NSMutableString *) printout
-                   withLabel: (NSString *) label;
+/**
+ Splits a set of schedules into two subsets:  those whose task IDs already
+ exist in CoreData -- meaning, a task with that ID has already appeared on
+ this device, at some point in the past -- and those whose task IDs are
+ brand-new.  The former are returned in -passed; the latter are returned in
+ -failed.  If a schedule contains even one task whose ID is in CoreData,
+ it will appear in -passed.
 
-+ (NSString *) stringFromDate: (NSDate *) date;
-- (NSString *) stringFromDate: (NSDate *) date;
-- (NSString *) stringsFromArrayOfDates: (NSArray *) arrayOfDates;
+ @param setOfSchedules  The schedules whose tasks we wish to search for.
+
+ @param mapOfTheseTaskIdsToSavedTasksAndSchedules  A taskID-schedule-task map
+ containing the task IDs in setOfSchedules mapped to existing, saved tasks and
+ schedules.
+ */
+- (void) split: (NSSet *) setOfSchedules
+       withMap: (APCScheduleTaskMap *) mapOfTheseTaskIdsToSavedTasksAndSchedules;
 
 @end

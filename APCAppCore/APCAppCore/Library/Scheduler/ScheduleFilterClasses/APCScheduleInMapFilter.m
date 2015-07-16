@@ -1,5 +1,5 @@
 //
-//  APCScheduleDebugPrinter.h
+//  APCScheduleInMapFilter.m
 //  APCAppCore
 //
 //  Copyright (c) 2015, Apple Inc. All rights reserved. 
@@ -31,26 +31,74 @@
 //  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 //
 
-#import <Foundation/Foundation.h>
+#import "APCScheduleInMapFilter.h"
+#import "APCSchedule.h"
+#import "APCTask.h"
+#import "NSArray+APCHelper.h"
 
-/**
- Utility class that lets us create printouts for Schedules
- and Tasks in a consistent format across classes, so we
- get consistent column spacing, date formatting (including
- time zones), etc.
- */
-@interface APCScheduleDebugPrinter : NSObject
 
-- (void) printArrayOfSchedules: (NSArray *) schedules
-                     withLabel: (NSString *) label
-             intoMutableString: (NSMutableString *) printout;
+@interface APCScheduleInMapFilter ()
+@property (nonatomic, strong) NSSet *schedulesWithTasksInMap;
+@property (nonatomic, strong) NSSet *schedulesWithSomeTasksNotInMap;
+@end
 
-- (void) printSetOfSchedules: (NSSet *) schedules
-           intoMutableString: (NSMutableString *) printout
-                   withLabel: (NSString *) label;
 
-+ (NSString *) stringFromDate: (NSDate *) date;
-- (NSString *) stringFromDate: (NSDate *) date;
-- (NSString *) stringsFromArrayOfDates: (NSArray *) arrayOfDates;
+@implementation APCScheduleInMapFilter
+
+- (instancetype) init
+{
+    self = [super init];
+
+    if (self)
+    {
+        _schedulesWithTasksInMap = nil;
+        _schedulesWithSomeTasksNotInMap = nil;
+    }
+
+    return self;
+}
+
+- (NSSet *) passed
+{
+    return self.schedulesWithTasksInMap;
+}
+
+- (NSSet *) failed
+{
+    return self.schedulesWithSomeTasksNotInMap;
+}
+
+- (void) split: (NSSet *) setOfSchedules
+       withMap: (APCScheduleTaskMap *) map
+{
+    NSMutableSet *schedulesWithTasksInMap = [NSMutableSet new];
+    NSMutableSet *schedulesWithSomeTasksNotInMap = [NSMutableSet new];
+
+    for (APCSchedule *schedule in setOfSchedules)
+    {
+        BOOL foundInMap = YES;
+
+        for (APCTask *task in schedule.tasks)
+        {
+            if (! [map containsTaskId: task.taskID])
+            {
+                foundInMap = NO;
+                break;
+            }
+        }
+
+        if (foundInMap)
+        {
+            [schedulesWithTasksInMap addObject: schedule];
+        }
+        else
+        {
+            [schedulesWithSomeTasksNotInMap addObject: schedule];
+        }
+    }
+
+    self.schedulesWithTasksInMap        = [NSSet setWithSet: schedulesWithTasksInMap];
+    self.schedulesWithSomeTasksNotInMap = [NSSet setWithSet: schedulesWithSomeTasksNotInMap];
+}
 
 @end

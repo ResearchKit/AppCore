@@ -1,5 +1,5 @@
 //
-//  NSArray+APCHelper.h
+//  APCScheduleQueryEngine.h
 //  APCAppCore
 //
 //  Copyright (c) 2015, Apple Inc. All rights reserved.
@@ -32,44 +32,16 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "APCConstants.h"
 
-@interface NSArray (APCHelper)
+@class NSManagedObjectContext;
 
-/**
- Creates a new array containing the contents of the
- specified arrays.  Does not remove duplicates.
 
- Usage:
+@protocol APCScheduleQueryEngine <NSObject>
 
- @code
- NSArray *myArray = [NSArray arrayWithObjectsFromArrays: someArray, someOtherArray, someThirdArray];
- @endcode
- */
-+ (instancetype) arrayWithObjectsFromArrays: (NSArray *) firstArray, ...;
-
-/**
- Returns the second object in self, or nil if there is no
- second object.
- 
- This method/property is useful because, sometimes,
- the second object in an array has a meaningful purpose:
- the 2nd day in a list of selected days in a month, the
- 2nd item in a two-item array of start-and-stop values,
- etc.  In those cases, having this -secondObject property
- avoids having "magic numbers" in the code: hard-coding
- a "1" to access that second array element.
- */
-@property (readonly) id secondObject;
-
-/**
- Returns the third object in self, or nil if there is no third object.
- 
- This method/property is useful because, sometimes, the third object
- in an array is has a meaningful purpose:  the "end" value in a
- "beginning/middle/end" sequence, for example.  In such cases, having
- this -thirdObject property avoids having "magic numbers" in the code:
- hard-coding a "2" to access that third array element.
- */
-@property (readonly) id thirdObject;
+- (NSArray *) querySchedulesActiveOnDayOfDate: (NSDate *) date
+                                   fromSource: (APCScheduleSource) scheduleSource
+                                    inContext: (NSManagedObjectContext *) context
+                               returningError: (NSError * __autoreleasing *) errorToReturn;
 
 @end

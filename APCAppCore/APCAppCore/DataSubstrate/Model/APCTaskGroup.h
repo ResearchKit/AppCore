@@ -33,6 +33,7 @@
 
 #import <Foundation/Foundation.h>
 @class APCTask;
+@class APCSchedule;
 @class APCPotentialTask;
 @class APCScheduledTask;
 
@@ -60,6 +61,11 @@
  date and time, etc.
  */
 @property (nonatomic, strong) APCTask *task;
+
+/**
+ The schedule which generated the dates and times for the task in this group.
+ */
+@property (nonatomic, strong) APCSchedule *schedule;
 
 /**
  An array of PotentialTask objects representing both
@@ -137,10 +143,64 @@
 @property (readonly) NSUInteger countOfRequiredTasksForThisTimeRange __attribute__((deprecated("Please use -totalRequiredTasksForThisTimeRange instead.")));
 
 /**
- The day whose midnight-to-midnight is represented by the
- contents of this group.
+ Former name for -appearanceDate.  We used to only have one date field on this
+ object; we now have three:  -appearanceDate, -scheduledDate, and -expirationDate.
  */
-@property (nonatomic, strong) NSDate *date;
+@property (readonly) NSDate *date __attribute__((deprecated("Please use -appearanceDate instead.")));
+
+/**
+ The day whose midnight-to-midnight is represented by the contents of this
+ group.  Intended to be the date on which those tasks will appear on the user's
+ Activities screen.  Compare with -scheduledDate.
+
+ @see -scheduledDate
+ */
+@property (nonatomic, strong) NSDate *appearanceDate;
+
+/**
+ The date for which the tasks in this group were originally scheduled.
+ Will be different from -date if the tasks are in this group because 
+ they're within their expiration period.
+ 
+ @see date
+ @see expiresToday
+ */
+@property (nonatomic, strong) NSDate *scheduledDate;
+
+/**
+ The scheduledDate + the schedule's expiration period:  the last date
+ this taskGroup will appear on-screen for a given appearance of the task.
+ If the schedule does not have an expiration period, this value is nil
+ -- individual tasks truly don't expire.  See -expiresToday for an example.
+ 
+ @see expiresToday
+ @see scheduledDate
+ */
+@property (nonatomic, strong) NSDate *expirationDate;
+
+/**
+ Returns YES if this is the expiration date for this task appearance.
+
+ For example, if a schedule says a task will be visible throughout the year
+ 2015, is only visible once a month, and is visible for 3 days at a time before
+ it vanishes, like this:
+
+ @code
+ startsOn:  2015-01-01
+ endsOn:    2015-12-31
+ interval:  P1M
+ expires:   P3D    <----
+ @endcode
+
+ ...then -expiresToday will be YES if -date is the last of those 3 days.  If
+ the user doesn't do it by that third day, it's considered "not completed" or
+ "skipped."  For each day through that third day, the task will appear in the
+ user's list of "Today" activities.  On the 4th day, the task will appear in
+ the user's list of "Incomplete from Yesterday" activities.
+ 
+ @see lastLegalDate
+ */
+@property (nonatomic, assign) BOOL expiresToday;
 
 /**
  Returns YES if -requiredCompletedTasks.count is greater
@@ -158,11 +218,14 @@
 - (NSComparisonResult) compareWithTaskGroup: (APCTaskGroup *) otherTaskGroup;
 
 - (instancetype)       initWithTask: (APCTask *) task
+                           schedule: (APCSchedule *) schedule
     requiredRemainingPotentialTasks: (NSArray *) requiredRemainingTasks
              requiredCompletedTasks: (NSArray *) requiredCompletedTasks
            gratuitousCompletedTasks: (NSArray *) gratuitousCompletedTasks
                 samplePotentialTask: (APCPotentialTask *) samplePotentialTask
                  totalRequiredTasks: (NSUInteger) countOfRequiredTasks
-                            forDate: (NSDate *) date;
+                   forScheduledDate: (NSDate *) scheduledDate
+                     appearanceDate: (NSDate *) appearanceDate
+                     expirationDate: (NSDate *) expirationDate;
 
 @end
