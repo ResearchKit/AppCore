@@ -83,6 +83,9 @@ static NSInteger const kMinimumNumberOfSteps = 3; //Gen Info + MedicalInfo + Pas
             nextStep = self.permissionsStep;
             self.currentStepNumber += 1;
         }
+    } else if ([step.identifier isEqualToString:kAPCSignUpIneligibleStepIdentifier]) {
+        nextStep = self.shareAppStep;
+        self.currentStepNumber += 1;
     }
     
     return nextStep;
@@ -117,6 +120,13 @@ static NSInteger const kMinimumNumberOfSteps = 3; //Gen Info + MedicalInfo + Pas
         self.currentStepNumber -= 1;
     } else if ([step.identifier isEqualToString:kAPCSignUpPermissionsStepIdentifier]) {
         prevStep = self.passcodeStep;
+        self.currentStepNumber -= 1;
+    } else if ([step.identifier isEqualToString:kAPCSignUpShareAppStepIdentifier]) {
+        if (self.eligible) {
+            prevStep = self.eligibleStep;
+        } else {
+            prevStep = self.ineligibleStep;
+        }
         self.currentStepNumber -= 1;
     }
     

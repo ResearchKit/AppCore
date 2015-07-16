@@ -71,12 +71,16 @@
 {
     self.label.font = [UIFont appRegularFontWithSize:19.0f];
     self.label.textColor = [UIColor appSecondaryColor1];
+    
+    if (((APCAppDelegate *)[UIApplication sharedApplication].delegate).showShareAppInOnboarding) {
+        self.shareButton.hidden = NO;
+        self.shareLabel.hidden = NO;
+    }
 }
 
 - (void)setupNavAppearance
 {
-    UIBarButtonItem  *backster = [APCCustomBackButton customBackBarButtonItemWithTarget:self action:@selector(back) tintColor:[UIColor appPrimaryColor]];
-    [self.navigationItem setLeftBarButtonItem:backster];
+    self.navigationItem.hidesBackButton = YES;
 }
 
 - (APCOnboarding *)onboarding
@@ -93,6 +97,11 @@
     [[self onboarding] popScene];
 }
 
+
+- (IBAction)showShare:(id) __unused sender {
+    UIViewController *viewController = [[self onboarding] nextScene];
+    [self.navigationController pushViewController:viewController animated:YES];
+}
 
 - (IBAction)next:(id) __unused sender
 {

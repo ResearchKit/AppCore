@@ -44,6 +44,7 @@ NSString *const kAPCSignUpPermissionsStepIdentifier         = @"Permissions";
 NSString *const kAPCSignUpThankYouStepIdentifier            = @"ThankYou";
 NSString *const kAPCSignInStepIdentifier                    = @"SignIn";
 NSString *const kAPCSignUpPermissionsPrimingStepIdentifier  = @"PermissionsPriming";
+NSString *const kAPCSignUpShareAppStepIdentifier            = @"ShareApp";
 
 @implementation APCOnboardingTask
 
@@ -206,6 +207,15 @@ NSString *const kAPCSignUpPermissionsPrimingStepIdentifier  = @"PermissionsPrimi
     }
     
     return _signInStep;
+}
+
+- (ORKStep *)shareAppStep
+{
+    if (!_shareAppStep) {
+        _shareAppStep = [[ORKStep alloc] initWithIdentifier:kAPCSignUpShareAppStepIdentifier];
+    }
+    
+    return _shareAppStep;
 }
 
 
