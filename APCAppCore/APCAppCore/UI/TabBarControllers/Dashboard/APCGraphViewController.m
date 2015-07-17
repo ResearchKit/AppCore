@@ -67,7 +67,9 @@
     graphView.maximumValueImage = self.graphItem.maximumImage;
     
     self.titleLabel.text = self.graphItem.caption;
-    self.subTitleLabel.text = self.graphItem.detailText;
+    
+    [self setSubTitleText];
+    
     self.legendLabel.attributedText = self.graphItem.legend;
     
     self.averageImageView.image = self.graphItem.averageImage;
@@ -113,9 +115,11 @@
 
 - (void)setupAppearance
 {
-    self.segmentedControl.tintColor = [UIColor clearColor];
+    id viewAppearance = [UIView appearanceWhenContainedIn:[APCGraphViewController class], nil];
+    [viewAppearance setTintColor:[UIColor clearColor]];
+    
     [self.segmentedControl setTitleTextAttributes:@{NSFontAttributeName:[UIFont appRegularFontWithSize:19.0f], NSForegroundColorAttributeName : [UIColor appSecondaryColor2]} forState:UIControlStateNormal];
-    [self.segmentedControl setTitleTextAttributes:@{NSFontAttributeName:[UIFont appMediumFontWithSize:19.0f], NSForegroundColorAttributeName : [UIColor whiteColor]} forState:UIControlStateSelected];
+    [self.segmentedControl setTitleTextAttributes:@{NSFontAttributeName:[UIFont appMediumFontWithSize:19.0f], NSForegroundColorAttributeName : [UIColor appSecondaryColor1]} forState:UIControlStateSelected];
     
     self.compareSwitch.onTintColor = self.graphItem.tintColor;
     
@@ -127,11 +131,23 @@
     
     self.subTitleLabel.font = [UIFont appRegularFontWithSize:16.0f];
     self.subTitleLabel.textColor = [UIColor appSecondaryColor3];
+    self.subTitleLabel.hidden = self.graphItem.hidesDetailText;
     
     [self.collapseButton setImage:[[UIImage imageNamed:@"collapse_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     [self.collapseButton.imageView setTintColor:self.graphItem.tintColor];
     
     self.tintView.backgroundColor = self.graphItem.tintColor;
+}
+
+- (void)setSubTitleText
+{
+    NSInteger numberOfPoints = [[self.graphItem.graphData numberOfDataPoints] integerValue];
+    
+    if (self.graphItem.graphType == kAPCDashboardGraphTypeLine) {
+        self.subTitleLabel.text = (numberOfPoints > 1) ? [NSString stringWithFormat:@"%@ : %@", NSLocalizedString(@"Average", nil),[self.graphItem averageValueString]] : @"";
+    } else {
+        self.subTitleLabel.text = (numberOfPoints > 0) ? [NSString stringWithFormat:@"%@ : %@  %@ : %@", NSLocalizedString(@"Min", nil), [self.graphItem minimumValueString], NSLocalizedString(@"Max", nil), [self.graphItem maximumValueString]] : @"";
+    }
 }
 
 #pragma mark - Orientation methods
@@ -214,7 +230,7 @@
 
 -(void)reloadCharts
 {
-    APCBaseGraphView *graphView;
+    __block APCBaseGraphView *graphView;
     
     if (self.graphItem.graphType == kAPCDashboardGraphTypeLine) {
         graphView = self.lineGraphView;
@@ -222,14 +238,21 @@
         graphView = self.discreteGraphView;
     }
     
+    __weak typeof(self) weakSelf = self;
+    
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (self.spinnerController) {
-            [self.spinnerController dismissViewControllerAnimated:YES completion:nil];
-            self.spinnerController = nil;
+        
+        __strong typeof(self) strongSelf = weakSelf;
+        
+        if (strongSelf.spinnerController) {
+            [strongSelf.spinnerController dismissViewControllerAnimated:YES completion:nil];
+            strongSelf.spinnerController = nil;
         }
         
         [graphView layoutSubviews];
         [graphView refreshGraph];
+        
+        [strongSelf setSubTitleText];
     });
 }
 
