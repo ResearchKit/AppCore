@@ -311,40 +311,6 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 }
 
 /*********************************************************************************/
-#pragma mark - State Restoration
-/*********************************************************************************/
-
-- (BOOL)application:(UIApplication *) __unused application shouldSaveApplicationState:(NSCoder *) __unused coder
-{
-    [[UIApplication sharedApplication] ignoreSnapshotOnNextApplicationLaunch];
-    return self.dataSubstrate.currentUser.isSignedIn;
-}
-
-- (BOOL)application:(UIApplication *) __unused application shouldRestoreApplicationState:(NSCoder *) __unused coder
-{
-    return self.dataSubstrate.currentUser.isSignedIn;
-}
-
-- (UIViewController *)application:(UIApplication *) __unused application viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *) __unused coder
-{
-    if ([identifierComponents.lastObject isEqualToString:@"AppTabbar"]) {
-        return self.window.rootViewController;
-    }
-    else if ([identifierComponents.lastObject isEqualToString:@"ActivitiesNavController"])
-    {
-        return self.tabBarController.viewControllers[kAPCActivitiesTabIndex];
-    }
-    else if ([identifierComponents.lastObject isEqualToString:@"APCActivityVC"])
-    {
-        if ( [self.tabBarController.viewControllers[kAPCActivitiesTabIndex] respondsToSelector:@selector(topViewController)]) {
-            return [(UINavigationController*) self.tabBarController.viewControllers[kAPCActivitiesTabIndex] topViewController];
-        }
-    }
-    
-    return nil;
-}
-
-/*********************************************************************************/
 #pragma mark - Did Finish Launch Methods
 /*********************************************************************************/
 - (void) initializeBridgeServerConnection

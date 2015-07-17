@@ -1,5 +1,5 @@
 //
-//  APCScheduleDebugPrinter.h
+//  APCScheduleImporter.h
 //  APCAppCore
 //
 //  Copyright (c) 2015, Apple Inc. All rights reserved. 
@@ -32,25 +32,36 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "APCConstants.h"
+#import "APCScheduleQueryEngine.h"
+
+@class NSManagedObjectContext;
+@class SBBSchedule;
+
 
 /**
- Utility class that lets us create printouts for Schedules
- and Tasks in a consistent format across classes, so we
- get consistent column spacing, date formatting (including
- time zones), etc.
+ Imports tasks and schedules from a given ScheduleSource (server,
+ disk, etc.) carefully merging them with existing tasks and schedules.
  */
-@interface APCScheduleDebugPrinter : NSObject
+@interface APCScheduleImporter : NSObject
 
-- (void) printArrayOfSchedules: (NSArray *) schedules
-                     withLabel: (NSString *) label
-             intoMutableString: (NSMutableString *) printout;
+/**
+ Imports tasks and schedules from the specified source,
+ carefully meshing them with existing tasks and schedules.
+ Executes on the calling method's thread.
+ 
+ See the .m file for technical notes on this method.
+ */
+- (void) processSchedulesAndTasks: (NSArray *) arrayOfSchedulesAndTasks
+                       fromSource: (APCScheduleSource) scheduleSource
+                     usingContext: (NSManagedObjectContext *) context
+              scheduleQueryEngine: (id <APCScheduleQueryEngine>) queryEngine
+                       importDate: (NSDate *) importDate
+                   returningError: (NSError * __autoreleasing *) errorToReturn;
 
-- (void) printSetOfSchedules: (NSSet *) schedules
-           intoMutableString: (NSMutableString *) printout
-                   withLabel: (NSString *) label;
-
-+ (NSString *) stringFromDate: (NSDate *) date;
-- (NSString *) stringFromDate: (NSDate *) date;
-- (NSString *) stringsFromArrayOfDates: (NSArray *) arrayOfDates;
+/**
+ Utility method helping us normalize all the data before we import it.
+ */
+- (NSDictionary *) extractJsonDataFromIncomingSageSchedule: (SBBSchedule *) sageSchedule;
 
 @end

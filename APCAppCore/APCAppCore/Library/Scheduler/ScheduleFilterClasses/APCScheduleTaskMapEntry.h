@@ -1,5 +1,5 @@
 //
-//  APCScheduleDebugPrinter.h
+//  APCScheduleTaskMapEntry.h
 //  APCAppCore
 //
 //  Copyright (c) 2015, Apple Inc. All rights reserved. 
@@ -32,25 +32,27 @@
 //
 
 #import <Foundation/Foundation.h>
+@class APCSchedule;
+@class APCTask;
+
 
 /**
- Utility class that lets us create printouts for Schedules
- and Tasks in a consistent format across classes, so we
- get consistent column spacing, date formatting (including
- time zones), etc.
+ Maps a single task ID to a single task and schedule.  Typically used
+ in an APCScheduleTaskMap, allowing us to quickly look up relevant tasks
+ and schedules by task ID, for a given set of tasks and schedules.
+ 
+ @see APCScheduleTaskMap
  */
-@interface APCScheduleDebugPrinter : NSObject
+@interface APCScheduleTaskMapEntry : NSObject
 
-- (void) printArrayOfSchedules: (NSArray *) schedules
-                     withLabel: (NSString *) label
-             intoMutableString: (NSMutableString *) printout;
+@property (nonatomic, strong) NSString *taskId;
+@property (nonatomic, strong) APCTask *task;
+@property (nonatomic, strong) APCSchedule *schedule;
 
-- (void) printSetOfSchedules: (NSSet *) schedules
-           intoMutableString: (NSMutableString *) printout
-                   withLabel: (NSString *) label;
+- (instancetype) initWithTaskId: (NSString *) taskId;
 
-+ (NSString *) stringFromDate: (NSDate *) date;
-- (NSString *) stringFromDate: (NSDate *) date;
-- (NSString *) stringsFromArrayOfDates: (NSArray *) arrayOfDates;
+- (instancetype) initWithTaskId: (NSString *) taskId
+                           task: (APCTask *) task
+                       schedule: (APCSchedule *) schedule;
 
 @end

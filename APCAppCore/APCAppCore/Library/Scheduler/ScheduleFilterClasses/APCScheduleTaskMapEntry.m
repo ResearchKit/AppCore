@@ -1,5 +1,5 @@
 //
-//  APCScheduleDebugPrinter.h
+//  APCScheduleTaskMapEntry.m
 //  APCAppCore
 //
 //  Copyright (c) 2015, Apple Inc. All rights reserved. 
@@ -31,26 +31,57 @@
 //  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 //
 
-#import <Foundation/Foundation.h>
+#import "APCScheduleTaskMapEntry.h"
+#import "APCSchedule.h"
+#import "APCTask.h"
 
-/**
- Utility class that lets us create printouts for Schedules
- and Tasks in a consistent format across classes, so we
- get consistent column spacing, date formatting (including
- time zones), etc.
- */
-@interface APCScheduleDebugPrinter : NSObject
 
-- (void) printArrayOfSchedules: (NSArray *) schedules
-                     withLabel: (NSString *) label
-             intoMutableString: (NSMutableString *) printout;
+@interface APCScheduleTaskMapEntry ()
+- (instancetype) init NS_DESIGNATED_INITIALIZER;
+@end
 
-- (void) printSetOfSchedules: (NSSet *) schedules
-           intoMutableString: (NSMutableString *) printout
-                   withLabel: (NSString *) label;
 
-+ (NSString *) stringFromDate: (NSDate *) date;
-- (NSString *) stringFromDate: (NSDate *) date;
-- (NSString *) stringsFromArrayOfDates: (NSArray *) arrayOfDates;
+@implementation APCScheduleTaskMapEntry
+
+- (instancetype) init
+{
+    self = [super init];
+
+    if (self)
+    {
+        _schedule = nil;
+        _task = nil;
+        _taskId = nil;
+    }
+
+    return self;
+}
+
+- (instancetype) initWithTaskId: (NSString *) taskId
+{
+    self = [self init];
+
+    if (self)
+    {
+        _taskId = taskId;
+    }
+
+    return self;
+}
+
+- (instancetype) initWithTaskId: (NSString *) taskId
+                           task: (APCTask *) task
+                       schedule: (APCSchedule *) schedule
+{
+    self = [self initWithTaskId: taskId];
+
+    if (self)
+    {
+        _task = task;
+        _schedule = schedule;
+    }
+
+    return self;
+}
 
 @end

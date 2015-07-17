@@ -1,5 +1,5 @@
 //
-//  APCScheduleDebugPrinter.h
+//  APCMatchingScheduleFilter.h
 //  APCAppCore
 //
 //  Copyright (c) 2015, Apple Inc. All rights reserved. 
@@ -31,26 +31,31 @@
 //  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 //
 
-#import <Foundation/Foundation.h>
+#import "APCScheduleFilter.h"
+#import "APCScheduleTaskMap.h"
 
 /**
- Utility class that lets us create printouts for Schedules
- and Tasks in a consistent format across classes, so we
- get consistent column spacing, date formatting (including
- time zones), etc.
+ Splits a set of schedules into two subsets:  those identical
+ to a previous set of schedules controlling tasks with the same
+ task ID, and those which aren't.
  */
-@interface APCScheduleDebugPrinter : NSObject
+@interface APCMatchingScheduleFilter : APCScheduleFilter
 
-- (void) printArrayOfSchedules: (NSArray *) schedules
-                     withLabel: (NSString *) label
-             intoMutableString: (NSMutableString *) printout;
 
-- (void) printSetOfSchedules: (NSSet *) schedules
-           intoMutableString: (NSMutableString *) printout
-                   withLabel: (NSString *) label;
+/**
+ Splits a set of schedules into two subsets:  those identical
+ to a previous set of schedules controlling tasks with the same
+ task ID, and those which aren't.  Matching schedules will be
+ available in -passed.  Non-matching schedules will be available
+ in -failed.
 
-+ (NSString *) stringFromDate: (NSDate *) date;
-- (NSString *) stringFromDate: (NSDate *) date;
-- (NSString *) stringsFromArrayOfDates: (NSArray *) arrayOfDates;
+ @param setOfSchedules  A set of schedules to split.
+ 
+ @param map  A mapping of task IDs to individual tasks and schedules.
+ A given schedule Z in setOfSchedules will be compared to each schedule
+ mapped to the task IDs mentioned in Z.
+ */
+- (void) split: (NSSet *) setOfSchedules
+       withMap: (APCScheduleTaskMap *) map;
 
 @end

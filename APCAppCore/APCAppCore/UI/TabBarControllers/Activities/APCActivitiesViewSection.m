@@ -182,29 +182,32 @@ static NSString * const kAPCSectionHeaderDateFormatToday        = @"eeee, MMMM d
     return result;
 }
 
+/**
+ Deprecated. Old name (old concept, actually) for
+ -reduceToIncompleteTasksOnTheirLastLegalDay.
+ */
 - (void) removeFullyCompletedTasks
 {
-    /*
-     I gotta say, this is pretty cool:  using a "predicate"
-     to run a method on every object in the array, based
-     on which we can remove elements from the array, using
-     a syntax that looks like SQL, kinda, and trusting
-     Objective-C to do this efficiently.  Purrrrrrty!
-     
-     The method we're running on every object in the array
-     is -isFullyCompleted.  The objects in the array are
-     APCTaskGroups.  Objective-C converts the @(YES) in the
-     predicate into the Boolean that's actually returned
-     by -isFullyCompleted.
-     */
-    NSPredicate *filterToRemoveCompletedTasks = [NSPredicate predicateWithFormat: @"%K != %@",
-                                                 NSStringFromSelector (@selector (isFullyCompleted)),
-                                                 @(YES)];
-
-    NSArray *newListOfTaskGroups = [self.taskGroups filteredArrayUsingPredicate:  filterToRemoveCompletedTasks];
-
-    self.taskGroups = newListOfTaskGroups;
+    [self reduceToIncompleteTasksOnTheirLastLegalDay];
 }
 
+- (void) reduceToIncompleteTasksOnTheirLastLegalDay
+{
+    NSIndexSet *indexesOfTaskGroupsWeWant = [self.taskGroups indexesOfObjectsPassingTest: ^BOOL (APCTaskGroup *taskGroup,
+                                                                                                 NSUInteger __unused taskGroupIndex,
+                                                                                                 BOOL __unused *stopIterating) {
+        BOOL keepThisOne = NO;
+        
+        if (! taskGroup.isFullyCompleted && taskGroup.expiresToday)
+        {
+            keepThisOne = YES;
+        }
+
+        return keepThisOne;
+    }];
+
+    NSArray *filteredTasks = [self.taskGroups objectsAtIndexes: indexesOfTaskGroupsWeWant];
+    self.taskGroups = filteredTasks;
+}
 
 @end

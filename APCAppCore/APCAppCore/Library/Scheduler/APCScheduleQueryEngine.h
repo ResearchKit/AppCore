@@ -1,5 +1,5 @@
 //
-//  NSArray+APCHelper.m
+//  APCScheduleQueryEngine.h
 //  APCAppCore
 //
 //  Copyright (c) 2015, Apple Inc. All rights reserved.
@@ -31,52 +31,17 @@
 //  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
-#import "NSArray+APCHelper.h"
-#import "APCUtilities.h"
+#import <Foundation/Foundation.h>
+#import "APCConstants.h"
 
-@implementation NSArray (APCHelper)
+@class NSManagedObjectContext;
 
-+ (instancetype) arrayWithObjectsFromArrays: (NSArray *) firstArray, ...
-{
-    NSArray *inboundArrays = NSArrayFromVariadicArguments (firstArray);
-    NSMutableArray *result = nil;
 
-    if (inboundArrays.count)
-    {
-        result = [NSMutableArray new];
+@protocol APCScheduleQueryEngine <NSObject>
 
-        for (id thingy in inboundArrays)
-        {
-            if ([thingy isKindOfClass: [NSArray class]])
-            {
-                [result addObjectsFromArray: thingy];
-            }
-        }
-    }
-
-    return result;
-}
-
-- (id) secondObject
-{
-    return [self safeObjectAtIndex: 1];
-}
-
-- (id) thirdObject
-{
-    return [self safeObjectAtIndex: 2];
-}
-
-- (id) safeObjectAtIndex: (NSUInteger) desiredIndex
-{
-    id result = nil;
-
-    if (self.count > desiredIndex)
-    {
-        result = self [desiredIndex];
-    }
-
-    return result;
-}
+- (NSArray *) querySchedulesActiveOnDayOfDate: (NSDate *) date
+                                   fromSource: (APCScheduleSource) scheduleSource
+                                    inContext: (NSManagedObjectContext *) context
+                               returningError: (NSError * __autoreleasing *) errorToReturn;
 
 @end

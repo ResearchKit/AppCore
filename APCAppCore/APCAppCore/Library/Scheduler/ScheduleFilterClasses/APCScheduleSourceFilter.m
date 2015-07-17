@@ -1,5 +1,5 @@
 //
-//  APCScheduleDebugPrinter.h
+//  APCScheduleSourceFilter.m
 //  APCAppCore
 //
 //  Copyright (c) 2015, Apple Inc. All rights reserved. 
@@ -31,26 +31,62 @@
 //  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 //
 
-#import <Foundation/Foundation.h>
+#import "APCScheduleSourceFilter.h"
+#import "APCSchedule.h"
+#import "NSArray+APCHelper.h"
 
-/**
- Utility class that lets us create printouts for Schedules
- and Tasks in a consistent format across classes, so we
- get consistent column spacing, date formatting (including
- time zones), etc.
- */
-@interface APCScheduleDebugPrinter : NSObject
 
-- (void) printArrayOfSchedules: (NSArray *) schedules
-                     withLabel: (NSString *) label
-             intoMutableString: (NSMutableString *) printout;
+@interface APCScheduleSourceFilter ()
+@property (nonatomic, strong) NSSet *schedulesFromSource;
+@property (nonatomic, strong) NSSet *schedulesNotFromSource;
+@end
 
-- (void) printSetOfSchedules: (NSSet *) schedules
-           intoMutableString: (NSMutableString *) printout
-                   withLabel: (NSString *) label;
 
-+ (NSString *) stringFromDate: (NSDate *) date;
-- (NSString *) stringFromDate: (NSDate *) date;
-- (NSString *) stringsFromArrayOfDates: (NSArray *) arrayOfDates;
+@implementation APCScheduleSourceFilter
+
+- (instancetype) init
+{
+    self = [super init];
+
+    if (self)
+    {
+        _schedulesFromSource = nil;
+        _schedulesNotFromSource = nil;
+    }
+
+    return self;
+}
+
+- (NSSet *) passed
+{
+    return self.schedulesFromSource;
+}
+
+- (NSSet *) failed
+{
+    return self.schedulesNotFromSource;
+}
+
+- (void) split: (NSSet *) setOfSchedules
+    withSource: (APCScheduleSource) source
+{
+    NSMutableSet *schedulesFromSource = [NSMutableSet new];
+    NSMutableSet *schedulesNotFromSource = [NSMutableSet new];
+
+    for (APCSchedule *schedule in setOfSchedules)
+    {
+        if (schedule.scheduleSource.integerValue == source)
+        {
+            [schedulesFromSource addObject: schedule];
+        }
+        else
+        {
+            [schedulesNotFromSource addObject: schedule];
+        }
+    }
+
+    self.schedulesFromSource    = [NSSet setWithSet: schedulesFromSource];
+    self.schedulesNotFromSource = [NSSet setWithSet: schedulesNotFromSource];
+}
 
 @end

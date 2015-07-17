@@ -1,5 +1,5 @@
 //
-//  APCScheduleDebugPrinter.h
+//  APCScheduleInMapFilter.h
 //  APCAppCore
 //
 //  Copyright (c) 2015, Apple Inc. All rights reserved. 
@@ -31,26 +31,33 @@
 //  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 //
 
-#import <Foundation/Foundation.h>
+#import "APCScheduleFilter.h"
+#import "APCScheduleTaskMap.h"
+
 
 /**
- Utility class that lets us create printouts for Schedules
- and Tasks in a consistent format across classes, so we
- get consistent column spacing, date formatting (including
- time zones), etc.
+ Splits setOfSchedules into two subsets:  schedules containing tasks
+ whose IDs ARE mentioned in the specified map of schedules, and those
+ whose tasks are NOT mentioned in that map.
+ 
+ Lets us quickly and easily find incoming schedules whose task are
+ currently running, and currently-running schedules whose tasks have
+ been mentioned in a download.
  */
-@interface APCScheduleDebugPrinter : NSObject
+@interface APCScheduleInMapFilter : APCScheduleFilter
 
-- (void) printArrayOfSchedules: (NSArray *) schedules
-                     withLabel: (NSString *) label
-             intoMutableString: (NSMutableString *) printout;
 
-- (void) printSetOfSchedules: (NSSet *) schedules
-           intoMutableString: (NSMutableString *) printout
-                   withLabel: (NSString *) label;
+/**
+ Splits setOfSchedules into two subsets:  schedules containing tasks
+ whose IDs ARE mentioned in the specified map of schedules (-passed),
+ and those whose tasks are NOT mentioned in that map (-failed).
 
-+ (NSString *) stringFromDate: (NSDate *) date;
-- (NSString *) stringFromDate: (NSDate *) date;
-- (NSString *) stringsFromArrayOfDates: (NSArray *) arrayOfDates;
+ @param setOfSchedules  Some set of APCSchedule objects.
+ 
+ @param map  A "schedule/task map" which maps a specific task ID to
+ a specific task and schedule.
+ */
+- (void) split: (NSSet *) setOfSchedules
+       withMap: (APCScheduleTaskMap *) map;
 
 @end
