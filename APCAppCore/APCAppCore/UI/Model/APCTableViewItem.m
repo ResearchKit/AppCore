@@ -189,34 +189,26 @@
 - (NSString *)averageValueString
 {
     double averageValue = [[self.graphData averageDataPoint] doubleValue];
-    
-    HKUnit *unit = self.graphData.unit;
-    NSString *unitString = (self.hidesUnitString || !unit) ? @"" : unit.unitString;
-    NSString *averageString = [NSString stringWithFormat:NSLocalizedString(@"%0.0f %@", nil), averageValue, unitString];
-    
-    return averageString;
+    return [self stringWithDoubleValue:averageValue];
 }
 
 - (NSString *)minimumValueString
 {
     double minValue = [[self.graphData minimumDataPoint] doubleValue];
-    
-    HKUnit *unit = self.graphData.unit;
-    NSString *unitString = (self.hidesUnitString || !unit) ? @"" : unit.unitString;
-    NSString *minString = [NSString stringWithFormat:NSLocalizedString(@"%0.0f %@", nil), minValue, unitString];
-    
-    return minString;
+    return [self stringWithDoubleValue:minValue];
 }
 
 - (NSString *)maximumValueString
 {
     double maxValue = [[self.graphData maximumDataPoint] doubleValue];
-    
+    return [self stringWithDoubleValue:maxValue];
+}
+
+- (NSString *)stringWithDoubleValue: (double)value
+{
     HKUnit *unit = self.graphData.unit;
     NSString *unitString = (self.hidesUnitString || !unit) ? @"" : unit.unitString;
-    NSString *maxString = [NSString stringWithFormat:NSLocalizedString(@"%0.0f %@", nil), maxValue, unitString];
-    
-    return maxString;
+    return [NSString stringWithFormat:NSLocalizedString(@"%0.0f %@", nil), value, unitString];
 }
 
 @end
