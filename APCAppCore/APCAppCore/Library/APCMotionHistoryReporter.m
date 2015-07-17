@@ -49,7 +49,6 @@ typedef NS_ENUM(NSInteger, MotionActivity)
     MotionActivityUnknown
 };
 
-
 @interface APCMotionHistoryReporter()
 {
     CMMotionActivityManager * motionActivityManager;
@@ -61,7 +60,6 @@ typedef NS_ENUM(NSInteger, MotionActivity)
 @property (copy, nonatomic) APCMotionHistoryReporterCallback doneCallback;
 
 @end
-
 
 @implementation APCMotionHistoryReporter
 
@@ -79,7 +77,6 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
     });
     return sharedInstance;
 }
-
 
 - (id)init {
     self = [super init];
