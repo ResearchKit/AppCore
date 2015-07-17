@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="h61-jT-BHu">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="h61-jT-BHu">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -14,7 +14,7 @@
                         <viewControllerLayoutGuide type="bottom" id="a5x-rm-Fx1"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Kj1-kb-LF2">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="tTU-aB-ynX">
@@ -62,14 +62,14 @@ a verification email at</string>
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3lp-lE-Oux">
-                                <rect key="frame" x="16" y="374" width="288" height="1"/>
+                                <rect key="frame" x="16" y="462" width="288" height="1"/>
                                 <color key="backgroundColor" red="0.90980392160000001" green="0.90980392160000001" blue="0.90980392160000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="1" id="wOD-8Z-UB1"/>
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yX7-Jl-zxX">
-                                <rect key="frame" x="41" y="396" width="238" height="34"/>
+                                <rect key="frame" x="41" y="484" width="238" height="34"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="34" id="6xz-2O-k55"/>
                                     <constraint firstAttribute="width" constant="238" id="lvt-a2-1N3"/>
@@ -90,7 +90,7 @@ will be sent to you for your records.</string>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cVc-Jw-LIH">
-                                <rect key="frame" x="24" y="440" width="273" height="30"/>
+                                <rect key="frame" x="24" y="528" width="273" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="emJ-QS-ca3"/>
                                     <constraint firstAttribute="width" constant="273" id="rkR-Zp-gnM"/>
@@ -124,6 +124,37 @@ will be sent to you for your records.</string>
                                     <action selector="tapToContinueButtonWasIndeedTapped:" destination="h61-jT-BHu" eventType="touchUpInside" id="NyI-z2-ilF"/>
                                 </connections>
                             </button>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="While you wait, you can share the app by pressing the share button below" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fuD-QG-wP8">
+                                <rect key="frame" x="16" y="350" width="288" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="NQi-mN-NZ2"/>
+                                    <constraint firstAttribute="width" constant="288" id="VGI-ER-TfW"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bzr-zG-t0U" customClass="APCButton">
+                                <rect key="frame" x="80" y="410" width="159" height="44"/>
+                                <color key="backgroundColor" red="0.81724121800000005" green="1" blue="0.97136515830000003" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="J9b-jE-ocz"/>
+                                    <constraint firstAttribute="width" constant="159" id="SVd-zk-0Ts"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="44" id="wKj-9d-9M5"/>
+                                </constraints>
+                                <state key="normal" title="Share">
+                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="wKj-9d-9M5"/>
+                                    </mask>
+                                </variation>
+                                <connections>
+                                    <action selector="showShare:" destination="h61-jT-BHu" eventType="touchUpInside" id="qbT-9r-1Cg"/>
+                                </connections>
+                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Once verified, tap below" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ikM-qL-vyw">
                                 <rect key="frame" x="16" y="271" width="288" height="28"/>
                                 <constraints>
@@ -134,7 +165,7 @@ will be sent to you for your records.</string>
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ddi-aN-vlM" userLabel="spinner - full-screen mask">
-                                <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QF4-Z4-QsM" userLabel="spinner -- apparent border">
                                         <rect key="frame" x="105" y="122" width="111" height="100"/>
@@ -170,14 +201,18 @@ will be sent to you for your records.</string>
                             <constraint firstItem="tTU-aB-ynX" firstAttribute="height" secondItem="WLq-Ms-OSK" secondAttribute="height" id="3bt-zY-Rgn"/>
                             <constraint firstItem="tTU-aB-ynX" firstAttribute="top" secondItem="PZ9-QS-Gmr" secondAttribute="bottom" constant="21" id="5z3-WH-O1B"/>
                             <constraint firstItem="3xK-c0-Pah" firstAttribute="top" secondItem="hsa-BE-Hkq" secondAttribute="bottom" constant="1" id="7EN-10-Hqd"/>
+                            <constraint firstItem="Bzr-zG-t0U" firstAttribute="top" secondItem="fuD-QG-wP8" secondAttribute="bottom" constant="10" id="8Kg-Qy-Kfj"/>
                             <constraint firstAttribute="centerX" secondItem="tTU-aB-ynX" secondAttribute="centerX" id="91V-EC-FkN"/>
                             <constraint firstAttribute="centerX" secondItem="cVc-Jw-LIH" secondAttribute="centerX" constant="-0.5" id="A2m-L2-YjN"/>
                             <constraint firstItem="tTU-aB-ynX" firstAttribute="top" secondItem="WLq-Ms-OSK" secondAttribute="top" id="D0w-lz-w04"/>
                             <constraint firstItem="a5x-rm-Fx1" firstAttribute="top" secondItem="yX7-Jl-zxX" secondAttribute="bottom" constant="50" id="G5E-d8-5bi"/>
                             <constraint firstItem="ikM-qL-vyw" firstAttribute="top" secondItem="gY2-y5-fND" secondAttribute="bottom" constant="5" id="GCQ-fD-dVn"/>
+                            <constraint firstItem="3lp-lE-Oux" firstAttribute="top" secondItem="Bzr-zG-t0U" secondAttribute="bottom" constant="8" id="IDZ-0q-FSd"/>
                             <constraint firstItem="hsa-BE-Hkq" firstAttribute="top" secondItem="WLq-Ms-OSK" secondAttribute="bottom" constant="11" id="LcI-px-aNQ"/>
+                            <constraint firstAttribute="centerX" secondItem="Bzr-zG-t0U" secondAttribute="centerX" id="MqH-fs-LtU"/>
                             <constraint firstItem="a5x-rm-Fx1" firstAttribute="top" secondItem="ddi-aN-vlM" secondAttribute="bottom" id="Mrm-NO-zeQ"/>
                             <constraint firstItem="ddi-aN-vlM" firstAttribute="top" secondItem="PZ9-QS-Gmr" secondAttribute="bottom" id="Nng-9G-aFA"/>
+                            <constraint firstAttribute="centerX" secondItem="fuD-QG-wP8" secondAttribute="centerX" id="Ny3-6Z-oKA"/>
                             <constraint firstItem="ikM-qL-vyw" firstAttribute="trailing" secondItem="Kj1-kb-LF2" secondAttribute="trailingMargin" id="O9S-OR-6so"/>
                             <constraint firstItem="ddi-aN-vlM" firstAttribute="leading" secondItem="Kj1-kb-LF2" secondAttribute="leading" id="PdH-UC-11U"/>
                             <constraint firstItem="a5x-rm-Fx1" firstAttribute="top" secondItem="3lp-lE-Oux" secondAttribute="bottom" constant="105" id="RFL-n7-4oA"/>
@@ -190,6 +225,7 @@ will be sent to you for your records.</string>
                             <constraint firstItem="gY2-y5-fND" firstAttribute="top" secondItem="3xK-c0-Pah" secondAttribute="bottom" constant="-8" id="cp4-Ep-F2V"/>
                             <constraint firstItem="QwO-ep-Om3" firstAttribute="top" secondItem="ikM-qL-vyw" secondAttribute="bottom" constant="6" id="eKt-Jk-Ttb"/>
                             <constraint firstItem="3xK-c0-Pah" firstAttribute="trailing" secondItem="Kj1-kb-LF2" secondAttribute="trailingMargin" id="eio-eH-r3b"/>
+                            <constraint firstAttribute="bottom" secondItem="fuD-QG-wP8" secondAttribute="bottom" constant="100" id="gKn-o4-QY8"/>
                             <constraint firstItem="tTU-aB-ynX" firstAttribute="width" secondItem="WLq-Ms-OSK" secondAttribute="width" id="iuY-nJ-UUo"/>
                             <constraint firstAttribute="centerX" secondItem="QwO-ep-Om3" secondAttribute="centerX" constant="-0.5" id="rJh-Oz-zxB"/>
                             <constraint firstItem="3lp-lE-Oux" firstAttribute="leading" secondItem="Kj1-kb-LF2" secondAttribute="leadingMargin" id="rnu-rc-p7p"/>
@@ -197,16 +233,23 @@ will be sent to you for your records.</string>
                             <constraint firstItem="3xK-c0-Pah" firstAttribute="leading" secondItem="Kj1-kb-LF2" secondAttribute="leadingMargin" id="yWn-hJ-Nxe"/>
                             <constraint firstAttribute="trailingMargin" secondItem="3lp-lE-Oux" secondAttribute="trailing" id="znn-Uv-IcD"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="gKn-o4-QY8"/>
+                            </mask>
+                        </variation>
                     </view>
                     <navigationItem key="navigationItem" id="nhs-F6-vkH"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="bottomMessageLabel" destination="yX7-Jl-zxX" id="FTv-48-xar"/>
                         <outlet property="changeEmailButton" destination="gY2-y5-fND" id="vNy-JB-kK6"/>
                         <outlet property="emailLabel" destination="3xK-c0-Pah" id="JpR-EY-Kpw"/>
                         <outlet property="logoImageView" destination="tTU-aB-ynX" id="xhh-SA-ugB"/>
                         <outlet property="resendEmailButton" destination="cVc-Jw-LIH" id="lPI-nw-88V"/>
+                        <outlet property="shareMessageButton" destination="Bzr-zG-t0U" id="Y6m-ef-sqs"/>
+                        <outlet property="shareMessageLabel" destination="fuD-QG-wP8" id="6WR-5c-SvY"/>
                         <outlet property="spinnerView" destination="ddi-aN-vlM" id="ywr-gW-U06"/>
                         <outlet property="topMessageLabel" destination="hsa-BE-Hkq" id="0Mn-zg-XPa"/>
                     </connections>

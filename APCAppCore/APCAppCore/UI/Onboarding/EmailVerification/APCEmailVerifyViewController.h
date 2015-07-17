@@ -1,4 +1,4 @@
-// 
+//
 //  APCEmailVerifyViewController.h 
 //  APCAppCore 
 // 
@@ -49,7 +49,10 @@
 @property (weak, nonatomic) IBOutlet UIButton *changeEmailButton;
 
 @property (weak, nonatomic) IBOutlet UIButton *resendEmailButton;
+@property (weak, nonatomic) IBOutlet UILabel *shareMessageLabel;
+@property (weak, nonatomic) IBOutlet UIButton *shareMessageButton;
 
 - (IBAction)changeEmailAddress:(id)sender;
+- (IBAction)showShare:(id)sender;
 
 @end
