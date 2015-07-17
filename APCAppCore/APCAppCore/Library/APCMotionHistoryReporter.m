@@ -37,6 +37,8 @@
 #import "APCConstants.h"
 #import "APCAppCore.h"
 
+static NSInteger const kSleepBlocksInSeconds = 10800; // 3 hours
+
 typedef NS_ENUM(NSInteger, MotionActivity)
 {
     MotionActivityStationary = 1,
@@ -89,12 +91,22 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
     return self;
 }
 
-- (void)startMotionCoProcessorDataFrom:(NSDate * __nonnull)startDate andEndDate:(NSDate * __nonnull)endDate andNumberOfDays:(NSInteger)numberOfDays {
-	[self startMotionCoProcessorDataFrom:startDate andEndDate:endDate andNumberOfDays:numberOfDays callback:^(NSArray *reports, NSError *error) {
-		if (error) {
-			NSLog(@"ERROR: %@", error.localizedDescription);
+- (void)startMotionCoProcessorDataFrom:(NSDate * __nonnull)startDate andEndDate:(NSDate * __nonnull)endDate andNumberOfDays:(NSInteger)numberOfDays
+{
+    [self startMotionCoProcessorDataFrom:startDate
+                              andEndDate:endDate
+                         andNumberOfDays:numberOfDays
+                                callback:^(NSArray *reports, NSError *error)
+    {
+        if (reports == nil)
+        {
+            if (error)
+            {
+                APCLogError2(error);
+            }
 		}
-		else {
+		else
+        {
 			[[NSNotificationCenter defaultCenter] postNotificationName:APCMotionHistoryReporterDoneNotification object:nil];
 		}
 	}];
@@ -145,6 +157,7 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
                                                                                         toDate:endDate
                                                                                        options:0];
   
+    __weak typeof(self) weakSelf = self;
     
     [motionActivityManager queryActivityStartingFromDate:newStartDate
                                                   toDate:newEndDate
@@ -224,8 +237,7 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
 
                     activityLength = fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
 
-
-                    if(activityLength >= 10800) // 3 hours in seconds
+                    if(activityLength >= kSleepBlocksInSeconds) // 3 hours in seconds
                     {
                       totalSleepTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
                       
@@ -233,7 +245,6 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
                     else
                     {
                       totalSedentaryTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
-                     
                     }
                 }
                 else if(lastMotionActivityType == MotionActivityUnknown)
@@ -242,76 +253,46 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
                   
                     if (activity.stationary)
                     {
-                      totalSedentaryTime += lastActivityDuration;
-                      lastActivity_started = activity.startDate;
+                        totalSedentaryTime += lastActivityDuration;
                     }
                     else if (activity.walking && activity.confidence == CMMotionActivityConfidenceLow)
                     {
-                      totalLightActivityTime += lastActivityDuration;
-                      lastActivity_started = activity.startDate;
+                        totalLightActivityTime += lastActivityDuration;
                     }
                     else if (activity.walking)
                     {
-                      totalModerateTime += lastActivityDuration;
-                      lastActivity_started = activity.startDate;
+                        totalModerateTime += lastActivityDuration;
                     }
                     else if (activity.running)
                     {
-                      totalRunningTime += lastActivityDuration;
-                      lastActivity_started = activity.startDate;
+                        if (activity.confidence == CMMotionActivityConfidenceLow)
+                        {
+                            totalModerateTime += lastActivityDuration;
+                        }
+                        else
+                        {
+                            totalRunningTime += lastActivityDuration;
+                        }
                     }
-
                     else if (activity.cycling)
                     {
-                      totalRunningTime += lastActivityDuration;
-                      lastActivity_started = activity.startDate;
+                        if (activity.confidence == CMMotionActivityConfidenceLow)
+                        {
+                            totalModerateTime += lastActivityDuration;
+                        }
+                        else
+                        {
+                            totalRunningTime += lastActivityDuration;
+                        }
                     }
                     else if (activity.automotive)
                     {
-                      totalSedentaryTime += lastActivityDuration;
-                      lastActivity_started = activity.startDate;
+                        totalSedentaryTime += lastActivityDuration;
                     }
-
-                    totalUnknownTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
                 }
               
-                if (activity.stationary)
-                {
-                  lastMotionActivityType = MotionActivityStationary;
-                  lastActivity_started = activity.startDate;
-                  
-                }
-                else if (activity.walking)
-                {
-                  lastMotionActivityType = MotionActivityWalking;
-                  lastActivity_started = activity.startDate;
-                  
-                }
-
-                else if (activity.running)
-                {
-                  lastMotionActivityType = MotionActivityRunning;
-                  lastActivity_started = activity.startDate;
-                  
-                }
-                else if (activity.automotive)
-                {
-                  lastMotionActivityType = MotionActivityAutomotive;
-                  lastActivity_started = activity.startDate;
-                  
-                }
-                else if (activity.cycling)
-                {
-                  lastMotionActivityType = MotionActivityCycling;
-                  lastActivity_started = activity.startDate;
-                  
-                }
-                else
-                {
-                  lastMotionActivityType = MotionActivityUnknown;
-                  lastActivity_started = activity.startDate;
-                  
-                }
+                lastMotionActivityType = [self lastMotionActivity:activity];
+                lastActivity_started = activity.startDate;
             }
 
             APCMotionHistoryData * motionHistoryVigorous = [APCMotionHistoryData new];
@@ -361,21 +342,53 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
                                                                                toDate:endDate
                                                                               options:0];
 
-            [self getMotionCoProcessorDataFrom:newStartDate
+            [weakSelf getMotionCoProcessorDataFrom:newStartDate
                                   andEndDate:endDate
                              andNumberOfDays:numberOfDays - 1];
         }
     }];
 }
 
-- (void)callDoneCallbackWithReports:(NSArray * __nullable )reports error:(NSError * __nullable )error {
-	if (_doneCallback) {
+- (MotionActivity)lastMotionActivity:(CMMotionActivity*)activity
+{
+    MotionActivity lastMotionActivityType;
+    
+    if (activity.stationary)
+    {
+        lastMotionActivityType = MotionActivityStationary;
+    }
+    else if (activity.walking)
+    {
+        lastMotionActivityType = MotionActivityWalking;
+    }
+    else if (activity.running)
+    {
+        lastMotionActivityType = MotionActivityRunning;
+    }
+    else if (activity.automotive)
+    {
+        lastMotionActivityType = MotionActivityAutomotive;
+    }
+    else if (activity.cycling)
+    {
+        lastMotionActivityType = MotionActivityCycling;
+    }
+    else
+    {
+        lastMotionActivityType = MotionActivityUnknown;
+    }
+    
+    return lastMotionActivityType;
+}
+
+- (void)callDoneCallbackWithReports:(NSArray * __nullable )reports error:(NSError * __nullable )error
+{
+	if (_doneCallback)
+    {
 		_doneCallback(reports, error);
 		self.doneCallback = nil;
 	}
 }
-
-
 
 -(NSArray*) retrieveMotionReport
 {
@@ -383,7 +396,8 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
     return [motionReport copy];
 }
 
--(BOOL)isDataReady{
+-(BOOL)isDataReady
+{
     return isTheDataReady;
 }
 
