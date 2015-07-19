@@ -339,7 +339,9 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
                                                                                toDate:endDate
                                                                               options:0];
 
-            [weakSelf getMotionCoProcessorDataFrom:newStartDate
+            __typeof(self) strongSelf = weakSelf;
+            
+            [strongSelf getMotionCoProcessorDataFrom:newStartDate
                                   andEndDate:endDate
                              andNumberOfDays:numberOfDays - 1];
         }
