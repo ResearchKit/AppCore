@@ -33,18 +33,18 @@
  
 #import <UIKit/UIKit.h>
 #import "APCDataSubstrate.h"
-#import "APCOnboarding.h"
 #import "APCPasscodeViewController.h"
 #import "APCProfileViewController.h"
+#import "APCOnboardingManager.h"
 #import "APCConsentTask.h"
 #import "APCDataUploader.h"
 
 extern NSUInteger   const kTheEntireDataModelOfTheApp;
 static NSString*    const kDatabaseName                     = @"db.sqlite";
 
-@class APCDataSubstrate, APCDataMonitor, APCScheduler, APCOnboarding, APCPasscodeViewController, APCTasksReminderManager, APCPassiveDataCollector, APCFitnessAllocation;
+@class APCDataSubstrate, APCDataMonitor, APCScheduler, APCPasscodeViewController, APCTasksReminderManager, APCPassiveDataCollector, APCFitnessAllocation;
 
-@interface APCAppDelegate : UIResponder <UIApplicationDelegate, APCOnboardingDelegate, APCOnboardingTaskDelegate, APCPasscodeViewControllerDelegate>
+@interface APCAppDelegate : UIResponder <UIApplicationDelegate, APCOnboardingManagerProvider, APCPasscodeViewControllerDelegate>
 
 @property (nonatomic, strong) APCFitnessAllocation *sevenDayFitnessAllocationData;
 @property (strong, nonatomic) UITabBarController *tabBarController;
@@ -66,7 +66,9 @@ static NSString*    const kDatabaseName                     = @"db.sqlite";
 @property (nonatomic, strong) NSDictionary * initializationOptions;
 - (NSMutableDictionary*) defaultInitializationOptions;
 
-@property (strong, nonatomic) APCOnboarding *onboarding;
+#pragma mark Onboarding
+
+@property (nonatomic, strong, readonly) APCOnboardingManager *onboardingManager;
 
 @property  (nonatomic, strong)  NSArray  *storyboardIdInfo;
 
@@ -114,8 +116,6 @@ static NSString*    const kDatabaseName                     = @"db.sqlite";
 
 - (ORKTaskViewController *)consentViewController;
 - (NSMutableArray*)consentSectionsAndHtmlContent:(NSString**)htmlContent;
-
-- (void)instantiateOnboardingForType:(APCOnboardingTaskType)type;
 
 - (NSDate*)applicationBecameActiveDate;
 
