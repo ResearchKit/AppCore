@@ -45,6 +45,10 @@
                      withLabel: (NSString *) label
              intoMutableString: (NSMutableString *) printout;
 
+- (void) printArrayOfSchedules: (NSArray *) schedules
+             intoMutableString: (NSMutableString *) printout
+                     withLabel: (NSString *) label;
+
 - (void) printSetOfSchedules: (NSSet *) schedules
            intoMutableString: (NSMutableString *) printout
                    withLabel: (NSString *) label;
@@ -52,5 +56,8 @@
 + (NSString *) stringFromDate: (NSDate *) date;
 - (NSString *) stringFromDate: (NSDate *) date;
 - (NSString *) stringsFromArrayOfDates: (NSArray *) arrayOfDates;
+
+- (NSString *) stringWithMillisecondsFromDate: (NSDate *) date;
++ (NSString *) stringWithMillisecondsFromDate: (NSDate *) date;
 
 @end

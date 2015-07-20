@@ -140,6 +140,12 @@ typedef void (^APCSchedulerCallbackForFetchingCount) (NSUInteger count, NSError 
 - (void) loadTasksAndSchedulesFromDiskAndThenUseThisQueue: (NSOperationQueue *) queue
                                          toDoThisWhenDone: (APCSchedulerCallbackForFetchAndLoadOperations) callbackBlock;
 
+- (void) loadTasksAndSchedulesFromDiskFileNamed: (NSString *) fileNameWithExtension
+                                       inBundle: (NSBundle *) bundle
+                                assigningSource: (APCScheduleSource) scheduleSource
+                            andThenUseThisQueue: (NSOperationQueue *) queue
+                               toDoThisWhenDone: (APCSchedulerCallbackForFetchAndLoadOperations) callbackBlock;
+
 - (void) importScheduleFromDictionary: (NSDictionary *) scheduleContainingTasks
                       assigningSource: (APCScheduleSource) scheduleSource
                   andThenUseThisQueue: (NSOperationQueue *) queue

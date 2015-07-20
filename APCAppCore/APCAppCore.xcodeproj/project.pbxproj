@@ -77,14 +77,6 @@
 		3627D3491A9A7517006B02E8 /* APCMedTrackerMedication.m in Sources */ = {isa = PBXBuildFile; fileRef = 3627D3471A9A7517006B02E8 /* APCMedTrackerMedication.m */; };
 		3627D34C1A9A7517006B02E8 /* APCMedTrackerPossibleDosage.h in Headers */ = {isa = PBXBuildFile; fileRef = 3627D34A1A9A7517006B02E8 /* APCMedTrackerPossibleDosage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3627D34D1A9A7517006B02E8 /* APCMedTrackerPossibleDosage.m in Sources */ = {isa = PBXBuildFile; fileRef = 3627D34B1A9A7517006B02E8 /* APCMedTrackerPossibleDosage.m */; };
-		363B6EE01B4F209400D1C233 /* APCScheduleStartDateFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 363B6ED41B4F209400D1C233 /* APCScheduleStartDateFilter.h */; };
-		363B6EE11B4F209400D1C233 /* APCScheduleStartDateFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 363B6ED51B4F209400D1C233 /* APCScheduleStartDateFilter.m */; };
-		363B6EE21B4F209400D1C233 /* APCScheduleFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 363B6ED61B4F209400D1C233 /* APCScheduleFilter.h */; };
-		363B6EE31B4F209400D1C233 /* APCScheduleFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 363B6ED71B4F209400D1C233 /* APCScheduleFilter.m */; };
-		363B6EE41B4F209400D1C233 /* APCExistingTaskFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 363B6ED81B4F209400D1C233 /* APCExistingTaskFilter.h */; };
-		363B6EE51B4F209400D1C233 /* APCExistingTaskFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 363B6ED91B4F209400D1C233 /* APCExistingTaskFilter.m */; };
-		363B6EE61B4F209400D1C233 /* APCScheduleSourceFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 363B6EDA1B4F209400D1C233 /* APCScheduleSourceFilter.h */; };
-		363B6EE71B4F209400D1C233 /* APCScheduleSourceFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 363B6EDB1B4F209400D1C233 /* APCScheduleSourceFilter.m */; };
 		364D348A1A7B1C8F0060B3F5 /* APCDataVerificationClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 364D34881A7B1C8F0060B3F5 /* APCDataVerificationClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		364D348B1A7B1C8F0060B3F5 /* APCDataVerificationClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 364D34891A7B1C8F0060B3F5 /* APCDataVerificationClient.m */; };
 		3650C65B1AA29BB50075C935 /* APCCatastrophicErrorViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 3650C6581AA29BB50075C935 /* APCCatastrophicErrorViewController.h */; };
@@ -125,22 +117,6 @@
 		36829A541A96B98F000AA2AB /* NSOperationQueue+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 36829A521A96B98F000AA2AB /* NSOperationQueue+Helper.m */; };
 		368BAFE91A9AD91A00F04ABB /* APCMedTrackerDailyDosageRecord.h in Headers */ = {isa = PBXBuildFile; fileRef = 368BAFE71A9AD91A00F04ABB /* APCMedTrackerDailyDosageRecord.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		368BAFEA1A9AD91A00F04ABB /* APCMedTrackerDailyDosageRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 368BAFE81A9AD91A00F04ABB /* APCMedTrackerDailyDosageRecord.m */; };
-		368C85201B4F20FB00E71050 /* APCCompletedOneTimeTaskFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 368C851E1B4F20FB00E71050 /* APCCompletedOneTimeTaskFilter.h */; };
-		368C85211B4F20FB00E71050 /* APCCompletedOneTimeTaskFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 368C851F1B4F20FB00E71050 /* APCCompletedOneTimeTaskFilter.m */; };
-		368C85241B4F25CE00E71050 /* APCScheduleTaskMap.h in Headers */ = {isa = PBXBuildFile; fileRef = 368C85221B4F25CE00E71050 /* APCScheduleTaskMap.h */; };
-		368C85251B4F25CE00E71050 /* APCScheduleTaskMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 368C85231B4F25CE00E71050 /* APCScheduleTaskMap.m */; };
-		368C85281B4F264100E71050 /* APCScheduleTaskMapEntry.h in Headers */ = {isa = PBXBuildFile; fileRef = 368C85261B4F264100E71050 /* APCScheduleTaskMapEntry.h */; };
-		368C85291B4F264100E71050 /* APCScheduleTaskMapEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 368C85271B4F264100E71050 /* APCScheduleTaskMapEntry.m */; };
-		368C852C1B4F294800E71050 /* APCScheduleInMapFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 368C852A1B4F294800E71050 /* APCScheduleInMapFilter.h */; };
-		368C852D1B4F294800E71050 /* APCScheduleInMapFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 368C852B1B4F294800E71050 /* APCScheduleInMapFilter.m */; };
-		368C85301B4F2D8D00E71050 /* APCUniqueTaskIdFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 368C852E1B4F2D8D00E71050 /* APCUniqueTaskIdFilter.h */; };
-		368C85311B4F2D8D00E71050 /* APCUniqueTaskIdFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 368C852F1B4F2D8D00E71050 /* APCUniqueTaskIdFilter.m */; };
-		368C85341B4F30B900E71050 /* APCMatchingScheduleFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 368C85321B4F30B900E71050 /* APCMatchingScheduleFilter.h */; };
-		368C85351B4F30B900E71050 /* APCMatchingScheduleFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 368C85331B4F30B900E71050 /* APCMatchingScheduleFilter.m */; };
-		368C853D1B4F4EA600E71050 /* APCMatchingSourceFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 368C853B1B4F4EA600E71050 /* APCMatchingSourceFilter.h */; };
-		368C853E1B4F4EA600E71050 /* APCMatchingSourceFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 368C853C1B4F4EA600E71050 /* APCMatchingSourceFilter.m */; };
-		368C85411B4F95BB00E71050 /* APCScheduleImporter.h in Headers */ = {isa = PBXBuildFile; fileRef = 368C853F1B4F95BB00E71050 /* APCScheduleImporter.h */; };
-		368C85421B4F95BB00E71050 /* APCScheduleImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 368C85401B4F95BB00E71050 /* APCScheduleImporter.m */; };
 		368C85441B4FAD1500E71050 /* APCScheduleQueryEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = 368C85431B4FAD1500E71050 /* APCScheduleQueryEngine.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		369B47551A853E8500777639 /* APCUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 369B47531A853E8500777639 /* APCUtilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		369B47561A853E8500777639 /* APCUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 369B47541A853E8500777639 /* APCUtilities.m */; };
@@ -182,6 +158,30 @@
 		369E28161A96B7A200D35DFA /* APCMedTrackerPredefinedPrescriptionColors.plist in Resources */ = {isa = PBXBuildFile; fileRef = 369E27E61A96B7A200D35DFA /* APCMedTrackerPredefinedPrescriptionColors.plist */; };
 		369E28171A96B7A200D35DFA /* APCMedTrackerPrescriptionColor+Helper.h in Headers */ = {isa = PBXBuildFile; fileRef = 369E27E71A96B7A200D35DFA /* APCMedTrackerPrescriptionColor+Helper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		369E28181A96B7A200D35DFA /* APCMedTrackerPrescriptionColor+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 369E27E81A96B7A200D35DFA /* APCMedTrackerPrescriptionColor+Helper.m */; };
+		36A979971B5807E60042B6C5 /* APCScheduleImporter.h in Headers */ = {isa = PBXBuildFile; fileRef = 36A979781B5807E60042B6C5 /* APCScheduleImporter.h */; };
+		36A979981B5807E60042B6C5 /* APCScheduleImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A979791B5807E60042B6C5 /* APCScheduleImporter.m */; };
+		36A9799D1B5807E60042B6C5 /* APCCompletedOneTimeTaskFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 36A979821B5807E60042B6C5 /* APCCompletedOneTimeTaskFilter.h */; };
+		36A9799E1B5807E60042B6C5 /* APCCompletedOneTimeTaskFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A979831B5807E60042B6C5 /* APCCompletedOneTimeTaskFilter.m */; };
+		36A9799F1B5807E60042B6C5 /* APCExistingTaskFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 36A979841B5807E60042B6C5 /* APCExistingTaskFilter.h */; };
+		36A979A01B5807E60042B6C5 /* APCExistingTaskFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A979851B5807E60042B6C5 /* APCExistingTaskFilter.m */; };
+		36A979A11B5807E60042B6C5 /* APCMatchingScheduleFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 36A979861B5807E60042B6C5 /* APCMatchingScheduleFilter.h */; };
+		36A979A21B5807E60042B6C5 /* APCMatchingScheduleFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A979871B5807E60042B6C5 /* APCMatchingScheduleFilter.m */; };
+		36A979A31B5807E60042B6C5 /* APCMatchingSourceFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 36A979881B5807E60042B6C5 /* APCMatchingSourceFilter.h */; };
+		36A979A41B5807E60042B6C5 /* APCMatchingSourceFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A979891B5807E60042B6C5 /* APCMatchingSourceFilter.m */; };
+		36A979A51B5807E60042B6C5 /* APCScheduleInMapFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 36A9798A1B5807E60042B6C5 /* APCScheduleInMapFilter.h */; };
+		36A979A61B5807E60042B6C5 /* APCScheduleInMapFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A9798B1B5807E60042B6C5 /* APCScheduleInMapFilter.m */; };
+		36A979A71B5807E60042B6C5 /* APCScheduleSourceFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 36A9798C1B5807E60042B6C5 /* APCScheduleSourceFilter.h */; };
+		36A979A81B5807E60042B6C5 /* APCScheduleSourceFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A9798D1B5807E60042B6C5 /* APCScheduleSourceFilter.m */; };
+		36A979A91B5807E60042B6C5 /* APCScheduleStartDateFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 36A9798E1B5807E60042B6C5 /* APCScheduleStartDateFilter.h */; };
+		36A979AA1B5807E60042B6C5 /* APCScheduleStartDateFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A9798F1B5807E60042B6C5 /* APCScheduleStartDateFilter.m */; };
+		36A979AB1B5807E60042B6C5 /* APCUniqueTaskIdFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 36A979901B5807E60042B6C5 /* APCUniqueTaskIdFilter.h */; };
+		36A979AC1B5807E60042B6C5 /* APCUniqueTaskIdFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A979911B5807E60042B6C5 /* APCUniqueTaskIdFilter.m */; };
+		36A979AD1B5807E60042B6C5 /* APCScheduleTaskMap.h in Headers */ = {isa = PBXBuildFile; fileRef = 36A979931B5807E60042B6C5 /* APCScheduleTaskMap.h */; };
+		36A979AE1B5807E60042B6C5 /* APCScheduleTaskMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A979941B5807E60042B6C5 /* APCScheduleTaskMap.m */; };
+		36A979AF1B5807E60042B6C5 /* APCScheduleTaskMapEntry.h in Headers */ = {isa = PBXBuildFile; fileRef = 36A979951B5807E60042B6C5 /* APCScheduleTaskMapEntry.h */; };
+		36A979B01B5807E60042B6C5 /* APCScheduleTaskMapEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A979961B5807E60042B6C5 /* APCScheduleTaskMapEntry.m */; };
+		36A979B31B5844670042B6C5 /* APCScheduleFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 36A979B11B5844670042B6C5 /* APCScheduleFilter.h */; };
+		36A979B41B5844670042B6C5 /* APCScheduleFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A979B21B5844670042B6C5 /* APCScheduleFilter.m */; };
 		36AAB34F1A9A75BB00FAC255 /* APCMedTrackerPrescription.h in Headers */ = {isa = PBXBuildFile; fileRef = 36AAB34D1A9A75BB00FAC255 /* APCMedTrackerPrescription.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		36AAB3501A9A75BB00FAC255 /* APCMedTrackerPrescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 36AAB34E1A9A75BB00FAC255 /* APCMedTrackerPrescription.m */; };
 		36AAB3541A9A760D00FAC255 /* APCMedTrackerPrescriptionColor.h in Headers */ = {isa = PBXBuildFile; fileRef = 36AAB3521A9A760D00FAC255 /* APCMedTrackerPrescriptionColor.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -849,16 +849,9 @@
 		3627D3471A9A7517006B02E8 /* APCMedTrackerMedication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = APCMedTrackerMedication.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		3627D34A1A9A7517006B02E8 /* APCMedTrackerPossibleDosage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = APCMedTrackerPossibleDosage.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		3627D34B1A9A7517006B02E8 /* APCMedTrackerPossibleDosage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = APCMedTrackerPossibleDosage.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		363B6ED41B4F209400D1C233 /* APCScheduleStartDateFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCScheduleStartDateFilter.h; sourceTree = "<group>"; };
-		363B6ED51B4F209400D1C233 /* APCScheduleStartDateFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScheduleStartDateFilter.m; sourceTree = "<group>"; };
-		363B6ED61B4F209400D1C233 /* APCScheduleFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = APCScheduleFilter.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		363B6ED71B4F209400D1C233 /* APCScheduleFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = APCScheduleFilter.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		363B6ED81B4F209400D1C233 /* APCExistingTaskFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = APCExistingTaskFilter.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		363B6ED91B4F209400D1C233 /* APCExistingTaskFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = APCExistingTaskFilter.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		363B6EDA1B4F209400D1C233 /* APCScheduleSourceFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCScheduleSourceFilter.h; sourceTree = "<group>"; };
-		363B6EDB1B4F209400D1C233 /* APCScheduleSourceFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScheduleSourceFilter.m; sourceTree = "<group>"; };
 		36469C311AA1433700C10CA7 /* APCModel 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "APCModel 2.xcdatamodel"; sourceTree = "<group>"; };
 		36469C321AA1650F00C10CA7 /* APCModel 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "APCModel 3.xcdatamodel"; sourceTree = "<group>"; };
+		3648DC551B59E7B8006B5491 /* ScheduleImportProcess-fourPages.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "ScheduleImportProcess-fourPages.pdf"; sourceTree = "<group>"; };
 		364D34881A7B1C8F0060B3F5 /* APCDataVerificationClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDataVerificationClient.h; sourceTree = "<group>"; };
 		364D34891A7B1C8F0060B3F5 /* APCDataVerificationClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDataVerificationClient.m; sourceTree = "<group>"; };
 		3650C6581AA29BB50075C935 /* APCCatastrophicErrorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCCatastrophicErrorViewController.h; sourceTree = "<group>"; };
@@ -898,22 +891,6 @@
 		36829A521A96B98F000AA2AB /* NSOperationQueue+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSOperationQueue+Helper.m"; sourceTree = "<group>"; };
 		368BAFE71A9AD91A00F04ABB /* APCMedTrackerDailyDosageRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCMedTrackerDailyDosageRecord.h; sourceTree = "<group>"; };
 		368BAFE81A9AD91A00F04ABB /* APCMedTrackerDailyDosageRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCMedTrackerDailyDosageRecord.m; sourceTree = "<group>"; };
-		368C851E1B4F20FB00E71050 /* APCCompletedOneTimeTaskFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = APCCompletedOneTimeTaskFilter.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		368C851F1B4F20FB00E71050 /* APCCompletedOneTimeTaskFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = APCCompletedOneTimeTaskFilter.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		368C85221B4F25CE00E71050 /* APCScheduleTaskMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCScheduleTaskMap.h; sourceTree = "<group>"; };
-		368C85231B4F25CE00E71050 /* APCScheduleTaskMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScheduleTaskMap.m; sourceTree = "<group>"; };
-		368C85261B4F264100E71050 /* APCScheduleTaskMapEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCScheduleTaskMapEntry.h; sourceTree = "<group>"; };
-		368C85271B4F264100E71050 /* APCScheduleTaskMapEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScheduleTaskMapEntry.m; sourceTree = "<group>"; };
-		368C852A1B4F294800E71050 /* APCScheduleInMapFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = APCScheduleInMapFilter.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		368C852B1B4F294800E71050 /* APCScheduleInMapFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = APCScheduleInMapFilter.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		368C852E1B4F2D8D00E71050 /* APCUniqueTaskIdFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCUniqueTaskIdFilter.h; sourceTree = "<group>"; };
-		368C852F1B4F2D8D00E71050 /* APCUniqueTaskIdFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCUniqueTaskIdFilter.m; sourceTree = "<group>"; };
-		368C85321B4F30B900E71050 /* APCMatchingScheduleFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = APCMatchingScheduleFilter.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		368C85331B4F30B900E71050 /* APCMatchingScheduleFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = APCMatchingScheduleFilter.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		368C853B1B4F4EA600E71050 /* APCMatchingSourceFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = APCMatchingSourceFilter.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		368C853C1B4F4EA600E71050 /* APCMatchingSourceFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = APCMatchingSourceFilter.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		368C853F1B4F95BB00E71050 /* APCScheduleImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCScheduleImporter.h; sourceTree = "<group>"; };
-		368C85401B4F95BB00E71050 /* APCScheduleImporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = APCScheduleImporter.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		368C85431B4FAD1500E71050 /* APCScheduleQueryEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCScheduleQueryEngine.h; sourceTree = "<group>"; };
 		369B47531A853E8500777639 /* APCUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCUtilities.h; sourceTree = "<group>"; };
 		369B47541A853E8500777639 /* APCUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCUtilities.m; sourceTree = "<group>"; };
@@ -957,6 +934,32 @@
 		369E27E61A96B7A200D35DFA /* APCMedTrackerPredefinedPrescriptionColors.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = APCMedTrackerPredefinedPrescriptionColors.plist; sourceTree = "<group>"; };
 		369E27E71A96B7A200D35DFA /* APCMedTrackerPrescriptionColor+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = "APCMedTrackerPrescriptionColor+Helper.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		369E27E81A96B7A200D35DFA /* APCMedTrackerPrescriptionColor+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "APCMedTrackerPrescriptionColor+Helper.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		36A979781B5807E60042B6C5 /* APCScheduleImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCScheduleImporter.h; sourceTree = "<group>"; };
+		36A979791B5807E60042B6C5 /* APCScheduleImporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScheduleImporter.m; sourceTree = "<group>"; };
+		36A9797B1B5807E60042B6C5 /* ScheduleImportProcess.graffle */ = {isa = PBXFileReference; lastKnownFileType = file; path = ScheduleImportProcess.graffle; sourceTree = "<group>"; };
+		36A9797C1B5807E60042B6C5 /* ScheduleImportProcess.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = ScheduleImportProcess.pdf; sourceTree = "<group>"; };
+		36A979821B5807E60042B6C5 /* APCCompletedOneTimeTaskFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCCompletedOneTimeTaskFilter.h; sourceTree = "<group>"; };
+		36A979831B5807E60042B6C5 /* APCCompletedOneTimeTaskFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCCompletedOneTimeTaskFilter.m; sourceTree = "<group>"; };
+		36A979841B5807E60042B6C5 /* APCExistingTaskFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCExistingTaskFilter.h; sourceTree = "<group>"; };
+		36A979851B5807E60042B6C5 /* APCExistingTaskFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCExistingTaskFilter.m; sourceTree = "<group>"; };
+		36A979861B5807E60042B6C5 /* APCMatchingScheduleFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCMatchingScheduleFilter.h; sourceTree = "<group>"; };
+		36A979871B5807E60042B6C5 /* APCMatchingScheduleFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCMatchingScheduleFilter.m; sourceTree = "<group>"; };
+		36A979881B5807E60042B6C5 /* APCMatchingSourceFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCMatchingSourceFilter.h; sourceTree = "<group>"; };
+		36A979891B5807E60042B6C5 /* APCMatchingSourceFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCMatchingSourceFilter.m; sourceTree = "<group>"; };
+		36A9798A1B5807E60042B6C5 /* APCScheduleInMapFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCScheduleInMapFilter.h; sourceTree = "<group>"; };
+		36A9798B1B5807E60042B6C5 /* APCScheduleInMapFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScheduleInMapFilter.m; sourceTree = "<group>"; };
+		36A9798C1B5807E60042B6C5 /* APCScheduleSourceFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCScheduleSourceFilter.h; sourceTree = "<group>"; };
+		36A9798D1B5807E60042B6C5 /* APCScheduleSourceFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScheduleSourceFilter.m; sourceTree = "<group>"; };
+		36A9798E1B5807E60042B6C5 /* APCScheduleStartDateFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCScheduleStartDateFilter.h; sourceTree = "<group>"; };
+		36A9798F1B5807E60042B6C5 /* APCScheduleStartDateFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScheduleStartDateFilter.m; sourceTree = "<group>"; };
+		36A979901B5807E60042B6C5 /* APCUniqueTaskIdFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCUniqueTaskIdFilter.h; sourceTree = "<group>"; };
+		36A979911B5807E60042B6C5 /* APCUniqueTaskIdFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCUniqueTaskIdFilter.m; sourceTree = "<group>"; };
+		36A979931B5807E60042B6C5 /* APCScheduleTaskMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCScheduleTaskMap.h; sourceTree = "<group>"; };
+		36A979941B5807E60042B6C5 /* APCScheduleTaskMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScheduleTaskMap.m; sourceTree = "<group>"; };
+		36A979951B5807E60042B6C5 /* APCScheduleTaskMapEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCScheduleTaskMapEntry.h; sourceTree = "<group>"; };
+		36A979961B5807E60042B6C5 /* APCScheduleTaskMapEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScheduleTaskMapEntry.m; sourceTree = "<group>"; };
+		36A979B11B5844670042B6C5 /* APCScheduleFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCScheduleFilter.h; sourceTree = "<group>"; };
+		36A979B21B5844670042B6C5 /* APCScheduleFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScheduleFilter.m; sourceTree = "<group>"; };
 		36AAB34D1A9A75BB00FAC255 /* APCMedTrackerPrescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = APCMedTrackerPrescription.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		36AAB34E1A9A75BB00FAC255 /* APCMedTrackerPrescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = APCMedTrackerPrescription.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		36AAB3521A9A760D00FAC255 /* APCMedTrackerPrescriptionColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCMedTrackerPrescriptionColor.h; sourceTree = "<group>"; };
@@ -1680,59 +1683,6 @@
 			name = "NSDateComponents+HelperTests";
 			sourceTree = "<group>";
 		};
-		361EC3E01B51899200E4F52C /* The individual filters */ = {
-			isa = PBXGroup;
-			children = (
-				368C851E1B4F20FB00E71050 /* APCCompletedOneTimeTaskFilter.h */,
-				368C851F1B4F20FB00E71050 /* APCCompletedOneTimeTaskFilter.m */,
-				368C85321B4F30B900E71050 /* APCMatchingScheduleFilter.h */,
-				368C85331B4F30B900E71050 /* APCMatchingScheduleFilter.m */,
-				368C852E1B4F2D8D00E71050 /* APCUniqueTaskIdFilter.h */,
-				368C852F1B4F2D8D00E71050 /* APCUniqueTaskIdFilter.m */,
-				363B6ED41B4F209400D1C233 /* APCScheduleStartDateFilter.h */,
-				363B6ED51B4F209400D1C233 /* APCScheduleStartDateFilter.m */,
-				363B6ED81B4F209400D1C233 /* APCExistingTaskFilter.h */,
-				363B6ED91B4F209400D1C233 /* APCExistingTaskFilter.m */,
-				368C853B1B4F4EA600E71050 /* APCMatchingSourceFilter.h */,
-				368C853C1B4F4EA600E71050 /* APCMatchingSourceFilter.m */,
-				363B6EDA1B4F209400D1C233 /* APCScheduleSourceFilter.h */,
-				363B6EDB1B4F209400D1C233 /* APCScheduleSourceFilter.m */,
-				368C852A1B4F294800E71050 /* APCScheduleInMapFilter.h */,
-				368C852B1B4F294800E71050 /* APCScheduleInMapFilter.m */,
-			);
-			name = "The individual filters";
-			sourceTree = "<group>";
-		};
-		361EC3E11B51899400E4F52C /* The Schedule-and-Task Map */ = {
-			isa = PBXGroup;
-			children = (
-				368C85221B4F25CE00E71050 /* APCScheduleTaskMap.h */,
-				368C85231B4F25CE00E71050 /* APCScheduleTaskMap.m */,
-				368C85261B4F264100E71050 /* APCScheduleTaskMapEntry.h */,
-				368C85271B4F264100E71050 /* APCScheduleTaskMapEntry.m */,
-			);
-			name = "The Schedule-and-Task Map";
-			sourceTree = "<group>";
-		};
-		361EC3E21B51899500E4F52C /* The Abstract Filter Superclass */ = {
-			isa = PBXGroup;
-			children = (
-				363B6ED61B4F209400D1C233 /* APCScheduleFilter.h */,
-				363B6ED71B4F209400D1C233 /* APCScheduleFilter.m */,
-			);
-			name = "The Abstract Filter Superclass";
-			sourceTree = "<group>";
-		};
-		363B6ED11B4F205D00D1C233 /* ScheduleFilterClasses */ = {
-			isa = PBXGroup;
-			children = (
-				361EC3E21B51899500E4F52C /* The Abstract Filter Superclass */,
-				361EC3E11B51899400E4F52C /* The Schedule-and-Task Map */,
-				361EC3E01B51899200E4F52C /* The individual filters */,
-			);
-			path = ScheduleFilterClasses;
-			sourceTree = "<group>";
-		};
 		364D34871A7B1C8F0060B3F5 /* DataVerificationClient */ = {
 			isa = PBXGroup;
 			children = (
@@ -1866,6 +1816,72 @@
 				369E27E81A96B7A200D35DFA /* APCMedTrackerPrescriptionColor+Helper.m */,
 			);
 			name = "Main classes. Please modify only the Helper files. The others are generated by CoreData.";
+			sourceTree = "<group>";
+		};
+		36A979771B5807E60042B6C5 /* ScheduleImporter */ = {
+			isa = PBXGroup;
+			children = (
+				36A979781B5807E60042B6C5 /* APCScheduleImporter.h */,
+				36A979791B5807E60042B6C5 /* APCScheduleImporter.m */,
+				36A9797A1B5807E60042B6C5 /* Documentation */,
+				36A979921B5807E60042B6C5 /* ScheduleTaskMap */,
+				36A9797D1B5807E60042B6C5 /* Filters */,
+			);
+			path = ScheduleImporter;
+			sourceTree = "<group>";
+		};
+		36A9797A1B5807E60042B6C5 /* Documentation */ = {
+			isa = PBXGroup;
+			children = (
+				36A9797B1B5807E60042B6C5 /* ScheduleImportProcess.graffle */,
+				36A9797C1B5807E60042B6C5 /* ScheduleImportProcess.pdf */,
+				3648DC551B59E7B8006B5491 /* ScheduleImportProcess-fourPages.pdf */,
+			);
+			path = Documentation;
+			sourceTree = "<group>";
+		};
+		36A9797D1B5807E60042B6C5 /* Filters */ = {
+			isa = PBXGroup;
+			children = (
+				36A979B11B5844670042B6C5 /* APCScheduleFilter.h */,
+				36A979B21B5844670042B6C5 /* APCScheduleFilter.m */,
+				36A979811B5807E60042B6C5 /* SpecificFilters */,
+			);
+			path = Filters;
+			sourceTree = "<group>";
+		};
+		36A979811B5807E60042B6C5 /* SpecificFilters */ = {
+			isa = PBXGroup;
+			children = (
+				36A979821B5807E60042B6C5 /* APCCompletedOneTimeTaskFilter.h */,
+				36A979831B5807E60042B6C5 /* APCCompletedOneTimeTaskFilter.m */,
+				36A979841B5807E60042B6C5 /* APCExistingTaskFilter.h */,
+				36A979851B5807E60042B6C5 /* APCExistingTaskFilter.m */,
+				36A979861B5807E60042B6C5 /* APCMatchingScheduleFilter.h */,
+				36A979871B5807E60042B6C5 /* APCMatchingScheduleFilter.m */,
+				36A979881B5807E60042B6C5 /* APCMatchingSourceFilter.h */,
+				36A979891B5807E60042B6C5 /* APCMatchingSourceFilter.m */,
+				36A9798A1B5807E60042B6C5 /* APCScheduleInMapFilter.h */,
+				36A9798B1B5807E60042B6C5 /* APCScheduleInMapFilter.m */,
+				36A9798C1B5807E60042B6C5 /* APCScheduleSourceFilter.h */,
+				36A9798D1B5807E60042B6C5 /* APCScheduleSourceFilter.m */,
+				36A9798E1B5807E60042B6C5 /* APCScheduleStartDateFilter.h */,
+				36A9798F1B5807E60042B6C5 /* APCScheduleStartDateFilter.m */,
+				36A979901B5807E60042B6C5 /* APCUniqueTaskIdFilter.h */,
+				36A979911B5807E60042B6C5 /* APCUniqueTaskIdFilter.m */,
+			);
+			path = SpecificFilters;
+			sourceTree = "<group>";
+		};
+		36A979921B5807E60042B6C5 /* ScheduleTaskMap */ = {
+			isa = PBXGroup;
+			children = (
+				36A979931B5807E60042B6C5 /* APCScheduleTaskMap.h */,
+				36A979941B5807E60042B6C5 /* APCScheduleTaskMap.m */,
+				36A979951B5807E60042B6C5 /* APCScheduleTaskMapEntry.h */,
+				36A979961B5807E60042B6C5 /* APCScheduleTaskMapEntry.m */,
+			);
+			path = ScheduleTaskMap;
 			sourceTree = "<group>";
 		};
 		36EE894F1A2FEFD700AEA9E6 /* APCScheduleExpressionTests */ = {
@@ -2423,8 +2439,9 @@
 				7BCF702F1ACB6C4A00838717 /* PassiveDataCollector */,
 				F5B9478E1A73272C0034C522 /* Permissions */,
 				6CD8B6761AC501250061E6D6 /* Reminders */,
-				F5B947911A73272C0034C522 /* ScheduleExpression */,
 				F5B947A71A73272C0034C522 /* Scheduler */,
+				F5B947911A73272C0034C522 /* ScheduleExpression */,
+				36A979771B5807E60042B6C5 /* ScheduleImporter */,
 				F5B947AA1A73272C0034C522 /* Scoring */,
 				7B6C8CC11AA26F150007B560 /* Stack */,
 			);
@@ -2633,15 +2650,12 @@
 				366345981B1F865B003CC0EF /* APCActivitiesDateState.m */,
 				366345991B1F865B003CC0EF /* APCScheduleDebugPrinter.h */,
 				3663459A1B1F865B003CC0EF /* APCScheduleDebugPrinter.m */,
-				368C853F1B4F95BB00E71050 /* APCScheduleImporter.h */,
-				368C85401B4F95BB00E71050 /* APCScheduleImporter.m */,
 				3663459B1B1F865B003CC0EF /* APCScheduleIntervalEnumerator.h */,
 				3663459C1B1F865B003CC0EF /* APCScheduleIntervalEnumerator.m */,
 				366345A31B1F8666003CC0EF /* APCTaskGroupCacheEntry.h */,
 				366345A41B1F8666003CC0EF /* APCTaskGroupCacheEntry.m */,
 				366345A51B1F8666003CC0EF /* APCTopLevelScheduleEnumerator.h */,
 				366345A61B1F8666003CC0EF /* APCTopLevelScheduleEnumerator.m */,
-				363B6ED11B4F205D00D1C233 /* ScheduleFilterClasses */,
 			);
 			path = Scheduler;
 			sourceTree = "<group>";
@@ -3176,9 +3190,9 @@
 			files = (
 				CFFDED731A95731F00B25581 /* APCMedicationTrackerCalendarWeeklyView.h in Headers */,
 				F5F12AF01A2F78490015982C /* APCDashboardProgressTableViewCell.h in Headers */,
-				363B6EE41B4F209400D1C233 /* APCExistingTaskFilter.h in Headers */,
 				08EA2AB31A7AD564007549C0 /* UIImage+ImageEffects.h in Headers */,
 				5BB10C0A1A91D540002D2DD2 /* APCStudyVideoCollectionViewCell.h in Headers */,
+				36A979B31B5844670042B6C5 /* APCScheduleFilter.h in Headers */,
 				7B558D281AE587DF00129167 /* CLLocation+APCAdditions.h in Headers */,
 				5BD6EBC41A9D905100C3BFB0 /* APCPermissionPrimingViewController.h in Headers */,
 				3654318D1A9A7BC200D66D97 /* APCMedTrackerInflatableItem.h in Headers */,
@@ -3223,7 +3237,6 @@
 				F5F12ABA1A2F78490015982C /* APCActivitiesViewController.h in Headers */,
 				CFFDED801A95731F00B25581 /* UIColor+MedicationTracker.h in Headers */,
 				F5B947B71A73272C0034C522 /* APCStepProgressBar+Appearance.h in Headers */,
-				368C85281B4F264100E71050 /* APCScheduleTaskMapEntry.h in Headers */,
 				5BD6EBA21A9A46BB00C3BFB0 /* APCStudyLandingCollectionViewCell.h in Headers */,
 				5B827B601A81CAE200C685A3 /* APCDashboardTableViewCell.h in Headers */,
 				F5F12ADA1A2F78490015982C /* APCPickerTableViewCell.h in Headers */,
@@ -3249,7 +3262,6 @@
 				F5F12AE81A2F78490015982C /* APCDashboardEditTableViewCell.h in Headers */,
 				369E27F51A96B7A200D35DFA /* APCMedicationPossibleDosage.h in Headers */,
 				7B8DBEC21AA186B2007B4026 /* APCVerticalThinLineView.h in Headers */,
-				363B6EE61B4F209400D1C233 /* APCScheduleSourceFilter.h in Headers */,
 				F5B947FE1A73272C0034C522 /* APCScheduleExpression.h in Headers */,
 				F5B946431A7309A20034C522 /* ZZOldArchiveEntryWriter.h in Headers */,
 				CFEF5CAD1A807DE4009A8634 /* APCCustomBackButton.h in Headers */,
@@ -3269,6 +3281,7 @@
 				F5B9464A1A7309A20034C522 /* ZZStoreOutputStream.h in Headers */,
 				CFFDED7E1A95731F00B25581 /* NSDictionary+MedicationTracker.h in Headers */,
 				CFFDEDE01A95734000B25581 /* APCMedicationFrequencyViewController.h in Headers */,
+				36A9799D1B5807E60042B6C5 /* APCCompletedOneTimeTaskFilter.h in Headers */,
 				7B6C8CBB1AA26ECE0007B560 /* APCConsentQuestion.h in Headers */,
 				5BD6EBB71A9C77D900C3BFB0 /* APCBaseGraphView.h in Headers */,
 				F5F12B061A2F78490015982C /* APCUserInfoViewController.h in Headers */,
@@ -3291,7 +3304,6 @@
 				F5F12A6C1A2F78490015982C /* APCAppDelegate.h in Headers */,
 				36AAB34F1A9A75BB00FAC255 /* APCMedTrackerPrescription.h in Headers */,
 				5BB10C131A91F970002D2DD2 /* APCWebViewController.h in Headers */,
-				363B6EE21B4F209400D1C233 /* APCScheduleFilter.h in Headers */,
 				F5F12A871A2F78490015982C /* APCSignUpTask.h in Headers */,
 				36D0510E1ABB92F0008FC9B3 /* NSFileManager+Helper.h in Headers */,
 				F5B947AF1A73272C0034C522 /* UIColor+APCAppearance.h in Headers */,
@@ -3336,7 +3348,6 @@
 				7B544B331ADF084F00361FB6 /* APCDisplacementTrackingCollector.h in Headers */,
 				F5B947E71A73272C0034C522 /* APCSegmentedButton.h in Headers */,
 				F5B947C71A73272C0034C522 /* NSObject+Helper.h in Headers */,
-				368C85411B4F95BB00E71050 /* APCScheduleImporter.h in Headers */,
 				747307101A96E1DE0071D863 /* APCCMS.h in Headers */,
 				7423AB5B1AA3FFD8004A325A /* APCConsentRedirector.h in Headers */,
 				087468061AA691A400BE2572 /* APCThankYouViewController.h in Headers */,
@@ -3358,13 +3369,13 @@
 				F5B946471A7309A20034C522 /* ZZStandardCryptoEngine.h in Headers */,
 				7BA5D99E1AA43F50006F505F /* APCStoredUserData.h in Headers */,
 				369E28101A96B7A200D35DFA /* APCMedTrackerPossibleDosage+Helper.h in Headers */,
+				36A979A31B5807E60042B6C5 /* APCMatchingSourceFilter.h in Headers */,
 				F5B947CF1A73272C0034C522 /* UIAlertController+Helper.h in Headers */,
 				F5F12A0E1A2F78490015982C /* APCUser+UserData.h in Headers */,
 				CFFDED7C1A95731F00B25581 /* NSDate+MedicationTracker.h in Headers */,
 				F5F12AA41A2F78490015982C /* APCSignInViewController.h in Headers */,
 				6C6AA2831B4E056C0056AD47 /* APCDataVerificationDaemon.h in Headers */,
 				7BD1D3D41A702ED200D6A377 /* APCDataResult.h in Headers */,
-				368C85341B4F30B900E71050 /* APCMatchingScheduleFilter.h in Headers */,
 				F5B947BB1A73272C0034C522 /* NSBundle+Helper.h in Headers */,
 				F5F12B0A1A2F78490015982C /* APCPasscodeView.h in Headers */,
 				CFFDEDE61A95734000B25581 /* APCMedicationColorViewController.h in Headers */,
@@ -3388,8 +3399,10 @@
 				F5F12A811A2F78490015982C /* APCPresentAnimator.h in Headers */,
 				F5B9462B1A7309A20034C522 /* ZZConstants.h in Headers */,
 				6C6AA3401B55EA6C0056AD47 /* ORKFileResult+Filename.h in Headers */,
+				36A979A71B5807E60042B6C5 /* APCScheduleSourceFilter.h in Headers */,
 				5B7D471C1B0549FA00958921 /* APCCubicCurveAlgorithm.h in Headers */,
 				F5B9480A1A73272C0034C522 /* APCScheduleExpressionToken.h in Headers */,
+				36A979AB1B5807E60042B6C5 /* APCUniqueTaskIdFilter.h in Headers */,
 				F5F12AD01A2F78490015982C /* APCWithdrawSurveyViewController.h in Headers */,
 				368BAFE91A9AD91A00F04ABB /* APCMedTrackerDailyDosageRecord.h in Headers */,
 				3663459F1B1F865B003CC0EF /* APCScheduleDebugPrinter.h in Headers */,
@@ -3409,6 +3422,7 @@
 				369E27EB1A96B7A200D35DFA /* APCMedicationActualMedicine.h in Headers */,
 				F5F12AF81A2F78490015982C /* APCGenericSurveyTaskViewController.h in Headers */,
 				F5B947F21A73272C0034C522 /* APCParametersCell.h in Headers */,
+				36A9799F1B5807E60042B6C5 /* APCExistingTaskFilter.h in Headers */,
 				CFFDEDF51A95734000B25581 /* APCMedicationTrackerSetupViewController.h in Headers */,
 				F5B9480E1A73272C0034C522 /* APCTimeSelector.h in Headers */,
 				F5B947F41A73272C0034C522 /* APCParametersCoreDataCell.h in Headers */,
@@ -3421,6 +3435,8 @@
 				5B9B36A31A95D9B500389F42 /* APCActivitiesTintedTableViewCell.h in Headers */,
 				3627D34C1A9A7517006B02E8 /* APCMedTrackerPossibleDosage.h in Headers */,
 				369E27FC1A96B7A200D35DFA /* APCMedicationWeeklySchedule.h in Headers */,
+				36A979A11B5807E60042B6C5 /* APCMatchingScheduleFilter.h in Headers */,
+				36A979A91B5807E60042B6C5 /* APCScheduleStartDateFilter.h in Headers */,
 				F5F129F81A2F78490015982C /* APCResult.h in Headers */,
 				F5F129EC1A2F78490015982C /* APCDataSubstrate.h in Headers */,
 				5B827B551A80CB0400C685A3 /* APCFadeAnimator.h in Headers */,
@@ -3436,7 +3452,6 @@
 				F5F12A971A2F78490015982C /* APCUserInfoConstants.h in Headers */,
 				F5F12B081A2F78490015982C /* APCImageButton.h in Headers */,
 				CFFDEDD71A95734000B25581 /* APCMedicationDosageViewController.h in Headers */,
-				368C85201B4F20FB00E71050 /* APCCompletedOneTimeTaskFilter.h in Headers */,
 				369E28021A96B7A200D35DFA /* APCMedTrackerDataStorageManager.h in Headers */,
 				7B76F94B1AD34A72003508EB /* APCCoreMotionBackgroundDataCollector.h in Headers */,
 				F5F12AC01A2F78490015982C /* APCGraphViewController.h in Headers */,
@@ -3450,25 +3465,22 @@
 				7BEC13D61AA3AA5B00CA316C /* APCFitnessAllocation.h in Headers */,
 				369E27ED1A96B7A200D35DFA /* APCMedicationColor.h in Headers */,
 				369E27EF1A96B7A200D35DFA /* APCMedicationDataStorageEngine.h in Headers */,
-				363B6EE01B4F209400D1C233 /* APCScheduleStartDateFilter.h in Headers */,
 				369B47551A853E8500777639 /* APCUtilities.h in Headers */,
+				36A979AD1B5807E60042B6C5 /* APCScheduleTaskMap.h in Headers */,
 				F5F12A711A2F78490015982C /* APCConcentricProgressView.h in Headers */,
 				5B7EA0231A44C21200924DEE /* APCFormTextField.h in Headers */,
 				F5B946381A7309A20034C522 /* ZZFileChannelOutput.h in Headers */,
 				F5F12A7F1A2F78490015982C /* APCLineGraphView.h in Headers */,
 				F5B947E51A73272C0034C522 /* APCKeychainStore.h in Headers */,
-				368C85301B4F2D8D00E71050 /* APCUniqueTaskIdFilter.h in Headers */,
 				7BEC13D41AA3AA5B00CA316C /* APCActivityTrackingStepViewController.h in Headers */,
 				366345811B1F857C003CC0EF /* APCDataMigrationPolicy_Model4ToModel6.h in Headers */,
 				F5F12AD61A2F78490015982C /* APCDefaultTableViewCell.h in Headers */,
-				368C852C1B4F294800E71050 /* APCScheduleInMapFilter.h in Headers */,
 				369C77961B1FB317007DD687 /* APCActivitiesViewSection.h in Headers */,
 				F5B9462D1A7309A20034C522 /* ZZDataChannel.h in Headers */,
 				366345A11B1F865B003CC0EF /* APCScheduleIntervalEnumerator.h in Headers */,
 				CFFDED751A95731F00B25581 /* APCMedicationTrackerDayTitleLabel.h in Headers */,
 				F5B947D11A73272C0034C522 /* UIImage+APCHelper.h in Headers */,
 				0871A3931A8F4244002EA80D /* APCDashboardFoodInsightTableViewCell.h in Headers */,
-				368C85241B4F25CE00E71050 /* APCScheduleTaskMap.h in Headers */,
 				F5B948021A73272C0034C522 /* APCListSelector.h in Headers */,
 				089465521A8C211100A983AC /* APCInsights.h in Headers */,
 				F5B947ED1A73272C0034C522 /* APCParameters+Settings.h in Headers */,
@@ -3477,10 +3489,10 @@
 				CFFDED701A95731F00B25581 /* APCMedicationTrackerCalendarViewController.h in Headers */,
 				369E28081A96B7A200D35DFA /* APCMedTrackerMedication+Helper.h in Headers */,
 				F5F12A021A2F78490015982C /* APCScheduledTask.h in Headers */,
-				368C853D1B4F4EA600E71050 /* APCMatchingSourceFilter.h in Headers */,
 				369E28041A96B7A200D35DFA /* APCMedTrackerInflatableItem+Helper.h in Headers */,
 				F5B947C11A73272C0034C522 /* NSDictionary+APCAdditions.h in Headers */,
 				F5F12A101A2F78490015982C /* APCUser.h in Headers */,
+				36A979A51B5807E60042B6C5 /* APCScheduleInMapFilter.h in Headers */,
 				08023C531AAA12DF008E6DDA /* APCAllSetTableViewCell.h in Headers */,
 				366345911B1F8627003CC0EF /* NSArray+APCHelper.h in Headers */,
 				F5B948041A73272C0034C522 /* APCPointSelector.h in Headers */,
@@ -3491,9 +3503,11 @@
 				7B6C8CB71AA26ECE0007B560 /* APCConsentBooleanQuestion.h in Headers */,
 				5B827B4C1A80A39900C685A3 /* APCDashboardMoreInfoViewController.h in Headers */,
 				369E27FA1A96B7A200D35DFA /* APCMedicationUltraSimpleSelfInflator.h in Headers */,
+				36A979AF1B5807E60042B6C5 /* APCScheduleTaskMapEntry.h in Headers */,
 				CFBD289A1AA4408800F49161 /* APCMedicationNameTableViewCell.h in Headers */,
 				369E280C1A96B7A200D35DFA /* APCMedTrackerPrescription+Helper.h in Headers */,
 				F5B948061A73272C0034C522 /* APCScheduleEnumerator.h in Headers */,
+				36A979971B5807E60042B6C5 /* APCScheduleImporter.h in Headers */,
 				6C6AA27D1B4E056C0056AD47 /* APCDataArchiveUploader.h in Headers */,
 				F5B9463B1A7309A20034C522 /* ZZInflateInputStream.h in Headers */,
 				F5F12AA81A2F78490015982C /* APCInclusionCriteriaViewController.h in Headers */,
@@ -3699,15 +3713,15 @@
 				F5B9480B1A73272C0034C522 /* APCScheduleExpressionToken.m in Sources */,
 				F5F12AB31A2F78490015982C /* APCSignupPasscodeViewController.m in Sources */,
 				7BA67A7B1AB174B500238899 /* APCTasksAndSchedulesMigrationUtility.m in Sources */,
+				36A979A41B5807E60042B6C5 /* APCMatchingSourceFilter.m in Sources */,
 				0894654A1A8C179700A983AC /* APCDashboardInsightTableViewCell.m in Sources */,
 				CFFDED761A95731F00B25581 /* APCMedicationTrackerDayTitleLabel.m in Sources */,
+				36A979A21B5807E60042B6C5 /* APCMatchingScheduleFilter.m in Sources */,
 				5B7EA0241A44C21200924DEE /* APCFormTextField.m in Sources */,
 				7B6C8CC01AA26ECE0007B560 /* APCConsentTextChoiceQuestion.m in Sources */,
 				F5B947FD1A73272C0034C522 /* APCPermissionsManager.m in Sources */,
-				363B6EE51B4F209400D1C233 /* APCExistingTaskFilter.m in Sources */,
 				CF7945871AA7AEC70019160F /* APCFrequencyEverydayTableViewCell.m in Sources */,
 				366345A81B1F8666003CC0EF /* APCTaskGroupCacheEntry.m in Sources */,
-				363B6EE31B4F209400D1C233 /* APCScheduleFilter.m in Sources */,
 				7B6C8CC51AA26F150007B560 /* APCStack.m in Sources */,
 				7B544B3C1ADF09E900361FB6 /* APCPassiveDisplacementTrackingDataUploader.m in Sources */,
 				F5F129F91A2F78490015982C /* APCResult.m in Sources */,
@@ -3719,7 +3733,9 @@
 				3651424E1AA78521008A5CFA /* APCDataArchiverAndUploader.m in Sources */,
 				5B9B36AC1A95DC1700389F42 /* APCActivitiesTableViewCell.m in Sources */,
 				369E28051A96B7A200D35DFA /* APCMedTrackerInflatableItem+Helper.m in Sources */,
+				36A979B41B5844670042B6C5 /* APCScheduleFilter.m in Sources */,
 				F5F12B091A2F78490015982C /* APCImageButton.m in Sources */,
+				36A979B01B5807E60042B6C5 /* APCScheduleTaskMapEntry.m in Sources */,
 				F5F12A911A2F78490015982C /* APCSpinnerViewController.m in Sources */,
 				F5F12AC81A2F78490015982C /* APCChangePasscodeViewController.m in Sources */,
 				7BD1D3D51A702ED200D6A377 /* APCDataResult.m in Sources */,
@@ -3730,15 +3746,12 @@
 				369E28091A96B7A200D35DFA /* APCMedTrackerMedication+Helper.m in Sources */,
 				F5F12AF31A2F78490015982C /* APCBaseTaskViewController.m in Sources */,
 				F5F12AE11A2F78490015982C /* APCSwitchTableViewCell.m in Sources */,
-				368C85211B4F20FB00E71050 /* APCCompletedOneTimeTaskFilter.m in Sources */,
 				F5B946351A7309A20034C522 /* ZZError.m in Sources */,
 				5BE106F11A9EE2D900CA5A07 /* APCDashboardGraphTableViewCell.m in Sources */,
 				CFFDEDF31A95734000B25581 /* APCMedicationSummaryTableViewCell.m in Sources */,
 				7B362C071B02A34500127051 /* APCDataArchiver.m in Sources */,
-				368C852D1B4F294800E71050 /* APCScheduleInMapFilter.m in Sources */,
 				7B8DBEC51AA1871D007B4026 /* APCVerticalThinLineView.m in Sources */,
 				5B0432A01A318AA2000DC9ED /* APCSignInTask.m in Sources */,
-				363B6EE11B4F209400D1C233 /* APCScheduleStartDateFilter.m in Sources */,
 				F5F12A0F1A2F78490015982C /* APCUser+UserData.m in Sources */,
 				3663459E1B1F865B003CC0EF /* APCActivitiesDateState.m in Sources */,
 				F5F12AC11A2F78490015982C /* APCGraphViewController.m in Sources */,
@@ -3764,6 +3777,7 @@
 				5BD6EBB81A9C77D900C3BFB0 /* APCBaseGraphView.m in Sources */,
 				F5F12A961A2F78490015982C /* APCStudyOverviewViewController.m in Sources */,
 				F5B947BE1A73272C0034C522 /* NSDate+Helper.m in Sources */,
+				36A979A81B5807E60042B6C5 /* APCScheduleSourceFilter.m in Sources */,
 				F5F12AD51A2F78490015982C /* APCCheckTableViewCell.m in Sources */,
 				366345801B1F857C003CC0EF /* APCDataMigrationMetadata_Model4ToModel6.m in Sources */,
 				F5F12AE51A2F78490015982C /* APCTintedTableViewCell.m in Sources */,
@@ -3792,7 +3806,6 @@
 				0875C3D91A797A7B00CE50FB /* APCButton.m in Sources */,
 				366345A01B1F865B003CC0EF /* APCScheduleDebugPrinter.m in Sources */,
 				F5B9464B1A7309A20034C522 /* ZZStoreOutputStream.m in Sources */,
-				368C853E1B4F4EA600E71050 /* APCMatchingSourceFilter.m in Sources */,
 				F5F12B0D1A2F78490015982C /* APCPermissionButton.m in Sources */,
 				369E27F61A96B7A200D35DFA /* APCMedicationPossibleDosage.m in Sources */,
 				7B07B8AF1ACDD7B400734558 /* APCHealthKitBackgroundDataCollector.m in Sources */,
@@ -3805,7 +3818,6 @@
 				7BEC13D71AA3AA5B00CA316C /* APCFitnessAllocation.m in Sources */,
 				CFFDED781A95731F00B25581 /* APCMedicationTrackerDetailViewController.m in Sources */,
 				3663458A1B1F85EA003CC0EF /* APCPotentialScheduledTask.m in Sources */,
-				368C85291B4F264100E71050 /* APCScheduleTaskMapEntry.m in Sources */,
 				F5F12AFC1A2F78490015982C /* APCInstructionStepViewController.m in Sources */,
 				CFFDEDD81A95734000B25581 /* APCMedicationDosageViewController.m in Sources */,
 				369E27EC1A96B7A200D35DFA /* APCMedicationActualMedicine.m in Sources */,
@@ -3822,7 +3834,6 @@
 				CFFDEDE41A95734000B25581 /* APCColorSwatchTableViewCell.m in Sources */,
 				7B8DBEC31AA186C4007B4026 /* APCHorizontalThinLineView.m in Sources */,
 				F5B947F91A73272C0034C522 /* APCParametersUserDefaultCell.m in Sources */,
-				368C85421B4F95BB00E71050 /* APCScheduleImporter.m in Sources */,
 				F5F12AEF1A2F78490015982C /* APCDashboardPieGraphTableViewCell.m in Sources */,
 				CFFDED7F1A95731F00B25581 /* NSDictionary+MedicationTracker.m in Sources */,
 				F5F12A721A2F78490015982C /* APCConcentricProgressView.m in Sources */,
@@ -3831,6 +3842,7 @@
 				F5B947FF1A73272C0034C522 /* APCScheduleExpression.m in Sources */,
 				F5306CCE1A8BE7F600732E60 /* ORKQuestionResult+APCHelper.m in Sources */,
 				CFFDEDF01A95734000B25581 /* APCMedicationNameViewController.m in Sources */,
+				36A979AC1B5807E60042B6C5 /* APCUniqueTaskIdFilter.m in Sources */,
 				F5F129EB1A2F78490015982C /* APCDataSubstrate+ResearchKit.m in Sources */,
 				3627D34D1A9A7517006B02E8 /* APCMedTrackerPossibleDosage.m in Sources */,
 				5B9B36A41A95D9B500389F42 /* APCActivitiesTintedTableViewCell.m in Sources */,
@@ -3840,7 +3852,7 @@
 				F5B948051A73272C0034C522 /* APCPointSelector.m in Sources */,
 				F5F12AAD1A2F78490015982C /* APCSignUpGeneralInfoViewController.m in Sources */,
 				F5B948151A73272C0034C522 /* APCScoring.m in Sources */,
-				363B6EE71B4F209400D1C233 /* APCScheduleSourceFilter.m in Sources */,
+				36A979A01B5807E60042B6C5 /* APCExistingTaskFilter.m in Sources */,
 				7B751D581B0A61A600E77BD2 /* NSDictionary+APCStringify.m in Sources */,
 				F5B947B81A73272C0034C522 /* APCStepProgressBar+Appearance.m in Sources */,
 				6C8646411AF8077300B46C49 /* APCCorrelationsSelectorViewController.m in Sources */,
@@ -3858,11 +3870,11 @@
 				CFFDEDDE1A95734000B25581 /* APCFrequencyTableViewTimesCell.m in Sources */,
 				712AB44D1A9E692400556DA2 /* APCMotionHistoryData.m in Sources */,
 				36AAB3501A9A75BB00FAC255 /* APCMedTrackerPrescription.m in Sources */,
+				36A979A61B5807E60042B6C5 /* APCScheduleInMapFilter.m in Sources */,
 				36257FBE1AA714B60060B95A /* CMMotionActivity+Helper.m in Sources */,
 				F5B947C61A73272C0034C522 /* NSManagedObject+APCHelper.m in Sources */,
 				F5B947DC1A73272C0034C522 /* APCLog.m in Sources */,
 				08023C501AA94F48008E6DDA /* APCAllSetContentViewController.m in Sources */,
-				368C85311B4F2D8D00E71050 /* APCUniqueTaskIdFilter.m in Sources */,
 				F5F12AD31A2F78490015982C /* APCAddressTableViewCell.m in Sources */,
 				F5F12A701A2F78490015982C /* APCCircularProgressView.m in Sources */,
 				5B827B611A81CAE200C685A3 /* APCDashboardTableViewCell.m in Sources */,
@@ -3901,8 +3913,10 @@
 				F5F12AE31A2F78490015982C /* APCTextFieldTableViewCell.m in Sources */,
 				369E27FF1A96B7A200D35DFA /* APCMedTrackerDailyDosageRecord+Helper.m in Sources */,
 				369E27F41A96B7A200D35DFA /* APCMedicationLozenge.m in Sources */,
+				36A979AE1B5807E60042B6C5 /* APCScheduleTaskMap.m in Sources */,
 				7BF54F981AA158E50081C935 /* APCHorizontalBottomThinLineView.m in Sources */,
 				369E27FB1A96B7A200D35DFA /* APCMedicationUltraSimpleSelfInflator.m in Sources */,
+				36A979AA1B5807E60042B6C5 /* APCScheduleStartDateFilter.m in Sources */,
 				F5F12ABB1A2F78490015982C /* APCActivitiesViewController.m in Sources */,
 				5B7D471F1B0549FA00958921 /* APCNormalDistributionGraphView.m in Sources */,
 				5BB10C141A91F970002D2DD2 /* APCWebViewController.m in Sources */,
@@ -3911,7 +3925,6 @@
 				F5B946371A7309A20034C522 /* ZZFileChannel.m in Sources */,
 				CFBD289B1AA4408800F49161 /* APCMedicationNameTableViewCell.m in Sources */,
 				F5F12B051A2F78490015982C /* APCPasscodeViewController.m in Sources */,
-				368C85351B4F30B900E71050 /* APCMatchingScheduleFilter.m in Sources */,
 				F5B947E81A73272C0034C522 /* APCSegmentedButton.m in Sources */,
 				F5B946391A7309A20034C522 /* ZZFileChannelOutput.m in Sources */,
 				369E27F21A96B7A200D35DFA /* APCMedicationDosageTaken.m in Sources */,
@@ -3967,10 +3980,12 @@
 				F5B947BA1A73272C0034C522 /* HKHealthStore+APCExtensions.m in Sources */,
 				F5F12A7C1A2F78490015982C /* APCCircleView.m in Sources */,
 				F5F12A8C1A2F78490015982C /* APCIntroVideoViewController.m in Sources */,
+				36A979981B5807E60042B6C5 /* APCScheduleImporter.m in Sources */,
 				081A477B1A93EC4700E13148 /* APCBadgeLabel.m in Sources */,
 				F5F12A9C1A2F78490015982C /* APCEmailVerifyViewController.m in Sources */,
 				0871A3941A8F4244002EA80D /* APCDashboardFoodInsightTableViewCell.m in Sources */,
 				7BCF70331ACB6C5C00838717 /* APCPassiveDataCollector.m in Sources */,
+				36A9799E1B5807E60042B6C5 /* APCCompletedOneTimeTaskFilter.m in Sources */,
 				F5F12ACB1A2F78490015982C /* APCProfileViewController.m in Sources */,
 				6C6AA3411B55EA6C0056AD47 /* ORKFileResult+Filename.m in Sources */,
 				F5F12ADF1A2F78490015982C /* APCShareTableViewCell.m in Sources */,
@@ -3986,7 +4001,6 @@
 				CFFDED7D1A95731F00B25581 /* NSDate+MedicationTracker.m in Sources */,
 				366345821B1F857C003CC0EF /* APCDataMigrationPolicy_Model4ToModel6.m in Sources */,
 				3627D3491A9A7517006B02E8 /* APCMedTrackerMedication.m in Sources */,
-				368C85251B4F25CE00E71050 /* APCScheduleTaskMap.m in Sources */,
 				F5F12A801A2F78490015982C /* APCLineGraphView.m in Sources */,
 				F5B947C81A73272C0034C522 /* NSObject+Helper.m in Sources */,
 				F5B948111A73272C0034C522 /* APCTimeSelectorEnumerator.m in Sources */,
