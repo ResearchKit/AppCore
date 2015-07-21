@@ -156,5 +156,4 @@
     return isCompletedOneTimeTask;
 }
 
-
 @end

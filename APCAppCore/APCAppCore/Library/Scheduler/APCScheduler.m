@@ -59,7 +59,7 @@
  Controls whether we compute and show (very) detailed debugging
  printouts.  This will always be NO in a release build.
  */
-static BOOL const kAPCShowDebugPrintouts = YES;
+static BOOL const kAPCShowDebugPrintouts = NO;
 
 
 /**
@@ -959,21 +959,36 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
                                     inContext: (NSManagedObjectContext *) context
                                returningError: (NSError * __autoreleasing *) errorToReturn
 {
-    NSDate *          midnightThisMorning = dateWhenThingsShouldBeActive.startOfDay;
-    NSDate * __unused midnightThisEvening = dateWhenThingsShouldBeActive.endOfDay;    // for debugging
+    NSDate *          midnightThisMorning   = dateWhenThingsShouldBeActive.startOfDay;
+    NSDate * __unused midnightThisEvening   = dateWhenThingsShouldBeActive.endOfDay;        // for debugging
 
-    NSPredicate *filter = [NSPredicate predicateWithFormat:
-                           @"%K == %@ && (%K == nil || %K <= %@) && (%K == nil || %K >= %@)",
-                           NSStringFromSelector (@selector (scheduleSource)),
-                           @(scheduleSource),
-                           NSStringFromSelector (@selector (startsOn)),             // -[APCSchedule startsOn]
-                           NSStringFromSelector (@selector (startsOn)),             // -[APCSchedule startsOn]
-                           midnightThisEvening,
-                           NSStringFromSelector (@selector (effectiveEndDate)),     // -[APCSchedule effectiveEndDate]
-                           NSStringFromSelector (@selector (effectiveEndDate)),     // -[APCSchedule effectiveEndDate]
-                           midnightThisMorning
-                           ];
+    NSString *nameOfSourceField     = NSStringFromSelector (@selector (scheduleSource));    // meaning: -[APCSchedule scheduleSource]
+    NSString *nameOfStartDateField  = NSStringFromSelector (@selector (startsOn));          // meaning: -[APCSchedule startsOn]
+    NSString *nameOfEndDateField    = NSStringFromSelector (@selector (effectiveEndDate));  // meaning: -[APCSchedule effectiveEndDate]
 
+    NSCompoundPredicate *filter = nil;
+
+    NSPredicate *dateFilter = [NSPredicate predicateWithFormat:
+                               @"(%K == %@ || %K <= %@) && (%K == %@ || %K >= %@)",
+                               nameOfStartDateField, nil,
+                               nameOfStartDateField, midnightThisEvening,
+                               nameOfEndDateField, nil,
+                               nameOfEndDateField, midnightThisMorning];
+
+    if (scheduleSource == APCScheduleSourceAll)
+    {
+        filter = [NSCompoundPredicate andPredicateWithSubpredicates: @[dateFilter]];
+    }
+    else
+    {
+        NSPredicate *sourceFilter = [NSPredicate predicateWithFormat:
+                                     @"%K == %@",
+                                     nameOfSourceField,
+                                     @(scheduleSource)];
+
+        filter = [NSCompoundPredicate andPredicateWithSubpredicates: @[sourceFilter, dateFilter]];
+    }
+    
     NSFetchRequest *request = [APCSchedule requestWithPredicate: filter];
     NSError *errorFetchingSchedules = nil;
     NSArray *schedules = [context executeFetchRequest: request error: & errorFetchingSchedules];
@@ -1094,6 +1109,8 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
 
         if (self.isServerDisabled)
         {
+            APCLogDebug (@"SERVER COMMUNICATION DISABLED:  Server communication has been (purposely?) disabled.  Not fetching schedules from the server.");
+
             NSError *errorFetchingSchedules = [NSError errorWithCode: APCErrorServerDisabledCode
                                                               domain: APCErrorDomainLoadingTasksAndSchedules
                                                        failureReason: APCErrorServerDisabledReason
@@ -1217,6 +1234,19 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
 - (void) loadTasksAndSchedulesFromDiskAndThenUseThisQueue: (NSOperationQueue *) queue
                                          toDoThisWhenDone: (APCSchedulerCallbackForFetchAndLoadOperations) callbackBlock
 {
+    [self loadTasksAndSchedulesFromDiskFileNamed: kAPCStaticJSONTasksAndSchedulesFileName
+                                        inBundle: nil
+                                 assigningSource: APCScheduleSourceLocalDisk
+                             andThenUseThisQueue: queue
+                                toDoThisWhenDone: callbackBlock];
+}
+
+- (void) loadTasksAndSchedulesFromDiskFileNamed: (NSString *) fileNameWithExtension
+                                       inBundle: (NSBundle *) bundle
+                                assigningSource: (APCScheduleSource) scheduleSource
+                            andThenUseThisQueue: (NSOperationQueue *) queue
+                               toDoThisWhenDone: (APCSchedulerCallbackForFetchAndLoadOperations) callbackBlock
+{
     [self.queryQueue addOperationWithBlock: ^{
 
         // Was:
@@ -1225,8 +1255,8 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
         NSArray *schedulesArray = nil;
         NSError *errorToReport = nil;
         NSError *errorLoadingTasksAndSchedulesFile = nil;
-        NSDictionary *jsonDictionary = [NSDictionary dictionaryWithContentsOfJSONFileWithName: kAPCStaticJSONTasksAndSchedulesFileName
-                                                                                     inBundle: nil
+        NSDictionary *jsonDictionary = [NSDictionary dictionaryWithContentsOfJSONFileWithName: fileNameWithExtension
+                                                                                     inBundle: bundle
                                                                                returningError: & errorLoadingTasksAndSchedulesFile];
         if (! jsonDictionary)
         {
@@ -1292,9 +1322,10 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
 
         else
         {
-            [self handleSuccessfullyLoadedTasksAndSchedulesFromDisk: schedulesArray
-                                                andThenUseThisQueue: queue
-                                                           toDoThis: callbackBlock];
+            [self handleSuccessfullyLoadedTasksAndScheduleDataFromDisk: schedulesArray
+                                                       assigningSource: scheduleSource
+                                                   andThenUseThisQueue: queue
+                                                              toDoThis: callbackBlock];
         }
     }];
 }
@@ -1337,12 +1368,23 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
                                        andThenUseThisQueue: (NSOperationQueue *) queue
                                                   toDoThis: (APCSchedulerCallbackForFetchAndLoadOperations) callbackBlock
 {
+    [self handleSuccessfullyLoadedTasksAndScheduleDataFromDisk: taskAndSchduleData
+                                               assigningSource: APCScheduleSourceLocalDisk
+                                           andThenUseThisQueue: queue
+                                                      toDoThis: callbackBlock];
+}
+
+- (void) handleSuccessfullyLoadedTasksAndScheduleDataFromDisk: (NSArray *) taskAndSchduleData
+                                              assigningSource: (APCScheduleSource) scheduleSource
+                                          andThenUseThisQueue: (NSOperationQueue *) queue
+                                                     toDoThis: (APCSchedulerCallbackForFetchAndLoadOperations) callbackBlock
+{
     /*
      Loop through the incoming items and save/udpate everything.
      Both -fetch and -load boil down to this one call.
      */
     [self processSchedulesAndTasks: taskAndSchduleData
-                        fromSource: APCScheduleSourceLocalDisk
+                        fromSource: scheduleSource
                andThenUseThisQueue: queue
                   toDoThisWhenDone: callbackBlock];
 }
@@ -1478,6 +1520,13 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
                        scheduleQueryEngine: self
                                 importDate: today
                             returningError: & error];
+
+    [self clearTaskGroupCache];
+
+    if (error)
+    {
+        APCLogError2 (error);
+    }
 
     [self performFetchAndLoadCallback: callbackBlock
                               onQueue: queue
