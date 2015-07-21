@@ -356,9 +356,11 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
     //get a fresh archive
     self.archive = [[APCDataArchive alloc]initWithReference:self.task.identifier];
     
+    __weak typeof(self) weakSelf = self;
     //add dictionaries or json data to the archive, calling completeArchive when done
     [self.result.results enumerateObjectsUsingBlock:^(ORKStepResult *stepResult, NSUInteger __unused idx, BOOL * __unused stop) {
         [stepResult.results enumerateObjectsUsingBlock:^(ORKResult *result, NSUInteger __unused idx, BOOL *__unused stop) {
+            __strong typeof(self) strongSelf = weakSelf;
             //Update date if needed
             if (!result.startDate) {
                 result.startDate = stepResult.startDate;
@@ -370,7 +372,7 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
             {
                 APCDataResult * dataResult = (APCDataResult*) result;
                 NSString *fileName = dataResult.identifier?:(stepResult.identifier?:[NSUUID UUID].UUIDString);
-                [self.archive insertJSONDataIntoArchive:dataResult.data filename:fileName];
+                [strongSelf.archive insertJSONDataIntoArchive:dataResult.data filename:fileName];
             }
             
             else if ([result isKindOfClass:[ORKFileResult class]])
@@ -378,7 +380,7 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
                 ORKFileResult * fileResult = (ORKFileResult*) result;
                 NSString *translatedFilename = [ORKFileResult filenameForFileResultIdentifier:fileResult.identifier stepIdentifier:stepResult.identifier];
                 if (fileResult.fileURL) {
-                    [self.archive insertDataAtURLIntoArchive:fileResult.fileURL fileName:translatedFilename];
+                    [strongSelf.archive insertDataAtURLIntoArchive:fileResult.fileURL fileName:translatedFilename];
                 }
             }
             
@@ -427,11 +429,13 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
 {
     //Encrypt and Upload
     APCDataArchiveUploader *archiveUploader = [[APCDataArchiveUploader alloc]init];
+    
+    __weak typeof(self) weakSelf = self;
     [archiveUploader encryptAndUploadArchive:self.archive withCompletion:^(NSError *error) {
-        
+        __strong typeof(self) strongSelf = weakSelf;
         if (! error) {
             if (resultSummary != nil) {
-                [self storeInCoreDataWithFileName:self.archive.unencryptedURL.absoluteString.lastPathComponent resultSummary:resultSummary];
+                [strongSelf storeInCoreDataWithFileName:self.archive.unencryptedURL.absoluteString.lastPathComponent resultSummary:resultSummary];
             }
         }else{
             APCLogError2(error);
