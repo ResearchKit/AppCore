@@ -72,4 +72,10 @@
  */
 @property (readonly) id thirdObject;
 
+/**
+ Returns the object at the specified index, or nil if desiredIndex is
+ out of bounds for this array.
+ */
+- (id) safeObjectAtIndex: (NSUInteger) desiredIndex;
+
 @end

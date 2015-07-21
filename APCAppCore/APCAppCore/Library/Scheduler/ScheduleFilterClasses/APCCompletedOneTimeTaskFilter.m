@@ -87,12 +87,8 @@
 
             if (entry == nil)
             {
-                /*
-                 Truly shouldn't happen.  We should only have been passed schedules
-                 and entries that go together.
-                 */
+                // No problem.
             }
-
             else
             {
                 BOOL thisEntryRepresentsACompletedOneTimeTask = [self analyzeEntryForCompletedOneTimeTask: entry];

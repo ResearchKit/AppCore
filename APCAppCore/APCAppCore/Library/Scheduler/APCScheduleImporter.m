@@ -128,12 +128,47 @@ static NSString * const kTaskUrlKey                            = @"taskUrl";
 static NSString * const kTaskVersionNumberKey                  = @"version";
 
 
+/**
+ Formats for interpreting a JSON list of time values.
+ Filled in during +load.
+ */
+static NSArray *legalTimeSpecifierFormats = nil;
+
+
+
 // ---------------------------------------------------------
 #pragma mark - The Class Body
 // ---------------------------------------------------------
 
 
 @implementation APCScheduleImporter
+
+/**
+ Sets global, static values the first time anyone calls this category.
+
+ By definition, this method is called once per category, in a thread-safe
+ way, the first time the category is sent a message -- basically, the first
+ time we refer to any method declared in that category.
+
+ Documentation:  the key sentence is actually in the documentation for
+ +initialize:  "initialize is invoked only once per class. If you want
+ to perform independent initialization for the class and for categories
+ of the class, you should implement +load methods."
+
+ Useful resources:
+ -  http://stackoverflow.com/q/13326435
+ -  https://developer.apple.com/library/ios/documentation/Cocoa/Reference/Foundation/Classes/NSObject_Class/index.html#//apple_ref/occ/clm/NSObject/load
+ -  https://developer.apple.com/library/ios/documentation/Cocoa/Reference/Foundation/Classes/NSObject_Class/index.html#//apple_ref/occ/clm/NSObject/initialize
+ */
++ (void) load
+{
+    legalTimeSpecifierFormats = @[@"H",
+                                  @"HH",
+                                  @"HH:mm",
+                                  @"HH:mm:SS",
+                                  @"HH:mm:SS.sss"
+                                  ];
+}
 
 
 // ---------------------------------------------------------
@@ -1019,13 +1054,6 @@ static NSString * const kTaskVersionNumberKey                  = @"version";
     NSDateFormatter *formatter = [NSDateFormatter new];
     formatter.locale = [NSLocale localeWithLocaleIdentifier: kAPCDateFormatLocaleEN_US_POSIX];
 
-    NSArray *legalFormats = @[@"H",
-                              @"HH",
-                              @"HH:mm",
-                              @"HH:mm:SS",
-                              @"HH:mm:SS.sss"
-                              ];
-
     NSString *result = nil;
     NSMutableArray *arrayOfValidStrings = [NSMutableArray new];
 
@@ -1069,7 +1097,7 @@ static NSString * const kTaskVersionNumberKey                  = @"version";
             {
                 NSDate *date = nil;
 
-                for (NSString *format in legalFormats)
+                for (NSString *format in legalTimeSpecifierFormats)
                 {
                     formatter.dateFormat = format;
                     date = [formatter dateFromString: inboundTimeString];
@@ -1103,22 +1131,14 @@ static NSString * const kTaskVersionNumberKey                  = @"version";
     NSDateFormatter *formatter = [NSDateFormatter new];
     formatter.locale = [NSLocale localeWithLocaleIdentifier: kAPCDateFormatLocaleEN_US_POSIX];
 
-    NSArray *legalFormats = @[@"H",
-                              @"HH",
-                              @"HH:mm",
-                              @"HH:mm:SS",
-                              @"HH:mm:SS.sss"
-                              ];
-
     NSMutableArray *result = [NSMutableArray new];
-
     NSArray *iso8601TimeStrings = [serializedTimesOfDayString componentsSeparatedByString: @"|"];
 
     for (NSString *iso8601TimeString in iso8601TimeStrings)
     {
         NSDate *date = nil;
 
-        for (NSString *format in legalFormats)
+        for (NSString *format in legalTimeSpecifierFormats)
         {
             formatter.dateFormat = format;
             date = [formatter dateFromString: iso8601TimeString];

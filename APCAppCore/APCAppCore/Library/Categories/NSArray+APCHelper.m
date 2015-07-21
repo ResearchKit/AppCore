@@ -59,23 +59,21 @@
 
 - (id) secondObject
 {
-    id result = nil;
-
-    if (self.count >= 2)
-    {
-        result = self [1];
-    }
-
-    return result;
+    return [self safeObjectAtIndex: 1];
 }
 
 - (id) thirdObject
 {
+    return [self safeObjectAtIndex: 2];
+}
+
+- (id) safeObjectAtIndex: (NSUInteger) desiredIndex
+{
     id result = nil;
 
-    if (self.count >= 3)
+    if (self.count > desiredIndex)
     {
-        result = self [2];
+        result = self [desiredIndex];
     }
 
     return result;
