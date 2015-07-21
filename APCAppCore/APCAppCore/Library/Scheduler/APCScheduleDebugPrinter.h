@@ -57,7 +57,6 @@
 - (NSString *) stringFromDate: (NSDate *) date;
 - (NSString *) stringsFromArrayOfDates: (NSArray *) arrayOfDates;
 
-- (NSString *) stringWithMillisecondsFromDate: (NSDate *) date;
 + (NSString *) stringWithMillisecondsFromDate: (NSDate *) date;
 
 @end

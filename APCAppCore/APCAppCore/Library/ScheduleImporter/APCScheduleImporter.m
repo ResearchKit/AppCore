@@ -397,7 +397,7 @@ static NSArray *legalTimeSpecifierFormats = nil;
         [printout appendFormat:
          @"\n\n======================= Importing new batch of schedules from [%@] starting at [%@] =======================\n\n",
          sourceName,
-         [printer stringWithMillisecondsFromDate: relativeTimeBeforeStarting]];
+         [printer.class stringWithMillisecondsFromDate: relativeTimeBeforeStarting]];
 
 
         [printout appendString: @"--------\nAnalyzing incoming schedules\n--------\n"];
@@ -551,7 +551,7 @@ static NSArray *legalTimeSpecifierFormats = nil;
         [printout appendFormat:
          @"======================= end batch of schedules from [%@] at [%@] =======================\n\n",
          sourceName,
-         [printer stringWithMillisecondsFromDate: relativeTimeBeforeStarting]];
+         [printer.class stringWithMillisecondsFromDate: relativeTimeBeforeStarting]];
         
         NSLog (@"%@", printout);
     }

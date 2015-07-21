@@ -264,11 +264,6 @@ static NSDateFormatter  *debugDateFormatterWithMilliseconds = nil;
     return result;
 }
 
-- (NSString *) stringWithMillisecondsFromDate: (NSDate *) date
-{
-    return [[self class] stringWithMillisecondsFromDate: date];
-}
-
 + (NSString *) stringWithMillisecondsFromDate: (NSDate *) date
 {
     NSString *result = @"(null)";
