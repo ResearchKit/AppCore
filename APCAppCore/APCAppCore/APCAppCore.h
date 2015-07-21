@@ -317,6 +317,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/UIView+Helper.h>
 #import <APCAppCore/NSDictionary+APCAdditions.h>
 #import <APCAppCore/APCDeviceHardware+APCHelper.h>
+#import <APCAppCore/ORKFileResult+Filename.h>
 #import <APCAppCore/ORKQuestionResult+APCHelper.h>
 #import <APCAppCore/NSOperationQueue+Helper.h>
 #import <APCAppCore/CMMotionActivity+Helper.h>

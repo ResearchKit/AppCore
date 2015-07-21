@@ -52,6 +52,7 @@ static NSString * kAppVersionKey                    = @"appVersion";
 static NSString * kPhoneInfoKey                     = @"phoneInfo";
 static NSString * kItemKey                          = @"item";
 static NSString * kJsonPathExtension                = @"json";
+static NSString * kJsonInfoFilename                 = @"info.json";
 
 @interface APCDataArchive ()
 
@@ -114,16 +115,16 @@ static NSString * kJsonPathExtension                = @"json";
     return workingDirectoryPath;
 }
 
-- (void)insertDataAtURLIntoArchive: (NSURL*) url fileName: (NSString *) filename extension:(NSString *)extension
+- (void)insertDataAtURLIntoArchive: (NSURL*) url fileName: (NSString *) filename
 {
     NSData *dataToInsert = [NSData dataWithContentsOfURL:url];
-    [self insertDataIntoArchive:dataToInsert filename:filename extension:extension];
+    [self insertDataIntoArchive:dataToInsert filename:filename];
 }
 
 - (void)insertJSONDataIntoArchive:(NSData *)jsonData filename:(NSString *)filename
 {
     if (jsonData !=nil) {
-        [self insertDataIntoArchive:jsonData filename:filename extension:kJsonPathExtension];
+        [self insertDataIntoArchive:jsonData filename:filename];
     }
 }
 
@@ -141,17 +142,16 @@ static NSString * kJsonPathExtension                = @"json";
         jsonData = [NSJSONSerialization dataWithJSONObject:newDictionary options:NSJSONWritingPrettyPrinted error:&serializationError];
         
         if (jsonData !=nil) {
-            [self insertDataIntoArchive:jsonData filename:filename extension:kJsonPathExtension];
+            [self insertDataIntoArchive:jsonData filename:filename];
         }else{
             APCLogError2(serializationError);
         }
     }
 }
 
-- (void)insertDataIntoArchive :(NSData *)data filename: (NSString *)filename extension: (NSString *)extension
+- (void)insertDataIntoArchive :(NSData *)data filename: (NSString *)filename
 {
-    NSString *fullFilename = [filename stringByAppendingPathExtension:extension];
-    [self.zipEntries addObject: [ZZArchiveEntry archiveEntryWithFileName: fullFilename
+    [self.zipEntries addObject: [ZZArchiveEntry archiveEntryWithFileName: filename
                                                                 compress:YES
                                                                dataBlock:^(NSError** error)
                                  {
@@ -160,7 +160,8 @@ static NSString * kJsonPathExtension                = @"json";
                                  }]];
     
     //add the fileInfoEntry
-    NSDictionary *fileInfoEntry = @{ kFileInfoNameKey: fullFilename,
+    NSString *extension = [filename pathExtension] ? : kJsonPathExtension;
+    NSDictionary *fileInfoEntry = @{ kFileInfoNameKey: filename,
                                      kFileInfoTimeStampKey: [NSDate date].toStringInISO8601Format,
                                      kFileInfoContentTypeKey: [self contentTypeForFileExtension:extension] };
     
@@ -180,7 +181,7 @@ static NSString * kJsonPathExtension                = @"json";
         [self.infoDict setObject:[NSUUID new].UUIDString forKey:kTaskRunKey];
         [self.infoDict setObject:self.reference forKey:kItemKey];
         
-        [self insertIntoArchive:self.infoDict filename:@"info"];
+        [self insertIntoArchive:self.infoDict filename:kJsonInfoFilename];
         
         NSError * error;
         if (![self.zipArchive updateEntries:self.zipEntries error:&error]) {
@@ -203,51 +204,22 @@ static NSString * kJsonPathExtension                = @"json";
 
 #pragma mark - Helpers
 
-+ (BOOL) isKnownFileExtension: (NSString *)extension
-{
-    NSSet *knownFileExtensions = [NSSet setWithObjects:@"m4a", @"json", @"csv", nil];
-    return [knownFileExtensions containsObject:extension];
-}
-
 - (NSString *)contentTypeForFileExtension: (NSString *)extension
 {
-    NSAssert([APCDataArchive isKnownFileExtension:extension], @"The file extension is not in the set of known file extensions!");
     
     NSString *contentType;
-    
-    if ([extension isEqualToString:@"json"]) {
-        contentType = @"application/json";
-    }else if ([extension isEqualToString:@"csv"]) {
+    if ([extension isEqualToString:@"csv"]) {
         contentType = @"text/csv";
     }else if ([extension isEqualToString:@"m4a"]) {
         contentType = @"audio/mp4";
+    }else {
+        contentType = @"application/json";
     }
     
     return contentType;
 
 }
 
-+ (NSString *)filenameFromURL: (NSURL *)url
-{
-    NSString *filename = [url lastPathComponent];
-    NSString *pathExtension = [url pathExtension];
-    
-    //Check for known ResearchKit defined filenames with internal path extension
-    NSArray *RKExtensions = @[@"outbound", @"rest", @"walk"];
-    
-    //need to use string containsString on each knownFilename or use array with predicate
-    NSPredicate *knownExtensionFilter = [NSPredicate predicateWithFormat:@"%@ beginswith SELF", pathExtension];
-    NSArray *knownExtension = [RKExtensions filteredArrayUsingPredicate:knownExtensionFilter];
-    
-    if (knownExtension.count > 0) {
-        //reform the filename from filename and knownExtension
-        NSString *newPathExtension = [@"_" stringByAppendingString:[knownExtension objectAtIndex:0]];
-        filename = [[filename stringByDeletingPathExtension] stringByAppendingString:newPathExtension];
-    } else if (pathExtension && !knownExtension.count > 0) {
-        filename = [filename stringByDeletingPathExtension];
-    }
-    
-    return filename;
-}
+
 
 @end

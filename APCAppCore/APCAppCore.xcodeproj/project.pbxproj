@@ -277,7 +277,7 @@
 		6C6AA2841B4E056C0056AD47 /* APCDataVerificationDaemon.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C6AA27C1B4E056C0056AD47 /* APCDataVerificationDaemon.m */; };
 		6C6AA2891B4E057D0056AD47 /* APCDataArchive.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C6AA2851B4E057D0056AD47 /* APCDataArchive.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C6AA28A1B4E057D0056AD47 /* APCDataArchive.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C6AA2861B4E057D0056AD47 /* APCDataArchive.m */; };
-		6C6AA3401B55EA6C0056AD47 /* ORKFileResult+Filename.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C6AA33E1B55EA6C0056AD47 /* ORKFileResult+Filename.h */; };
+		6C6AA3401B55EA6C0056AD47 /* ORKFileResult+Filename.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C6AA33E1B55EA6C0056AD47 /* ORKFileResult+Filename.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C6AA3411B55EA6C0056AD47 /* ORKFileResult+Filename.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C6AA33F1B55EA6C0056AD47 /* ORKFileResult+Filename.m */; };
 		6C7346081A7ECD3B00DA9CD8 /* APCConsentTaskViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C7346061A7ECD3B00DA9CD8 /* APCConsentTaskViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C7346091A7ECD3B00DA9CD8 /* APCConsentTaskViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7346071A7ECD3B00DA9CD8 /* APCConsentTaskViewController.m */; };

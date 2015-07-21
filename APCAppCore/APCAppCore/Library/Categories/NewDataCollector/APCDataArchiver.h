@@ -39,11 +39,11 @@
 
 @interface APCDataArchiver : NSObject
 
-- (instancetype) initWithTaskResult: (ORKTaskResult*) taskResult;
-- (instancetype)initWithResults: (NSArray*) results itemIdentifier: (NSString*) itemIdentifier runUUID: (NSUUID*) runUUID;
-- (NSString*) writeToOutputDirectory: (NSString*) outputDirectory;
+- (instancetype) initWithTaskResult: (ORKTaskResult*) taskResult  __deprecated_msg("Please use APCDataArchiveUploader");
+- (instancetype)initWithResults: (NSArray*) results itemIdentifier: (NSString*) itemIdentifier runUUID: (NSUUID*) runUUID __deprecated_msg("Please use APCDataArchiveUploader");
+- (NSString*) writeToOutputDirectory: (NSString*) outputDirectory __deprecated_msg("Please use APCDataArchiveUploader");
 
-+ (BOOL) encryptZipFile: (NSString*) unencryptedPath encryptedPath:(NSString*) encryptedPath;
++ (BOOL) encryptZipFile: (NSString*) unencryptedPath encryptedPath:(NSString*) encryptedPath __deprecated_msg("Please use APCDataEncryptor");
 
 
 /**
@@ -65,7 +65,7 @@
  dictionary, it'll call the same conversion routines on that
  object and its contents.
  */
-- (NSDictionary *) generateSerializableDataFromSourceDictionary: (NSDictionary *) sourceDictionary;
+- (NSDictionary *) generateSerializableDataFromSourceDictionary: (NSDictionary *) sourceDictionary __deprecated_msg("Please use NSJSONSerialization");
 
 
 /*
@@ -78,7 +78,7 @@
 	 Should we save the unencrypted .zip file?  Specifically
 	 so we can retrieve it with -unencryptedFilePath?
 	 */
-	@property (nonatomic) BOOL preserveUnencryptedFile;
+	@property (nonatomic) BOOL preserveUnencryptedFile __deprecated;
 
 	/**
 	 The path where the unencrypted .zip file was generated.
@@ -86,7 +86,7 @@
 	 exist at this path after the -init process has finished
 	 creating the .zip file.
 	 */
-	@property (nonatomic, strong) NSString *unencryptedFilePath;
+	@property (nonatomic, strong) NSString *unencryptedFilePath __deprecated;
 
 #endif
 
