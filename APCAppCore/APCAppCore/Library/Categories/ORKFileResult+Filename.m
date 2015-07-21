@@ -42,9 +42,14 @@ static NSString *kTranslationFilename = @"FilenameTranslation";
 {
     if (! fileResultIdentifier) {
         fileResultIdentifier = @"";
+    }else{
+        fileResultIdentifier = [fileResultIdentifier stringByAppendingString:@"_"];
     }
     
-    NSString *identifier = [[fileResultIdentifier stringByAppendingString:@"_"] stringByAppendingString:stepIdentifier];
+    if (! stepIdentifier) {
+        stepIdentifier = @"";
+    }
+    
     NSString *translatedFilename;
     NSString *filePath = [[NSBundle mainBundle] pathForResource:kTranslationFilename ofType:kJSONExtension];
     
@@ -53,7 +58,7 @@ static NSString *kTranslationFilename = @"FilenameTranslation";
     
     NSDictionary *translationDictionary = [NSJSONSerialization JSONObjectWithData:[JSONString dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:&parseError];
     
-    translatedFilename = [translationDictionary objectForKey:identifier] ? : identifier;
+    translatedFilename = [translationDictionary objectForKey:fileResultIdentifier] ? : fileResultIdentifier;
     
     return translatedFilename;
 }

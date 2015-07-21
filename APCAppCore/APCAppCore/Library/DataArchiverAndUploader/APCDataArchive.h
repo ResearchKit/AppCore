@@ -87,7 +87,7 @@
  
  @param     filename                Filename for the json data to be included without path extension (path extension will be preserved from the url).
  */
-- (void)insertDataAtURLIntoArchive: (NSURL*) url fileName: (NSString *) filename extension:(NSString *)extension;
+- (void)insertDataAtURLIntoArchive: (NSURL*) url fileName: (NSString *) filename;
 
 /**
  Inserts the data with the filename and path extension
@@ -98,7 +98,7 @@
  
  @param     extension               File extension
  */
-- (void)insertDataIntoArchive :(NSData *)data filename: (NSString *)filename extension: (NSString *)extension;
+- (void)insertDataIntoArchive :(NSData *)data filename: (NSString *)filename;
 
 /**
  Inserts an info.json file into the archive.
@@ -112,22 +112,5 @@
  Call this method when you are finished with the archive, for example after encrypting or uploading.
  */
 - (void) removeArchive;
-
-/**
- Utility method to indicate whether this class can handle the file extension when inserting into an archive and deriving Content Type.
- 
- @param     extension               NSString extension to inspect
- */
-+ (BOOL) isKnownFileExtension: (NSString *)extension;
-
-/**
- Utility method to get a filename from an NSURL by inspecting the last path component.
- If the URL contains a known path extension internal to ResearchKit such as ".outbound" or ".rest", the filename is reformed without the internal extension by replacing the dot (.) with an underscore (_).
- Otherwise, the filename is stripped of the path extension and returned.
- 
- @param     url                     URL from which to derive the filename
- @return    NSString                the filename without path extension
- */
-+ (NSString *)filenameFromURL: (NSURL *)url;
 
 @end
