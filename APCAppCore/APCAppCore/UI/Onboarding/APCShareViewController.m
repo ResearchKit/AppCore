@@ -290,13 +290,16 @@
 
 - (IBAction) okayTapped: (id) __unused sender
 {
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    if (self.goBackIfUserHitsOkay) {
+        [self back];
+    } else {
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    }
 }
 
 - (void)back
 {
     [self.navigationController popViewControllerAnimated:YES];
-    
     [[self onboarding] popScene];
 }
 

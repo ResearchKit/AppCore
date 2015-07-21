@@ -42,6 +42,7 @@ typedef NS_ENUM(NSUInteger, APCShareType) {
 
 @interface APCShareViewController : UIViewController
 
+@property (nonatomic) BOOL goBackIfUserHitsOkay;
 @property (nonatomic) BOOL hidesOkayButton;
 
 @end
