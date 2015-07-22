@@ -371,7 +371,8 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
             if ([result isKindOfClass:[APCDataResult class]])
             {
                 APCDataResult * dataResult = (APCDataResult*) result;
-                NSString *fileName = dataResult.identifier?:(stepResult.identifier?:[NSUUID UUID].UUIDString);
+                dataResult.identifier = dataResult.identifier ? : (stepResult.identifier ? : [NSUUID UUID].UUIDString);
+                NSString *fileName = [dataResult.identifier stringByAppendingString:@"_data"];
                 [strongSelf.archive insertJSONDataIntoArchive:dataResult.data filename:fileName];
             }
             
