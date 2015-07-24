@@ -59,6 +59,10 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
 
 @property (nonatomic, copy) APCPermissionsBlock completionBlock;
 
+@property (copy, nonatomic) NSArray *healthKitCharacteristicTypesToRead;
+@property (copy, nonatomic) NSArray *healthKitTypesToRead;
+@property (copy, nonatomic) NSArray *healthKitTypesToWrite;
+
 @end
 
 
@@ -78,6 +82,23 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
         _coreMotionPermissionStatus = kPermissionStatusNotDetermined;
                 
     }
+    return self;
+}
+
+- (id)initWithHealthKitCharacteristicTypesToRead:(NSArray *)characteristicTypesToRead
+                    healthKitQuantityTypesToRead:(NSArray *)quantityTypesToRead
+                   healthKitQuantityTypesToWrite:(NSArray *)QuantityTypesToWrite
+                               userInfoItemTypes:(NSArray *)userInfoItemTypes
+{
+    self = [self init];
+    
+    if (self) {
+        self.healthKitCharacteristicTypesToRead = characteristicTypesToRead;
+        self.healthKitTypesToRead = quantityTypesToRead;
+        self.healthKitTypesToWrite = QuantityTypesToWrite;
+        self.requiredServiceTypes = userInfoItemTypes;
+    }
+
     return self;
 }
 
