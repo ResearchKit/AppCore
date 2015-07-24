@@ -35,7 +35,7 @@
 #import <CoreMotion/CoreMotion.h>
 #import "APCMotionHistoryData.h"
 #import "APCConstants.h"
-#import "APCAppCore.h"
+#import "APCLog.h"
 
 static NSInteger const kSleepBlocksInSeconds = 10800; // 3 hours
 
