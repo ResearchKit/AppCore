@@ -109,22 +109,27 @@ typedef NS_ENUM(NSUInteger, APCAllSetRows)
     switch (indexPath.row) {
         case APCAllSetRowActivities:
         {
-            NSString *original = NSLocalizedString(@"You’ll find your list of daily surveys and tasks on the “Activities” tab. New surveys and tasks will appear over the next few weeks.",
-                                                   @"You’ll find your list of daily surveys and tasks on the “Activities” tab. New surveys and tasks will appear over the next few weeks.");
+            NSString *original = NSLocalizedString(@"You’ll find your list of daily surveys and tasks on the “Activities” tab. New surveys and tasks will appear over the next few weeks.", nil);
 
             cell.originalText = original;
             
-            if (self.textBlocks) {
-                for (NSDictionary *textBlock in self.textBlocks) {
-                    if (textBlock[kAllSetActivitiesTextOriginal]) {
+            if (self.textBlocks)
+            {
+                for (NSDictionary *textBlock in self.textBlocks)
+                {
+                    if (textBlock[kAllSetActivitiesTextOriginal])
+                    {
                         cell.originalText = textBlock[kAllSetActivitiesTextOriginal];
                     }
                     
-                    if (textBlock[kAllSetActivitiesTextAdditional]) {
+                    if (textBlock[kAllSetActivitiesTextAdditional])
+                    {
                         cell.additonalText = textBlock[kAllSetActivitiesTextAdditional];
                     } 
                 }
-            } else {
+            }
+            else
+            {
                 cell.originalText = original;
             }
             
@@ -134,8 +139,7 @@ typedef NS_ENUM(NSUInteger, APCAllSetRows)
             
         default:
         {
-            NSString *original = NSLocalizedString(@"To see your results from surveys and tasks, check your “Dashboard” tab.",
-                                                   @"To see your results from surveys and tasks, check your “Dashboard” tab.");
+            NSString *original = NSLocalizedString(@"To see your results from surveys and tasks, check your “Dashboard” tab.", nil);
 
             if (self.textBlocks) {
                 for (NSDictionary *textBlock in self.textBlocks) {
