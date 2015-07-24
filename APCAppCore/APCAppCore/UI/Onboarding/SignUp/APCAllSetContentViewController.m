@@ -111,20 +111,18 @@ typedef NS_ENUM(NSUInteger, APCAllSetRows)
         {
             NSString *original = NSLocalizedString(@"You’ll find your list of daily surveys and tasks on the “Activities” tab. New surveys and tasks will appear over the next few weeks.",
                                                    @"You’ll find your list of daily surveys and tasks on the “Activities” tab. New surveys and tasks will appear over the next few weeks.");
+
+            cell.originalText = original;
             
             if (self.textBlocks) {
                 for (NSDictionary *textBlock in self.textBlocks) {
                     if (textBlock[kAllSetActivitiesTextOriginal]) {
                         cell.originalText = textBlock[kAllSetActivitiesTextOriginal];
-                    } else {
-                        cell.originalText = original;
                     }
                     
                     if (textBlock[kAllSetActivitiesTextAdditional]) {
                         cell.additonalText = textBlock[kAllSetActivitiesTextAdditional];
-                    } else {
-                        cell.additonalText = nil;
-                    }
+                    } 
                 }
             } else {
                 cell.originalText = original;
