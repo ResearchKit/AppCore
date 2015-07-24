@@ -128,10 +128,6 @@ typedef NS_ENUM(NSUInteger, APCAllSetRows)
                     } 
                 }
             }
-            else
-            {
-                cell.originalText = original;
-            }
             
             cell.icon = [UIImage imageNamed:@"tab_activities_selected"];
         }
