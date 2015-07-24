@@ -49,14 +49,11 @@
 #import "NSDate+Helper.h"
 #import "UIAlertController+Helper.h"
 #import "UIColor+APCAppearance.h"
+#import "NSDictionary+APCAdditions.h"
 
 
-static CGFloat    const kTintedCellHeight                           = 65;
-static CGFloat    const kTableViewSectionHeaderHeight               = 77;
-static NSString * const kAPCSampleGlucoseLogTaskAndScheduleFileName = @"APHSampleGlucoseLogTaskAndSchedule.json";
-static NSString * const kAPCListOfTimesMarker                       = @"LIST_OF_TIMES";
-static NSString * const kAPCListOfWeekdaysMarker                    = @"LIST_OF_WEEKDAYS";
-static NSString * const kAPCScheduleStringKey                       = @"scheduleString";
+static CGFloat const kTintedCellHeight             = 65;
+static CGFloat const kTableViewSectionHeaderHeight = 77;
 
 
 @interface APCActivitiesViewController ()
@@ -574,7 +571,7 @@ static NSString * const kAPCScheduleStringKey                       = @"schedule
              }
              else if (section.isYesterdaySection)
              {
-                 [section removeFullyCompletedTasks];
+                 [section reduceToIncompleteTasksOnTheirLastLegalDay];
              }
              
              if (section.taskGroups.count)

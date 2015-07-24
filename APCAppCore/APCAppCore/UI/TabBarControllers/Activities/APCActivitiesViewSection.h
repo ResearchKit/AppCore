@@ -56,11 +56,15 @@
 - (instancetype) initAsKeepGoingSectionWithTasks: (NSArray *) arrayOfTaskGroupObjects;
 
 /**
- Used after fetching the tasks for a specific day --
- the "yesterday," as perceived by the user -- and
- converting resulting section to a "here's the stuff
- you didn't finish" section.
+ Former name for -reduceToIncompleteTasksOnTheirLastLegalDay.
  */
-- (void) removeFullyCompletedTasks;
+- (void) removeFullyCompletedTasks  __attribute__((deprecated("Please use -reduceToIncompleteTasksOnTheirLastLegalDay instead.")));
+
+/**
+ Used after fetching the tasks for "yesterday," as perceived by the user,
+ and converting resulting section to a "here's the stuff you didn't finish"
+ section.
+ */
+- (void) reduceToIncompleteTasksOnTheirLastLegalDay;
 
 @end

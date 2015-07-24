@@ -61,4 +61,21 @@
  */
 @property (readonly) id secondObject;
 
+/**
+ Returns the third object in self, or nil if there is no third object.
+ 
+ This method/property is useful because, sometimes, the third object
+ in an array is has a meaningful purpose:  the "end" value in a
+ "beginning/middle/end" sequence, for example.  In such cases, having
+ this -thirdObject property avoids having "magic numbers" in the code:
+ hard-coding a "2" to access that third array element.
+ */
+@property (readonly) id thirdObject;
+
+/**
+ Returns the object at the specified index, or nil if desiredIndex is
+ out of bounds for this array.
+ */
+- (id) safeObjectAtIndex: (NSUInteger) desiredIndex;
+
 @end

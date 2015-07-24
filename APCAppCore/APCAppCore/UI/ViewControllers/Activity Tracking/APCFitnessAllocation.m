@@ -237,44 +237,33 @@ typedef NS_ENUM(NSUInteger, SevenDayFitnessQueryType)
 - (void)reporterDone:(NSNotification *) __unused notification {
     
     APCMotionHistoryReporter *reporter = [APCMotionHistoryReporter sharedInstance];
-    
-
     NSArray * theMotionData = reporter.retrieveMotionReport;
+
     //The count will be the number of days in the array, each element represents a day
-    
     if(theMotionData.count > 0)
     {
-        
         for (NSArray *dayArray in theMotionData)
         {
-            
-            NSUInteger inactiveCounter    = 0;
-            NSUInteger sedentaryCounter   = 0;
-            NSUInteger moderateCounter    = 0;
-            NSUInteger vigorousCounter    = 0;
-            NSUInteger sleepCounter       = 0;
-            
-            
-            NSUInteger oneCounter       = 0;
-            NSUInteger twoCounter       = 0;
+            NSUInteger inactiveCounter      = 0;
+            NSUInteger sedentaryCounter     = 0;
+            NSUInteger moderateCounter      = 0;
+            NSUInteger vigorousCounter      = 0;
+            NSUInteger sleepCounter         = 0;
 
-            
-            for(APCMotionHistoryData * theData in dayArray) {
-                
+            for(APCMotionHistoryData * theData in dayArray)
+            {
                 if(theData.activityType == ActivityTypeSleeping)
                 {
-                    //[self.sleepDataset addObject:@(theData.timeInterval)];
                     sleepCounter += theData.timeInterval;
                 }
                 else if(theData.activityType == ActivityTypeSedentary)
                 {
                     sedentaryCounter += theData.timeInterval;
                 }
-                
-                else if (theData.activityType == ActivityTypeLight) {
+                else if(theData.activityType == ActivityTypeLight)
+                {
                     inactiveCounter += theData.timeInterval;
                 }
-                
                 else if(theData.activityType == ActivityTypeModerate)
                 {
                     moderateCounter += theData.timeInterval;
@@ -283,46 +272,30 @@ typedef NS_ENUM(NSUInteger, SevenDayFitnessQueryType)
                 {
                     vigorousCounter += theData.timeInterval;
                 }
-                
-                
-                else if(theData.activityType == ActivityTypeAutomotive)
-                {
-                    oneCounter += theData.timeInterval;
-                }
-                
-                
-                else if(theData.activityType == ActivityTypeCycling)
-                {
-                    twoCounter += theData.timeInterval;
-                }
-            
-                
             }
             
-            
-            
             NSDictionary *activityData = @{
-                                           self.segmentInactive: @(inactiveCounter),
+                                           self.segmentInactive : @(inactiveCounter),
                                            self.segmentSedentary: @(sedentaryCounter),
-                                           self.segmentModerate: @(moderateCounter),
-                                           self.segmentVigorous: @(vigorousCounter),
-                                           self.segmentSleep: @(sleepCounter)
+                                           self.segmentModerate : @(moderateCounter),
+                                           self.segmentVigorous : @(vigorousCounter),
+                                           self.segmentSleep    : @(sleepCounter)
                                            };
             
             [self.wakeDataset addObject:activityData];
-          
-            
+
             //    Active minutes = minutes of moderate activity + 2x(minutes of vigorous activity). This should be the TOTAL ACTIVE MINUTES FOR THE WEEK,
-            self.activeSeconds += (double)twoCounter + (oneCounter * 2) ;
-            
+            self.activeSeconds += (double)moderateCounter + (vigorousCounter * 2) ;
         }
     }
     
-    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async(dispatch_get_main_queue(), ^
+    {
         [[NSNotificationCenter defaultCenter] postNotificationName:APHSevenDayAllocationSleepDataIsReadyNotification object:nil];
     });
 }
-- (HKHealthStore *) healthStore {
+- (HKHealthStore *) healthStore
+{
     APCAppDelegate *delegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
     
     return delegate.dataSubstrate.healthStore;

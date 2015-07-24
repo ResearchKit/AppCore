@@ -33,7 +33,19 @@
  
 #import "APCEligibleViewController.h"
 #import "APCConsentTaskViewController.h"
-#import "APCAppCore.h"
+#import "APCOnboardingManager.h"
+#import "APCLog.h"
+
+#ifndef APC_HAVE_CONSENT
+  #import "APCExampleLabel.h"
+#endif
+#import "APCCustomBackButton.h"
+
+#import "APCAppDelegate.h"
+
+#import "UIFont+APCAppearance.h"
+#import "UIColor+APCAppearance.h"
+#import "UIImage+APCHelper.h"
 
 
 static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
@@ -58,7 +70,7 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-  APCLogViewControllerAppeared();
+    APCLogViewControllerAppeared();
 }
 
 -(void)dealloc{
@@ -83,13 +95,8 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
     [self.navigationItem setLeftBarButtonItem:backster];
 }
 
-- (APCOnboarding *)onboarding
-{
-    return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).onboarding;
-}
-
-- (APCUser *) user {
-    return ((APCAppDelegate*) [UIApplication sharedApplication].delegate).dataSubstrate.currentUser;;
+- (APCOnboardingManager *)onboardingManager {
+    return [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager];
 }
 
 
@@ -99,13 +106,12 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
     
     self.consentVC.delegate = self;
     self.consentVC.navigationBar.topItem.title = NSLocalizedString(@"Consent", nil);
-    
-    NSUInteger subviewsCount = self.consentVC.view.subviews.count;
+#ifndef APC_HAVE_CONSENT
+#warning Adding watermark label until you define "APC_HAVE_CONSENT" to indicate that you have a real consenting document
     UILabel *watermarkLabel = [APCExampleLabel watermarkInRect:self.consentVC.view.bounds
                                                     withCenter:self.consentVC.view.center];
-    
-    [self.consentVC.view insertSubview:watermarkLabel atIndex:subviewsCount];
-    
+    [self.consentVC.view insertSubview:watermarkLabel atIndex:NSUIntegerMax];
+#endif
     [self presentViewController:self.consentVC animated:YES completion:nil];
     
 }
@@ -113,10 +119,8 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
 #pragma mark - ORKTaskViewControllerDelegate methods
 
 //called on notification
--(void)returnControlOfTaskDelegate: (id) __unused sender{
-    
+- (void)returnControlOfTaskDelegate: (id) __unused sender{
     self.consentVC.delegate = self;
-    
 }
 
 - (void)goBack
@@ -129,29 +133,23 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
 
 }
 
-- (void)taskViewController:(ORKTaskViewController *)taskViewController didFinishWithReason:(ORKTaskViewControllerFinishReason)reason error:(nullable NSError *)__unused error
-{
-    if (reason == ORKTaskViewControllerFinishReasonCompleted)
-    {
+- (void)taskViewController:(ORKTaskViewController *)taskViewController
+       didFinishWithReason:(ORKTaskViewControllerFinishReason)reason
+                     error:(nullable NSError *)__unused error {
+    if (reason == ORKTaskViewControllerFinishReasonCompleted) {
         ORKConsentSignatureResult *consentResult =  nil;
         
-        if ([taskViewController respondsToSelector:@selector(signatureResult)])
-        {
+        if ([taskViewController respondsToSelector:@selector(signatureResult)]) {
             APCConsentTaskViewController *consentTaskViewController = (APCConsentTaskViewController *)taskViewController;
-            if (consentTaskViewController.signatureResult)
-            {
+            if (consentTaskViewController.signatureResult) {
                 consentResult = consentTaskViewController.signatureResult;
             }
-        }
-        else
-        {
-            NSString*   signatureResultStepIdentifier = @"reviewStep";
+        } else {
+            NSString *signatureResultStepIdentifier = @"reviewStep";
             
-            for (ORKStepResult* result in taskViewController.result.results)
-            {
+            for (ORKStepResult* result in taskViewController.result.results) {
                 NSLog(@"Id: %@", result.identifier);
-                if ([result.identifier isEqualToString:signatureResultStepIdentifier])
-                {
+                if ([result.identifier isEqualToString:signatureResultStepIdentifier]) {
                     consentResult = (ORKConsentSignatureResult*)[[result results] firstObject];
                     break;
                 }
@@ -160,11 +158,11 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
         
         //  if no signature (no consent result) then assume the user failed the quiz
         if (consentResult != nil && consentResult.signature.requiresName && (consentResult.signature.givenName && consentResult.signature.familyName)) {
-            APCUser *user = [self user];
             
             // extract the user's sharing choice
             APCConsentTask *task = self.consentVC.task;
             ORKConsentSharingStep *sharingStep = task.sharingStep;
+            APCUserConsentSharingScope sharingScope = APCUserConsentSharingScopeNone;
             
             for (ORKStepResult* result in taskViewController.result.results) {
                 if ([result.identifier isEqualToString:sharingStep.identifier]) {
@@ -173,10 +171,10 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
                             NSNumber *answer = [choice.choiceAnswers firstObject];
                             if ([answer isKindOfClass:[NSNumber class]]) {
                                 if (0 == answer.integerValue) {
-                                    user.sharingScope = APCUserConsentSharingScopeStudy;
+                                    sharingScope = APCUserConsentSharingScopeStudy;
                                 }
                                 else if (1 == answer.integerValue) {
-                                    user.sharingScope = APCUserConsentSharingScopeAll;
+                                    sharingScope = APCUserConsentSharingScopeAll;
                                 }
                                 else {
                                     APCLogDebug(@"Unknown sharing choice answer: %@", answer);
@@ -191,43 +189,35 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
                 }
             }
             
-            // retrieve consent signature and date
-            user.consentSignatureName = [consentResult.signature.givenName stringByAppendingFormat:@" %@",consentResult.signature.familyName];
-            user.consentSignatureImage = UIImagePNGRepresentation(consentResult.signature.signatureImage);
-            user.consentSignatureDate = consentResult.startDate;
-            user.userConsented = YES;
+            // signal the onboarding manager that we're done here
+            [self.onboardingManager userDidConsentWithResult:consentResult sharingScope:sharingScope];
             
             [self.consentVC dismissViewControllerAnimated:YES completion:^{
                 [self startSignUp];
             }];
-        }
-        else
-        {
-            [[NSNotificationCenter defaultCenter] postNotificationName:APCConsentCompletedWithDisagreeNotification object:nil];
+        } else {
+            [[self onboardingManager] userDeclinedConsent];
             [taskViewController dismissViewControllerAnimated:YES completion:nil];
         }
-    }
-    else
-    {
+    } else {
+        APCOnboardingManager *manager = [self onboardingManager];
         [taskViewController dismissViewControllerAnimated:YES completion:^{
-             [[NSNotificationCenter defaultCenter] postNotificationName:APCConsentCompletedWithDisagreeNotification object:nil];
-         }];
+            [manager userDeclinedConsent];
+        }];
     }
 }
 
 
 #pragma mark - Selectors
 
-- (void)back
-{
+- (void)back {
     [self.navigationController popViewControllerAnimated:YES];
-    
-    [[self onboarding] popScene];
+    [[self onboardingManager].onboarding popScene];
 }
 
-- (void) startSignUp
-{
-    UIViewController *viewController = [[self onboarding] nextScene];
+- (void)startSignUp {
+    UIViewController *viewController = [[self onboardingManager].onboarding nextScene];
+    NSAssert(viewController, @"For now you must provide a scene after kAPCSignUpEligibleStepIdentifier");
     [self.navigationController pushViewController:viewController animated:YES];
 }
 

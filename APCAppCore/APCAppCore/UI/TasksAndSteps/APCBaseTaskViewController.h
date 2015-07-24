@@ -35,8 +35,10 @@
 #import <ResearchKit/ResearchKit.h>
 #import "APCScheduledTask.h"
 #import "APCTaskGroup.h"
+#import "ORKFileResult+Filename.h"
 
 @class APCAppDelegate;
+@class APCDataArchive;
 
 @interface APCBaseTaskViewController : ORKTaskViewController <ORKTaskViewControllerDelegate, ORKStepViewControllerDelegate>
 
@@ -44,6 +46,9 @@
 @property (nonatomic, copy) void (^createResultSummaryBlock) (NSManagedObjectContext* context);
 @property (readonly) APCAppDelegate *appDelegate;
 @property (nonatomic) BOOL canGenerateResult;
+
+//exposed for subclasses
+@property (strong, nonatomic) APCDataArchive *archive;
 
 /**
  Older, default version of an initialization method.  Initializes
@@ -66,5 +71,11 @@
 - (void) storeInCoreDataWithFileName: (NSString *) fileName
                        resultSummary: (NSString *) resultSummary
                         usingContext: (NSManagedObjectContext *) context;
+
+/**
+ Subclasses should override these methods
+ */
+- (void)addSpatialSpanMemoryResultsToArchive:(ORKSpatialSpanMemoryResult *) __unused result;
+- (void)addTappingResultsToArchive:(ORKTappingIntervalResult *)__unused result;
 
 @end

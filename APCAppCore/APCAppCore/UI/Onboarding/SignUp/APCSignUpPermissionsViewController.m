@@ -31,15 +31,20 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 // 
  
-#import "APCAppCore.h"
 #import "APCSignUpPermissionsViewController.h"
+#import "APCOnboardingManager.h"
+#import "APCPermissionsManager.h"
+#import "APCDataSubstrate.h"
+#import "APCLog.h"
 #import "APCTableViewItem.h"
 #import "APCPermissionsCell.h"
+#import "APCStepProgressBar.h"
+#import "APCCustomBackButton.h"
+
+#import "UIColor+APCAppearance.h"
 #import "NSBundle+Helper.h"
-#import "APCPermissionsManager.h"
-#import "UIAlertController+Helper.h"
 #import "UIView+Helper.h"
-#import "APCAppDelegate.h"
+#import "UIAlertController+Helper.h"
 
 #import <CoreMotion/CoreMotion.h>
 
@@ -57,7 +62,6 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
 
 @synthesize stepProgressBar;
 
-@synthesize user = _user;
 
 - (instancetype)init
 {
@@ -77,9 +81,8 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
 
 - (void)sharedInit
 {
-    _permissions = [NSMutableArray array];
-    
-    _permissionsManager = [[APCPermissionsManager alloc] init];
+    self.permissions = [NSMutableArray array];
+    self.permissionsManager = [self onboardingManager].permissionsManager;
 }
 
 #pragma mark - Lifecycle
@@ -118,12 +121,7 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
 - (NSArray *)prepareData
 {
     NSMutableArray *items = [NSMutableArray new];
-    
-    NSDictionary *initialOptions = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).initializationOptions;
-    NSArray *servicesArray = initialOptions[kAppServicesListRequiredKey];
-    NSDictionary *servicesDescrtiptions = initialOptions[kAppServicesDescriptionsKey];
-    
-    for (NSNumber *type in servicesArray) {
+    for (NSNumber *type in _permissionsManager.requiredServiceTypes) {
         
         APCSignUpPermissionsType permissionType = type.integerValue;
         
@@ -134,7 +132,7 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
                 item.permissionType = kAPCSignUpPermissionsTypeHealthKit;
                 item.permissionGranted = [self.permissionsManager isPermissionsGrantedForType:item.permissionType];
                 item.caption = NSLocalizedString(@"Health Kit", @"");
-                item.detailText = servicesDescrtiptions[@(kAPCSignUpPermissionsTypeHealthKit)];
+                item.detailText = [_permissionsManager permissionDescriptionForType:kAPCSignUpPermissionsTypeHealthKit];
                 [items addObject:item];
             }
                 break;
@@ -144,7 +142,7 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
                 item.permissionType = kAPCSignUpPermissionsTypeLocation;
                 item.permissionGranted = [self.permissionsManager isPermissionsGrantedForType:item.permissionType];
                 item.caption = NSLocalizedString(@"Location Services", @"");
-                item.detailText = servicesDescrtiptions[@(kAPCSignUpPermissionsTypeLocation)];
+                item.detailText = [_permissionsManager permissionDescriptionForType:kAPCSignUpPermissionsTypeLocation];
                 [items addObject:item];
             }
                 break;
@@ -155,7 +153,7 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
                     item.permissionType = kAPCSignUpPermissionsTypeCoremotion;
                     item.permissionGranted = [self.permissionsManager isPermissionsGrantedForType:item.permissionType];
                     item.caption = NSLocalizedString(@"Motion Activity", @"");
-                    item.detailText = servicesDescrtiptions[@(kAPCSignUpPermissionsTypeCoremotion)];
+                    item.detailText = [_permissionsManager permissionDescriptionForType:kAPCSignUpPermissionsTypeCoremotion];
                     [items addObject:item];
                 }
             }
@@ -166,7 +164,7 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
                 item.permissionType = kAPCSignUpPermissionsTypeLocalNotifications;
                 item.permissionGranted = [self.permissionsManager isPermissionsGrantedForType:item.permissionType];
                 item.caption = NSLocalizedString(@"Notifications", @"");
-                item.detailText = servicesDescrtiptions[@(kAPCSignUpPermissionsTypeLocalNotifications)];
+                item.detailText = [_permissionsManager permissionDescriptionForType:kAPCSignUpPermissionsTypeLocalNotifications];
                 [items addObject:item];
             }
                 break;
@@ -176,7 +174,7 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
                 item.permissionType = kAPCSignUpPermissionsTypeMicrophone;
                 item.permissionGranted = [self.permissionsManager isPermissionsGrantedForType:item.permissionType];
                 item.caption = NSLocalizedString(@"Microphone", @"");
-                item.detailText = servicesDescrtiptions[@(kAPCSignUpPermissionsTypeMicrophone)];
+                item.detailText = [_permissionsManager permissionDescriptionForType:kAPCSignUpPermissionsTypeMicrophone];
                 [items addObject:item];
             }
                 break;
@@ -197,16 +195,12 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
     [self.navigationItem setLeftBarButtonItem:backster];
 }
 
-- (APCUser *) user {
-    if (!_user) {
-        _user = ((APCAppDelegate*) [UIApplication sharedApplication].delegate).dataSubstrate.currentUser;
-    }
-    return _user;
+- (APCOnboardingManager *)onboardingManager {
+    return [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager];
 }
 
-- (APCOnboarding *)onboarding
-{
-    return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).onboarding;
+- (APCOnboarding *)onboarding {
+    return [self onboardingManager].onboarding;
 }
 
 #pragma mark - UITableViewDataSource methods
@@ -291,24 +285,11 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
 {
     [self.stepProgressBar setCompletedSteps:[self onboarding].onboardingTask.currentStepNumber animation:YES];
     
-    if ([self onboarding].taskType == kAPCOnboardingTaskTypeSignIn) {
-        // We are posting this notification after .4 seconds delay, because we need to display the progress bar completion animation
-        [self performSelector:@selector(setUserSignedIn) withObject:nil afterDelay:0.4];
-    } else{
-        [self performSelector:@selector(setUserSignedUp) withObject:nil afterDelay:0.4];
-    }
-}
-
-- (void) setUserSignedUp
-{
-    self.user.signedUp = YES;
-}
-
-- (void)setUserSignedIn
-{
-    self.user.signedIn = YES;
-    
-    [(APCAppDelegate *)[UIApplication sharedApplication].delegate afterOnBoardProcessIsFinished];
+    // We are calling this method after .4 seconds delay, because we need to display the progress bar completion animation
+    APCOnboardingManager *manager = [self onboardingManager];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [manager onboardingDidFinish];
+    });
 }
 
 - (void)back

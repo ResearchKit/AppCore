@@ -32,19 +32,22 @@
 // 
  
 #import "APCStudyOverviewViewController.h"
+#import "APCStudyDetailsViewController.h"
+#import "APCShareViewController.h"
+#import "APCTintedTableViewCell.h"
+#import "APCOnboardingManager.h"
+#import "APCSignInViewController.h"
+#import "APCUser.h"
+#import "APCLog.h"
+
+#import "APCAppDelegate.h"
+
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
 #import "UIImage+APCHelper.h"
-#import "APCStudyDetailsViewController.h"
-#import "APCShareViewController.h"
-#import "APCAppDelegate.h"
-#import "APCOnboarding.h"
-#import "NSBundle+Helper.h"
-#import "APCSignInViewController.h"
-#import "APCUser.h"
 #import "UIAlertController+Helper.h"
 #import "APCDeviceHardware+APCHelper.h"
-#import "APCAppCore.h"
+#import "NSBundle+Helper.h"
 
 static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdentifier";
 
@@ -76,14 +79,14 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(goBackToSignUpJoin:)
-                                                 name:APCConsentCompletedWithDisagreeNotification
+                                                 name:APCUserDidDeclineConsentNotification
                                                object:nil];
   APCLogViewControllerAppeared();
 }
 
 - (void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:APCConsentCompletedWithDisagreeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:APCUserDidDeclineConsentNotification object:nil];
     _tableView.delegate = nil;
     _tableView.dataSource = nil;
 }
@@ -157,11 +160,6 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     self.diseaseNameLabel.textColor = [UIColor appSecondaryColor1];
     self.diseaseNameLabel.adjustsFontSizeToFitWidth = YES;
     self.diseaseNameLabel.minimumScaleFactor = 0.5;
-}
-
-- (APCOnboarding *)onboarding
-{
-    return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).onboarding;
 }
 
 - (APCUser *)user
@@ -311,22 +309,22 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     return studyItemType;
 }
 
-- (void) signInTapped: (id) __unused sender
-{
-    [((APCAppDelegate *)[UIApplication sharedApplication].delegate) instantiateOnboardingForType:kAPCOnboardingTaskTypeSignIn];
+- (void)signInTapped:(id)__unused sender {
+    APCOnboardingManager *manager = [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager];
+    [manager instantiateOnboardingForType:kAPCOnboardingTaskTypeSignIn];
     
-    UIViewController *viewController = [[self onboarding] nextScene];
+    UIViewController *viewController = [manager.onboarding nextScene];
+    NSAssert(viewController, @"Expecting the first scene's view controller for sign-in onboarding but got nothing");
     [self.navigationController pushViewController:viewController animated:YES];
-    
 }
 
-- (void) signUpTapped: (id) __unused sender
-{
-    [((APCAppDelegate *)[UIApplication sharedApplication].delegate) instantiateOnboardingForType:kAPCOnboardingTaskTypeSignUp];
+- (void)signUpTapped:(id)__unused sender {
+    APCOnboardingManager *manager = [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager];
+    [manager instantiateOnboardingForType:kAPCOnboardingTaskTypeSignUp];
     
-    UIViewController *viewController = [[self onboarding] nextScene];
+    UIViewController *viewController = [manager.onboarding nextScene];
+    NSAssert(viewController, @"Expecting the first scene's view controller for sign-up onboarding but got nothing");
     [self.navigationController pushViewController:viewController animated:YES];
-    
 }
 
 

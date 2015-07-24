@@ -83,8 +83,9 @@ NSString *NSStringShortFromAPCScheduleSourceAsNumber (NSNumber *scheduleSourceAs
 NSString *const APCUserSignedUpNotification                     = @"APCUserSignedUpNotification";
 NSString *const APCUserSignedInNotification                     = @"APCUserSignedInNotification";
 NSString *const APCUserLogOutNotification                       = @"APCUserLogOutNotification";
-NSString *const APCUserWithdrawStudyNotification                = @"APCUserWithdrawStudyNotification";
+NSString *const APCUserDidWithdrawStudyNotification             = @"APCUserDidWithdrawStudyNotification";
 NSString *const APCUserDidConsentNotification                   = @"APCUserDidConsentNotification";
+NSString *const APCUserDidDeclineConsentNotification            = @"APCUserDidDeclineConsentNotification";
 
 NSString *const APCScheduleUpdatedNotification                  = @"APCScheduleUpdatedNotification";
 NSString *const APCUpdateActivityNotification                   = @"APCUpdateActivityNotification";

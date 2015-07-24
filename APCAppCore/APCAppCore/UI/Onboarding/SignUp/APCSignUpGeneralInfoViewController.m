@@ -32,11 +32,12 @@
 // 
  
 #import "APCSignUpGeneralInfoViewController.h"
+#import "APCTermsAndConditionsViewController.h"
 #import "APCPermissionButton.h"
 #import "APCPermissionsManager.h"
-#import "APCTermsAndConditionsViewController.h"
-#import "APCOnboarding.h"
-#import "APCAppDelegate.h"
+#import "APCOnboardingManager.h"
+#import "APCLog.h"
+
 #import "UIColor+APCAppearance.h"
 #import "NSDate+Helper.h"
 #import "NSString+Helper.h"
@@ -45,7 +46,6 @@
 #import "NSBundle+Helper.h"
 #import "APCSpinnerViewController.h"
 #import "APCUser+Bridge.h"
-#import "APCLog.h"
 #import "NSError+APCAdditions.h"
 
 static NSString *kInternetNotAvailableErrorMessage1 = @"Internet Not Connected";
@@ -56,7 +56,7 @@ static CGFloat kHeaderHeight = 157.0f;
 
 @interface APCSignUpGeneralInfoViewController () <APCTermsAndConditionsViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, APCFormTextFieldDelegate>
 
-@property (nonatomic, strong) APCPermissionsManager *permissionManager;
+@property (nonatomic, strong) APCPermissionsManager *permissionsManager;
 @property (nonatomic) BOOL permissionGranted;
 @property (weak, nonatomic) IBOutlet APCPermissionButton *permissionButton;
 
@@ -84,10 +84,10 @@ static CGFloat kHeaderHeight = 157.0f;
     self.permissionButton.attributed = NO;
     self.permissionButton.alignment = kAPCPermissionButtonAlignmentLeft;
     
-    self.permissionManager = [[APCPermissionsManager alloc] init];
+    self.permissionsManager = [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager].permissionsManager;
     
     __weak typeof(self) weakSelf = self;
-    [self.permissionManager requestForPermissionForType:kAPCSignUpPermissionsTypeHealthKit withCompletion:^(BOOL granted, NSError * __unused error) {
+    [self.permissionsManager requestForPermissionForType:kAPCSignUpPermissionsTypeHealthKit withCompletion:^(BOOL granted, NSError * __unused error) {
         if (granted) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 weakSelf.permissionGranted = YES;
@@ -184,9 +184,7 @@ static CGFloat kHeaderHeight = 157.0f;
 }
 
 - (NSArray *)prepareContent {
-    
-    NSDictionary *initialOptions = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).initializationOptions;
-    NSArray *profileElementsList = initialOptions[kAppProfileElementsListKey];
+    NSArray *profileElementsList = [self onboardingManager].userProfileElements;
     
     NSMutableArray *items = [NSMutableArray new];
     NSMutableArray *rowItems = [NSMutableArray new];
@@ -273,9 +271,12 @@ static CGFloat kHeaderHeight = 157.0f;
     return [NSArray arrayWithArray:items];
 }
 
-- (APCOnboarding *)onboarding
-{
-    return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).onboarding;
+- (APCOnboardingManager *)onboardingManager {
+    return [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager];
+}
+
+- (APCOnboarding *)onboarding {
+    return [self onboardingManager].onboarding;
 }
 
 #pragma mark - UITextFieldDelegate methods
@@ -748,7 +749,7 @@ static CGFloat kHeaderHeight = 157.0f;
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Take Photo", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
         
-        [self.permissionManager requestForPermissionForType:kAPCSignUpPermissionsTypeCamera withCompletion:^(BOOL granted, NSError *error) {
+        [self.permissionsManager requestForPermissionForType:kAPCSignUpPermissionsTypeCamera withCompletion:^(BOOL granted, NSError *error) {
             if (granted) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [weakSelf openCamera];
@@ -765,7 +766,7 @@ static CGFloat kHeaderHeight = 157.0f;
     }
     
     UIAlertAction *libraryAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Choose from Library", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
-        [self.permissionManager requestForPermissionForType:kAPCSignUpPermissionsTypePhotoLibrary withCompletion:^(BOOL granted, NSError *error) {
+        [self.permissionsManager requestForPermissionForType:kAPCSignUpPermissionsTypePhotoLibrary withCompletion:^(BOOL granted, NSError *error) {
             if (granted) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [weakSelf openPhotoLibrary];

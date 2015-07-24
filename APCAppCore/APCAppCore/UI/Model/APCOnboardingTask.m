@@ -87,24 +87,17 @@ NSString *const kAPCSignUpShareAppStepIdentifier            = @"ShareApp";
 
 #pragma mark - Getter methods
 
-- (BOOL)permissionScreenSkipped
-{
-    BOOL skip = NO;
-    
+- (BOOL)permissionScreenSkipped {
     if ([self.delegate respondsToSelector:@selector(numberOfServicesInPermissionsListForOnboardingTask:)]) {
-        NSInteger count = [self.delegate numberOfServicesInPermissionsListForOnboardingTask:self];
-        skip = (count == 0);
+        return (0 == [self.delegate numberOfServicesInPermissionsListForOnboardingTask:self]);
     }
-    
-    return skip;
+    return NO;
 }
 
-- (APCUser *)user
-{
+- (APCUser *)user {
     if ([self.delegate respondsToSelector:@selector(userForOnboardingTask:)]) {
         _user = [self.delegate userForOnboardingTask:self];
     }
-    
     return _user;
 }
 

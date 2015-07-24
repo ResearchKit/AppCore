@@ -54,6 +54,20 @@ static NSString * const kAPCDebugDateFormat = @"EEE yyyy-MM-dd HH:mm zzz";
 static NSDateFormatter *debugDateFormatter = nil;
 
 
+
+@interface APCTaskGroup ()
+
+/**
+ By flagging the -init method this way, we help ensure we all use the same
+ master -init method -- we get a compiler warning if our other -init methods
+ don't call this one.  Hopefully, this helps ensure that we initialize all
+ properties consistently and safely.
+ */
+- (instancetype) init NS_DESIGNATED_INITIALIZER;
+
+@end
+
+
 @implementation APCTaskGroup
 
 /**
@@ -84,36 +98,48 @@ static NSDateFormatter *debugDateFormatter = nil;
     if (self)
     {
         _task = nil;
+        _schedule = nil;
         _samplePotentialTask = nil;
         _requiredRemainingTasks = nil;
         _requiredCompletedTasks = nil;
         _gratuitousCompletedTasks = nil;
         _totalRequiredTasksForThisTimeRange = 0;
-        _date = nil;
+        _scheduledDate = nil;
+        _appearanceDate = nil;
+        _expirationDate = nil;
+        _expiresToday = NO;
     }
 
     return self;
 }
 
 - (instancetype)       initWithTask: (APCTask *) task
+                           schedule: (APCSchedule *) schedule
     requiredRemainingPotentialTasks: (NSArray *) requiredRemainingTasks
              requiredCompletedTasks: (NSArray *) requiredCompletedTasks
            gratuitousCompletedTasks: (NSArray *) gratuitousCompletedTasks
                 samplePotentialTask: (APCPotentialTask *) samplePotentialTask
                  totalRequiredTasks: (NSUInteger) countOfRequiredTasks
-                            forDate: (NSDate *) date
+                   forScheduledDate: (NSDate *) scheduledDate
+                     appearanceDate: (NSDate *) appearanceDate
+                     expirationDate: (NSDate *) expirationDate
 {
     self = [self init];
 
     if (self)
     {
         _task = task;
+        _schedule = schedule;
         _samplePotentialTask = samplePotentialTask;
         _requiredRemainingTasks = requiredRemainingTasks;
         _requiredCompletedTasks = requiredCompletedTasks;
         _gratuitousCompletedTasks = gratuitousCompletedTasks;
         _totalRequiredTasksForThisTimeRange = countOfRequiredTasks;
-        _date = date;
+        _scheduledDate = scheduledDate;
+        _appearanceDate = appearanceDate;
+        _expirationDate = expirationDate;
+
+        _expiresToday = _expirationDate != nil && [_expirationDate.startOfDay isEqualToDate: _appearanceDate.startOfDay];
     }
 
     return self;
@@ -153,6 +179,15 @@ static NSDateFormatter *debugDateFormatter = nil;
     return self.allCompletedTasks.lastObject;
 }
 
+/**
+ This method (formerly a property) is deprecated.  Please see header file
+ for details.
+ */
+- (NSDate *) date
+{
+    return self.appearanceDate;
+}
+
 - (NSDate *) dateFullyCompleted
 {
     NSDate *latestCompletionDate = nil;
@@ -183,12 +218,13 @@ static NSDateFormatter *debugDateFormatter = nil;
         [dates appendFormat: @"%@, ", scheduledTask.updatedAt];
     }
 
-    result = [NSString stringWithFormat: @"TaskGroup: %@ | %@ | %@ | vcToShow: %@ | %@ | tasks: %@ required, %@ completed, %@ remaining, %@ gratuitous completed, most recent completed on %@",
+    result = [NSString stringWithFormat: @"TaskGroup: %@ | %@ | %@ | vcToShow: %@ | %@ | expires today: %@ | tasks: %@ required, %@ completed, %@ remaining, %@ gratuitous completed, most recent completed on %@",
               NSStringShortFromAPCScheduleSourceAsNumber ([self.task.schedules.anyObject scheduleSource]),
               self.task.taskTitle,
               self.task.taskID,
               self.task.taskClassName,
               dates,
+              self.expiresToday ? @"YES" : @"NO",
               @(self.totalRequiredTasksForThisTimeRange),
               @(self.requiredCompletedTasks.count),
               @(self.requiredRemainingTasks.count),
