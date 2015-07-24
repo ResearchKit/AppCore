@@ -32,13 +32,17 @@
 // 
  
 #import "APCSignUpInfoViewController.h"
-#import "APCAppDelegate.h"
+#import "APCOnboardingManager.h"
 #import "APCUserInfoConstants.h"
+#import "APCDataSubstrate.h"
+#import "APCUser.h"
+#import "APCLog.h"
+#import "APCStepProgressBar.h"
+
 #import "NSString+Helper.h"
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
-#import "APCAppDelegate.h"
-#import "APCAppCore.h"
+
 
 static CGFloat const kHeaderHeight = 127.0f;
 
@@ -52,7 +56,6 @@ static CGFloat const kHeaderHeight = 127.0f;
 @implementation APCSignUpInfoViewController
 
 @synthesize stepProgressBar;
-@synthesize user = _user;
 
 - (void)dealloc {
     _nameTextField.delegate = nil;
@@ -88,7 +91,7 @@ static CGFloat const kHeaderHeight = 127.0f;
         
         self.tableView.tableHeaderView = self.tableView.tableHeaderView;
     }
-  APCLogViewControllerAppeared();
+    APCLogViewControllerAppeared();
 }
 
 #pragma mark -
@@ -106,17 +109,12 @@ static CGFloat const kHeaderHeight = 127.0f;
     self.stepProgressBar.leftLabel.attributedText = attributedString;
 }
 
-- (APCUser *) user {
-    if (!_user) {
-        _user = ((APCAppDelegate*) [UIApplication sharedApplication].delegate).dataSubstrate.currentUser;
-    }
-    
-    return _user;
+- (APCOnboarding *)onboarding {
+    return [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager].onboarding;
 }
 
-- (APCOnboarding *)onboarding
-{
-    return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).onboarding;
+- (APCUser *)user {
+    return [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager].user;
 }
 
 #pragma mark - Appearance

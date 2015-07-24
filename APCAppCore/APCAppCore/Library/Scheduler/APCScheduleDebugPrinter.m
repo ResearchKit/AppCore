@@ -36,11 +36,13 @@
 #import "APCConstants.h"
 #import "APCTask+AddOn.h"
 
-/** The date format we use when debug-printing the schedules. */
-static NSString * const kAPCDebugDateFormat = @"EEE yyyy-MM-dd HH:mm zzz";
-
-/** A date formatter we use when debug-printing the schedules. */
-static NSDateFormatter *debugDateFormatter = nil;
+/*
+ Date-formatting tools we use when debug-printing the schedules.
+ */
+static NSString * const kAPCDebugDateFormat                 = @"EEE yyyy-MM-dd HH:mm zzz";
+static NSString * const kAPCDebugDateFormatWithMilliseconds = @"EEE yyyy-MM-dd HH:mm.ss.SSS zzz";
+static NSDateFormatter  *debugDateFormatter                 = nil;
+static NSDateFormatter  *debugDateFormatterWithMilliseconds = nil;
 
 @implementation APCScheduleDebugPrinter
 
@@ -60,6 +62,32 @@ static NSDateFormatter *debugDateFormatter = nil;
     debugDateFormatter = [NSDateFormatter new];
     debugDateFormatter.dateFormat = kAPCDebugDateFormat;
     debugDateFormatter.timeZone = [NSTimeZone localTimeZone];
+
+    debugDateFormatterWithMilliseconds = [NSDateFormatter new];
+    debugDateFormatterWithMilliseconds.dateFormat = kAPCDebugDateFormatWithMilliseconds;
+    debugDateFormatterWithMilliseconds.timeZone = [NSTimeZone localTimeZone];
+}
+
+- (void) printSetOfSchedules: (NSSet *) schedules
+           intoMutableString: (NSMutableString *) printout
+                   withLabel: (NSString *) label
+{
+    /*
+     -printArray always alphabetizes the array, so we can safely
+     send it the results of this -allObjects call.
+     */
+    [self printArrayOfSchedules: schedules.allObjects
+                      withLabel: label
+              intoMutableString: printout];
+}
+
+- (void) printArrayOfSchedules: (NSArray *) schedules
+             intoMutableString: (NSMutableString *) printout
+                     withLabel: (NSString *) label
+{
+    [self printArrayOfSchedules: schedules
+                      withLabel: label
+              intoMutableString: printout];
 }
 
 - (void) printArrayOfSchedules: (NSArray *) schedules
@@ -85,11 +113,17 @@ static NSDateFormatter *debugDateFormatter = nil;
 
     if (schedules.count == 0)
     {
-        [printout appendString: @"- (none)\n"];
+        [printout appendString: @"-  (none)\n"];
     }
 
     else
     {
+        /*
+         We can't get to our managed-object category methods during
+         migration.  This class method lets us get around that.
+         */
+        schedules = [APCSchedule sortSchedules: schedules];
+
         for (APCSchedule *schedule in schedules)
         {
             NSString *source = [NSStringFromAPCScheduleSourceAsNumber (schedule.scheduleSource) substringFromIndex: @"APCScheduleSource".length];
@@ -102,19 +136,19 @@ static NSDateFormatter *debugDateFormatter = nil;
             NSString *taskId                  = [self firstTaskIdForSchedule: schedule];
             NSString *isOneTimeScheduleString = [self isOneTimeScheduleStringForSchedule: schedule];
 
-            patternWidth            = MAX (patternWidth,       schedule.scheduleString.length);
-            delayWidth              = MAX (delayWidth,         schedule.delay.length);
-            expirationWidth         = MAX (expirationWidth,    schedule.expires.length);
-            sourceWidth             = MAX (sourceWidth,        source.length);
-            startDateWidth          = MAX (startDateWidth,     [self stringFromDate: schedule.startsOn].length);
-            endDateWidth            = MAX (endDateWidth,       [self stringFromDate: schedule.endsOn].length);
-            effectiveStartDateWidth = MAX (startDateWidth,     [self stringFromDate: schedule.effectiveStartDate].length);
-            effectiveEndDateWidth   = MAX (endDateWidth,       [self stringFromDate: schedule.effectiveEndDate].length);
-            titleWidth              = MAX (titleWidth,         title.length);
-            intervalWidth           = MAX (intervalWidth,      schedule.interval.length);
-            timeListWidth           = MAX (timeListWidth,      schedule.timesOfDay.length);
-            taskIdWidth             = MAX (taskIdWidth,        taskId.length);
-            oneTimeStringWidth      = MAX (oneTimeStringWidth, isOneTimeScheduleString.length);
+            patternWidth            = MAX (patternWidth,            schedule.scheduleString.length);
+            delayWidth              = MAX (delayWidth,              schedule.delay.length);
+            expirationWidth         = MAX (expirationWidth,         schedule.expires.length);
+            sourceWidth             = MAX (sourceWidth,             source.length);
+            startDateWidth          = MAX (startDateWidth,          [self stringFromDate: schedule.startsOn].length);
+            endDateWidth            = MAX (endDateWidth,            [self stringFromDate: schedule.endsOn].length);
+            effectiveStartDateWidth = MAX (effectiveStartDateWidth, [self stringFromDate: schedule.effectiveStartDate].length);
+            effectiveEndDateWidth   = MAX (effectiveEndDateWidth,   [self stringFromDate: schedule.effectiveEndDate].length);
+            titleWidth              = MAX (titleWidth,              title.length);
+            intervalWidth           = MAX (intervalWidth,           schedule.interval.length);
+            timeListWidth           = MAX (timeListWidth,           schedule.timesOfDay.length);
+            taskIdWidth             = MAX (taskIdWidth,             taskId.length);
+            oneTimeStringWidth      = MAX (oneTimeStringWidth,      isOneTimeScheduleString.length);
         }
 
         titleWidth = MIN (titleWidth, longestTitleIllPrint);
@@ -230,6 +264,18 @@ static NSDateFormatter *debugDateFormatter = nil;
     return result;
 }
 
++ (NSString *) stringWithMillisecondsFromDate: (NSDate *) date
+{
+    NSString *result = @"(null)";
+
+    if (date != nil)
+    {
+        result = [debugDateFormatterWithMilliseconds stringFromDate: date];
+    }
+
+    return result;
+}
+
 - (NSString *) stringsFromArrayOfDates: (NSArray *) arrayOfDates
 {
     NSMutableString *result = [NSMutableString new];
@@ -249,6 +295,11 @@ static NSDateFormatter *debugDateFormatter = nil;
         {
             [result appendString: [NSString stringWithFormat: @"%@", maybeDate]];
         }
+    }
+
+    if (result.length == 0)
+    {
+        [result appendString: @"(none)"];
     }
 
     return result;

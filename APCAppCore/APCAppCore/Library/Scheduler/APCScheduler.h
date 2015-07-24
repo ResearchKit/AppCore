@@ -34,6 +34,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "APCConstants.h"
+#import "APCScheduleQueryEngine.h"
 
 @class APCDataSubstrate;
 @class APCSchedule;
@@ -89,7 +90,7 @@ typedef void (^APCSchedulerCallbackForFetchingCount) (NSUInteger count, NSError 
  and/or completed, and if the user cancels the task, we
  delete that ScheduledTask.
  */
-@interface APCScheduler : NSObject
+@interface APCScheduler : NSObject <APCScheduleQueryEngine>
 
 + (APCScheduler *) defaultScheduler;
 
@@ -122,6 +123,11 @@ typedef void (^APCSchedulerCallbackForFetchingCount) (NSUInteger count, NSError 
                       usingQueue: (NSOperationQueue *) queue
                  toReportResults: (APCSchedulerCallbackForTaskGroupQueries) callbackBlock;
 
+- (NSArray *) querySchedulesActiveOnDayOfDate: (NSDate *) date
+                                   fromSource: (APCScheduleSource) scheduleSource
+                                    inContext: (NSManagedObjectContext *) context
+                               returningError: (NSError * __autoreleasing *) errorToReturn;
+
 
 
 // ---------------------------------------------------------
@@ -133,6 +139,12 @@ typedef void (^APCSchedulerCallbackForFetchingCount) (NSUInteger count, NSError 
 
 - (void) loadTasksAndSchedulesFromDiskAndThenUseThisQueue: (NSOperationQueue *) queue
                                          toDoThisWhenDone: (APCSchedulerCallbackForFetchAndLoadOperations) callbackBlock;
+
+- (void) loadTasksAndSchedulesFromDiskFileNamed: (NSString *) fileNameWithExtension
+                                       inBundle: (NSBundle *) bundle
+                                assigningSource: (APCScheduleSource) scheduleSource
+                            andThenUseThisQueue: (NSOperationQueue *) queue
+                               toDoThisWhenDone: (APCSchedulerCallbackForFetchAndLoadOperations) callbackBlock;
 
 - (void) importScheduleFromDictionary: (NSDictionary *) scheduleContainingTasks
                       assigningSource: (APCScheduleSource) scheduleSource

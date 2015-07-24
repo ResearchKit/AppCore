@@ -34,6 +34,7 @@
 #import "APCTask+AddOn.h"
 #import "APCAppCore.h"
 #import <ResearchKit/ResearchKit.h>
+#import "NSManagedObject+APCHelper.h"
 
 static NSArray *defaultSortDescriptorsInternal = nil;
 
@@ -108,6 +109,45 @@ static NSString * const kTaskFileNameKey = @"taskFileName";
     return taskToReturn;
 }
 
++ (NSSet *) querySavedTasksWithTaskIds: (NSSet *) setOfTaskIds
+                          usingContext: (NSManagedObjectContext *) context
+{
+    NSSet *result = nil;
+
+    if (setOfTaskIds.count > 0 && context != nil)
+    {
+        NSString *nameOfTaskIdField = NSStringFromSelector (@selector (taskID));
+
+        NSFetchRequest *query = [self requestWithPredicate: [NSPredicate predicateWithFormat: @"%K in %@",
+                                                             nameOfTaskIdField,
+                                                             setOfTaskIds]];
+
+        NSError *error = nil;
+        NSArray *tasks = [context executeFetchRequest: query
+                                                error: & error];
+        if (tasks == nil)
+        {
+            APCLogError2 (error);
+        }
+        else
+        {
+            NSMutableSet *nonTemporaryTasks = [NSMutableSet new];
+
+            for (APCTask *task in tasks)
+            {
+                if (! task.objectID.isTemporaryID)
+                {
+                    [nonTemporaryTasks addObject: task];
+                }
+            }
+
+            result = [NSSet setWithSet: nonTemporaryTasks];
+        }
+    }
+
+    return result;
+}
+
 - (id<ORKTask>)rkTask
 {
     ORKOrderedTask * retTask = self.taskDescription ? [NSKeyedUnarchiver unarchiveObjectWithData:self.taskDescription] : nil;
@@ -119,9 +159,31 @@ static NSString * const kTaskFileNameKey = @"taskFileName";
     self.taskDescription = [NSKeyedArchiver archivedDataWithRootObject:rkTask];
 }
 
-/*********************************************************************************/
+- (APCSchedule *) mostRecentSchedule
+{
+    NSString *nameOfStartDateField = NSStringFromSelector (@selector (startsOn));
+    NSArray *sortedSchedules = [self.schedules sortedArrayUsingDescriptors: @[[NSSortDescriptor sortDescriptorWithKey: nameOfStartDateField ascending: NO]]];
+
+    APCSchedule *newestSchedule = nil;
+
+    for (APCSchedule *schedule in sortedSchedules)
+    {
+        if (! schedule.objectID.isTemporaryID)
+        {
+            newestSchedule = schedule;
+            break;
+        }
+    }
+
+    return newestSchedule;
+}
+
+
+
+// ---------------------------------------------------------
 #pragma mark - Life Cycle Methods
-/*********************************************************************************/
+// ---------------------------------------------------------
+
 - (void)awakeFromInsert
 {
     [super awakeFromInsert];
