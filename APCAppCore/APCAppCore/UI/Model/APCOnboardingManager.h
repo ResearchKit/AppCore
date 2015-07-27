@@ -82,16 +82,13 @@ NS_ASSUME_NONNULL_BEGIN
 /// The permissions manager defining and requesting needed permissions.
 @property (strong, nonatomic, readonly) APCPermissionsManager *permissionsManager;
 
-/// Array of `kAPCUserInfoItemType` as NSNumber to specify which profile elements about a user should be collected.
-@property (strong, nonatomic) NSArray *userProfileElements;
-
 /// Whether a sign-in action, to resume a study previously enrolled in, is supported. Defaults to YES.
 @property (nonatomic, getter=isSignInSupported) BOOL signInSupported;
 
-+ (instancetype)managerWithProvider:(id<APCOnboardingManagerProvider>)provider user:(APCUser * __nonnull)user userProfileElements: (NSArray *)userProfileElements;
++ (instancetype)managerWithProvider:(id<APCOnboardingManagerProvider>)provider user:(APCUser * __nonnull)user;
 
 /** Designated initializer. */
-- (instancetype)initWithProvider:(id<APCOnboardingManagerProvider>)provider user:(APCUser * __nonnull)user userProfileElements: (NSArray *)userProfileElements;
+- (instancetype)initWithProvider:(id<APCOnboardingManagerProvider>)provider user:(APCUser * __nonnull)user;
 
 - (void)instantiateOnboardingForType:(APCOnboardingTaskType)type;
 

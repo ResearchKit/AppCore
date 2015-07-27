@@ -90,7 +90,7 @@
 }
 
 - (NSArray *)prepareContent {
-    NSArray *profileElementsList = [self onboardingManager].userProfileElements;
+    NSArray *profileElementsList = [self onboardingManager].permissionsManager.userInfoItemTypes;
     NSMutableArray *rowItems = [NSMutableArray new];
     
     for (NSNumber *type in profileElementsList) {

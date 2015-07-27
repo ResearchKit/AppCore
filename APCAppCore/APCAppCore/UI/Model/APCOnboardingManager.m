@@ -57,18 +57,17 @@ NSString * const kAPCOnboardingStoryboardName = @"APCOnboarding";
 @implementation APCOnboardingManager
 
 
-- (instancetype)initWithProvider:(id<APCOnboardingManagerProvider>)provider user:(APCUser * __nonnull)user userProfileElements: (NSArray *)userProfileElements {
+- (instancetype)initWithProvider:(id<APCOnboardingManagerProvider>)provider user:(APCUser * __nonnull)user {
     if ((self = [super init])) {
         self.provider = provider;
         self.user = user;
-        self.userProfileElements = userProfileElements;
         _signInSupported = YES;
     }
     return self;
 }
 
-+ (instancetype)managerWithProvider:(id<APCOnboardingManagerProvider>)provider user:(APCUser * __nonnull)user userProfileElements: (NSArray *)userProfileElements{
-    return [[self alloc] initWithProvider:provider user:user userProfileElements:userProfileElements];
++ (instancetype)managerWithProvider:(id<APCOnboardingManagerProvider>)provider user:(APCUser * __nonnull)user {
+    return [[self alloc] initWithProvider:provider user:user];
 }
 
 
@@ -186,7 +185,7 @@ NSString * const kAPCOnboardingStoryboardName = @"APCOnboarding";
 }
 
 - (NSInteger)numberOfServicesInPermissionsListForOnboardingTask:(APCOnboardingTask *)__unused task {
-    return [self.permissionsManager.requiredServiceTypes count];
+    return [self.permissionsManager.signUpPermissionTypes count];
 }
 
 @end
