@@ -986,6 +986,10 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     return _onboardingManager;
 }
 
+- (APCPermissionsManager *)permissionsManager {
+    return [APCPermissionsManager new];
+}
+
 - (APCScene *)inclusionCriteriaSceneForOnboarding:(APCOnboarding *)__unused onboarding {
     NSAssert(NO, @"Cannot retun nil. Override this delegate method to return a valid APCScene.");
     return nil;
