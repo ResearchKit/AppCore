@@ -34,12 +34,15 @@
 #import "APCBaseGraphView.h"
 #import "UIColor+APCAppearance.h"
 
-static NSString * const kFadeAnimationKey = @"LayerFadeAnimation";
-static NSString * const kGrowAnimationKey = @"LayerGrowAnimation";
+static NSString * const kAPCFadeAnimationKey   = @"APCFadeAnimationKey";
+static NSString * const kAPCStrokeAnimationKey = @"APCStrokeAnimationKey";
+static NSString * const kAPCScaleAnimationKey  = @"APCScaleAnimationKey";
+static NSString * const kAPCPathAnimationKey   = @"APCPathAnimationKey";
 
-CGFloat const kAPCFadeAnimationDuration = 0.2;
-CGFloat const kAPCGrowAnimationDuration = 0.1;
-CGFloat const kAPCPopAnimationDuration  = 0.3;
+CGFloat const kAPCFadeAnimationDuration   = 0.2;
+CGFloat const kAPCStrokeAnimationDuration = 0.1;
+CGFloat const kAPCScaleAnimationDuration  = 0.3;
+CGFloat const kAPCPathAnimationDuration   = 0.7;
 
 @implementation APCBaseGraphView
 
@@ -127,60 +130,50 @@ CGFloat const kAPCPopAnimationDuration  = 0.3;
 
 #pragma mark - Animations
 
-- (void)animateLayer:(CAShapeLayer *)shapeLayer withAnimationType:(APCGraphAnimationType)animationType
+- (void)animateLayer:(CAShapeLayer *)shapeLayer withAnimationType:(APCGraphAnimationType)animationType toValue:(id)toValue startDelay:(CGFloat)delay
 {
-    [self animateLayer:shapeLayer withAnimationType:animationType toValue:1.0];
-}
-
-- (void)animateLayer:(CAShapeLayer *)shapeLayer withAnimationType:(APCGraphAnimationType)animationType toValue:(CGFloat)toValue
-{
-    [self animateLayer:shapeLayer withAnimationType:animationType toValue:toValue startDelay:0.0];
-}
-
-- (void)animateLayer:(CAShapeLayer *)shapeLayer withAnimationType:(APCGraphAnimationType)animationType startDelay:(CGFloat)delay
-{
-    [self animateLayer:shapeLayer withAnimationType:animationType toValue:1.0 startDelay:delay];
-}
-
-- (void)animateLayer:(CAShapeLayer *)shapeLayer withAnimationType:(APCGraphAnimationType)animationType toValue:(CGFloat)toValue startDelay:(CGFloat)delay
-{
+    NSString *animationKeyPath;
+    NSString *animationKeyName;
+    CFTimeInterval animationDuration = 0;
+    
     if (animationType == kAPCGraphAnimationTypeFade) {
         
-        CABasicAnimation *fadeAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
-        fadeAnimation.beginTime = CACurrentMediaTime() + delay;
-        fadeAnimation.fromValue = @0;
-        fadeAnimation.toValue = @(toValue);
-        fadeAnimation.duration = kAPCFadeAnimationDuration;
-        fadeAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
-        fadeAnimation.fillMode = kCAFillModeForwards;
-        fadeAnimation.removedOnCompletion = NO;
-        [shapeLayer addAnimation:fadeAnimation forKey:kFadeAnimationKey];
+        animationKeyPath = @"opacity";
+        animationKeyName = kAPCFadeAnimationKey;
+        animationDuration =  kAPCFadeAnimationDuration;
         
-    } else if (animationType == kAPCGraphAnimationTypeGrow) {
+    } else if (animationType == kAPCGraphAnimationTypeStrokeStart) {
         
-        CABasicAnimation *growAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
-        growAnimation.beginTime = CACurrentMediaTime() + delay;
-        growAnimation.fromValue = @0;
-        growAnimation.toValue = @(toValue);
-        growAnimation.duration = kAPCGrowAnimationDuration;
-        growAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
-        growAnimation.fillMode = kCAFillModeForwards;
-        growAnimation.removedOnCompletion = NO;
-        [shapeLayer addAnimation:growAnimation forKey:kGrowAnimationKey];
+        animationKeyPath = @"strokeStart";
+        animationKeyName = kAPCStrokeAnimationKey;
+        animationDuration =  kAPCStrokeAnimationDuration;
         
-    } else if (animationType == kAPCGraphAnimationTypePop) {
+    } else if (animationType == kAPCGraphAnimationTypeStrokeEnd) {
         
-        CABasicAnimation *popAnimation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
-        popAnimation.beginTime = CACurrentMediaTime() + delay;
-        popAnimation.fromValue = @0;
-        popAnimation.toValue = @(toValue);
-        popAnimation.duration = kAPCPopAnimationDuration;
-        popAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
-        popAnimation.fillMode = kCAFillModeForwards;
-        popAnimation.removedOnCompletion = NO;
-        [shapeLayer addAnimation:popAnimation forKey:kGrowAnimationKey];
+        animationKeyPath = @"strokeEnd";
+        animationKeyName = kAPCStrokeAnimationKey;
+        animationDuration =  kAPCStrokeAnimationDuration;
         
+    }else if (animationType == kAPCGraphAnimationTypeScale) {
+        
+        animationKeyPath = @"transform.scale";
+        animationKeyName = kAPCScaleAnimationKey;
+        animationDuration =  kAPCScaleAnimationDuration;
+        
+    } else if (animationType == kAPCGraphAnimationTypePath){
+        animationKeyPath = @"path";
+        animationKeyName = kAPCPathAnimationKey;
+        animationDuration =  kAPCPathAnimationDuration;
     }
+    
+    CABasicAnimation *growAnimation = [CABasicAnimation animationWithKeyPath:animationKeyPath];
+    growAnimation.beginTime = CACurrentMediaTime() + delay;
+    growAnimation.toValue = toValue;
+    growAnimation.duration = animationDuration;
+    growAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+    growAnimation.fillMode = kCAFillModeForwards;
+    growAnimation.removedOnCompletion = NO;
+    [shapeLayer addAnimation:growAnimation forKey:animationKeyName];
 }
 
 @end

@@ -36,5 +36,6 @@
 #import "APCLineGraphView.h"
 #import "APCDiscreteGraphView.h"
 #import "APCNormalDistributionGraphView.h"
+#import "APCBarGraphView.h"
 
 #import "APCCubicCurveAlgorithm.h"

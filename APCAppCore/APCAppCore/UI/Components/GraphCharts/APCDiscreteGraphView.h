@@ -34,9 +34,6 @@
 #import <UIKit/UIKit.h>
 #import "APCBaseGraphView.h"
 
-FOUNDATION_EXPORT NSString * const kAPCDiscreteGraphViewTriggerAnimationsNotification;
-FOUNDATION_EXPORT NSString * const kAPCDiscreteGraphViewRefreshNotification;
-
 @protocol APCDiscreteGraphViewDataSource;
 @protocol APCDiscreteGraphViewDelegate;
 @class APCRangePoint;
@@ -61,7 +58,7 @@ FOUNDATION_EXPORT NSString * const kAPCDiscreteGraphViewRefreshNotification;
 
 - (NSInteger)numberOfPlotsInDiscreteGraph:(APCDiscreteGraphView *)graphView;
 
-- (NSInteger)numberOfDivisionsInXAxisForGraph:(APCDiscreteGraphView *)graphView;
+- (NSInteger)numberOfDivisionsInXAxisForDiscreteGraph:(APCDiscreteGraphView *)graphView;
 
 - (CGFloat)maximumValueForDiscreteGraph:(APCDiscreteGraphView *)graphView;
 

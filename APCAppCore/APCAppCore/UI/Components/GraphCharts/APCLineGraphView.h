@@ -34,9 +34,6 @@
 #import <UIKit/UIKit.h>
 #import "APCBaseGraphView.h"
 
-FOUNDATION_EXPORT NSString * const kAPCLineGraphViewTriggerAnimationsNotification;
-FOUNDATION_EXPORT NSString * const kAPCLineGraphViewRefreshNotification;
-
 @protocol APCLineGraphViewDataSource;
 @protocol APCLineGraphViewDelegate;
 
@@ -62,7 +59,7 @@ FOUNDATION_EXPORT NSString * const kAPCLineGraphViewRefreshNotification;
 
 - (NSInteger)numberOfPlotsInLineGraph:(APCLineGraphView *)graphView;
 
-- (NSInteger)numberOfDivisionsInXAxisForGraph:(APCLineGraphView *)graphView;
+- (NSInteger)numberOfDivisionsInXAxisForLineGraph:(APCLineGraphView *)graphView;
 
 - (CGFloat)maximumValueForLineGraph:(APCLineGraphView *)graphView;
 

@@ -95,7 +95,7 @@
     referenceLineLayer.opacity = 0;
     [self.plotsView.layer addSublayer:referenceLineLayer];
     
-    [self animateLayer:referenceLineLayer withAnimationType:kAPCGraphAnimationTypeFade toValue:0.85 startDelay:1.0];
+    [self animateLayer:referenceLineLayer withAnimationType:kAPCGraphAnimationTypeFade toValue:@(0.85) startDelay:1.0];
 }
 
 @end
