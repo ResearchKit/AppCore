@@ -51,8 +51,6 @@ NSString * const kAPCOnboardingStoryboardName = @"APCOnboarding";
 
 @property (strong, nonatomic, readwrite) APCPermissionsManager *permissionsManager;
 
-@property (copy, nonatomic, readwrite) NSArray *userProfileElements;
-
 @end
 
 
@@ -124,55 +122,10 @@ NSString * const kAPCOnboardingStoryboardName = @"APCOnboarding";
 
 - (APCPermissionsManager *)permissionsManager {
     if (!_permissionsManager) {
-        _permissionsManager = [self createPermissionsManager];
+        _permissionsManager = [self.provider permissionsManager];
     }
     return _permissionsManager;
 }
-
-- (APCPermissionsManager *)createPermissionsManager {
-    APCPermissionsManager *manager = [APCPermissionsManager new];
-    
-    // set HealthKit characteristic types to read
-    NSMutableArray *types = [NSMutableArray arrayWithCapacity:3];
-    for (NSNumber *type in self.userProfileElements) {
-        switch (type.integerValue) {
-            case kAPCUserInfoItemTypeBiologicalSex:
-                [types addObject:HKCharacteristicTypeIdentifierBiologicalSex];
-                break;
-            case kAPCUserInfoItemTypeDateOfBirth:
-                [types addObject:HKCharacteristicTypeIdentifierDateOfBirth];
-                break;
-            case kAPCUserInfoItemTypeBloodType:
-                [types addObject:HKCharacteristicTypeIdentifierBloodType];
-                break;
-        }
-    }
-    manager.healthKitCharacteristicTypesToRead = types;
-    
-    return manager;
-}
-
-
-#pragma mark - User Profile
-
-- (NSArray *)userProfileElements {
-    if (!_userProfileElements) {
-        _userProfileElements = [self createUserProfileElements];
-    }
-    return _userProfileElements;
-}
-
-- (NSArray *)createUserProfileElements {
-    return @[
-        @(kAPCUserInfoItemTypeEmail),
-        @(kAPCUserInfoItemTypeBiologicalSex),
-        @(kAPCUserInfoItemTypeHeight),
-        @(kAPCUserInfoItemTypeWeight),
-        @(kAPCUserInfoItemTypeWakeUpTime),
-        @(kAPCUserInfoItemTypeSleepTime),
-    ];
-}
-
 
 #pragma mark - APCOnboardingDelegate
 
@@ -235,7 +188,7 @@ NSString * const kAPCOnboardingStoryboardName = @"APCOnboarding";
 }
 
 - (NSInteger)numberOfServicesInPermissionsListForOnboardingTask:(APCOnboardingTask *)__unused task {
-    return [self.permissionsManager.requiredServiceTypes count];
+    return [self.permissionsManager.signUpPermissionTypes count];
 }
 
 @end

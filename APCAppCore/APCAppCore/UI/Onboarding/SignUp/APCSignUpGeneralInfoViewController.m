@@ -184,7 +184,7 @@ static CGFloat kHeaderHeight = 157.0f;
 }
 
 - (NSArray *)prepareContent {
-    NSArray *profileElementsList = [self onboardingManager].userProfileElements;
+    NSArray *profileElementsList = [self onboardingManager].permissionsManager.userInfoItemTypes;
     
     NSMutableArray *items = [NSMutableArray new];
     NSMutableArray *rowItems = [NSMutableArray new];

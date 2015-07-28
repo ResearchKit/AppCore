@@ -121,7 +121,7 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
 - (NSArray *)prepareData
 {
     NSMutableArray *items = [NSMutableArray new];
-    for (NSNumber *type in _permissionsManager.requiredServiceTypes) {
+    for (NSNumber *type in _permissionsManager.signUpPermissionTypes) {
         
         APCSignUpPermissionsType permissionType = type.integerValue;
         
