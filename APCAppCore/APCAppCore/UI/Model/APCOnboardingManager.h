@@ -49,7 +49,8 @@ NS_ASSUME_NONNULL_BEGIN
 @required
 /** The onboarding manager for the app. */
 - (APCOnboardingManager *)onboardingManager;
-
+/** The permissions manager for the app. */
+- (APCPermissionsManager *)permissionsManager;
 @optional
 /**
  *  Kept for backwards compatibility: return the inclusion criteria scene.
@@ -62,7 +63,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable APCScene *)customInfoSceneForOnboarding:(APCOnboarding *)onboarding;
 
 @end
-
 
 /**
  *  Manager to configure and handle the onboarding process.
@@ -82,37 +82,18 @@ NS_ASSUME_NONNULL_BEGIN
 /// The permissions manager defining and requesting needed permissions.
 @property (strong, nonatomic, readonly) APCPermissionsManager *permissionsManager;
 
-/// Array of `kAPCUserInfoItemType` as NSNumber to specify which profile elements about a user should be collected.
-@property (copy, nonatomic, readonly) NSArray *userProfileElements;
-
 /// Whether a sign-in action, to resume a study previously enrolled in, is supported. Defaults to YES.
 @property (nonatomic, getter=isSignInSupported) BOOL signInSupported;
 
 /// Whether the app should display 'share this app' options in onboarding. Defaults to NO.
 @property (nonatomic) BOOL showShareAppInOnboarding;
 
-+ (instancetype)managerWithProvider:(id<APCOnboardingManagerProvider>)provider user:(APCUser *)user;
++ (instancetype)managerWithProvider:(id<APCOnboardingManagerProvider>)provider user:(APCUser * __nonnull)user;
 
 /** Designated initializer. */
-- (instancetype)initWithProvider:(id<APCOnboardingManagerProvider>)provider user:(APCUser *)user;
+- (instancetype)initWithProvider:(id<APCOnboardingManagerProvider>)provider user:(APCUser * __nonnull)user;
 
 - (void)instantiateOnboardingForType:(APCOnboardingTaskType)type;
-
-
-#pragma mark Subclass Override Points
-
-/**
- *  Subclasses can override to provide their own permissions manager. Default implementation creates an APCPermissionsManager and sets that
- *  instance's `userProfileElements` to match the types specified in `userProfileElements`.
- */
-- (APCPermissionsManager *)createPermissionsManager;
-
-/**
- *  Subclasses can override to specify their own user profile elements. Default implementation creates an array with Email, BiologicalSex,
- *  Height, Weight, UpTime and SleepTime.
- */
-- (NSArray *)createUserProfileElements;
-
 
 #pragma mark Onboarding
 

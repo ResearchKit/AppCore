@@ -405,7 +405,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 - (NSArray *)prepareContent
 {
     APCOnboardingManager *manager = [(id<APCOnboardingManagerProvider>)[[UIApplication sharedApplication] delegate] onboardingManager];
-    NSArray *profileElementsList = manager.userProfileElements;
+    NSArray *profileElementsList = manager.permissionsManager.userInfoItemTypes;
     
     NSMutableArray *items = [NSMutableArray new];
     

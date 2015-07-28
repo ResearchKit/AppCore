@@ -977,18 +977,17 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
                     completion:nil];
 }
 
-
 #pragma mark - Onboarding Manager
 
 - (APCOnboardingManager *)onboardingManager {
     if (!_onboardingManager) {
         self.onboardingManager = [APCOnboardingManager managerWithProvider:self user:self.dataSubstrate.currentUser];
-        
-        // TODO: do away with initializationOptions[kHKReadPermissionsKey] and initializationOptions[kHKWritePermissionsKey]
-        _onboardingManager.permissionsManager.healthKitTypesToRead = self.initializationOptions[kHKReadPermissionsKey];
-        _onboardingManager.permissionsManager.healthKitTypesToWrite = self.initializationOptions[kHKWritePermissionsKey];
     }
     return _onboardingManager;
+}
+
+- (APCPermissionsManager *)permissionsManager {
+    return [APCPermissionsManager new];
 }
 
 - (APCScene *)inclusionCriteriaSceneForOnboarding:(APCOnboarding *)__unused onboarding {
