@@ -152,7 +152,7 @@ static NSString * const kAPCPleaseCheckEmailAlertOkButton = @"OK";
     [self.resendEmailButton setTitleColor:[UIColor appPrimaryColor] forState:UIControlStateNormal];
     
     CGRect screenRect = [[UIScreen mainScreen] bounds];
-    if (((APCAppDelegate *)[UIApplication sharedApplication].delegate).showShareAppInOnboarding &&
+    if (([((id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate).onboardingManager showShareAppInOnboarding]) &&
         screenRect.size.height > 500) {
         // There's not enough room to show everything in the 3.5 phones without scrolling, so only show this
         // if not height constrained
