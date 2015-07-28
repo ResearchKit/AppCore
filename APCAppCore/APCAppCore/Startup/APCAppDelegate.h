@@ -60,7 +60,6 @@ static NSString*    const kDatabaseName                     = @"db.sqlite";
 @property (strong, nonatomic) APCProfileViewController * profileViewController;
 @property (nonatomic) BOOL disableSignatureInConsent;
 @property (nonatomic, strong) APCDataUploader *dataUploader;
-@property (nonatomic) BOOL showShareAppInOnboarding;
 
 //Initialization Methods
 @property (nonatomic, getter=doesPersisteStoreExist) BOOL persistentStoreExistence;

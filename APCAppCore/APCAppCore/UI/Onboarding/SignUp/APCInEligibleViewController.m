@@ -36,7 +36,6 @@
 #import "APCOnboardingManager.h"
 #import "APCLog.h"
 #import "APCCustomBackButton.h"
-#import "APCAppDelegate.h"
 
 #import "NSBundle+Helper.h"
 #import "UIColor+APCAppearance.h"
@@ -71,7 +70,7 @@
     self.label.font = [UIFont appRegularFontWithSize:19.0f];
     self.label.textColor = [UIColor appSecondaryColor1];
     
-    if (((APCAppDelegate *)[UIApplication sharedApplication].delegate).showShareAppInOnboarding) {
+    if ([((id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate).onboardingManager showShareAppInOnboarding]) {
         self.shareButton.hidden = NO;
         self.shareLabel.hidden = NO;
     }

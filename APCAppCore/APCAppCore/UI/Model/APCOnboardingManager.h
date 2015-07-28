@@ -88,6 +88,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// Whether a sign-in action, to resume a study previously enrolled in, is supported. Defaults to YES.
 @property (nonatomic, getter=isSignInSupported) BOOL signInSupported;
 
+/// Whether the app should display 'share this app' options in onboarding. Defaults to NO.
+@property (nonatomic) BOOL showShareAppInOnboarding;
+
 + (instancetype)managerWithProvider:(id<APCOnboardingManagerProvider>)provider user:(APCUser *)user;
 
 /** Designated initializer. */
