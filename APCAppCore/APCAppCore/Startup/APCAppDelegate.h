@@ -95,7 +95,6 @@ static NSString*    const kDatabaseName                     = @"db.sqlite";
 - (void) setUpInitializationOptions;
 - (void) setUpAppAppearance;
 - (void) registerCatastrophicStartupError: (NSError *) error;
-- (NSArray *) userProfileElements;
 
 //For User in Subclasses
 - (void) signedInNotification:(NSNotification *)notification;

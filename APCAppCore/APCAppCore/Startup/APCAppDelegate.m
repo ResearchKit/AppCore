@@ -981,9 +981,13 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 
 - (APCOnboardingManager *)onboardingManager {
     if (!_onboardingManager) {
-        self.onboardingManager = [APCOnboardingManager managerWithProvider:self user:self.dataSubstrate.currentUser userProfileElements:[self userProfileElements]];
+        self.onboardingManager = [APCOnboardingManager managerWithProvider:self user:self.dataSubstrate.currentUser];
     }
     return _onboardingManager;
+}
+
+- (APCPermissionsManager *)permissionsManager {
+    return [APCPermissionsManager new];
 }
 
 - (APCScene *)inclusionCriteriaSceneForOnboarding:(APCOnboarding *)__unused onboarding {
