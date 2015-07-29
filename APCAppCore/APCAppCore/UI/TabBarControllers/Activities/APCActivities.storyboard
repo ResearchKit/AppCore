@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="hzw-2n-SwF">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14F6a" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="hzw-2n-SwF">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -35,8 +35,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5z3-pp-dKg" userLabel="There are no tasks to show at this time.">
-                                <rect key="frame" x="16" y="80" width="568" height="337"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5z3-pp-dKg" userLabel="There are no tasks to show at this time.">
+                                <rect key="frame" x="16" y="36" width="568" height="381"/>
                                 <string key="text">There are no tasks
 to show at this time.
 
@@ -48,8 +48,8 @@ to show at this time.
                                 <color key="textColor" red="0.25903566919191923" green="0.25903566919191923" blue="0.25903566919191923" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="Svp-s5-r2Y">
-                                <rect key="frame" x="0.0" y="64" width="600" height="373"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="Svp-s5-r2Y">
+                                <rect key="frame" x="0.0" y="20" width="600" height="417"/>
                                 <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="APCActivitiesTintedTableViewCell" rowHeight="65" id="hT2-NM-tlq" customClass="APCActivitiesTintedTableViewCell">
@@ -74,7 +74,7 @@ to show at this time.
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" tag="200" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="20 seconds" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AKk-ZR-fFa">
-                                                    <rect key="frame" x="49" y="34" width="483" height="17"/>
+                                                    <rect key="frame" x="49" y="34" width="483" height="16.5"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="23" id="LbW-GW-dWr"/>
                                                     </constraints>
@@ -484,12 +484,12 @@ to show at this time.
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="BdY-Lh-lM3" secondAttribute="trailing" constant="15" id="0Ie-D6-Cir"/>
-                            <constraint firstItem="Miq-DF-gzW" firstAttribute="trailing" secondItem="Pc5-6g-fiE" secondAttribute="trailingMargin" constant="16" id="HiT-Tx-nJV"/>
+                            <constraint firstItem="Miq-DF-gzW" firstAttribute="trailing" secondItem="Pc5-6g-fiE" secondAttribute="trailing" id="HiT-Tx-nJV"/>
                             <constraint firstItem="BdY-Lh-lM3" firstAttribute="top" secondItem="uVJ-2f-VjQ" secondAttribute="bottom" constant="47" id="JLn-se-6ue"/>
                             <constraint firstItem="Miq-DF-gzW" firstAttribute="top" secondItem="uVJ-2f-VjQ" secondAttribute="bottom" id="MJp-H2-kOD"/>
                             <constraint firstItem="BdY-Lh-lM3" firstAttribute="leading" secondItem="Pc5-6g-fiE" secondAttribute="leadingMargin" constant="15" id="TfP-XR-JE6"/>
                             <constraint firstItem="uXM-vz-msz" firstAttribute="top" secondItem="Miq-DF-gzW" secondAttribute="bottom" id="cUi-Cv-AUz"/>
-                            <constraint firstItem="Miq-DF-gzW" firstAttribute="leading" secondItem="Pc5-6g-fiE" secondAttribute="leadingMargin" constant="-16" id="tcv-0w-cqZ"/>
+                            <constraint firstItem="Miq-DF-gzW" firstAttribute="leading" secondItem="Pc5-6g-fiE" secondAttribute="leading" id="tcv-0w-cqZ"/>
                             <constraint firstItem="uXM-vz-msz" firstAttribute="top" secondItem="BdY-Lh-lM3" secondAttribute="bottom" constant="50" id="xmV-ZV-EeA"/>
                         </constraints>
                     </view>
