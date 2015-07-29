@@ -95,6 +95,10 @@ static NSString * const APCErrorParsingSurveyContentSuggestion                  
 static NSString * const APCErrorSavingEverythingReason                              = @"Error Saving New Schedules";
 static NSString * const APCErrorSavingEverythingSuggestion                          = @"There was an error attempting to save the new schedules.";
 
+/**
+ JSON Mapping files
+ */
+static NSString * const kTaskIdToViewControllerMappingJSON                      = @"APHTaskIdToViewControllerMapping";
 
 /**
  Keys and special values in the JSON dictionaries representing
@@ -977,7 +981,18 @@ static NSArray *legalTimeSpecifierFormats = nil;
     scheduleData [kScheduleIntervalKey]             = null; // [self nullIfNil: sageSchedule.interval];
     scheduleData [kScheduleTimesOfDayKey]           = null; // [self nullIfNil: sageSchedule.times];
     scheduleData [kScheduleMaxCountKey]             = null; // [self nullIfNil: sageSchedule.maxCount];
-
+    
+    // Set up TaskId->TaskViewController dictionary
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:kTaskIdToViewControllerMappingJSON ofType:@"json"];
+    NSString *JSONString = [[NSString alloc] initWithContentsOfFile:filePath
+                                                           encoding:NSUTF8StringEncoding
+                                                              error:NULL];
+    
+    NSError *parseError;
+    NSDictionary *mappingDictionary = [NSJSONSerialization JSONObjectWithData:[JSONString dataUsingEncoding:NSUTF8StringEncoding]
+                                                                      options:NSJSONReadingMutableContainers
+                                                                        error:&parseError];
+    NSAssert(mappingDictionary != nil, @"ERROR trouble parsing taskId -> view controller mapping file", parseError);
 
     for (SBBActivity *activity in sageSchedule.activities)
     {
@@ -1007,7 +1022,7 @@ static NSArray *legalTimeSpecifierFormats = nil;
             activityData [kTaskCompletionTimeStringKey] = [self nullIfNil: activity.labelDetail];
             activityData [kTaskTypeKey]                 = [self nullIfNil: activity.activityType];
             activityData [kTaskIDKey]                   = [self nullIfNil: activity.task.identifier];
-            activityData [kTaskClassNameKey]            = NSStringFromClass ([APCSimpleTaskSummaryViewController class]); // TODO: fix this, its probably wrong
+            activityData [kTaskClassNameKey]            = mappingDictionary[activity.task.identifier];
             
             // Not available for non survey tasks
             activityData [kTaskVersionNumberKey]    = null;
