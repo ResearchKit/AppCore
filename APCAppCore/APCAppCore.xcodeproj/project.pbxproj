@@ -3582,7 +3582,6 @@
 				TargetAttributes = {
 					F5179B2819D09128001DCCB7 = {
 						CreatedOnToolsVersion = 6.0.1;
-						DevelopmentTeam = NL3PRC58UN;
 					};
 					F5179B3319D09128001DCCB7 = {
 						CreatedOnToolsVersion = 6.0.1;
@@ -3895,7 +3894,6 @@
 				F5B9480D1A73272C0034C522 /* APCScheduleExpressionTokenizer.m in Sources */,
 				6C7346091A7ECD3B00DA9CD8 /* APCConsentTaskViewController.m in Sources */,
 				EE64F4321B02517000A402A7 /* APCOnboardingManager.m in Sources */,
-				F54DDD281A8026010073E4B4 /* APCDataTracker.m in Sources */,
 				F5F12A7A1A2F78490015982C /* APCAxisView.m in Sources */,
 				6CD8B6751AC5011D0061E6D6 /* APCTaskReminder.m in Sources */,
 				F5B947EC1A73272C0034C522 /* APCDebugWindow.m in Sources */,
