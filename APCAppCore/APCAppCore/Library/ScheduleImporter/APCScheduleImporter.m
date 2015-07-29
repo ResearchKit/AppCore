@@ -38,7 +38,6 @@
 #import "APCMatchingScheduleFilter.h"
 #import "APCUniqueTaskIdFilter.h"
 #import "APCGenericSurveyTaskViewController.h"
-#import "APCSimpleTaskSummaryViewController.h"
 #import "APCLog.h"
 #import "APCSchedule+AddOn.h"
 #import "APCScheduleDebugPrinter.h"
