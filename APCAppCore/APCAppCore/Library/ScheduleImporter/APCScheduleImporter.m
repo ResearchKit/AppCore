@@ -38,6 +38,7 @@
 #import "APCMatchingScheduleFilter.h"
 #import "APCUniqueTaskIdFilter.h"
 #import "APCGenericSurveyTaskViewController.h"
+#import "APCSimpleTaskSummaryViewController.h"
 #import "APCLog.h"
 #import "APCSchedule+AddOn.h"
 #import "APCScheduleDebugPrinter.h"
@@ -980,23 +981,46 @@ static NSArray *legalTimeSpecifierFormats = nil;
 
     for (SBBActivity *activity in sageSchedule.activities)
     {
-        NSMutableDictionary *activityData = [NSMutableDictionary new];
+        if (activity.survey) {
+            NSMutableDictionary *activityData = [NSMutableDictionary new];
 
-        activityData [kTaskTitleKey]            = [self nullIfNil: activity.label];
-        activityData [kTaskTypeKey]             = [self nullIfNil: activity.activityType];
-        activityData [kTaskIDKey]               = [self nullIfNil: activity.survey.guid];
-        activityData [kTaskVersionNumberKey]    = [self nullIfNil: activity.survey.version];
-        activityData [kTaskUrlKey]              = [self nullIfNil: activity.ref];
-        activityData [kTaskClassNameKey]        = NSStringFromClass ([APCGenericSurveyTaskViewController class]);
+            activityData [kTaskTitleKey]            = [self nullIfNil: activity.label];
+            activityData [kTaskTypeKey]             = [self nullIfNil: activity.activityType];
+            activityData [kTaskIDKey]               = [self nullIfNil: activity.survey.identifier];
+            activityData [kTaskVersionNumberKey]    = [self nullIfNil: activity.survey.createdOn.toStringInISO8601Format];
+            activityData [kTaskUrlKey]              = [self nullIfNil: activity.survey.href];
+            activityData [kTaskClassNameKey]        = NSStringFromClass ([APCGenericSurveyTaskViewController class]);
 
-        // When we start getting these from Sage, we'll use them.
-        // In the mean time, noting them here, because we're using
-        // them from our local disk files.
-        activityData [kTaskCompletionTimeStringKey] = null;
-        activityData [kTaskFileNameKey]             = null;
-        activityData [kTaskSortStringKey]           = null;
+            // When we start getting these from Sage, we'll use them.
+            // In the mean time, noting them here, because we're using
+            // them from our local disk files.
+            activityData [kTaskCompletionTimeStringKey] = null;
+            activityData [kTaskFileNameKey]             = null;
+            activityData [kTaskSortStringKey]           = null;
 
-        [activities addObject: activityData];
+            [activities addObject: activityData];
+        } else if (activity.task) {
+            // TODO: Implement this
+            NSMutableDictionary *activityData = [NSMutableDictionary new];
+            
+            activityData [kTaskTitleKey]            = [self nullIfNil: activity.label];
+            activityData [kTaskTypeKey]             = [self nullIfNil: activity.activityType];
+            activityData [kTaskIDKey]               = [self nullIfNil: activity.task.identifier];
+            activityData [kTaskClassNameKey]        = NSStringFromClass ([APCSimpleTaskSummaryViewController class]); // TODO: fix this, its probably wrong
+            
+            // Not available for non survey tasks
+            activityData [kTaskVersionNumberKey]    = null;
+            activityData [kTaskUrlKey]              = null;
+            
+            // When we start getting these from Sage, we'll use them.
+            // In the mean time, noting them here, because we're using
+            // them from our local disk files.
+            activityData [kTaskCompletionTimeStringKey] = null;
+            activityData [kTaskFileNameKey]             = null;
+            activityData [kTaskSortStringKey]           = null;
+            
+            [activities addObject: activityData];
+        }
     }
     
     return scheduleData;
