@@ -50,6 +50,8 @@ static NSString *kTranslationFilename = @"FilenameTranslation";
         stepIdentifier = @"";
     }
     
+    fileResultIdentifier = [fileResultIdentifier stringByAppendingString:stepIdentifier];
+    
     NSString *translatedFilename;
     NSString *filePath = [[NSBundle mainBundle] pathForResource:kTranslationFilename ofType:kJSONExtension];
     
