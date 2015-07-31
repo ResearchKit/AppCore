@@ -156,7 +156,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     
     [self setupDataFromJSONFile:@"StudyOverview"];
     
-    if (APCUserConsentSharingScopeNone == self.user.sharedOptionSelection) {
+    if (APCUserConsentSharingScopeNone == self.user.sharedOptionSelection.integerValue) {
         self.participationLabel.text = NSLocalizedString(@"Your data is no longer being used for this study.", @"");
         self.leaveStudyButton.hidden = YES;
     }
