@@ -157,6 +157,22 @@ static NSString * const kAPCErrorFetchingUsersSuggestion = @"Unable to fetch use
     return versionNumber;
 }
 
+/**
+ Version 6 of the model introduces a maxCount field in the Schedule object,
+ with a default value of 0.  We later decided the default should be nil
+ unless explicitly set.  This method lets us fix the default value for
+ schedules migrated from v4 to v6.  New schedules get their values set
+ properly at creation time.
+
+ @param scheduleFromV6  The "destination" schedule object:  the object created
+ after the migration process has been performed on a schedule from version 4.
+ For inspection during debugging.
+ */
+- (NSNumber *) repairImproperDefaultMaxCountInNewSchedule: (APCSchedule *) __unused scheduleFromV6
+{
+    return nil;
+}
+
 
 
 // ---------------------------------------------------------

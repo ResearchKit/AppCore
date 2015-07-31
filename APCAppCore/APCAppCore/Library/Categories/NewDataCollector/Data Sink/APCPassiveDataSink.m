@@ -529,7 +529,7 @@ static NSUInteger       kHoursPerDay        = 24;
 {
     if (_sizeThreshold == 0)
     {
-        _sizeThreshold = 50 * kBytesPerKB;
+        _sizeThreshold = 50 * kKBPerMB;
     }
     
     return _sizeThreshold;

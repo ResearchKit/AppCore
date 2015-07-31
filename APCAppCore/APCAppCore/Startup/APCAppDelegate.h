@@ -33,17 +33,18 @@
  
 #import <UIKit/UIKit.h>
 #import "APCDataSubstrate.h"
-#import "APCOnboarding.h"
 #import "APCPasscodeViewController.h"
 #import "APCProfileViewController.h"
+#import "APCOnboardingManager.h"
 #import "APCConsentTask.h"
+#import "APCDataUploader.h"
 
 extern NSUInteger   const kTheEntireDataModelOfTheApp;
 static NSString*    const kDatabaseName                     = @"db.sqlite";
 
-@class APCDataSubstrate, APCDataMonitor, APCScheduler, APCOnboarding, APCPasscodeViewController, APCTasksReminderManager, APCPassiveDataCollector, APCFitnessAllocation;
+@class APCDataSubstrate, APCDataMonitor, APCScheduler, APCPasscodeViewController, APCTasksReminderManager, APCPassiveDataCollector, APCFitnessAllocation;
 
-@interface APCAppDelegate : UIResponder <UIApplicationDelegate, APCOnboardingDelegate, APCOnboardingTaskDelegate, APCPasscodeViewControllerDelegate>
+@interface APCAppDelegate : UIResponder <UIApplicationDelegate, APCOnboardingManagerProvider, APCPasscodeViewControllerDelegate>
 
 @property (nonatomic, strong) APCFitnessAllocation *sevenDayFitnessAllocationData;
 @property (strong, nonatomic) UITabBarController *tabBarController;
@@ -58,13 +59,16 @@ static NSString*    const kDatabaseName                     = @"db.sqlite";
 @property (strong, nonatomic) APCPassiveDataCollector * passiveDataCollector;
 @property (strong, nonatomic) APCProfileViewController * profileViewController;
 @property (nonatomic) BOOL disableSignatureInConsent;
+@property (nonatomic, strong) APCDataUploader *dataUploader;
 
 //Initialization Methods
 @property (nonatomic, getter=doesPersisteStoreExist) BOOL persistentStoreExistence;
 @property (nonatomic, strong) NSDictionary * initializationOptions;
 - (NSMutableDictionary*) defaultInitializationOptions;
 
-@property (strong, nonatomic) APCOnboarding *onboarding;
+#pragma mark Onboarding
+
+@property (nonatomic, strong, readonly) APCOnboardingManager *onboardingManager;
 
 @property  (nonatomic, strong)  NSArray  *storyboardIdInfo;
 
@@ -81,7 +85,7 @@ static NSString*    const kDatabaseName                     = @"db.sqlite";
 - (void) showNeedsEmailVerification;
 - (void) setUpRootViewController: (UIViewController*) viewController;
 - (void) setUpTasksReminder;
-
+- (void)performMigrationAfterFirstImport;
 - (void)performMigrationFrom:(NSInteger)previousVersion currentVersion:(NSInteger)currentVersion;
 - (void)performMigrationAfterDataSubstrateFrom:(NSInteger)previousVersion currentVersion:(NSInteger)currentVersion;
 - (NSString *) applicationDocumentsDirectory;
@@ -112,8 +116,6 @@ static NSString*    const kDatabaseName                     = @"db.sqlite";
 
 - (ORKTaskViewController *)consentViewController;
 - (NSMutableArray*)consentSectionsAndHtmlContent:(NSString**)htmlContent;
-
-- (void)instantiateOnboardingForType:(APCOnboardingTaskType)type;
 
 - (NSDate*)applicationBecameActiveDate;
 

@@ -32,17 +32,19 @@
 // 
  
 #import "APCThankYouViewController.h"
-#import "APCAppCore.h"
+#import "APCOnboardingManager.h"
+#import "APCDataSubstrate.h"
+#import "APCButton.h"
+#import "APCConstants.h"
+#import "APCUser.h"
 
-@interface APCThankYouViewController ()
+#import "APCAppDelegate.h"
 
-@end
 
 @implementation APCThankYouViewController
 
 @synthesize stepProgressBar;
 
-@synthesize user = _user;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -50,50 +52,22 @@
     self.navigationItem.hidesBackButton = YES;
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
+- (APCOnboardingManager *)onboardingManager {
+    return [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager];
 }
 
-- (APCUser *) user {
-    if (!_user) {
-        _user = ((APCAppDelegate*) [UIApplication sharedApplication].delegate).dataSubstrate.currentUser;
-    }
-    return _user;
-}
-
-
-- (APCOnboarding *)onboarding
-{
-    return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).onboarding;
-}
-
-- (IBAction)next:(APCButton *) __unused sender {
-    if (self.emailVerified) {
-        [self performSelector:@selector(setUserSignedIn) withObject:nil afterDelay:0.4];
-    } else {
-        [self finishOnboarding];
-    }
-}
-
-- (void)finishOnboarding
-{
-    if ([self onboarding].taskType == kAPCOnboardingTaskTypeSignIn) {
-        // We are posting this notification after .4 seconds delay, because we need to display the progress bar completion animation
-        [self performSelector:@selector(setUserSignedIn) withObject:nil afterDelay:0.4];
-    } else{
-        [self performSelector:@selector(setUserSignedUp) withObject:nil afterDelay:0.4];
-    }
-}
-
-- (void) setUserSignedUp
-{
-    self.user.signedUp = YES;
-}
-
-- (void)setUserSignedIn
-{
-    self.user.signedIn = YES;
-    [(APCAppDelegate *)[UIApplication sharedApplication].delegate afterOnBoardProcessIsFinished];
+- (IBAction)next:(APCButton *)__unused sender {
+    BOOL forceSignIn = self.emailVerified;
+    
+    // We are calling this method after .4 seconds delay, because we need to display the progress bar completion animation
+    APCOnboardingManager *manager = [self onboardingManager];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (forceSignIn) {
+            [manager onboardingDidFinishAsSignIn];
+        } else {
+            [manager onboardingDidFinish];
+        }
+    });
 }
 
 @end

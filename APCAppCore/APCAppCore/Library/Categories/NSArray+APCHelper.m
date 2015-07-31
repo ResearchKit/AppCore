@@ -41,22 +41,6 @@
     NSArray *inboundArrays = NSArrayFromVariadicArguments (firstArray);
     NSMutableArray *result = nil;
 
-    /*
-     I found a tantalizing suggestion of a built-in
-     Objective-C way of doing this: a call to
-     -valueForKeyPath which runs a "collection" operation
-     on the thing you pass it.  There are several such
-     operations having to do with the "unions" of arrays.
-     However, they had specific limitations: "raises an
-     exception if such-and-such is nil." I prefer to write
-     stuff so that it never crashes, or appears to crash.
-
-     For your information, I found it here:
-     http://stackoverflow.com/a/17091443
-     
-     ...which pointed to this official documentation:
-     https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/KeyValueCoding/Articles/CollectionOperators.html
-     */
     if (inboundArrays.count)
     {
         result = [NSMutableArray new];
@@ -75,11 +59,21 @@
 
 - (id) secondObject
 {
+    return [self safeObjectAtIndex: 1];
+}
+
+- (id) thirdObject
+{
+    return [self safeObjectAtIndex: 2];
+}
+
+- (id) safeObjectAtIndex: (NSUInteger) desiredIndex
+{
     id result = nil;
 
-    if (self.count >= 2)
+    if (self.count > desiredIndex)
     {
-        result = self [1];
+        result = self [desiredIndex];
     }
 
     return result;

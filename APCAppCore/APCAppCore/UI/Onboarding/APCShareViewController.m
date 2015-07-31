@@ -240,6 +240,11 @@
     }
 }
 
+- (APCOnboarding *)onboarding
+{
+    return [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager].onboarding;
+}
+
 #pragma mark - MFMailComposeViewControllerDelegate method
 
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
@@ -285,12 +290,17 @@
 
 - (IBAction) okayTapped: (id) __unused sender
 {
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    if (self.goBackIfUserHitsOkay) {
+        [self back];
+    } else {
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    }
 }
 
 - (void)back
 {
     [self.navigationController popViewControllerAnimated:YES];
+    [[self onboarding] popScene];
 }
 
 @end

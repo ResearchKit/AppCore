@@ -36,6 +36,11 @@
 
 @class APCUser;
 
+typedef NS_ENUM(NSUInteger, APCOnboardingTaskType) {
+    kAPCOnboardingTaskTypeSignUp,
+    kAPCOnboardingTaskTypeSignIn,
+};
+
 FOUNDATION_EXPORT NSString *const kAPCSignUpInclusionCriteriaStepIdentifier;
 FOUNDATION_EXPORT NSString *const kAPCSignUpEligibleStepIdentifier;
 FOUNDATION_EXPORT NSString *const kAPCSignUpIneligibleStepIdentifier;
@@ -47,6 +52,7 @@ FOUNDATION_EXPORT NSString *const kAPCSignUpPermissionsStepIdentifier;
 FOUNDATION_EXPORT NSString *const kAPCSignUpThankYouStepIdentifier;
 FOUNDATION_EXPORT NSString *const kAPCSignInStepIdentifier;
 FOUNDATION_EXPORT NSString *const kAPCSignUpPermissionsPrimingStepIdentifier;
+FOUNDATION_EXPORT NSString *const kAPCSignUpShareAppStepIdentifier;
 
 @protocol APCOnboardingTaskDelegate;
 
@@ -60,10 +66,8 @@ FOUNDATION_EXPORT NSString *const kAPCSignUpPermissionsPrimingStepIdentifier;
 
 @property (nonatomic) APCUser *user;
 
-/**
- *  When the list of Services required in zero, we can skip
- */
-@property (nonatomic,readonly) BOOL permissionScreenSkipped;
+/** When the list of Services required is zero, we can skip. */
+@property (nonatomic, readonly) BOOL permissionScreenSkipped;
 
 @property (nonatomic) NSInteger currentStepNumber;
 
@@ -90,6 +94,8 @@ FOUNDATION_EXPORT NSString *const kAPCSignUpPermissionsPrimingStepIdentifier;
 @property (nonatomic, strong) ORKStep *thankyouStep;
 
 @property (nonatomic, strong) ORKStep *signInStep;
+
+@property (nonatomic, strong) ORKStep *shareAppStep;
 
 @end
 

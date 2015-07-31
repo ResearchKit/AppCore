@@ -88,7 +88,97 @@ FOUNDATION_EXPORT NSString * const kAPCScheduleTypeValueOneTimeSchedule;
 
 - (APCTopLevelScheduleEnumerator *) enumeratorOverDateRange: (APCDateRange *) dateRange;
 
+/**
+ Lets us sort schedules for human readability:  by the human-readable
+ name and/or sort order by one of the taks controlled by the schedule.
+ */
 - (NSComparisonResult) compareWithSchedule: (APCSchedule *) otherSchedule;
 
-@end
+/**
+ Lets us sort schedules for human readability:  by the human-readable
+ name and/or sort order by one of the taks controlled by the schedule.
+ */
++ (NSComparisonResult) compareSchedule: (APCSchedule *) schedule1
+                          withSchedule: (APCSchedule *) schedule2;
 
+/**
+ Sorts the specified set of schedules by task name (or, rather, by the
+ tasks' default sort order, which is usually by the human-readable
+ title).
+ */
++ (NSArray *) sortSchedules: (NSArray *) schedules;
+
+/**
+ Checks for functional equivalence between self and otherSchedule,
+ comparing the two schedules property by property (except startsOn,
+ which is almost always different).
+ */
+- (BOOL) isFunctionallyEquivalentToSchedule: (APCSchedule *) otherSchedule;
+
+/**
+ Embodies our rules for applying a delay to a schedule's start date.
+ This method simply calls the class-level method
+ +computeDelayedStartDateFromDate:usingISO860DelayPeriod:.
+ */
+- (NSDate *) computeDelayedStartDateFromDate: (NSDate *) date;
+
+/**
+ Embodies our rules for applying a delay to a schedule's start date.  Please
+ use this method when adding delays (the schedule.delay property) to a date, in
+ order to get consistent behavior when comparing dates.
+
+ If delay is nil, returns date.  Otherwise, adds delay to date and rounds to
+ the morning before that.  For example:
+
+ -  Feb 1, 2010, noon + 4 hours (P4H) = Feb 1, 00:00:00 (start of the same day)
+ -  Feb 1, 2010, noon + 3 days  (P3D) = Feb 3, 00:00:00 (start of the 3rd day, counting from Feburary 1)
+
+ The delay is a string representing a time interval, like "P4D" for "4 days" or
+ "P1W" for "1 week."  The strings are in ISO 8601 format.  This method uses the
+ category method -[NSDate+Helper dateByAddingISO8601Duration:] to do the math.
+ */
++ (NSDate *) computeDelayedStartDateFromDate: (NSDate *) date
+                      usingISO860DelayPeriod: (NSString *) delay;
+
+/**
+ Embodies our rules for "expiration periods" ("grace periods").
+ This method simply calls the class-level method
+ +computeExpirationDateForScheduledDate:usingISO860ExpirationPeriod:.
+ */
+- (NSDate *) computeExpirationDateForScheduledDate: (NSDate *) date;
+
+/**
+ Embodies our rules for "expiration periods" ("grace periods").  Please use
+ this method when adding expiration-time intervals (the schedule.expires
+ property) to a date, in order to get consistent behavior when comparing dates.
+
+ If expirationPeriod is nil, returns nil, indicating that there is no
+ expiration period for that date.  (Note that for repeating schedules, a task
+ will always expire at the next repetition of that schedule -- unless that
+ schedule's "expires" property says it should expire sooner.)  If
+ expirationPeriod is not nil, adds expirationPeriod to date.  For example:
+
+ -  Feb 1, 2010 + 4 hours (P4H)  = Feb 1, 2010, 23:59:59 (end of the same day)
+ -  Feb 1, 2010 + 3 days  (P3D)  = Feb 3, 2010, 23:59:59 (end of Feb 3, 3 full days later)
+
+ The expirationPeriod is a string representing a time interval, like "P4D" for
+ "4 days" or "P1W" for "1 week."  The strings are in ISO 8601 format.  This
+ method uses the category method -[NSDate+Helper dateByAddingISO8601Duration:]
+ to do the math.
+ */
++ (NSDate *) computeExpirationDateForScheduledDate: (NSDate *) date
+                       usingISO860ExpirationPeriod: (NSString *) expirationPeriod;
+
+/**
+ Extracts and returns the set of non-nil taskIDs from my tasks.
+ The resulting set may be empty, but will never be nil.
+ */
+@property (readonly) NSSet *taskIds;
+
+/**
+ Walks through the specified set of schedules, extracting
+ all their tasks' IDs.
+ */
++ (NSSet *) extractTaskIdsFromSchedules: (NSSet *) schedules;
+
+@end

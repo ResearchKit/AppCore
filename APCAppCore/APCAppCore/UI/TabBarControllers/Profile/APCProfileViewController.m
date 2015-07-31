@@ -44,12 +44,13 @@
 #import "APCSpinnerViewController.h"
 #import "APCTableViewItem.h"
 #import "APCAppDelegate.h"
+#import "APCTasksReminderManager.h"
+#import "APCOnboardingManager.h"
 #import "APCUserInfoConstants.h"
 #import "APCDataSubstrate.h"
 #import "APCConstants.h"
 #import "APCUtilities.h"
 #import "APCUser.h"
-#import "APCTasksReminderManager.h"
 #import "APCLog.h"
 
 #ifndef APC_HAVE_CONSENT
@@ -155,7 +156,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     
     [self setupDataFromJSONFile:@"StudyOverview"];
     
-    if (APCUserConsentSharingScopeNone == self.user.sharingScope) {
+    if (APCUserConsentSharingScopeNone == self.user.sharedOptionSelection.integerValue) {
         self.participationLabel.text = NSLocalizedString(@"Your data is no longer being used for this study.", @"");
         self.leaveStudyButton.hidden = YES;
     }
@@ -403,8 +404,8 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
 - (NSArray *)prepareContent
 {
-    NSDictionary *initialOptions = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).initializationOptions;
-    NSArray *profileElementsList = initialOptions[kAppProfileElementsListKey];
+    APCOnboardingManager *manager = [(id<APCOnboardingManagerProvider>)[[UIApplication sharedApplication] delegate] onboardingManager];
+    NSArray *profileElementsList = manager.permissionsManager.userInfoItemTypes;
     
     NSMutableArray *items = [NSMutableArray new];
     
@@ -741,7 +742,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             [rowItems addObject:row];
         }
         
-        if (APCUserConsentSharingScopeNone != self.user.sharingScope) {
+        if (APCUserConsentSharingScopeNone != self.user.sharedOptionSelection) {
             //  Instead of prevent the row from being added to the table, a better option would be to
             //  disable the row (grey it out and don't respond to taps)
             APCTableViewItem *field = [APCTableViewItem new];
@@ -1320,7 +1321,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     [self presentViewController:spinnerController animated:YES completion:nil];
     
     typeof(self) __weak weakSelf = self;
-    self.user.sharingScope = APCUserConsentSharingScopeNone;
+    self.user.sharedOptionSelection = APCUserConsentSharingScopeNone;
     [self.user withdrawStudyOnCompletion:^(NSError *error) {
         if (error) {
             APCLogError2 (error);
@@ -1637,9 +1638,10 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     
 #ifndef APC_HAVE_CONSENT
 #warning Adding watermark label until you define "APC_HAVE_CONSENT" to indicate that you have a real consenting document
+    NSUInteger subviewsCount = consentVC.view.subviews.count;
     UILabel *watermarkLabel = [APCExampleLabel watermarkInRect:consentVC.view.bounds
                                                     withCenter:consentVC.view.center];
-    [consentVC.view insertSubview:watermarkLabel atIndex:NSUIntegerMax];
+    [consentVC.view insertSubview:watermarkLabel atIndex:subviewsCount];
 #endif
     
     [self presentViewController:consentVC animated:YES completion:nil];

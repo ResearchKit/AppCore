@@ -45,6 +45,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 /* -------------------------------------
  Headers
  --------------------------------------- */
+#import <APCAppCore/APCCMSSupport.h>
 #import <APCAppCore/APCConstants.h>
 #import <APCAppCore/APCAppDelegate.h>
 #import <APCAppCore/APCDataMonitor.h>
@@ -56,6 +57,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCPermissionsManager.h>
 #import <APCAppCore/APCAssertionHandler.h>
 #import <APCAppCore/APCSignUpProgressing.h>
+#import <APCAppCore/APCOnboardingManager.h>
 #import <APCAppCore/APCOnboarding.h>
 #import <APCAppCore/APCDataResult.h>
 #import <APCAppCore/APCTasksReminderManager.h>
@@ -77,7 +79,10 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
  --------------------------------------- */
 #import <APCAppCore/APCDataArchiverAndUploader.h>
 #import <APCAppCore/APCDataArchiver.h>
-#import <APCAppCore/APCPassiveDataCollector.h>
+#import <APCAppCore/APCDataArchive.h>
+#import <APCAppCore/APCDataEncryptor.h>
+#import <APCAppCore/APCDataUploader.h>
+#import <APCAppCore/APCDataArchiveUploader.h>
 #import <APCAppCore/zipzap.h>
 #import <APCAppCore/ZZArchive.h>
 #import "APCAppCore/ZZArchiveEntry.h"
@@ -313,6 +318,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/UIView+Helper.h>
 #import <APCAppCore/NSDictionary+APCAdditions.h>
 #import <APCAppCore/APCDeviceHardware+APCHelper.h>
+#import <APCAppCore/ORKFileResult+Filename.h>
 #import <APCAppCore/ORKQuestionResult+APCHelper.h>
 #import <APCAppCore/NSOperationQueue+Helper.h>
 #import <APCAppCore/CMMotionActivity+Helper.h>
@@ -336,6 +342,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCDayOfMonthSelector.h>
 #import <APCAppCore/APCListSelector.h>
 #import <APCAppCore/APCPointSelector.h>
+#import <APCAppCore/APCPotentialScheduledTask.h>
 #import <APCAppCore/APCScheduleEnumerator.h>
 #import <APCAppCore/APCScheduleExpressionParser.h>
 #import <APCAppCore/APCScheduleExpressionToken.h>

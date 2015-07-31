@@ -55,11 +55,6 @@ static CGFloat const klabelSidepadding = 30.f;
                          @"file_type": @"txt"
                          },
                      @{
-                         @"title": @"Open SSL",
-                         @"filename": @"License_OpenSSL",
-                         @"file_type": @"txt"
-                         },
-                     @{
                          @"title": @"ZipZap",
                          @"filename": @"License_ZipZap",
                          @"file_type": @"txt"

@@ -188,7 +188,17 @@
 
 @property (nonatomic, strong) NSAttributedString *legend;
 
-+(NSAttributedString *)legendForSeries1:(NSString *)series1 series2:(NSString *)series2;
+@property (nonatomic) BOOL hidesUnitString;
+
+@property (nonatomic) BOOL hidesDetailText;
+
++ (NSAttributedString *)legendForSeries1:(NSString *)series1 series2:(NSString *)series2;
+
+- (NSString *)averageValueString;
+
+- (NSString *)minimumValueString;
+
+- (NSString *)maximumValueString;
 
 @end
 

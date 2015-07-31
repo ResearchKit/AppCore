@@ -571,7 +571,7 @@ static APCDummyObject * _dummyObject;
                 NSInteger stepValue = (integerConstraint.step != nil && [integerConstraint.step integerValue] > 0) ? [integerConstraint.step integerValue] : 1;
                 NSInteger newStepValue = (NSInteger)((double)[integerConstraint.maxValue integerValue] - (double)[integerConstraint.minValue integerValue]) / 10.0;
                 stepValue = MAX(newStepValue, stepValue);
-                retValue = [ORKScaleAnswerFormat scaleAnswerFormatWithMaxValue:[integerConstraint.maxValue integerValue] minValue:[integerConstraint.minValue integerValue] step:stepValue defaultValue:0];
+                retValue = [ORKScaleAnswerFormat scaleAnswerFormatWithMaximumValue:[integerConstraint.maxValue integerValue] minimumValue:[integerConstraint.minValue integerValue] defaultValue:0 step:stepValue vertical:NO maximumValueDescription:nil minimumValueDescription:nil];
             }
             else {
                 ORKNumericAnswerFormat * format = (integerConstraint.unit.length > 0) ? [ORKNumericAnswerFormat integerAnswerFormatWithUnit:integerConstraint.unit] : [ORKNumericAnswerFormat integerAnswerFormatWithUnit:nil];

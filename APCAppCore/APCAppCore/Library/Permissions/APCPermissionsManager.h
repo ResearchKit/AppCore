@@ -44,13 +44,19 @@ typedef NS_ENUM(NSUInteger, APCPermissionStatus) {
 
 @interface APCPermissionsManager : NSObject
 
-+ (void)setHealthKitTypesToRead:(NSArray *)types;
+@property (copy, nonatomic) NSArray *userInfoItemTypes;
+@property (copy, nonatomic) NSArray *signUpPermissionTypes;
 
-+ (void)setHealthKitTypesToWrite:(NSArray *)types;
+- (id)initWithHealthKitCharacteristicTypesToRead:(NSArray *)characteristicTypesToRead
+                    healthKitQuantityTypesToRead:(NSArray *)quantityTypesToRead
+                   healthKitQuantityTypesToWrite:(NSArray *)QuantityTypesToWrite
+                               userInfoItemTypes:(NSArray *)userInfoItemTypes
+                           signUpPermissionTypes:(NSArray *)signUpPermissionTypes;
 
 - (BOOL)isPermissionsGrantedForType:(APCSignUpPermissionsType)type;
 
-- (void)requestForPermissionForType:(APCSignUpPermissionsType)type
-                     withCompletion:(APCPermissionsBlock)completion;
+- (void)requestForPermissionForType:(APCSignUpPermissionsType)type withCompletion:(APCPermissionsBlock)completion;
+
+- (NSString *)permissionDescriptionForType:(APCSignUpPermissionsType)type;
 
 @end

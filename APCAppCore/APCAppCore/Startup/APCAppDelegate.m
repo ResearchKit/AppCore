@@ -35,15 +35,15 @@
 #import "APCAppCore.h"
 #import "APCDebugWindow.h"
 #import "APCPasscodeViewController.h"
-#import <AVFoundation/AVFoundation.h>
-#import <AudioToolbox/AudioToolbox.h>
-#import "APCOnboarding.h"
 #import "APCTasksReminderManager.h"
 #import "UIView+Helper.h"
-#import "APCTabBarViewController.h"
 #import "UIAlertController+Helper.h"
 #import "APCDemographicUploader.h"
 #import "APCConstants.h"
+#import "APCUtilities.h"
+
+#import <AVFoundation/AVFoundation.h>
+#import <AudioToolbox/AudioToolbox.h>
 
 /*
  Be sure to set the CORRECT current version before releasing to production
@@ -84,8 +84,11 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 @property (nonatomic, strong) NSError *catastrophicStartupError;
 @property (nonatomic, strong) NSOperationQueue *healthKitCollectorQueue;
 @property (nonatomic, strong) APCDemographicUploader  *demographicUploader;
+@property (nonatomic, strong) APCPasscodeViewController *passcodeViewController;
 
-@end 
+@property (nonatomic, strong, readwrite) APCOnboardingManager *onboardingManager;
+
+@end
 
 @implementation APCAppDelegate
 
@@ -114,16 +117,20 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     [self initializeBridgeServerConnection];
     [self initializeAppleCoreStack];
 
-    [self.scheduler loadTasksAndSchedulesFromDiskAndThenUseThisQueue: nil
-                                                    toDoThisWhenDone: nil];
+    [self.scheduler loadTasksAndSchedulesFromDiskAndThenUseThisQueue:[NSOperationQueue mainQueue]
+                                                    toDoThisWhenDone:^(NSError* errorFetchingOrLoading)
+    {
+        if(!errorFetchingOrLoading)
+        {
+            [self performMigrationAfterFirstImport];
+        }
+    }];
 
     [self registerNotifications];
-    [self setUpHKPermissions];
     [self setUpAppAppearance];
     [self setUpTasksReminder];
     [self performDemographicUploadIfRequired];
     [self showAppropriateVC];
-    [self.dataMonitor appFinishedLaunching];
     
     return YES;
 }
@@ -164,6 +171,11 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     return (NSUInteger) [defaults integerForKey:@"previousVersion"];
 }
 
+- (void)performMigrationAfterFirstImport
+{
+    /* abstract implementation */
+}
+
 - (void)performMigrationFrom:(NSInteger) __unused previousVersion currentVersion:(NSInteger)__unused currentVersion
 {
     /* abstract implementation */
@@ -176,6 +188,8 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 
 - (BOOL)application:(UIApplication *) __unused application didFinishLaunchingWithOptions:(NSDictionary *) __unused launchOptions
 {
+    self.dataUploader = [[APCDataUploader alloc] init];
+    [self.dataMonitor appFinishedLaunching];
     return YES;
 }
 
@@ -200,7 +214,6 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 #endif
     
     [self hideSecureView];
-    [self showPasscodeIfNecessary];
     [self.dataMonitor appBecameActive];
 }
 
@@ -212,8 +225,7 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 - (void)applicationWillTerminate:(UIApplication *) __unused application
 {
     if (self.dataSubstrate.currentUser.signedIn && !self.isPasscodeShowing) {
-        NSDate *currentTime = [NSDate date];
-        [[NSUserDefaults standardUserDefaults] setObject:currentTime forKey:kLastUsedTimeKey];
+        [[NSUserDefaults standardUserDefaults] setObject: [NSNumber numberWithLong:uptime()] forKey:kLastUsedTimeKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     
@@ -227,8 +239,7 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 - (void)applicationDidEnterBackground:(UIApplication *) __unused application
 {
     if (self.dataSubstrate.currentUser.signedIn && !self.isPasscodeShowing) {
-        NSDate *currentTime = [NSDate date];
-        [[NSUserDefaults standardUserDefaults] setObject:currentTime forKey:kLastUsedTimeKey];
+        [[NSUserDefaults standardUserDefaults] setObject: [NSNumber numberWithLong:uptime()] forKey:kLastUsedTimeKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     self.dataSubstrate.currentUser.sessionToken = nil;
@@ -299,40 +310,6 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     }
     
     return isSuccessful;
-}
-
-/*********************************************************************************/
-#pragma mark - State Restoration
-/*********************************************************************************/
-
-- (BOOL)application:(UIApplication *) __unused application shouldSaveApplicationState:(NSCoder *) __unused coder
-{
-    [[UIApplication sharedApplication] ignoreSnapshotOnNextApplicationLaunch];
-    return self.dataSubstrate.currentUser.isSignedIn;
-}
-
-- (BOOL)application:(UIApplication *) __unused application shouldRestoreApplicationState:(NSCoder *) __unused coder
-{
-    return self.dataSubstrate.currentUser.isSignedIn;
-}
-
-- (UIViewController *)application:(UIApplication *) __unused application viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *) __unused coder
-{
-    if ([identifierComponents.lastObject isEqualToString:@"AppTabbar"]) {
-        return self.window.rootViewController;
-    }
-    else if ([identifierComponents.lastObject isEqualToString:@"ActivitiesNavController"])
-    {
-        return self.tabBarController.viewControllers[kAPCActivitiesTabIndex];
-    }
-    else if ([identifierComponents.lastObject isEqualToString:@"APCActivityVC"])
-    {
-        if ( [self.tabBarController.viewControllers[kAPCActivitiesTabIndex] respondsToSelector:@selector(topViewController)]) {
-            return [(UINavigationController*) self.tabBarController.viewControllers[kAPCActivitiesTabIndex] topViewController];
-        }
-    }
-    
-    return nil;
 }
 
 /*********************************************************************************/
@@ -563,11 +540,6 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     return consentSections;
 }
 
-- (void) setUpHKPermissions
-{
-    [APCPermissionsManager setHealthKitTypesToRead:self.initializationOptions[kHKReadPermissionsKey]];
-    [APCPermissionsManager setHealthKitTypesToWrite:self.initializationOptions[kHKWritePermissionsKey]];
-}
 
 - (void) setUpTasksReminder {/*Abstract Implementation*/}
 
@@ -684,9 +656,8 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(signedInNotification:) name:(NSString *)APCUserSignedInNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logOutNotification:) name:(NSString *)APCUserLogOutNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userConsented:) name:APCUserDidConsentNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(withdrawStudy:) name:APCUserWithdrawStudyNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(withdrawStudy:) name:APCUserDidWithdrawStudyNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(newsFeedUpdated:) name:kAPCNewsFeedUpdateNotification object:nil];
-
 }
 
 - (void)dealloc
@@ -805,9 +776,8 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 
 - (void)showTabBar
 {
-    self.tabBarController = [[APCTabBarViewController alloc] init];
-    
-    NSUInteger     selectedItemIndex = kAPCActivitiesTabIndex;
+    self.tabBarController = [[UITabBarController alloc] init];
+    NSUInteger selectedItemIndex = kAPCActivitiesTabIndex;
     
     NSMutableArray *tabBarItems = [NSMutableArray new];
     NSMutableArray *viewControllers = [NSMutableArray new];
@@ -889,14 +859,11 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
         if (newsFeedTab) {
             [self.tabBarController setSelectedIndex:4];
         }
-
     }
-    
     
     [self.tabBarController setSelectedIndex:selectedItemIndex];
     self.tabBarController.delegate = self;
     self.tabBarController.tabBar.translucent = NO;
-    
     self.window.rootViewController = self.tabBarController;
 }
 
@@ -952,7 +919,7 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     }
     else if (self.dataSubstrate.currentUser.isSignedIn)
     {
-        [self showTabBar];
+        [self showPasscodeViewController];
     }
     else if (self.dataSubstrate.currentUser.isSignedUp)
     {
@@ -967,28 +934,23 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 - (void)showPasscodeIfNecessary
 {
     if (self.dataSubstrate.currentUser.isSignedIn && !self.isPasscodeShowing) {
-        NSDate *lastUsedTime = [[NSUserDefaults standardUserDefaults] objectForKey:kLastUsedTimeKey];
-        
-        if (lastUsedTime) {
-            NSTimeInterval timeDifference = [lastUsedTime timeIntervalSinceNow];
-            NSInteger numberOfMinutes = [self.dataSubstrate.parameters integerForKey:kNumberOfMinutesForPasscodeKey];
-            
-            if (timeDifference * -1 > numberOfMinutes * 60) {
-
-                [self showPasscode];
-            }
+        NSInteger numberOfMinutes = [self.dataSubstrate.parameters integerForKey:kNumberOfMinutesForPasscodeKey];
+        NSNumber *lastPasscodeSuccessTime = [[NSUserDefaults standardUserDefaults] objectForKey:kLastUsedTimeKey];
+        long timeDifference = uptime() - lastPasscodeSuccessTime.longValue;
+        if (timeDifference > numberOfMinutes * 60) {
+            [self showPasscodeViewController];
         }
     }
 }
 
-- (void)showPasscode
+- (void)showPasscodeViewController
 {
-    if ([self.window.rootViewController isKindOfClass:[APCTabBarViewController class]]) {
-        APCTabBarViewController * tvc = (APCTabBarViewController*) self.window.rootViewController;
-        tvc.passcodeDelegate = self;
-        self.isPasscodeShowing = YES;
-        tvc.showPasscodeScreen = YES;
+    if (!self.passcodeViewController) {
+        self.passcodeViewController = [[UIStoryboard storyboardWithName:@"APCPasscode" bundle:[NSBundle appleCoreBundle]] instantiateInitialViewController];
+        self.passcodeViewController.passcodeViewControllerDelegate = self;
     }
+    
+    self.window.rootViewController = self.passcodeViewController;
 }
 
 - (void) showOnBoarding
@@ -1015,25 +977,34 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
                     completion:nil];
 }
 
-- (void)instantiateOnboardingForType:(APCOnboardingTaskType)type
-{
-    if (self.onboarding) {
-        self.onboarding = nil;
-        self.onboarding.delegate = nil;
+#pragma mark - Onboarding Manager
+
+- (APCOnboardingManager *)onboardingManager {
+    if (!_onboardingManager) {
+        self.onboardingManager = [APCOnboardingManager managerWithProvider:self user:self.dataSubstrate.currentUser];
     }
-    
-    self.onboarding = [[APCOnboarding alloc] initWithDelegate:self taskType:type];
+    return _onboardingManager;
 }
 
-- (ORKTaskViewController *)consentViewController
-{
-    NSAssert(FALSE, @"Override this method to return a valid Consent Task View Controller.");
+- (APCPermissionsManager *)permissionsManager {
+    return [APCPermissionsManager new];
+}
+
+- (APCScene *)inclusionCriteriaSceneForOnboarding:(APCOnboarding *)__unused onboarding {
+    NSAssert(NO, @"Cannot retun nil. Override this delegate method to return a valid APCScene.");
     return nil;
 }
 
-/*********************************************************************************/
+
+- (ORKTaskViewController *)consentViewController
+{
+    NSAssert(NO, @"Override this method to return a valid Consent Task View Controller.");
+    return nil;
+}
+
+
 #pragma mark - Private Helper Methods
-/*********************************************************************************/
+
 - (NSString *) applicationDocumentsDirectory
 {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -1041,39 +1012,6 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     return basePath;
 }
 
-#pragma mark - APCOnboardingDelegate methods
-
-- (APCScene *) inclusionCriteriaSceneForOnboarding: (APCOnboarding *) __unused onboarding
-{
-    NSAssert(FALSE, @"Cannot retun nil. Override this delegate method to return a valid APCScene.");
-    
-    return nil;
-}
-
-#pragma mark - APCOnboardingTaskDelegate methods
-
-- (APCUser *) userForOnboardingTask: (APCOnboardingTask *) __unused task
-{
-    return self.dataSubstrate.currentUser;
-}
-
-- (NSInteger) numberOfServicesInPermissionsListForOnboardingTask: (APCOnboardingTask *) __unused task
-{
-    NSDictionary *initialOptions = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).initializationOptions;
-    NSArray *servicesArray = initialOptions[kAppServicesListRequiredKey];
-    
-    return servicesArray.count;
-}
-
-#pragma mark - APCPasscodeViewControllerDelegate methods
-
-- (void)passcodeViewControllerDidSucceed:(APCPasscodeViewController *) __unused viewController
-{
-    [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kLastUsedTimeKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    
-    self.isPasscodeShowing = NO;
-}
 
 #pragma mark - Secure View
 
@@ -1087,18 +1025,18 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
         UIImage *appIcon = [UIImage imageNamed:@"logo_disease_large" inBundle:[NSBundle mainBundle] compatibleWithTraitCollection:nil];
         UIImageView *blurredImageView = [[UIImageView alloc] initWithImage:blurredImage];
         UIImageView *appIconImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0,0, 180, 180)];
-
+        
         appIconImageView.image = appIcon;
         appIconImageView.center = blurredImageView.center;
         appIconImageView.contentMode = UIViewContentModeScaleAspectFit;
-        
+
         [self.secureView addSubview:blurredImageView];
         [self.secureView addSubview:appIconImageView];
-        
+
         [viewForSnapshot insertSubview:self.secureView atIndex:NSIntegerMax];
     }
 }
-
+        
 - (void)hideSecureView
 {
     if (self.secureView) {
@@ -1106,6 +1044,24 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
         self.secureView = nil;
     }
 }
+        
 
+#pragma mark - PasscodeViewController delegate
+
+- (void)passcodeViewControllerDidSucceed:(APCPasscodeViewController *)__unused viewController
+{
+    //set the tabbar controller as the rootViewController
+    [self showTabBar];
+    self.isPasscodeShowing = NO;
+    self.passcodeViewController = nil;
+    [[NSUserDefaults standardUserDefaults] setObject: [NSNumber numberWithLong:uptime()] forKey:kLastUsedTimeKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (void)passcodeViewControllerDidFail:(APCPasscodeViewController *) __unused viewController
+{
+    //retain the passcodeViewController as the Root View Controller and do not reset timeout
+    self.isPasscodeShowing = YES;
+}
 
 @end

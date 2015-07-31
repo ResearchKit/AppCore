@@ -97,7 +97,7 @@ FOUNDATION_EXPORT CGFloat const kAPCPopAnimationDuration;
 
 - (NSInteger)numberOfPlots;
 
-- (NSInteger)numberOfPointsinPlot:(NSInteger)plotIndex;
+- (NSInteger)numberOfPointsInPlot:(NSInteger)plotIndex;
 
 - (void)scrubReferenceLineForXPosition:(CGFloat)xPosition;
 
