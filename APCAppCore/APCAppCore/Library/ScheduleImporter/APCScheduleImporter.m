@@ -1017,23 +1017,27 @@ static NSArray *legalTimeSpecifierFormats = nil;
         } else if (activity.task) {
             NSMutableDictionary *activityData = [NSMutableDictionary new];
             
-            activityData [kTaskTitleKey]                = [self nullIfNil: activity.label];
-            activityData [kTaskCompletionTimeStringKey] = [self nullIfNil: activity.labelDetail];
-            activityData [kTaskTypeKey]                 = [self nullIfNil: activity.activityType];
-            activityData [kTaskIDKey]                   = [self nullIfNil: activity.task.identifier];
-            activityData [kTaskClassNameKey]            = mappingDictionary[activity.task.identifier];
-            
-            // Not available for non survey tasks
-            activityData [kTaskVersionNumberKey]    = null;
-            activityData [kTaskUrlKey]              = null;
-            
-            // When we start getting these from Sage, we'll use them.
-            // In the mean time, noting them here, because we're using
-            // them from our local disk files.
-            activityData [kTaskFileNameKey]             = null;
-            activityData [kTaskSortStringKey]           = null;
-            
-            [activities addObject: activityData];
+            // ignore unrecognized tasks (probably added in a later app version)
+            NSString *taskClassName = mappingDictionary[activity.task.identifier];
+            if (taskClassName.length) {
+                activityData [kTaskTitleKey]                = [self nullIfNil: activity.label];
+                activityData [kTaskCompletionTimeStringKey] = [self nullIfNil: activity.labelDetail];
+                activityData [kTaskTypeKey]                 = [self nullIfNil: activity.activityType];
+                activityData [kTaskIDKey]                   = [self nullIfNil: activity.task.identifier];
+                activityData [kTaskClassNameKey]            = taskClassName;
+                
+                // Not available for non survey tasks
+                activityData [kTaskVersionNumberKey]    = null;
+                activityData [kTaskUrlKey]              = null;
+                
+                // When we start getting these from Sage, we'll use them.
+                // In the mean time, noting them here, because we're using
+                // them from our local disk files.
+                activityData [kTaskFileNameKey]             = null;
+                activityData [kTaskSortStringKey]           = null;
+                
+                [activities addObject: activityData];
+            }
         }
     }
     
