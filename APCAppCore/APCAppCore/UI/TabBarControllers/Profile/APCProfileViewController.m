@@ -419,7 +419,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 case kAPCUserInfoItemTypeBiologicalSex:
                 {
                     APCTableViewItem *field = [APCTableViewItem new];
-                    field.caption = NSLocalizedString(@"Biological Sex", @"");
+                    field.caption = NSLocalizedString(@"Sex", @"");
                     field.identifier = kAPCDefaultTableViewCellIdentifier;
                     field.editable = NO;
                     field.textAlignnment = NSTextAlignmentRight;
