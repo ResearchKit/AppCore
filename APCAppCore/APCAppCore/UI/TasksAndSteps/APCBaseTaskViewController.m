@@ -435,7 +435,7 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
     [archiveUploader encryptAndUploadArchive:self.archive withCompletion:^(NSError *error) {
         __strong typeof(self) strongSelf = weakSelf;
         if (! error) {
-            if (resultSummary != nil) {
+            if (resultSummary != nil || self.createResultSummaryBlock) {
                 [strongSelf storeInCoreDataWithFileName:self.archive.unencryptedURL.absoluteString.lastPathComponent resultSummary:resultSummary];
             }
         }else{
