@@ -77,7 +77,7 @@
 
 @required
 
-- (NSInteger)numberOfSegmentsInPieGraphView;
+- (NSInteger)numberOfSegmentsInPieGraphView:(APCPieGraphView *)pieGraphView;
 
 - (CGFloat)pieGraphView:(APCPieGraphView *)pieGraphView valueForSegmentAtIndex:(NSInteger)index;
 
