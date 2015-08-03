@@ -49,8 +49,10 @@ NS_ASSUME_NONNULL_BEGIN
 @required
 /** The onboarding manager for the app. */
 - (APCOnboardingManager *)onboardingManager;
+
 /** The permissions manager for the app. */
 - (APCPermissionsManager *)permissionsManager;
+
 @optional
 /**
  *  Kept for backwards compatibility: return the inclusion criteria scene.
@@ -91,6 +93,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithProvider:(id<APCOnboardingManagerProvider>)provider user:(APCUser * __nonnull)user;
 
 - (void)instantiateOnboardingForType:(APCOnboardingTaskType)type;
+
+/** Override point to create a custom permissions manager. By default returns the receiver provider's permission manager. */
+- (APCPermissionsManager *)createPermissionsManager;
 
 #pragma mark Onboarding
 
