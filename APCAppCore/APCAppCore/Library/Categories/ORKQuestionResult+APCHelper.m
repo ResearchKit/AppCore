@@ -54,6 +54,7 @@
     //ORKTextQuestionResult : textAnswer
     //ORKNumericQuestionResult : numericAnswer
     //ORKTimeIntervalQuestionResult : intervalAnswer
+    //ORKChoiceQuestionResult : choiceAnswers
     
     id retValue = nil;
     if ([self isKindOfClass:[ORKScaleQuestionResult class]]) {
@@ -71,10 +72,13 @@
     {
         retValue = [(ORKTimeIntervalQuestionResult*) self intervalAnswer];
     }
+    else if([self isKindOfClass:[ORKNumericQuestionResult class]])
+    {
+        retValue = [(ORKNumericQuestionResult*) self numericAnswer];
+    }
     else if([self isKindOfClass:[ORKChoiceQuestionResult class]])
     {
-        ORKChoiceQuestionResult * choiceResult = (ORKChoiceQuestionResult*) self;
-        retValue = choiceResult.choiceAnswers.firstObject;
+        retValue = [(ORKChoiceQuestionResult *) self choiceAnswers];
     }
     
     return retValue;
@@ -104,10 +108,14 @@
     }
     else if([self isKindOfClass:[ORKChoiceQuestionResult class]])
     {
-        ORKChoiceQuestionResult * choiceResult = (ORKChoiceQuestionResult*) self;
-        retValue = (choiceResult.choiceAnswers.count > 1) ? NO : YES;
+        retValue = YES;
+    }
+    else if ([self isKindOfClass:[ORKNumericQuestionResult class]])
+    {
+        retValue = YES;
     }
     
     return retValue;
 }
+
 @end

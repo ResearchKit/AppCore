@@ -33,6 +33,7 @@
  
 #import "APCSmartSurveyTask.h"
 #import <ResearchKit/ResearchKit.h>
+#import "ResearchKit/ORKStep.h"
 #import <BridgeSDK/BridgeSDK.h>
 #import "APCAppCore.h"
 
@@ -49,6 +50,7 @@ NSString *const kOperatorLessThanEqual      = @"le";
 NSString *const kOperatorGreaterThanEqual   = @"ge";
 NSString *const kOperatorOtherThan          = @"ot";
 
+NSString *const kShorthandEndMarker         = @"end";
 NSString *const kEndOfSurveyMarker          = @"END_OF_SURVEY";
 
 NSString *const kConstraintsKey   = @"constraints";
@@ -75,7 +77,7 @@ static APCDummyObject * _dummyObject;
 @property (nonatomic, copy) NSString * identifier;
 @property (nonatomic, strong) NSMutableDictionary * rkSteps;
 @property (nonatomic, strong) NSMutableDictionary * rules; //[stepID : [rules]]
-
+@property (nonatomic, strong) NSMutableDictionary * dataTypes;//[stepID : [dataType]
 @property (nonatomic, strong) NSMutableArray * staticStepIdentifiers;
 @property (nonatomic, strong) NSMutableArray * dynamicStepIdentifiers;
 
@@ -96,6 +98,7 @@ static APCDummyObject * _dummyObject;
         self.rkSteps = [NSMutableDictionary dictionary];
         self.staticStepIdentifiers = [NSMutableArray array];
         self.setOfIdentifiers = [NSMutableSet set];
+        self.dataTypes = [NSMutableDictionary new];
         
         NSArray * elements = survey.elements;
         
@@ -106,6 +109,7 @@ static APCDummyObject * _dummyObject;
                 
                 [self.staticStepIdentifiers addObject:obj.identifier];
                 [self.setOfIdentifiers addObject:obj.identifier];
+                [self.dataTypes setObject:obj.constraints.dataType forKey:obj.identifier];
                 
                 NSArray * rulesArray = [[obj constraints] rules];
                 if (rulesArray) {
@@ -150,27 +154,24 @@ static APCDummyObject * _dummyObject;
 {
     [self refillDynamicStepIdentifiersWithCurrentStepIdentifier:step.identifier];
     
-    //If Step has rules, process answer. Otherwise keep moving
-    NSArray * rulesForThisStep = self.rules[step.identifier];
-    NSString * skipToStep = nil;
-    if (rulesForThisStep.count) {
-        ORKStepResult * stepResult = (ORKStepResult*) [result resultForIdentifier:step.identifier];
-        id firstResult = stepResult.results.firstObject;
-        if (firstResult == nil || [firstResult isKindOfClass:[ORKQuestionResult class]]) {
-            ORKQuestionResult * questionResult = (ORKQuestionResult*) firstResult;
-            if ([questionResult validForApplyingRule]) {
-                skipToStep = [self processRules:rulesForThisStep forAnswer:[questionResult consolidatedAnswer]];
-            }
+    NSString * skipToStep;
+    
+    ORKStepResult * stepResult = (ORKStepResult*) [result resultForIdentifier:step.identifier];
+    id firstResult = stepResult.results.firstObject;
+    if (firstResult == nil || [firstResult isKindOfClass:[ORKQuestionResult class]]) {
+        ORKQuestionResult * questionResult = (ORKQuestionResult*) firstResult;
+        if ([questionResult validForApplyingRule]) {
+            skipToStep = [self conditionalStepIdentiferForStep: (ORKStep *)step answer:[questionResult consolidatedAnswer]];
         }
-        
-        if ([skipToStep isEqualToString:kEndOfSurveyMarker]) {
-            return nil;
-        }
-        
-        //If there is new skipToStep then skip to that step
-        if (skipToStep) {
-            [self adjustDynamicStepIdentifersForSkipToStep:skipToStep from:step.identifier];
-        }
+    }
+    
+    if ([skipToStep isEqualToString:kEndOfSurveyMarker]) {
+        return nil;
+    }
+    
+    //If there is new skipToStep then skip to that step
+    if (skipToStep) {
+        [self adjustDynamicStepIdentifersForSkipToStep:skipToStep from:step.identifier];
     }
     
     NSString * nextStepIdentifier = [self nextStepIdentifier:YES currentIdentifier:step.identifier];
@@ -253,12 +254,12 @@ static APCDummyObject * _dummyObject;
 #pragma mark - Rule Checking
 /*********************************************************************************/
 
-- (NSString *) processRules: (NSArray*) rules forAnswer: (id) answer
+- (NSString *) conditionalStepIdentiferForStep:(ORKStep *)step answer:(id)answer
 {
     /**
      * Check if answer is nil (Skip) or NSNumber or NSString then process rules. Otherwise no processing of rules.
      *      Single choice: the selected RKAnswerOption's `value` property. SUPPORTED
-     *      Multiple choice: array of values from selected RKAnswerOptions' `value` properties. NOT SUPPORTED
+     *      Multiple choice: array of values from selected RKAnswerOptions' `value` properties. SUPPORTED IF "dataType": "integer" and values are binary up to 32 bits.
      *      Boolean: NSNumber SUPPORTED
      *      Text: NSString SUPPORTED
      *      Scale: NSNumber SUPPORTED
@@ -267,6 +268,17 @@ static APCDummyObject * _dummyObject;
      *      DateAndTime: ORKDateAnswer with date components having (NSCalendarUnitEra|NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay|NSCalendarUnitHour|NSCalendarUnitMinute|NSCalendarUnitSecond). NOT SUPPORTED
      *      Time Interval: NSNumber, containing a time span in seconds. SUPPORTED
      */
+    
+    NSArray * rules = self.rules[step.identifier];
+    
+    if ([answer isKindOfClass:[NSArray class]] && [(NSArray *)answer count] > 0) {
+        //we have a multi-choice answer, but we only want to reduce it if it's of "dataType": "integer"
+        NSString *dataTypeForThisStep = self.dataTypes[step.identifier];
+        if ([dataTypeForThisStep isEqualToString:@"integer"]) {
+            answer = [self reduceChoiceAnswers:answer].firstObject;
+        }
+    }
+    
     __block NSString * skipToIdentifier = nil;
     if (answer == nil || [answer isKindOfClass:[NSNumber class]] || [answer isKindOfClass:[NSString class]]) {
         [rules enumerateObjectsUsingBlock:^(SBBSurveyRule * rule, NSUInteger __unused idx, BOOL *stop) {
@@ -276,10 +288,23 @@ static APCDummyObject * _dummyObject;
             }
         }];
     }
+    
     if (skipToIdentifier) {
         APCLogDebug(@"SKIPPING TO: %@", skipToIdentifier);
     }
     return skipToIdentifier;
+}
+
+- (NSArray *)reduceChoiceAnswers : (NSArray *)choiceAnswers
+{
+    //Use 32 bits to OR the answers
+    NSInteger shortValue = 0000000000000000;
+    for (NSNumber *number in choiceAnswers) {
+        shortValue = shortValue | number.integerValue;
+    }
+    
+    return [NSArray arrayWithObject:@(shortValue)];;
+    
 }
 
 - (NSString *) checkRule: (SBBSurveyRule*) rule againstAnswer: (id) answer
@@ -295,6 +320,10 @@ static APCDummyObject * _dummyObject;
     //Skip
     if ([operator isEqualToString:kOperatorSkip] && answer == nil) {
         retValue = skipToValue;
+    }
+    
+    if ([skipToValue isEqualToString:kShorthandEndMarker]) {
+        retValue = kEndOfSurveyMarker;
     }
     
     NSNumberFormatter * formatter = [NSNumberFormatter new];
@@ -481,6 +510,7 @@ static APCDummyObject * _dummyObject;
     if (self) {
         self.identifier = [aDecoder decodeObjectForKey:@"identifier"];
         self.rules = [aDecoder decodeObjectForKey:@"rules"];
+        self.dataTypes = [aDecoder decodeObjectForKey:@"dataTypes"];
         self.rkSteps = [aDecoder decodeObjectForKey:@"rkSteps"];
         self.staticStepIdentifiers = [aDecoder decodeObjectForKey:@"staticStepIdentifiers"];
         self.dynamicStepIdentifiers = [self.staticStepIdentifiers mutableCopy];
@@ -492,6 +522,7 @@ static APCDummyObject * _dummyObject;
 {
     [aCoder encodeObject:self.identifier forKey:@"identifier"];
     [aCoder encodeObject:self.rules forKey:@"rules"];
+    [aCoder encodeObject:self.dataTypes forKey:@"dataTypes"];
     [aCoder encodeObject:self.rkSteps forKey:@"rkSteps"];
     [aCoder encodeObject:self.staticStepIdentifiers forKey:@"staticStepIdentifiers"];
 }
