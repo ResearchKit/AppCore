@@ -12,8 +12,7 @@ including:
 * JSON serialization and deserialization
 * Integration with Sage Bionetworks' Bridge service
 
-Over time, we expect that some of the features in AppCore will be
-migrated into ResearchKit.
+We are excited about how helpful AppCore has been in the development of several ResearchKit apps. In order to help the ResearchKit community derive the most utility from the individual components in AppCore, we’re working hard with many developers to transition components of AppCore into the main ResearchKit repo. As a result, we will only be accepting bug fixes to AppCore moving forward and hope you’ll continue giving feature and UI enhancements once the pieces are fully integrated into ResearchKit’s repo.
 
 Building AppCore
 ----------------
