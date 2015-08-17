@@ -4,7 +4,7 @@
 "CONSENT_NAME_LAST" = "Last Name";
 "CONSENT_NAME_PLACEHOLDER" = "Required";
 "CONSENT_REVIEW_TITLE" = "Review";
-"CONSENT_REVIEW_INSTRUCTION" = "Review the information below, and tap ‘agree’ if you\'re ready to continue.";
+"CONSENT_REVIEW_INSTRUCTION" = "Review the information below, and tap \'agree\' if you\'re ready to continue.";
 "CONSENT_REVIEW_ALERT_TITLE" = "Review";
 "CONSENT_SIGNATURE_TITLE" = "Signature";
 "CONSENT_SIGNATURE_INSTRUCTION" = "Please sign using your finger on the line below.";
@@ -28,14 +28,14 @@
 "LEARN_MORE_PRIVACY" = "Learn more about how your privacy and identity are protected";
 "LEARN_MORE_WELCOME" = "Learn more about the study first";
 "LEARN_MORE_STUDY_SURVEY" = "Learn more about the study survey";
-"LEARN_MORE_TIME_COMMITMENT" = "Learn more about the study\'s impact on your time";
+"LEARN_MORE_TIME_COMMITMENT" = "Learn more about the study's impact on your time";
 "LEARN_MORE_TASKS" = "Learn more about the tasks involved";
 "LEARN_MORE_WITHDRAWING" = "Learn more about withdrawing";
 
 
 /* Lines beneath typewritten signatures on documents. Argument is the title of the signatory, e.g. "Participant's Signature" */
-"CONSENT_DOC_LINE_PRINTED_NAME" = "%@\'s Name (printed)";
-"CONSENT_DOC_LINE_SIGNATURE" = "%@\'s Signature";
+"CONSENT_DOC_LINE_PRINTED_NAME" = "%@'s Name (printed)";
+"CONSENT_DOC_LINE_SIGNATURE" = "%@'s Signature";
 "CONSENT_DOC_LINE_DATE" = "Date";
 
 /* Progress indication (in navigation bar). */
@@ -96,7 +96,7 @@
 "FITNESS_SIT_INSTRUCTION_FORMAT" = "Sit comfortably for %@.";
 "FITNESS_WALK_INSTRUCTION_FORMAT" = "Walk as fast as you can for %@.";
 "FITNESS_INTRO_TEXT_FORMAT" = "This test monitors your heart rate and measures how far you can walk in %1$@.";
-"FITNESS_INTRO_2_TEXT_FORMAT" = "Walk outdoors at your fastest possible pace for %1$@. When you\'re done, sit and rest comfortably for %2$@. To begin, tap Get Started.";
+"FITNESS_INTRO_2_TEXT_FORMAT" = "Walk outdoors at your fastest possible pace for %1$@. When you're done, sit and rest comfortably for %2$@. To begin, tap Get Started.";
 
 /* Short walk active task. */
 "WALK_TASK_TITLE" = "Walking Activity";
@@ -127,8 +127,8 @@
 "SPATIAL_SPAN_MEMORY_TITLE" = "Spatial Memory Test";
 "SPATIAL_SPAN_MEMORY_INTRO_TEXT" = "This test measures your spatial memory by showing you patterns and asking you to recall and repeat them.";
 "SPATIAL_SPAN_MEMORY_TARGET_PLURAL" = "flowers";
-"SPATIAL_SPAN_MEMORY_INTRO_2_TEXT_%@" = "%@ like those below will light up in a sequence. You\'ll be asked to remember the sequence and repeat it by tapping.";
-"SPATIAL_SPAN_MEMORY_INTRO_2_TEXT_REVERSE_%@" = "%@ like those below will light up in a sequence. You\'ll be asked to remember the sequence and repeat it in REVERSE order by tapping.";
+"SPATIAL_SPAN_MEMORY_INTRO_2_TEXT_%@" = "%@ like those below will light up in a sequence. You'll be asked to remember the sequence and repeat it by tapping.";
+"SPATIAL_SPAN_MEMORY_INTRO_2_TEXT_REVERSE_%@" = "%@ like those below will light up in a sequence. You'll be asked to remember the sequence and repeat it in REVERSE order by tapping.";
 "SPATIAL_SPAN_MEMORY_CALL_TO_ACTION" = "To begin, tap Get Started, then watch closely.";
 "MEMORY_GAME_ITEM_COUNT_TITLE_%@" = "%@";
 "MEMORY_GAME_SCORE_TITLE" = "Score";
@@ -138,9 +138,9 @@
 "MEMORY_GAME_COMPLETE_TITLE" = "Round Complete";
 "MEMORY_GAME_COMPLETE_MESSAGE" = "To continue to the next round, tap Next";
 "MEMORY_GAME_FAILED_TITLE" = "Try Again";
-"MEMORY_GAME_FAILED_MESSAGE" = "You didn\'t quite make it through that time. Tap ‘Try Again’ to repeat.";
-"MEMORY_GAME_TIMEOUT_TITLE" = "Time\'s Up";
-"MEMORY_GAME_TIMEOUT_MESSAGE" = "You ran out of time on this round.\nTap ‘Try Again’ to repeat.";
+"MEMORY_GAME_FAILED_MESSAGE" = "You didn't quite make it through that time. Tap 'Try Again' to repeat.";
+"MEMORY_GAME_TIMEOUT_TITLE" = "Time's Up";
+"MEMORY_GAME_TIMEOUT_MESSAGE" = "You ran out of time on this round.\nTap 'Try Again' to repeat.";
 "MEMORY_GAME_COMPLETE" = "Game Complete";
 "BUTTON_TRY_AGAIN" = "Try Again";
 

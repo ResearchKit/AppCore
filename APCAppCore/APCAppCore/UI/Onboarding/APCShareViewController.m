@@ -181,7 +181,7 @@
                 
                 [self presentViewController:mailComposeVC animated:YES completion:NULL];
             } else {
-                NSString *message = NSLocalizedString(@"Looks like you don\'t have Mail app setup. Please configure to share via email.", nil);
+                NSString *message = NSLocalizedString(@"Looks like you don't have Mail app setup. Please configure to share via email.", nil);
                 
                 UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Email", nil) message:message preferredStyle:UIAlertControllerStyleAlert];
                 UIAlertAction *dismiss = [UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", nil) style:UIAlertActionStyleDefault handler:nil];
@@ -199,7 +199,7 @@
                 
                 [self presentViewController:messageComposer animated:YES completion:nil];
             } else {
-                NSString *message = NSLocalizedString(@"Looks like you don\'t have Messages app setup. Please configure to share via SMS.", nil);
+                NSString *message = NSLocalizedString(@"Looks like you don't have Messages app setup. Please configure to share via SMS.", nil);
                 
                 UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Messages", nil) message:message preferredStyle:UIAlertControllerStyleAlert];
                 UIAlertAction *dismiss = [UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", nil) style:UIAlertActionStyleDefault handler:nil];
