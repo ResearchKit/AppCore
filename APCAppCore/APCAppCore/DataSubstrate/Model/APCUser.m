@@ -111,7 +111,7 @@ static NSString *const kSignedInKey = @"SignedIn";
             Name : %@\n\
             Email : %@\n\
             DOB : %@\n\
-            Biological Sex : %d\n\
+            Sex : %d\n\
             -----------------------\n\
             SignedUp? :%@\n\
             UserConsented? : %@\n\
