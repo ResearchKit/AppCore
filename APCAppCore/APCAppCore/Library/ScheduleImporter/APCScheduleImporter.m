@@ -123,7 +123,7 @@ static NSString * const kTaskClassNameKey                      = @"taskClassName
 static NSString * const kTaskCompletionTimeStringKey           = @"taskCompletionTimeString";
 static NSString * const kTaskFileNameKey                       = @"taskFileName";
 static NSString * const kTaskIDKey                             = @"taskID";
-static NSString * const kTaskIsOptionalKey                     = @"optional";
+static NSString * const kTaskIsOptionalKey                     = @"persistent";
 static NSString * const kTaskSortStringKey                     = @"sortString";
 static NSString * const kTaskTitleKey                          = @"taskTitle";
 static NSString * const kTaskTypeKey                           = @"taskType";
@@ -1005,6 +1005,7 @@ static NSArray *legalTimeSpecifierFormats = nil;
             activityData [kTaskVersionNumberKey]        = [self nullIfNil: activity.survey.createdOn.toStringInISO8601Format];
             activityData [kTaskUrlKey]                  = [self nullIfNil: activity.survey.href];
             activityData [kTaskClassNameKey]            = NSStringFromClass ([APCGenericSurveyTaskViewController class]);
+            activityData [kTaskIsOptionalKey]           = [self nullIfNil: sageSchedule.persistent];
             
             // When we start getting these from Sage, we'll use them.
             // In the mean time, noting them here, because we're using
@@ -1025,6 +1026,7 @@ static NSArray *legalTimeSpecifierFormats = nil;
                 activityData [kTaskTypeKey]                 = [self nullIfNil: activity.activityType];
                 activityData [kTaskIDKey]                   = [self nullIfNil: activity.task.identifier];
                 activityData [kTaskClassNameKey]            = taskClassName;
+                activityData [kTaskIsOptionalKey]           = [self nullIfNil: sageSchedule.persistent];
                 
                 // Not available for non survey tasks
                 activityData [kTaskVersionNumberKey]    = null;
