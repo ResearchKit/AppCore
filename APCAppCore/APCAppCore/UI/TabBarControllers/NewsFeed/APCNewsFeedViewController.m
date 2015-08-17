@@ -116,7 +116,18 @@
     APCFeedItem *item = self.posts[indexPath.row];
     
     cell.titleLabel.text = item.title;
-    cell.descriptionLabel.text = item.itemDescription;
+    
+    // strip HTML tags from itemDescription before displaying.
+    NSError *error = nil;
+    NSAttributedString *attributedDescription = [[NSAttributedString alloc] initWithData:[item.itemDescription dataUsingEncoding:NSUTF8StringEncoding] options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType} documentAttributes:nil error:&error];
+    if (error) {
+#if DEBUG
+        NSLog(@"Problem creating attributed string from HTML:\n%@\nError:\n%@", item.description, error);
+#endif
+        cell.descriptionLabel.text = item.itemDescription;
+    } else {
+        cell.descriptionLabel.text = [attributedDescription string];
+    }
     cell.dateLabel.text = [self.dateFormatter stringFromDate:item.pubDate];
     
     BOOL read = [[self newsFeedManager] hasUserReadPostWithURL:item.link];
