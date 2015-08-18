@@ -39,7 +39,7 @@
 #import "APCAppDelegate.h"
 
 static  NSString  *kTaskIdentifierKey              = @"NonIdentifiableDemographicsTask";
-static  NSString  *kFileIdentifierKey              = @"NonIdentifiableDemographics";
+static  NSString  *kFileIdentifierKey              = @"NonIdentifiableDemographics.json";
 static  NSString  *kPatientInformationKey          = @"item";
 static  NSString  *kPatientCurrentAgeKey           = @"patientCurrentAge";
 static  NSString  *kPatientBiologicalSexKey        = @"patientBiologicalSex";
