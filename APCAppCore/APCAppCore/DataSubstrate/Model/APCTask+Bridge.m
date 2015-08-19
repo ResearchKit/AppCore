@@ -61,7 +61,11 @@
 {
     NSManagedObjectContext * context = ((APCAppDelegate*)[UIApplication sharedApplication].delegate).dataSubstrate.persistentContext;
     NSFetchRequest * request = [APCTask request];
-    request.predicate = [NSPredicate predicateWithFormat:@"taskDescription == nil && taskHRef != nil"];
+
+    NSDate *now = [NSDate date];
+    NSDate *oneDayAgo = [now dateByAddingTimeInterval:-1*24*60*60];
+    
+    request.predicate = [NSPredicate predicateWithFormat:@"taskHRef != nil AND (taskDescription == nil OR updatedAt <= %@)", oneDayAgo];
     [context performBlockAndWait:^{
         NSError * error;
         NSArray * unloadedSurveyTasks = [context executeFetchRequest:request error:&error];
@@ -94,7 +98,7 @@
 
 - (void) loadSurveyOnCompletion: (void (^)(NSError * error)) completionBlock
 {
-    if ([APCTask serverDisabled] || self.taskDescription) {
+    if ([APCTask serverDisabled]) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (completionBlock) {
                 completionBlock(nil);
@@ -117,6 +121,8 @@
             }
             else
             {
+                APCLogError(self.taskTitle);
+                APCLogError(self.taskHRef);
                 APCLogError2 (error);
             }
             dispatch_async(dispatch_get_main_queue(), ^{
