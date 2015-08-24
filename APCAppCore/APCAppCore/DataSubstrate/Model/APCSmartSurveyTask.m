@@ -100,6 +100,13 @@ static APCDummyObject * _dummyObject;
         NSArray * elements = survey.elements;
         
         [elements enumerateObjectsUsingBlock:^(id object, NSUInteger __unused idx, BOOL * __unused stop) {
+            if ([object isKindOfClass:[SBBSurveyInfoScreen class]]) {
+                SBBSurveyInfoScreen *screen = (SBBSurveyInfoScreen*) object;
+                self.rkSteps[screen.identifier] = [APCSmartSurveyTask rkStepFromSBBSurveyInfoScreen:screen];
+                
+                [self.staticStepIdentifiers addObject:screen.identifier];
+                [self.setOfIdentifiers addObject:screen.identifier];
+            }
             if ([object isKindOfClass:[SBBSurveyQuestion class]]) {
                 SBBSurveyQuestion * obj = (SBBSurveyQuestion*) object;
                 self.rkSteps[obj.identifier] = [APCSmartSurveyTask rkStepFromSBBSurveyQuestion:obj];
@@ -434,6 +441,18 @@ static APCDummyObject * _dummyObject;
                                          };
     NSAssert(answerFormatClass[SBBClassName], @"SBBClass Not Defined");
     return answerFormatClass[SBBClassName];
+}
+         
++ (ORKInstructionStep*) rkStepFromSBBSurveyInfoScreen:(SBBSurveyInfoScreen*)screen
+{
+    ORKInstructionStep *returnStep = [[ORKInstructionStep alloc] initWithIdentifier:screen.identifier];
+    if (screen.prompt.length > 0) {
+        returnStep.title = screen.prompt;
+    }
+    if (screen.promptDetail.length > 0) {
+        returnStep.text = screen.promptDetail;
+    }
+    return returnStep;
 }
 
 + (ORKQuestionStep*) rkStepFromSBBSurveyQuestion: (SBBSurveyQuestion*) question
