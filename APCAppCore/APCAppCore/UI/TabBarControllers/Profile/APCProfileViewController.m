@@ -227,7 +227,9 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         if ([self.delegate respondsToSelector:@selector(decorateCell:atIndexPath:)])
         {
             //the delegate should set fields on the cell as required for any preparedContent
-            cell = [self.delegate decorateCell:cell atIndexPath:indexPath];
+            NSInteger adjustedSectionForExtender = indexPath.section - self.items.count;
+            NSIndexPath *adjustedIndexPath = [NSIndexPath indexPathForRow:indexPath.row inSection:adjustedSectionForExtender];
+            cell = [self.delegate decorateCell:cell atIndexPath:adjustedIndexPath];
         }
 
     } else {
