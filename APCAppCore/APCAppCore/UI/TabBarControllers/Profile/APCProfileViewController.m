@@ -744,6 +744,20 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             [rowItems addObject:row];
         }
         
+        {
+            APCTableViewItem *field = [APCTableViewItem new];
+            field.caption = NSLocalizedString(@"Download Data", @"");
+            field.identifier = kAPCDefaultTableViewCellIdentifier;
+            field.textAlignnment = NSTextAlignmentLeft;
+            field.editable = NO;
+            field.selectionStyle = UITableViewCellSelectionStyleGray;
+            
+            APCTableViewRow *row = [APCTableViewRow new];
+            row.item = field;
+            row.itemType = kAPCSettingsItemTypeDownloadData;
+            [rowItems addObject:row];
+        }
+        
         if (APCUserConsentSharingScopeNone != self.user.sharedOptionSelection) {
             //  Instead of prevent the row from being added to the table, a better option would be to
             //  disable the row (grey it out and don't respond to taps)
@@ -1061,6 +1075,19 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     APCSharingOptionsViewController *sharingOptionsViewController = [[UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCSharingOptionsViewController"];
                     
                     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:sharingOptionsViewController];
+                    [self.navigationController presentViewController:navController animated:YES completion:nil];
+                } else {
+                    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+                }
+            }
+                break;
+                
+            case kAPCSettingsItemTypeDownloadData:
+            {
+                if (!self.isEditing){
+                    APCSharingOptionsViewController *downloadDataViewController = [[UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCDownloadDataViewController"];
+                    
+                    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:downloadDataViewController];
                     [self.navigationController presentViewController:navController animated:YES completion:nil];
                 } else {
                     [tableView deselectRowAtIndexPath:indexPath animated:YES];

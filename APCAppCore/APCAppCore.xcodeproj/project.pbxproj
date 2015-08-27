@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		049439811B8FC04000CAE23C /* APCDownloadDataViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 0494397F1B8FC04000CAE23C /* APCDownloadDataViewController.h */; };
+		049439821B8FC04000CAE23C /* APCDownloadDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049439801B8FC04000CAE23C /* APCDownloadDataViewController.m */; };
 		08023C4F1AA94F48008E6DDA /* APCAllSetContentViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 08023C4D1AA94F48008E6DDA /* APCAllSetContentViewController.h */; };
 		08023C501AA94F48008E6DDA /* APCAllSetContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08023C4E1AA94F48008E6DDA /* APCAllSetContentViewController.m */; };
 		08023C531AAA12DF008E6DDA /* APCAllSetTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 08023C511AAA12DF008E6DDA /* APCAllSetTableViewCell.h */; };
@@ -777,6 +779,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0494397F1B8FC04000CAE23C /* APCDownloadDataViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDownloadDataViewController.h; sourceTree = "<group>"; };
+		049439801B8FC04000CAE23C /* APCDownloadDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDownloadDataViewController.m; sourceTree = "<group>"; };
 		08023C4D1AA94F48008E6DDA /* APCAllSetContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCAllSetContentViewController.h; sourceTree = "<group>"; };
 		08023C4E1AA94F48008E6DDA /* APCAllSetContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCAllSetContentViewController.m; sourceTree = "<group>"; };
 		08023C511AAA12DF008E6DDA /* APCAllSetTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCAllSetTableViewCell.h; sourceTree = "<group>"; };
@@ -3011,6 +3015,8 @@
 				5BFEB41C1AA72CCD0089DEF7 /* APCSharingOptionsViewController.m */,
 				5B09ED1D1ABC1BEF003C5061 /* APCLicenseInfoViewController.h */,
 				5B09ED1E1ABC1BEF003C5061 /* APCLicenseInfoViewController.m */,
+				0494397F1B8FC04000CAE23C /* APCDownloadDataViewController.h */,
+				049439801B8FC04000CAE23C /* APCDownloadDataViewController.m */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -3444,6 +3450,7 @@
 				369E27FC1A96B7A200D35DFA /* APCMedicationWeeklySchedule.h in Headers */,
 				36A979A11B5807E60042B6C5 /* APCMatchingScheduleFilter.h in Headers */,
 				36A979A91B5807E60042B6C5 /* APCScheduleStartDateFilter.h in Headers */,
+				049439811B8FC04000CAE23C /* APCDownloadDataViewController.h in Headers */,
 				F5F129F81A2F78490015982C /* APCResult.h in Headers */,
 				F5F129EC1A2F78490015982C /* APCDataSubstrate.h in Headers */,
 				5B827B551A80CB0400C685A3 /* APCFadeAnimator.h in Headers */,
@@ -3919,6 +3926,7 @@
 				F5F12AED1A2F78490015982C /* APCDashboardMessageTableViewCell.m in Sources */,
 				F5F12AE31A2F78490015982C /* APCTextFieldTableViewCell.m in Sources */,
 				369E27FF1A96B7A200D35DFA /* APCMedTrackerDailyDosageRecord+Helper.m in Sources */,
+				049439821B8FC04000CAE23C /* APCDownloadDataViewController.m in Sources */,
 				369E27F41A96B7A200D35DFA /* APCMedicationLozenge.m in Sources */,
 				36A979AE1B5807E60042B6C5 /* APCScheduleTaskMap.m in Sources */,
 				7BF54F981AA158E50081C935 /* APCHorizontalBottomThinLineView.m in Sources */,
