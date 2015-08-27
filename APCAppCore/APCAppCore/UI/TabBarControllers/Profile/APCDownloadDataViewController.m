@@ -42,11 +42,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -54,5 +49,12 @@
     // Dispose of any resources that can be recreated.
 }
 
+
+- (IBAction)downloadData:(id) __unused sender {
+}
+
+- (IBAction)back:(id) __unused sender {
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+}
 
 @end

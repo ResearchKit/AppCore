@@ -1068,28 +1068,66 @@ IHRoYXQgeW91IGNvdWxkIG5vdCBjb250aW51ZS4
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <datePicker contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="kqO-wV-j11">
-                                <rect key="frame" x="0.0" y="173" width="320" height="162"/>
+                            <datePicker contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="kqO-wV-j11" userLabel="Start Picker">
+                                <rect key="frame" x="0.0" y="186" width="320" height="99"/>
                                 <date key="date" timeIntervalSinceReferenceDate="462406674.875404">
                                     <!--2015-08-27 22:17:54 +0000-->
                                 </date>
                             </datePicker>
-                            <datePicker contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="oAf-oE-xeX">
-                                <rect key="frame" x="0.0" y="334" width="320" height="162"/>
+                            <datePicker contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="oAf-oE-xeX" userLabel="End Picker">
+                                <rect key="frame" x="0.0" y="300" width="320" height="95"/>
                                 <date key="date" timeIntervalSinceReferenceDate="462406699.682311">
                                     <!--2015-08-27 22:18:19 +0000-->
                                 </date>
                             </datePicker>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eUN-2a-GKO" userLabel="Download Data" customClass="APCButton">
+                                <rect key="frame" x="87" y="441" width="146" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="fQZ-e3-EeG"/>
+                                    <constraint firstAttribute="width" constant="146" id="pt9-DO-Vfj"/>
+                                </constraints>
+                                <state key="normal" title="Download Data">
+                                    <color key="titleColor" red="0.97254901959999995" green="0.97254901959999995" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="downloadData:" destination="vk1-Of-g9A" eventType="touchUpInside" id="Hb2-u7-sv7"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NAe-b1-WhG" userLabel="Back" customClass="APCButton">
+                                <rect key="frame" x="87" y="511" width="146" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="f2A-rm-MVB"/>
+                                    <constraint firstAttribute="width" constant="146" id="qVk-Js-HqV"/>
+                                </constraints>
+                                <state key="normal" title="Back">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="back:" destination="vk1-Of-g9A" eventType="touchUpInside" id="sAZ-cr-vO3"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="centerX" secondItem="hFA-6t-bT4" secondAttribute="centerX" id="0aL-xL-eZm"/>
+                            <constraint firstAttribute="bottom" secondItem="NAe-b1-WhG" secondAttribute="bottom" constant="13" id="6oX-oL-Hxq"/>
+                            <constraint firstAttribute="bottom" secondItem="eUN-2a-GKO" secondAttribute="bottom" constant="83" id="AU9-7v-ay8"/>
+                            <constraint firstAttribute="centerX" secondItem="NAe-b1-WhG" secondAttribute="centerX" id="Hee-BF-yLd"/>
+                            <constraint firstAttribute="centerX" secondItem="eUN-2a-GKO" secondAttribute="centerX" id="eU9-Yt-dde"/>
                             <constraint firstItem="hFA-6t-bT4" firstAttribute="top" secondItem="eN0-JS-aXp" secondAttribute="top" constant="90" id="teK-Od-gx4"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Download Data" id="aoG-ly-D0T" userLabel="Download Data"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <connections>
+                        <outlet property="backButton" destination="NAe-b1-WhG" id="Hoa-8W-OPm"/>
+                        <outlet property="downloadButton" destination="eUN-2a-GKO" id="Ixf-yz-Nwm"/>
+                        <outlet property="endPicker" destination="oAf-oE-xeX" id="gQi-Fx-clj"/>
+                        <outlet property="instructionsLabel" destination="hFA-6t-bT4" id="a58-R5-Y4Q"/>
+                        <outlet property="startPicker" destination="kqO-wV-j11" id="CLe-Kj-q4T"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HP0-7C-aBY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
