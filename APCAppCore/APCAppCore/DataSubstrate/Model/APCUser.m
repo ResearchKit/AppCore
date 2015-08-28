@@ -79,6 +79,9 @@ static NSString *const kConsentSignatureNamePropertyName = @"consentSignatureNam
 static NSString *const kConsentSignatureDatePropertyName = @"consentSignatureDate";
 static NSString *const kConsentSignatureImagePropertyName = @"consentSignatureImage";
 
+static NSString *const kDownloadDataStartDatePropertyName = @"downloadDataStartDate";
+static NSString *const kDownloadDataEndDatePropertyName = @"downloadDataEndDate";
+
 static NSString *const kSignedUpKey = @"SignedUp";
 static NSString *const kSignedInKey = @"SignedIn";
 
@@ -176,6 +179,9 @@ static NSString *const kSignedInKey = @"SignedIn";
     _consentSignatureName = [storedUserData.consentSignatureName copy];
     _consentSignatureDate = [storedUserData.consentSignatureDate copy];
     _consentSignatureImage = [storedUserData.consentSignatureImage copy];
+    
+//    _downloadDataStartDate = [storedUserData.downloadDataStartDate copy];
+//    _downloadDataEndDate = [storedUserData.downloadDataEndDate copy];
     
     _dailyScalesCompletionCounter = [[storedUserData.dailyScalesCompletionCounter copy] integerValue];
     _customSurveyQuestion = [storedUserData.customSurveyQuestion copy];
@@ -470,6 +476,18 @@ static NSString *const kSignedInKey = @"SignedIn";
     _consentSignatureImage = consentSignatureImage;
     [self updateStoredProperty:kConsentSignatureImagePropertyName withValue:consentSignatureImage];
 }
+
+//- (void)setDownloadDataStartDate:(NSDate *)downloadDataStartDate
+//{
+//    _downloadDataStartDate = downloadDataStartDate;
+//    [self updateStoredProperty:kDownloadDataStartDatePropertyName withValue:downloadDataStartDate];
+//}
+//
+//- (void)setDownloadDataEndDate:(NSDate *)downloadDataEndDate
+//{
+//    _downloadDataEndDate = downloadDataEndDate;
+//    [self updateStoredProperty:kDownloadDataEndDatePropertyName withValue:downloadDataEndDate];
+//}
 
 /*********************************************************************************/
 #pragma mark - Simulated Properties using HealthKit

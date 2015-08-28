@@ -32,8 +32,12 @@
 //
 
 #import "APCDownloadDataViewController.h"
+#import "APCAppDelegate.h"
+#import "APCUser+Bridge.h"
 
 @interface APCDownloadDataViewController ()
+
+@property (nonatomic, strong) APCUser *user;
 
 @end
 
@@ -49,8 +53,19 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (APCUser *) user {
+    if (!_user) {
+        _user = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.currentUser;
+    }
+    
+    return _user;
+}
+
 
 - (IBAction)downloadData:(id) __unused sender {
+    self.user.downloadDataStartDate = self.startPicker.date;
+    self.user.downloadDataEndDate = self.endPicker.date;
+    [self.user sendDownloadDataOnCompletion:nil];
 }
 
 - (IBAction)back:(id) __unused sender {

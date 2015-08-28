@@ -419,6 +419,24 @@
     }];
 }
 
+- (void)sendDownloadDataOnCompletion:(void (^)(NSError *))completionBlock
+{
+    if ([self serverDisabled]) {
+        if (completionBlock) {
+            completionBlock(nil);
+        }
+    }
+    else
+    {
+        [SBBComponent(SBBUserManager) emailDataToUserFrom:self.downloadDataStartDate
+                                                       to:self.downloadDataEndDate
+                                               completion:^(id __unused responseObject, NSError * __unused error)
+         {
+             
+         }];
+    }
+}
+
 /*********************************************************************************/
 #pragma mark - Authmanager Delegate Protocol
 /*********************************************************************************/
