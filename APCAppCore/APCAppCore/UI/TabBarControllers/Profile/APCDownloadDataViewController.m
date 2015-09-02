@@ -46,11 +46,28 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self initDatePickers];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)initDatePickers {
+    // Get current calendar
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDate *today = [NSDate date];
+    NSDateComponents *components = [calendar components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear
+                                               fromDate:today];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy MM dd"];
+    NSDate *startOfYear = [dateFormatter dateFromString:[NSString stringWithFormat:@"%ld 01 01",(long)components.year]];
+    
+    self.startPicker.date = startOfYear;
+    self.endPicker.date = today;
+    [self.startPicker setMaximumDate:today];
+    [self.endPicker setMaximumDate:today];
 }
 
 - (APCUser *) user {

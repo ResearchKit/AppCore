@@ -1068,13 +1068,13 @@ IHRoYXQgeW91IGNvdWxkIG5vdCBjb250aW51ZS4
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <datePicker contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="kqO-wV-j11" userLabel="Start Picker">
+                            <datePicker contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="kqO-wV-j11" userLabel="Start Picker">
                                 <rect key="frame" x="0.0" y="186" width="320" height="99"/>
                                 <date key="date" timeIntervalSinceReferenceDate="462406674.875404">
                                     <!--2015-08-27 22:17:54 +0000-->
                                 </date>
                             </datePicker>
-                            <datePicker contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="oAf-oE-xeX" userLabel="End Picker">
+                            <datePicker contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="oAf-oE-xeX" userLabel="End Picker">
                                 <rect key="frame" x="0.0" y="300" width="320" height="95"/>
                                 <date key="date" timeIntervalSinceReferenceDate="462406699.682311">
                                     <!--2015-08-27 22:18:19 +0000-->
