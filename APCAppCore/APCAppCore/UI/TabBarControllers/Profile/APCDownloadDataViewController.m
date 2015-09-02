@@ -34,6 +34,7 @@
 #import "APCDownloadDataViewController.h"
 #import "APCAppDelegate.h"
 #import "APCUser+Bridge.h"
+#import "NSDate+Helper.h"
 
 @interface APCDownloadDataViewController ()
 
@@ -55,16 +56,8 @@
 }
 
 - (void)initDatePickers {
-    // Get current calendar
-    NSCalendar *calendar = [NSCalendar currentCalendar];
     NSDate *today = [NSDate date];
-    NSDateComponents *components = [calendar components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear
-                                               fromDate:today];
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy MM dd"];
-    NSDate *startOfYear = [dateFormatter dateFromString:[NSString stringWithFormat:@"%ld 01 01",(long)components.year]];
-    
-    self.startPicker.date = startOfYear;
+    self.startPicker.date = today.startOfYear;
     self.endPicker.date = today;
     [self.startPicker setMaximumDate:today];
     [self.endPicker setMaximumDate:today];

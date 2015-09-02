@@ -75,9 +75,11 @@ extern NSString * const DateFormatISO8601DateOnly;
 + (instancetype) startOfDay: (NSDate*) date;
 + (instancetype) endOfDay: (NSDate*) date;
 + (instancetype) startOfTomorrow: (NSDate*) date;
++ (instancetype) startOfYear: (NSDate*) date;
 
 - (instancetype) startOfDay;
 - (instancetype) endOfDay;
+- (instancetype) startOfYear;
 
 - (instancetype) dayBefore;
 - (instancetype) dayAfter;
