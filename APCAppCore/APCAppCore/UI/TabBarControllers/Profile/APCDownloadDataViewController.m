@@ -144,7 +144,39 @@
 - (IBAction)downloadData:(id) __unused sender {
     self.user.downloadDataStartDate = self.startDatePicker.date;
     self.user.downloadDataEndDate = self.endDatePicker.date;
+    
+    APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
+    [self presentViewController:spinnerController animated:YES completion:nil];
+    
+    typeof(self) __weak weakSelf = self;
     [self.user sendDownloadDataOnCompletion:nil];
+    
+    
+    [self.user sendDownloadDataOnCompletion:^(NSError *error) {
+        if (error) {
+            
+            APCLogError2 (error);
+            
+            [spinnerController dismissViewControllerAnimated:NO completion:^{
+                
+                UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", @"Dismiss") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
+                    
+                }];
+                
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"" message:error.message preferredStyle:UIAlertControllerStyleAlert];
+                [alertController addAction:cancelAction];
+                
+                [weakSelf.navigationController presentViewController:alertController animated:YES completion:nil];
+            }];
+        }
+        else
+        {
+            [spinnerController dismissViewControllerAnimated:NO completion:^{
+                
+                [weakSelf dismissViewControllerAnimated:YES completion:nil];
+            }];
+        }
+    }];
 }
 
 - (void)back:(id) __unused sender

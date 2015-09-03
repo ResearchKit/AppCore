@@ -432,7 +432,14 @@
                                                        to:self.downloadDataEndDate
                                                completion:^(id __unused responseObject, NSError * __unused error)
          {
-             
+             dispatch_async(dispatch_get_main_queue(), ^{
+                 if (!error) {
+                     APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Activated Download Data Email"}));
+                 }
+                 if (completionBlock) {
+                     completionBlock(error);
+                 }
+             });
          }];
     }
 }
