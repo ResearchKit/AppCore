@@ -36,11 +36,12 @@
 @interface APCDownloadDataViewController : UIViewController
 
 @property (weak, nonatomic) IBOutlet UILabel *instructionsLabel;
-@property (weak, nonatomic) IBOutlet UIDatePicker *startPicker;
-@property (weak, nonatomic) IBOutlet UIDatePicker *endPicker;
+@property (weak, nonatomic) IBOutlet UITextField *startTextField;
+@property (weak, nonatomic) IBOutlet UITextField *endTextField;
 
 @property (weak, nonatomic) IBOutlet UIButton *downloadButton;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
+
 
 - (IBAction)downloadData:(id)sender;
 - (IBAction)back:(id)sender;

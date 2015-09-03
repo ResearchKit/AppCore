@@ -35,10 +35,14 @@
 #import "APCAppDelegate.h"
 #import "APCUser+Bridge.h"
 #import "NSDate+Helper.h"
+#import "APCAppCore.h"
 
 @interface APCDownloadDataViewController ()
 
 @property (nonatomic, strong) APCUser *user;
+@property (nonatomic, strong) UIToolbar *inputDoneBar;
+@property (nonatomic, strong) UIDatePicker *startDatePicker;
+@property (nonatomic, strong) UIDatePicker *endDatePicker;
 
 @end
 
@@ -47,7 +51,26 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self initDatePickers];
+    [self.startTextField setFont:[UIFont appRegularFontWithSize:16.0f]];
+    [self.startTextField setTextColor:[UIColor appSecondaryColor1]];
+    [self.endTextField setFont:[UIFont appRegularFontWithSize:16.0f]];
+    [self.endTextField setTextColor:[UIColor appSecondaryColor1]];
+    
+    [self.startTextField setInputView:self.startDatePicker];
+    [self.endTextField setInputView:self.endDatePicker];
+    
+    if (_inputDoneBar == nil) {
+        _inputDoneBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 44)];
+        UIBarButtonItem *extraSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+        UIBarButtonItem *done = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStylePlain target:self action:@selector(updateDates:)];
+        [_inputDoneBar setItems:[[NSArray alloc] initWithObjects: extraSpace, done, nil]];
+    }
+    
+    self.startTextField.inputAccessoryView = _inputDoneBar;
+    self.endTextField.inputAccessoryView = _inputDoneBar;
+    
+    [self updateDates:nil];
+    [self setupNavAppearance];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -55,12 +78,50 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)initDatePickers {
-    NSDate *today = [NSDate date];
-    self.startPicker.date = today.startOfYear;
-    self.endPicker.date = today;
-    [self.startPicker setMaximumDate:today];
-    [self.endPicker setMaximumDate:today];
+- (void)setupNavAppearance
+{
+    UIBarButtonItem  *backster = [APCCustomBackButton customBackBarButtonItemWithTarget:self action:@selector(back:) tintColor:[UIColor appPrimaryColor]];
+    [self.navigationItem setLeftBarButtonItem:backster];
+}
+
+- (UIDatePicker *) startDatePicker {
+    if (!_startDatePicker) {
+        _startDatePicker = [[UIDatePicker alloc] init];
+        NSDate *today = [NSDate date];
+        _startDatePicker.date = today.startOfYear;
+        [_startDatePicker setMaximumDate:today];
+        _startDatePicker.datePickerMode = UIDatePickerModeDate;
+    }
+    
+    return _startDatePicker;
+}
+
+- (UIDatePicker *) endDatePicker {
+    if (!_endDatePicker) {
+        _endDatePicker = [[UIDatePicker alloc] init];
+        NSDate *today = [NSDate date];
+        _endDatePicker.date = today;
+        [_endDatePicker setMaximumDate:today];
+        _endDatePicker.datePickerMode = UIDatePickerModeDate;
+    }
+    
+    return _endDatePicker;
+}
+
+-(void)updateDates:(id) __unused sender
+{
+    [self.startTextField resignFirstResponder];
+    [self.endTextField resignFirstResponder];
+    [self updateDateTextFields];
+}
+
+-(void)updateDateTextFields
+{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.timeStyle = NSDateFormatterNoStyle;
+    dateFormatter.dateStyle = NSDateFormatterMediumStyle;
+    self.startTextField.text = [dateFormatter stringFromDate:self.startDatePicker.date];
+    self.endTextField.text = [dateFormatter stringFromDate:self.endDatePicker.date];
 }
 
 - (APCUser *) user {
@@ -73,12 +134,13 @@
 
 
 - (IBAction)downloadData:(id) __unused sender {
-    self.user.downloadDataStartDate = self.startPicker.date;
-    self.user.downloadDataEndDate = self.endPicker.date;
+    self.user.downloadDataStartDate = self.startDatePicker.date;
+    self.user.downloadDataEndDate = self.endDatePicker.date;
     [self.user sendDownloadDataOnCompletion:nil];
 }
 
-- (IBAction)back:(id) __unused sender {
+- (void)back:(id) __unused sender
+{
     [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
