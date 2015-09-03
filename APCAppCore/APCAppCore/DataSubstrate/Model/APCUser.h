@@ -96,8 +96,8 @@ typedef NS_ENUM(NSInteger, APCUserConsentSharingScope) {
 @property (nonatomic, strong) NSDate *consentSignatureDate;
 @property (nonatomic, strong) NSData *consentSignatureImage;
 
-@property (nonatomic, strong) NSDate *downloadDataStartDate;
-@property (nonatomic, strong) NSDate *downloadDataEndDate;
+@property (nonatomic, strong) NSDate *downloadDataStartDate; // NOT stored in CoreData
+@property (nonatomic, strong) NSDate *downloadDataEndDate; // NOT stored in CoreData
 
 @property (nonatomic, getter=isSecondaryInfoSaved) BOOL secondaryInfoSaved;
 
