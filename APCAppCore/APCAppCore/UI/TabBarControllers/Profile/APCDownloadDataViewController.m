@@ -51,6 +51,25 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self setupTextFields];
+    [self updateDateTextFields];
+    [self setupNavAppearance];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - Setup
+
+- (void)setupNavAppearance
+{
+    UIBarButtonItem  *backster = [APCCustomBackButton customBackBarButtonItemWithTarget:self action:@selector(back:) tintColor:[UIColor appPrimaryColor]];
+    [self.navigationItem setLeftBarButtonItem:backster];
+}
+
+- (void)setupTextFields {
     [self.startTextField setFont:[UIFont appRegularFontWithSize:16.0f]];
     [self.startTextField setTextColor:[UIColor appSecondaryColor1]];
     [self.endTextField setFont:[UIFont appRegularFontWithSize:16.0f]];
@@ -68,21 +87,9 @@
     
     self.startTextField.inputAccessoryView = _inputDoneBar;
     self.endTextField.inputAccessoryView = _inputDoneBar;
-    
-    [self updateDates:nil];
-    [self setupNavAppearance];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (void)setupNavAppearance
-{
-    UIBarButtonItem  *backster = [APCCustomBackButton customBackBarButtonItemWithTarget:self action:@selector(back:) tintColor:[UIColor appPrimaryColor]];
-    [self.navigationItem setLeftBarButtonItem:backster];
-}
+#pragma mark - Getters
 
 - (UIDatePicker *) startDatePicker {
     if (!_startDatePicker) {
@@ -108,6 +115,16 @@
     return _endDatePicker;
 }
 
+- (APCUser *) user {
+    if (!_user) {
+        _user = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.currentUser;
+    }
+    
+    return _user;
+}
+
+#pragma mark - Actions
+
 -(void)updateDates:(id) __unused sender
 {
     [self.startTextField resignFirstResponder];
@@ -123,15 +140,6 @@
     self.startTextField.text = [dateFormatter stringFromDate:self.startDatePicker.date];
     self.endTextField.text = [dateFormatter stringFromDate:self.endDatePicker.date];
 }
-
-- (APCUser *) user {
-    if (!_user) {
-        _user = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.currentUser;
-    }
-    
-    return _user;
-}
-
 
 - (IBAction)downloadData:(id) __unused sender {
     self.user.downloadDataStartDate = self.startDatePicker.date;
