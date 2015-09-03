@@ -1072,33 +1072,57 @@ IHRoYXQgeW91IGNvdWxkIG5vdCBjb250aW51ZS4
                                     <action selector="downloadData:" destination="vk1-Of-g9A" eventType="touchUpInside" id="Hb2-u7-sv7"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Start" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OE7-14-4fc" userLabel="StartLabel">
-                                <rect key="frame" x="16" y="156" width="42" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Start" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OE7-14-4fc" userLabel="StartLabel">
+                                <rect key="frame" x="16" y="156" width="38" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="H1O-ak-BwE"/>
+                                    <constraint firstAttribute="width" constant="38" id="Q3A-fR-DfQ"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="End" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GvA-QA-AGt" userLabel="EndLabel">
-                                <rect key="frame" x="16" y="243" width="42" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="End" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GvA-QA-AGt" userLabel="EndLabel">
+                                <rect key="frame" x="16" y="244" width="38" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="38" id="BIy-WI-hFi"/>
+                                    <constraint firstAttribute="height" constant="21" id="Gqn-ib-XZ1"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hBd-OE-m9S" userLabel="StartDate">
-                                <rect key="frame" x="87" y="152" width="217" height="30"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hBd-OE-m9S" userLabel="StartDate">
+                                <rect key="frame" x="84" y="152" width="220" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="220" id="6nT-CM-MWh"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="lO2-pM-TX8" userLabel="EndDate">
-                                <rect key="frame" x="87" y="239" width="217" height="30"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="lO2-pM-TX8" userLabel="EndDate">
+                                <rect key="frame" x="84" y="239" width="220" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="220" id="7DO-Mp-nEm"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstAttribute="centerY" secondItem="lO2-pM-TX8" secondAttribute="centerY" constant="30" id="0CW-k8-9p8"/>
+                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="hBd-OE-m9S" secondAttribute="trailing" constant="16" id="10a-6d-woc"/>
                             <constraint firstAttribute="bottom" secondItem="eUN-2a-GKO" secondAttribute="bottom" constant="20" id="AU9-7v-ay8"/>
+                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="lO2-pM-TX8" secondAttribute="trailing" constant="16" id="JTG-1m-aob"/>
+                            <constraint firstAttribute="centerY" secondItem="hBd-OE-m9S" secondAttribute="centerY" constant="117" id="b6a-QD-Isl"/>
+                            <constraint firstAttribute="centerY" secondItem="OE7-14-4fc" secondAttribute="centerY" constant="118" id="bNf-Ee-nak"/>
+                            <constraint firstItem="OE7-14-4fc" firstAttribute="leading" secondItem="eN0-JS-aXp" secondAttribute="leading" constant="16" id="dYg-3u-pYa"/>
+                            <constraint firstItem="hBd-OE-m9S" firstAttribute="leading" secondItem="OE7-14-4fc" secondAttribute="trailing" constant="30" id="eS4-gI-v1t"/>
                             <constraint firstAttribute="centerX" secondItem="eUN-2a-GKO" secondAttribute="centerX" id="eU9-Yt-dde"/>
+                            <constraint firstItem="lO2-pM-TX8" firstAttribute="leading" secondItem="GvA-QA-AGt" secondAttribute="trailing" constant="30" id="iIy-PZ-DbU"/>
+                            <constraint firstItem="GvA-QA-AGt" firstAttribute="leading" secondItem="eN0-JS-aXp" secondAttribute="leading" constant="16" id="q9u-dw-KPm"/>
+                            <constraint firstAttribute="centerY" secondItem="GvA-QA-AGt" secondAttribute="centerY" constant="30" id="w2s-eK-xJa"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Download Data" id="aoG-ly-D0T" userLabel="Download Data"/>
