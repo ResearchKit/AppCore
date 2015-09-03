@@ -275,6 +275,15 @@ typedef enum : NSUInteger {
     return [calendar dateFromComponents:components];
 }
 
++ (instancetype) dateWithYear:(NSInteger)year month:(NSInteger)month day:(NSInteger)day
+{
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *components = [[NSDateComponents alloc] init];
+    [components setYear:year];
+    [components setMonth:month];
+    [components setDay:day];
+    return [calendar dateFromComponents:components];
+}
 
 - (instancetype) dayBefore
 {

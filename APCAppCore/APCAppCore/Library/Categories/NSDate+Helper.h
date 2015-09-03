@@ -89,6 +89,7 @@ extern NSString * const DateFormatISO8601DateOnly;
 +(instancetype) yesterdayAtMidnight;
 +(instancetype) weekAgoAtMidnight;
 +(instancetype) priorSundayAtMidnightFromDate:(NSDate *)date;
++ (instancetype) dateWithYear:(NSInteger)year month:(NSInteger)month day:(NSInteger)day;
 
 - (BOOL) isEarlierThanDate: (NSDate*) otherDate;
 - (BOOL) isLaterThanDate: (NSDate*) otherDate;

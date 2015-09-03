@@ -95,7 +95,7 @@
     if (!_startDatePicker) {
         _startDatePicker = [[UIDatePicker alloc] init];
         NSDate *today = [NSDate date];
-        _startDatePicker.date = today.startOfYear;
+        _startDatePicker.date = [NSDate dateWithYear:2015 month:1 day:1]; // Default to start of year before RK released to get all data
         [_startDatePicker setMaximumDate:today];
         _startDatePicker.datePickerMode = UIDatePickerModeDate;
     }
@@ -172,8 +172,15 @@
         else
         {
             [spinnerController dismissViewControllerAnimated:NO completion:^{
+                UIAlertAction *doneAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Okay", @"Okay") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
+                    [weakSelf dismissViewControllerAnimated:YES completion:nil];
+                }];
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Success", @"Success")
+                                                                                         message:NSLocalizedString(@"Your data will be emailed to you shortly", @"Your data will be emailed to you shortly")
+                                                                                  preferredStyle:UIAlertControllerStyleAlert];
+                [alertController addAction:doneAction];
                 
-                [weakSelf dismissViewControllerAnimated:YES completion:nil];
+                [weakSelf.navigationController presentViewController:alertController animated:YES completion:nil];
             }];
         }
     }];
