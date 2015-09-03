@@ -258,6 +258,33 @@ typedef enum : NSUInteger {
     return [cal dateFromComponents:components];
 }
 
++ (instancetype) startOfYear: (NSDate*) date
+{
+    return [date startOfYear];
+}
+
+- (instancetype) startOfYear
+{
+    // Get current calendar
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *components = [calendar components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear
+                                               fromDate:self];
+    components.month = 1;
+    components.day = 1;
+    
+    return [calendar dateFromComponents:components];
+}
+
++ (instancetype) dateWithYear:(NSInteger)year month:(NSInteger)month day:(NSInteger)day
+{
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *components = [[NSDateComponents alloc] init];
+    [components setYear:year];
+    [components setMonth:month];
+    [components setDay:day];
+    return [calendar dateFromComponents:components];
+}
+
 - (instancetype) dayBefore
 {
     return [self dateByAddingDays: -1];

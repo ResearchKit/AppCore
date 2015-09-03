@@ -43,6 +43,8 @@
 @dynamic consentSignatureDate;
 @dynamic consentSignatureImage;
 @dynamic consentSignatureName;
+@dynamic downloadDataStartDate;
+@dynamic downloadDataEndDate;
 @dynamic customSurveyQuestion;
 @dynamic dailyScalesCompletionCounter;
 @dynamic ethnicity;

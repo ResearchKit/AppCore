@@ -48,5 +48,6 @@
 - (void) resumeStudyOnCompletion:(void (^)(NSError *error))completionBlock;
 - (void) resendEmailVerificationOnCompletion:(void (^)(NSError *))completionBlock;
 - (void) changeDataSharingTypeOnCompletion:(void (^)(NSError *))completionBlock;
+- (void) sendDownloadDataOnCompletion:(void (^)(NSError *))completionBlock;
 
 @end
