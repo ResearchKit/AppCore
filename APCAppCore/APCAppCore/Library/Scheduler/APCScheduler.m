@@ -1126,22 +1126,41 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
              Bounce over to the Sage SDK's thread, call the server, and then come
              back to our thread a while later.
              */
-            [SBBComponent (SBBScheduleManager) getSchedulesWithCompletion: ^(SBBResourceList *schedulesList,
-                                                                             NSError *errorFetchingSchedules)
+//            [SBBComponent (SBBScheduleManager) getSchedulesWithCompletion: ^(SBBResourceList *schedulesList,
+//                                                                             NSError *errorFetchingSchedules)
+//             {
+//                 /*
+//                  Immediately get off the Sage queue and back onto ours,
+//                  so we know and can control what's happening and what
+//                  resources are being used.
+//                  */
+//                 [self.queryQueue addOperationWithBlock: ^{
+//
+//                     [self handleSuccessfullyFetchedTasksAndSchedulesFromServer: schedulesList
+//                                   givenThisPossibleErrorFromTheDownloadProcess: errorFetchingSchedules
+//                                                            andThenUseThisQueue: queue
+//                                                                       toDoThis: callbackBlock];
+//                 }];
+//             }];
+            NSDate *futureDate = [[NSDate date] dateByAddingDays:3]; // TODO: store this variable somewhere, can it be in the api?
+            [SBBComponent (SBBTaskManager) getTasksUntil:futureDate
+                                          withCompletion:^(SBBResourceList *tasksList,
+                                                           NSError *errorFetchingTasks)
              {
                  /*
-                  Immediately get off the Sage queue and back onto ours,
+                  Immediately get off the BridgeSDK queue and back onto ours,
                   so we know and can control what's happening and what
                   resources are being used.
                   */
                  [self.queryQueue addOperationWithBlock: ^{
-
-                     [self handleSuccessfullyFetchedTasksAndSchedulesFromServer: schedulesList
-                                   givenThisPossibleErrorFromTheDownloadProcess: errorFetchingSchedules
-                                                            andThenUseThisQueue: queue
-                                                                       toDoThis: callbackBlock];
+                     
+                     [self handleSuccessfullyFetchedTasksFromServer: tasksList
+                       givenThisPossibleErrorFromTheDownloadProcess: errorFetchingTasks
+                                                andThenUseThisQueue: queue
+                                                           toDoThis: callbackBlock];
                  }];
              }];
+
         }
     }];
 }
@@ -1180,18 +1199,18 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
     }
     else
     {
-        NSMutableArray *jsonCopyOfSageSchdulesAndTasks = nil;
+        NSMutableArray *jsonCopyOfSageSchedulesAndTasks = nil;
 
         if (! errorFetchingSchedules)
         {
-            jsonCopyOfSageSchdulesAndTasks = [NSMutableArray new];
+            jsonCopyOfSageSchedulesAndTasks = [NSMutableArray new];
             NSArray *sageSchedules = schedulesAndTasks.items;
 
             for (SBBSchedule *sageSchedule in sageSchedules)
             {
                 NSDictionary *sageScheduleData = [importEngine extractJsonDataFromIncomingSageSchedule: sageSchedule];
 
-                [jsonCopyOfSageSchdulesAndTasks addObject: sageScheduleData];
+                [jsonCopyOfSageSchedulesAndTasks addObject: sageScheduleData];
             }
         }
 
@@ -1199,7 +1218,52 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
          Loop through the incoming items and save/udpate everything.
          Both -fetch and -load boil down to this one call.
          */
-        [self processSchedulesAndTasks: jsonCopyOfSageSchdulesAndTasks
+        [self processSchedulesAndTasks: jsonCopyOfSageSchedulesAndTasks
+                            fromSource: APCScheduleSourceServer
+                   andThenUseThisQueue: queue
+                      toDoThisWhenDone: callbackBlock];
+    }
+}
+
+/**
+ By the time we get here, we're safely on our private thread
+ (a private serial queue).
+ */
+- (void) handleSuccessfullyFetchedTasksFromServer: (SBBResourceList *) tasks
+     givenThisPossibleErrorFromTheDownloadProcess: (NSError *) errorFetchingtasks
+                              andThenUseThisQueue: (NSOperationQueue *) queue
+                                         toDoThis: (APCSchedulerCallbackForFetchAndLoadOperations) callbackBlock
+{
+    APCScheduleImporter *importEngine = [APCScheduleImporter new];
+    
+    if (errorFetchingtasks)
+    {
+        [self handleErrorFetchingTasksAndSchedulesFromServer: errorFetchingtasks
+                                         andThenUseThisQueue: queue
+                                                    toDoThis: callbackBlock];
+    }
+    else
+    {
+        NSMutableArray *jsonCopyOfSageSchedulesAndTasks = nil;
+        
+        if (!errorFetchingtasks)
+        {
+            jsonCopyOfSageSchedulesAndTasks = [NSMutableArray new];
+            NSArray *sageSchedules = schedulesAndTasks.items;
+            
+            for (SBBSchedule *sageSchedule in sageSchedules)
+            {
+                NSDictionary *sageScheduleData = [importEngine extractJsonDataFromIncomingSageSchedule: sageSchedule];
+                
+                [jsonCopyOfSageSchedulesAndTasks addObject: sageScheduleData];
+            }
+        }
+        
+        /*
+         Loop through the incoming items and save/udpate everything.
+         Both -fetch and -load boil down to this one call.
+         */
+        [self processSchedulesAndTasks: jsonCopyOfSageSchedulesAndTasks
                             fromSource: APCScheduleSourceServer
                    andThenUseThisQueue: queue
                       toDoThisWhenDone: callbackBlock];
