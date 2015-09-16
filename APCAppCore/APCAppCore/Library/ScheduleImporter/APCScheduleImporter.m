@@ -1012,7 +1012,7 @@ static NSArray *legalTimeSpecifierFormats = nil;
             // them from our local disk files.
             
             activityData [kTaskFileNameKey]             = null;
-            activityData [kTaskSortStringKey]           = null;
+            activityData [kTaskSortStringKey]           = [self nullIfNil: activity.activityType];
 
             [activities addObject: activityData];
         } else if (activity.task) {
@@ -1036,11 +1036,12 @@ static NSArray *legalTimeSpecifierFormats = nil;
                 // In the mean time, noting them here, because we're using
                 // them from our local disk files.
                 activityData [kTaskFileNameKey]             = null;
-                activityData [kTaskSortStringKey]           = null;
+                activityData [kTaskSortStringKey]           = [self nullIfNil: activity.activityType];
                 
                 [activities addObject: activityData];
             }
         }
+        
     }
     
     return scheduleData;

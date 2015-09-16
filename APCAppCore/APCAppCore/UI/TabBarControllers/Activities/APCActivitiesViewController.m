@@ -39,6 +39,7 @@
 #import "APCConstants.h"
 #import "APCDataMonitor+Bridge.h"
 #import "APCLog.h"
+#import "APCPermissionsManager.h"
 #import "APCScheduler.h"
 #import "APCSpinnerViewController.h"
 #import "APCTask.h"
@@ -73,6 +74,8 @@ static CGFloat const kTableViewSectionHeaderHeight = 77;
 @property (nonatomic, strong) NSArray               *sections;
 @property (nonatomic, assign) BOOL                  isFetchingFromCoreDataRightNow;
 @property (nonatomic, strong) UIRefreshControl      *refreshControl;
+
+@property (strong, nonatomic) APCPermissionsManager *permissionManager;
 
 @property (readonly) NSDate *dateWeAreUsingForToday;
 
@@ -110,6 +113,8 @@ static CGFloat const kTableViewSectionHeaderHeight = 77;
     
     [self reloadTasksFromCoreData];
     [self checkForAndMaybeRespondToSystemDateChange];
+    
+    self.permissionManager = [[APCPermissionsManager alloc] init];
 
     APCLogViewControllerAppeared();
 }
@@ -282,9 +287,22 @@ static CGFloat const kTableViewSectionHeaderHeight = 77;
 
         if (viewControllerToShowNext != nil)
         {
-            [self presentViewController: viewControllerToShowNext
-                               animated: YES
-                             completion: nil];
+            if ([self.permissionManager isPermissionsGrantedForType:viewControllerToShowNext.requiredPermission])
+            {
+                [self presentViewController: viewControllerToShowNext
+                                   animated: YES
+                                 completion: nil];
+            } else
+            {
+                NSError *permissionsError = [self.permissionManager permissionDeniedErrorForType:viewControllerToShowNext.requiredPermission];
+                UIAlertController *alert = [UIAlertController simpleAlertWithTitle: @"Error"
+                                                                           message: permissionsError.localizedDescription];
+                
+                [self presentViewController: alert
+                                   animated: YES
+                                 completion: NULL];
+                APCLogError2(permissionsError);
+            }
         }
     }
 }
