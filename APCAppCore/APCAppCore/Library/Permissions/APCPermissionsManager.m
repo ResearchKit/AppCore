@@ -114,6 +114,9 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
     BOOL isGranted = NO;
     [[NSUserDefaults standardUserDefaults]synchronize];
     switch (type) {
+        case kAPCSignUpPermissionsTypeNone:
+            isGranted = YES;
+            break;
         case kAPCSignUpPermissionsTypeHealthKit:
         {
             HKCharacteristicType *dateOfBirth = [HKCharacteristicType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierDateOfBirth];
