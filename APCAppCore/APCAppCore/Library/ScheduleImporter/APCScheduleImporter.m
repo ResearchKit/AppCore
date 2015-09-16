@@ -572,6 +572,19 @@ static NSArray *legalTimeSpecifierFormats = nil;
     }
 }
 
+- (void) processTasks: (NSArray *) arrayOfTasks
+           fromSource: (APCScheduleSource) scheduleSource
+         usingContext: (NSManagedObjectContext *) context
+  scheduleQueryEngine: (id <APCScheduleQueryEngine>) queryEngine
+           importDate: (NSDate *) importDate
+       returningError: (NSError * __autoreleasing *) errorToReturn
+{
+    for (NSDictionary *taskDictionary in arrayOfTasks) {
+        APCTask *task = [self createOrUpdateTaskFromJsonData: taskDictionary
+                                                   inContext: context];
+    }
+}
+
 
 
 // ---------------------------------------------------------
@@ -1064,7 +1077,7 @@ static NSArray *legalTimeSpecifierFormats = nil;
         taskData [kTaskTitleKey]                = [self nullIfNil: sageTask.activity.label];
         taskData [kTaskCompletionTimeStringKey] = [self nullIfNil: sageTask.activity.labelDetail];
         taskData [kTaskTypeKey]                 = [self nullIfNil: sageTask.activity.activityType];
-        taskData [kTaskIDKey]                   = [self nullIfNil: sageTask.activity.survey.identifier];
+        taskData [kTaskIDKey]                   = [self nullIfNil: sageTask.guid];
         taskData [kTaskVersionNumberKey]        = [self nullIfNil: sageTask.activity.survey.createdOn.toStringInISO8601Format];
         taskData [kTaskUrlKey]                  = [self nullIfNil: sageTask.activity.survey.href];
         taskData [kTaskClassNameKey]            = NSStringFromClass ([APCGenericSurveyTaskViewController class]);
@@ -1096,7 +1109,7 @@ static NSArray *legalTimeSpecifierFormats = nil;
             taskData [kTaskTitleKey]                = [self nullIfNil: sageTask.activity.label];
             taskData [kTaskCompletionTimeStringKey] = [self nullIfNil: sageTask.activity.labelDetail];
             taskData [kTaskTypeKey]                 = [self nullIfNil: sageTask.activity.activityType];
-            taskData [kTaskIDKey]                   = [self nullIfNil: sageTask.activity.task.identifier];
+            taskData [kTaskIDKey]                   = [self nullIfNil: sageTask.guid];
             taskData [kTaskClassNameKey]            = taskClassName;
             taskData [kTaskIsOptionalKey]           = [self nullIfNil: sageTask.persistent];
             
