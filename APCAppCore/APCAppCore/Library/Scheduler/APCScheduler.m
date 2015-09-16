@@ -1463,7 +1463,7 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
 
 
 // ---------------------------------------------------------
-#pragma mark - The core import process
+#pragma mark - The core schedule import process
 // ---------------------------------------------------------
 
 /**
@@ -1580,6 +1580,35 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
         APCLogError2 (error);
     }
 
+    [self performFetchAndLoadCallback: callbackBlock
+                              onQueue: queue
+                         sendingError: error];
+}
+
+- (void) processTasks: (NSArray *) arrayOfTasks
+           fromSource: (APCScheduleSource) scheduleSource
+  andThenUseThisQueue: (NSOperationQueue *) queue
+     toDoThisWhenDone: (APCSchedulerCallbackForFetchAndLoadOperations) callbackBlock
+{
+    NSDate *today = self.systemDate;
+    NSManagedObjectContext *context = self.scheduleMOC;
+    APCScheduleImporter *importEngine = [APCScheduleImporter new];
+    NSError *error = nil;
+    
+    [importEngine processTasks: arrayOfTasks
+                    fromSource: scheduleSource
+                  usingContext: context
+           scheduleQueryEngine: self
+                    importDate: today
+                returningError: &error];
+    
+    [self clearTaskGroupCache];
+    
+    if (error)
+    {
+        APCLogError2 (error);
+    }
+    
     [self performFetchAndLoadCallback: callbackBlock
                               onQueue: queue
                          sendingError: error];

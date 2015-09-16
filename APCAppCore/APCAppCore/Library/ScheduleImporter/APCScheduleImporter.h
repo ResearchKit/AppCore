@@ -61,6 +61,19 @@
                    returningError: (NSError * __autoreleasing *) errorToReturn;
 
 /**
+ Imports tasks from the specified source, and meshes them with existing tasks.
+ Executes on the calling method's thread.
+ 
+ See the .m file for technical notes on this method.
+ */
+- (void) processTasks: (NSArray *) arrayOfTasks
+           fromSource: (APCScheduleSource) scheduleSource
+         usingContext: (NSManagedObjectContext *) context
+  scheduleQueryEngine: (id <APCScheduleQueryEngine>) queryEngine
+           importDate: (NSDate *) importDate
+       returningError: (NSError * __autoreleasing *) errorToReturn;
+
+/**
  Utility methods helping us normalize all the data before we import it.
  */
 - (NSDictionary *) extractJsonDataFromIncomingSageSchedule: (SBBSchedule *) sageSchedule;
