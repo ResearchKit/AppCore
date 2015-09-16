@@ -36,6 +36,7 @@
 #import "APCScheduledTask.h"
 #import "APCTaskGroup.h"
 #import "ORKFileResult+Filename.h"
+#import "APCConstants.h"
 
 @class APCAppDelegate;
 @class APCDataArchive;
@@ -77,6 +78,7 @@
  */
 - (void)addSpatialSpanMemoryResultsToArchive:(ORKSpatialSpanMemoryResult *) __unused result;
 - (void)addTappingResultsToArchive:(ORKTappingIntervalResult *)__unused result;
+- (APCSignUpPermissionsType)requiredPermission;
 
 - (void) archiveResults;
 

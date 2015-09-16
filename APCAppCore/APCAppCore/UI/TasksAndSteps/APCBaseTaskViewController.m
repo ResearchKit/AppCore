@@ -424,6 +424,11 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
     
 }
 
+- (APCSignUpPermissionsType)requiredPermission
+{
+    return kAPCSignUpPermissionsTypeNone;
+}
+
 #pragma mark - Upload
 
 - (void)uploadResultSummary: (NSString *)resultSummary

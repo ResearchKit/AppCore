@@ -58,5 +58,6 @@ typedef NS_ENUM(NSUInteger, APCPermissionStatus) {
 - (void)requestForPermissionForType:(APCSignUpPermissionsType)type withCompletion:(APCPermissionsBlock)completion;
 
 - (NSString *)permissionDescriptionForType:(APCSignUpPermissionsType)type;
+- (NSError *)permissionDeniedErrorForType:(APCSignUpPermissionsType)type;
 
 @end
