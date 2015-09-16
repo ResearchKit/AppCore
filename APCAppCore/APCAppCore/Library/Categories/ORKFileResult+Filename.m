@@ -40,17 +40,7 @@ static NSString *kTranslationFilename = @"FilenameTranslation";
 
 + (NSString *)filenameForFileResultIdentifier: (NSString *)fileResultIdentifier stepIdentifier: (NSString *)stepIdentifier
 {
-    if (! fileResultIdentifier) {
-        fileResultIdentifier = @"";
-    }else{
-        fileResultIdentifier = [fileResultIdentifier stringByAppendingString:@"_"];
-    }
-    
-    if (! stepIdentifier) {
-        stepIdentifier = @"";
-    }
-    
-    fileResultIdentifier = [fileResultIdentifier stringByAppendingString:stepIdentifier];
+    fileResultIdentifier = [self rawFilenameForFileResultIdentifier:fileResultIdentifier stepIdentifier:stepIdentifier];
     
     NSString *translatedFilename;
     NSString *filePath = [[NSBundle mainBundle] pathForResource:kTranslationFilename ofType:kJSONExtension];
@@ -63,6 +53,21 @@ static NSString *kTranslationFilename = @"FilenameTranslation";
     translatedFilename = [translationDictionary objectForKey:fileResultIdentifier] ? : fileResultIdentifier;
     
     return translatedFilename;
+}
+
++ (NSString *)rawFilenameForFileResultIdentifier: (NSString *)fileResultIdentifier stepIdentifier: (NSString *)stepIdentifier
+{
+    if (! fileResultIdentifier) {
+        fileResultIdentifier = @"";
+    }else{
+        fileResultIdentifier = [fileResultIdentifier stringByAppendingString:@"_"];
+    }
+    
+    if (! stepIdentifier) {
+        stepIdentifier = @"";
+    }
+    
+    return [fileResultIdentifier stringByAppendingString:stepIdentifier];
 }
 
 @end

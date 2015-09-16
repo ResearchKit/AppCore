@@ -47,4 +47,14 @@
  */
 + (NSString *)filenameForFileResultIdentifier: (NSString *)fileResultIdentifier stepIdentifier: (NSString *)stepIdentifier;
 
+/**
+ Translates the fileResult identifier and stepIdentifier via concatenation in the following scheme:
+ fileResultIdentifier_stepIdentifer.
+ 
+ @param     fileResultIdentifier        ORKResult identifier
+ @param     stepIdentifier              ORKStep identifier
+ @return    filename                    the concatenated string fileResultIdentifier_stepIdentifer.
+ */
++ (NSString *)rawFilenameForFileResultIdentifier: (NSString *)fileResultIdentifier stepIdentifier: (NSString *)stepIdentifier;
+
 @end
