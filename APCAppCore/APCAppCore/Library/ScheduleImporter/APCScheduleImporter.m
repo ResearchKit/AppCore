@@ -1048,6 +1048,80 @@ static NSArray *legalTimeSpecifierFormats = nil;
 }
 
 /**
+ Convert inbound Bridge server data to an NSDictionary of keys we know how to
+ look for.
+ 
+ This lets us use the same method to process data downloaded from the server as
+ we do data pulled from a local JSON file. It also lets us flatten out the
+ task structure into a single object and its associated properties.
+ */
+- (NSDictionary *) extractJsonDataFromIncomingSageTask: (SBBTask *)sageTask
+{
+    NSMutableDictionary *taskData               = [NSMutableDictionary new];
+    
+    if (sageTask.activity.survey) {
+        
+        taskData [kTaskTitleKey]                = [self nullIfNil: sageTask.activity.label];
+        taskData [kTaskCompletionTimeStringKey] = [self nullIfNil: sageTask.activity.labelDetail];
+        taskData [kTaskTypeKey]                 = [self nullIfNil: sageTask.activity.activityType];
+        taskData [kTaskIDKey]                   = [self nullIfNil: sageTask.activity.survey.identifier];
+        taskData [kTaskVersionNumberKey]        = [self nullIfNil: sageTask.activity.survey.createdOn.toStringInISO8601Format];
+        taskData [kTaskUrlKey]                  = [self nullIfNil: sageTask.activity.survey.href];
+        taskData [kTaskClassNameKey]            = NSStringFromClass ([APCGenericSurveyTaskViewController class]);
+        taskData [kTaskIsOptionalKey]           = [self nullIfNil: sageTask.persistent];
+        
+        // When we start getting these from Bridge, we'll use them.
+        // In the mean time, noting them here, because they can still be used from
+        // local json files.
+        
+        taskData [kTaskFileNameKey]             = [NSNull null];
+        taskData [kTaskSortStringKey]           = [self nullIfNil: sageTask.activity.activityType]; // Default for now
+        
+        return taskData;
+    } else if (sageTask.activity.task) {
+        // Set up TaskId->TaskViewController dictionary
+        // TODO: move this init stuff out of a situation where it will be called many times
+        NSString *filePath = [[NSBundle mainBundle] pathForResource:kTaskIdToViewControllerMappingJSON ofType:@"json"];
+        NSString *JSONString = [[NSString alloc] initWithContentsOfFile:filePath
+                                                               encoding:NSUTF8StringEncoding
+                                                                  error:NULL];
+        NSError *parseError;
+        NSDictionary *mappingDictionary = [NSJSONSerialization JSONObjectWithData:[JSONString dataUsingEncoding:NSUTF8StringEncoding]
+                                                                          options:NSJSONReadingMutableContainers
+                                                                            error:&parseError];
+        
+        // ignore unrecognized tasks (probably added in a later app version)
+        NSString *taskClassName = mappingDictionary[sageTask.activity.task.identifier];
+        if (taskClassName.length) {
+            taskData [kTaskTitleKey]                = [self nullIfNil: sageTask.activity.label];
+            taskData [kTaskCompletionTimeStringKey] = [self nullIfNil: sageTask.activity.labelDetail];
+            taskData [kTaskTypeKey]                 = [self nullIfNil: sageTask.activity.activityType];
+            taskData [kTaskIDKey]                   = [self nullIfNil: sageTask.activity.task.identifier];
+            taskData [kTaskClassNameKey]            = taskClassName;
+            taskData [kTaskIsOptionalKey]           = [self nullIfNil: sageTask.persistent];
+            
+            // Not available for non survey tasks
+            taskData [kTaskVersionNumberKey]    = [NSNull null];
+            taskData [kTaskUrlKey]              = [NSNull null];
+            
+            // When we start getting these from Bridge, we'll use them.
+            // In the mean time, noting them here, because they can still be used from
+            // local json files.
+            taskData [kTaskFileNameKey]             = [NSNull null];
+            taskData [kTaskSortStringKey]           = [self nullIfNil: sageTask.activity.activityType]; // Default for now
+            
+            return taskData;
+        } else {
+            APCLogEvent(@"Could not find taskClassName from task identifier: %@", sageTask.activity.task.identifier);
+            return nil;
+        }
+    } else {
+        APCLogEvent(@"Unable to extract JSON data from task, no activity survey or task supplied.");
+        return nil;
+    }
+}
+
+/**
  Crawls through the dictionaries and arrays in the incoming data until it finds
  a task dictionary containing the specified id and version.
  */

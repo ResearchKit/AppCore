@@ -1244,18 +1244,19 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
     }
     else
     {
-        NSMutableArray *jsonCopyOfSageSchedulesAndTasks = nil;
+        NSMutableArray *jsonCopyOfSageTasks = nil;
         
         if (!errorFetchingtasks)
         {
-            jsonCopyOfSageSchedulesAndTasks = [NSMutableArray new];
-            NSArray *sageSchedules = schedulesAndTasks.items;
+            jsonCopyOfSageTasks = [NSMutableArray new];
+            NSArray *sageTasks = tasks.items;
             
-            for (SBBSchedule *sageSchedule in sageSchedules)
+            for (SBBTask *sageTask in sageTasks)
             {
-                NSDictionary *sageScheduleData = [importEngine extractJsonDataFromIncomingSageSchedule: sageSchedule];
+//                NSDictionary *sageScheduleData = [importEngine extractJsonDataFromIncomingSageSchedule: sageSchedule];
+                NSDictionary *sageTaskData = [importEngine extractJsonDataFromIncomingSageTask:sageTask];
                 
-                [jsonCopyOfSageSchedulesAndTasks addObject: sageScheduleData];
+                [jsonCopyOfSageTasks addObject: sageTaskData];
             }
         }
         
@@ -1263,10 +1264,10 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
          Loop through the incoming items and save/udpate everything.
          Both -fetch and -load boil down to this one call.
          */
-        [self processSchedulesAndTasks: jsonCopyOfSageSchedulesAndTasks
-                            fromSource: APCScheduleSourceServer
-                   andThenUseThisQueue: queue
-                      toDoThisWhenDone: callbackBlock];
+        [self processTasks: jsonCopyOfSageTasks
+                fromSource: APCScheduleSourceServer
+       andThenUseThisQueue: queue
+          toDoThisWhenDone: callbackBlock];
     }
 }
 

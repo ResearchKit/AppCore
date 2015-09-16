@@ -37,6 +37,7 @@
 
 @class NSManagedObjectContext;
 @class SBBSchedule;
+@class SBBTask;
 
 
 /**
@@ -60,8 +61,9 @@
                    returningError: (NSError * __autoreleasing *) errorToReturn;
 
 /**
- Utility method helping us normalize all the data before we import it.
+ Utility methods helping us normalize all the data before we import it.
  */
 - (NSDictionary *) extractJsonDataFromIncomingSageSchedule: (SBBSchedule *) sageSchedule;
+- (NSDictionary *) extractJsonDataFromIncomingSageTask: (SBBTask *)sageTask;
 
 @end
