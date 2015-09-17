@@ -583,9 +583,46 @@ static NSArray *legalTimeSpecifierFormats = nil;
            importDate: (NSDate *) importDate
        returningError: (NSError * __autoreleasing *) errorToReturn
 {
+    // Save method requires a pointer to an object, which should probably be updated at some
+    // point but isn't part of the current work.
+    APCTask *taskForSaving = nil;
+    
+    // -----------------------------------------------------
+    // Upsert
+    // -----------------------------------------------------
+    
     for (NSDictionary *taskDictionary in arrayOfTasks) {
-        APCTask *task = [self createOrUpdateTaskFromJsonData: taskDictionary
-                                                   inContext: context];
+        if (taskForSaving == nil) {
+            taskForSaving = [self createOrUpdateTaskFromJsonData: taskDictionary
+                                                       inContext: context];
+        } else {
+            [self createOrUpdateTaskFromJsonData: taskDictionary
+                                       inContext: context];
+        }
+    }
+    
+    // -----------------------------------------------------
+    // Save
+    // -----------------------------------------------------
+    
+    if (!context.hasChanges)
+    {
+        APCLogEvent(kTaskEvent,@"No new changes imported from Server.");
+    }
+    else
+    {
+        NSManagedObject *anySaveableObject = taskForSaving;
+        NSError *savingError = nil;
+        BOOL saved = [anySaveableObject saveToPersistentStore: &savingError];
+        
+        if (!saved)
+        {
+            *errorToReturn = [NSError errorWithCode: APCErrorSavingEverythingCode
+                                             domain: APCErrorDomain
+                                      failureReason: APCErrorSavingEverythingReason
+                                 recoverySuggestion: APCErrorSavingEverythingSuggestion
+                                        nestedError: savingError];
+        }
     }
 }
 
