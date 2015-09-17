@@ -1065,6 +1065,39 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
 }
 
 
+- (NSArray *) tasksScheduledForDayOfDate: (NSDate *) dateWhenThingsShouldBeVisible
+                            usingContext: (NSManagedObjectContext *) context
+                          returningError: (NSError * __autoreleasing *) errorToReturn
+{
+    NSDate *midnightThisMorning = dateWhenThingsShouldBeVisible.startOfDay;
+    NSDate *midnightThisEvening = dateWhenThingsShouldBeVisible.endOfDay;
+    
+    NSPredicate *filterForThisDay = [NSPredicate predicateWithFormat:
+                                     @"(%K <= %@) && (%K >= %@)",
+                                     NSStringFromSelector (@selector (taskScheduledFor)),           // -[APCTask taskScheduledFor]
+                                     midnightThisEvening,
+                                     NSStringFromSelector (@selector (taskScheduledFor)),           // -[APCTask taskScheduledFor]
+                                     midnightThisMorning
+                                     ];
+    
+    NSFetchRequest *taskQuery = [APCTask requestWithPredicate: filterForThisDay];
+    NSError *errorFetchingTasks = nil;
+    NSArray *tasks = [context executeFetchRequest: taskQuery
+                                            error: &errorFetchingTasks];
+    
+    if (errorToReturn != nil)
+    {
+        *errorToReturn = [NSError errorWithCode: APCErrorCouldntFetchVisibleSchedulesForDateCode
+                                         domain: APCErrorDomainLoadingTasksAndSchedules
+                                  failureReason: APCErrorCouldntFetchVisibleSchedulesForDateReason
+                             recoverySuggestion: APCErrorCouldntFetchVisibleSchedulesForDateSuggestion
+                                    nestedError: errorFetchingTasks];
+    }
+    
+    return tasks;
+}
+
+
 
 
 // =========================================================
