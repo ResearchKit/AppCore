@@ -44,9 +44,13 @@
 @property (nonatomic, retain) NSString * taskCompletionTimeString;
 @property (nonatomic, retain) NSString * taskContentFileName;
 @property (nonatomic, retain) NSData * taskDescription;
+@property (nonatomic, retain) NSDate * taskExpires;
+@property (nonatomic, retain) NSDate * taskFinished;
 @property (nonatomic, retain) NSString * taskHRef;
 @property (nonatomic, retain) NSString * taskID;
 @property (nonatomic, retain) NSNumber * taskIsOptional;
+@property (nonatomic, retain) NSDate * taskScheduledFor;
+@property (nonatomic, retain) NSDate * taskStarted;
 @property (nonatomic, retain) NSString * taskTitle;
 @property (nonatomic, retain) NSNumber * taskVersionNumber;
 @property (nonatomic, retain) NSDate * updatedAt;

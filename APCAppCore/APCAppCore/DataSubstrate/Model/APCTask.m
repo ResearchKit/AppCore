@@ -44,9 +44,13 @@
 @dynamic taskCompletionTimeString;
 @dynamic taskContentFileName;
 @dynamic taskDescription;
+@dynamic taskExpires;
+@dynamic taskFinished;
 @dynamic taskHRef;
 @dynamic taskID;
 @dynamic taskIsOptional;
+@dynamic taskScheduledFor;
+@dynamic taskStarted;
 @dynamic taskTitle;
 @dynamic taskVersionNumber;
 @dynamic updatedAt;

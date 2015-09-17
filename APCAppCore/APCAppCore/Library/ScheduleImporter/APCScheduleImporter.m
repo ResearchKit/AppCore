@@ -121,10 +121,14 @@ static NSString * const kScheduleTypeKey                       = @"scheduleType"
 static NSString * const kScheduleTypeValueOnce                 = @"once";
 static NSString * const kTaskClassNameKey                      = @"taskClassName";
 static NSString * const kTaskCompletionTimeStringKey           = @"taskCompletionTimeString";
+static NSString * const kTaskExpiresDateKey                    = @"taskExpiresDateKey";
+static NSString * const kTaskFinishedDateKey                   = @"taskFinishedDateKey";
 static NSString * const kTaskFileNameKey                       = @"taskFileName";
 static NSString * const kTaskIDKey                             = @"taskID";
 static NSString * const kTaskIsOptionalKey                     = @"persistent";
+static NSString * const kTaskScheduledForDateKey               = @"taskScheduledForDateKey";
 static NSString * const kTaskSortStringKey                     = @"sortString";
+static NSString * const kTaskStartedDateKey                    = @"taskStartedDateKey";
 static NSString * const kTaskTitleKey                          = @"taskTitle";
 static NSString * const kTaskTypeKey                           = @"taskType";
 static NSString * const kTaskTypeValueSurvey                   = @"survey";
@@ -795,14 +799,17 @@ static NSArray *legalTimeSpecifierFormats = nil;
     // Update the task with potentially new data
     // (or add it for the first time, if we're creating a task).
     //
-    task.taskHRef                   = [self nilIfNull: taskData [kTaskUrlKey]];                     // Sage-only?
-    task.taskTitle                  = [self nilIfNull: taskData [kTaskTitleKey]];                   // sage and us
-    task.sortString                 = [self nilIfNull: taskData [kTaskSortStringKey]];              // us-only, for now
-    task.taskClassName              = [self nilIfNull: taskData [kTaskClassNameKey]];               // sage and us, because we add to sage
-    task.taskCompletionTimeString   = [self nilIfNull: taskData [kTaskCompletionTimeStringKey]];    // us-only?
-    task.taskContentFileName        = [self nilIfNull: taskData [kTaskFileNameKey]];                // us-only?
-    task.taskIsOptional             = [self nilIfNull: taskData [kTaskIsOptionalKey]];              // us for now, Sage eventually?
-
+    task.taskHRef                   = [self nilIfNull: taskData [kTaskUrlKey]];                     // bridge-only?
+    task.taskTitle                  = [self nilIfNull: taskData [kTaskTitleKey]];                   // bridge and us
+    task.sortString                 = [self nilIfNull: taskData [kTaskSortStringKey]];              // appcore-only, for now
+    task.taskClassName              = [self nilIfNull: taskData [kTaskClassNameKey]];               // bridge and appcore, because we add to bridge
+    task.taskCompletionTimeString   = [self nilIfNull: taskData [kTaskCompletionTimeStringKey]];    // appcore-only?
+    task.taskContentFileName        = [self nilIfNull: taskData [kTaskFileNameKey]];                // appcore-only?
+    task.taskIsOptional             = [self nilIfNull: taskData [kTaskIsOptionalKey]];              // both
+    task.taskExpires                = [self nilIfNull: taskData [kTaskExpiresDateKey]];             // new tasks api
+    task.taskFinished               = [self nilIfNull: taskData [kTaskFinishedDateKey]];            // new tasks api
+    task.taskScheduledFor           = [self nilIfNull: taskData [kTaskScheduledForDateKey]];        // new tasks api
+    task.taskStarted                = [self nilIfNull: taskData [kTaskStartedDateKey]];             // new tasks api
 
     if ([task.taskTitle stringByTrimmingCharactersInSet: [NSCharacterSet whitespaceAndNewlineCharacterSet]].length == 0)
     {
@@ -1082,6 +1089,10 @@ static NSArray *legalTimeSpecifierFormats = nil;
         taskData [kTaskUrlKey]                  = [self nullIfNil: sageTask.activity.survey.href];
         taskData [kTaskClassNameKey]            = NSStringFromClass ([APCGenericSurveyTaskViewController class]);
         taskData [kTaskIsOptionalKey]           = [self nullIfNil: sageTask.persistent];
+        taskData [kTaskExpiresDateKey]          = [self nullIfNil: sageTask.expiresOn];
+        taskData [kTaskFinishedDateKey]         = [self nullIfNil: sageTask.finishedOn];
+        taskData [kTaskScheduledForDateKey]     = [self nullIfNil: sageTask.scheduledOn];
+        taskData [kTaskStartedDateKey]          = [self nullIfNil: sageTask.startedOn];
         
         // When we start getting these from Bridge, we'll use them.
         // In the mean time, noting them here, because they can still be used from
@@ -1112,6 +1123,10 @@ static NSArray *legalTimeSpecifierFormats = nil;
             taskData [kTaskIDKey]                   = [self nullIfNil: sageTask.guid];
             taskData [kTaskClassNameKey]            = taskClassName;
             taskData [kTaskIsOptionalKey]           = [self nullIfNil: sageTask.persistent];
+            taskData [kTaskExpiresDateKey]          = [self nullIfNil: sageTask.expiresOn];
+            taskData [kTaskFinishedDateKey]         = [self nullIfNil: sageTask.finishedOn];
+            taskData [kTaskScheduledForDateKey]     = [self nullIfNil: sageTask.scheduledOn];
+            taskData [kTaskStartedDateKey]          = [self nullIfNil: sageTask.startedOn];
             
             // Not available for non survey tasks
             taskData [kTaskVersionNumberKey]    = [NSNull null];

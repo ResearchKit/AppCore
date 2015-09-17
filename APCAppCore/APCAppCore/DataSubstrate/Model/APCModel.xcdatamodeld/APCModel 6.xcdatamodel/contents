@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="7549" systemVersion="14D136" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="7701" systemVersion="14D136" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="APCDBStatus" representedClassName="APCDBStatus" syncable="YES">
         <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
@@ -119,9 +119,13 @@
         <attribute name="taskCompletionTimeString" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="taskContentFileName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="taskDescription" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="taskExpires" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="taskFinished" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="taskHRef" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="taskID" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="taskIsOptional" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="taskScheduledFor" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="taskStarted" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="taskTitle" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="taskVersionNumber" optional="YES" attributeType="Integer 32" defaultValueString="0" indexed="YES" syncable="YES"/>
         <attribute name="updatedAt" optional="YES" attributeType="Date" syncable="YES"/>
@@ -140,6 +144,6 @@
         <element name="APCSchedule" positionX="-594" positionY="71" width="207" height="358"/>
         <element name="APCScheduledTask" positionX="-1125" positionY="297" width="171" height="178"/>
         <element name="APCStoredUserData" positionX="-1593" positionY="72" width="200" height="435"/>
-        <element name="APCTask" positionX="-873" positionY="71" width="207" height="253"/>
+        <element name="APCTask" positionX="-873" positionY="71" width="207" height="315"/>
     </elements>
 </model>
