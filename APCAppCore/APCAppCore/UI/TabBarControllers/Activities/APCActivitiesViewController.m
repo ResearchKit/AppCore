@@ -101,6 +101,11 @@ static CGFloat const kTableViewSectionHeaderHeight = 77;
     self.dateFormatter = [NSDateFormatter new];
     [self configureRefreshControl];
     self.lastKnownSystemDate = nil;
+    
+    self.permissionManager = [[APCPermissionsManager alloc] init];
+
+    // make sure we know the state of CoreMotion permissions so it's available when we need it
+    [self.permissionManager requestForPermissionForType:kAPCSignUpPermissionsTypeCoremotion withCompletion:nil];
 }
 
 - (void) viewWillAppear: (BOOL) animated
@@ -114,8 +119,6 @@ static CGFloat const kTableViewSectionHeaderHeight = 77;
     [self reloadTasksFromCoreData];
     [self checkForAndMaybeRespondToSystemDateChange];
     
-    self.permissionManager = [[APCPermissionsManager alloc] init];
-
     APCLogViewControllerAppeared();
 }
 
