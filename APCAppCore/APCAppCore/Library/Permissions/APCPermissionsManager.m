@@ -194,7 +194,6 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
                      withCompletion:(APCPermissionsBlock)completion
 {
     
-    self.completionBlock = completion;
     __weak typeof(self) weakSelf = self;
     switch (type) {
         case kAPCSignUpPermissionsTypeHealthKit:
@@ -255,13 +254,14 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
             
             if (status == kCLAuthorizationStatusNotDetermined) {
+                weakSelf.completionBlock = completion;
+
                 [self.locationManager requestAlwaysAuthorization];
                 [self.locationManager requestWhenInUseAuthorization];
                 
             } else{
-                if (weakSelf.completionBlock) {
-                    weakSelf.completionBlock(NO, [self permissionDeniedErrorForType:kAPCSignUpPermissionsTypeLocation]);
-                    weakSelf.completionBlock = nil;
+                if (completion) {
+                    completion(NO, [self permissionDeniedErrorForType:kAPCSignUpPermissionsTypeLocation]);
                 }
             }
         }
@@ -269,6 +269,8 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
         case kAPCSignUpPermissionsTypeLocalNotifications:
         {
             if ([[UIApplication sharedApplication] currentUserNotificationSettings].types == UIUserNotificationTypeNone) {
+                weakSelf.completionBlock = completion;
+                
                 UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert
                                                                                                      |UIUserNotificationTypeBadge
                                                                                                      |UIUserNotificationTypeSound)
@@ -289,16 +291,16 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
                 if (!error) {
                     dispatch_async(dispatch_get_main_queue(), ^{
                     weakSelf.coreMotionPermissionStatus = kPermissionStatusAuthorized;
-                    weakSelf.completionBlock(YES, nil);
-                    weakSelf.completionBlock = nil;
+                    if (completion) {
+                        completion(YES, nil);
+                    }
                     });
                 } else if (error != nil && error.code == CMErrorMotionActivityNotAuthorized) {
                     weakSelf.coreMotionPermissionStatus = kPermissionStatusDenied;
                     
-                    if (weakSelf.completionBlock) {
+                    if (completion) {
                         dispatch_async(dispatch_get_main_queue(), ^{
-                        weakSelf.completionBlock(NO, [self permissionDeniedErrorForType:kAPCSignUpPermissionsTypeCoremotion]);
-                        weakSelf.completionBlock = nil;
+                        completion(NO, [self permissionDeniedErrorForType:kAPCSignUpPermissionsTypeCoremotion]);
                         });
                     }
                     
@@ -312,12 +314,12 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             
             [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
                 if (granted) {
-                    weakSelf.completionBlock(YES, nil);
-                    weakSelf.completionBlock = nil;
+                    if (completion) {
+                        completion(YES, nil);
+                    }
                 } else {
-                    if (weakSelf.completionBlock) {
-                        weakSelf.completionBlock(NO, [self permissionDeniedErrorForType:kAPCSignUpPermissionsTypeMicrophone]);
-                        weakSelf.completionBlock = nil;
+                    if (completion) {
+                        completion(NO, [self permissionDeniedErrorForType:kAPCSignUpPermissionsTypeMicrophone]);
                     }
                 }
             }];
@@ -328,12 +330,12 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             
             [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
                 if(granted){
-                    weakSelf.completionBlock(YES, nil);
-                    weakSelf.completionBlock = nil;
+                    if (completion) {
+                        completion(YES, nil);
+                    }
                 } else {
-                    if (weakSelf.completionBlock) {
-                        weakSelf.completionBlock(NO, [self permissionDeniedErrorForType:kAPCSignUpPermissionsTypeCamera]);
-                        weakSelf.completionBlock = nil;
+                    if (completion) {
+                        completion(NO, [self permissionDeniedErrorForType:kAPCSignUpPermissionsTypeCamera]);
                     }
                 }
             }];
@@ -347,15 +349,15 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             [lib enumerateGroupsWithTypes:ALAssetsGroupSavedPhotos usingBlock:^(ALAssetsGroup *group, BOOL * __unused stop) {
                 if (group == nil) {
                     // end of enumeration
-                    weakSelf.completionBlock(YES, nil);
-                    weakSelf.completionBlock = nil;
+                    if (completion) {
+                        completion(YES, nil);
+                    }
                 }
                 
             } failureBlock:^(NSError *error) {
                 if (error.code == ALAssetsLibraryAccessUserDeniedError) {
-                    if (weakSelf.completionBlock) {
-                        weakSelf.completionBlock(NO, [self permissionDeniedErrorForType:kAPCSignUpPermissionsTypePhotoLibrary]);
-                        weakSelf.completionBlock = nil;
+                    if (completion) {
+                        completion(NO, [self permissionDeniedErrorForType:kAPCSignUpPermissionsTypePhotoLibrary]);
                     }
                 }
             }];
