@@ -486,29 +486,30 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
     NSError *errorFetchingTasks         = nil;
     NSManagedObjectContext *context         = self.scheduleMOC;
     // TODO: Check thread this is called from
+    // TODO: Worry about task filter? Should probably be a compound predicate passed to tasksSecheduledForDayOfDate
     NSArray *todaysTasks = [self tasksScheduledForDayOfDate: theSpecifiedDate
                                                usingContext: context
                                              returningError: &errorFetchingTasks];
     
     
-    // TODO Group tasks by task id
-    // TODO Compute necessary stuff to create APCTaskGroup
-    
-    // Temp just to see it in UI
+    NSMutableDictionary *taskGroupsDictionary = [NSMutableDictionary new];
     for (APCTask *task in todaysTasks) {
-        
-//        APCTaskGroup *taskGroup = [self computeAndGenerateTaskGroupForTask: task
-//                                                               andSchedule: nil
-//                                                              atTheseTimes: timestamps
-//                                                      onThisAppearanceDate: theSpecifiedDate
-//                                                             scheduledDate: dateOriginallyScheduled
-//                                                            expirationDate: expirationDate
-//                                               addingDiagnosticsToPrintout: printout
-//                                                              usingPrinter: printer];
+        NSMutableArray *groupOfTasks = [taskGroupsDictionary objectForKey:task.taskID];
+        if (!groupOfTasks) {
+            // TODO is this safe? todaysTask isn't modified
+            groupOfTasks = [NSMutableArray new];
+            [taskGroupsDictionary setObject:groupOfTasks forKey:task.taskID];
+        }
+        [groupOfTasks addObject:task];
     }
-    
-    NSArray *result = nil; // TODO return valid result
-    return result;
+    NSMutableArray *taskGroups = [NSMutableArray new];
+    [taskGroupsDictionary enumerateKeysAndObjectsUsingBlock:^(__unused id key, id object, __unused BOOL *stop) {
+        NSArray *tasks = (NSArray*)object;
+        APCTaskGroup *taskGroup = [[APCTaskGroup alloc] initWithTasks:tasks
+                                                     forScheduledDate:theSpecifiedDate];
+        [taskGroups addObject:taskGroup];
+    }];
+    return (NSArray*)taskGroups;
 }
 
 
@@ -1107,9 +1108,6 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
 {
     NSDate *midnightThisMorning = dateWhenThingsShouldBeVisible.startOfDay;
     NSDate *midnightThisEvening = dateWhenThingsShouldBeVisible.endOfDay;
-    NSEntityDescription* taskEntity = [NSEntityDescription entityForName:@"APCTask"
-                                                  inManagedObjectContext:context];
-    NSAttributeDescription* taskID = [taskEntity.attributesByName objectForKey:@"taskGuid"];
     
     NSPredicate *filterForThisDay = [NSPredicate predicateWithFormat:
                                      @"(%K <= %@) && (%K >= %@)",
@@ -1120,9 +1118,6 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
                                      ];
     
     NSFetchRequest *taskQuery = [APCTask requestWithPredicate: filterForThisDay];
-    [taskQuery setPropertiesToFetch:[NSArray arrayWithObject:taskID]];
-    [taskQuery setPropertiesToGroupBy:[NSArray arrayWithObject:taskID]];
-    [taskQuery setResultType:NSDictionaryResultType];
     NSError *errorFetchingTasks = nil;
     NSArray *tasks = [context executeFetchRequest: taskQuery
                                             error: &errorFetchingTasks];
@@ -1285,7 +1280,9 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
             {
                 NSDictionary *sageScheduleData = [importEngine extractJsonDataFromIncomingSageSchedule: sageSchedule];
 
-                [jsonCopyOfSageSchedulesAndTasks addObject: sageScheduleData];
+                if (sageScheduleData) {
+                    [jsonCopyOfSageSchedulesAndTasks addObject: sageScheduleData];
+                }
             }
         }
 
@@ -1331,7 +1328,9 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
 //                NSDictionary *sageScheduleData = [importEngine extractJsonDataFromIncomingSageSchedule: sageSchedule];
                 NSDictionary *sageTaskData = [importEngine extractJsonDataFromIncomingSageTask:sageTask];
                 
-                [jsonCopyOfSageTasks addObject: sageTaskData];
+                if (sageTaskData) {
+                    [jsonCopyOfSageTasks addObject: sageTaskData];
+                }
             }
         }
         
