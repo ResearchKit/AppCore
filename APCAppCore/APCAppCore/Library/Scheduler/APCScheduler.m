@@ -234,8 +234,11 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
 
     else
     {
-        taskGroupsToReport = [self uncachedTaskGroupsForDayOfDate: date
-                                           forTasksMatchingFilter: taskFilter];
+//        taskGroupsToReport = [self uncachedTaskGroupsForDayOfDate: date
+//                                           forTasksMatchingFilter: taskFilter];
+        taskGroupsToReport = [self uncachedGroupsForDayOfDate:date
+                                       forTasksMatchingFilter: taskFilter];
+
 
         
         /*
@@ -476,6 +479,39 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
 
     return sortedGroups;
 }
+
+- (NSArray *) uncachedGroupsForDayOfDate: (NSDate *) theSpecifiedDate
+                  forTasksMatchingFilter: (NSPredicate *) taskFilter
+{
+    NSError *errorFetchingTasks         = nil;
+    NSManagedObjectContext *context         = self.scheduleMOC;
+    // TODO: Check thread this is called from
+    NSArray *todaysTasks = [self tasksScheduledForDayOfDate: theSpecifiedDate
+                                               usingContext: context
+                                             returningError: &errorFetchingTasks];
+    
+    
+    // TODO Group tasks by task id
+    // TODO Compute necessary stuff to create APCTaskGroup
+    
+    // Temp just to see it in UI
+    for (APCTask *task in todaysTasks) {
+        
+//        APCTaskGroup *taskGroup = [self computeAndGenerateTaskGroupForTask: task
+//                                                               andSchedule: nil
+//                                                              atTheseTimes: timestamps
+//                                                      onThisAppearanceDate: theSpecifiedDate
+//                                                             scheduledDate: dateOriginallyScheduled
+//                                                            expirationDate: expirationDate
+//                                               addingDiagnosticsToPrintout: printout
+//                                                              usingPrinter: printer];
+    }
+    
+    NSArray *result = nil; // TODO return valid result
+    return result;
+}
+
+
 
 /**
  Returns the times of day that the specified schedule says a task should appear
@@ -1030,12 +1066,12 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
 
  @see -schedulesActiveOnDayOfDate:
  */
-- (NSArray *) schedulesVisibleOnDayOfDate: (NSDate *) dateWhenThingsShouldBeVisible
+- (NSArray *) schedulesVisibleOnDayOfDate: (NSDate *)date
                              usingContext: (NSManagedObjectContext *) context
                            returningError: (NSError * __autoreleasing *) errorToReturn
 {
-    NSDate *midnightThisMorning = dateWhenThingsShouldBeVisible.startOfDay;
-    NSDate *midnightThisEvening = dateWhenThingsShouldBeVisible.endOfDay;
+    NSDate *midnightThisMorning = date.startOfDay;
+    NSDate *midnightThisEvening = date.endOfDay;
 
     NSPredicate *filterForThisDay = [NSPredicate predicateWithFormat:
                                      @"(%K == nil || %K <= %@) && (%K == nil || %K >= %@)",
@@ -1071,6 +1107,9 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
 {
     NSDate *midnightThisMorning = dateWhenThingsShouldBeVisible.startOfDay;
     NSDate *midnightThisEvening = dateWhenThingsShouldBeVisible.endOfDay;
+    NSEntityDescription* taskEntity = [NSEntityDescription entityForName:@"APCTask"
+                                                  inManagedObjectContext:context];
+    NSAttributeDescription* taskID = [taskEntity.attributesByName objectForKey:@"taskGuid"];
     
     NSPredicate *filterForThisDay = [NSPredicate predicateWithFormat:
                                      @"(%K <= %@) && (%K >= %@)",
@@ -1081,11 +1120,14 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
                                      ];
     
     NSFetchRequest *taskQuery = [APCTask requestWithPredicate: filterForThisDay];
+    [taskQuery setPropertiesToFetch:[NSArray arrayWithObject:taskID]];
+    [taskQuery setPropertiesToGroupBy:[NSArray arrayWithObject:taskID]];
+    [taskQuery setResultType:NSDictionaryResultType];
     NSError *errorFetchingTasks = nil;
     NSArray *tasks = [context executeFetchRequest: taskQuery
                                             error: &errorFetchingTasks];
     
-    if (errorToReturn != nil)
+    if (errorFetchingTasks)
     {
         *errorToReturn = [NSError errorWithCode: APCErrorCouldntFetchVisibleSchedulesForDateCode
                                          domain: APCErrorDomainLoadingTasksAndSchedules

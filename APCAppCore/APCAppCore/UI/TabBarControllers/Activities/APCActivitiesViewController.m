@@ -557,7 +557,7 @@ static CGFloat const kTableViewSectionHeaderHeight = 77;
     BOOL sortNewestToOldest = YES;
 
     __weak typeof(self) weakSelf = self;
-    
+    // TODO: make sure this works now
     [[APCScheduler defaultScheduler] fetchTaskGroupsFromDate: yesterday
                                                       toDate: today
                                       forTasksMatchingFilter: filterForRequiredTasks

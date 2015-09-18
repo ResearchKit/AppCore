@@ -128,6 +128,10 @@ typedef void (^APCSchedulerCallbackForFetchingCount) (NSUInteger count, NSError 
                                     inContext: (NSManagedObjectContext *) context
                                returningError: (NSError * __autoreleasing *) errorToReturn;
 
+- (NSArray *) tasksScheduledForDayOfDate: (NSDate *) date
+                            usingContext: (NSManagedObjectContext *) context
+                          returningError: (NSError * __autoreleasing *) errorToReturn;
+
 
 
 // ---------------------------------------------------------
