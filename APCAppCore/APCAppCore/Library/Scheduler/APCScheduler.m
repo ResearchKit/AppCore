@@ -486,9 +486,9 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
     NSError *errorFetchingTasks         = nil;
     NSManagedObjectContext *context         = self.scheduleMOC;
     // TODO: Check thread this is called from
-    // TODO: Worry about task filter? Should probably be a compound predicate passed to tasksSecheduledForDayOfDate
     NSArray *todaysTasks = [self tasksScheduledForDayOfDate: theSpecifiedDate
                                                usingContext: context
+                                                usingFilter:taskFilter
                                              returningError: &errorFetchingTasks];
     
     
@@ -1104,6 +1104,7 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
 
 - (NSArray *) tasksScheduledForDayOfDate: (NSDate *) dateWhenThingsShouldBeVisible
                             usingContext: (NSManagedObjectContext *) context
+                             usingFilter:(NSPredicate *) taskFilter
                           returningError: (NSError * __autoreleasing *) errorToReturn
 {
     NSDate *midnightThisMorning = dateWhenThingsShouldBeVisible.startOfDay;
@@ -1117,7 +1118,9 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
                                      midnightThisMorning
                                      ];
     
-    NSFetchRequest *taskQuery = [APCTask requestWithPredicate: filterForThisDay];
+    NSPredicate *compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:@[taskFilter, filterForThisDay]];
+    
+    NSFetchRequest *taskQuery = [APCTask requestWithPredicate: compoundPredicate];
     NSError *errorFetchingTasks = nil;
     NSArray *tasks = [context executeFetchRequest: taskQuery
                                             error: &errorFetchingTasks];
@@ -1325,7 +1328,6 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
             
             for (SBBTask *sageTask in sageTasks)
             {
-//                NSDictionary *sageScheduleData = [importEngine extractJsonDataFromIncomingSageSchedule: sageSchedule];
                 NSDictionary *sageTaskData = [importEngine extractJsonDataFromIncomingSageTask:sageTask];
                 
                 if (sageTaskData) {
@@ -1336,7 +1338,6 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
         
         /*
          Loop through the incoming items and save/udpate everything.
-         Both -fetch and -load boil down to this one call.
          */
         [self processTasks: jsonCopyOfSageTasks
                 fromSource: APCScheduleSourceServer
