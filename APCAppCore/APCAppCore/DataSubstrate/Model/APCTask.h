@@ -46,6 +46,7 @@
 @property (nonatomic, retain) NSData * taskDescription;
 @property (nonatomic, retain) NSDate * taskExpires;
 @property (nonatomic, retain) NSDate * taskFinished;
+@property (nonatomic, retain) NSString * TaskGuid;
 @property (nonatomic, retain) NSString * taskHRef;
 @property (nonatomic, retain) NSString * taskID;
 @property (nonatomic, retain) NSNumber * taskIsOptional;

@@ -124,6 +124,7 @@ static NSString * const kTaskCompletionTimeStringKey           = @"taskCompletio
 static NSString * const kTaskExpiresDateKey                    = @"taskExpiresDateKey";
 static NSString * const kTaskFinishedDateKey                   = @"taskFinishedDateKey";
 static NSString * const kTaskFileNameKey                       = @"taskFileName";
+static NSString * const kTaskGuidKey                           = @"taskGuid";
 static NSString * const kTaskIDKey                             = @"taskID";
 static NSString * const kTaskIsOptionalKey                     = @"persistent";
 static NSString * const kTaskScheduledForDateKey               = @"taskScheduledForDateKey";
@@ -1117,11 +1118,11 @@ static NSArray *legalTimeSpecifierFormats = nil;
     NSMutableDictionary *taskData               = [NSMutableDictionary new];
     
     if (sageTask.activity.survey) {
-        
+        taskData [kTaskGuidKey]                 = [self nullIfNil: sageTask.guid];
         taskData [kTaskTitleKey]                = [self nullIfNil: sageTask.activity.label];
         taskData [kTaskCompletionTimeStringKey] = [self nullIfNil: sageTask.activity.labelDetail];
         taskData [kTaskTypeKey]                 = [self nullIfNil: sageTask.activity.activityType];
-        taskData [kTaskIDKey]                   = [self nullIfNil: sageTask.guid];
+        taskData [kTaskIDKey]                   = [self nullIfNil: sageTask.activity.survey.identifier];
         taskData [kTaskVersionNumberKey]        = [self nullIfNil: sageTask.activity.survey.createdOn.toStringInISO8601Format];
         taskData [kTaskUrlKey]                  = [self nullIfNil: sageTask.activity.survey.href];
         taskData [kTaskClassNameKey]            = NSStringFromClass ([APCGenericSurveyTaskViewController class]);
@@ -1154,10 +1155,11 @@ static NSArray *legalTimeSpecifierFormats = nil;
         // ignore unrecognized tasks (probably added in a later app version)
         NSString *taskClassName = mappingDictionary[sageTask.activity.task.identifier];
         if (taskClassName.length) {
+            taskData [kTaskGuidKey]                 = [self nullIfNil: sageTask.guid];
             taskData [kTaskTitleKey]                = [self nullIfNil: sageTask.activity.label];
             taskData [kTaskCompletionTimeStringKey] = [self nullIfNil: sageTask.activity.labelDetail];
             taskData [kTaskTypeKey]                 = [self nullIfNil: sageTask.activity.activityType];
-            taskData [kTaskIDKey]                   = [self nullIfNil: sageTask.guid];
+            taskData [kTaskIDKey]                   = [self nullIfNil: sageTask.activity.task.identifier];
             taskData [kTaskClassNameKey]            = taskClassName;
             taskData [kTaskIsOptionalKey]           = [self nullIfNil: sageTask.persistent];
             taskData [kTaskExpiresDateKey]          = [self nullIfNil: sageTask.expiresOn];

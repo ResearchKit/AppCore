@@ -121,6 +121,7 @@
         <attribute name="taskDescription" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="taskExpires" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="taskFinished" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="taskGuid" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="taskHRef" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="taskID" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="taskIsOptional" optional="YES" attributeType="Boolean" syncable="YES"/>
@@ -144,6 +145,6 @@
         <element name="APCSchedule" positionX="-594" positionY="71" width="207" height="358"/>
         <element name="APCScheduledTask" positionX="-1125" positionY="297" width="171" height="178"/>
         <element name="APCStoredUserData" positionX="-1593" positionY="72" width="200" height="435"/>
-        <element name="APCTask" positionX="-873" positionY="71" width="207" height="315"/>
+        <element name="APCTask" positionX="-873" positionY="71" width="207" height="330"/>
     </elements>
 </model>
