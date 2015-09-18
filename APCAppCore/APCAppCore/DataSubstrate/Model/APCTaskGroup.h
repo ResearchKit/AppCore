@@ -228,4 +228,7 @@
                      appearanceDate: (NSDate *) appearanceDate
                      expirationDate: (NSDate *) expirationDate;
 
+- (instancetype)       initWithTasks: (NSArray *) tasks
+                    forScheduledDate: (NSDate *) scheduledDate;
+
 @end

@@ -145,6 +145,42 @@ static NSDateFormatter *debugDateFormatter = nil;
     return self;
 }
 
+- (instancetype)       initWithTasks: (NSArray *) tasks
+                    forScheduledDate: (NSDate *) scheduledDate {
+    self = [self init];
+    if (self)
+    {
+        NSMutableArray *requiredRemainingTasksArray = [NSMutableArray new];
+        NSMutableArray *requiredCompletedTasksArray = [NSMutableArray new];
+        for (APCTask *task in tasks) {
+            if (!_task) {
+                // TODO make sure this is still letting me complete the other tasks in the group
+                _task = task;
+            }
+            if (!task.taskIsOptional) {
+                // Task is required
+                _totalRequiredTasksForThisTimeRange++;
+                if (task.taskFinished) {
+                    [requiredCompletedTasksArray addObject:task];
+                } else {
+                    [requiredRemainingTasksArray addObject:task];
+                }
+            }
+        }
+        _requiredRemainingTasks = (NSArray*) requiredRemainingTasksArray;
+        _requiredCompletedTasks = (NSArray*) requiredCompletedTasksArray;
+        _appearanceDate = scheduledDate;
+        _scheduledDate = scheduledDate;
+        _expirationDate = _task.taskExpires;
+        _expiresToday = _expirationDate != nil && [_expirationDate.startOfDay isEqualToDate: _appearanceDate.startOfDay];
+        
+        // TODO: Do we need to handle gratuitous tasks still?
+        // TODO: Deprecate APCPotentialTask
+    }
+    
+    return self;
+}
+
 - (BOOL) hasAnyCompletedTasks
 {
     return self.requiredCompletedTasks.count + self.gratuitousCompletedTasks.count > 0;
