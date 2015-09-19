@@ -157,7 +157,7 @@ static NSDateFormatter *debugDateFormatter = nil;
                 // TODO make sure this is still letting me complete the other tasks in the group
                 _task = task;
             }
-            if (!task.taskIsOptional) {
+            if ([task.taskIsOptional boolValue] == NO) {
                 // Task is required
                 _totalRequiredTasksForThisTimeRange++;
                 if (task.taskFinished) {
