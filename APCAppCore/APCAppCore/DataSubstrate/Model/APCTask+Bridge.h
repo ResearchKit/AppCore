@@ -39,6 +39,7 @@
 
 + (void) refreshSurveysOnCompletion: (void (^)(NSError * error)) completionBlock;
 - (void) loadSurveyOnCompletion: (void (^)(NSError * error)) completionBlock;
+- (void) updateTaskOnCompletion: (void (^)(NSError * error)) completionBlock;
 + (ORKOrderedTask*) rkTaskFromSBBSurvey: (SBBSurvey*) survey;
 
 @end

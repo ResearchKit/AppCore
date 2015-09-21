@@ -250,6 +250,7 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
             }
             
             [self.scheduledTask finishTask];
+            [self apiUpdateTask:self.scheduledTask];
             [[NSNotificationCenter defaultCenter]postNotificationName:APCActivityCompletionNotification object:nil];
             break;
 
@@ -476,6 +477,14 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
     if (self.createResultSummaryBlock) {
         [self.appDelegate.dataMonitor performCoreDataBlockInBackground:self.createResultSummaryBlock];
     }
+}
+
+- (void) apiUpdateTask: (APCTask *) task {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        [task updateTaskOnCompletion: ^(NSError *error) {
+            APCLogError2 (error);
+        }];
+    });
 }
 
 /*********************************************************************************/
