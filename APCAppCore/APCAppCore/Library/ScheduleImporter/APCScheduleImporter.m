@@ -806,11 +806,11 @@ static NSArray *legalTimeSpecifierFormats = nil;
                                    inContext: (NSManagedObjectContext *) context
 {
     APCTask  *task              = nil;
-    NSString *taskId            = [self nilIfNull: taskData [kTaskIDKey]];
+    NSString *taskGuid          = [self nilIfNull: taskData [kTaskGuidKey]];
     NSNumber *taskVersionNumber = [self nilIfNull: taskData [kTaskVersionNumberKey]];
 
-    NSSet *tasks = [APCTask querySavedTasksWithTaskIds: [NSSet setWithObject: taskId]
-                                          usingContext: context];
+    NSSet *tasks = [APCTask querySavedTasksWithTaskGuids: [NSSet setWithObject: taskGuid]
+                                            usingContext: context];
 
     if (tasks)
     {
@@ -820,7 +820,7 @@ static NSArray *legalTimeSpecifierFormats = nil;
     if (task == nil)
     {
         task = [APCTask newObjectForContext: context];
-        task.taskID = taskId;
+        task.taskGuid = taskGuid;
         task.taskVersionNumber = taskVersionNumber;
     }
 
@@ -837,6 +837,7 @@ static NSArray *legalTimeSpecifierFormats = nil;
     // Update the task with potentially new data
     // (or add it for the first time, if we're creating a task).
     //
+    task.taskID                     = [self nilIfNull: taskData [kTaskIDKey]];
     task.taskHRef                   = [self nilIfNull: taskData [kTaskUrlKey]];                     // bridge-only?
     task.taskTitle                  = [self nilIfNull: taskData [kTaskTitleKey]];                   // bridge and us
     task.sortString                 = [self nilIfNull: taskData [kTaskSortStringKey]];              // appcore-only, for now

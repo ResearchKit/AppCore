@@ -174,6 +174,45 @@ static NSString * const kTaskFileNameKey = @"taskFileName";
     return result;
 }
 
++ (NSSet *) querySavedTasksWithTaskGuids: (NSSet *) setOfTaskGuids
+                            usingContext: (NSManagedObjectContext *) context
+{
+    NSSet *result = nil;
+    
+    if (setOfTaskGuids.count > 0 && context != nil)
+    {
+        NSString *nameOfTaskGuidField = NSStringFromSelector (@selector (taskGuid));
+        
+        NSFetchRequest *query = [self requestWithPredicate: [NSPredicate predicateWithFormat: @"%K in %@",
+                                                             nameOfTaskGuidField,
+                                                             setOfTaskGuids]];
+        
+        NSError *error = nil;
+        NSArray *tasks = [context executeFetchRequest: query
+                                                error: & error];
+        if (tasks == nil)
+        {
+            APCLogError2 (error);
+        }
+        else
+        {
+            NSMutableSet *nonTemporaryTasks = [NSMutableSet new];
+            
+            for (APCTask *task in tasks)
+            {
+                if (! task.objectID.isTemporaryID)
+                {
+                    [nonTemporaryTasks addObject: task];
+                }
+            }
+            
+            result = [NSSet setWithSet: nonTemporaryTasks];
+        }
+    }
+    
+    return result;
+}
+
 - (id<ORKTask>)rkTask
 {
     ORKOrderedTask * retTask = self.taskDescription ? [NSKeyedUnarchiver unarchiveObjectWithData:self.taskDescription] : nil;

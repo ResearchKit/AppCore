@@ -46,7 +46,7 @@
 @dynamic taskDescription;
 @dynamic taskExpires;
 @dynamic taskFinished;
-@dynamic TaskGuid;
+@dynamic taskGuid;
 @dynamic taskHRef;
 @dynamic taskID;
 @dynamic taskIsOptional;
