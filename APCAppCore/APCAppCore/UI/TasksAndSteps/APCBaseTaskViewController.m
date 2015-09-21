@@ -199,7 +199,7 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
     APCLogViewControllerAppeared();
     APCLogEventWithData(kTaskEvent, (@{
                                        @"task_status":@"Started",
-                                       @"task_title": (self.scheduledTask.task.taskTitle == nil) ? @"No Title Provided": self.scheduledTask.task.taskTitle,
+                                       @"task_title": (self.scheduledTask.taskTitle == nil) ? @"No Title Provided": self.scheduledTask.taskTitle,
                                        @"task_view_controller":NSStringFromClass([self class])
                                        }));
 }
@@ -219,7 +219,7 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
                       error: (nullable NSError *) error
 {
     NSString *currentStepIdentifier = self.currentStepViewController.step.identifier;
-    NSString *taskTitle = self.scheduledTask.task.taskTitle;
+    NSString *taskTitle = self.scheduledTask.taskTitle;
     BOOL shouldLogError = YES;
 
     if (currentStepIdentifier == nil)
@@ -249,7 +249,7 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
                 [self processTaskResult];
             }
             
-            [self.scheduledTask completeScheduledTask];
+            [self.scheduledTask finishTask];
             [[NSNotificationCenter defaultCenter]postNotificationName:APCActivityCompletionNotification object:nil];
             break;
 
@@ -275,26 +275,11 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
             break;
 
         case ORKTaskViewControllerFinishReasonDiscarded:
-            /*
-             The user cancelled the operation.  Delete the ScheduledTask.
-
-             In our new world, the theory is:  ScheduledTasks are only created
-             in the database when the user actually chooses to save them.
-             Unfortunately, a lot of existing code depends on ScheduledTasks
-             already having been created before a view appears.  So we'll run
-             with that:  save the task while the views are using it, but then
-             destroy it if the user cancels.
-
-             This should be asynchronous.  For now, it's not, so I can
-             figure out what threads this class (the one you're reading
-             now) is reliably using.  Then I'll fix it to be wholly-
-             asynchronous.
-             */
-            [self.appDelegate.scheduler deleteScheduledTask: self.scheduledTask];
+            [self.scheduledTask abortTask];
             break;
 
         case ORKTaskViewControllerFinishReasonSaved:
-            // Nothing special to do.
+            [self.scheduledTask startedTask];
             break;
 
         default:
@@ -519,7 +504,7 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
     NSString * scheduledTaskID = [coder decodeObjectForKey:@"scheduledTask"];
     APCAppDelegate *appDelegate = [APCAppDelegate sharedAppDelegate];
     NSManagedObjectID * objID = [appDelegate.dataSubstrate.persistentStoreCoordinator managedObjectIDForURIRepresentation:[NSURL URLWithString:scheduledTaskID]];
-    APCScheduledTask * scheduledTask = (APCScheduledTask*)[appDelegate.dataSubstrate.mainContext objectWithID:objID];
+    APCTask * scheduledTask = (APCTask*)[appDelegate.dataSubstrate.mainContext objectWithID:objID];
     id localRestorationData = [coder decodeObjectForKey:@"restorationData"];
     if (scheduledTask) {
         APCBaseTaskViewController * tvc =[[self alloc] initWithTask:task restorationData:localRestorationData];

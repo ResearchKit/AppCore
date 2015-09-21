@@ -36,6 +36,10 @@
 @protocol ORKTask;
 @interface APCTask (AddOn)
 
+- (void) startedTask;
+- (void) finishTask;
+- (void) abortTask;
+
 /**
  Simple, statically-allocated list of sort descriptors we use in various
  places to ensure tasks always appear on the screen, and in debug statements,
