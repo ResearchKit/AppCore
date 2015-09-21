@@ -43,7 +43,7 @@
 
 @interface APCBaseTaskViewController : ORKTaskViewController <ORKTaskViewControllerDelegate, ORKStepViewControllerDelegate>
 
-@property  (nonatomic, strong)  APCScheduledTask  *scheduledTask;
+@property (nonatomic, strong) APCTask *scheduledTask;
 @property (nonatomic, copy) void (^createResultSummaryBlock) (NSManagedObjectContext* context);
 @property (readonly) APCAppDelegate *appDelegate;
 @property (nonatomic) BOOL canGenerateResult;
@@ -56,7 +56,7 @@
  your subclass of this ViewController with a ScheduledTask.  Compare
  with +configureTaskViewController:.
  */
-+ (instancetype)customTaskViewController: (APCScheduledTask*) scheduledTask;
++ (instancetype)customTaskViewController: (APCTask*) scheduledTask;
 
 /**
  Initializes an instance of this class with the task

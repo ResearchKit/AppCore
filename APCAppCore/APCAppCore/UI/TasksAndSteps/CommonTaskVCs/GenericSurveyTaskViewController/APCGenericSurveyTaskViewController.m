@@ -44,9 +44,9 @@
     APCLogViewControllerAppeared();
 }
 
-+ (id<ORKTask>)createTask:(APCScheduledTask*) scheduledTask
++ (id<ORKTask>)createOrkTask:(APCTask*) scheduledTask
 {
-    return  [scheduledTask.task rkTask];
+    return  [scheduledTask rkTask];
 }
 
 @end

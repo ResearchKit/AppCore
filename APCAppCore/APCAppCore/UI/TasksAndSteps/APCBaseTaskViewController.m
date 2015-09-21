@@ -123,15 +123,15 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
 @implementation APCBaseTaskViewController
 
 #pragma  mark  -  Instance Initialisation
-+ (instancetype)customTaskViewController: (APCScheduledTask*) scheduledTask
++ (instancetype)customTaskViewController: (APCTask*) scheduledTask
 {
     [[UIView appearance] setTintColor:[UIColor appPrimaryColor]];
     
-    id<ORKTask> task = [self createTask: scheduledTask];
+    id<ORKTask> orkTask = [self createOrkTask: scheduledTask];
     
     NSUUID * taskRunUUID = [NSUUID UUID];
     
-    APCBaseTaskViewController * controller = task ? [[self alloc] initWithTask:task taskRunUUID:taskRunUUID] : nil;
+    APCBaseTaskViewController * controller = orkTask ? [[self alloc] initWithTask:orkTask taskRunUUID:taskRunUUID] : nil;
     controller.scheduledTask = scheduledTask;
     controller.delegate = controller;
     
@@ -140,31 +140,37 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
 
 + (instancetype)configureTaskViewController:(APCTaskGroup *)taskGroup
 {
-    APCPotentialTask *potentialTask             = taskGroup.requiredRemainingTasks.firstObject;
+    // TODO: make the next task actually be the next task one up rather
+    // than the first one in the collection.
+    APCTask *nextTask                           = taskGroup.requiredRemainingTasks.firstObject;
     APCBaseTaskViewController *viewController   = nil;
     
+    // Tasks are already scheduled when they come from Tasks API, we don't need
+    // to create a special scheduled task since that is a legacy hold over from
+    // the schedules API.
     /*
      It's a fundamental business requirement that our users
      can do *more* than the required number of tasks.  This
      object lets us do that, if they've gone through all
      the actually- required tasks for this date.
      */
-    if (potentialTask == nil)
-    {
-        potentialTask = taskGroup.samplePotentialTask;
-    }
+//    if (potentialTask == nil)
+//    {
+//        potentialTask = taskGroup.samplePotentialTask;
+//    }
+//    
+//    if (potentialTask != nil) {
+//        APCScheduledTask *scheduledTask = [[APCScheduler defaultScheduler] createScheduledTaskFromPotentialTask:potentialTask];
+//        
+//        viewController = [self customTaskViewController:scheduledTask];
+//    }
     
-    if (potentialTask != nil) {
-        APCScheduledTask *scheduledTask = [[APCScheduler defaultScheduler] createScheduledTaskFromPotentialTask:potentialTask];
-        
-        viewController = [self customTaskViewController:scheduledTask];
-    }
-    
+    viewController = [self customTaskViewController:nextTask];
     
     return viewController;
 }
 
-+ (id<ORKTask>)createTask: (APCScheduledTask*) __unused scheduledTask
++ (id<ORKTask>)createOrkTask: (APCTask*) __unused scheduledTask
 {
     //To be overridden by child classes
     return  nil;
