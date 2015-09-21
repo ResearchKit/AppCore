@@ -34,7 +34,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class APCSchedule, APCScheduledTask;
+@class APCResult;
 
 @interface APCTask : NSManagedObject
 
@@ -55,20 +55,14 @@
 @property (nonatomic, retain) NSString * taskTitle;
 @property (nonatomic, retain) NSNumber * taskVersionNumber;
 @property (nonatomic, retain) NSDate * updatedAt;
-@property (nonatomic, retain) NSSet *scheduledTasks;
-@property (nonatomic, retain) NSSet *schedules;
+@property (nonatomic, retain) NSSet *results;
 @end
 
 @interface APCTask (CoreDataGeneratedAccessors)
 
-- (void)addScheduledTasksObject:(APCScheduledTask *)value;
-- (void)removeScheduledTasksObject:(APCScheduledTask *)value;
-- (void)addScheduledTasks:(NSSet *)values;
-- (void)removeScheduledTasks:(NSSet *)values;
-
-- (void)addSchedulesObject:(APCSchedule *)value;
-- (void)removeSchedulesObject:(APCSchedule *)value;
-- (void)addSchedules:(NSSet *)values;
-- (void)removeSchedules:(NSSet *)values;
+- (void)addResultsObject:(APCResult *)value;
+- (void)removeResultsObject:(APCResult *)value;
+- (void)addResults:(NSSet *)values;
+- (void)removeResults:(NSSet *)values;
 
 @end

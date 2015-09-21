@@ -47,6 +47,6 @@
 @dynamic taskRunID;
 @dynamic updatedAt;
 @dynamic uploaded;
-@dynamic scheduledTask;
+@dynamic task;
 
 @end

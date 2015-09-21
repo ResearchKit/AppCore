@@ -91,13 +91,13 @@
             }
             else
             {
-                BOOL thisEntryRepresentsACompletedOneTimeTask = [self analyzeEntryForCompletedOneTimeTask: entry];
+//                BOOL thisEntryRepresentsACompletedOneTimeTask = [self analyzeEntryForCompletedOneTimeTask: entry];
 
-                if (thisEntryRepresentsACompletedOneTimeTask)
-                {
-                    atLeastOneTaskIsACompletedOneTimeTask = YES;
-                    break;
-                }
+//                if (thisEntryRepresentsACompletedOneTimeTask)
+//                {
+//                    atLeastOneTaskIsACompletedOneTimeTask = YES;
+//                    break;
+//                }
             }
         }
 
@@ -115,45 +115,45 @@
     self.schedulesWithoutCompletedOneTimeTasks = [NSSet setWithSet: schedulesWithoutCompletedOneTimeTasks];
 }
 
-- (BOOL) analyzeEntryForCompletedOneTimeTask: (APCScheduleTaskMapEntry *) entry
-{
-    BOOL isCompletedOneTimeTask = NO;
-
-    if (! entry.schedule.isOneTimeSchedule)
-    {
-        // It's not a one-time schedule, so don't worry about it.
-    }
-    else
-    {
-        /*
-         The "scheduled tasks" are the user's data records for a given task:
-         a task that was scheduled on (and usually completed on) a particular
-         date.
-         */
-        for (APCScheduledTask *maybeCompletedTask in entry.task.scheduledTasks)
-        {
-            if (maybeCompletedTask.generatedSchedule == entry.schedule)
-            {
-                if (maybeCompletedTask.completed.boolValue)
-                {
-                    isCompletedOneTimeTask = YES;
-                }
-                else
-                {
-                    // One-time task, yes.  Completed, no.  No problem.
-                }
-
-                break;
-            }
-            else
-            {
-                // We don't care about old schedules, and we know we only received
-                // a list of the most recent schedules.  Look at the next scheduledTask.
-            }
-        }
-    }
-
-    return isCompletedOneTimeTask;
-}
+//- (BOOL) analyzeEntryForCompletedOneTimeTask: (APCScheduleTaskMapEntry *) entry
+//{
+//    BOOL isCompletedOneTimeTask = NO;
+//
+//    if (! entry.schedule.isOneTimeSchedule)
+//    {
+//        // It's not a one-time schedule, so don't worry about it.
+//    }
+//    else
+//    {
+//        /*
+//         The "scheduled tasks" are the user's data records for a given task:
+//         a task that was scheduled on (and usually completed on) a particular
+//         date.
+//         */
+//        for (APCScheduledTask *maybeCompletedTask in entry.task.scheduledTasks)
+//        {
+//            if (maybeCompletedTask.generatedSchedule == entry.schedule)
+//            {
+//                if (maybeCompletedTask.completed.boolValue)
+//                {
+//                    isCompletedOneTimeTask = YES;
+//                }
+//                else
+//                {
+//                    // One-time task, yes.  Completed, no.  No problem.
+//                }
+//
+//                break;
+//            }
+//            else
+//            {
+//                // We don't care about old schedules, and we know we only received
+//                // a list of the most recent schedules.  Look at the next scheduledTask.
+//            }
+//        }
+//    }
+//
+//    return isCompletedOneTimeTask;
+//}
 
 @end

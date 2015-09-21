@@ -128,9 +128,9 @@ typedef void (^APCSchedulerCallbackForFetchingCount) (NSUInteger count, NSError 
                                     inContext: (NSManagedObjectContext *) context
                                returningError: (NSError * __autoreleasing *) errorToReturn;
 
-- (NSArray *) tasksScheduledForDayOfDate: (NSDate *) date
-                            usingContext: (NSManagedObjectContext *) context
-                          returningError: (NSError * __autoreleasing *) errorToReturn;
+//- (NSArray *) tasksScheduledForDayOfDate: (NSDate *) date
+//                            usingContext: (NSManagedObjectContext *) context
+//                          returningError: (NSError * __autoreleasing *) errorToReturn;
 
 
 
@@ -138,24 +138,25 @@ typedef void (^APCSchedulerCallbackForFetchingCount) (NSUInteger count, NSError 
 #pragma mark - Importing
 // ---------------------------------------------------------
 
-- (void) fetchTasksAndSchedulesFromServerAndThenUseThisQueue: (NSOperationQueue *) queue
-                                            toDoThisWhenDone: (APCSchedulerCallbackForFetchAndLoadOperations) callbackBlock;
+//- (void) fetchTasksAndSchedulesFromServerAndThenUseThisQueue: (NSOperationQueue *) queue
+//                                            toDoThisWhenDone: (APCSchedulerCallbackForFetchAndLoadOperations) callbackBlock;
+//
+//- (void) loadTasksAndSchedulesFromDiskAndThenUseThisQueue: (NSOperationQueue *) queue
+//                                         toDoThisWhenDone: (APCSchedulerCallbackForFetchAndLoadOperations) callbackBlock;
+//
+//- (void) loadTasksAndSchedulesFromDiskFileNamed: (NSString *) fileNameWithExtension
+//                                       inBundle: (NSBundle *) bundle
+//                                assigningSource: (APCScheduleSource) scheduleSource
+//                            andThenUseThisQueue: (NSOperationQueue *) queue
+//                               toDoThisWhenDone: (APCSchedulerCallbackForFetchAndLoadOperations) callbackBlock;
+//
+//- (void) importScheduleFromDictionary: (NSDictionary *) scheduleContainingTasks
+//                      assigningSource: (APCScheduleSource) scheduleSource
+//                  andThenUseThisQueue: (NSOperationQueue *) queue
+//                     toDoThisWhenDone: (APCSchedulerCallbackForFetchAndLoadOperations) callbackBlock;
 
-- (void) loadTasksAndSchedulesFromDiskAndThenUseThisQueue: (NSOperationQueue *) queue
-                                         toDoThisWhenDone: (APCSchedulerCallbackForFetchAndLoadOperations) callbackBlock;
-
-- (void) loadTasksAndSchedulesFromDiskFileNamed: (NSString *) fileNameWithExtension
-                                       inBundle: (NSBundle *) bundle
-                                assigningSource: (APCScheduleSource) scheduleSource
-                            andThenUseThisQueue: (NSOperationQueue *) queue
-                               toDoThisWhenDone: (APCSchedulerCallbackForFetchAndLoadOperations) callbackBlock;
-
-- (void) importScheduleFromDictionary: (NSDictionary *) scheduleContainingTasks
-                      assigningSource: (APCScheduleSource) scheduleSource
-                  andThenUseThisQueue: (NSOperationQueue *) queue
-                     toDoThisWhenDone: (APCSchedulerCallbackForFetchAndLoadOperations) callbackBlock;
-
-
+- (void) fetchTasksFromServerAndThenUseThisQueue: (NSOperationQueue *) queue
+                                toDoThisWhenDone: (APCSchedulerCallbackForFetchAndLoadOperations) callbackBlock;
 
 // ---------------------------------------------------------
 #pragma mark - Converting PotentialTasks to ScheduledTasks

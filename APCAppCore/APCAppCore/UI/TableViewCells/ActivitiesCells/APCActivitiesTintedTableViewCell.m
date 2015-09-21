@@ -155,11 +155,11 @@ static CGFloat const kTitleLabelCenterYConstant = 10.5f;
     {
         BOOL isServerTask = NO;
 
-        if (taskGroup.task.schedules.count)
-        {
-            APCSchedule *anySchedule = taskGroup.task.schedules.anyObject;
-            isServerTask = ((APCScheduleSource) anySchedule.scheduleSource.integerValue) == APCScheduleSourceServer;
-        }
+//        if (taskGroup.task.schedules.count)
+//        {
+//            APCSchedule *anySchedule = taskGroup.task.schedules.anyObject;
+//            isServerTask = ((APCScheduleSource) anySchedule.scheduleSource.integerValue) == APCScheduleSourceServer;
+//        }
 
         if (isServerTask)
         {

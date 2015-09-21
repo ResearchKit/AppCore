@@ -48,41 +48,7 @@
         <attribute name="taskRunID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="updatedAt" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="uploaded" optional="YES" attributeType="Boolean" syncable="YES"/>
-        <relationship name="scheduledTask" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="APCScheduledTask" inverseName="results" inverseEntity="APCScheduledTask" syncable="YES"/>
-    </entity>
-    <entity name="APCSchedule" representedClassName="APCSchedule" syncable="YES">
-        <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="delay" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="effectiveEndDate" optional="YES" attributeType="Date" indexed="YES" syncable="YES"/>
-        <attribute name="effectiveStartDate" optional="YES" attributeType="Date" indexed="YES" syncable="YES"/>
-        <attribute name="endsOn" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="expires" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="inActive" optional="YES" attributeType="Boolean" syncable="YES"/>
-        <attribute name="interval" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="maxCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <attribute name="notes" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="reminderMessage" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="reminderOffset" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="scheduleSource" optional="YES" attributeType="Integer 32" syncable="YES"/>
-        <attribute name="scheduleString" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="scheduleType" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="shouldRemind" optional="YES" attributeType="Boolean" syncable="YES"/>
-        <attribute name="startsOn" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="timesOfDay" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="updatedAt" optional="YES" attributeType="Date" syncable="YES"/>
-        <relationship name="scheduledTasks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="APCScheduledTask" inverseName="generatedSchedule" inverseEntity="APCScheduledTask" syncable="YES"/>
-        <relationship name="tasks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="APCTask" inverseName="schedules" inverseEntity="APCTask" syncable="YES"/>
-    </entity>
-    <entity name="APCScheduledTask" representedClassName="APCScheduledTask" syncable="YES">
-        <attribute name="completed" optional="YES" attributeType="Boolean" syncable="YES"/>
-        <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="endOn" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="startOn" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="updatedAt" optional="YES" attributeType="Date" syncable="YES"/>
-        <relationship name="generatedSchedule" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="APCSchedule" inverseName="scheduledTasks" inverseEntity="APCSchedule" syncable="YES"/>
-        <relationship name="results" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="APCResult" inverseName="scheduledTask" inverseEntity="APCResult" syncable="YES"/>
-        <relationship name="task" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="APCTask" inverseName="scheduledTasks" inverseEntity="APCTask" syncable="YES"/>
+        <relationship name="task" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="APCTask" inverseName="results" inverseEntity="APCTask" syncable="YES"/>
     </entity>
     <entity name="APCStoredUserData" representedClassName="APCStoredUserData" syncable="YES">
         <attribute name="allowContact" optional="YES" attributeType="Boolean" syncable="YES"/>
@@ -130,8 +96,7 @@
         <attribute name="taskTitle" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="taskVersionNumber" optional="YES" attributeType="Integer 32" defaultValueString="0" indexed="YES" syncable="YES"/>
         <attribute name="updatedAt" optional="YES" attributeType="Date" syncable="YES"/>
-        <relationship name="scheduledTasks" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="APCScheduledTask" inverseName="task" inverseEntity="APCScheduledTask" syncable="YES"/>
-        <relationship name="schedules" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="APCSchedule" inverseName="tasks" inverseEntity="APCSchedule" syncable="YES"/>
+        <relationship name="results" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="APCResult" inverseName="task" inverseEntity="APCResult" syncable="YES"/>
     </entity>
     <elements>
         <element name="APCDBStatus" positionX="-1341" positionY="72" width="171" height="58"/>
@@ -141,10 +106,8 @@
         <element name="APCMedTrackerPossibleDosage" positionX="-1269" positionY="758" width="216" height="73"/>
         <element name="APCMedTrackerPrescription" positionX="-938" positionY="764" width="218" height="178"/>
         <element name="APCMedTrackerPrescriptionColor" positionX="-666" positionY="729" width="207" height="133"/>
-        <element name="APCResult" positionX="-1359" positionY="297" width="171" height="208"/>
-        <element name="APCSchedule" positionX="-594" positionY="71" width="207" height="358"/>
-        <element name="APCScheduledTask" positionX="-1125" positionY="297" width="171" height="178"/>
+        <element name="APCResult" positionX="-1359" positionY="297" width="171" height="210"/>
         <element name="APCStoredUserData" positionX="-1593" positionY="72" width="200" height="435"/>
-        <element name="APCTask" positionX="-873" positionY="71" width="207" height="330"/>
+        <element name="APCTask" positionX="-873" positionY="71" width="207" height="315"/>
     </elements>
 </model>

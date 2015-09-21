@@ -282,7 +282,7 @@ static NSString * const kAPCJSONFileKeyTasks     = @"tasks";
     [self removeSqliteStore];
     [self setUpPersistentStore];
     APCAppDelegate * appDelegate = [APCAppDelegate sharedAppDelegate];
-    [appDelegate.scheduler loadTasksAndSchedulesFromDiskAndThenUseThisQueue: nil toDoThisWhenDone: nil];
+//    [appDelegate.scheduler loadTasksAndSchedulesFromDiskAndThenUseThisQueue: nil toDoThisWhenDone: nil];
 }
 
 

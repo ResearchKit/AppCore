@@ -185,24 +185,24 @@ static NSString * const kTaskFileNameKey = @"taskFileName";
     self.taskDescription = [NSKeyedArchiver archivedDataWithRootObject:rkTask];
 }
 
-- (APCSchedule *) mostRecentSchedule
-{
-    NSString *nameOfStartDateField = NSStringFromSelector (@selector (startsOn));
-    NSArray *sortedSchedules = [self.schedules sortedArrayUsingDescriptors: @[[NSSortDescriptor sortDescriptorWithKey: nameOfStartDateField ascending: NO]]];
-
-    APCSchedule *newestSchedule = nil;
-
-    for (APCSchedule *schedule in sortedSchedules)
-    {
-        if (! schedule.objectID.isTemporaryID)
-        {
-            newestSchedule = schedule;
-            break;
-        }
-    }
-
-    return newestSchedule;
-}
+//- (APCSchedule *) mostRecentSchedule
+//{
+//    NSString *nameOfStartDateField = NSStringFromSelector (@selector (startsOn));
+//    NSArray *sortedSchedules = [self.schedules sortedArrayUsingDescriptors: @[[NSSortDescriptor sortDescriptorWithKey: nameOfStartDateField ascending: NO]]];
+//
+//    APCSchedule *newestSchedule = nil;
+//
+//    for (APCSchedule *schedule in sortedSchedules)
+//    {
+//        if (! schedule.objectID.isTemporaryID)
+//        {
+//            newestSchedule = schedule;
+//            break;
+//        }
+//    }
+//
+//    return newestSchedule;
+//}
 
 
 

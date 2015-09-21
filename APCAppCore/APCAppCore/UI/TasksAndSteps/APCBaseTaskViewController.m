@@ -454,12 +454,12 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
                         usingContext: (NSManagedObjectContext *) context
 {
     NSManagedObjectID * objectID = [APCResult storeTaskResult:self.result inContext:context];
-    APCScheduledTask *localContextScheduledTask = (APCScheduledTask *)[context objectWithID:self.scheduledTask.objectID];
+    APCTask *localContextScheduledTask = (APCTask *)[context objectWithID:self.scheduledTask.objectID];
     
     APCResult * result = (APCResult*)[context objectWithID:objectID];
     result.archiveFilename = fileName;
     result.resultSummary = resultSummary;
-    result.scheduledTask = localContextScheduledTask;
+    result.task = localContextScheduledTask;
     
     NSError * resultSaveError = nil;
     BOOL saveSuccess = [result saveToPersistentStore:&resultSaveError];

@@ -254,8 +254,7 @@ static NSDateFormatter *debugDateFormatter = nil;
         [dates appendFormat: @"%@, ", scheduledTask.updatedAt];
     }
 
-    result = [NSString stringWithFormat: @"TaskGroup: %@ | %@ | %@ | vcToShow: %@ | %@ | expires today: %@ | tasks: %@ required, %@ completed, %@ remaining, %@ gratuitous completed, most recent completed on %@",
-              NSStringShortFromAPCScheduleSourceAsNumber ([self.task.schedules.anyObject scheduleSource]),
+    result = [NSString stringWithFormat: @"TaskGroup: %@ | %@ | vcToShow: %@ | %@ | expires today: %@ | tasks: %@ required, %@ completed, %@ remaining, %@ gratuitous completed, most recent completed on %@",
               self.task.taskTitle,
               self.task.taskID,
               self.task.taskClassName,

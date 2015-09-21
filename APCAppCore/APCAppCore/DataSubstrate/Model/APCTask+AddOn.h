@@ -72,11 +72,4 @@
  */
 @property (nonatomic, strong) id<ORKTask> rkTask;
 
-/**
- Sorts my schedules by their -startsOn field, and returns the first
- resulting object.  Ignores temporary schedules (i.e., schedules in
- the process of being imported).
- */
-@property (readonly) APCSchedule *mostRecentSchedule;
-
 @end

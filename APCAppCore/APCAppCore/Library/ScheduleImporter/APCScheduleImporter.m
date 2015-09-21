@@ -260,322 +260,322 @@ static NSArray *legalTimeSpecifierFormats = nil;
  Please see APCScheduleFilter, and each Filter subclass, for more information
  about how the filters work.
  */
-- (void) processSchedulesAndTasks: (NSArray *) arrayOfSchedulesAndTasks
-                       fromSource: (APCScheduleSource) scheduleSource
-                     usingContext: (NSManagedObjectContext *) context
-              scheduleQueryEngine: (id <APCScheduleQueryEngine>) queryEngine
-                       importDate: (NSDate *) importDate
-                   returningError: (NSError * __autoreleasing *) errorToReturn
-{
-    // -----------------------------------------------------
-    // Setup
-    // -----------------------------------------------------
-
-    NSDate *today = importDate;
-    NSDate *relativeTimeBeforeStarting = [NSDate date];
-    NSMutableString *printout = nil;
-    NSError *finalErrorFromThisMethod = nil;
-    NSError *errorFetchingCurrentSchedules = nil;
-    APCScheduleDebugPrinter *printer = nil;
-    NSString *sourceName = NSStringFromAPCScheduleSource (scheduleSource);
-
-#if DEBUG
-    if (kAPCShowDebugPrintouts)
-    {
-        printout = [NSMutableString new];
-        printer = [APCScheduleDebugPrinter new];
-    }
-#endif
-
-
-    // -----------------------------------------------------
-    // Query and Import
-    // -----------------------------------------------------
-
-    NSArray *activeScheduleArray = [queryEngine querySchedulesActiveOnDayOfDate: today
-                                                                     fromSource: APCScheduleSourceAll
-                                                                      inContext: context
-                                                                 returningError: & errorFetchingCurrentSchedules];
-
-    NSArray *incomingScheduleArray = [self createSchedulesAndUpdateTasksFromIncomingData: arrayOfSchedulesAndTasks
-                                                                               forSource: scheduleSource
-                                                                               inContext: context
-                                                                         usingImportDate: importDate];
-
-    NSMutableSet *activeSchedules   = [NSMutableSet setWithArray: activeScheduleArray];
-    NSMutableSet *incomingSchedules = [NSMutableSet setWithArray: incomingScheduleArray];
-
-    if (activeScheduleArray == nil)
-    {
-        finalErrorFromThisMethod = errorFetchingCurrentSchedules;
-    }
-
-
-    // -----------------------------------------------------
-    // Filters and metadata
-    // -----------------------------------------------------
-
-    NSSet *incomingTaskIds = [APCSchedule extractTaskIdsFromSchedules: incomingSchedules];
-
-    APCScheduleTaskMap *activeScheduleMap    = [[APCScheduleTaskMap alloc] initWithSetOfSchedules: activeSchedules];
-    APCScheduleTaskMap *incomingScheduleMap  = [[APCScheduleTaskMap alloc] initWithSetOfSchedules: incomingSchedules];
-    APCScheduleTaskMap *recentScheduleMap    = [self queryMostRecentOwnersForTaskIds: incomingTaskIds usingContext: context];
-
-    APCUniqueTaskIdFilter         *incomingSchedUniqueTaskFilter            = [APCUniqueTaskIdFilter new];
-    APCExistingTaskFilter         *incomingSchedExistingTaskFilter          = [APCExistingTaskFilter new];
-    APCCompletedOneTimeTaskFilter *incomingSchedCompletedOneTimeTaskFilter  = [APCCompletedOneTimeTaskFilter new];
-    APCMatchingSourceFilter       *incomingSchedSameSourceFilter            = [APCMatchingSourceFilter new];
-    APCScheduleInMapFilter        *incomingSchedTasksAreActiveFilter        = [APCScheduleInMapFilter new];
-    APCMatchingScheduleFilter     *incomingSchedIsIdenticalFilter           = [APCMatchingScheduleFilter new];
-    APCScheduleSourceFilter       *incomingSchedFromServerFilter            = [APCScheduleSourceFilter new];
-    APCScheduleInMapFilter        *incomingSchedServerActiveFilter          = [APCScheduleInMapFilter new];
-
-    APCScheduleSourceFilter       *activeSchedFromThisSourceFilter          = [APCScheduleSourceFilter new];
-    APCMatchingScheduleFilter     *activeSchedIdenticalToIncomingFilter     = [APCMatchingScheduleFilter new];
-    APCScheduleInMapFilter        *activeSchedWithRefreshedTasksFilter      = [APCScheduleInMapFilter new];
-    APCScheduleStartDateFilter    *activeSchedButSupersededDateFilter       = [APCScheduleStartDateFilter new];
-    APCScheduleStartDateFilter    *activeSchedTaskNotRefreshedDateFilter    = [APCScheduleStartDateFilter new];
-    APCScheduleInMapFilter        *activeSchedOvertakenByIncomingFilter     = [APCScheduleInMapFilter new];
-    APCScheduleStartDateFilter    *activeSchedOvertakenDateFilter           = [APCScheduleStartDateFilter new];
-
-
-
-    // -----------------------------------------------------
-    // Analyze
-    // -----------------------------------------------------
-
-    /*
-     This section implements the decision tree shown in the attached PDF file,
-     ScheduleImportProcess.pdf, as described in the method header.  When you
-     read this, it might help to split the screen, with the flow chart on one
-     side and this code on the other, so you can see how each filter call maps
-     to a decision in the tree.
-
-     The basic plan:  for any given input someData,
-     
-     -  use filter A to split someData using <helper>     <-- input to filter A
-     -  use filter B to split [A passed] using <helper>   <-- SOME of the output from A:  stuff that passed the A filter
-     -  use filter C to split [B passed] using <helper>
-     -  use filter D to split [A failed] using <helper>   <-- the REST of the output from A:  stuff that did NOT pass the A filter
-     -  use filter E to split [D passed] using <helper>
-     -  etc.
-     
-     Thus the outputs from every filter become the inputs for other filters,
-     until we decide whether to keep, delete, or modify the output from a
-     filter.  The next section shows those final actions.
-     */
-
-    //
-    // Decide what to do with incoming schedules.
-    //
-
-    [incomingSchedUniqueTaskFilter            split: incomingSchedules];
-    [incomingSchedExistingTaskFilter          split: incomingSchedUniqueTaskFilter.passed            withMap:    recentScheduleMap];
-    [incomingSchedCompletedOneTimeTaskFilter  split: incomingSchedExistingTaskFilter.passed          withMap:    recentScheduleMap];
-    [incomingSchedSameSourceFilter            split: incomingSchedCompletedOneTimeTaskFilter.failed  withMap:    recentScheduleMap];
-    [incomingSchedTasksAreActiveFilter        split: incomingSchedSameSourceFilter.passed            withMap:    activeScheduleMap];
-    [incomingSchedIsIdenticalFilter           split: incomingSchedTasksAreActiveFilter.passed        withMap:    activeScheduleMap];
-    [incomingSchedFromServerFilter            split: incomingSchedSameSourceFilter.failed            withSource: APCScheduleSourceServer];
-    [incomingSchedServerActiveFilter          split: incomingSchedFromServerFilter.passed            withMap:    activeScheduleMap];
-
-
-    //
-    // Decide what to do with active schedules.
-    //
-
-    APCScheduleTaskMap *incomingOverridingActiveMap = [[APCScheduleTaskMap alloc] initWithSetOfSchedules: incomingSchedServerActiveFilter.passed];
-
-    [activeSchedFromThisSourceFilter        split: activeSchedules                              withSource: scheduleSource];
-    [activeSchedWithRefreshedTasksFilter    split: activeSchedFromThisSourceFilter.passed       withMap:    incomingScheduleMap];
-    [activeSchedIdenticalToIncomingFilter   split: activeSchedWithRefreshedTasksFilter.passed   withMap:    incomingScheduleMap];
-    [activeSchedButSupersededDateFilter     split: activeSchedIdenticalToIncomingFilter.failed  withDate:   today];
-    [activeSchedTaskNotRefreshedDateFilter  split: activeSchedWithRefreshedTasksFilter.failed   withDate:   today];
-    [activeSchedOvertakenByIncomingFilter   split: activeSchedFromThisSourceFilter.failed       withMap:    incomingOverridingActiveMap];
-    [activeSchedOvertakenDateFilter         split: activeSchedOvertakenByIncomingFilter.passed  withDate:   today];
-
-
-
-    // -----------------------------------------------------
-    // Print the analysis so far, before we change some of those objects
-    // -----------------------------------------------------
-    {
-        /*
-         The above curly brace is just so I can collapse this section in Xcode.
-         */
-
-        [printout appendFormat:
-         @"\n\n======================= Importing new batch of schedules from [%@] starting at [%@] =======================\n\n",
-         sourceName,
-         [printer.class stringWithMillisecondsFromDate: relativeTimeBeforeStarting]];
-
-
-        [printout appendString: @"--------\nAnalyzing incoming schedules\n--------\n"];
-
-        [printer printSetOfSchedules: incomingSchedules                               intoMutableString: printout  withLabel: @"Incoming schedules"];
-        [printer printSetOfSchedules: incomingSchedUniqueTaskFilter.passed            intoMutableString: printout  withLabel: @"...without duplicate task IDs (we'll keep processing these)"];
-        [printer printSetOfSchedules: incomingSchedUniqueTaskFilter.failed            intoMutableString: printout  withLabel: @"...with duplicate task IDs (we'll delete these)"];
-        [printer printSetOfSchedules: incomingSchedExistingTaskFilter.failed          intoMutableString: printout  withLabel: @"...with brand-new tasks"];
-        [printer printSetOfSchedules: incomingSchedExistingTaskFilter.passed          intoMutableString: printout  withLabel: @"...with existing tasks"];
-        [printer printSetOfSchedules: incomingSchedCompletedOneTimeTaskFilter.passed  intoMutableString: printout  withLabel: @"...for existing, completed, one-time tasks (we'll delete these)"];
-        [printer printSetOfSchedules: incomingSchedCompletedOneTimeTaskFilter.failed  intoMutableString: printout  withLabel: @"...for not-yet-completed tasks (we'll keep processing these)"];
-        [printer printSetOfSchedules: incomingSchedSameSourceFilter.passed            intoMutableString: printout  withLabel: @"...matching existing sources for not-yet-completed tasks"];
-        [printer printSetOfSchedules: incomingSchedSameSourceFilter.failed            intoMutableString: printout  withLabel: @"...NOT matching existing sources for not-yet-completed tasks"];
-        [printer printSetOfSchedules: incomingSchedTasksAreActiveFilter.passed        intoMutableString: printout  withLabel: @"...(matching existing sources, not yet completed) for active tasks"];
-        [printer printSetOfSchedules: incomingSchedTasksAreActiveFilter.failed        intoMutableString: printout  withLabel: @"...(matching existing sources, not yet completed) for inactive tasks"];
-        [printer printSetOfSchedules: incomingSchedIsIdenticalFilter.passed           intoMutableString: printout  withLabel: @"...which duplicate active schedules (we'll delete these)"];
-        [printer printSetOfSchedules: incomingSchedIsIdenticalFilter.failed           intoMutableString: printout  withLabel: @"...which don't duplicate active schedules (we'll keep these)"];
-        [printer printSetOfSchedules: incomingSchedFromServerFilter.passed            intoMutableString: printout  withLabel: @"...with new source for old task, from server"];
-        [printer printSetOfSchedules: incomingSchedFromServerFilter.failed            intoMutableString: printout  withLabel: @"...with new source for old task, not from server (we'll delete these)"];
-        [printer printSetOfSchedules: incomingSchedServerActiveFilter.passed          intoMutableString: printout  withLabel: @"...trying to control active tasks"];
-        [printer printSetOfSchedules: incomingSchedServerActiveFilter.failed          intoMutableString: printout  withLabel: @"...NOT trying to control active tasks"];
-
-
-        [printout appendString: @"--------\nAnalyzing active schedules\n--------\n"];
-
-        [printer printSetOfSchedules: activeSchedules                                   intoMutableString: printout  withLabel: @"Active schedules"];
-        [printer printSetOfSchedules: activeSchedFromThisSourceFilter.passed            intoMutableString: printout  withLabel: [NSString stringWithFormat: @"...from this source, %@", sourceName]];
-        [printer printSetOfSchedules: activeSchedFromThisSourceFilter.failed            intoMutableString: printout  withLabel: @"...from other sources"];
-        [printer printSetOfSchedules: activeSchedWithRefreshedTasksFilter.passed        intoMutableString: printout  withLabel: @"...from this source with new schedules"];
-        [printer printSetOfSchedules: activeSchedWithRefreshedTasksFilter.failed        intoMutableString: printout  withLabel: @"...from this source without new schedules"];
-        [printer printSetOfSchedules: activeSchedIdenticalToIncomingFilter.passed       intoMutableString: printout  withLabel: @"...identical to new schedules"];
-        [printer printSetOfSchedules: activeSchedIdenticalToIncomingFilter.failed       intoMutableString: printout  withLabel: @"...different from new schedules"];
-        [printer printSetOfSchedules: activeSchedButSupersededDateFilter.before         intoMutableString: printout  withLabel: @"...superseded, downloaded in the past"];
-        [printer printSetOfSchedules: activeSchedButSupersededDateFilter.during         intoMutableString: printout  withLabel: @"...superseded, downloaded sometime today (we'll delete these)"];
-        [printer printSetOfSchedules: activeSchedButSupersededDateFilter.after          intoMutableString: printout  withLabel: @"...superseded, downloaded in the future"];
-        [printer printSetOfSchedules: activeSchedTaskNotRefreshedDateFilter.before      intoMutableString: printout  withLabel: @"...not refreshed, downloaded in the past"];
-        [printer printSetOfSchedules: activeSchedTaskNotRefreshedDateFilter.during      intoMutableString: printout  withLabel: @"...not refreshed, downloaded sometime today (we'll delete these)"];
-        [printer printSetOfSchedules: activeSchedTaskNotRefreshedDateFilter.after       intoMutableString: printout  withLabel: @"...not refreshed, downloaded in the future"];
-        [printer printSetOfSchedules: activeSchedOvertakenByIncomingFilter.passed       intoMutableString: printout  withLabel: @"...from other sources that ARE being overtaken by incoming"];
-        [printer printSetOfSchedules: activeSchedOvertakenByIncomingFilter.failed       intoMutableString: printout  withLabel: @"...from other sources NOT being overtaken by incoming"];
-        [printer printSetOfSchedules: activeSchedOvertakenDateFilter.before             intoMutableString: printout  withLabel: @"...being overtaken, downloaded in the past (we'll terminate these)"];
-        [printer printSetOfSchedules: activeSchedOvertakenDateFilter.during             intoMutableString: printout  withLabel: @"...being overtaken, downloaded sometime today (we'll delete these)"];
-        [printer printSetOfSchedules: activeSchedOvertakenDateFilter.after              intoMutableString: printout  withLabel: @"...being overtaken, downloaded in the future (we'll delete these)"];
-    }
-
-
-    // -----------------------------------------------------
-    // Do it
-    // -----------------------------------------------------
-
-    /*
-     By the time we get here, we should have:
-     - stuff to leave as-is:  currently running and OK that way, or newly imported and accepted
-     - stuff to delete:       imported earlier today; or illegal incoming stuff
-     - stuff to terminate:    previous schedules for the same tasks
-     */
-
-    [self terminateSchedules: activeSchedButSupersededDateFilter.before                 asOfDate: today.dayBefore];
-    [self terminateSchedules: activeSchedTaskNotRefreshedDateFilter.before              asOfDate: today.dayBefore];
-    [self terminateSchedules: activeSchedOvertakenDateFilter.before                     asOfDate: today.dayBefore];
-
-    [self deleteSchedulesButNotTasks: incomingSchedUniqueTaskFilter.failed              inContext: context];
-    [self deleteSchedulesButNotTasks: incomingSchedCompletedOneTimeTaskFilter.passed    inContext: context];
-    [self deleteSchedulesButNotTasks: incomingSchedIsIdenticalFilter.passed             inContext: context];
-    [self deleteSchedulesButNotTasks: incomingSchedFromServerFilter.failed              inContext: context];
-
-    [self deleteSchedulesButNotTasks: activeSchedButSupersededDateFilter.during         inContext: context];
-    [self deleteSchedulesButNotTasks: activeSchedButSupersededDateFilter.after          inContext: context];
-    [self deleteSchedulesButNotTasks: activeSchedTaskNotRefreshedDateFilter.during      inContext: context];
-    [self deleteSchedulesButNotTasks: activeSchedTaskNotRefreshedDateFilter.after       inContext: context];
-    [self deleteSchedulesButNotTasks: activeSchedOvertakenDateFilter.during             inContext: context];
-    [self deleteSchedulesButNotTasks: activeSchedOvertakenDateFilter.after              inContext: context];
-
-    /*
-     These arrays contain the sets of schedules we choose not to touch:  stuff
-     we want to keep running, and/or start running for the first time.  Putting
-     them in arrays is just a debugging technique:  we can click the filter
-     name in Xcode, and let Xcode's highlighting help us make sure we're
-     handling every output from every filter.
-     */
-    NSArray * __unused incomingSchedulesToKeep = @[
-                                                   incomingSchedExistingTaskFilter.failed,
-                                                   incomingSchedTasksAreActiveFilter.failed,
-                                                   incomingSchedIsIdenticalFilter.failed,
-                                                   incomingSchedServerActiveFilter.passed,
-                                                   incomingSchedServerActiveFilter.failed,
-                                                   ];
-
-    NSArray * __unused activeSchedulesToLeaveRunning = @[
-                                                         activeSchedIdenticalToIncomingFilter.passed,
-                                                         activeSchedOvertakenByIncomingFilter.failed,
-                                                         ];
-
-
-
-    // -----------------------------------------------------
-    // Save
-    // -----------------------------------------------------
-
-    if (! context.hasChanges)
-    {
-        [printout appendString: @"\n...which means, all told, there's nothing to save.  We're done.\n\n"];
-    }
-    else
-    {
-        NSManagedObject *anySaveableObject = incomingSchedules.anyObject;
-        NSError *errorSavingEverything = nil;
-        BOOL saved = [anySaveableObject saveToPersistentStore: & errorSavingEverything];
-
-        if (! saved)
-        {
-            finalErrorFromThisMethod = [NSError errorWithCode: APCErrorSavingEverythingCode
-                                                       domain: APCErrorDomain
-                                                failureReason: APCErrorSavingEverythingReason
-                                           recoverySuggestion: APCErrorSavingEverythingSuggestion
-                                                  nestedError: errorSavingEverything];
-        }
-    }
-
-
-
-    // -----------------------------------------------------
-    // Summarize and print
-    // -----------------------------------------------------
-
-    // Summarize
-    {
-        NSArray *currentSchedulesAfterImport = [queryEngine querySchedulesActiveOnDayOfDate: today
-                                                                                 fromSource: APCScheduleSourceAll
-                                                                                  inContext: context
-                                                                             returningError: & errorFetchingCurrentSchedules];
-
-        NSArray *allSchedulesInTheSystem = [context executeFetchRequest: [APCSchedule request] error: nil];
-
-        [printout appendString: @"--------\nResults\n--------\n"];
-
-        [printer printArrayOfSchedules: currentSchedulesAfterImport                     intoMutableString: printout  withLabel: @"Current schedules after import"];
-        [printer printArrayOfSchedules: allSchedulesInTheSystem                         intoMutableString: printout  withLabel: @"All schedules in the system"];
-        [printer printSetOfSchedules:   activeSchedButSupersededDateFilter.before       intoMutableString: printout  withLabel: @"Terminated schedules"];
-        [printer printSetOfSchedules:   activeSchedButSupersededDateFilter.before       intoMutableString: printout  withLabel: @"active schedules:  superseded"];
-        [printer printSetOfSchedules:   activeSchedTaskNotRefreshedDateFilter.before    intoMutableString: printout  withLabel: @"active schedules:  not refreshed by this import"];
-        [printer printSetOfSchedules:   activeSchedOvertakenDateFilter.before           intoMutableString: printout  withLabel: @"active schedules:  taken over by server"];
-
-
-
-        // Print
-        NSDate *relativeTimeAtEnd = [NSDate date];
-        NSTimeInterval totalTime = [relativeTimeAtEnd timeIntervalSinceDate: relativeTimeBeforeStarting];
-        [printout appendFormat: @"\nTotal time: %f seconds\n", totalTime];
-
-        [printout appendFormat:
-         @"======================= end batch of schedules from [%@] at [%@] =======================\n\n",
-         sourceName,
-         [printer.class stringWithMillisecondsFromDate: relativeTimeBeforeStarting]];
-        
-        NSLog (@"%@", printout);
-    }
-
-
-
-    // -----------------------------------------------------
-    // Done!
-    // -----------------------------------------------------
-
-    if (errorToReturn != nil)
-    {
-        * errorToReturn = finalErrorFromThisMethod;
-    }
-}
+//- (void) processSchedulesAndTasks: (NSArray *) arrayOfSchedulesAndTasks
+//                       fromSource: (APCScheduleSource) scheduleSource
+//                     usingContext: (NSManagedObjectContext *) context
+//              scheduleQueryEngine: (id <APCScheduleQueryEngine>) queryEngine
+//                       importDate: (NSDate *) importDate
+//                   returningError: (NSError * __autoreleasing *) errorToReturn
+//{
+//    // -----------------------------------------------------
+//    // Setup
+//    // -----------------------------------------------------
+//
+//    NSDate *today = importDate;
+//    NSDate *relativeTimeBeforeStarting = [NSDate date];
+//    NSMutableString *printout = nil;
+//    NSError *finalErrorFromThisMethod = nil;
+//    NSError *errorFetchingCurrentSchedules = nil;
+//    APCScheduleDebugPrinter *printer = nil;
+//    NSString *sourceName = NSStringFromAPCScheduleSource (scheduleSource);
+//
+//#if DEBUG
+//    if (kAPCShowDebugPrintouts)
+//    {
+//        printout = [NSMutableString new];
+//        printer = [APCScheduleDebugPrinter new];
+//    }
+//#endif
+//
+//
+//    // -----------------------------------------------------
+//    // Query and Import
+//    // -----------------------------------------------------
+//
+//    NSArray *activeScheduleArray = [queryEngine querySchedulesActiveOnDayOfDate: today
+//                                                                     fromSource: APCScheduleSourceAll
+//                                                                      inContext: context
+//                                                                 returningError: & errorFetchingCurrentSchedules];
+//
+//    NSArray *incomingScheduleArray = [self createSchedulesAndUpdateTasksFromIncomingData: arrayOfSchedulesAndTasks
+//                                                                               forSource: scheduleSource
+//                                                                               inContext: context
+//                                                                         usingImportDate: importDate];
+//
+//    NSMutableSet *activeSchedules   = [NSMutableSet setWithArray: activeScheduleArray];
+//    NSMutableSet *incomingSchedules = [NSMutableSet setWithArray: incomingScheduleArray];
+//
+//    if (activeScheduleArray == nil)
+//    {
+//        finalErrorFromThisMethod = errorFetchingCurrentSchedules;
+//    }
+//
+//
+//    // -----------------------------------------------------
+//    // Filters and metadata
+//    // -----------------------------------------------------
+//
+//    NSSet *incomingTaskIds = [APCSchedule extractTaskIdsFromSchedules: incomingSchedules];
+//
+//    APCScheduleTaskMap *activeScheduleMap    = [[APCScheduleTaskMap alloc] initWithSetOfSchedules: activeSchedules];
+//    APCScheduleTaskMap *incomingScheduleMap  = [[APCScheduleTaskMap alloc] initWithSetOfSchedules: incomingSchedules];
+//    APCScheduleTaskMap *recentScheduleMap    = [self queryMostRecentOwnersForTaskIds: incomingTaskIds usingContext: context];
+//
+//    APCUniqueTaskIdFilter         *incomingSchedUniqueTaskFilter            = [APCUniqueTaskIdFilter new];
+//    APCExistingTaskFilter         *incomingSchedExistingTaskFilter          = [APCExistingTaskFilter new];
+//    APCCompletedOneTimeTaskFilter *incomingSchedCompletedOneTimeTaskFilter  = [APCCompletedOneTimeTaskFilter new];
+//    APCMatchingSourceFilter       *incomingSchedSameSourceFilter            = [APCMatchingSourceFilter new];
+//    APCScheduleInMapFilter        *incomingSchedTasksAreActiveFilter        = [APCScheduleInMapFilter new];
+//    APCMatchingScheduleFilter     *incomingSchedIsIdenticalFilter           = [APCMatchingScheduleFilter new];
+//    APCScheduleSourceFilter       *incomingSchedFromServerFilter            = [APCScheduleSourceFilter new];
+//    APCScheduleInMapFilter        *incomingSchedServerActiveFilter          = [APCScheduleInMapFilter new];
+//
+//    APCScheduleSourceFilter       *activeSchedFromThisSourceFilter          = [APCScheduleSourceFilter new];
+//    APCMatchingScheduleFilter     *activeSchedIdenticalToIncomingFilter     = [APCMatchingScheduleFilter new];
+//    APCScheduleInMapFilter        *activeSchedWithRefreshedTasksFilter      = [APCScheduleInMapFilter new];
+//    APCScheduleStartDateFilter    *activeSchedButSupersededDateFilter       = [APCScheduleStartDateFilter new];
+//    APCScheduleStartDateFilter    *activeSchedTaskNotRefreshedDateFilter    = [APCScheduleStartDateFilter new];
+//    APCScheduleInMapFilter        *activeSchedOvertakenByIncomingFilter     = [APCScheduleInMapFilter new];
+//    APCScheduleStartDateFilter    *activeSchedOvertakenDateFilter           = [APCScheduleStartDateFilter new];
+//
+//
+//
+//    // -----------------------------------------------------
+//    // Analyze
+//    // -----------------------------------------------------
+//
+//    /*
+//     This section implements the decision tree shown in the attached PDF file,
+//     ScheduleImportProcess.pdf, as described in the method header.  When you
+//     read this, it might help to split the screen, with the flow chart on one
+//     side and this code on the other, so you can see how each filter call maps
+//     to a decision in the tree.
+//
+//     The basic plan:  for any given input someData,
+//     
+//     -  use filter A to split someData using <helper>     <-- input to filter A
+//     -  use filter B to split [A passed] using <helper>   <-- SOME of the output from A:  stuff that passed the A filter
+//     -  use filter C to split [B passed] using <helper>
+//     -  use filter D to split [A failed] using <helper>   <-- the REST of the output from A:  stuff that did NOT pass the A filter
+//     -  use filter E to split [D passed] using <helper>
+//     -  etc.
+//     
+//     Thus the outputs from every filter become the inputs for other filters,
+//     until we decide whether to keep, delete, or modify the output from a
+//     filter.  The next section shows those final actions.
+//     */
+//
+//    //
+//    // Decide what to do with incoming schedules.
+//    //
+//
+//    [incomingSchedUniqueTaskFilter            split: incomingSchedules];
+//    [incomingSchedExistingTaskFilter          split: incomingSchedUniqueTaskFilter.passed            withMap:    recentScheduleMap];
+//    [incomingSchedCompletedOneTimeTaskFilter  split: incomingSchedExistingTaskFilter.passed          withMap:    recentScheduleMap];
+//    [incomingSchedSameSourceFilter            split: incomingSchedCompletedOneTimeTaskFilter.failed  withMap:    recentScheduleMap];
+//    [incomingSchedTasksAreActiveFilter        split: incomingSchedSameSourceFilter.passed            withMap:    activeScheduleMap];
+//    [incomingSchedIsIdenticalFilter           split: incomingSchedTasksAreActiveFilter.passed        withMap:    activeScheduleMap];
+//    [incomingSchedFromServerFilter            split: incomingSchedSameSourceFilter.failed            withSource: APCScheduleSourceServer];
+//    [incomingSchedServerActiveFilter          split: incomingSchedFromServerFilter.passed            withMap:    activeScheduleMap];
+//
+//
+//    //
+//    // Decide what to do with active schedules.
+//    //
+//
+//    APCScheduleTaskMap *incomingOverridingActiveMap = [[APCScheduleTaskMap alloc] initWithSetOfSchedules: incomingSchedServerActiveFilter.passed];
+//
+//    [activeSchedFromThisSourceFilter        split: activeSchedules                              withSource: scheduleSource];
+//    [activeSchedWithRefreshedTasksFilter    split: activeSchedFromThisSourceFilter.passed       withMap:    incomingScheduleMap];
+//    [activeSchedIdenticalToIncomingFilter   split: activeSchedWithRefreshedTasksFilter.passed   withMap:    incomingScheduleMap];
+//    [activeSchedButSupersededDateFilter     split: activeSchedIdenticalToIncomingFilter.failed  withDate:   today];
+//    [activeSchedTaskNotRefreshedDateFilter  split: activeSchedWithRefreshedTasksFilter.failed   withDate:   today];
+//    [activeSchedOvertakenByIncomingFilter   split: activeSchedFromThisSourceFilter.failed       withMap:    incomingOverridingActiveMap];
+//    [activeSchedOvertakenDateFilter         split: activeSchedOvertakenByIncomingFilter.passed  withDate:   today];
+//
+//
+//
+//    // -----------------------------------------------------
+//    // Print the analysis so far, before we change some of those objects
+//    // -----------------------------------------------------
+//    {
+//        /*
+//         The above curly brace is just so I can collapse this section in Xcode.
+//         */
+//
+//        [printout appendFormat:
+//         @"\n\n======================= Importing new batch of schedules from [%@] starting at [%@] =======================\n\n",
+//         sourceName,
+//         [printer.class stringWithMillisecondsFromDate: relativeTimeBeforeStarting]];
+//
+//
+//        [printout appendString: @"--------\nAnalyzing incoming schedules\n--------\n"];
+//
+//        [printer printSetOfSchedules: incomingSchedules                               intoMutableString: printout  withLabel: @"Incoming schedules"];
+//        [printer printSetOfSchedules: incomingSchedUniqueTaskFilter.passed            intoMutableString: printout  withLabel: @"...without duplicate task IDs (we'll keep processing these)"];
+//        [printer printSetOfSchedules: incomingSchedUniqueTaskFilter.failed            intoMutableString: printout  withLabel: @"...with duplicate task IDs (we'll delete these)"];
+//        [printer printSetOfSchedules: incomingSchedExistingTaskFilter.failed          intoMutableString: printout  withLabel: @"...with brand-new tasks"];
+//        [printer printSetOfSchedules: incomingSchedExistingTaskFilter.passed          intoMutableString: printout  withLabel: @"...with existing tasks"];
+//        [printer printSetOfSchedules: incomingSchedCompletedOneTimeTaskFilter.passed  intoMutableString: printout  withLabel: @"...for existing, completed, one-time tasks (we'll delete these)"];
+//        [printer printSetOfSchedules: incomingSchedCompletedOneTimeTaskFilter.failed  intoMutableString: printout  withLabel: @"...for not-yet-completed tasks (we'll keep processing these)"];
+//        [printer printSetOfSchedules: incomingSchedSameSourceFilter.passed            intoMutableString: printout  withLabel: @"...matching existing sources for not-yet-completed tasks"];
+//        [printer printSetOfSchedules: incomingSchedSameSourceFilter.failed            intoMutableString: printout  withLabel: @"...NOT matching existing sources for not-yet-completed tasks"];
+//        [printer printSetOfSchedules: incomingSchedTasksAreActiveFilter.passed        intoMutableString: printout  withLabel: @"...(matching existing sources, not yet completed) for active tasks"];
+//        [printer printSetOfSchedules: incomingSchedTasksAreActiveFilter.failed        intoMutableString: printout  withLabel: @"...(matching existing sources, not yet completed) for inactive tasks"];
+//        [printer printSetOfSchedules: incomingSchedIsIdenticalFilter.passed           intoMutableString: printout  withLabel: @"...which duplicate active schedules (we'll delete these)"];
+//        [printer printSetOfSchedules: incomingSchedIsIdenticalFilter.failed           intoMutableString: printout  withLabel: @"...which don't duplicate active schedules (we'll keep these)"];
+//        [printer printSetOfSchedules: incomingSchedFromServerFilter.passed            intoMutableString: printout  withLabel: @"...with new source for old task, from server"];
+//        [printer printSetOfSchedules: incomingSchedFromServerFilter.failed            intoMutableString: printout  withLabel: @"...with new source for old task, not from server (we'll delete these)"];
+//        [printer printSetOfSchedules: incomingSchedServerActiveFilter.passed          intoMutableString: printout  withLabel: @"...trying to control active tasks"];
+//        [printer printSetOfSchedules: incomingSchedServerActiveFilter.failed          intoMutableString: printout  withLabel: @"...NOT trying to control active tasks"];
+//
+//
+//        [printout appendString: @"--------\nAnalyzing active schedules\n--------\n"];
+//
+//        [printer printSetOfSchedules: activeSchedules                                   intoMutableString: printout  withLabel: @"Active schedules"];
+//        [printer printSetOfSchedules: activeSchedFromThisSourceFilter.passed            intoMutableString: printout  withLabel: [NSString stringWithFormat: @"...from this source, %@", sourceName]];
+//        [printer printSetOfSchedules: activeSchedFromThisSourceFilter.failed            intoMutableString: printout  withLabel: @"...from other sources"];
+//        [printer printSetOfSchedules: activeSchedWithRefreshedTasksFilter.passed        intoMutableString: printout  withLabel: @"...from this source with new schedules"];
+//        [printer printSetOfSchedules: activeSchedWithRefreshedTasksFilter.failed        intoMutableString: printout  withLabel: @"...from this source without new schedules"];
+//        [printer printSetOfSchedules: activeSchedIdenticalToIncomingFilter.passed       intoMutableString: printout  withLabel: @"...identical to new schedules"];
+//        [printer printSetOfSchedules: activeSchedIdenticalToIncomingFilter.failed       intoMutableString: printout  withLabel: @"...different from new schedules"];
+//        [printer printSetOfSchedules: activeSchedButSupersededDateFilter.before         intoMutableString: printout  withLabel: @"...superseded, downloaded in the past"];
+//        [printer printSetOfSchedules: activeSchedButSupersededDateFilter.during         intoMutableString: printout  withLabel: @"...superseded, downloaded sometime today (we'll delete these)"];
+//        [printer printSetOfSchedules: activeSchedButSupersededDateFilter.after          intoMutableString: printout  withLabel: @"...superseded, downloaded in the future"];
+//        [printer printSetOfSchedules: activeSchedTaskNotRefreshedDateFilter.before      intoMutableString: printout  withLabel: @"...not refreshed, downloaded in the past"];
+//        [printer printSetOfSchedules: activeSchedTaskNotRefreshedDateFilter.during      intoMutableString: printout  withLabel: @"...not refreshed, downloaded sometime today (we'll delete these)"];
+//        [printer printSetOfSchedules: activeSchedTaskNotRefreshedDateFilter.after       intoMutableString: printout  withLabel: @"...not refreshed, downloaded in the future"];
+//        [printer printSetOfSchedules: activeSchedOvertakenByIncomingFilter.passed       intoMutableString: printout  withLabel: @"...from other sources that ARE being overtaken by incoming"];
+//        [printer printSetOfSchedules: activeSchedOvertakenByIncomingFilter.failed       intoMutableString: printout  withLabel: @"...from other sources NOT being overtaken by incoming"];
+//        [printer printSetOfSchedules: activeSchedOvertakenDateFilter.before             intoMutableString: printout  withLabel: @"...being overtaken, downloaded in the past (we'll terminate these)"];
+//        [printer printSetOfSchedules: activeSchedOvertakenDateFilter.during             intoMutableString: printout  withLabel: @"...being overtaken, downloaded sometime today (we'll delete these)"];
+//        [printer printSetOfSchedules: activeSchedOvertakenDateFilter.after              intoMutableString: printout  withLabel: @"...being overtaken, downloaded in the future (we'll delete these)"];
+//    }
+//
+//
+//    // -----------------------------------------------------
+//    // Do it
+//    // -----------------------------------------------------
+//
+//    /*
+//     By the time we get here, we should have:
+//     - stuff to leave as-is:  currently running and OK that way, or newly imported and accepted
+//     - stuff to delete:       imported earlier today; or illegal incoming stuff
+//     - stuff to terminate:    previous schedules for the same tasks
+//     */
+//
+//    [self terminateSchedules: activeSchedButSupersededDateFilter.before                 asOfDate: today.dayBefore];
+//    [self terminateSchedules: activeSchedTaskNotRefreshedDateFilter.before              asOfDate: today.dayBefore];
+//    [self terminateSchedules: activeSchedOvertakenDateFilter.before                     asOfDate: today.dayBefore];
+//
+//    [self deleteSchedulesButNotTasks: incomingSchedUniqueTaskFilter.failed              inContext: context];
+//    [self deleteSchedulesButNotTasks: incomingSchedCompletedOneTimeTaskFilter.passed    inContext: context];
+//    [self deleteSchedulesButNotTasks: incomingSchedIsIdenticalFilter.passed             inContext: context];
+//    [self deleteSchedulesButNotTasks: incomingSchedFromServerFilter.failed              inContext: context];
+//
+//    [self deleteSchedulesButNotTasks: activeSchedButSupersededDateFilter.during         inContext: context];
+//    [self deleteSchedulesButNotTasks: activeSchedButSupersededDateFilter.after          inContext: context];
+//    [self deleteSchedulesButNotTasks: activeSchedTaskNotRefreshedDateFilter.during      inContext: context];
+//    [self deleteSchedulesButNotTasks: activeSchedTaskNotRefreshedDateFilter.after       inContext: context];
+//    [self deleteSchedulesButNotTasks: activeSchedOvertakenDateFilter.during             inContext: context];
+//    [self deleteSchedulesButNotTasks: activeSchedOvertakenDateFilter.after              inContext: context];
+//
+//    /*
+//     These arrays contain the sets of schedules we choose not to touch:  stuff
+//     we want to keep running, and/or start running for the first time.  Putting
+//     them in arrays is just a debugging technique:  we can click the filter
+//     name in Xcode, and let Xcode's highlighting help us make sure we're
+//     handling every output from every filter.
+//     */
+//    NSArray * __unused incomingSchedulesToKeep = @[
+//                                                   incomingSchedExistingTaskFilter.failed,
+//                                                   incomingSchedTasksAreActiveFilter.failed,
+//                                                   incomingSchedIsIdenticalFilter.failed,
+//                                                   incomingSchedServerActiveFilter.passed,
+//                                                   incomingSchedServerActiveFilter.failed,
+//                                                   ];
+//
+//    NSArray * __unused activeSchedulesToLeaveRunning = @[
+//                                                         activeSchedIdenticalToIncomingFilter.passed,
+//                                                         activeSchedOvertakenByIncomingFilter.failed,
+//                                                         ];
+//
+//
+//
+//    // -----------------------------------------------------
+//    // Save
+//    // -----------------------------------------------------
+//
+//    if (! context.hasChanges)
+//    {
+//        [printout appendString: @"\n...which means, all told, there's nothing to save.  We're done.\n\n"];
+//    }
+//    else
+//    {
+//        NSManagedObject *anySaveableObject = incomingSchedules.anyObject;
+//        NSError *errorSavingEverything = nil;
+//        BOOL saved = [anySaveableObject saveToPersistentStore: & errorSavingEverything];
+//
+//        if (! saved)
+//        {
+//            finalErrorFromThisMethod = [NSError errorWithCode: APCErrorSavingEverythingCode
+//                                                       domain: APCErrorDomain
+//                                                failureReason: APCErrorSavingEverythingReason
+//                                           recoverySuggestion: APCErrorSavingEverythingSuggestion
+//                                                  nestedError: errorSavingEverything];
+//        }
+//    }
+//
+//
+//
+//    // -----------------------------------------------------
+//    // Summarize and print
+//    // -----------------------------------------------------
+//
+//    // Summarize
+//    {
+//        NSArray *currentSchedulesAfterImport = [queryEngine querySchedulesActiveOnDayOfDate: today
+//                                                                                 fromSource: APCScheduleSourceAll
+//                                                                                  inContext: context
+//                                                                             returningError: & errorFetchingCurrentSchedules];
+//
+//        NSArray *allSchedulesInTheSystem = [context executeFetchRequest: [APCSchedule request] error: nil];
+//
+//        [printout appendString: @"--------\nResults\n--------\n"];
+//
+//        [printer printArrayOfSchedules: currentSchedulesAfterImport                     intoMutableString: printout  withLabel: @"Current schedules after import"];
+//        [printer printArrayOfSchedules: allSchedulesInTheSystem                         intoMutableString: printout  withLabel: @"All schedules in the system"];
+//        [printer printSetOfSchedules:   activeSchedButSupersededDateFilter.before       intoMutableString: printout  withLabel: @"Terminated schedules"];
+//        [printer printSetOfSchedules:   activeSchedButSupersededDateFilter.before       intoMutableString: printout  withLabel: @"active schedules:  superseded"];
+//        [printer printSetOfSchedules:   activeSchedTaskNotRefreshedDateFilter.before    intoMutableString: printout  withLabel: @"active schedules:  not refreshed by this import"];
+//        [printer printSetOfSchedules:   activeSchedOvertakenDateFilter.before           intoMutableString: printout  withLabel: @"active schedules:  taken over by server"];
+//
+//
+//
+//        // Print
+//        NSDate *relativeTimeAtEnd = [NSDate date];
+//        NSTimeInterval totalTime = [relativeTimeAtEnd timeIntervalSinceDate: relativeTimeBeforeStarting];
+//        [printout appendFormat: @"\nTotal time: %f seconds\n", totalTime];
+//
+//        [printout appendFormat:
+//         @"======================= end batch of schedules from [%@] at [%@] =======================\n\n",
+//         sourceName,
+//         [printer.class stringWithMillisecondsFromDate: relativeTimeBeforeStarting]];
+//        
+//        NSLog (@"%@", printout);
+//    }
+//
+//
+//
+//    // -----------------------------------------------------
+//    // Done!
+//    // -----------------------------------------------------
+//
+//    if (errorToReturn != nil)
+//    {
+//        * errorToReturn = finalErrorFromThisMethod;
+//    }
+//}
 
 - (void) processTasks: (NSArray *) arrayOfTasks
            fromSource: (APCScheduleSource) scheduleSource
@@ -983,29 +983,29 @@ static NSArray *legalTimeSpecifierFormats = nil;
 #pragma mark - Queries
 // ---------------------------------------------------------
 
-- (APCScheduleTaskMap *) queryMostRecentOwnersForTaskIds: (NSSet *) taskIds
-                                            usingContext: (NSManagedObjectContext *) context
-{
-    APCScheduleTaskMap *map = [APCScheduleTaskMap new];
-
-    NSSet *tasks = [APCTask querySavedTasksWithTaskIds: taskIds usingContext: context];
-
-    for (APCTask *task in tasks)
-    {
-        if (task.taskID.length)
-        {
-            APCSchedule *mostRecentSchedule = task.mostRecentSchedule;
-
-            APCScheduleTaskMapEntry *entry = [[APCScheduleTaskMapEntry alloc] initWithTaskId: task.taskID
-                                                                                        task: task
-                                                                                    schedule: mostRecentSchedule];
-
-            [map setEntry: entry forTaskId: task.taskID];
-        }
-    }
-    
-    return map;
-}
+//- (APCScheduleTaskMap *) queryMostRecentOwnersForTaskIds: (NSSet *) taskIds
+//                                            usingContext: (NSManagedObjectContext *) context
+//{
+//    APCScheduleTaskMap *map = [APCScheduleTaskMap new];
+//
+//    NSSet *tasks = [APCTask querySavedTasksWithTaskIds: taskIds usingContext: context];
+//
+//    for (APCTask *task in tasks)
+//    {
+//        if (task.taskID.length)
+//        {
+//            APCSchedule *mostRecentSchedule = task.mostRecentSchedule;
+//
+//            APCScheduleTaskMapEntry *entry = [[APCScheduleTaskMapEntry alloc] initWithTaskId: task.taskID
+//                                                                                        task: task
+//                                                                                    schedule: mostRecentSchedule];
+//
+//            [map setEntry: entry forTaskId: task.taskID];
+//        }
+//    }
+//    
+//    return map;
+//}
 
 
 

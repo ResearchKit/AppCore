@@ -55,7 +55,6 @@
 @dynamic taskTitle;
 @dynamic taskVersionNumber;
 @dynamic updatedAt;
-@dynamic scheduledTasks;
-@dynamic schedules;
+@dynamic results;
 
 @end
