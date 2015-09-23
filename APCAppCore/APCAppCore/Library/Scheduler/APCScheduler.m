@@ -1108,11 +1108,20 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
     NSDate *midnightThisMorning = dateWhenThingsShouldBeVisible.startOfDay;
     NSDate *midnightThisEvening = dateWhenThingsShouldBeVisible.endOfDay;
     
+    // Check that scheduledFor date is today or earlier
+    // Check that expires date does not exist or is later than the start of today
+    // Check that finishedDate does not exist or is later than the start of today
     NSPredicate *filterForThisDay = [NSPredicate predicateWithFormat:
-                                     @"(%K <= %@) && (%K >= %@)",
+                                     @"(%K <= %@) && (%K == nil OR %K.length == 0 OR %K >= %@) && (%K == nil OR %K.length == 0 OR %K >= %@)",
                                      NSStringFromSelector (@selector (taskScheduledFor)),           // -[APCTask taskScheduledFor]
                                      midnightThisEvening,
-                                     NSStringFromSelector (@selector (taskScheduledFor)),           // -[APCTask taskScheduledFor]
+                                     NSStringFromSelector (@selector (taskExpires)),           // -[APCTask taskExpires]
+                                     NSStringFromSelector (@selector (taskExpires)),           // -[APCTask taskExpires]
+                                     NSStringFromSelector (@selector (taskExpires)),           // -[APCTask taskExpires]
+                                     midnightThisMorning,
+                                     NSStringFromSelector (@selector (taskFinished)),           // -[APCTask taskFinished]
+                                     NSStringFromSelector (@selector (taskFinished)),           // -[APCTask taskFinished]
+                                     NSStringFromSelector (@selector (taskFinished)),           // -[APCTask taskFinished]
                                      midnightThisMorning
                                      ];
     
