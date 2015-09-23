@@ -234,8 +234,6 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
 
     else
     {
-//        taskGroupsToReport = [self uncachedTaskGroupsForDayOfDate: date
-//                                           forTasksMatchingFilter: taskFilter];
         taskGroupsToReport = [self uncachedGroupsForDayOfDate:date
                                        forTasksMatchingFilter: taskFilter];
 
@@ -1727,7 +1725,7 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
 
 
 // =========================================================
-#pragma mark - IV. MANAGING POTENTIAL AND SCHEDULED TASKS -
+#pragma mark - IV. MANAGING STARTING AND FINISHING OF TASKS -
 // =========================================================
 
 /**
@@ -1802,7 +1800,53 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
     [self clearTaskGroupCache];
 }
 
+- (APCTask*) startTask:(APCTask*) startedTask {
+    startedTask.taskStarted = [NSDate date];
+    NSError * saveError;
+    [startedTask saveToPersistentStore:&saveError];
+    APCLogError2 (saveError);
+    
+    /*
+     Clear the taskGroup cache, so UIs (and anything else
+     depending on the cached taskGroups) draw correctly.
+     This operation is thread-safe.
+     */
+    [self clearTaskGroupCache];
+    
+    return startedTask;
+}
 
+- (APCTask*) finishTask:(APCTask*) completedTask {
+    completedTask.taskFinished = [NSDate date];
+    NSError * saveError;
+    [completedTask saveToPersistentStore:&saveError];
+    APCLogError2 (saveError);
+    
+    /*
+     Clear the taskGroup cache, so UIs (and anything else
+     depending on the cached taskGroups) draw correctly.
+     This operation is thread-safe.
+     */
+    [self clearTaskGroupCache];
+    
+    return completedTask;
+}
+
+- (APCTask*) abortTask:(APCTask*) abortedTask {
+    abortedTask.taskStarted = nil;
+    NSError * saveError;
+    [abortedTask saveToPersistentStore:&saveError];
+    APCLogError2 (saveError);
+    
+    /*
+     Clear the taskGroup cache, so UIs (and anything else
+     depending on the cached taskGroups) draw correctly.
+     This operation is thread-safe.
+     */
+    [self clearTaskGroupCache];
+    
+    return abortedTask;
+}
 
 
 // =========================================================

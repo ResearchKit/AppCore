@@ -159,7 +159,7 @@ typedef void (^APCSchedulerCallbackForFetchingCount) (NSUInteger count, NSError 
                                 toDoThisWhenDone: (APCSchedulerCallbackForFetchAndLoadOperations) callbackBlock;
 
 // ---------------------------------------------------------
-#pragma mark - Converting PotentialTasks to ScheduledTasks
+#pragma mark - MANAGING STARTING AND FINISHING OF TASKS
 // ---------------------------------------------------------
 
 /**
@@ -181,7 +181,11 @@ typedef void (^APCSchedulerCallbackForFetchingCount) (NSUInteger count, NSError 
  */
 - (void) deleteScheduledTask: (APCScheduledTask *) scheduledTask;
 
+- (APCTask *) startTask:(APCTask*) startedTask;
 
+- (APCTask*) finishTask:(APCTask*) completedTask;
+
+- (APCTask*) abortTask:(APCTask*) abortedTask;
 
 // ---------------------------------------------------------
 #pragma mark - Debugging

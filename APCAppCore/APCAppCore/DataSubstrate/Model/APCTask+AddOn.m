@@ -46,32 +46,6 @@ static NSString * const kTaskFileNameKey = @"taskFileName";
 
 @implementation APCTask (AddOn)
 
-- (void) startedTask
-{
-    if (self.taskStarted == nil) {
-        self.taskStarted = [NSDate date];
-        NSError * saveError;
-        [self saveToPersistentStore:&saveError];
-        APCLogError2 (saveError);
-    }
-}
-
-- (void) finishTask
-{
-    self.taskFinished = [NSDate date];
-    NSError * saveError;
-    [self saveToPersistentStore:&saveError];
-    APCLogError2 (saveError);
-}
-
-- (void) abortTask
-{
-    self.taskStarted = nil;
-    NSError * saveError;
-    [self saveToPersistentStore:&saveError];
-    APCLogError2 (saveError);
-}
-
 /**
  Sets global, static values the first time anyone calls this category.
 
@@ -188,6 +162,7 @@ static NSString * const kTaskFileNameKey = @"taskFileName";
                                                              setOfTaskGuids]];
         
         NSError *error = nil;
+        //TODO: set mutated while being enumerated, here?
         NSArray *tasks = [context executeFetchRequest: query
                                                 error: & error];
         if (tasks == nil)

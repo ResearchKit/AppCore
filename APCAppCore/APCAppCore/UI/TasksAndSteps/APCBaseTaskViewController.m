@@ -249,7 +249,7 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
                 [self processTaskResult];
             }
             
-            [self.scheduledTask finishTask];
+            [[APCScheduler defaultScheduler] finishTask:self.scheduledTask];
             [self apiUpdateTask:self.scheduledTask];
             [[NSNotificationCenter defaultCenter]postNotificationName:APCActivityCompletionNotification object:nil];
             break;
@@ -276,11 +276,11 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
             break;
 
         case ORKTaskViewControllerFinishReasonDiscarded:
-            [self.scheduledTask abortTask];
+            [[APCScheduler defaultScheduler] abortTask:self.scheduledTask];
             break;
 
         case ORKTaskViewControllerFinishReasonSaved:
-            [self.scheduledTask startedTask];
+            [[APCScheduler defaultScheduler] startTask:self.scheduledTask];
             break;
 
         default:
