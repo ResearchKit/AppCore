@@ -115,10 +115,6 @@ static CGFloat const kTableViewSectionHeaderHeight = 77;
     [self setupNotifications];
     [self setUpNavigationBarAppearance];
 
-    NSDateFormatter *formatter = [NSDateFormatter new];
-    [formatter setTimeStyle:NSDateFormatterLongStyle];
-    [formatter setDateStyle:NSDateFormatterNoStyle];
-    NSLog(@"Loading saved tasks at %@", [formatter stringFromDate:[NSDate date]]);
     [self reloadTasksFromCoreData];
     [self checkForAndMaybeRespondToSystemDateChange];
     

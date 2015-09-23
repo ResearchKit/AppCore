@@ -140,30 +140,17 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
 
 + (instancetype)configureTaskViewController:(APCTaskGroup *)taskGroup
 {
-    // TODO: make the next task actually be the next task one up rather
-    // than the first one in the collection.
-    APCTask *nextTask                           = taskGroup.requiredRemainingTasks.firstObject;
+    APCTask *nextTask = nil;
     APCBaseTaskViewController *viewController   = nil;
     
-    // Tasks are already scheduled when they come from Tasks API, we don't need
-    // to create a special scheduled task since that is a legacy hold over from
-    // the schedules API.
-    /*
-     It's a fundamental business requirement that our users
-     can do *more* than the required number of tasks.  This
-     object lets us do that, if they've gone through all
-     the actually- required tasks for this date.
-     */
-//    if (potentialTask == nil)
-//    {
-//        potentialTask = taskGroup.samplePotentialTask;
-//    }
-//    
-//    if (potentialTask != nil) {
-//        APCScheduledTask *scheduledTask = [[APCScheduler defaultScheduler] createScheduledTaskFromPotentialTask:potentialTask];
-//        
-//        viewController = [self customTaskViewController:scheduledTask];
-//    }
+    if (taskGroup.requiredRemainingTasks.count > 0) {
+        nextTask = [taskGroup.requiredRemainingTasks firstObject];
+    } else if (taskGroup.requiredCompletedTasks.count > 0) {
+        // Allow the user to complete a required task again, essentially a gratuitous task
+        nextTask = [taskGroup.requiredCompletedTasks lastObject];
+    } else {
+        nextTask = taskGroup.task;
+    }
     
     viewController = [self customTaskViewController:nextTask];
     

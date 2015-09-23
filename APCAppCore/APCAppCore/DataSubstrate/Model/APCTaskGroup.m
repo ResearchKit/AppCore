@@ -154,7 +154,6 @@ static NSDateFormatter *debugDateFormatter = nil;
         NSMutableArray *requiredCompletedTasksArray = [NSMutableArray new];
         for (APCTask *task in tasks) {
             if (!_task) {
-                // TODO make sure this is still letting me complete the other tasks in the group
                 _task = task;
             }
             if ([task.taskIsOptional boolValue] == NO) {
@@ -173,9 +172,6 @@ static NSDateFormatter *debugDateFormatter = nil;
         _scheduledDate = scheduledDate;
         _expirationDate = _task.taskExpires;
         _expiresToday = _expirationDate != nil && [_expirationDate.startOfDay isEqualToDate: _appearanceDate.startOfDay];
-        
-        // TODO: Do we need to handle gratuitous tasks still?
-        // TODO: Deprecate APCPotentialTask
     }
     
     return self;
