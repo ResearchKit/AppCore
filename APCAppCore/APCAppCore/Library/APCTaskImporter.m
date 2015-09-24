@@ -196,12 +196,10 @@ static NSArray *legalTimeSpecifierFormats = nil;
 
 /**
  When we get data from a file or from the server, we first convert it to a set
- of dictionaries.  Each dictionary contains one Schedule.  That Schedule
- contains a list of the Tasks the schedule should manage.  Then we loop through
- those Schedules, creating each one.  Within that "create schedule" method, we
- then loop through all the Tasks it's supposed to manage, and create each of
- THOSE.  This method does that part: creates a single Task, when we're looping
- through the list of tasks attached to inbound schedule data.
+ of dictionaries. This method looks for an existing task with the same guid as
+ supplied in the dictionary and creates one if none exists. It then calls the
+ update method to update the task with the rest of the data in the supplied
+ dictionary.
  */
 - (APCTask *) createOrUpdateTaskFromJsonData: (NSDictionary *) taskData
                                    inContext: (NSManagedObjectContext *) context

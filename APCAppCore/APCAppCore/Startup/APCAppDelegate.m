@@ -117,15 +117,6 @@ static NSUInteger   const __unused kIndexOfProfileTab                = 3;
     [self initializeBridgeServerConnection];
     [self initializeAppleCoreStack];
 
-//    [self.scheduler loadTasksAndSchedulesFromDiskAndThenUseThisQueue:[NSOperationQueue mainQueue]
-//                                                    toDoThisWhenDone:^(NSError* errorFetchingOrLoading)
-//    {
-//        if(!errorFetchingOrLoading)
-//        {
-//            [self performMigrationAfterFirstImport];
-//        }
-//    }];
-
     [self registerNotifications];
     [self setUpAppAppearance];
     [self setUpTasksReminder];
