@@ -34,14 +34,10 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "APCConstants.h"
-#import "APCScheduleQueryEngine.h"
 
 @class APCDataSubstrate;
-@class APCSchedule;
 @class APCDateRange;
 @class APCTask;
-@class APCScheduledTask;
-@class APCPotentialTask;
 
 typedef NS_ENUM(NSUInteger, APCSchedulerDateRange) {
     kAPCSchedulerDateRangeYesterday,
@@ -90,7 +86,7 @@ typedef void (^APCSchedulerCallbackForFetchingCount) (NSUInteger count, NSError 
  and/or completed, and if the user cancels the task, we
  delete that ScheduledTask.
  */
-@interface APCScheduler : NSObject <APCScheduleQueryEngine>
+@interface APCScheduler : NSObject
 
 + (APCScheduler *) defaultScheduler;
 
@@ -123,37 +119,11 @@ typedef void (^APCSchedulerCallbackForFetchingCount) (NSUInteger count, NSError 
                       usingQueue: (NSOperationQueue *) queue
                  toReportResults: (APCSchedulerCallbackForTaskGroupQueries) callbackBlock;
 
-- (NSArray *) querySchedulesActiveOnDayOfDate: (NSDate *) date
-                                   fromSource: (APCScheduleSource) scheduleSource
-                                    inContext: (NSManagedObjectContext *) context
-                               returningError: (NSError * __autoreleasing *) errorToReturn;
-
-//- (NSArray *) tasksScheduledForDayOfDate: (NSDate *) date
-//                            usingContext: (NSManagedObjectContext *) context
-//                          returningError: (NSError * __autoreleasing *) errorToReturn;
-
 
 
 // ---------------------------------------------------------
 #pragma mark - Importing
 // ---------------------------------------------------------
-
-//- (void) fetchTasksAndSchedulesFromServerAndThenUseThisQueue: (NSOperationQueue *) queue
-//                                            toDoThisWhenDone: (APCSchedulerCallbackForFetchAndLoadOperations) callbackBlock;
-//
-//- (void) loadTasksAndSchedulesFromDiskAndThenUseThisQueue: (NSOperationQueue *) queue
-//                                         toDoThisWhenDone: (APCSchedulerCallbackForFetchAndLoadOperations) callbackBlock;
-//
-//- (void) loadTasksAndSchedulesFromDiskFileNamed: (NSString *) fileNameWithExtension
-//                                       inBundle: (NSBundle *) bundle
-//                                assigningSource: (APCScheduleSource) scheduleSource
-//                            andThenUseThisQueue: (NSOperationQueue *) queue
-//                               toDoThisWhenDone: (APCSchedulerCallbackForFetchAndLoadOperations) callbackBlock;
-//
-//- (void) importScheduleFromDictionary: (NSDictionary *) scheduleContainingTasks
-//                      assigningSource: (APCScheduleSource) scheduleSource
-//                  andThenUseThisQueue: (NSOperationQueue *) queue
-//                     toDoThisWhenDone: (APCSchedulerCallbackForFetchAndLoadOperations) callbackBlock;
 
 - (void) fetchTasksFromServerAndThenUseThisQueue: (NSOperationQueue *) queue
                                 toDoThisWhenDone: (APCSchedulerCallbackForFetchAndLoadOperations) callbackBlock;
@@ -162,24 +132,6 @@ typedef void (^APCSchedulerCallbackForFetchingCount) (NSUInteger count, NSError 
 #pragma mark - MANAGING STARTING AND FINISHING OF TASKS
 // ---------------------------------------------------------
 
-/**
- We only save ScheduledTasks when the user actually does
- something with them.  The -fetch methods above return
- (among other things) PotentialTask objects which show when
- a user *could* perform a task.  This method lets us
- convert from one of those PotentialTasks to a
- ScheduledTask, representing the user's real work.  Please
- be sure to call -deleteScheduledTask: if the user cancels
- that operation.
- */
-- (APCScheduledTask *) createScheduledTaskFromPotentialTask: (APCPotentialTask *) potentialTask;
-
-/**
- ScheduledTasks represent work the user is actually doing.
- If the user cancels a particular task, we want to delete
- the task from the database.  This method lets us do that.
- */
-- (void) deleteScheduledTask: (APCScheduledTask *) scheduledTask;
 
 - (APCTask *) startTask:(APCTask*) startedTask;
 

@@ -39,7 +39,6 @@
 #import "APCDataSubstrate.h"
 #import "APCLog.h"
 #import "APCSchedule+AddOn.h"
-#import "APCScheduleDebugPrinter.h"
 #import "APCScheduledTask+AddOn.h"
 #import "APCStoredUserData.h"
 #import "APCTask+AddOn.h"
@@ -74,21 +73,6 @@ static NSString * const kAPCErrorFetchingUsersSuggestion = @"Unable to fetch use
 #pragma mark - Migration methods called from the model file
 // ---------------------------------------------------------
 
-/*
- All methods in this section are called by the migration
- process, because we typed these method names and
- parameters into the migration-model XML file
- (APCMappingModel4ToModel6.xcmappingmodel).  For details
- on how to do that, see the README file
- MODEL_MIGRATION_README.txt.
- */
-
-- (NSNumber *) generateNewScheduleSourceFromOldSchedule: (id) scheduleFromV4
-{
-    NSNumber *result = [self extractScheduleSourceEnumValueFromOldSchedule: scheduleFromV4];
-
-    return result;
-}
 
 /**
  Takes an old Schedule object, extracts its task ID,
@@ -268,13 +252,6 @@ static NSString * const kAPCErrorFetchingUsersSuggestion = @"Unable to fetch use
     }
     else  // have schedules with nil start dates.
     {
-        APCScheduleDebugPrinter *printer = [APCScheduleDebugPrinter new];
-        NSMutableString *printout = [NSMutableString new];
-
-        [printer printArrayOfSchedules: schedulesWithNilStartDates
-                             withLabel: @"\n\n During migration. About to fill these schedules with start dates"
-                     intoMutableString: printout];
-        
         NSDate *consentSignatureDate = nil;
         NSError *errorFetchingUsers = nil;
         NSFetchRequest *requestAllUsers = [APCStoredUserData request];
@@ -342,12 +319,6 @@ static NSString * const kAPCErrorFetchingUsersSuggestion = @"Unable to fetch use
                  */
             }
         }
-
-        [printer printArrayOfSchedules: schedulesWithNilStartDates
-                             withLabel: @"Here's what we did"
-                     intoMutableString: printout];
-
-        APCLogDebug (@"%@", printout);
     }
 }
 
@@ -477,43 +448,6 @@ static NSString * const kAPCErrorFetchingUsersSuggestion = @"Unable to fetch use
     }
 
     return versionNumber;
-}
-
-- (NSNumber *) extractScheduleSourceEnumValueFromOldSchedule: (id) scheduleFromV4
-{
-    NSNumber *result = nil;
-    APCScheduleSource scheduleSource = APCScheduleSourceLocalDisk;
-
-    /*
-     This refers to the property -[APCSchedule remoteUpdatable]
-     in the code we're migrating from.
-     */
-    id maybeRemoteUpdatable = [scheduleFromV4 valueForKey: @"remoteUpdatable"];
-
-    if (maybeRemoteUpdatable != nil && [maybeRemoteUpdatable isKindOfClass: [NSNumber class]])
-    {
-        NSNumber *remoteUpdatable = maybeRemoteUpdatable;
-        BOOL isRemoteUpdatable = remoteUpdatable.boolValue;
-        scheduleSource = isRemoteUpdatable ? APCScheduleSourceServer : APCScheduleSourceLocalDisk;
-    }
-    else
-    {
-        scheduleSource = APCScheduleSourceLocalDisk;
-    }
-
-    /*
-     If this is the singleton schedule managing the Glucose
-     Log, set its Source to GlucoseLog.
-     */
-    NSString *taskId = [self extractOriginalTaskIdFieldFromScheduleV4: scheduleFromV4];
-
-    if (taskId != nil && [taskId hasPrefix: kAPCTaskIdPrefixGlucoseLog])
-    {
-        scheduleSource = APCScheduleSourceGlucoseLog;
-    }
-
-    result = @(scheduleSource);
-    return result;
 }
 
 - (void) printMigrationStatusUsingMigrationManager: (NSMigrationManager *) manager

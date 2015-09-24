@@ -276,13 +276,11 @@ static NSString * const kAPCJSONFileKeyTasks     = @"tasks";
     [self.mainContext reset];
     [self.persistentContext reset];
     NSError * error;
-    NSPersistentStore * persistenStore = [self.persistentStoreCoordinator persistentStores] [0];
-    [self.persistentStoreCoordinator removePersistentStore:persistenStore error:&error];
+    NSPersistentStore * persistentStore = [self.persistentStoreCoordinator persistentStores] [0];
+    [self.persistentStoreCoordinator removePersistentStore:persistentStore error:&error];
     APCLogError2 (error);
     [self removeSqliteStore];
     [self setUpPersistentStore];
-    APCAppDelegate * appDelegate = [APCAppDelegate sharedAppDelegate];
-//    [appDelegate.scheduler loadTasksAndSchedulesFromDiskAndThenUseThisQueue: nil toDoThisWhenDone: nil];
 }
 
 

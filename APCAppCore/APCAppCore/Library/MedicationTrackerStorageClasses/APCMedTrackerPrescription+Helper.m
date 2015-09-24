@@ -59,32 +59,32 @@
  Prescription object chosen by the user.  These constants identify
  that uploaded data.
  */
-static NSString * const kUploadablePackageIdentifierKey                     = @"userAction";
-static NSString * const kUploadablePackageCategoryKey                       = @"category";
-static NSString * const kUploadablePackageNameKey                           = @"name";
-static NSString * const kUploadablePackageVersionKey                        = @"version";
-static NSString * const kUploadablePackageCategory                          = @"medicationTracker";
-static NSString * const kUploadablePackageContents                          = @"prescription";
-static NSString * const kUploadablePackageCreatePrescriptionFileName        = @"medicationTracker_createPrescription";
-static NSString * const kUploadablePackageCreatePrescriptionName            = @"createPrescription";
-static NSUInteger const kUploadablePackageCreatePrescriptionSchemaVersion   = 1;
-static NSString * const kUploadablePackageExpirePrescriptionFileName        = @"medicationTracker_cancelPrescription";
-static NSString * const kUploadablePackageExpirePrescriptionName            = @"cancelPrescription";
-static NSUInteger const kUploadablePackageExpirePrescriptionSchemaVersion   = 1;
-static NSString * const kUploadablePackageRecordDosesFileName               = @"medicationTracker_recordTotalDailyDosesOfPrescription";
-static NSString * const kUploadablePackageRecordDosesName                   = @"recordTotalDailyDosesOfPrescription";
-static NSUInteger const kUploadablePackageRecordDosesSchemaVersion          = 1;
-static NSString * const kUploadableFieldUniqueIdKey                         = @"uniqueId";
-static NSString * const kUploadableFieldCreationDateKey                     = @"dateCreated";
-static NSString * const kUploadableFieldCancellationDateKey                 = @"dateCanceled";
-static NSString * const kUploadableFieldWeekdaysKey                         = @"daysOfTheWeek";
-static NSString * const kUploadableFieldTimesPerDayKey                      = @"numberOfTimesPerDay";
-static NSString * const kUploadableFieldMedicationNameKey                   = @"medicationName";
-static NSString * const kUploadableFieldDosageAmountKey                     = @"dosageAmount";
-static NSString * const kUploadableFieldDosageNameKey                       = @"dosageName";
-static NSString * const kUploadableFieldColorNameKey                        = @"colorName";
-static NSString * const kUploadableFieldDosageDateKey                       = @"dosageDate";
-static NSString * const kUploadableFieldDosesTakenKey                       = @"numberOfDosesTaken";
+static NSString * const kUploadablePackageIdentifierKey                                 = @"userAction";
+static NSString * const kUploadablePackageCategoryKey                                   = @"category";
+static NSString * const kUploadablePackageNameKey                                       = @"name";
+static NSString * const kUploadablePackageVersionKey                                    = @"version";
+static NSString * const kUploadablePackageCategory                                      = @"medicationTracker";
+static NSString * const kUploadablePackageContents                                      = @"prescription";
+static NSString * const kUploadablePackageCreatePrescriptionFileName                    = @"medicationTracker_createPrescription";
+static NSString * const kUploadablePackageCreatePrescriptionName                        = @"createPrescription";
+static NSUInteger const __unused kUploadablePackageCreatePrescriptionSchemaVersion      = 1;
+static NSString * const kUploadablePackageExpirePrescriptionFileName                    = @"medicationTracker_cancelPrescription";
+static NSString * const kUploadablePackageExpirePrescriptionName                        = @"cancelPrescription";
+static NSUInteger const __unused kUploadablePackageExpirePrescriptionSchemaVersion      = 1;
+static NSString * const kUploadablePackageRecordDosesFileName                           = @"medicationTracker_recordTotalDailyDosesOfPrescription";
+static NSString * const kUploadablePackageRecordDosesName                               = @"recordTotalDailyDosesOfPrescription";
+static NSUInteger const __unused kUploadablePackageRecordDosesSchemaVersion             = 1;
+static NSString * const kUploadableFieldUniqueIdKey                                     = @"uniqueId";
+static NSString * const kUploadableFieldCreationDateKey                                 = @"dateCreated";
+static NSString * const kUploadableFieldCancellationDateKey                             = @"dateCanceled";
+static NSString * const kUploadableFieldWeekdaysKey                                     = @"daysOfTheWeek";
+static NSString * const kUploadableFieldTimesPerDayKey                                  = @"numberOfTimesPerDay";
+static NSString * const kUploadableFieldMedicationNameKey                               = @"medicationName";
+static NSString * const kUploadableFieldDosageAmountKey                                 = @"dosageAmount";
+static NSString * const kUploadableFieldDosageNameKey                                   = @"dosageName";
+static NSString * const kUploadableFieldColorNameKey                                    = @"colorName";
+static NSString * const kUploadableFieldDosageDateKey                                   = @"dosageDate";
+static NSString * const kUploadableFieldDosesTakenKey                                   = @"numberOfDosesTaken";
 
 
 /**
