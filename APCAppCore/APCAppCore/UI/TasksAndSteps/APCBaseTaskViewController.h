@@ -33,7 +33,6 @@
  
 #import <Foundation/Foundation.h>
 #import <ResearchKit/ResearchKit.h>
-#import "APCScheduledTask.h"
 #import "APCTaskGroup.h"
 #import "ORKFileResult+Filename.h"
 #import "APCConstants.h"

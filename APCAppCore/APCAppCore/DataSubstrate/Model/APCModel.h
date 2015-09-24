@@ -47,8 +47,6 @@
 /*********************************************************************************/
 #import "APCTask+AddOn.h"
 #import "APCTask+Bridge.h"
-#import "APCSchedule+AddOn.h"
-#import "APCScheduledTask+AddOn.h"
 #import "APCDBStatus+AddOn.h"
 
 //Results Cluster

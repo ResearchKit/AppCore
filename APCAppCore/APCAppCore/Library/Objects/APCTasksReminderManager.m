@@ -33,7 +33,6 @@
  
 #import "APCTasksReminderManager.h"
 #import "APCAppDelegate.h"
-#import "APCScheduledTask+AddOn.h"
 #import "APCResult+AddOn.h"
 
 #import "APCConstants.h"
@@ -465,31 +464,8 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
     
     if (!groupForTaskID) {
         includeTask = NO;
-    }else if (!groupForTaskID.isFullyCompleted ) {//if this task has not been completed but was required, include it in the reminder
+    } else if (!groupForTaskID.isFullyCompleted ) {//if this task has not been completed but was required, include it in the reminder
         includeTask = YES;
-    }else if (taskReminder.resultsSummaryKey != nil) {
-        //we have a completed task with a subtask reminder. Get the results object from task.
-        NSArray *allCompletedActivitiesForTaskID = [groupForTaskID.requiredCompletedTasks arrayByAddingObjectsFromArray:groupForTaskID.gratuitousCompletedTasks];
-        
-        for (APCScheduledTask *subtask in allCompletedActivitiesForTaskID) {
-            if (subtask.results.count > 0) {
-                includeTask = NO;
-                NSString * resultSummary = subtask.lastResult.resultSummary;
-                
-                NSDictionary * dictionary = resultSummary ? [NSDictionary dictionaryWithJSONString:resultSummary] : nil;
-                
-                NSString *result;
-                if (dictionary.count > 0) {
-                    result = [dictionary objectForKey:taskReminder.resultsSummaryKey];
-                }
-                
-                NSArray *results = [[NSArray alloc]initWithObjects:result, nil];
-                NSArray *completedSubtask = [results filteredArrayUsingPredicate:taskReminder.completedTaskPredicate];
-                if (completedSubtask.count == 0){
-                    includeTask = YES;
-                }
-            }
-        }
     }
     
     return includeTask;

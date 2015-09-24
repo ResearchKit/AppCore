@@ -610,7 +610,7 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"startOn"
                                                                    ascending:YES];
     
-    NSFetchRequest *request = [APCScheduledTask request];
+    NSFetchRequest *request = [APCTask request];
     
     NSDate *startDate = [[NSCalendar currentCalendar] dateBySettingHour:0
                                                                  minute:0
@@ -637,8 +637,8 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
     
     NSArray *tasks = [localContext executeFetchRequest:request error:&error];
     
-    for (APCScheduledTask *task in tasks) {
-        if ([task.completed boolValue]) {
+    for (APCTask *task in tasks) {
+        if (!task.taskFinished) {
             NSArray *taskResults = [self retrieveResultSummaryFromResults:task.results latestOnly:latestOnly];
             
             for (NSDictionary *taskResult in taskResults) {
@@ -646,7 +646,7 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
                     NSDate *pointDate = [[NSCalendar currentCalendar] dateBySettingHour:0
                                                                                  minute:0
                                                                                  second:0
-                                                                                 ofDate:task.startOn
+                                                                                 ofDate:task.taskStarted
                                                                                 options:0];
                     
                     id taskResultValue = [taskResult valueForKey:valueKey];
@@ -661,7 +661,7 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
                     NSMutableDictionary *dataPoint = nil;
                     
                     if (groupBy == APHTimelineGroupForInsights) {
-                        dataPoint = [[self generateDataPointForDate:task.createdAt
+                        dataPoint = [[self generateDataPointForDate:task.taskStarted
                                                           withValue:taskValue
                                                         noDataValue:YES] mutableCopy];
                         dataPoint[kDatasetRawDataKey] = taskResult;

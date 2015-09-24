@@ -38,11 +38,9 @@
 #import "APCDataSubstrate.h"
 #import "APCDateRange.h"
 #import "APCGenericSurveyTaskViewController.h"
-#import "APCPotentialScheduledTask.h"
 #import "APCTask+AddOn.h"
 #import "APCTaskGroup.h"
 #import "APCTaskGroupCacheEntry.h"
-#import "APCTopLevelScheduleEnumerator.h"
 #import "APCUser.h"
 #import "APCUtilities.h"
 #import "NSArray+APCHelper.h"
@@ -50,6 +48,9 @@
 #import "NSDictionary+APCAdditions.h"
 #import "NSOperationQueue+Helper.h"
 #import "APCTaskImporter.h"
+#import "NSManagedObject+APCHelper.h"
+#import "NSError+APCAdditions.h"
+#import "APCLog.h"
 
 
 /**
@@ -337,78 +338,8 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
 
 
 // ---------------------------------------------------------
-#pragma mark - Downloading tasks and schedules from the server
+#pragma mark - Downloading tasks from the server
 // ---------------------------------------------------------
-
-/**
- This method and -loadTasksAndSchedulesFromDisk do
- analogous things: get a list of schedules-and-tasks from a
- source (server or disk).  Then they call a central method
- to delete old versions, add the new versions, and save
- everything to disk.
-
- This method (-fetch) differs from -load because it has to
- extract Sage's data into an array of data with the
- key-value pairs we need.
-
- Both methods put the specified work onto a (private,
- serial) operation queue, and so can return to the calling
- method immediately.
-
- Both methods are immediately followed by methods for
- handling errors and success specific to that download
- type.  Both "success" methods call the same internal
- method for processing schedules.
- */
-//- (void) fetchTasksAndSchedulesFromServerAndThenUseThisQueue: (NSOperationQueue *) queue
-//                                            toDoThisWhenDone: (APCSchedulerCallbackForFetchAndLoadOperations) callbackBlock
-//{
-//    /*
-//     Get off whatever thread we were called on.  For this outer "if"
-//     statement, we'll only be here for an instant, but for consistency
-//     in all our data-handling, we'll do everything on the same thread.
-//     */
-//    [self.queryQueue addOperationWithBlock:^{
-//
-//        if (self.isServerDisabled)
-//        {
-//            APCLogDebug (@"SERVER COMMUNICATION DISABLED:  Server communication has been (purposely?) disabled.  Not fetching schedules from the server.");
-//
-//            NSError *errorFetchingSchedules = [NSError errorWithCode: APCErrorServerDisabledCode
-//                                                              domain: APCErrorDomainLoadingTasksAndSchedules
-//                                                       failureReason: APCErrorServerDisabledReason
-//                                                  recoverySuggestion: APCErrorServerDisabledSuggestion];
-//
-//            [self handleErrorFetchingTasksAndSchedulesFromServer: errorFetchingSchedules
-//                                             andThenUseThisQueue: queue
-//                                                        toDoThis: callbackBlock];
-//        }
-//        else
-//        {
-//            /*
-//             Bounce over to the Sage SDK's thread, call the server, and then come
-//             back to our thread a while later.
-//             */
-//            [SBBComponent (SBBScheduleManager) getSchedulesWithCompletion: ^(SBBResourceList *schedulesList,
-//                                                                             NSError *errorFetchingSchedules)
-//             {
-//                 /*
-//                  Immediately get off the Sage queue and back onto ours,
-//                  so we know and can control what's happening and what
-//                  resources are being used.
-//                  */
-//                 [self.queryQueue addOperationWithBlock: ^{
-//
-//                     [self handleSuccessfullyFetchedTasksAndSchedulesFromServer: schedulesList
-//                                   givenThisPossibleErrorFromTheDownloadProcess: errorFetchingSchedules
-//                                                            andThenUseThisQueue: queue
-//                                                                       toDoThis: callbackBlock];
-//                 }];
-//             }];
-//
-//        }
-//    }];
-//}
 
 - (void) fetchTasksFromServerAndThenUseThisQueue: (NSOperationQueue *) queue
                                 toDoThisWhenDone: (APCSchedulerCallbackForFetchAndLoadOperations) callbackBlock

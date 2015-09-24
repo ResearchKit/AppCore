@@ -32,8 +32,7 @@
 //
 
 #import "APCTask.h"
-#import "APCSchedule.h"
-#import "APCScheduledTask.h"
+#import "APCResult.h"
 
 
 @implementation APCTask
