@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		049439811B8FC04000CAE23C /* APCDownloadDataViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 0494397F1B8FC04000CAE23C /* APCDownloadDataViewController.h */; };
 		049439821B8FC04000CAE23C /* APCDownloadDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049439801B8FC04000CAE23C /* APCDownloadDataViewController.m */; };
+		04FB64471BB4883900D0A50D /* APCTaskImporter.h in Headers */ = {isa = PBXBuildFile; fileRef = 04FB64451BB4883900D0A50D /* APCTaskImporter.h */; };
+		04FB64481BB4883900D0A50D /* APCTaskImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 04FB64461BB4883900D0A50D /* APCTaskImporter.m */; };
 		08023C4F1AA94F48008E6DDA /* APCAllSetContentViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 08023C4D1AA94F48008E6DDA /* APCAllSetContentViewController.h */; };
 		08023C501AA94F48008E6DDA /* APCAllSetContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08023C4E1AA94F48008E6DDA /* APCAllSetContentViewController.m */; };
 		08023C531AAA12DF008E6DDA /* APCAllSetTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 08023C511AAA12DF008E6DDA /* APCAllSetTableViewCell.h */; };
@@ -781,6 +783,8 @@
 /* Begin PBXFileReference section */
 		0494397F1B8FC04000CAE23C /* APCDownloadDataViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDownloadDataViewController.h; sourceTree = "<group>"; };
 		049439801B8FC04000CAE23C /* APCDownloadDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDownloadDataViewController.m; sourceTree = "<group>"; };
+		04FB64451BB4883900D0A50D /* APCTaskImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCTaskImporter.h; sourceTree = "<group>"; };
+		04FB64461BB4883900D0A50D /* APCTaskImporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCTaskImporter.m; sourceTree = "<group>"; };
 		08023C4D1AA94F48008E6DDA /* APCAllSetContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCAllSetContentViewController.h; sourceTree = "<group>"; };
 		08023C4E1AA94F48008E6DDA /* APCAllSetContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCAllSetContentViewController.m; sourceTree = "<group>"; };
 		08023C511AAA12DF008E6DDA /* APCAllSetTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCAllSetTableViewCell.h; sourceTree = "<group>"; };
@@ -1581,6 +1585,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		04FB64441BB4880000D0A50D /* TaskImporter */ = {
+			isa = PBXGroup;
+			children = (
+				04FB64451BB4883900D0A50D /* APCTaskImporter.h */,
+				04FB64461BB4883900D0A50D /* APCTaskImporter.m */,
+			);
+			name = TaskImporter;
+			sourceTree = "<group>";
+		};
 		08027A3A1A7319AC00B358CC /* Assets */ = {
 			isa = PBXGroup;
 			children = (
@@ -2428,6 +2441,7 @@
 		F5B947341A73272C0034C522 /* Library */ = {
 			isa = PBXGroup;
 			children = (
+				04FB64441BB4880000D0A50D /* TaskImporter */,
 				5B0601BF1AE79AE0009D6D65 /* FeedParser */,
 				F5B947351A73272C0034C522 /* AppearanceHelpers */,
 				F5B9473C1A73272C0034C522 /* AssertionHandler */,
@@ -3368,6 +3382,7 @@
 				F5F12A891A2F78490015982C /* APCTableViewItem.h in Headers */,
 				F5F12AC31A2F78490015982C /* APCLearnMasterViewController.h in Headers */,
 				F5B9463A1A7309A20034C522 /* ZZHeaders.h in Headers */,
+				04FB64471BB4883900D0A50D /* APCTaskImporter.h in Headers */,
 				F5F12A7E1A2F78490015982C /* APCGraphConstants.h in Headers */,
 				089465491A8C179700A983AC /* APCDashboardInsightTableViewCell.h in Headers */,
 				F5F12A981A2F78490015982C /* APCChangeEmailViewController.h in Headers */,
@@ -3927,6 +3942,7 @@
 				F5F12AE31A2F78490015982C /* APCTextFieldTableViewCell.m in Sources */,
 				369E27FF1A96B7A200D35DFA /* APCMedTrackerDailyDosageRecord+Helper.m in Sources */,
 				049439821B8FC04000CAE23C /* APCDownloadDataViewController.m in Sources */,
+				04FB64481BB4883900D0A50D /* APCTaskImporter.m in Sources */,
 				369E27F41A96B7A200D35DFA /* APCMedicationLozenge.m in Sources */,
 				36A979AE1B5807E60042B6C5 /* APCScheduleTaskMap.m in Sources */,
 				7BF54F981AA158E50081C935 /* APCHorizontalBottomThinLineView.m in Sources */,
