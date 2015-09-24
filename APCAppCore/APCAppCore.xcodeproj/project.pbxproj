@@ -758,6 +758,7 @@
 		049439801B8FC04000CAE23C /* APCDownloadDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDownloadDataViewController.m; sourceTree = "<group>"; };
 		04FB64451BB4883900D0A50D /* APCTaskImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCTaskImporter.h; sourceTree = "<group>"; };
 		04FB64461BB4883900D0A50D /* APCTaskImporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCTaskImporter.m; sourceTree = "<group>"; };
+		04FB64491BB4A11A00D0A50D /* APCModel 7.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "APCModel 7.xcdatamodel"; sourceTree = "<group>"; };
 		08023C4D1AA94F48008E6DDA /* APCAllSetContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCAllSetContentViewController.h; sourceTree = "<group>"; };
 		08023C4E1AA94F48008E6DDA /* APCAllSetContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCAllSetContentViewController.m; sourceTree = "<group>"; };
 		08023C511AAA12DF008E6DDA /* APCAllSetTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCAllSetTableViewCell.h; sourceTree = "<group>"; };
@@ -4235,6 +4236,7 @@
 		F5F128981A2F78490015982C /* APCModel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				04FB64491BB4A11A00D0A50D /* APCModel 7.xcdatamodel */,
 				366345791B1F84F0003CC0EF /* APCModel 6.xcdatamodel */,
 				366345781B1F84DD003CC0EF /* APCModel 5.xcdatamodel */,
 				7BA5D9971AA43E96006F505F /* APCModel 4.xcdatamodel */,
@@ -4242,7 +4244,7 @@
 				36469C321AA1650F00C10CA7 /* APCModel 3.xcdatamodel */,
 				F5F128991A2F78490015982C /* APCModel.xcdatamodel */,
 			);
-			currentVersion = 366345791B1F84F0003CC0EF /* APCModel 6.xcdatamodel */;
+			currentVersion = 04FB64491BB4A11A00D0A50D /* APCModel 7.xcdatamodel */;
 			path = APCModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
