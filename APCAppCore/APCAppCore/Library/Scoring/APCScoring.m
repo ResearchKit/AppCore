@@ -607,7 +607,7 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
 {
     APCAppDelegate *appDelegate = (APCAppDelegate *)[[UIApplication sharedApplication] delegate];
     
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"startOn"
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"taskStarted"
                                                                    ascending:YES];
     
     NSFetchRequest *request = [APCTask request];
@@ -624,7 +624,7 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
                                                                ofDate:[NSDate date]
                                                               options:0];
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(task.taskID == %@) AND (startOn >= %@) AND (startOn <= %@)",
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(taskID == %@) AND (taskStarted >= %@) AND (taskFinished <= %@)",
                               taskId, startDate, endDate];
     
     request.predicate = predicate;
