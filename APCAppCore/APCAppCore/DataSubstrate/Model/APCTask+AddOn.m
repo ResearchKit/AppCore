@@ -162,7 +162,6 @@ static NSString * const kTaskFileNameKey = @"taskFileName";
                                                              setOfTaskGuids]];
         
         NSError *error = nil;
-        //TODO: set mutated while being enumerated, here?
         NSArray *tasks = [context executeFetchRequest: query
                                                 error: &error];
         if (tasks == nil)

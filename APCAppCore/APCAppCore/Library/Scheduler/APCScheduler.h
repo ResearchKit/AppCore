@@ -132,11 +132,28 @@ typedef void (^APCSchedulerCallbackForFetchingCount) (NSUInteger count, NSError 
 #pragma mark - MANAGING STARTING AND FINISHING OF TASKS
 // ---------------------------------------------------------
 
-
+/**
+ Starts the current task which involves setting a start date to
+ the current time, saving the started task to CoreDate, and purging
+ the TaskGroupCache so that whenever the UI is refreshed any UI changes
+ for a started task will be visible.
+ */
 - (APCTask *) startTask:(APCTask*) startedTask;
 
+/**
+ Finishes the current task which involves setting a finish date to
+ the current time, saving the finished task to CoreDate, and purging
+ the TaskGroupCache so that whenever the UI is refreshed any UI changes
+ for a finished task will be visible.
+ */
 - (APCTask*) finishTask:(APCTask*) completedTask;
 
+/**
+ Starts the current task which involves setting a start date to
+ back to nil, saving the aborted task to CoreDate, and purging
+ the TaskGroupCache so that whenever the UI is refreshed any UI changes
+ for an aborted task will be visible.
+ */
 - (APCTask*) abortTask:(APCTask*) abortedTask;
 
 // ---------------------------------------------------------

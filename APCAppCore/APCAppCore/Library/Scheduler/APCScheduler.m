@@ -141,7 +141,7 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
     if (self)
     {
         _dataSubstrate              = dataSubstrate;
-        _scheduleMOC                = _dataSubstrate.persistentContext;
+        _scheduleMOC                = _dataSubstrate.persistentContext; // TODO: Dig deeper into if this is necessary, can result in concurrency errors if multiple threads access
         _queryQueue                 = [NSOperationQueue sequentialOperationQueueWithName: kQueueName];
         _isUpdating                 = NO;
         _dateFormatter              = [NSDateFormatter new];
@@ -267,7 +267,6 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
     for (APCTask *task in todaysTasks) {
         NSMutableArray *groupOfTasks = [taskGroupsDictionary objectForKey:task.taskID];
         if (!groupOfTasks) {
-            // TODO is this safe? todaysTask isn't modified
             groupOfTasks = [NSMutableArray new];
             [taskGroupsDictionary setObject:groupOfTasks forKey:task.taskID];
         }
