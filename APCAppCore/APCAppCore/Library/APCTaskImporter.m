@@ -248,9 +248,14 @@ static NSArray *legalTimeSpecifierFormats = nil;
     task.taskScheduledFor           = [self nilIfNull: taskData [kTaskScheduledForDateKey]];        // new tasks api
     
     
-    // Don't overwrite data with nil for these fields. They can be updated locally and the import source might not have the latest values.
-    task.taskStarted                = [self mostValidDataOf:task.taskStarted andNewValue:[self nilIfNull: taskData [kTaskStartedDateKey]]];  // new tasks api
-    task.taskFinished               = [self mostValidDataOf:task.taskFinished andNewValue:[self nilIfNull: taskData [kTaskFinishedDateKey]]];// new tasks api
+    // Don't overwrite data with nil for these values. Changed locally and server might not have latest values.
+    if ([self nilIfNull: taskData [kTaskStartedDateKey]]) {
+        task.taskStarted                = [self nilIfNull: taskData [kTaskStartedDateKey]];         // new tasks api
+    }
+    if ([self nilIfNull: taskData [kTaskFinishedDateKey]]) {
+        task.taskFinished               = [self nilIfNull: taskData [kTaskFinishedDateKey]];        // new tasks api
+    }
+    
     
     if ([task.taskTitle stringByTrimmingCharactersInSet: [NSCharacterSet whitespaceAndNewlineCharacterSet]].length == 0)
     {
@@ -480,22 +485,5 @@ static NSArray *legalTimeSpecifierFormats = nil;
     
     return outputValue;
 }
-
-/**
- Returns the newValue as long as it is not nil or NULL, otherwise it returns
- the old value. This can be used to prevent overwriting valid data with empty
- data in an import.
- */
-- (id) mostValidDataOf: (id) oldValue
-           andNewValue: (id) newValue
-{
-    id inputValue = [self nilIfNull:newValue];
-    if (inputValue) {
-        return inputValue;
-    } else {
-        return oldValue;
-    }
-}
-
 
 @end
