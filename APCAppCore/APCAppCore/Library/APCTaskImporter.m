@@ -245,9 +245,12 @@ static NSArray *legalTimeSpecifierFormats = nil;
     task.taskContentFileName        = [self nilIfNull: taskData [kTaskFileNameKey]];                // appcore-only?
     task.taskIsOptional             = [self nilIfNull: taskData [kTaskIsOptionalKey]];              // both
     task.taskExpires                = [self nilIfNull: taskData [kTaskExpiresDateKey]];             // new tasks api
-    task.taskFinished               = [self nilIfNull: taskData [kTaskFinishedDateKey]];            // new tasks api
     task.taskScheduledFor           = [self nilIfNull: taskData [kTaskScheduledForDateKey]];        // new tasks api
-    task.taskStarted                = [self nilIfNull: taskData [kTaskStartedDateKey]];             // new tasks api
+    
+    
+    // Don't overwrite data with nil for these fields. They can be updated locally and the import source might not have the latest values.
+    task.taskStarted                = [self mostValidDataOf:task.taskStarted andNewValue:[self nilIfNull: taskData [kTaskStartedDateKey]]];  // new tasks api
+    task.taskFinished               = [self mostValidDataOf:task.taskFinished andNewValue:[self nilIfNull: taskData [kTaskFinishedDateKey]]];// new tasks api
     
     if ([task.taskTitle stringByTrimmingCharactersInSet: [NSCharacterSet whitespaceAndNewlineCharacterSet]].length == 0)
     {
@@ -370,28 +373,28 @@ static NSArray *legalTimeSpecifierFormats = nil;
 - (NSDictionary *) extractJsonDataFromIncomingSageTask: (SBBTask *)sageTask
 {
     NSMutableDictionary *taskData               = [NSMutableDictionary new];
+    taskData [kTaskGuidKey]                 = [self nullIfNil: sageTask.guid];
+    taskData [kTaskTitleKey]                = [self nullIfNil: sageTask.activity.label];
+    taskData [kTaskCompletionTimeStringKey] = [self nullIfNil: sageTask.activity.labelDetail];
+    taskData [kTaskTypeKey]                 = [self nullIfNil: sageTask.activity.activityType];
+    taskData [kTaskIsOptionalKey]           = [self nullIfNil: sageTask.persistent];
+    taskData [kTaskExpiresDateKey]          = [self nullIfNil: sageTask.expiresOn];
+    taskData [kTaskFinishedDateKey]         = [self nullIfNil: sageTask.finishedOn];
+    taskData [kTaskScheduledForDateKey]     = [self nullIfNil: sageTask.scheduledOn];
+    taskData [kTaskStartedDateKey]          = [self nullIfNil: sageTask.startedOn];
+    
+    // When we start getting these from Bridge, we'll use them.
+    // In the mean time, noting them here, because they can still be used from
+    // local json files.
+    
+    taskData [kTaskFileNameKey]             = [NSNull null];
+    taskData [kTaskSortStringKey]           = [self nullIfNil: sageTask.activity.activityType]; // Default for now
     
     if (sageTask.activity.survey) {
-        taskData [kTaskGuidKey]                 = [self nullIfNil: sageTask.guid];
-        taskData [kTaskTitleKey]                = [self nullIfNil: sageTask.activity.label];
-        taskData [kTaskCompletionTimeStringKey] = [self nullIfNil: sageTask.activity.labelDetail];
-        taskData [kTaskTypeKey]                 = [self nullIfNil: sageTask.activity.activityType];
         taskData [kTaskIDKey]                   = [self nullIfNil: sageTask.activity.survey.identifier];
         taskData [kTaskVersionNumberKey]        = [self nullIfNil: sageTask.activity.survey.createdOn.toStringInISO8601Format];
         taskData [kTaskUrlKey]                  = [self nullIfNil: sageTask.activity.survey.href];
         taskData [kTaskClassNameKey]            = NSStringFromClass ([APCGenericSurveyTaskViewController class]);
-        taskData [kTaskIsOptionalKey]           = [self nullIfNil: sageTask.persistent];
-        taskData [kTaskExpiresDateKey]          = [self nullIfNil: sageTask.expiresOn];
-        taskData [kTaskFinishedDateKey]         = [self nullIfNil: sageTask.finishedOn];
-        taskData [kTaskScheduledForDateKey]     = [self nullIfNil: sageTask.scheduledOn];
-        taskData [kTaskStartedDateKey]          = [self nullIfNil: sageTask.startedOn];
-        
-        // When we start getting these from Bridge, we'll use them.
-        // In the mean time, noting them here, because they can still be used from
-        // local json files.
-        
-        taskData [kTaskFileNameKey]             = [NSNull null];
-        taskData [kTaskSortStringKey]           = [self nullIfNil: sageTask.activity.activityType]; // Default for now
         
         return taskData;
     } else if (sageTask.activity.task) {
@@ -409,27 +412,12 @@ static NSArray *legalTimeSpecifierFormats = nil;
         // ignore unrecognized tasks (probably added in a later app version)
         NSString *taskClassName = mappingDictionary[sageTask.activity.task.identifier];
         if (taskClassName.length) {
-            taskData [kTaskGuidKey]                 = [self nullIfNil: sageTask.guid];
-            taskData [kTaskTitleKey]                = [self nullIfNil: sageTask.activity.label];
-            taskData [kTaskCompletionTimeStringKey] = [self nullIfNil: sageTask.activity.labelDetail];
-            taskData [kTaskTypeKey]                 = [self nullIfNil: sageTask.activity.activityType];
             taskData [kTaskIDKey]                   = [self nullIfNil: sageTask.activity.task.identifier];
             taskData [kTaskClassNameKey]            = taskClassName;
-            taskData [kTaskIsOptionalKey]           = [self nullIfNil: sageTask.persistent];
-            taskData [kTaskExpiresDateKey]          = [self nullIfNil: sageTask.expiresOn];
-            taskData [kTaskFinishedDateKey]         = [self nullIfNil: sageTask.finishedOn];
-            taskData [kTaskScheduledForDateKey]     = [self nullIfNil: sageTask.scheduledOn];
-            taskData [kTaskStartedDateKey]          = [self nullIfNil: sageTask.startedOn];
             
             // Not available for non survey tasks
             taskData [kTaskVersionNumberKey]    = [NSNull null];
             taskData [kTaskUrlKey]              = [NSNull null];
-            
-            // When we start getting these from Bridge, we'll use them.
-            // In the mean time, noting them here, because they can still be used from
-            // local json files.
-            taskData [kTaskFileNameKey]             = [NSNull null];
-            taskData [kTaskSortStringKey]           = [self nullIfNil: sageTask.activity.activityType]; // Default for now
             
             return taskData;
         } else {
@@ -491,6 +479,22 @@ static NSArray *legalTimeSpecifierFormats = nil;
     }
     
     return outputValue;
+}
+
+/**
+ Returns the newValue as long as it is not nil or NULL, otherwise it returns
+ the old value. This can be used to prevent overwriting valid data with empty
+ data in an import.
+ */
+- (id) mostValidDataOf: (id) oldValue
+           andNewValue: (id) newValue
+{
+    id inputValue = [self nilIfNull:newValue];
+    if (inputValue) {
+        return inputValue;
+    } else {
+        return oldValue;
+    }
 }
 
 
