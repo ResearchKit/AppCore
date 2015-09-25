@@ -279,7 +279,10 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
                                                      forScheduledDate:theSpecifiedDate];
         [taskGroups addObject:taskGroup];
     }];
-    return (NSArray*)taskGroups;
+    
+    NSArray *sortedGroups = [taskGroups sortedArrayUsingSelector: @selector(compareWithTaskGroup:)];
+    
+    return sortedGroups;
 }
 
 
