@@ -256,7 +256,6 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
 {
     NSError *errorFetchingTasks         = nil;
     NSManagedObjectContext *context         = self.scheduleMOC;
-    // TODO: Check thread this is called from
     NSArray *todaysTasks = [self tasksScheduledForDayOfDate: theSpecifiedDate
                                                usingContext: context
                                                 usingFilter:taskFilter
