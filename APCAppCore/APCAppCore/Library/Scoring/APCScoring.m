@@ -638,7 +638,7 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
     NSArray *tasks = [localContext executeFetchRequest:request error:&error];
     
     for (APCTask *task in tasks) {
-        if (!task.taskFinished) {
+        if (task.taskFinished != nil && task.results.count > 0) {
             NSArray *taskResults = [self retrieveResultSummaryFromResults:task.results latestOnly:latestOnly];
             
             for (NSDictionary *taskResult in taskResults) {

@@ -96,7 +96,7 @@
         <attribute name="taskTitle" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="taskVersionNumber" optional="YES" attributeType="Integer 32" defaultValueString="0" indexed="YES" syncable="YES"/>
         <attribute name="updatedAt" optional="YES" attributeType="Date" syncable="YES"/>
-        <relationship name="results" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="APCResult" inverseName="task" inverseEntity="APCResult" syncable="YES"/>
+        <relationship name="results" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="APCResult" inverseName="task" inverseEntity="APCResult" syncable="YES"/>
     </entity>
     <elements>
         <element name="APCDBStatus" positionX="-1341" positionY="72" width="171" height="58"/>

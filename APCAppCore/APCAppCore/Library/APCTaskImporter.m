@@ -470,7 +470,7 @@ static NSArray *legalTimeSpecifierFormats = nil;
 }
 
 /**
- Returns [NSNull null] if the specified value is [NSNull null], so that we can
+ Returns [NSNull null] if the specified value is nil, so that we can
  insert the specified item into a dictionary.  Otherwise, returns the value
  itself.
  */

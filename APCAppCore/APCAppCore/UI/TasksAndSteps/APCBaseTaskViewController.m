@@ -134,6 +134,7 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
     APCBaseTaskViewController * controller = orkTask ? [[self alloc] initWithTask:orkTask taskRunUUID:taskRunUUID] : nil;
     controller.scheduledTask = scheduledTask;
     controller.delegate = controller;
+    [[APCScheduler defaultScheduler] startTask:scheduledTask];
     
     return  controller;
 }
@@ -268,6 +269,7 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
 
         case ORKTaskViewControllerFinishReasonSaved:
             [[APCScheduler defaultScheduler] startTask:self.scheduledTask];
+            [self apiUpdateTask:self.scheduledTask];
             break;
 
         default:

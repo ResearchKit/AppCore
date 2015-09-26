@@ -134,7 +134,7 @@ typedef void (^APCSchedulerCallbackForFetchingCount) (NSUInteger count, NSError 
 
 /**
  Starts the current task which involves setting a start date to
- the current time, saving the started task to CoreDate, and purging
+ the current time, saving the started task to CoreData, and purging
  the TaskGroupCache so that whenever the UI is refreshed any UI changes
  for a started task will be visible.
  */
@@ -142,7 +142,7 @@ typedef void (^APCSchedulerCallbackForFetchingCount) (NSUInteger count, NSError 
 
 /**
  Finishes the current task which involves setting a finish date to
- the current time, saving the finished task to CoreDate, and purging
+ the current time, saving the finished task to CoreData, and purging
  the TaskGroupCache so that whenever the UI is refreshed any UI changes
  for a finished task will be visible.
  */
@@ -150,7 +150,7 @@ typedef void (^APCSchedulerCallbackForFetchingCount) (NSUInteger count, NSError 
 
 /**
  Starts the current task which involves setting a start date to
- back to nil, saving the aborted task to CoreDate, and purging
+ back to nil, saving the aborted task to CoreData, and purging
  the TaskGroupCache so that whenever the UI is refreshed any UI changes
  for an aborted task will be visible.
  */
