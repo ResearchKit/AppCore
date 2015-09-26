@@ -75,7 +75,6 @@ static NSString *const kNewsFeedStoryBoardKey      = @"APCNewsFeed";
 static NSString*    const kDemographicDataWasUploadedKey    = @"kDemographicDataWasUploadedKey";
 static NSString*    const kLastUsedTimeKey                  = @"APHLastUsedTime";
 static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterForegroundTime";
-static NSUInteger   const __unused kIndexOfProfileTab                = 3;
 
 @interface APCAppDelegate  ( )  <UITabBarControllerDelegate>
 
