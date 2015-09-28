@@ -149,9 +149,6 @@
     [self presentViewController:spinnerController animated:YES completion:nil];
     
     typeof(self) __weak weakSelf = self;
-    [self.user sendDownloadDataOnCompletion:nil];
-    
-    
     [self.user sendDownloadDataOnCompletion:^(NSError *error) {
         if (error) {
             
