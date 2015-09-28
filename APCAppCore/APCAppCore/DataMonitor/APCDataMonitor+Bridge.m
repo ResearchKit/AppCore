@@ -44,8 +44,8 @@ NSString *const kFirstTimeRefreshToday = @"FirstTimeRefreshToday";
     {
         __weak typeof(self) weakSelf = self;
 
-        [[APCScheduler defaultScheduler] fetchTasksAndSchedulesFromServerAndThenUseThisQueue: [NSOperationQueue mainQueue]
-                                                                            toDoThisWhenDone: ^(NSError *errorFromServerFetch)
+        [[APCScheduler defaultScheduler] fetchTasksFromServerAndThenUseThisQueue: [NSOperationQueue mainQueue]
+                                                                toDoThisWhenDone: ^(NSError *errorFromServerFetch)
          {
              if (errorFromServerFetch)
              {

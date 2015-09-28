@@ -115,7 +115,6 @@ static CGFloat const kTableViewSectionHeaderHeight = 77;
     [self setupNotifications];
     [self setUpNavigationBarAppearance];
 
-    
     [self reloadTasksFromCoreData];
     [self checkForAndMaybeRespondToSystemDateChange];
     
@@ -557,7 +556,6 @@ static CGFloat const kTableViewSectionHeaderHeight = 77;
     BOOL sortNewestToOldest = YES;
 
     __weak typeof(self) weakSelf = self;
-    
     [[APCScheduler defaultScheduler] fetchTaskGroupsFromDate: yesterday
                                                       toDate: today
                                       forTasksMatchingFilter: filterForRequiredTasks

@@ -75,7 +75,6 @@ static NSString *const kNewsFeedStoryBoardKey      = @"APCNewsFeed";
 static NSString*    const kDemographicDataWasUploadedKey    = @"kDemographicDataWasUploadedKey";
 static NSString*    const kLastUsedTimeKey                  = @"APHLastUsedTime";
 static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterForegroundTime";
-static NSUInteger   const kIndexOfProfileTab                = 3;
 
 @interface APCAppDelegate  ( )  <UITabBarControllerDelegate>
 
@@ -116,15 +115,6 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     [self doGeneralInitialization];
     [self initializeBridgeServerConnection];
     [self initializeAppleCoreStack];
-
-    [self.scheduler loadTasksAndSchedulesFromDiskAndThenUseThisQueue:[NSOperationQueue mainQueue]
-                                                    toDoThisWhenDone:^(NSError* errorFetchingOrLoading)
-    {
-        if(!errorFetchingOrLoading)
-        {
-            [self performMigrationAfterFirstImport];
-        }
-    }];
 
     [self registerNotifications];
     [self setUpAppAppearance];

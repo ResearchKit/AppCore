@@ -32,7 +32,7 @@
 // 
  
 #import "APCResult.h"
-#import "APCScheduledTask.h"
+#import "APCTask.h"
 
 
 @implementation APCResult
@@ -47,6 +47,6 @@
 @dynamic taskRunID;
 @dynamic updatedAt;
 @dynamic uploaded;
-@dynamic scheduledTask;
+@dynamic task;
 
 @end

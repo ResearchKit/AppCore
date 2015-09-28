@@ -1,5 +1,5 @@
 //
-//  APCActivitiesDateState.h
+//  APCTaskImporter.h
 //  APCAppCore
 //
 //  Copyright (c) 2015, Apple Inc. All rights reserved.
@@ -32,9 +32,31 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "APCConstants.h"
 
-@interface APCActivitiesDateState : NSObject
+@class NSManagedObjectContext;
+@class SBBTask;
 
-- (NSDictionary *)activitiesStateForDate:(NSDate *)date;
+/**
+ Imports tasks and schedules from a given TaskSource (server,
+ disk, etc.) carefully merging them with existing tasks.
+ */
+@interface APCTaskImporter : NSObject
+
+/**
+ Imports tasks from the specified source, and meshes them with existing tasks.
+ Executes on the calling method's thread.
+ 
+ See the .m file for technical notes on this method.
+ */
+- (void) processTasks: (NSArray *) arrayOfTasks
+           fromSource: (APCTaskSource) taskSource
+         usingContext: (NSManagedObjectContext *) context
+       returningError: (NSError * __autoreleasing *) errorToReturn;
+
+/**
+ Utility methods helping us normalize all the data before we import it.
+ */
+- (NSDictionary *) extractJsonDataFromIncomingSageTask: (SBBTask *)sageTask;
 
 @end

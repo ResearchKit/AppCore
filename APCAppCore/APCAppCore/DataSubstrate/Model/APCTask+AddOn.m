@@ -148,6 +148,45 @@ static NSString * const kTaskFileNameKey = @"taskFileName";
     return result;
 }
 
++ (NSSet *) querySavedTasksWithTaskGuids: (NSSet *) setOfTaskGuids
+                            usingContext: (NSManagedObjectContext *) context
+{
+    NSSet *result = nil;
+    
+    if (setOfTaskGuids.count > 0 && context != nil)
+    {
+        NSString *nameOfTaskGuidField = NSStringFromSelector (@selector (taskGuid));
+        
+        NSFetchRequest *query = [self requestWithPredicate: [NSPredicate predicateWithFormat: @"%K in %@",
+                                                             nameOfTaskGuidField,
+                                                             setOfTaskGuids]];
+        
+        NSError *error = nil;
+        NSArray *tasks = [context executeFetchRequest: query
+                                                error: &error];
+        if (tasks == nil)
+        {
+            APCLogError2 (error);
+        }
+        else
+        {
+            NSMutableSet *nonTemporaryTasks = [NSMutableSet new];
+            
+            for (APCTask *task in tasks)
+            {
+                if (! task.objectID.isTemporaryID)
+                {
+                    [nonTemporaryTasks addObject: task];
+                }
+            }
+            
+            result = [NSSet setWithSet: nonTemporaryTasks];
+        }
+    }
+    
+    return result;
+}
+
 - (id<ORKTask>)rkTask
 {
     ORKOrderedTask * retTask = self.taskDescription ? [NSKeyedUnarchiver unarchiveObjectWithData:self.taskDescription] : nil;
@@ -157,25 +196,6 @@ static NSString * const kTaskFileNameKey = @"taskFileName";
 - (void)setRkTask:(id<ORKTask>)rkTask
 {
     self.taskDescription = [NSKeyedArchiver archivedDataWithRootObject:rkTask];
-}
-
-- (APCSchedule *) mostRecentSchedule
-{
-    NSString *nameOfStartDateField = NSStringFromSelector (@selector (startsOn));
-    NSArray *sortedSchedules = [self.schedules sortedArrayUsingDescriptors: @[[NSSortDescriptor sortDescriptorWithKey: nameOfStartDateField ascending: NO]]];
-
-    APCSchedule *newestSchedule = nil;
-
-    for (APCSchedule *schedule in sortedSchedules)
-    {
-        if (! schedule.objectID.isTemporaryID)
-        {
-            newestSchedule = schedule;
-            break;
-        }
-    }
-
-    return newestSchedule;
 }
 
 

@@ -33,11 +33,8 @@
 
 #import "APCTaskGroup.h"
 #import "APCTask+AddOn.h"
-#import "APCSchedule+AddOn.h"
 #import "APCConstants.h"
-#import "APCScheduledTask+AddOn.h"
 #import "NSDate+Helper.h"
-#import "APCPotentialScheduledTask.h"
 
 /**
  We always sort -allCompletedTasks by the same set of
@@ -99,7 +96,6 @@ static NSDateFormatter *debugDateFormatter = nil;
     {
         _task = nil;
         _schedule = nil;
-        _samplePotentialTask = nil;
         _requiredRemainingTasks = nil;
         _requiredCompletedTasks = nil;
         _gratuitousCompletedTasks = nil;
@@ -113,35 +109,35 @@ static NSDateFormatter *debugDateFormatter = nil;
     return self;
 }
 
-- (instancetype)       initWithTask: (APCTask *) task
-                           schedule: (APCSchedule *) schedule
-    requiredRemainingPotentialTasks: (NSArray *) requiredRemainingTasks
-             requiredCompletedTasks: (NSArray *) requiredCompletedTasks
-           gratuitousCompletedTasks: (NSArray *) gratuitousCompletedTasks
-                samplePotentialTask: (APCPotentialTask *) samplePotentialTask
-                 totalRequiredTasks: (NSUInteger) countOfRequiredTasks
-                   forScheduledDate: (NSDate *) scheduledDate
-                     appearanceDate: (NSDate *) appearanceDate
-                     expirationDate: (NSDate *) expirationDate
-{
+- (instancetype)       initWithTasks: (NSArray *) tasks
+                    forScheduledDate: (NSDate *) scheduledDate {
     self = [self init];
-
     if (self)
     {
-        _task = task;
-        _schedule = schedule;
-        _samplePotentialTask = samplePotentialTask;
-        _requiredRemainingTasks = requiredRemainingTasks;
-        _requiredCompletedTasks = requiredCompletedTasks;
-        _gratuitousCompletedTasks = gratuitousCompletedTasks;
-        _totalRequiredTasksForThisTimeRange = countOfRequiredTasks;
+        NSMutableArray *requiredRemainingTasksArray = [NSMutableArray new];
+        NSMutableArray *requiredCompletedTasksArray = [NSMutableArray new];
+        for (APCTask *task in tasks) {
+            if (!_task) {
+                _task = task;
+            }
+            if ([task.taskIsOptional boolValue] == NO) {
+                // Task is required
+                _totalRequiredTasksForThisTimeRange++;
+                if (task.taskFinished) {
+                    [requiredCompletedTasksArray addObject:task];
+                } else {
+                    [requiredRemainingTasksArray addObject:task];
+                }
+            }
+        }
+        _requiredRemainingTasks = (NSArray*) requiredRemainingTasksArray;
+        _requiredCompletedTasks = (NSArray*) requiredCompletedTasksArray;
+        _appearanceDate = scheduledDate;
         _scheduledDate = scheduledDate;
-        _appearanceDate = appearanceDate;
-        _expirationDate = expirationDate;
-
+        _expirationDate = _task.taskExpires;
         _expiresToday = _expirationDate != nil && [_expirationDate.startOfDay isEqualToDate: _appearanceDate.startOfDay];
     }
-
+    
     return self;
 }
 
@@ -174,7 +170,7 @@ static NSDateFormatter *debugDateFormatter = nil;
     return result;
 }
 
-- (APCScheduledTask *) latestCompletedTask
+- (APCTask *) latestCompletedTask
 {
     return self.allCompletedTasks.lastObject;
 }
@@ -192,7 +188,7 @@ static NSDateFormatter *debugDateFormatter = nil;
 {
     NSDate *latestCompletionDate = nil;
 
-    for (APCScheduledTask *completedTask in self.requiredCompletedTasks)
+    for (APCTask *completedTask in self.requiredCompletedTasks)
     {
         if (latestCompletionDate == nil || [completedTask.updatedAt isLaterThanDate: latestCompletionDate])
         {
@@ -213,13 +209,12 @@ static NSDateFormatter *debugDateFormatter = nil;
     {
         [dates appendString: @"(none)"];
     }
-    else for (APCScheduledTask *scheduledTask in self.allCompletedTasks)
+    else for (APCTask *scheduledTask in self.allCompletedTasks)
     {
         [dates appendFormat: @"%@, ", scheduledTask.updatedAt];
     }
 
-    result = [NSString stringWithFormat: @"TaskGroup: %@ | %@ | %@ | vcToShow: %@ | %@ | expires today: %@ | tasks: %@ required, %@ completed, %@ remaining, %@ gratuitous completed, most recent completed on %@",
-              NSStringShortFromAPCScheduleSourceAsNumber ([self.task.schedules.anyObject scheduleSource]),
+    result = [NSString stringWithFormat: @"TaskGroup: %@ | %@ | vcToShow: %@ | %@ | expires today: %@ | tasks: %@ required, %@ completed, %@ remaining, %@ gratuitous completed, most recent completed on %@",
               self.task.taskTitle,
               self.task.taskID,
               self.task.taskClassName,

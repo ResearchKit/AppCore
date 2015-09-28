@@ -39,17 +39,17 @@
 #pragma mark - Enum Translation Functions
 // ---------------------------------------------------------
 
-NSString *NSStringFromAPCScheduleSource (APCScheduleSource scheduleSource)
+NSString *NSStringFromAPCTaskSource (APCTaskSource taskSource)
 {
     NSString *result = nil;
 
-    switch (scheduleSource)
+    switch (taskSource)
     {
-        case APCScheduleSourceAll:                  result = @"APCScheduleSourceAll";               break;
-        case APCScheduleSourceLocalDisk:            result = @"APCScheduleSourceLocalDisk";         break;
-        case APCScheduleSourceServer:               result = @"APCScheduleSourceServer";            break;
-        case APCScheduleSourceGlucoseLog:           result = @"APCScheduleSourceGlucoseLog";        break;
-        case APCScheduleSourceMedicationTracker:    result = @"APCScheduleSourceMedicationTracker"; break;
+        case APCTaskSourceAll:                  result = @"APCTaskSourceAll";               break;
+        case APCTaskSourceLocalDisk:            result = @"APCTaskSourceLocalDisk";         break;
+        case APCTaskSourceServer:               result = @"APCTaskSourceServer";            break;
+        case APCTaskSourceGlucoseLog:           result = @"APCTaskSourceGlucoseLog";        break;
+        case APCTaskSourceMedicationTracker:    result = @"APCTaskSourceMedicationTracker"; break;
 
         default: result = @"Unknown"; break;
     }
@@ -57,21 +57,21 @@ NSString *NSStringFromAPCScheduleSource (APCScheduleSource scheduleSource)
     return result;
 }
 
-NSString *NSStringFromAPCScheduleSourceAsNumber (NSNumber *scheduleSourceAsNumber)
+NSString *NSStringFromAPCTaskSourceAsNumber (NSNumber *taskSourceAsNumber)
 {
-    return NSStringFromAPCScheduleSource (scheduleSourceAsNumber.integerValue);
+    return NSStringFromAPCTaskSource (taskSourceAsNumber.integerValue);
 }
 
-NSString *NSStringShortFromAPCScheduleSource (APCScheduleSource scheduleSource)
+NSString *NSStringShortFromAPCTaskSource (APCTaskSource taskSource)
 {
-    NSString *result = NSStringFromAPCScheduleSource (scheduleSource);
-    result = [result substringFromIndex: @"APCScheduleSource".length];
+    NSString *result = NSStringFromAPCTaskSource (taskSource);
+    result = [result substringFromIndex: @"APCTaskSource".length];
     return result;
 }
 
-NSString *NSStringShortFromAPCScheduleSourceAsNumber (NSNumber *scheduleSourceAsNumber)
+NSString *NSStringShortFromAPCTaskSourceAsNumber (NSNumber *taskSourceAsNumber)
 {
-    return NSStringShortFromAPCScheduleSource (scheduleSourceAsNumber.integerValue);
+    return NSStringShortFromAPCTaskSource (taskSourceAsNumber.integerValue);
 }
 
 

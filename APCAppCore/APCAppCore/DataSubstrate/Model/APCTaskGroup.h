@@ -109,7 +109,7 @@
  
  @see allCompletedTasks
  */
-@property (readonly) APCScheduledTask *latestCompletedTask;
+@property (readonly) APCTask *latestCompletedTask;
 
 /**
  YES if there are any completed tasks in this TaskGroup
@@ -117,14 +117,6 @@
  NO otherwise.
  */
 @property (readonly) BOOL hasAnyCompletedTasks;
-
-/**
- A sample PotentialTask you can use to create new
- ScheduledTasks, and open the matching ViewController.
- Use this if there are no more requiredRemainingTasks,
- but the user still needs/wants to do one.
- */
-@property (nonatomic, strong) APCPotentialTask *samplePotentialTask;
 
 /**
  An integer reporting how many instances of this task were
@@ -217,15 +209,7 @@
 
 - (NSComparisonResult) compareWithTaskGroup: (APCTaskGroup *) otherTaskGroup;
 
-- (instancetype)       initWithTask: (APCTask *) task
-                           schedule: (APCSchedule *) schedule
-    requiredRemainingPotentialTasks: (NSArray *) requiredRemainingTasks
-             requiredCompletedTasks: (NSArray *) requiredCompletedTasks
-           gratuitousCompletedTasks: (NSArray *) gratuitousCompletedTasks
-                samplePotentialTask: (APCPotentialTask *) samplePotentialTask
-                 totalRequiredTasks: (NSUInteger) countOfRequiredTasks
-                   forScheduledDate: (NSDate *) scheduledDate
-                     appearanceDate: (NSDate *) appearanceDate
-                     expirationDate: (NSDate *) expirationDate;
+- (instancetype)       initWithTasks: (NSArray *) tasks
+                    forScheduledDate: (NSDate *) scheduledDate;
 
 @end

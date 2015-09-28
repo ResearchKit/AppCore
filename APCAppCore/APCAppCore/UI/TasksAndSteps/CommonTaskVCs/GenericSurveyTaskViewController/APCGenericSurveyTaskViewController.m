@@ -32,7 +32,6 @@
 // 
  
 #import "APCGenericSurveyTaskViewController.h"
-#import "APCScheduledTask.h"
 #import "APCLog.h"
 #import "APCTask+AddOn.h"
 
@@ -44,9 +43,9 @@
     APCLogViewControllerAppeared();
 }
 
-+ (id<ORKTask>)createTask:(APCScheduledTask*) scheduledTask
++ (id<ORKTask>)createOrkTask:(APCTask*) scheduledTask
 {
-    return  [scheduledTask.task rkTask];
+    return  [scheduledTask rkTask];
 }
 
 @end

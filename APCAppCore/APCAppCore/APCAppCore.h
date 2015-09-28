@@ -285,7 +285,6 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
  Objects
  ------------------------- */
 #import <APCAppCore/APCTableViewItem.h>
-#import <APCAppCore/APCGroupedScheduledTask.h>
 #import <APCAppCore/APCKeychainStore+Passcode.h>
 #import <APCAppCore/APCPresentAnimator.h>
 #import <APCAppCore/APCFadeAnimator.h>
@@ -342,11 +341,9 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCDayOfMonthSelector.h>
 #import <APCAppCore/APCListSelector.h>
 #import <APCAppCore/APCPointSelector.h>
-#import <APCAppCore/APCPotentialScheduledTask.h>
 #import <APCAppCore/APCScheduleEnumerator.h>
 #import <APCAppCore/APCScheduleExpressionParser.h>
 #import <APCAppCore/APCScheduleExpressionToken.h>
 #import <APCAppCore/APCScheduleExpressionTokenizer.h>
 #import <APCAppCore/APCTimeSelector.h>
 #import <APCAppCore/APCTimeSelectorEnumerator.h>
-#import <APCAppCore/APCActivitiesDateState.h>

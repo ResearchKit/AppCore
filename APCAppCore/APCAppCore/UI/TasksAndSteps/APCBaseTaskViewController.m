@@ -123,48 +123,42 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
 @implementation APCBaseTaskViewController
 
 #pragma  mark  -  Instance Initialisation
-+ (instancetype)customTaskViewController: (APCScheduledTask*) scheduledTask
++ (instancetype)customTaskViewController: (APCTask*) scheduledTask
 {
     [[UIView appearance] setTintColor:[UIColor appPrimaryColor]];
     
-    id<ORKTask> task = [self createTask: scheduledTask];
+    id<ORKTask> orkTask = [self createOrkTask: scheduledTask];
     
     NSUUID * taskRunUUID = [NSUUID UUID];
     
-    APCBaseTaskViewController * controller = task ? [[self alloc] initWithTask:task taskRunUUID:taskRunUUID] : nil;
+    APCBaseTaskViewController * controller = orkTask ? [[self alloc] initWithTask:orkTask taskRunUUID:taskRunUUID] : nil;
     controller.scheduledTask = scheduledTask;
     controller.delegate = controller;
+    [[APCScheduler defaultScheduler] startTask:scheduledTask];
     
     return  controller;
 }
 
 + (instancetype)configureTaskViewController:(APCTaskGroup *)taskGroup
 {
-    APCPotentialTask *potentialTask             = taskGroup.requiredRemainingTasks.firstObject;
+    APCTask *nextTask = nil;
     APCBaseTaskViewController *viewController   = nil;
     
-    /*
-     It's a fundamental business requirement that our users
-     can do *more* than the required number of tasks.  This
-     object lets us do that, if they've gone through all
-     the actually- required tasks for this date.
-     */
-    if (potentialTask == nil)
-    {
-        potentialTask = taskGroup.samplePotentialTask;
+    if (taskGroup.requiredRemainingTasks.count > 0) {
+        nextTask = [taskGroup.requiredRemainingTasks firstObject];
+    } else if (taskGroup.requiredCompletedTasks.count > 0) {
+        // Allow the user to complete a required task again, essentially a gratuitous task
+        nextTask = [taskGroup.requiredCompletedTasks lastObject];
+    } else {
+        nextTask = taskGroup.task;
     }
     
-    if (potentialTask != nil) {
-        APCScheduledTask *scheduledTask = [[APCScheduler defaultScheduler] createScheduledTaskFromPotentialTask:potentialTask];
-        
-        viewController = [self customTaskViewController:scheduledTask];
-    }
-    
+    viewController = [self customTaskViewController:nextTask];
     
     return viewController;
 }
 
-+ (id<ORKTask>)createTask: (APCScheduledTask*) __unused scheduledTask
++ (id<ORKTask>)createOrkTask: (APCTask*) __unused scheduledTask
 {
     //To be overridden by child classes
     return  nil;
@@ -193,7 +187,7 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
     APCLogViewControllerAppeared();
     APCLogEventWithData(kTaskEvent, (@{
                                        @"task_status":@"Started",
-                                       @"task_title": (self.scheduledTask.task.taskTitle == nil) ? @"No Title Provided": self.scheduledTask.task.taskTitle,
+                                       @"task_title": (self.scheduledTask.taskTitle == nil) ? @"No Title Provided": self.scheduledTask.taskTitle,
                                        @"task_view_controller":NSStringFromClass([self class])
                                        }));
 }
@@ -213,7 +207,7 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
                       error: (nullable NSError *) error
 {
     NSString *currentStepIdentifier = self.currentStepViewController.step.identifier;
-    NSString *taskTitle = self.scheduledTask.task.taskTitle;
+    NSString *taskTitle = self.scheduledTask.taskTitle;
     BOOL shouldLogError = YES;
 
     if (currentStepIdentifier == nil)
@@ -243,7 +237,8 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
                 [self processTaskResult];
             }
             
-            [self.scheduledTask completeScheduledTask];
+            [[APCScheduler defaultScheduler] finishTask:self.scheduledTask];
+            [self apiUpdateTask:self.scheduledTask];
             [[NSNotificationCenter defaultCenter]postNotificationName:APCActivityCompletionNotification object:nil];
             break;
 
@@ -269,26 +264,12 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
             break;
 
         case ORKTaskViewControllerFinishReasonDiscarded:
-            /*
-             The user cancelled the operation.  Delete the ScheduledTask.
-
-             In our new world, the theory is:  ScheduledTasks are only created
-             in the database when the user actually chooses to save them.
-             Unfortunately, a lot of existing code depends on ScheduledTasks
-             already having been created before a view appears.  So we'll run
-             with that:  save the task while the views are using it, but then
-             destroy it if the user cancels.
-
-             This should be asynchronous.  For now, it's not, so I can
-             figure out what threads this class (the one you're reading
-             now) is reliably using.  Then I'll fix it to be wholly-
-             asynchronous.
-             */
-            [self.appDelegate.scheduler deleteScheduledTask: self.scheduledTask];
+            [[APCScheduler defaultScheduler] abortTask:self.scheduledTask];
             break;
 
         case ORKTaskViewControllerFinishReasonSaved:
-            // Nothing special to do.
+            [[APCScheduler defaultScheduler] startTask:self.scheduledTask];
+            [self apiUpdateTask:self.scheduledTask];
             break;
 
         default:
@@ -463,12 +444,12 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
                         usingContext: (NSManagedObjectContext *) context
 {
     NSManagedObjectID * objectID = [APCResult storeTaskResult:self.result inContext:context];
-    APCScheduledTask *localContextScheduledTask = (APCScheduledTask *)[context objectWithID:self.scheduledTask.objectID];
+    APCTask *localContextScheduledTask = (APCTask *)[context objectWithID:self.scheduledTask.objectID];
     
     APCResult * result = (APCResult*)[context objectWithID:objectID];
     result.archiveFilename = fileName;
     result.resultSummary = resultSummary;
-    result.scheduledTask = localContextScheduledTask;
+    result.task = localContextScheduledTask;
     
     NSError * resultSaveError = nil;
     BOOL saveSuccess = [result saveToPersistentStore:&resultSaveError];
@@ -485,6 +466,14 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
     if (self.createResultSummaryBlock) {
         [self.appDelegate.dataMonitor performCoreDataBlockInBackground:self.createResultSummaryBlock];
     }
+}
+
+- (void) apiUpdateTask: (APCTask *) task {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        [task updateTaskOnCompletion: ^(NSError *error) {
+            APCLogError2 (error);
+        }];
+    });
 }
 
 /*********************************************************************************/
@@ -513,7 +502,7 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
     NSString * scheduledTaskID = [coder decodeObjectForKey:@"scheduledTask"];
     APCAppDelegate *appDelegate = [APCAppDelegate sharedAppDelegate];
     NSManagedObjectID * objID = [appDelegate.dataSubstrate.persistentStoreCoordinator managedObjectIDForURIRepresentation:[NSURL URLWithString:scheduledTaskID]];
-    APCScheduledTask * scheduledTask = (APCScheduledTask*)[appDelegate.dataSubstrate.mainContext objectWithID:objID];
+    APCTask * scheduledTask = (APCTask*)[appDelegate.dataSubstrate.mainContext objectWithID:objID];
     id localRestorationData = [coder decodeObjectForKey:@"restorationData"];
     if (scheduledTask) {
         APCBaseTaskViewController * tvc =[[self alloc] initWithTask:task restorationData:localRestorationData];

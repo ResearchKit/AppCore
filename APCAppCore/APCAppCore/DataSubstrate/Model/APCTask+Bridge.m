@@ -137,6 +137,38 @@
     }
 }
 
+- (void) updateTaskOnCompletion: (void (^)(NSError * error)) completionBlock
+{
+    if ([APCTask serverDisabled]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (completionBlock) {
+                completionBlock(nil);
+            }
+        });
+    }
+    else
+    {
+        SBBTask *sbbTask = [SBBTask new];
+        sbbTask.guid = self.taskGuid;
+        sbbTask.startedOn = self.taskStarted;
+        sbbTask.finishedOn = self.taskFinished;
+        
+        [SBBComponent(SBBTaskManager) finishTask:sbbTask
+                                            asOf:self.taskFinished
+              withCompletion:^(id __unused task, NSError *error) {
+                  dispatch_async(dispatch_get_main_queue(), ^{
+                      if (!error) {
+                          APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"Task Updated To Bridge"}));
+                      }
+                      if (completionBlock) {
+                          completionBlock(error);
+                      }
+                  });
+              }
+        ];
+    }
+}
+
 
 /*********************************************************************************/
 #pragma mark - SBB to APCSmartSurvey Conversion
