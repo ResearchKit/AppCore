@@ -371,8 +371,7 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
              Bounce over to the Bridge SDK's thread, call the server, and then come
              back to our thread a while later.
              */
-            NSDate *futureDate = [[NSDate date] dateByAddingDays:3]; // TODO: store this variable somewhere, can it be in the api?
-            [SBBComponent (SBBTaskManager) getTasksUntil:futureDate
+            [SBBComponent (SBBTaskManager) getTasksForDaysAhead:3
                                           withCompletion:^(SBBResourceList *tasksList,
                                                            NSError *errorFetchingTasks)
              {
