@@ -378,7 +378,6 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
                 [self addSpatialSpanMemoryResultsToArchive:spatialSpanMemoryResult];
             }
             
-            
             else if ([result isKindOfClass:[ORKQuestionResult class]])
             {
                 [self addResultToArchive:result];

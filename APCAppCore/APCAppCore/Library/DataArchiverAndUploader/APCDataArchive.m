@@ -57,6 +57,7 @@ static NSString * kJsonInfoFilename                 = @"info.json";
 @interface APCDataArchive ()
 
 @property (nonatomic, strong) NSString *reference;
+@property (nonatomic, strong) APCTask *task;
 @property (nonatomic, strong) ZZArchive *zipArchive;
 @property (nonatomic, strong) NSMutableArray *zipEntries;
 @property (nonatomic, strong) NSMutableArray *filesList;
@@ -72,6 +73,19 @@ static NSString * kJsonInfoFilename                 = @"info.json";
     self = [super init];
     if (self) {
         _reference = reference;
+        [self createArchive];
+    }
+    
+    return self;
+}
+
+// designated initializer
+- (id)initWithReference: (NSString *)reference task:(APCTask *)task
+{
+    self = [super init];
+    if (self) {
+        _reference = reference;
+        _task = task;
         [self createArchive];
     }
     
