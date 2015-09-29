@@ -40,12 +40,15 @@
 #import "NSDate+Helper.h"
 #import "APCJSONSerializer.h"
 #import "NSError+APCAdditions.h"
+#import "APCConstants.h"
 
 static NSString * kFileInfoNameKey                  = @"filename";
 static NSString * kUnencryptedArchiveFilename       = @"unencrypted.zip";
 static NSString * kFileInfoTimeStampKey             = @"timestamp";
 static NSString * kFileInfoContentTypeKey           = @"contentType";
 static NSString * kTaskRunKey                       = @"taskRun";
+static NSString * kSurveyCreatedOnKey               = @"surveyCreatedOn";
+static NSString * kSurveyGuidKey                    = @"surveyGuid";
 static NSString * kFilesKey                         = @"files";
 static NSString * kAppNameKey                       = @"appName";
 static NSString * kAppVersionKey                    = @"appVersion";
@@ -194,6 +197,10 @@ static NSString * kJsonInfoFilename                 = @"info.json";
         [self.infoDict setObject:[APCUtilities phoneInfo] forKey:kPhoneInfoKey];
         [self.infoDict setObject:[NSUUID new].UUIDString forKey:kTaskRunKey];
         [self.infoDict setObject:self.reference forKey:kItemKey];
+        if ([self.task.taskType isEqualToNumber:@(APCTaskTypeSurveyTask)]) {
+            [self.infoDict setObject:self.task.taskVersionName forKey:kSurveyGuidKey];
+            [self.infoDict setObject:self.task.taskVersionDate forKey:kSurveyCreatedOnKey];
+        }
         
         [self insertIntoArchive:self.infoDict filename:kJsonInfoFilename];
         
