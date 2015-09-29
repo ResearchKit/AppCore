@@ -53,7 +53,9 @@
 @property (nonatomic, retain) NSDate * taskScheduledFor;
 @property (nonatomic, retain) NSDate * taskStarted;
 @property (nonatomic, retain) NSString * taskTitle;
-@property (nonatomic, retain) NSNumber * taskVersionNumber;
+@property (nonatomic, retain) NSNumber * taskType;
+@property (nonatomic, retain) NSDate * taskVersionDate;
+@property (nonatomic, retain) NSString * taskVersionName;
 @property (nonatomic, retain) NSDate * updatedAt;
 @property (nonatomic, retain) NSSet *results;
 @end

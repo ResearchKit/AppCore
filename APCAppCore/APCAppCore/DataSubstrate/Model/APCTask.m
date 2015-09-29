@@ -52,7 +52,9 @@
 @dynamic taskScheduledFor;
 @dynamic taskStarted;
 @dynamic taskTitle;
-@dynamic taskVersionNumber;
+@dynamic taskType;
+@dynamic taskVersionDate;
+@dynamic taskVersionName;
 @dynamic updatedAt;
 @dynamic results;
 

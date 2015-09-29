@@ -446,7 +446,7 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
         }
         
         /*
-         Loop through the incoming items and save/udpate everything.
+         Loop through the incoming items and save/update everything.
          */
         [self processTasks: jsonCopyOfSageTasks
                 fromSource: APCTaskSourceServer

@@ -94,7 +94,9 @@
         <attribute name="taskScheduledFor" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="taskStarted" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="taskTitle" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="taskVersionNumber" optional="YES" attributeType="Integer 32" defaultValueString="0" indexed="YES" syncable="YES"/>
+        <attribute name="taskType" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="taskVersionDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="taskVersionName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="updatedAt" optional="YES" attributeType="Date" syncable="YES"/>
         <relationship name="results" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="APCResult" inverseName="task" inverseEntity="APCResult" syncable="YES"/>
     </entity>
@@ -108,6 +110,6 @@
         <element name="APCMedTrackerPrescriptionColor" positionX="-666" positionY="729" width="207" height="133"/>
         <element name="APCResult" positionX="-1359" positionY="297" width="171" height="210"/>
         <element name="APCStoredUserData" positionX="-1593" positionY="72" width="200" height="435"/>
-        <element name="APCTask" positionX="-873" positionY="71" width="207" height="315"/>
+        <element name="APCTask" positionX="-873" positionY="71" width="207" height="345"/>
     </elements>
 </model>
