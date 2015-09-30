@@ -67,6 +67,11 @@
 - (NSInteger) cronDayOfWeekForDay: (NSInteger) dayInCurrentMonthYearAndCalendar;
 - (NSNumber *) cronDayOfWeekAsNSNumberForDay: (NSNumber *) dayInCurrentMonthYearAndCalendar;
 
+/**
+ Convert to a Joda time readable time string
+ */
+- (NSString *) toJodaReadableTimeString;
+
 
 /**
  Returns the integer last day of the month.  For example,

@@ -35,6 +35,7 @@
 #import "ORKAnswerFormat+Helper.h"
 #import "NSDate+Helper.h"
 #import <CoreData/CoreData.h>
+#import "NSDateComponents+helper.h"
 
 
 
@@ -253,6 +254,17 @@ static NSString * const kRegularExpressionPatternMatchingUUIDs = (@"[a-fA-F0-9]{
         NSDate *theDate = (NSDate *) sourceObject;
         NSString *sageFriendlyDate = theDate.toStringInISO8601Format;
         result = sageFriendlyDate;
+    }
+    
+    /*
+     RK returns a DateComponents object when a specific time is selected. We
+     need to convert that to a Joda parseable time like hh:mm:ss for Bridge.
+     */
+    else if ([sourceObject isKindOfClass: [NSDateComponents class]])
+    {
+        NSDateComponents *theDateComponents = (NSDateComponents *) sourceObject;
+        NSString *timeString = [theDateComponents toJodaReadableTimeString];
+        result = timeString;
     }
 
     /*
