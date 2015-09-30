@@ -39,6 +39,9 @@
 #pragma mark - Enum Translation Functions
 // ---------------------------------------------------------
 
+/**
+ APCTaskSource Methods
+ */
 NSString *NSStringFromAPCTaskSource (APCTaskSource taskSource)
 {
     NSString *result = nil;
@@ -74,6 +77,41 @@ NSString *NSStringShortFromAPCTaskSourceAsNumber (NSNumber *taskSourceAsNumber)
     return NSStringShortFromAPCTaskSource (taskSourceAsNumber.integerValue);
 }
 
+/**
+ APCTaskType Methods
+ */
+NSString *NSStringFromAPCTaskType (APCTaskType taskType)
+{
+    NSString *result = nil;
+    
+    switch (taskType)
+    {
+        case APCTaskTypeSurveyTask:                 result = @"APCTaskTypeSurveyTask";              break;
+        case APCTaskTypeActivityTask:               result = @"APCTaskTypeActivityTask";            break;
+        case APCTaskTypeSurveyAndActivityTask:      result = @"APCTaskTypeSurveyAndActivityTask";   break;
+            
+        default: result = @"Unknown"; break;
+    }
+    
+    return result;
+}
+
+NSString *NSStringFromAPCTaskTypeAsNumber (NSNumber *taskTypeAsNumber)
+{
+    return NSStringFromAPCTaskType (taskTypeAsNumber.integerValue);
+}
+
+NSString *NSStringShortFromAPCTaskType (APCTaskType taskType)
+{
+    NSString *result = NSStringFromAPCTaskType (taskType);
+    result = [result substringFromIndex: @"APCTaskType".length];
+    return result;
+}
+
+NSString *NSStringShortFromAPCTaskTypeAsNumber (NSNumber *taskTypeAsNumber)
+{
+    return NSStringShortFromAPCTaskType (taskTypeAsNumber.integerValue);
+}
 
 
 // ---------------------------------------------------------

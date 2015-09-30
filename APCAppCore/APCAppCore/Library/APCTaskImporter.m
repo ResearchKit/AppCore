@@ -91,7 +91,6 @@ static NSString * const kTaskTitleKey                          = @"taskTitle";
 static NSString * const kTaskTypeKey                           = @"taskType";
 static NSString * const kTaskTypeValueSurvey                   = @"survey";
 static NSString * const kTaskUrlKey                            = @"taskUrl";
-static NSString * const kTaskVersionNumberKey                  = @"version";
 
 /**
  Formats for interpreting a JSON list of time values.
@@ -206,7 +205,6 @@ static NSArray *legalTimeSpecifierFormats = nil;
 {
     APCTask  *task              = nil;
     NSString *taskGuid          = [self nilIfNull: taskData [kTaskGuidKey]];
-    NSNumber *taskVersionNumber = [self nilIfNull: taskData [kTaskVersionNumberKey]];
     
     NSSet *tasks = [APCTask querySavedTasksWithTaskGuids: [NSSet setWithObject: taskGuid]
                                             usingContext: context];
@@ -220,7 +218,6 @@ static NSArray *legalTimeSpecifierFormats = nil;
     {
         task = [APCTask newObjectForContext: context];
         task.taskGuid = taskGuid;
-        task.taskVersionNumber = taskVersionNumber;
     }
     
     [self updateTask: task
@@ -237,6 +234,7 @@ static NSArray *legalTimeSpecifierFormats = nil;
     // (or add it for the first time, if we're creating a task).
     //
     task.taskID                     = [self nilIfNull: taskData [kTaskIDKey]];
+    task.taskType                   = [self nilIfNull: taskData [kTaskTypeKey]];                    // internal representation of separate bridge types (Survey, non Survey)
     task.taskHRef                   = [self nilIfNull: taskData [kTaskUrlKey]];                     // bridge-only?
     task.taskTitle                  = [self nilIfNull: taskData [kTaskTitleKey]];                   // bridge and us
     task.sortString                 = [self nilIfNull: taskData [kTaskSortStringKey]];              // appcore-only, for now
@@ -396,13 +394,15 @@ static NSArray *legalTimeSpecifierFormats = nil;
     taskData [kTaskSortStringKey]           = [self nullIfNil: sageTask.activity.activityType]; // Default for now
     
     if (sageTask.activity.survey) {
+        taskData [kTaskTypeKey]                 = [NSNumber numberWithUnsignedInt:APCTaskTypeSurveyTask];
         taskData [kTaskIDKey]                   = [self nullIfNil: sageTask.activity.survey.identifier];
-        taskData [kTaskVersionNumberKey]        = [self nullIfNil: sageTask.activity.survey.createdOn.toStringInISO8601Format];
         taskData [kTaskUrlKey]                  = [self nullIfNil: sageTask.activity.survey.href];
         taskData [kTaskClassNameKey]            = NSStringFromClass ([APCGenericSurveyTaskViewController class]);
         
         return taskData;
     } else if (sageTask.activity.task) {
+        taskData [kTaskTypeKey]                 =  [NSNumber numberWithUnsignedInt:APCTaskTypeActivityTask];
+        
         // Set up TaskId->TaskViewController dictionary
         // TODO: move this init stuff out of a situation where it will be called many times
         NSString *filePath = [[NSBundle mainBundle] pathForResource:kTaskIdToViewControllerMappingJSON ofType:@"json"];
@@ -421,7 +421,6 @@ static NSArray *legalTimeSpecifierFormats = nil;
             taskData [kTaskClassNameKey]            = taskClassName;
             
             // Not available for non survey tasks
-            taskData [kTaskVersionNumberKey]    = [NSNull null];
             taskData [kTaskUrlKey]              = [NSNull null];
             
             return taskData;

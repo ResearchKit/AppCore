@@ -736,6 +736,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		045D0CBD1BBAFDC500330C7E /* APCModel 8.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "APCModel 8.xcdatamodel"; sourceTree = "<group>"; };
 		0494397F1B8FC04000CAE23C /* APCDownloadDataViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDownloadDataViewController.h; sourceTree = "<group>"; };
 		049439801B8FC04000CAE23C /* APCDownloadDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDownloadDataViewController.m; sourceTree = "<group>"; };
 		04FB64451BB4883900D0A50D /* APCTaskImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCTaskImporter.h; sourceTree = "<group>"; };
@@ -4164,6 +4165,7 @@
 		F5F128981A2F78490015982C /* APCModel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				045D0CBD1BBAFDC500330C7E /* APCModel 8.xcdatamodel */,
 				04FB64491BB4A11A00D0A50D /* APCModel 7.xcdatamodel */,
 				366345791B1F84F0003CC0EF /* APCModel 6.xcdatamodel */,
 				366345781B1F84DD003CC0EF /* APCModel 5.xcdatamodel */,
@@ -4172,7 +4174,7 @@
 				36469C321AA1650F00C10CA7 /* APCModel 3.xcdatamodel */,
 				F5F128991A2F78490015982C /* APCModel.xcdatamodel */,
 			);
-			currentVersion = 04FB64491BB4A11A00D0A50D /* APCModel 7.xcdatamodel */;
+			currentVersion = 045D0CBD1BBAFDC500330C7E /* APCModel 8.xcdatamodel */;
 			path = APCModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

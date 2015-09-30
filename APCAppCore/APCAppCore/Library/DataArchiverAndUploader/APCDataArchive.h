@@ -46,6 +46,7 @@
  */
 
 #import <Foundation/Foundation.h>
+#import "APCTask.h"
 
 @class ORKTaskResult;
 
@@ -61,6 +62,16 @@
  @return    APCDataArchive      An instance of APCDataArchive
  */
 - (id)initWithReference: (NSString *)reference;
+
+/**
+ Designated Initializer
+ 
+ @param     reference           Reference for the archive used as a directory name in temp directory
+ @param     task                APCTask associated with this Data
+ 
+ @return    APCDataArchive      An instance of APCDataArchive
+ */
+- (id)initWithReference: (NSString *)reference task:(APCTask *)task;
 
 /**
  Inserts json data into the archive.

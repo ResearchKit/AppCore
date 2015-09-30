@@ -86,6 +86,29 @@ typedef enum : NSUInteger {
     APCTaskSourceMedicationTracker  = 1 << 3,   // 0000 0000 0000 1000
 }   APCTaskSource;
 
+/**
+ Indicates the type of task to be done. A Survey is typically a
+ question and answer format while activities will involve doing
+ somethiing like tapping or speaking into the phone
+ 
+ Please feel free to add your own sources, here.  If you
+ do, please respect the following:
+ 
+ -  Make them bitmask-friendly, using the examples below.
+ 
+ -  Do NOT change the values of the existing items. Those
+ are values in our users' current databases.
+ 
+ -  Add your enum name to the switch() statement in the
+ function NSStringFromAPCTaskType(), inside
+ APCConstants.m.
+ */
+typedef enum : NSInteger {
+    APCTaskTypeSurveyTask                   = 0,
+    APCTaskTypeActivityTask                 = 1 << 0,   // 0000 0000 0000 0001
+    APCTaskTypeSurveyAndActivityTask        = 1 << 1,   // 0000 0000 0000 0010
+}   APCTaskType;
+
 // ---------------------------------------------------------
 #pragma mark - Enum Translation Functions
 // ---------------------------------------------------------
@@ -100,6 +123,16 @@ NSString *NSStringFromAPCTaskSource              (APCTaskSource taskSource);
 NSString *NSStringFromAPCTaskSourceAsNumber      (NSNumber *taskSourceAsNumber);
 NSString *NSStringShortFromAPCTaskSource         (APCTaskSource taskSource);
 NSString *NSStringShortFromAPCTaskSourceAsNumber (NSNumber *taskSourceAsNumber);
+
+/*
+ Converts an APCTaskSource object or value to a string.
+ 
+ @see APCTaskType
+ */
+NSString *NSStringFromAPCTaskType               (APCTaskType taskType);
+NSString *NSStringFromAPCTaskTypeAsNumber       (NSNumber *taskTypeAsNumber);
+NSString *NSStringShortFromAPCTaskType          (APCTaskType taskType);
+NSString *NSStringShortFromAPCTaskTypeAsNumber  (NSNumber *taskTypeAsNumber);
 
 
 // ---------------------------------------------------------

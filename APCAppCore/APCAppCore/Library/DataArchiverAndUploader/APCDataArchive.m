@@ -40,12 +40,15 @@
 #import "NSDate+Helper.h"
 #import "APCJSONSerializer.h"
 #import "NSError+APCAdditions.h"
+#import "APCConstants.h"
 
 static NSString * kFileInfoNameKey                  = @"filename";
 static NSString * kUnencryptedArchiveFilename       = @"unencrypted.zip";
 static NSString * kFileInfoTimeStampKey             = @"timestamp";
 static NSString * kFileInfoContentTypeKey           = @"contentType";
 static NSString * kTaskRunKey                       = @"taskRun";
+static NSString * kSurveyCreatedOnKey               = @"surveyCreatedOn";
+static NSString * kSurveyGuidKey                    = @"surveyGuid";
 static NSString * kFilesKey                         = @"files";
 static NSString * kAppNameKey                       = @"appName";
 static NSString * kAppVersionKey                    = @"appVersion";
@@ -57,6 +60,7 @@ static NSString * kJsonInfoFilename                 = @"info.json";
 @interface APCDataArchive ()
 
 @property (nonatomic, strong) NSString *reference;
+@property (nonatomic, strong) APCTask *task;
 @property (nonatomic, strong) ZZArchive *zipArchive;
 @property (nonatomic, strong) NSMutableArray *zipEntries;
 @property (nonatomic, strong) NSMutableArray *filesList;
@@ -72,6 +76,19 @@ static NSString * kJsonInfoFilename                 = @"info.json";
     self = [super init];
     if (self) {
         _reference = reference;
+        [self createArchive];
+    }
+    
+    return self;
+}
+
+// designated initializer
+- (id)initWithReference: (NSString *)reference task:(APCTask *)task
+{
+    self = [super init];
+    if (self) {
+        _reference = reference;
+        _task = task;
         [self createArchive];
     }
     
@@ -180,6 +197,10 @@ static NSString * kJsonInfoFilename                 = @"info.json";
         [self.infoDict setObject:[APCUtilities phoneInfo] forKey:kPhoneInfoKey];
         [self.infoDict setObject:[NSUUID new].UUIDString forKey:kTaskRunKey];
         [self.infoDict setObject:self.reference forKey:kItemKey];
+        if ([self.task.taskType isEqualToNumber:@(APCTaskTypeSurveyTask)]) {
+            [self.infoDict setObject:self.task.taskVersionName forKey:kSurveyGuidKey];
+            [self.infoDict setObject:self.task.taskVersionDate forKey:kSurveyCreatedOnKey];
+        }
         
         [self insertIntoArchive:self.infoDict filename:kJsonInfoFilename];
         

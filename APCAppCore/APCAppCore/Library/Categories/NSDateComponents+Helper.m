@@ -177,6 +177,16 @@ static NSTimeZone *_localTimeZone = nil;
 				   fromDate: date];
 }
 
+- (NSString *) toJodaReadableTimeString
+{
+    NSDate *dateForTime = [[NSDateComponents gregorianCalendar] dateFromComponents:self];
+    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"HH:mm:ss"];
+    
+    return [formatter stringFromDate:dateForTime];
+}
+
 
 /**
  Again -- we're modifying this DateComponents object, by design.
