@@ -112,6 +112,7 @@
     
     APCScene *custom = [self.delegate onboarding:self sceneOfType:kAPCSignUpCustomInfoStepIdentifier];
     if (custom) {
+        self.onboardingTask.customStepIncluded = YES;
         scenes[kAPCSignUpCustomInfoStepIdentifier] = custom;
     }
     
