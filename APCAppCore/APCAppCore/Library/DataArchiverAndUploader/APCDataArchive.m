@@ -29,8 +29,9 @@
 // CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, 
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
-// 
- 
+//
+
+@import BridgeSDK;
 #import "APCDataArchive.h"
 #import "zipzap.h"
 #import <objc/runtime.h>
@@ -199,7 +200,8 @@ static NSString * kJsonInfoFilename                 = @"info.json";
         [self.infoDict setObject:self.reference forKey:kItemKey];
         if ([self.task.taskType isEqualToNumber:@(APCTaskTypeSurveyTask)]) {
             [self.infoDict setObject:self.task.taskVersionName forKey:kSurveyGuidKey];
-            [self.infoDict setObject:self.task.taskVersionDate forKey:kSurveyCreatedOnKey];
+            NSString *isoCreatedString = [self.task.taskVersionDate ISO8601String];
+            [self.infoDict setObject:isoCreatedString forKey:kSurveyCreatedOnKey];
         }
         
         [self insertIntoArchive:self.infoDict filename:kJsonInfoFilename];
