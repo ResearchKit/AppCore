@@ -339,7 +339,7 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
     
     __weak typeof(self) weakSelf = self;
     //add dictionaries or json data to the archive, calling completeArchive when done
-    [self.result.results enumerateObjectsUsingBlock:^(ORKStepResult *stepResult, NSUInteger __unused idx, BOOL * __unused stop) {
+    for (ORKStepResult *stepResult in self.result.results) {
         [stepResult.results enumerateObjectsUsingBlock:^(ORKResult *result, NSUInteger __unused idx, BOOL *__unused stop) {
             __strong typeof(self) strongSelf = weakSelf;
             //Update date if needed
@@ -387,7 +387,7 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
                 APCLogError(@"Result not processed for : %@", result.identifier);
             }
         }];
-    }];
+    }
 }
 
 /**
@@ -504,7 +504,7 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
     APCTask * scheduledTask = (APCTask*)[appDelegate.dataSubstrate.mainContext objectWithID:objID];
     id localRestorationData = [coder decodeObjectForKey:@"restorationData"];
     if (scheduledTask) {
-        APCBaseTaskViewController * tvc =[[self alloc] initWithTask:task restorationData:localRestorationData];
+        APCBaseTaskViewController * tvc =[[self alloc] initWithTask:task restorationData:localRestorationData delegate:self];
         tvc.scheduledTask = scheduledTask;
         tvc.restorationIdentifier = [task identifier];
         tvc.restorationClass = self;
