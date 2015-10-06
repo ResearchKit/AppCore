@@ -697,10 +697,10 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
         
         BOOL newsFeedTab = [self.initializationOptions[kNewsFeedTabKey] boolValue];
         
-        NSArray *items = tabBarController.tabBar.items;
-        UITabBarItem *item = items[kAPCNewsFeedTabIndex];
-        
         if (newsFeedTab){
+            NSArray *items = tabBarController.tabBar.items;
+            UITabBarItem *item = items[kAPCNewsFeedTabIndex];
+            
             NSUInteger unreadPostsCount = [self.dataSubstrate.newsFeedManager unreadPostsCount];
             NSNumber *unreadValue = @(unreadPostsCount);
             
