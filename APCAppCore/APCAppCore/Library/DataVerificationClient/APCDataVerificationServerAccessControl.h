@@ -43,10 +43,10 @@
  helpful during debugging.)
  */
 
-#if DEBUG
-
-   #define USE_DATA_VERIFICATION_SERVER
-
-#endif
+//#if DEBUG
+//
+//   #define USE_DATA_VERIFICATION_SERVER
+//
+//#endif
 
 
