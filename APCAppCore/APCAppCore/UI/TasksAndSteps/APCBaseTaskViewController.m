@@ -336,6 +336,9 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
 {
     //get a fresh archive
     self.archive = [[APCDataArchive alloc]initWithReference:self.task.identifier task:self.scheduledTask];
+    // Track filenames. Occasionally RK spit out 2 files with the same name which causes trouble on the backend
+    // if the archive has 2 files named the same. See BRIDGE-789.
+    NSMutableSet *filenames = [NSMutableSet new];
     
     __weak typeof(self) weakSelf = self;
     //add dictionaries or json data to the archive, calling completeArchive when done
@@ -361,7 +364,8 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
             {
                 ORKFileResult * fileResult = (ORKFileResult*) result;
                 NSString *translatedFilename = [ORKFileResult filenameForFileResultIdentifier:fileResult.identifier stepIdentifier:stepResult.identifier];
-                if (fileResult.fileURL) {
+                if (fileResult.fileURL && ![filenames containsObject:translatedFilename]) {
+                    [filenames addObject:translatedFilename];
                     [strongSelf.archive insertDataAtURLIntoArchive:fileResult.fileURL fileName:translatedFilename];
                 }
             }
