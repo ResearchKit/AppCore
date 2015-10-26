@@ -145,7 +145,7 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
         //    indicating that this is an update to a previously installed version of the application
         //
     APCUser  *user = self.dataSubstrate.currentUser;
-    if (user.isConsented) {
+    if (user.isConsented && user.sharingScope != APCUserConsentSharingScopeNone) {
         BOOL  demographicDataWasUploaded = [defaults boolForKey:kDemographicDataWasUploadedKey];
         if (demographicDataWasUploaded == NO) {
             self.demographicUploader = [[APCDemographicUploader alloc] initWithUser:user];

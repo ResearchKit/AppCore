@@ -150,12 +150,12 @@
     }
     else
     {
-        SBBTask *sbbTask = [SBBTask new];
+        SBBScheduledActivity *sbbTask = [SBBScheduledActivity new];
         sbbTask.guid = self.taskGuid;
         sbbTask.startedOn = self.taskStarted;
         sbbTask.finishedOn = self.taskFinished;
         
-        [SBBComponent(SBBTaskManager) finishTask:sbbTask
+        [SBBComponent(SBBActivityManager) finishScheduledActivity:sbbTask
                                             asOf:self.taskFinished
               withCompletion:^(id __unused task, NSError *error) {
                   dispatch_async(dispatch_get_main_queue(), ^{

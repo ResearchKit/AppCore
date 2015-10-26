@@ -182,6 +182,7 @@ static NSString *const kSignedInKey = @"SignedIn";
     _hasHeartDisease = [[storedUserData.hasHeartDisease copy] integerValue];
     _taskCompletion = [storedUserData.taskCompletion copy];
     _sharedOptionSelection = [storedUserData.sharedOptionSelection copy];
+    _sharingScope = _sharedOptionSelection.integerValue;
 }
 
 - (void)updateStoredProperty:(NSString *)propertyName withValue:(id)value

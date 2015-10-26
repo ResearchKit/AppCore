@@ -35,7 +35,7 @@
 #import "APCConstants.h"
 
 @class NSManagedObjectContext;
-@class SBBTask;
+@class SBBScheduledActivity;
 
 /**
  Imports tasks and schedules from a given TaskSource (server,
@@ -57,6 +57,6 @@
 /**
  Utility methods helping us normalize all the data before we import it.
  */
-- (NSDictionary *) extractJsonDataFromIncomingSageTask: (SBBTask *)sageTask;
+- (NSDictionary *) extractJsonDataFromIncomingSageTask: (SBBScheduledActivity *)sageTask;
 
 @end

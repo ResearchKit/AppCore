@@ -63,13 +63,19 @@
 
             NSString *pathBeingUploaded = self.archiveURL.absoluteString;
             APCLogFilenameBeingUploaded (pathBeingUploaded);
-
-            [SBBComponent(SBBUploadManager) uploadFileToBridge:self.archiveURL contentType:@"application/zip" completion:^(NSError *error) {
+            BOOL sharingData = (((APCAppDelegate*)[UIApplication sharedApplication].delegate).dataSubstrate.currentUser.sharingScope != APCUserConsentSharingScopeNone);
+            
+            // if the user isn't currently sharing data, don't actually upload the data that was archived for upload, but do delete it,
+            // and do mark this result as having been uploaded so it won't ever actually get uploaded even if they turn sharing
+            // back on later.
+            SBBUploadManagerCompletionBlock doneWithUpload = [^(NSError *error) {
                 
                 if (error) {
                     APCLogError2(error);
                 } else {
-                    APCLogEventWithData(kNetworkEvent, (@{@"event_detail":[NSString stringWithFormat:@"Uploaded Task: %@    RunID: %@", self.taskID, self.taskRunID]}));
+                    if (sharingData) {
+                        APCLogEventWithData(kNetworkEvent, (@{@"event_detail":[NSString stringWithFormat:@"Uploaded Task: %@    RunID: %@", self.taskID, self.taskRunID]}));
+                    }
                     
                     self.uploaded = @(YES);
                     NSError * saveError;
@@ -87,7 +93,13 @@
                 if (completionBlock) {
                     completionBlock(error);
                 }
-            }];
+            } copy];
+
+            if (sharingData) {
+                [SBBComponent(SBBUploadManager) uploadFileToBridge:self.archiveURL contentType:@"application/zip" completion:doneWithUpload];
+            } else {
+                doneWithUpload(nil);
+            }
         }
         else
         {

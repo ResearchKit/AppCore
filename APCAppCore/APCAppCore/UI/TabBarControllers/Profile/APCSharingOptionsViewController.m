@@ -41,7 +41,6 @@
 #import "UIAlertController+Helper.h"
 
 static NSString * const kSharingOptionsTableViewCellIdentifier = @"SharingOptionsTableViewCell";
-static NSInteger kNumberOfRows = 2;
 
 @interface APCSharingOptionsViewController()
 
@@ -83,14 +82,28 @@ static NSInteger kNumberOfRows = 2;
     
     
     NSMutableArray *options = [NSMutableArray new];
+    NSBundle *appCoreBundle = [NSBundle bundleForClass:[APCUser class]];
     
     {
-        NSString *option = [NSString stringWithFormat:@"Share my data with %@ and qualified researchers worldwide", self.instituteShortName];
+        NSString *optionFormat = NSLocalizedStringFromTableInBundle(@"Share my data with %@ and qualified researchers worldwide", nil, appCoreBundle, @"Format string for Profile tab option to share data broadly, to be filled in with the short name of the institution sponsoring the study");
+        NSString *option = [NSString stringWithFormat:optionFormat, self.instituteShortName];
         [options addObject:option];
     }
     
     {
-        NSString *option = [NSString stringWithFormat:@"Only share my data with %@", self.instituteLongName];
+        NSString *optionFormat = NSLocalizedStringFromTableInBundle(@"Only share my data with %@", nil, appCoreBundle, @"Format string for Profile tab option to share data narrowly, to be filled in with the long name of the institution sponsoring the study");
+        NSString *option = [NSString stringWithFormat:optionFormat, self.instituteLongName];
+        [options addObject:option];
+    }
+    
+    {
+        NSString *option = NSLocalizedStringFromTableInBundle(@"Stop sharing my data\n(data will no longer be transmitted to server, and researchers will not be able to use it in studies)", nil, appCoreBundle, @"Text for Profile tab option to stop sharing data");
+        [options addObject:option];
+    }
+    
+    {
+        NSString *optionFormat = NSLocalizedStringFromTableInBundle(@"Withdraw from study", nil, appCoreBundle, @"Text for Profile tab option to withdraw from the study altogether");
+        NSString *option = [NSString stringWithFormat:optionFormat, self.instituteShortName];
         [options addObject:option];
     }
     
@@ -134,7 +147,7 @@ static NSInteger kNumberOfRows = 2;
 
 - (NSInteger)tableView:(UITableView *)__unused tableView numberOfRowsInSection:(NSInteger)__unused section
 {
-    return kNumberOfRows;
+    return self.options.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -150,6 +163,8 @@ static NSInteger kNumberOfRows = 2;
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
     } else if (indexPath.row == 1 && self.user.sharingScope == APCUserConsentSharingScopeStudy) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    } else if (indexPath.row == 2 && self.user.sharingScope == APCUserConsentSharingScopeNone) {
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
     } else {
         cell.accessoryType = UITableViewCellAccessoryNone;
     }
@@ -161,10 +176,18 @@ static NSInteger kNumberOfRows = 2;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.row == 3) {
+        // push to withdraw view controller
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        return;
+    }
+    
     if (indexPath.row == 0) {
         self.user.sharingScope = APCUserConsentSharingScopeAll;
     } else if (indexPath.row == 1) {
         self.user.sharingScope = APCUserConsentSharingScopeStudy;
+    } else if (indexPath.row == 2) {
+        self.user.sharingScope = APCUserConsentSharingScopeNone;
     }
     
     APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];

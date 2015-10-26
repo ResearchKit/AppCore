@@ -373,7 +373,7 @@ static NSArray *legalTimeSpecifierFormats = nil;
  we do data pulled from a local JSON file. It also lets us flatten out the
  task structure into a single object and its associated properties.
  */
-- (NSDictionary *) extractJsonDataFromIncomingSageTask: (SBBTask *)sageTask
+- (NSDictionary *) extractJsonDataFromIncomingSageTask: (SBBScheduledActivity *)sageTask
 {
     NSMutableDictionary *taskData               = [NSMutableDictionary new];
     taskData [kTaskGuidKey]                 = [self nullIfNil: sageTask.guid];
