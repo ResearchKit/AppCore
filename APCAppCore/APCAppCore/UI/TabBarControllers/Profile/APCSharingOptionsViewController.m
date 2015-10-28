@@ -33,6 +33,7 @@
  
 #import "APCAppCore.h"
 #import "APCSharingOptionsViewController.h"
+#import "APCWithdrawDescriptionViewController.h"
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
 #import "APCAppDelegate.h"
@@ -188,6 +189,8 @@ static NSString * const kSharingOptionsTableViewCellIdentifier = @"SharingOption
         self.user.sharingScope = APCUserConsentSharingScopeStudy;
     } else if (indexPath.row == 2) {
         self.user.sharingScope = APCUserConsentSharingScopeNone;
+    } else if (indexPath.row == 3) {
+        [self withdrawAlert];
     }
     
     APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
@@ -212,8 +215,65 @@ static NSString * const kSharingOptionsTableViewCellIdentifier = @"SharingOption
     }];
 }
 
+- (void)withdraw
+{
+    APCWithdrawDescriptionViewController *viewController = [[UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCWithdrawDescriptionViewController"];
+    viewController.delegate = self;
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:viewController];
+    [self.navigationController presentViewController:navController animated:YES completion:nil];
+}
+
+- (void)withdrawAlert
+{
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Withdraw", @"") message:NSLocalizedString(@"Are you sure you want to completely withdraw from the study?\nYou will be logged out of your account and no further data will be collected. If you wish to re-enroll at a later date, you will be asked to give informed consent again.", nil) preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertAction *withdrawAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Withdraw", @"") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * __unused action) {
+        [self withdraw];
+    }];
+    [alertController addAction:withdrawAction];
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
+        
+    }];
+    [alertController addAction:cancelAction];
+    
+    [self.navigationController presentViewController:alertController animated:YES completion:nil];
+}
+
 - (IBAction)close:(id)__unused sender
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
+
+#pragma mark - APCWithdrawDescriptionViewControllerDelegate methods
+
+- (void)withdrawViewControllerDidCancel:(APCWithdrawDescriptionViewController *) __unused viewController
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void) withdrawViewController: (APCWithdrawDescriptionViewController *) __unused viewController
+       didFinishWithDescription: (NSString *)reason
+{
+    APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
+    [self presentViewController:spinnerController animated:YES completion:nil];
+    
+    typeof(self) __weak weakSelf = self;
+    [self.user withdrawStudyWithReason:reason onCompletion:^(NSError *error) {
+        if (error) {
+            APCLogError2 (error);
+            [spinnerController dismissViewControllerAnimated:NO completion:^{
+                UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Withdraw", @"") message:error.message];
+                [weakSelf presentViewController:alert animated:YES completion:nil];
+            }];
+        }
+        else {
+            [spinnerController dismissViewControllerAnimated:NO completion:^{
+                APCWithdrawCompleteViewController *viewController = [[UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCWithdrawCompleteViewController"];
+                UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:viewController];
+                [weakSelf.navigationController presentViewController:navController animated:YES completion:nil];
+            }];
+        }
+    }];
+}
+
 @end

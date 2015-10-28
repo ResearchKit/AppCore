@@ -44,7 +44,7 @@
 - (void) getProfileOnCompletion:(void (^)(NSError *error))completionBlock;
 - (void) sendUserConsentedToBridgeOnCompletion: (void (^)(NSError * error))completionBlock;
 - (void) retrieveConsentOnCompletion:(void (^)(NSError *error))completionBlock;
-- (void) withdrawStudyOnCompletion:(void (^)(NSError *error))completionBlock;
+- (void) withdrawStudyWithReason:(NSString*)reason onCompletion:(void (^)(NSError *error))completionBlock;
 - (void) resumeStudyOnCompletion:(void (^)(NSError *error))completionBlock;
 - (void) resendEmailVerificationOnCompletion:(void (^)(NSError *))completionBlock;
 - (void) changeDataSharingTypeOnCompletion:(void (^)(NSError *))completionBlock;

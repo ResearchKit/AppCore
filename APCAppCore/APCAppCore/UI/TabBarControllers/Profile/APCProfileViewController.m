@@ -1346,27 +1346,27 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
 - (void)withdraw
 {
-    APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
-    [self presentViewController:spinnerController animated:YES completion:nil];
-    
-    typeof(self) __weak weakSelf = self;
-    self.user.sharedOptionSelection = APCUserConsentSharingScopeNone;
-    [self.user withdrawStudyOnCompletion:^(NSError *error) {
-        if (error) {
-            APCLogError2 (error);
-            [spinnerController dismissViewControllerAnimated:NO completion:^{
-                UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Withdraw", @"") message:error.message];
-                [weakSelf presentViewController:alert animated:YES completion:nil];
-            }];
-        }
-        else {
-            [spinnerController dismissViewControllerAnimated:NO completion:^{
-                APCWithdrawCompleteViewController *viewController = [[UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCWithdrawCompleteViewController"];
-                UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:viewController];
-                [weakSelf.navigationController presentViewController:navController animated:YES completion:nil];
-            }];
-        }
-    }];
+//    APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
+//    [self presentViewController:spinnerController animated:YES completion:nil];
+//    
+//    typeof(self) __weak weakSelf = self;
+//    self.user.sharedOptionSelection = APCUserConsentSharingScopeNone;
+//    [self.user withdrawStudyOnCompletion:^(NSError *error) {
+//        if (error) {
+//            APCLogError2 (error);
+//            [spinnerController dismissViewControllerAnimated:NO completion:^{
+//                UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Withdraw", @"") message:error.message];
+//                [weakSelf presentViewController:alert animated:YES completion:nil];
+//            }];
+//        }
+//        else {
+//            [spinnerController dismissViewControllerAnimated:NO completion:^{
+//                APCWithdrawCompleteViewController *viewController = [[UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCWithdrawCompleteViewController"];
+//                UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:viewController];
+//                [weakSelf.navigationController presentViewController:navController animated:YES completion:nil];
+//            }];
+//        }
+//    }];
 }
 
 #pragma mark - IBActions/Selectors
@@ -1407,18 +1407,18 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
 - (IBAction)leaveStudy:(id) __unused sender
 {
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Withdraw", @"") message:NSLocalizedString(@"Are you sure you want to completely withdraw from the study?\nThis action cannot be undone.", nil) preferredStyle:UIAlertControllerStyleActionSheet];
-    UIAlertAction *withdrawAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Withdraw", @"") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * __unused action) {
-        [self withdraw];
-    }];
-    [alertController addAction:withdrawAction];
-    
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
-		
-    }];
-    [alertController addAction:cancelAction];
-    
-    [self.navigationController presentViewController:alertController animated:YES completion:nil];
+//    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Withdraw", @"") message:NSLocalizedString(@"Are you sure you want to completely withdraw from the study?\nYou will be logged out of your account and no further data will be collected. If you wish to re-enroll at a later date, you will be asked to give informed consent again.", nil) preferredStyle:UIAlertControllerStyleActionSheet];
+//    UIAlertAction *withdrawAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Withdraw", @"") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * __unused action) {
+//        [self withdraw];
+//    }];
+//    [alertController addAction:withdrawAction];
+//    
+//    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
+//		
+//    }];
+//    [alertController addAction:cancelAction];
+//    
+//    [self.navigationController presentViewController:alertController animated:YES completion:nil];
 }
 
 - (IBAction)changeProfileImage:(id) __unused sender

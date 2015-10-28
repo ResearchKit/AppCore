@@ -162,7 +162,7 @@
     }
 }
 
-- (void) withdrawStudyOnCompletion:(void (^)(NSError *))completionBlock
+- (void) withdrawStudyWithReason:(NSString *)reason onCompletion:(void (^)(NSError *))completionBlock
 {
     if ([self serverDisabled]) {
         if (completionBlock) {
@@ -171,6 +171,7 @@
     }
     else
     {
+        // TODO: call SBBConsentManager withdrawConsentWithReason:completion: instead of just changing the data sharing to none
         [SBBComponent(SBBUserManager) dataSharing:SBBUserDataSharingScopeNone completion:^(id __unused responseObject, NSError * __unused error) {
             [self signOutOnCompletion:^(NSError *error) {
                 dispatch_async(dispatch_get_main_queue(), ^{
