@@ -78,6 +78,7 @@
 - (void)addSpatialSpanMemoryResultsToArchive:(ORKSpatialSpanMemoryResult *) __unused result;
 - (void)addTappingResultsToArchive:(ORKTappingIntervalResult *)__unused result;
 - (APCSignUpPermissionsType)requiredPermission;
+- (void) updateSchemaRevision;
 
 - (void) archiveResults;
 
