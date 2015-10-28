@@ -51,6 +51,7 @@
 @property (nonatomic, retain) NSString * taskID;
 @property (nonatomic, retain) NSNumber * taskIsOptional;
 @property (nonatomic, retain) NSDate * taskScheduledFor;
+@property (nonatomic, retain) NSNumber * taskSchemaRevision;
 @property (nonatomic, retain) NSDate * taskStarted;
 @property (nonatomic, retain) NSString * taskTitle;
 @property (nonatomic, retain) NSNumber * taskType;

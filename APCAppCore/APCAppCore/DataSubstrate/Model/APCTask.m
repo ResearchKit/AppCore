@@ -50,6 +50,7 @@
 @dynamic taskID;
 @dynamic taskIsOptional;
 @dynamic taskScheduledFor;
+@dynamic taskSchemaRevision;
 @dynamic taskStarted;
 @dynamic taskTitle;
 @dynamic taskType;
