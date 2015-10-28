@@ -115,6 +115,7 @@
                     self.taskTitle = sbbSurvey.name;
                     self.taskVersionName = sbbSurvey.guid;
                     self.taskVersionDate = sbbSurvey.createdOn;
+                    self.taskSchemaRevision = sbbSurvey.schemaRevision;
                     self.rkTask = [APCTask rkTaskFromSBBSurvey:survey];
                     NSError * saveError;
                     [self saveToPersistentStore:&saveError];
