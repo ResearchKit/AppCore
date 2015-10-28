@@ -54,6 +54,9 @@ static NSString * const kFileInfoNameKey            = @"filename";
 static NSString * const kFileInfoTimeStampKey       = @"timestamp";
 static NSString * const kFileInfoContentTypeKey     = @"contentType";
 
+// Upload constants
+static NSInteger        kDefaultSchemaRevision      = 1;
+
 //    ORK Result Base Class property keys
 //
 static NSString * const kIdentifierKey              = @"identifier";
@@ -134,6 +137,7 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
     APCBaseTaskViewController * controller = orkTask ? [[self alloc] initWithTask:orkTask taskRunUUID:taskRunUUID] : nil;
     controller.scheduledTask = scheduledTask;
     controller.delegate = controller;
+    [controller updateSchemaRevision];
     [[APCScheduler defaultScheduler] startTask:scheduledTask];
     
     return  controller;
@@ -168,6 +172,14 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
 {
     //To be overridden by child classes
     return nil;
+}
+
+- (void) updateSchemaRevision
+{
+    // To be overridden by child classes for non default schema revision #s
+    if (self.scheduledTask) {
+        self.scheduledTask.taskSchemaRevision = [NSNumber numberWithInteger:kDefaultSchemaRevision];
+    }
 }
 
 - (void)viewDidLoad
@@ -336,6 +348,7 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
 {
     //get a fresh archive
     self.archive = [[APCDataArchive alloc]initWithReference:self.task.identifier task:self.scheduledTask];
+    
     // Track filenames. Occasionally RK spit out 2 files with the same name which causes trouble on the backend
     // if the archive has 2 files named the same. See BRIDGE-789.
     NSMutableSet *filenames = [NSMutableSet new];

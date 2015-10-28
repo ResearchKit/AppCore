@@ -50,6 +50,7 @@ static NSString * kFileInfoContentTypeKey           = @"contentType";
 static NSString * kTaskRunKey                       = @"taskRun";
 static NSString * kSurveyCreatedOnKey               = @"surveyCreatedOn";
 static NSString * kSurveyGuidKey                    = @"surveyGuid";
+static NSString * kSchemaRevisionKey                = @"schemaRevision";
 static NSString * kFilesKey                         = @"files";
 static NSString * kAppNameKey                       = @"appName";
 static NSString * kAppVersionKey                    = @"appVersion";
@@ -198,7 +199,11 @@ static NSString * kJsonInfoFilename                 = @"info.json";
         [self.infoDict setObject:[APCUtilities phoneInfo] forKey:kPhoneInfoKey];
         [self.infoDict setObject:[NSUUID new].UUIDString forKey:kTaskRunKey];
         [self.infoDict setObject:self.reference forKey:kItemKey];
+        if (self.task.taskSchemaRevision) {
+            [self.infoDict setObject:self.task.taskSchemaRevision forKey:kSchemaRevisionKey];
+        }
         if ([self.task.taskType isEqualToNumber:@(APCTaskTypeSurveyTask)]) {
+            // Survey schema is better matched by created date and survey guid
             [self.infoDict setObject:self.task.taskVersionName forKey:kSurveyGuidKey];
             NSString *isoCreatedString = [self.task.taskVersionDate ISO8601String];
             [self.infoDict setObject:isoCreatedString forKey:kSurveyCreatedOnKey];
