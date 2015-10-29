@@ -48,4 +48,10 @@
     return  [scheduledTask rkTask];
 }
 
+- (void) updateSchemaRevision
+{
+    // Don't make changes here. For surveys, the schemaRevision is updated from bridge when
+    // the survey is loaded.
+}
+
 @end

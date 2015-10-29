@@ -371,7 +371,7 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
              Bounce over to the Bridge SDK's thread, call the server, and then come
              back to our thread a while later.
              */
-            [SBBComponent (SBBActivityManager) getScheduledActivitiesForDaysAhead:3
+            [SBBComponent (SBBActivityManager) getScheduledActivitiesForDaysAhead:4
                                           withCompletion:^(SBBResourceList *tasksList,
                                                            NSError *errorFetchingTasks)
              {
