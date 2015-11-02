@@ -42,7 +42,6 @@ typedef NS_ENUM(NSInteger, APCUserConsentSharingScope) {
     APCUserConsentSharingScopeAll,
 };
 
-
 @interface APCUser : NSObject
 
 /*********************************************************************************/
@@ -118,6 +117,7 @@ typedef NS_ENUM(NSInteger, APCUserConsentSharingScope) {
 /*********************************************************************************/
 @property (nonatomic, getter=isSignedUp) BOOL signedUp;
 @property (nonatomic, getter=isSignedIn) BOOL signedIn;
+@property (nonatomic) NSNumber * savedSharingScope;
 
 - (BOOL) isLoggedOut;
 

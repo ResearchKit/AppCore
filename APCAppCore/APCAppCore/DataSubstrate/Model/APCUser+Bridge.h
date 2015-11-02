@@ -46,6 +46,8 @@
 - (void) retrieveConsentOnCompletion:(void (^)(NSError *error))completionBlock;
 - (void) withdrawStudyWithReason:(NSString*)reason onCompletion:(void (^)(NSError *error))completionBlock;
 - (void) resumeStudyOnCompletion:(void (^)(NSError *error))completionBlock;
+- (void) pauseSharingOnCompletion:(void (^)(NSError *error))completionBlock;
+- (void) resumeSharingOnCompletion:(void (^)(NSError *error))completionBlock;
 - (void) resendEmailVerificationOnCompletion:(void (^)(NSError *))completionBlock;
 - (void) changeDataSharingTypeOnCompletion:(void (^)(NSError *))completionBlock;
 - (void) sendDownloadDataOnCompletion:(void (^)(NSError *))completionBlock;

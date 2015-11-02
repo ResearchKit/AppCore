@@ -38,7 +38,7 @@
 #import "APCIntroVideoViewController.h"
 #import "APCSignUpPermissionsViewController.h"
 #import "APCChangePasscodeViewController.h"
-#import "APCWithdrawCompleteViewController.h"
+#import "APCWithdrawSurveyViewController.h"
 #import "APCWebViewController.h"
 #import "APCSettingsViewController.h"
 #import "APCSpinnerViewController.h"
@@ -156,9 +156,12 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     
     [self setupDataFromJSONFile:@"StudyOverview"];
     
-    if (APCUserConsentSharingScopeNone == self.user.sharedOptionSelection.integerValue) {
-        self.participationLabel.text = NSLocalizedString(@"Your data is no longer being used for this study.", @"");
-        self.leaveStudyButton.hidden = YES;
+    [self.pauseResumeStudyButton setSelected:(APCUserConsentSharingScopeNone == self.user.sharingScope)];
+
+    if (APCUserConsentSharingScopeNone == self.user.sharingScope) {
+        self.participationLabel.text = NSLocalizedString(@"Your data is not being used for this study.", @"Text to show at top of Profile view when 'paused' (not sharing data)");
+    } else {
+        self.participationLabel.text = NSLocalizedString(@"Currently participating in", @"Text to show at top of Profile view above the study name when not 'paused' (when sharing data)");
     }
 }
 
@@ -758,7 +761,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             [rowItems addObject:row];
         }
         
-        if (APCUserConsentSharingScopeNone != self.user.sharedOptionSelection) {
+//        if (APCUserConsentSharingScopeNone != self.user.sharingScope) {
             //  Instead of prevent the row from being added to the table, a better option would be to
             //  disable the row (grey it out and don't respond to taps)
             APCTableViewItem *field = [APCTableViewItem new];
@@ -772,7 +775,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             row.item = field;
             row.itemType = kAPCSettingsItemTypeSharingOptions;
             [rowItems addObject:row];
-        }
+//        }
         
         APCTableViewSection *section = [APCTableViewSection new];
         section.rows = [NSArray arrayWithArray:rowItems];
@@ -1346,27 +1349,32 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
 - (void)withdraw
 {
-//    APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
-//    [self presentViewController:spinnerController animated:YES completion:nil];
-//    
-//    typeof(self) __weak weakSelf = self;
-//    self.user.sharedOptionSelection = APCUserConsentSharingScopeNone;
-//    [self.user withdrawStudyOnCompletion:^(NSError *error) {
-//        if (error) {
-//            APCLogError2 (error);
-//            [spinnerController dismissViewControllerAnimated:NO completion:^{
-//                UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Withdraw", @"") message:error.message];
-//                [weakSelf presentViewController:alert animated:YES completion:nil];
-//            }];
-//        }
-//        else {
-//            [spinnerController dismissViewControllerAnimated:NO completion:^{
-//                APCWithdrawCompleteViewController *viewController = [[UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCWithdrawCompleteViewController"];
-//                UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:viewController];
-//                [weakSelf.navigationController presentViewController:navController animated:YES completion:nil];
-//            }];
-//        }
-//    }];
+    APCWithdrawSurveyViewController *viewController = [[UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCWithdrawSurveyViewController"];
+    [self.navigationController pushViewController:viewController animated:YES];
+}
+
+- (void)pause
+{
+    APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
+    [self presentViewController:spinnerController animated:YES completion:nil];
+
+    [self.user pauseSharingOnCompletion:^(NSError *error) {
+        [spinnerController dismissViewControllerAnimated:NO completion:^{
+            // does viewWillAppear get called when this happens?
+        }];
+    }];
+}
+
+- (void)resume
+{
+    APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
+    [self presentViewController:spinnerController animated:YES completion:nil];
+    
+    [self.user resumeSharingOnCompletion:^(NSError *error) {
+        [spinnerController dismissViewControllerAnimated:NO completion:^{
+            // does viewWillAppear get called when this happens?
+        }];
+    }];
 }
 
 #pragma mark - IBActions/Selectors
@@ -1407,18 +1415,52 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
 - (IBAction)leaveStudy:(id) __unused sender
 {
-//    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Withdraw", @"") message:NSLocalizedString(@"Are you sure you want to completely withdraw from the study?\nYou will be logged out of your account and no further data will be collected. If you wish to re-enroll at a later date, you will be asked to give informed consent again.", nil) preferredStyle:UIAlertControllerStyleActionSheet];
-//    UIAlertAction *withdrawAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Withdraw", @"") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * __unused action) {
-//        [self withdraw];
-//    }];
-//    [alertController addAction:withdrawAction];
-//    
-//    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
-//		
-//    }];
-//    [alertController addAction:cancelAction];
-//    
-//    [self.navigationController presentViewController:alertController animated:YES completion:nil];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Withdraw", @"") message:NSLocalizedString(@"Are you sure you want to completely withdraw from the study?\nYou will be logged out of your account and no further data will be collected. If you wish to re-enroll at a later date, you will be asked to give informed consent again.", nil) preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertAction *withdrawAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Withdraw", @"") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * __unused action) {
+        [self withdraw];
+    }];
+    [alertController addAction:withdrawAction];
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
+		
+    }];
+    [alertController addAction:cancelAction];
+    
+    [self.navigationController presentViewController:alertController animated:YES completion:nil];
+}
+
+- (IBAction)pauseStudy:(id)sender {
+    NSString *titleString = nil;
+    NSString *messageString = nil;
+    NSString *actionString = nil;
+    void (^handler)(UIAlertAction *action);
+    if (self.user.savedSharingScope) {
+        // we're paused, so resume here
+        titleString = NSLocalizedString(@"Resume", @"Title for action sheet brought up by the Resume button");
+        messageString = NSLocalizedString(@"This will resume sending data you collect to the study.", @"Prompt for action sheet brought up by the Resume button");
+        actionString = NSLocalizedString(@"Resume", @"Title for action sheet item to resume sharing data with the study");
+        handler = [^(UIAlertAction * __unused action) {
+            [self resume];
+        } copy];
+    } else {
+        // pause
+        titleString = NSLocalizedString(@"Pause", @"Title for action sheet brought up by the Pause button");
+        messageString = NSLocalizedString(@"Are you sure you want to pause your participation in the study?\nData you collect while paused will remain on your phone and will not be included in the study.", @"Prompt for action sheet brought up by the Pause button");
+        actionString = NSLocalizedString(@"Pause", @"Title for action sheet item to pause sharing data with the study");
+        handler = [^(UIAlertAction * __unused action) {
+            [self pause];
+        } copy];
+    }
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:titleString message:messageString preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertAction *action = [UIAlertAction actionWithTitle:actionString style:UIAlertActionStyleDestructive handler:handler];
+    [alertController addAction:action];
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
+        
+    }];
+    [alertController addAction:cancelAction];
+    
+    [self.navigationController presentViewController:alertController animated:YES completion:nil];
 }
 
 - (IBAction)changeProfileImage:(id) __unused sender

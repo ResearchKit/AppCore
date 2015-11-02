@@ -51,5 +51,6 @@
 - (NSArray *)surveyFromJSONFile:(NSString *)jsonFileName;
 
 - (IBAction)submit:(id)sender;
+- (IBAction)cancel:(id)sender;
 
 @end

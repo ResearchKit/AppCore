@@ -97,17 +97,6 @@ static NSString * const kSharingOptionsTableViewCellIdentifier = @"SharingOption
         [options addObject:option];
     }
     
-    {
-        NSString *option = NSLocalizedStringFromTableInBundle(@"Stop sharing my data\n(data will no longer be transmitted to server, and researchers will not be able to use it in studies)", nil, appCoreBundle, @"Text for Profile tab option to stop sharing data");
-        [options addObject:option];
-    }
-    
-    {
-        NSString *optionFormat = NSLocalizedStringFromTableInBundle(@"Withdraw from study", nil, appCoreBundle, @"Text for Profile tab option to withdraw from the study altogether");
-        NSString *option = [NSString stringWithFormat:optionFormat, self.instituteShortName];
-        [options addObject:option];
-    }
-    
     self.options = [NSArray arrayWithArray:options];
 }
 
@@ -160,11 +149,9 @@ static NSString * const kSharingOptionsTableViewCellIdentifier = @"SharingOption
     cell.textLabel.font = [UIFont appMediumFontWithSize:16.0f];
     cell.textLabel.textColor = [UIColor appSecondaryColor1];
     
-    if (indexPath.row == 0 && self.user.sharingScope == APCUserConsentSharingScopeAll) {
+    if (indexPath.row == 0 && self.user.sharedOptionSelection.integerValue == APCUserConsentSharingScopeAll) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
-    } else if (indexPath.row == 1 && self.user.sharingScope == APCUserConsentSharingScopeStudy) {
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
-    } else if (indexPath.row == 2 && self.user.sharingScope == APCUserConsentSharingScopeNone) {
+    } else if (indexPath.row == 1 && self.user.sharedOptionSelection.integerValue == APCUserConsentSharingScopeStudy) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
     } else {
         cell.accessoryType = UITableViewCellAccessoryNone;
@@ -184,13 +171,9 @@ static NSString * const kSharingOptionsTableViewCellIdentifier = @"SharingOption
     }
     
     if (indexPath.row == 0) {
-        self.user.sharingScope = APCUserConsentSharingScopeAll;
+        self.user.sharedOptionSelection = @(APCUserConsentSharingScopeAll);
     } else if (indexPath.row == 1) {
-        self.user.sharingScope = APCUserConsentSharingScopeStudy;
-    } else if (indexPath.row == 2) {
-        self.user.sharingScope = APCUserConsentSharingScopeNone;
-    } else if (indexPath.row == 3) {
-        [self withdrawAlert];
+        self.user.sharedOptionSelection = @(APCUserConsentSharingScopeStudy);
     }
     
     APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
@@ -215,65 +198,9 @@ static NSString * const kSharingOptionsTableViewCellIdentifier = @"SharingOption
     }];
 }
 
-- (void)withdraw
-{
-    APCWithdrawDescriptionViewController *viewController = [[UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCWithdrawDescriptionViewController"];
-    viewController.delegate = self;
-    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:viewController];
-    [self.navigationController presentViewController:navController animated:YES completion:nil];
-}
-
-- (void)withdrawAlert
-{
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Withdraw", @"") message:NSLocalizedString(@"Are you sure you want to completely withdraw from the study?\nYou will be logged out of your account and no further data will be collected. If you wish to re-enroll at a later date, you will be asked to give informed consent again.", nil) preferredStyle:UIAlertControllerStyleActionSheet];
-    UIAlertAction *withdrawAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Withdraw", @"") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * __unused action) {
-        [self withdraw];
-    }];
-    [alertController addAction:withdrawAction];
-    
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
-        
-    }];
-    [alertController addAction:cancelAction];
-    
-    [self.navigationController presentViewController:alertController animated:YES completion:nil];
-}
-
 - (IBAction)close:(id)__unused sender
 {
     [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-#pragma mark - APCWithdrawDescriptionViewControllerDelegate methods
-
-- (void)withdrawViewControllerDidCancel:(APCWithdrawDescriptionViewController *) __unused viewController
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void) withdrawViewController: (APCWithdrawDescriptionViewController *) __unused viewController
-       didFinishWithDescription: (NSString *)reason
-{
-    APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
-    [self presentViewController:spinnerController animated:YES completion:nil];
-    
-    typeof(self) __weak weakSelf = self;
-    [self.user withdrawStudyWithReason:reason onCompletion:^(NSError *error) {
-        if (error) {
-            APCLogError2 (error);
-            [spinnerController dismissViewControllerAnimated:NO completion:^{
-                UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Withdraw", @"") message:error.message];
-                [weakSelf presentViewController:alert animated:YES completion:nil];
-            }];
-        }
-        else {
-            [spinnerController dismissViewControllerAnimated:NO completion:^{
-                APCWithdrawCompleteViewController *viewController = [[UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCWithdrawCompleteViewController"];
-                UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:viewController];
-                [weakSelf.navigationController presentViewController:navController animated:YES completion:nil];
-            }];
-        }
-    }];
 }
 
 @end

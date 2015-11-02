@@ -61,6 +61,8 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *leaveStudyButton;
 
+@property (weak, nonatomic) IBOutlet UIButton *pauseResumeStudyButton;
+
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *rightBarButton;
 
 @property (assign) id <APCProfileViewControllerDelegate> delegate;
@@ -69,6 +71,8 @@
 
 
 - (IBAction)leaveStudy:(id)sender;
+
+- (IBAction)pauseStudy:(id)sender;
 
 - (IBAction)changeProfileImage:(id)sender;
 
