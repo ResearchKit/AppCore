@@ -102,9 +102,9 @@
                                         <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                     </state>
+                                    <state key="selected" title="Resume Study"/>
                                     <connections>
-                                        <action selector="leaveStudy:" destination="3ca-8Q-UW8" eventType="touchUpInside" id="O5n-GH-gfZ"/>
-                                        <action selector="pauseStudy:" destination="3ca-8Q-UW8" eventType="touchUpInside" id="WQy-3S-tOp"/>
+                                        <action selector="pauseStudy:" destination="3ca-8Q-UW8" eventType="touchUpInside" id="fmX-Sr-zLd"/>
                                     </connections>
                                 </button>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BHJ-hN-unW">
@@ -381,7 +381,6 @@
                         <outlet property="nameTextField" destination="8hk-Wz-D1n" id="WWf-nf-0BV"/>
                         <outlet property="participationLabel" destination="bb2-UZ-Wan" id="y7l-mx-QG2"/>
                         <outlet property="pauseResumeStudyButton" destination="ymU-X3-A4W" id="YW7-BT-oAz"/>
-                        <outlet property="pauseStudyButton" destination="v4O-xa-Vkh" id="tiS-aO-Umj"/>
                         <outlet property="profileImageButton" destination="wbP-3z-2pl" id="hp2-iW-hH9"/>
                         <outlet property="rightBarButton" destination="fF4-PR-bA8" id="Fyo-HO-yHb"/>
                         <outlet property="versionLabel" destination="Vxa-dH-1Bp" id="ppv-g9-RMd"/>
