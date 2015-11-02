@@ -116,10 +116,8 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     self.demographicUploader = [[APCDemographicUploader alloc] initWithUser:user];
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (void)refreshView
 {
-    [super viewWillAppear:animated];
-    
     CGRect headerRect = self.headerView.frame;
     headerRect.size.height = 159.0f;
     self.headerView.frame = headerRect;
@@ -156,13 +154,23 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     
     [self setupDataFromJSONFile:@"StudyOverview"];
     
-    [self.pauseResumeStudyButton setSelected:(APCUserConsentSharingScopeNone == self.user.sharingScope)];
-
     if (APCUserConsentSharingScopeNone == self.user.sharingScope) {
-        self.participationLabel.text = NSLocalizedString(@"Your data is not being used for this study.", @"Text to show at top of Profile view when 'paused' (not sharing data)");
+        self.participationLabel.text = NSLocalizedString(@"Your data is not currently being used for this study.", @"Text to show at top of Profile view when 'paused' (not sharing data)");
+        self.applicationNameLabel.hidden = YES;
+        [self.pauseResumeStudyButton setTitle:NSLocalizedString(@"Resume Study", @"Title for Resume button in Profile view") forState:UIControlStateNormal];
     } else {
         self.participationLabel.text = NSLocalizedString(@"Currently participating in", @"Text to show at top of Profile view above the study name when not 'paused' (when sharing data)");
+        self.applicationNameLabel.hidden = NO;
+        [self.pauseResumeStudyButton setTitle:NSLocalizedString(@"Pause Study", @"Title for Pause Study button in Profile view") forState:UIControlStateNormal];
     }
+    
+    [self.view setNeedsLayout];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self refreshView];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -761,9 +769,8 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             [rowItems addObject:row];
         }
         
-//        if (APCUserConsentSharingScopeNone != self.user.sharingScope) {
-            //  Instead of prevent the row from being added to the table, a better option would be to
-            //  disable the row (grey it out and don't respond to taps)
+
+        {
             APCTableViewItem *field = [APCTableViewItem new];
             field.caption = NSLocalizedString(@"Sharing Options", @"");
             field.identifier = kAPCDefaultTableViewCellIdentifier;
@@ -775,7 +782,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             row.item = field;
             row.itemType = kAPCSettingsItemTypeSharingOptions;
             [rowItems addObject:row];
-//        }
+        }
         
         APCTableViewSection *section = [APCTableViewSection new];
         section.rows = [NSArray arrayWithArray:rowItems];
@@ -1350,7 +1357,8 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 - (void)withdraw
 {
     APCWithdrawSurveyViewController *viewController = [[UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCWithdrawSurveyViewController"];
-    [self.navigationController pushViewController:viewController animated:YES];
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:viewController];
+    [self.navigationController presentViewController:navController animated:YES completion:nil];
 }
 
 - (void)pause
@@ -1360,7 +1368,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
     [self.user pauseSharingOnCompletion:^(NSError *error) {
         [spinnerController dismissViewControllerAnimated:NO completion:^{
-            // does viewWillAppear get called when this happens?
+            [self refreshView];
         }];
     }];
 }
@@ -1372,7 +1380,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     
     [self.user resumeSharingOnCompletion:^(NSError *error) {
         [spinnerController dismissViewControllerAnimated:NO completion:^{
-            // does viewWillAppear get called when this happens?
+            [self refreshView];
         }];
     }];
 }

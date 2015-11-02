@@ -61,11 +61,12 @@
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Currently Participating In " lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000000000000004" translatesAutoresizingMaskIntoConstraints="NO" id="bb2-UZ-Wan">
-                                    <rect key="frame" x="19" y="101" width="195" height="18"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Currently Participating In " lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000000000000004" translatesAutoresizingMaskIntoConstraints="NO" id="bb2-UZ-Wan">
+                                    <rect key="frame" x="19" y="96" width="195" height="28"/>
                                     <animations/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="29" id="5kX-1S-zNy"/>
+                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="28" id="ayW-cn-uG5"/>
                                     </constraints>
                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                     <color key="textColor" white="0.63418560606060592" alpha="1" colorSpace="calibratedWhite"/>
@@ -95,14 +96,14 @@
                                     <rect key="frame" x="219" y="125" width="91" height="28"/>
                                     <animations/>
                                     <constraints>
-                                        <constraint firstAttribute="width" constant="91" id="RHF-1g-nIf"/>
+                                        <constraint firstAttribute="width" relation="lessThanOrEqual" priority="500" constant="150" id="RHF-1g-nIf"/>
                                         <constraint firstAttribute="height" constant="28" id="SG2-nR-Itt"/>
+                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="91" id="jD9-7P-1Vc"/>
                                     </constraints>
                                     <state key="normal" title="Pause Study">
                                         <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                     </state>
-                                    <state key="selected" title="Resume Study"/>
                                     <connections>
                                         <action selector="pauseStudy:" destination="3ca-8Q-UW8" eventType="touchUpInside" id="fmX-Sr-zLd"/>
                                     </connections>
@@ -120,6 +121,7 @@
                                     <animations/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="23" id="FBA-KB-HmK"/>
+                                        <constraint firstAttribute="width" priority="500" constant="195" id="zxr-rh-ff3"/>
                                     </constraints>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -151,7 +153,7 @@
                                 <constraint firstItem="bb2-UZ-Wan" firstAttribute="leading" secondItem="kqd-X8-uFF" secondAttribute="leading" constant="19" id="Sqg-UQ-NfA"/>
                                 <constraint firstItem="H3m-U4-zNB" firstAttribute="top" relation="greaterThanOrEqual" secondItem="bb2-UZ-Wan" secondAttribute="bottom" constant="2" id="V49-xF-DLI"/>
                                 <constraint firstItem="UMm-O6-rLy" firstAttribute="leading" secondItem="bb2-UZ-Wan" secondAttribute="trailing" constant="5" id="XMH-ft-Av0"/>
-                                <constraint firstItem="UMm-O6-rLy" firstAttribute="centerY" secondItem="bb2-UZ-Wan" secondAttribute="centerY" id="ZBT-6F-CJs"/>
+                                <constraint firstItem="UMm-O6-rLy" firstAttribute="top" secondItem="bb2-UZ-Wan" secondAttribute="top" id="ZBT-6F-CJs"/>
                                 <constraint firstAttribute="trailing" secondItem="8hk-Wz-D1n" secondAttribute="trailing" constant="10" id="Zgq-78-Idg"/>
                                 <constraint firstAttribute="bottom" secondItem="BHJ-hN-unW" secondAttribute="bottom" id="byw-80-Tcn"/>
                                 <constraint firstAttribute="trailing" secondItem="BHJ-hN-unW" secondAttribute="trailing" id="d1M-v8-Ia7"/>

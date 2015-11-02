@@ -279,7 +279,7 @@
 
 - (IBAction)cancel:(id) __unused sender
 {
-    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end
