@@ -112,14 +112,19 @@ NSString *const kFirstTimeRefreshToday = @"FirstTimeRefreshToday";
 
     APCLogFilenameBeingUploaded (path);
 
-    [SBBComponent(SBBUploadManager) uploadFileToBridge:[NSURL fileURLWithPath:path] contentType:@"application/zip" completion:^(NSError *error) {
-        if (!error) {
-            APCLogEventWithData(kNetworkEvent, (@{@"event_detail":[NSString stringWithFormat:@"Uploaded Passive Collector File: %@", path.lastPathComponent]}));
-        }
-        if (completionBlock) {
-            completionBlock(error);
-        }
-    }];
+    BOOL sharingData = (self.dataSubstrate.currentUser.sharingScope != APCUserConsentSharingScopeNone);
+    if (sharingData) {
+        [SBBComponent(SBBUploadManager) uploadFileToBridge:[NSURL fileURLWithPath:path] contentType:@"application/zip" completion:^(NSError *error) {
+            if (!error) {
+                APCLogEventWithData(kNetworkEvent, (@{@"event_detail":[NSString stringWithFormat:@"Uploaded Passive Collector File: %@", path.lastPathComponent]}));
+            }
+            if (completionBlock) {
+                completionBlock(error);
+            }
+        }];
+    } else {
+        
+    }
     
 }
 
