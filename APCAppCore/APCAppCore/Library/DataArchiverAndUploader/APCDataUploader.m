@@ -64,18 +64,24 @@
 
 -(void)uploadFileAtURL:(NSURL *)url withCompletion:(void (^)(NSError *))completion
 {
-    
-    [SBBComponent(SBBUploadManager) uploadFileToBridge:url contentType:@"application/zip" completion:^(NSError *error) {
-        if (!error) {
-            APCLogEventWithData(kNetworkEvent, (@{@"event_detail":[NSString stringWithFormat:@"APCDataUploader uploaded file: %@", url.relativePath.lastPathComponent]}));
-        }else {
-            APCLogDebug(@"APCDataUploader error returned from SBBUploadManager: %@", error.message);
-        }
-        
+    BOOL sharingData = (((APCAppDelegate*)[UIApplication sharedApplication].delegate).dataSubstrate.currentUser.sharingScope != APCUserConsentSharingScopeNone);
+    if (sharingData) {
+        [SBBComponent(SBBUploadManager) uploadFileToBridge:url contentType:@"application/zip" completion:^(NSError *error) {
+            if (!error) {
+                APCLogEventWithData(kNetworkEvent, (@{@"event_detail":[NSString stringWithFormat:@"APCDataUploader uploaded file: %@", url.relativePath.lastPathComponent]}));
+            }else {
+                APCLogDebug(@"APCDataUploader error returned from SBBUploadManager: %@", error.message);
+            }
+            
+            if (completion){
+                completion(error);
+            }
+        }];
+    } else {
         if (completion){
-            completion(error);
+            completion(nil);
         }
-    }];
+    }
 }
 
 #pragma mark - SBBUploadManager delegate

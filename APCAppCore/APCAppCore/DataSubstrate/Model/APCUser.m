@@ -41,6 +41,7 @@
 #import "NSManagedObject+APCHelper.h"
 #import "HKHealthStore+APCExtensions.h"
 
+static NSString *const kSavedSharingScopeKey = @"SavedSharingScope";
 
 static NSString *const kNamePropertytName = @"name";
 static NSString *const kFirstNamePropertytName = @"firstName";
@@ -182,7 +183,7 @@ static NSString *const kSignedInKey = @"SignedIn";
     _hasHeartDisease = [[storedUserData.hasHeartDisease copy] integerValue];
     _taskCompletion = [storedUserData.taskCompletion copy];
     _sharedOptionSelection = [storedUserData.sharedOptionSelection copy];
-    _sharingScope = _sharedOptionSelection.integerValue;
+    _sharingScope = self.savedSharingScope ? self.savedSharingScope.integerValue : _sharedOptionSelection.integerValue;
 }
 
 - (void)updateStoredProperty:(NSString *)propertyName withValue:(id)value
@@ -309,9 +310,17 @@ static NSString *const kSignedInKey = @"SignedIn";
 - (void)setSharingScope:(APCUserConsentSharingScope)sharingScope
 {
     _sharingScope = sharingScope;
+    
+    // sharingScope of none is treated as "pausing" the study rather than as a sharing scope option per se,
+    // so if we're setting to none we save to user defaults and leave the sharedOptionSelection alone;
+    // otherwise we clear that user default and keep sharedOptionSelection in sync with the new setting.
+    if (sharingScope == APCUserConsentSharingScopeNone) {
+        self.savedSharingScope = @(APCUserConsentSharingScopeNone);
+    } else {
+        self.savedSharingScope = nil;
+    }
     switch (sharingScope) {
         case APCUserConsentSharingScopeNone:
-            self.sharedOptionSelection = [NSNumber numberWithInteger:0];    // SBBConsentShareScopeNone
             break;
         case APCUserConsentSharingScopeStudy:
             self.sharedOptionSelection = [NSNumber numberWithInteger:1];    // SBBConsentShareScopeStudy
@@ -324,16 +333,18 @@ static NSString *const kSignedInKey = @"SignedIn";
 
 - (void)setSharedOptionSelection:(NSNumber *)sharedOptionSelection
 {
-    switch (sharedOptionSelection.integerValue) {
-        case 0:
-            _sharingScope = APCUserConsentSharingScopeNone;
-            break;
-        case 1:
-            _sharingScope = APCUserConsentSharingScopeStudy;
-            break;
-        case 2:
-            _sharingScope = APCUserConsentSharingScopeAll;
-            break;
+    // sharingScope of none is treated as "pausing" the study rather than as a sharing scope option per se,
+    // so if it's set to none we'll have saved it to user defaults and want to leave it with that value;
+    // otherwise we keep it in sync with the new sharedOptionSelection setting.
+    if (!self.savedSharingScope) {
+        switch (sharedOptionSelection.integerValue) {
+            case 1:
+                _sharingScope = APCUserConsentSharingScopeStudy;
+                break;
+            case 2:
+                _sharingScope = APCUserConsentSharingScopeAll;
+                break;
+        }
     }
     
     _sharedOptionSelection = sharedOptionSelection;
@@ -641,6 +652,20 @@ static NSString *const kSignedInKey = @"SignedIn";
 - (BOOL)isLoggedOut
 {
     return self.email.length && !self.isSignedIn && !self.isSignedUp;
+}
+
+- (NSNumber *)savedSharingScope
+{
+    return [[NSUserDefaults standardUserDefaults] objectForKey:kSavedSharingScopeKey];
+}
+
+- (void)setSavedSharingScope:(NSNumber *)savedSharingScope
+{
+    if (savedSharingScope) {
+        [[NSUserDefaults standardUserDefaults] setObject:savedSharingScope forKey:kSavedSharingScopeKey];
+    } else {
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:kSavedSharingScopeKey];
+    }
 }
 
 @end

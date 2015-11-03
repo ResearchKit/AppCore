@@ -236,7 +236,50 @@
 
 - (IBAction) submit: (id) __unused sender
 {
-    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+    APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
+    [self presentViewController:spinnerController animated:YES completion:nil];
+    
+    typeof(self) __weak weakSelf = self;
+    self.user.sharedOptionSelection = APCUserConsentSharingScopeNone;
+    NSString *reasonString = @"";
+    APCTableViewSection *sectionItem = self.items[0];
+    for (NSUInteger i = 0; i < sectionItem.rows.count; ++i) {
+        if (i) {
+            reasonString = [NSString stringWithFormat:@"%@\n", reasonString];
+        }
+        APCTableViewRow *rowItem = sectionItem.rows[i];
+        APCTableViewSwitchItem *studyDetailsItem = (APCTableViewSwitchItem *)rowItem.item;
+        NSString *answer = @"";
+        if (i == sectionItem.rows.count - 1) {
+            answer = self.descriptionText ?: @"";
+        } else {
+            answer = studyDetailsItem.on ? @"YES" : @"NO";
+        }
+        reasonString = [NSString stringWithFormat:@"%@%@\n%@\n", reasonString, studyDetailsItem.caption, answer];
+
+    }
+    
+    [self.user withdrawStudyWithReason:reasonString onCompletion:^(NSError *error) {
+        if (error) {
+            APCLogError2 (error);
+            [spinnerController dismissViewControllerAnimated:NO completion:^{
+                UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Withdraw", @"") message:error.message];
+                [weakSelf presentViewController:alert animated:YES completion:nil];
+            }];
+        }
+        else {
+            [spinnerController dismissViewControllerAnimated:NO completion:^{
+                APCWithdrawCompleteViewController *viewController = [[UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCWithdrawCompleteViewController"];
+                UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:viewController];
+                [weakSelf.navigationController presentViewController:navController animated:YES completion:nil];
+            }];
+        }
+    }];
+}
+
+- (IBAction)cancel:(id) __unused sender
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

@@ -34,7 +34,6 @@
 #import "APCUser+Bridge.h"
 #import "APCAppCore.h"
 
-
 @implementation APCUser (Bridge)
 
 - (BOOL) serverDisabled
@@ -162,7 +161,7 @@
     }
 }
 
-- (void) withdrawStudyOnCompletion:(void (^)(NSError *))completionBlock
+- (void) withdrawStudyWithReason:(NSString *)reason onCompletion:(void (^)(NSError *))completionBlock
 {
     if ([self serverDisabled]) {
         if (completionBlock) {
@@ -171,18 +170,25 @@
     }
     else
     {
-        [SBBComponent(SBBUserManager) dataSharing:SBBUserDataSharingScopeNone completion:^(id __unused responseObject, NSError * __unused error) {
-            [self signOutOnCompletion:^(NSError *error) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if(!error) {
-                        self.consented = NO;
-                        APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Suspended Consent"}));
-                    }
-                    if (completionBlock) {
-                        completionBlock(error);
-                    }
-                });
-            }];
+        [SBBComponent(SBBConsentManager) withdrawConsentWithReason:reason completion:^(id __unused responseObject, NSError * __unused error) {
+            if (!error) {
+                [self signOutOnCompletion:^(NSError *error) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if(!error) {
+                            self.consented = NO;
+                            [[NSNotificationCenter defaultCenter] postNotificationName:APCUserDidWithdrawStudyNotification object:self];
+                            APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Suspended Consent"}));
+                        }
+                        if (completionBlock) {
+                            completionBlock(error);
+                        }
+                    });
+                }];
+            } else {
+                if (completionBlock) {
+                    completionBlock(error);
+                }
+            }
         }];
     }
 }
@@ -198,11 +204,65 @@
     {
         APCAppDelegate *delegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
         NSNumber *selected = delegate.dataSubstrate.currentUser.sharedOptionSelection;
+        NSInteger scope = self.savedSharingScope ? self.savedSharingScope.integerValue : selected.integerValue;
+        
+        [SBBComponent(SBBUserManager) dataSharing:scope completion:^(id __unused responseObject, NSError *error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (!error) {
+                    APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Resumed Consent"}));
+                }
+                if (completionBlock) {
+                    completionBlock(error);
+                }
+            });
+        }];
+    }
+}
+
+
+- (void) pauseSharingOnCompletion:(void (^)(NSError *))completionBlock
+{
+    self.sharingScope = APCUserConsentSharingScopeNone;
+    
+    if ([self serverDisabled]) {
+        if (completionBlock) {
+            completionBlock(nil);
+        }
+    }
+    else
+    {
+        APCAppDelegate *delegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
+        
+        [SBBComponent(SBBUserManager) dataSharing:SBBUserDataSharingScopeNone completion:^(id __unused responseObject, NSError *error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (!error) {
+                    APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Paused Sharing"}));
+                }
+                if (completionBlock) {
+                    completionBlock(error);
+                }
+            });
+        }];
+    }
+}
+
+- (void) resumeSharingOnCompletion:(void (^)(NSError *))completionBlock
+{
+    if ([self serverDisabled]) {
+        if (completionBlock) {
+            completionBlock(nil);
+        }
+    }
+    else
+    {
+        APCAppDelegate *delegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
+        NSNumber *selected = delegate.dataSubstrate.currentUser.sharedOptionSelection;
         
         [SBBComponent(SBBUserManager) dataSharing:[selected integerValue] completion:^(id __unused responseObject, NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (!error) {
-                    APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Resumed Consent"}));
+                    APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Resumed Sharing"}));
+                    self.sharingScope = selected.integerValue;
                 }
                 if (completionBlock) {
                     completionBlock(error);
@@ -238,12 +298,12 @@
                         if (dataSharing.integerValue == 1) {
                             NSString *scope = responseDictionary[@"sharingScope"];
                             if ([scope isEqualToString:@"sponsors_and_partners"]) {
-                                self.sharedOptionSelection = @(SBBUserDataSharingScopeStudy);
+                                self.sharingScope = APCUserConsentSharingScopeStudy;
                             } else if ([scope isEqualToString:@"all_qualified_researchers"]) {
-                                self.sharedOptionSelection = @(SBBUserDataSharingScopeAll);
+                                self.sharingScope = APCUserConsentSharingScopeAll;
                             }
                         } else if (dataSharing.integerValue == 0) {
-                            self.sharedOptionSelection = @(SBBUserDataSharingScopeNone);
+                            self.sharingScope = APCUserConsentSharingScopeNone;
                         }
                     }
                     APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Signed In"}));
@@ -272,13 +332,16 @@
                                                                id __unused responseObject,
                                                                NSError *error)
          {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Signed Out"}));
-                if (completionBlock) {
-                    completionBlock(error);
-                }
-            });
-        }];
+             self.email = nil;
+             self.password = nil;
+             [[NSNotificationCenter defaultCenter] postNotificationName:APCUserLogOutNotification object:self];
+             dispatch_async(dispatch_get_main_queue(), ^{
+                 APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Signed Out"}));
+                 if (completionBlock) {
+                     completionBlock(error);
+                 }
+             });
+         }];
     }
 }
 
@@ -386,6 +449,12 @@
 
 - (void)changeDataSharingTypeOnCompletion:(void (^)(NSError *))completionBlock
 {
+    if (self.sharingScope == APCUserConsentSharingScopeNone) {
+        if (completionBlock) {
+            completionBlock(nil);
+        }
+        return;
+    }
     NSNumber *selected = self.sharedOptionSelection;
     
     [SBBComponent(SBBUserManager) dataSharing:[selected integerValue] completion:^(id __unused responseObject, NSError *error) {

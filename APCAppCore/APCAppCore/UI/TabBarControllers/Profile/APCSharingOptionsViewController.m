@@ -33,6 +33,7 @@
  
 #import "APCAppCore.h"
 #import "APCSharingOptionsViewController.h"
+#import "APCWithdrawDescriptionViewController.h"
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
 #import "APCAppDelegate.h"
@@ -96,17 +97,6 @@ static NSString * const kSharingOptionsTableViewCellIdentifier = @"SharingOption
         [options addObject:option];
     }
     
-    {
-        NSString *option = NSLocalizedStringFromTableInBundle(@"Stop sharing my data\n(data will no longer be transmitted to server, and researchers will not be able to use it in studies)", nil, appCoreBundle, @"Text for Profile tab option to stop sharing data");
-        [options addObject:option];
-    }
-    
-    {
-        NSString *optionFormat = NSLocalizedStringFromTableInBundle(@"Withdraw from study", nil, appCoreBundle, @"Text for Profile tab option to withdraw from the study altogether");
-        NSString *option = [NSString stringWithFormat:optionFormat, self.instituteShortName];
-        [options addObject:option];
-    }
-    
     self.options = [NSArray arrayWithArray:options];
 }
 
@@ -159,11 +149,9 @@ static NSString * const kSharingOptionsTableViewCellIdentifier = @"SharingOption
     cell.textLabel.font = [UIFont appMediumFontWithSize:16.0f];
     cell.textLabel.textColor = [UIColor appSecondaryColor1];
     
-    if (indexPath.row == 0 && self.user.sharingScope == APCUserConsentSharingScopeAll) {
+    if (indexPath.row == 0 && self.user.sharedOptionSelection.integerValue == APCUserConsentSharingScopeAll) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
-    } else if (indexPath.row == 1 && self.user.sharingScope == APCUserConsentSharingScopeStudy) {
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
-    } else if (indexPath.row == 2 && self.user.sharingScope == APCUserConsentSharingScopeNone) {
+    } else if (indexPath.row == 1 && self.user.sharedOptionSelection.integerValue == APCUserConsentSharingScopeStudy) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
     } else {
         cell.accessoryType = UITableViewCellAccessoryNone;
@@ -183,11 +171,9 @@ static NSString * const kSharingOptionsTableViewCellIdentifier = @"SharingOption
     }
     
     if (indexPath.row == 0) {
-        self.user.sharingScope = APCUserConsentSharingScopeAll;
+        self.user.sharedOptionSelection = @(APCUserConsentSharingScopeAll);
     } else if (indexPath.row == 1) {
-        self.user.sharingScope = APCUserConsentSharingScopeStudy;
-    } else if (indexPath.row == 2) {
-        self.user.sharingScope = APCUserConsentSharingScopeNone;
+        self.user.sharedOptionSelection = @(APCUserConsentSharingScopeStudy);
     }
     
     APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
@@ -216,4 +202,5 @@ static NSString * const kSharingOptionsTableViewCellIdentifier = @"SharingOption
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
+
 @end
