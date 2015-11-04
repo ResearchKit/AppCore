@@ -111,9 +111,9 @@ static CGFloat kHeaderHeight = 157.0f;
     [self.emailTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (void)viewDidLayoutSubviews
 {
-    [super viewWillAppear:animated];
+    [super viewDidLayoutSubviews];
     
     UIEdgeInsets inset = self.tableView.contentInset;
     self.tableView.contentInset = inset;
