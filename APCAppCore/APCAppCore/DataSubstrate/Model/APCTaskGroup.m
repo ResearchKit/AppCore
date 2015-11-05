@@ -199,7 +199,7 @@ static NSDateFormatter *debugDateFormatter = nil;
 
 - (BOOL) expiresOnOrBeforeDate:(NSDate *) date
 {
-    return _expirationDate != nil && (_expirationDate.startOfDay <= date.startOfDay);
+    return _expirationDate != nil && (_expirationDate <= date);
 }
 
 - (NSString *) description
