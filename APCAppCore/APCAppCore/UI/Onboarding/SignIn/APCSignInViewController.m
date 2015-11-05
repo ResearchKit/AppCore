@@ -365,6 +365,38 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
         dateFormatter.dateFormat = consentResult.signature.signatureDateFormatString;
         user.consentSignatureDate = [dateFormatter dateFromString:consentResult.signature.signatureDate];
         
+        // extract the user's sharing choice
+        APCConsentTask *task = taskViewController.task;
+        ORKConsentSharingStep *sharingStep = task.sharingStep;
+        APCUserConsentSharingScope sharingScope = APCUserConsentSharingScopeNone;
+        
+        for (ORKStepResult* result in taskViewController.result.results) {
+            if ([result.identifier isEqualToString:sharingStep.identifier]) {
+                for (ORKChoiceQuestionResult *choice in result.results) {
+                    if ([choice isKindOfClass:[ORKChoiceQuestionResult class]]) {
+                        NSNumber *answer = [choice.choiceAnswers firstObject];
+                        if ([answer isKindOfClass:[NSNumber class]]) {
+                            if (0 == answer.integerValue) {
+                                sharingScope = APCUserConsentSharingScopeStudy;
+                            }
+                            else if (1 == answer.integerValue) {
+                                sharingScope = APCUserConsentSharingScopeAll;
+                            }
+                            else {
+                                APCLogDebug(@"Unknown sharing choice answer: %@", answer);
+                            }
+                        }
+                        else {
+                            APCLogDebug(@"Unknown sharing choice answer(s): %@", choice.choiceAnswers);
+                        }
+                    }
+                }
+                break;
+            }
+        }
+        
+        user.sharingScope = sharingScope;
+        
         [self dismissViewControllerAnimated:YES completion:^
          {
              [((APCAppDelegate*)[UIApplication sharedApplication].delegate) dataSubstrate].currentUser.userConsented = YES;
