@@ -590,7 +590,7 @@ static CGFloat const kTableViewSectionHeaderHeight = 77;
              }
              else if (section.isYesterdaySection)
              {
-                 [section reduceToIncompleteTasksOnTheirLastLegalDay];
+                 [section reduceToIncompleteExpiredTasks];
              }
              
              if (section.taskGroups.count)
