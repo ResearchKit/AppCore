@@ -297,19 +297,27 @@ static CGFloat const kTableViewSectionHeaderHeight = 77;
             } else
             {
                 NSError *permissionsError = [self.permissionManager permissionDeniedErrorForType:viewControllerToShowNext.requiredPermission];
-                UIAlertController *alert = [UIAlertController simpleAlertWithTitle: @"Error"
-                                                                           message: permissionsError.localizedDescription];
-                
-                [self presentViewController: alert
-                                   animated: YES
-                                 completion: NULL];
+                [self presentSettingsAlert:permissionsError];
                 APCLogError2(permissionsError);
             }
         }
     }
 }
 
-
+- (void)presentSettingsAlert:(NSError *)error
+{
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Permissions Denied", @"") message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *dismiss = [UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction *__unused action) {
+    }];
+    [alertController addAction:dismiss];
+    UIAlertAction *settings = [UIAlertAction actionWithTitle:NSLocalizedString(@"Settings", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
+        // Common misconception, this takes user to our app's settings page, not general settings page
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+    }];
+    [alertController addAction:settings];
+    
+    [self.navigationController presentViewController:alertController animated:YES completion:nil];
+}
 
 // ---------------------------------------------------------
 #pragma mark - The *real* data-source methods
