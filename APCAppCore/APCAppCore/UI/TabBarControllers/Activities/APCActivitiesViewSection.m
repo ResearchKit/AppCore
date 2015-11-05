@@ -198,7 +198,7 @@ static NSString * const kAPCSectionHeaderDateFormatToday        = @"eeee, MMMM d
                                                                                                  BOOL __unused *stopIterating) {
         BOOL keepThisOne = NO;
         
-        if (! taskGroup.isFullyCompleted && taskGroup.expiresToday)
+        if (! taskGroup.isFullyCompleted && [taskGroup expiresOnOrBeforeDate:self.today])
         {
             keepThisOne = YES;
         }

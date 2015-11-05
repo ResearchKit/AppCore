@@ -103,7 +103,6 @@ static NSDateFormatter *debugDateFormatter = nil;
         _scheduledDate = nil;
         _appearanceDate = nil;
         _expirationDate = nil;
-        _expiresToday = NO;
     }
 
     return self;
@@ -135,7 +134,6 @@ static NSDateFormatter *debugDateFormatter = nil;
         _appearanceDate = scheduledDate;
         _scheduledDate = scheduledDate;
         _expirationDate = _task.taskExpires;
-        _expiresToday = _expirationDate != nil && [_expirationDate.startOfDay isEqualToDate: _appearanceDate.startOfDay];
     }
     
     return self;
@@ -199,6 +197,11 @@ static NSDateFormatter *debugDateFormatter = nil;
     return latestCompletionDate;
 }
 
+- (BOOL) expiresOnOrBeforeDate:(NSDate *) date
+{
+    return _expirationDate != nil && (_expirationDate.startOfDay <= date.startOfDay);
+}
+
 - (NSString *) description
 {
     NSString *result = nil;
@@ -214,12 +217,11 @@ static NSDateFormatter *debugDateFormatter = nil;
         [dates appendFormat: @"%@, ", scheduledTask.updatedAt];
     }
 
-    result = [NSString stringWithFormat: @"TaskGroup: %@ | %@ | vcToShow: %@ | %@ | expires today: %@ | tasks: %@ required, %@ completed, %@ remaining, %@ gratuitous completed, most recent completed on %@",
+    result = [NSString stringWithFormat: @"TaskGroup: %@ | %@ | vcToShow: %@ | %@ | tasks: %@ required, %@ completed, %@ remaining, %@ gratuitous completed, most recent completed on %@",
               self.task.taskTitle,
               self.task.taskID,
               self.task.taskClassName,
               dates,
-              self.expiresToday ? @"YES" : @"NO",
               @(self.totalRequiredTasksForThisTimeRange),
               @(self.requiredCompletedTasks.count),
               @(self.requiredRemainingTasks.count),
