@@ -58,13 +58,13 @@
 /**
  Former name for -reduceToIncompleteTasksOnTheirLastLegalDay.
  */
-- (void) removeFullyCompletedTasks  __attribute__((deprecated("Please use -reduceToIncompleteTasksOnTheirLastLegalDay instead.")));
+- (void) removeFullyCompletedTasks  __attribute__((deprecated("Please use -reduceToIncompleteExpiredTasks.")));
 
 /**
  Used after fetching the tasks for "yesterday," as perceived by the user,
  and converting resulting section to a "here's the stuff you didn't finish"
  section.
  */
-- (void) reduceToIncompleteTasksOnTheirLastLegalDay;
+- (void) reduceToIncompleteExpiredTasks;
 
 @end
