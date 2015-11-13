@@ -934,6 +934,9 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     
     [self.leaveStudyButton setTitleColor:[UIColor appPrimaryColor] forState:UIControlStateNormal];
     [self.leaveStudyButton.titleLabel setFont:[UIFont appRegularFontWithSize:16.0]];
+    
+    [self.pauseResumeStudyButton setTitleColor:[UIColor appPrimaryColor] forState:UIControlStateNormal];
+    [self.pauseResumeStudyButton.titleLabel setFont:[UIFont appRegularFontWithSize:16.0]];
 }
 
 - (void) setupPickerCellAppeareance: (APCPickerTableViewCell *) __unused cell
