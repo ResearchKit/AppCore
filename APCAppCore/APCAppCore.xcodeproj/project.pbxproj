@@ -337,6 +337,7 @@
 		80A98DD71BFD49EC0060146F /* APCProfile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 80A98DD91BFD49EC0060146F /* APCProfile.storyboard */; };
 		80A98DDA1BFD4A290060146F /* APCPasscode.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 80A98DDC1BFD4A290060146F /* APCPasscode.storyboard */; };
 		80A98DDD1BFD517C0060146F /* APCLocalization.h in Headers */ = {isa = PBXBuildFile; fileRef = 80A98DB01BFCFE430060146F /* APCLocalization.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		80A98DEC1BFD60940060146F /* APCAppCore.strings in Resources */ = {isa = PBXBuildFile; fileRef = 80A98DEE1BFD60940060146F /* APCAppCore.strings */; };
 		A7CFE4B51A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = A7CFE4B11A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A7CFE4B61A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7CFE4B21A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.m */; };
 		A7CFE4B71A8B05F4009A171C /* APCStudyOverviewCollectionViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = A7CFE4B31A8B05F4009A171C /* APCStudyOverviewCollectionViewController.h */; };
@@ -420,7 +421,6 @@
 		F5306CCE1A8BE7F600732E60 /* ORKQuestionResult+APCHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = F5306CCC1A8BE7F600732E60 /* ORKQuestionResult+APCHelper.m */; };
 		F55653B21A6F08E0003E0B0C /* libMobileGestalt.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F55653B11A6F08E0003E0B0C /* libMobileGestalt.dylib */; };
 		F55653B31A6F0918003E0B0C /* libMobileGestalt.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F55653B11A6F08E0003E0B0C /* libMobileGestalt.dylib */; };
-		F556549B1A701337003E0B0C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F556549A1A701337003E0B0C /* Localizable.strings */; };
 		F5B946211A7309A20034C522 /* zipzap.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B945F61A7309A20034C522 /* zipzap.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5B946221A7309A20034C522 /* ZZAESDecryptInputStream.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B945F71A7309A20034C522 /* ZZAESDecryptInputStream.h */; };
 		F5B946231A7309A20034C522 /* ZZAESDecryptInputStream.mm in Sources */ = {isa = PBXBuildFile; fileRef = F5B945F81A7309A20034C522 /* ZZAESDecryptInputStream.mm */; };
@@ -1070,6 +1070,10 @@
 		80A98DE31BFD56D70060146F /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/APCEmailVerify.strings; sourceTree = "<group>"; };
 		80A98DE41BFD56D70060146F /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/APCProfile.strings; sourceTree = "<group>"; };
 		80A98DE51BFD56D70060146F /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/APCPasscode.strings; sourceTree = "<group>"; };
+		80A98DED1BFD60940060146F /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/APCAppCore.strings; sourceTree = "<group>"; };
+		80A98DEF1BFD60960060146F /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/APCAppCore.strings; sourceTree = "<group>"; };
+		80A98DF01BFD60970060146F /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/APCAppCore.strings; sourceTree = "<group>"; };
+		80A98DF11BFE69470060146F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/APCAppCore.strings; sourceTree = "<group>"; };
 		A7CFE4B11A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCStudyOverviewCollectionViewCell.h; sourceTree = "<group>"; };
 		A7CFE4B21A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCStudyOverviewCollectionViewCell.m; sourceTree = "<group>"; };
 		A7CFE4B31A8B05F4009A171C /* APCStudyOverviewCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCStudyOverviewCollectionViewController.h; sourceTree = "<group>"; };
@@ -1155,7 +1159,6 @@
 		F5306CCB1A8BE7F600732E60 /* ORKQuestionResult+APCHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ORKQuestionResult+APCHelper.h"; sourceTree = "<group>"; };
 		F5306CCC1A8BE7F600732E60 /* ORKQuestionResult+APCHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ORKQuestionResult+APCHelper.m"; sourceTree = "<group>"; };
 		F55653B11A6F08E0003E0B0C /* libMobileGestalt.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libMobileGestalt.dylib; path = usr/lib/libMobileGestalt.dylib; sourceTree = SDKROOT; };
-		F556549A1A701337003E0B0C /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		F5B945F61A7309A20034C522 /* zipzap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zipzap.h; sourceTree = "<group>"; };
 		F5B945F71A7309A20034C522 /* ZZAESDecryptInputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZAESDecryptInputStream.h; sourceTree = "<group>"; };
 		F5B945F81A7309A20034C522 /* ZZAESDecryptInputStream.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ZZAESDecryptInputStream.mm; sourceTree = "<group>"; };
@@ -2608,7 +2611,7 @@
 			children = (
 				5B4574C61ABFD07A00601DCC /* Licenses */,
 				08027A3A1A7319AC00B358CC /* Assets */,
-				F556549A1A701337003E0B0C /* Localizable.strings */,
+				80A98DEE1BFD60940060146F /* APCAppCore.strings */,
 				F5F12B1B1A2F78AE0015982C /* Info.plist */,
 				3624092A1A8181350005B1A7 /* get_debug_ip_address.sh */,
 				F5F1291B1A2F78490015982C /* update_version.sh */,
@@ -3456,6 +3459,8 @@
 			knownRegions = (
 				en,
 				Base,
+				fr,
+				de,
 			);
 			mainGroup = F5179B1F19D09128001DCCB7;
 			productRefGroup = F5179B2A19D09128001DCCB7 /* Products */;
@@ -3536,6 +3541,7 @@
 				08027A8A1A7319AC00B358CC /* phonetapping@2x.png in Resources */,
 				5B4574CC1ABFD07A00601DCC /* License_ZipZap.txt in Resources */,
 				CF130B7A1A9E8DCD002DA023 /* APCSetupButtonTableViewCell.xib in Resources */,
+				80A98DEC1BFD60940060146F /* APCAppCore.strings in Resources */,
 				5BD4CA071AF0E46F008D97AE /* APCNewsFeed.storyboard in Resources */,
 				08027A801A7319AC00B358CC /* consent_03@3x.png in Resources */,
 				5B4574CA1ABFD07A00601DCC /* License_BridgeSDK.txt in Resources */,
@@ -3546,7 +3552,6 @@
 				08027A7A1A7319AC00B358CC /* consent_04@2x.png in Resources */,
 				F5F12AFF1A2F78490015982C /* APCIntroductionViewController.xib in Resources */,
 				08027A811A7319AC00B358CC /* consent_04@3x.png in Resources */,
-				F556549B1A701337003E0B0C /* Localizable.strings in Resources */,
 				F5F12A921A2F78490015982C /* APCSpinnerViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3575,7 +3580,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "mkdir -p APCAppCore/Resources/en.lproj\nfind . -name *.m | xargs genstrings -s APCLocalizedString -o APCAppCore/Resources/en.lproj";
+			shellScript = "OUT_DIR=\"APCAppCore/Resources\"\n# don't want to conflict with app's Localizable.strings if AppCore is included in a project as a CocoaPod\nBUILT_FILE=${OUT_DIR}/Localizable.strings\nOUT_FILE=${OUT_DIR}/APCAppCore.strings\nmkdir -p ${OUT_DIR}\nfind . -name *.m | xargs genstrings -s APCLocalizedString -o ${OUT_DIR}\nrm -f ${OUT_FILE}\nmv ${BUILT_FILE} ${OUT_FILE}";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -3957,6 +3962,17 @@
 				80A98DE51BFD56D70060146F /* de */,
 			);
 			name = APCPasscode.storyboard;
+			sourceTree = "<group>";
+		};
+		80A98DEE1BFD60940060146F /* APCAppCore.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				80A98DED1BFD60940060146F /* Base */,
+				80A98DEF1BFD60960060146F /* fr */,
+				80A98DF01BFD60970060146F /* de */,
+				80A98DF11BFE69470060146F /* en */,
+			);
+			name = APCAppCore.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

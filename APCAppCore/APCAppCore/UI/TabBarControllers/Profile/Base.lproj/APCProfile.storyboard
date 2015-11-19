@@ -860,17 +860,13 @@
                                     <constraint firstAttribute="height" constant="50" id="ZpL-Fq-2JU"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BcC-vd-hvB">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Thank you for your contribution to this study. We are sorry that you could not continue." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BcC-vd-hvB">
                                 <rect key="frame" x="23" y="239" width="275" height="91"/>
                                 <animations/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="275" id="IlI-Kw-SNe"/>
                                     <constraint firstAttribute="height" constant="91" id="cMK-Eb-jfr"/>
                                 </constraints>
-                                <string key="text" base64-UTF8="YES">
-VGhhbmsgeW91IGZvciB5b3VyIGNvbnRyaWJ1dGlvbiADdG8gdGhpcyBzdHVkeS4gV2UgYXJlIHNvcnJ5
-IHRoYXQgeW91IGNvdWxkIG5vdCBjb250aW51ZS4
-</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
