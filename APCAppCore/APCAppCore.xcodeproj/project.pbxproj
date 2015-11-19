@@ -1070,7 +1070,6 @@
 		80A98DE31BFD56D70060146F /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/APCEmailVerify.strings; sourceTree = "<group>"; };
 		80A98DE41BFD56D70060146F /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/APCProfile.strings; sourceTree = "<group>"; };
 		80A98DE51BFD56D70060146F /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/APCPasscode.strings; sourceTree = "<group>"; };
-		80A98DED1BFD60940060146F /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/APCAppCore.strings; sourceTree = "<group>"; };
 		80A98DEF1BFD60960060146F /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/APCAppCore.strings; sourceTree = "<group>"; };
 		80A98DF01BFD60970060146F /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/APCAppCore.strings; sourceTree = "<group>"; };
 		80A98DF11BFE69470060146F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/APCAppCore.strings; sourceTree = "<group>"; };
@@ -3580,7 +3579,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "OUT_DIR=\"APCAppCore/Resources\"\n# don't want to conflict with app's Localizable.strings if AppCore is included in a project as a CocoaPod\nBUILT_FILE=${OUT_DIR}/Localizable.strings\nOUT_FILE=${OUT_DIR}/APCAppCore.strings\nmkdir -p ${OUT_DIR}\nfind . -name *.m | xargs genstrings -s APCLocalizedString -o ${OUT_DIR}\nrm -f ${OUT_FILE}\nmv ${BUILT_FILE} ${OUT_FILE}";
+			shellScript = "OUT_DIR=\"APCAppCore/Resources/en.lproj\"\n# don't want to conflict with app's Localizable.strings if AppCore is included in a project as a CocoaPod\nBUILT_FILE=${OUT_DIR}/Localizable.strings\nOUT_FILE=${OUT_DIR}/APCAppCore.strings\nmkdir -p ${OUT_DIR}\nfind . -name *.m | xargs genstrings -s APCLocalizedString -o ${OUT_DIR}\nrm -f ${OUT_FILE}\nmv ${BUILT_FILE} ${OUT_FILE}";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -3967,7 +3966,6 @@
 		80A98DEE1BFD60940060146F /* APCAppCore.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				80A98DED1BFD60940060146F /* Base */,
 				80A98DEF1BFD60960060146F /* fr */,
 				80A98DF01BFD60970060146F /* de */,
 				80A98DF11BFE69470060146F /* en */,
