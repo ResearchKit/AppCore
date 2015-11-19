@@ -36,6 +36,7 @@
 #import "APCPermissionsManager.h"
 #import "APCCustomBackButton.h"
 #import "APCConstants.h"
+#import "APCLocalization.h"
 
 #import "UIFont+APCAppearance.h"
 #import "UIColor+APCAppearance.h"

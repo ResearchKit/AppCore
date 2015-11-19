@@ -34,6 +34,8 @@
 #import "APCStudyLandingCollectionViewCell.h"
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
+#import "APCLocalization.h"
+
 @import MessageUI;
 
 NSString *const kAPCStudyLandingCollectionViewCellIdentifier = @"APCStudyLandingCollectionViewCell";

@@ -39,6 +39,7 @@
 #import "APCTaskReminder.h"
 #import "APCAppDelegate.h"
 #import "APCLog.h"
+#import "APCLocalization.h"
 
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"

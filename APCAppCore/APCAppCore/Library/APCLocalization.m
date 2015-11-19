@@ -7,14 +7,14 @@
 //
 
 #import "APCLocalization.h"
-#import "APCOnboarding.h"
+#import "APCUser.h"
 
 NSBundle *APCBundle() {
     static NSBundle *__bundle;
     
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        __bundle = [NSBundle bundleForClass:[APCOnboarding class]];
+        __bundle = [NSBundle bundleForClass:[APCUser class]];
     });
     
     return __bundle;

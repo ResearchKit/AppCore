@@ -32,6 +32,7 @@
 // 
  
 #import "APCParameters+Settings.h"
+#import "APCLocalization.h"
 
 @implementation APCParameters (Settings)
 

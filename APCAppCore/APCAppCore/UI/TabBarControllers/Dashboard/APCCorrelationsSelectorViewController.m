@@ -34,6 +34,7 @@
 #import "APCCorrelationsSelectorViewController.h"
 #import "APCScoring.h"
 #import "UIColor+APCAppearance.h"
+#import "APCLocalization.h"
 
 @interface APCCorrelationsSelectorViewController ()
 @property (strong, nonatomic) APCScoring *scoring;

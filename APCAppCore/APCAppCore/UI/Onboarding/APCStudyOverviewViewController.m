@@ -39,6 +39,7 @@
 #import "APCSignInViewController.h"
 #import "APCUser.h"
 #import "APCLog.h"
+#import "APCLocalization.h"
 
 #import "APCAppDelegate.h"
 

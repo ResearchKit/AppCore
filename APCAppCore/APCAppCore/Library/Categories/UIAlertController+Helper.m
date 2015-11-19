@@ -32,6 +32,7 @@
 // 
  
 #import "UIAlertController+Helper.h"
+#import "APCLocalization.h"
 
 @implementation UIAlertController (Helper)
 

@@ -35,6 +35,7 @@
 #import "APCUserInfoConstants.h"
 #import "APCPasscodeView.h"
 #import "APCLog.h"
+#import "APCLocalization.h"
 
 #import "APCKeychainStore+Passcode.h"
 #import "UIColor+APCAppearance.h"

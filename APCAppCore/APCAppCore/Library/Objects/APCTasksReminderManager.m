@@ -42,6 +42,7 @@
 #import "NSManagedObject+APCHelper.h"
 #import "APCTask.h"
 #import "APCTaskGroup.h"
+#import "APCLocalization.h"
 
 #import <UIKit/UIKit.h>
 

@@ -38,6 +38,7 @@
 #import "APCUser.h"
 #import "APCLog.h"
 #import "APCStepProgressBar.h"
+#import "APCLocalization.h"
 
 #import "NSString+Helper.h"
 #import "UIColor+APCAppearance.h"

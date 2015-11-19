@@ -33,6 +33,7 @@
  
 #import "APCBaseGraphView.h"
 #import "UIColor+APCAppearance.h"
+#import "APCLocalization.h"
 
 static NSString * const kFadeAnimationKey = @"LayerFadeAnimation";
 static NSString * const kGrowAnimationKey = @"LayerGrowAnimation";

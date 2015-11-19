@@ -37,6 +37,7 @@
 #import "APCMedTrackerPossibleDosage+Helper.h"
 
 #import "APCLog.h"
+#import "APCLocalization.h"
 
 static  NSString  *kViewControllerName       = @"Medication Dosage";
 

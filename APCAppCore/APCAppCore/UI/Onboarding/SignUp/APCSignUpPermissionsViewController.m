@@ -40,6 +40,7 @@
 #import "APCPermissionsCell.h"
 #import "APCStepProgressBar.h"
 #import "APCCustomBackButton.h"
+#import "APCLocalization.h"
 
 #import "UIColor+APCAppearance.h"
 #import "NSBundle+Helper.h"

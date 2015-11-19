@@ -51,6 +51,7 @@
 #import "UIAlertController+Helper.h"
 #import "UIColor+APCAppearance.h"
 #import "NSDictionary+APCAdditions.h"
+#import "APCLocalization.h"
 
 
 static CGFloat const kTintedCellHeight             = 65;

@@ -52,6 +52,8 @@
 #import "APCSetupButtonTableViewCell.h"
 #import "APCButton.h"
 
+#import "APCLocalization.h"
+
 typedef  enum  _SetupTableRowTypes
 {
     SetupTableRowTypesName = 0,

@@ -32,6 +32,7 @@
 // 
  
 #import "APCPieGraphView.h"
+#import "APCLocalization.h"
 
 static CGFloat const kAnimationDuration = 0.35f;
 

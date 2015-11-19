@@ -33,6 +33,7 @@
  
 #import "APCConsentTask.h"
 #import "APCLog.h"
+#import "APCLocalization.h"
 #import "APCConsentQuestion.h"
 #import "APCConsentBooleanQuestion.h"
 #import "APCConsentInstructionQuestion.h"

@@ -55,6 +55,7 @@
 #import "UIFont+APCAppearance.h"
 #import "NSDate+Helper.h"
 #import "APCLog.h"
+#import "APCLocalization.h"
 
 typedef  enum  _PlacementOfNewPages
 {

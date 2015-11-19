@@ -33,6 +33,7 @@
  
 #import "NSError+APCAdditions.h"
 #import "APCLog.h"
+#import "APCLocalization.h"
 
 NSString * const kAPCServerBusyErrorMessage                     = @"Thank you for your interest in this study. We are working hard to process the large volume of interest, and should be back up momentarily. Please try again soon.";
 NSString * const kAPCUnexpectedConditionErrorMessage            = @"An unexpected network condition has occurred. Please try again soon.";

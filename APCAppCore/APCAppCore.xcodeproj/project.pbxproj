@@ -332,9 +332,11 @@
 		7BF54F981AA158E50081C935 /* APCHorizontalBottomThinLineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BF54F961AA158E50081C935 /* APCHorizontalBottomThinLineView.m */; };
 		806F24331B3388E700B50664 /* APCCMSSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 806F24321B3388E700B50664 /* APCCMSSupport.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		80A98DB61BFD11580060146F /* APCLocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = 80A98DB51BFD11580060146F /* APCLocalization.m */; };
-		80A98DC01BFD45310060146F /* APCOnboarding.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 80A98DC21BFD45310060146F /* APCOnboarding.storyboard */; };
-		80A98DC41BFD458F0060146F /* APCEmailVerify.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 80A98DC61BFD458F0060146F /* APCEmailVerify.storyboard */; };
-		80A98DCA1BFD46520060146F /* APCEmailVerify.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 80A98DC81BFD46520060146F /* APCEmailVerify.storyboard */; };
+		80A98DCE1BFD49180060146F /* APCOnboarding.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 80A98DD01BFD49180060146F /* APCOnboarding.storyboard */; };
+		80A98DD41BFD496C0060146F /* APCEmailVerify.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 80A98DD61BFD496C0060146F /* APCEmailVerify.storyboard */; };
+		80A98DD71BFD49EC0060146F /* APCProfile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 80A98DD91BFD49EC0060146F /* APCProfile.storyboard */; };
+		80A98DDA1BFD4A290060146F /* APCPasscode.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 80A98DDC1BFD4A290060146F /* APCPasscode.storyboard */; };
+		80A98DDD1BFD517C0060146F /* APCLocalization.h in Headers */ = {isa = PBXBuildFile; fileRef = 80A98DB01BFCFE430060146F /* APCLocalization.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A7CFE4B51A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = A7CFE4B11A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A7CFE4B61A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7CFE4B21A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.m */; };
 		A7CFE4B71A8B05F4009A171C /* APCStudyOverviewCollectionViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = A7CFE4B31A8B05F4009A171C /* APCStudyOverviewCollectionViewController.h */; };
@@ -622,7 +624,6 @@
 		F5F12A8A1A2F78490015982C /* APCTableViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129421A2F78490015982C /* APCTableViewItem.m */; };
 		F5F12A8B1A2F78490015982C /* APCIntroVideoViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F129441A2F78490015982C /* APCIntroVideoViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5F12A8C1A2F78490015982C /* APCIntroVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129451A2F78490015982C /* APCIntroVideoViewController.m */; };
-		F5F12A8D1A2F78490015982C /* APCOnboarding.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F5F129461A2F78490015982C /* APCOnboarding.storyboard */; };
 		F5F12A8E1A2F78490015982C /* APCShareViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F129471A2F78490015982C /* APCShareViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5F12A8F1A2F78490015982C /* APCShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129481A2F78490015982C /* APCShareViewController.m */; };
 		F5F12A901A2F78490015982C /* APCSpinnerViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F129491A2F78490015982C /* APCSpinnerViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -635,7 +636,6 @@
 		F5F12A971A2F78490015982C /* APCUserInfoConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F129501A2F78490015982C /* APCUserInfoConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5F12A981A2F78490015982C /* APCChangeEmailViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F129521A2F78490015982C /* APCChangeEmailViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5F12A991A2F78490015982C /* APCChangeEmailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129531A2F78490015982C /* APCChangeEmailViewController.m */; };
-		F5F12A9A1A2F78490015982C /* APCEmailVerify.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F5F129541A2F78490015982C /* APCEmailVerify.storyboard */; };
 		F5F12A9B1A2F78490015982C /* APCEmailVerifyViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F129551A2F78490015982C /* APCEmailVerifyViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5F12A9C1A2F78490015982C /* APCEmailVerifyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129561A2F78490015982C /* APCEmailVerifyViewController.m */; };
 		F5F12AA21A2F78490015982C /* APCForgotPasswordViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F1295E1A2F78490015982C /* APCForgotPasswordViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -677,7 +677,6 @@
 		F5F12AC61A2F78490015982C /* APCLearnStudyDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129871A2F78490015982C /* APCLearnStudyDetailsViewController.m */; };
 		F5F12AC71A2F78490015982C /* APCChangePasscodeViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F129891A2F78490015982C /* APCChangePasscodeViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5F12AC81A2F78490015982C /* APCChangePasscodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F1298A1A2F78490015982C /* APCChangePasscodeViewController.m */; };
-		F5F12AC91A2F78490015982C /* APCProfile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F5F1298B1A2F78490015982C /* APCProfile.storyboard */; };
 		F5F12ACA1A2F78490015982C /* APCProfileViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F1298C1A2F78490015982C /* APCProfileViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5F12ACB1A2F78490015982C /* APCProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F1298D1A2F78490015982C /* APCProfileViewController.m */; };
 		F5F12ACC1A2F78490015982C /* APCSettingsViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F1298E1A2F78490015982C /* APCSettingsViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -731,7 +730,6 @@
 		F5F12B001A2F78490015982C /* APCSimpleTaskSummaryViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F129C91A2F78490015982C /* APCSimpleTaskSummaryViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5F12B011A2F78490015982C /* APCSimpleTaskSummaryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129CA1A2F78490015982C /* APCSimpleTaskSummaryViewController.m */; };
 		F5F12B021A2F78490015982C /* APCSimpleTaskSummaryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F5F129CB1A2F78490015982C /* APCSimpleTaskSummaryViewController.xib */; };
-		F5F12B031A2F78490015982C /* APCPasscode.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F5F129CD1A2F78490015982C /* APCPasscode.storyboard */; };
 		F5F12B041A2F78490015982C /* APCPasscodeViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F129CE1A2F78490015982C /* APCPasscodeViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5F12B051A2F78490015982C /* APCPasscodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129CF1A2F78490015982C /* APCPasscodeViewController.m */; };
 		F5F12B061A2F78490015982C /* APCUserInfoViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F129D01A2F78490015982C /* APCUserInfoViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1060,9 +1058,10 @@
 		806F24321B3388E700B50664 /* APCCMSSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = APCCMSSupport.h; path = CMS/APCCMSSupport.h; sourceTree = "<group>"; };
 		80A98DB01BFCFE430060146F /* APCLocalization.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = APCLocalization.h; path = Localization/APCLocalization.h; sourceTree = "<group>"; };
 		80A98DB51BFD11580060146F /* APCLocalization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCLocalization.m; sourceTree = "<group>"; };
-		80A98DC31BFD45620060146F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/APCOnboarding.storyboard; sourceTree = "<group>"; };
-		80A98DC51BFD458F0060146F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/APCEmailVerify.storyboard; sourceTree = "<group>"; };
-		80A98DC91BFD46520060146F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = APCEmailVerify.storyboard; sourceTree = "<group>"; };
+		80A98DCF1BFD49180060146F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/APCOnboarding.storyboard; sourceTree = "<group>"; };
+		80A98DD51BFD496C0060146F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/APCEmailVerify.storyboard; sourceTree = "<group>"; };
+		80A98DD81BFD49EC0060146F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/APCProfile.storyboard; sourceTree = "<group>"; };
+		80A98DDB1BFD4A290060146F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/APCPasscode.storyboard; sourceTree = "<group>"; };
 		A7CFE4B11A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCStudyOverviewCollectionViewCell.h; sourceTree = "<group>"; };
 		A7CFE4B21A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCStudyOverviewCollectionViewCell.m; sourceTree = "<group>"; };
 		A7CFE4B31A8B05F4009A171C /* APCStudyOverviewCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCStudyOverviewCollectionViewController.h; sourceTree = "<group>"; };
@@ -1353,7 +1352,6 @@
 		F5F129421A2F78490015982C /* APCTableViewItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCTableViewItem.m; sourceTree = "<group>"; };
 		F5F129441A2F78490015982C /* APCIntroVideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCIntroVideoViewController.h; sourceTree = "<group>"; };
 		F5F129451A2F78490015982C /* APCIntroVideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCIntroVideoViewController.m; sourceTree = "<group>"; };
-		F5F129461A2F78490015982C /* APCOnboarding.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = APCOnboarding.storyboard; sourceTree = "<group>"; };
 		F5F129471A2F78490015982C /* APCShareViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCShareViewController.h; sourceTree = "<group>"; };
 		F5F129481A2F78490015982C /* APCShareViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCShareViewController.m; sourceTree = "<group>"; };
 		F5F129491A2F78490015982C /* APCSpinnerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSpinnerViewController.h; sourceTree = "<group>"; };
@@ -1366,7 +1364,6 @@
 		F5F129501A2F78490015982C /* APCUserInfoConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCUserInfoConstants.h; sourceTree = "<group>"; };
 		F5F129521A2F78490015982C /* APCChangeEmailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCChangeEmailViewController.h; sourceTree = "<group>"; };
 		F5F129531A2F78490015982C /* APCChangeEmailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCChangeEmailViewController.m; sourceTree = "<group>"; };
-		F5F129541A2F78490015982C /* APCEmailVerify.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = APCEmailVerify.storyboard; sourceTree = "<group>"; };
 		F5F129551A2F78490015982C /* APCEmailVerifyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCEmailVerifyViewController.h; sourceTree = "<group>"; };
 		F5F129561A2F78490015982C /* APCEmailVerifyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = APCEmailVerifyViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		F5F1295E1A2F78490015982C /* APCForgotPasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCForgotPasswordViewController.h; sourceTree = "<group>"; };
@@ -1408,7 +1405,6 @@
 		F5F129871A2F78490015982C /* APCLearnStudyDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCLearnStudyDetailsViewController.m; sourceTree = "<group>"; };
 		F5F129891A2F78490015982C /* APCChangePasscodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCChangePasscodeViewController.h; sourceTree = "<group>"; };
 		F5F1298A1A2F78490015982C /* APCChangePasscodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCChangePasscodeViewController.m; sourceTree = "<group>"; };
-		F5F1298B1A2F78490015982C /* APCProfile.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = APCProfile.storyboard; sourceTree = "<group>"; };
 		F5F1298C1A2F78490015982C /* APCProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCProfileViewController.h; sourceTree = "<group>"; };
 		F5F1298D1A2F78490015982C /* APCProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = APCProfileViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		F5F1298E1A2F78490015982C /* APCSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSettingsViewController.h; sourceTree = "<group>"; };
@@ -1462,7 +1458,6 @@
 		F5F129C91A2F78490015982C /* APCSimpleTaskSummaryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSimpleTaskSummaryViewController.h; sourceTree = "<group>"; };
 		F5F129CA1A2F78490015982C /* APCSimpleTaskSummaryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSimpleTaskSummaryViewController.m; sourceTree = "<group>"; };
 		F5F129CB1A2F78490015982C /* APCSimpleTaskSummaryViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCSimpleTaskSummaryViewController.xib; sourceTree = "<group>"; };
-		F5F129CD1A2F78490015982C /* APCPasscode.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = APCPasscode.storyboard; sourceTree = "<group>"; };
 		F5F129CE1A2F78490015982C /* APCPasscodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCPasscodeViewController.h; sourceTree = "<group>"; };
 		F5F129CF1A2F78490015982C /* APCPasscodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCPasscodeViewController.m; sourceTree = "<group>"; };
 		F5F129D01A2F78490015982C /* APCUserInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCUserInfoViewController.h; sourceTree = "<group>"; };
@@ -1991,14 +1986,6 @@
 				80A98DB51BFD11580060146F /* APCLocalization.m */,
 			);
 			name = Localization;
-			sourceTree = "<group>";
-		};
-		80A98DC71BFD46520060146F /* Base.lproj */ = {
-			isa = PBXGroup;
-			children = (
-				80A98DC81BFD46520060146F /* APCEmailVerify.storyboard */,
-			);
-			path = Base.lproj;
 			sourceTree = "<group>";
 		};
 		CF03CCFB1AA23CE7000437FF /* Main Calendar View */ = {
@@ -2731,7 +2718,7 @@
 		F5F129431A2F78490015982C /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
-				F5F129461A2F78490015982C /* APCOnboarding.storyboard */,
+				80A98DD01BFD49180060146F /* APCOnboarding.storyboard */,
 				A7CFE4B11A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.h */,
 				A7CFE4B21A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.m */,
 				A7CFE4B31A8B05F4009A171C /* APCStudyOverviewCollectionViewController.h */,
@@ -2762,7 +2749,7 @@
 			children = (
 				F5F129521A2F78490015982C /* APCChangeEmailViewController.h */,
 				F5F129531A2F78490015982C /* APCChangeEmailViewController.m */,
-				F5F129541A2F78490015982C /* APCEmailVerify.storyboard */,
+				80A98DD61BFD496C0060146F /* APCEmailVerify.storyboard */,
 				F5F129551A2F78490015982C /* APCEmailVerifyViewController.h */,
 				F5F129561A2F78490015982C /* APCEmailVerifyViewController.m */,
 			);
@@ -2875,7 +2862,7 @@
 			children = (
 				F5F129891A2F78490015982C /* APCChangePasscodeViewController.h */,
 				F5F1298A1A2F78490015982C /* APCChangePasscodeViewController.m */,
-				F5F1298B1A2F78490015982C /* APCProfile.storyboard */,
+				80A98DD91BFD49EC0060146F /* APCProfile.storyboard */,
 				F5F1298C1A2F78490015982C /* APCProfileViewController.h */,
 				F5F1298D1A2F78490015982C /* APCProfileViewController.m */,
 				F5F1298E1A2F78490015982C /* APCSettingsViewController.h */,
@@ -3016,7 +3003,7 @@
 			isa = PBXGroup;
 			children = (
 				7BEC13CD1AA3AA5B00CA316C /* Activity Tracking */,
-				F5F129CD1A2F78490015982C /* APCPasscode.storyboard */,
+				80A98DDC1BFD4A290060146F /* APCPasscode.storyboard */,
 				F5F129CE1A2F78490015982C /* APCPasscodeViewController.h */,
 				F5F129CF1A2F78490015982C /* APCPasscodeViewController.m */,
 				F5F129D01A2F78490015982C /* APCUserInfoViewController.h */,
@@ -3189,6 +3176,7 @@
 				F5F12A6C1A2F78490015982C /* APCAppDelegate.h in Headers */,
 				36AAB34F1A9A75BB00FAC255 /* APCMedTrackerPrescription.h in Headers */,
 				5BB10C131A91F970002D2DD2 /* APCWebViewController.h in Headers */,
+				80A98DDD1BFD517C0060146F /* APCLocalization.h in Headers */,
 				F5F12A871A2F78490015982C /* APCSignUpTask.h in Headers */,
 				36D0510E1ABB92F0008FC9B3 /* NSFileManager+Helper.h in Headers */,
 				F5B947AF1A73272C0034C522 /* UIColor+APCAppearance.h in Headers */,
@@ -3486,12 +3474,12 @@
 				CFFDEDF41A95734000B25581 /* APCMedicationSummaryTableViewCell.xib in Resources */,
 				08027A931A7319AC00B358CC /* heartbeat@3x.png in Resources */,
 				08027A921A7319AC00B358CC /* heart-fitness@3x.png in Resources */,
-				F5F12A9A1A2F78490015982C /* APCEmailVerify.storyboard in Resources */,
+				80A98DD41BFD496C0060146F /* APCEmailVerify.storyboard in Resources */,
 				F5F12AB91A2F78490015982C /* APCActivities.storyboard in Resources */,
 				CFFDEDDF1A95734000B25581 /* APCFrequencyTableViewTimesCell.xib in Resources */,
 				08027A821A7319AC00B358CC /* consent_05@3x.png in Resources */,
 				F5F12B021A2F78490015982C /* APCSimpleTaskSummaryViewController.xib in Resources */,
-				F5F12AC91A2F78490015982C /* APCProfile.storyboard in Resources */,
+				80A98DD71BFD49EC0060146F /* APCProfile.storyboard in Resources */,
 				CF7945881AA7AEC70019160F /* APCFrequencyEverydayTableViewCell.xib in Resources */,
 				CF03CD041AA23DA2000437FF /* APCMedicationDetailsTableViewCell.xib in Resources */,
 				369E28161A96B7A200D35DFA /* APCMedTrackerPredefinedPrescriptionColors.plist in Resources */,
@@ -3507,12 +3495,12 @@
 				08027A871A7319AC00B358CC /* heart-fitness@2x.png in Resources */,
 				CFFDEDE81A95734000B25581 /* APCMedicationColorViewController.xib in Resources */,
 				CFFDED721A95731F00B25581 /* APCMedicationTrackerCalendarViewController.xib in Resources */,
-				F5F12A8D1A2F78490015982C /* APCOnboarding.storyboard in Resources */,
+				80A98DCE1BFD49180060146F /* APCOnboarding.storyboard in Resources */,
 				F5F12A121A2F78490015982C /* MODEL_README.txt in Resources */,
 				F5B947F11A73272C0034C522 /* APCParameters.storyboard in Resources */,
 				CFBD289C1AA4408800F49161 /* APCMedicationNameTableViewCell.xib in Resources */,
 				08027A851A7319AC00B358CC /* handtapping01@2x.png in Resources */,
-				F5F12B031A2F78490015982C /* APCPasscode.storyboard in Resources */,
+				80A98DDA1BFD4A290060146F /* APCPasscode.storyboard in Resources */,
 				08027A8D1A7319AC00B358CC /* sittingman@2x.png in Resources */,
 				08027A781A7319AC00B358CC /* consent_02@2x.png in Resources */,
 				369E27F71A96B7A200D35DFA /* APCMedicationSampleDosesTaken.plist in Resources */,
@@ -3922,7 +3910,71 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXVariantGroup section */
+		80A98DD01BFD49180060146F /* APCOnboarding.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				80A98DCF1BFD49180060146F /* Base */,
+			);
+			name = APCOnboarding.storyboard;
+			sourceTree = "<group>";
+		};
+		80A98DD61BFD496C0060146F /* APCEmailVerify.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				80A98DD51BFD496C0060146F /* Base */,
+			);
+			name = APCEmailVerify.storyboard;
+			sourceTree = "<group>";
+		};
+		80A98DD91BFD49EC0060146F /* APCProfile.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				80A98DD81BFD49EC0060146F /* Base */,
+			);
+			name = APCProfile.storyboard;
+			sourceTree = "<group>";
+		};
+		80A98DDC1BFD4A290060146F /* APCPasscode.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				80A98DDB1BFD4A290060146F /* Base */,
+			);
+			name = APCPasscode.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
+		80A98DD11BFD49180060146F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = genstrings;
+			};
+			name = Debug;
+		};
+		80A98DD21BFD49180060146F /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = genstrings;
+			};
+			name = Development;
+		};
+		80A98DD31BFD49180060146F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				PRODUCT_NAME = genstrings;
+			};
+			name = Release;
+		};
 		F5179B3A19D09128001DCCB7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -4196,9 +4248,9 @@
 		80A98DB81BFD1C5C0060146F /* Build configuration list for PBXAggregateTarget "genstrings" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				80A98DB91BFD1C5C0060146F /* Debug */,
-				80A98DBA1BFD1C5C0060146F /* Development */,
-				80A98DBB1BFD1C5C0060146F /* Release */,
+				80A98DD11BFD49180060146F /* Debug */,
+				80A98DD21BFD49180060146F /* Development */,
+				80A98DD31BFD49180060146F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

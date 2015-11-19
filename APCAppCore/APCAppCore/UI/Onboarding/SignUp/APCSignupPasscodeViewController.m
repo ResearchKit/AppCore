@@ -37,6 +37,7 @@
 #import "APCDataSubstrate.h"
 #import "APCConstants.h"
 #import "APCLog.h"
+#import "APCLocalization.h"
 
 #import "APCPasscodeView.h"
 #import "APCCustomBackButton.h"

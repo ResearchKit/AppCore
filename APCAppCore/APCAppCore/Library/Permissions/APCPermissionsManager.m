@@ -35,6 +35,7 @@
 #import "APCUserInfoConstants.h"
 #import "APCTasksReminderManager.h"
 #import "APCAppDelegate.h"
+#import "APCLocalization.h"
 
 #import <UIKit/UIKit.h>
 #import <CoreMotion/CoreMotion.h>

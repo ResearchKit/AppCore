@@ -35,6 +35,7 @@
 #import "APCConsentTaskViewController.h"
 #import "APCOnboardingManager.h"
 #import "APCLog.h"
+#import "APCLocalization.h"
 
 #ifndef APC_HAVE_CONSENT
   #import "APCExampleLabel.h"

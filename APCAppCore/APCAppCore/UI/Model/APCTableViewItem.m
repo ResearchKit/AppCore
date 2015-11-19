@@ -34,6 +34,7 @@
 #import "APCTableViewItem.h"
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
+#import "APCLocalization.h"
 
 @implementation APCTableViewItem
 

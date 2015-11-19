@@ -34,6 +34,7 @@
 #import "APCPermissionsCell.h"
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
+#import "APCLocalization.h"
 
 NSString * const kSignUpPermissionsCellIdentifier = @"APCPermissionsCell";
 

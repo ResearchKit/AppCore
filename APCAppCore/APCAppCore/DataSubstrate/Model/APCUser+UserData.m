@@ -32,6 +32,7 @@
 // 
  
 #import "APCUser+UserData.h"
+#import "APCLocalization.h"
 
 @implementation APCUser (UserData)
 

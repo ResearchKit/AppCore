@@ -47,6 +47,7 @@
 #import "APCSpinnerViewController.h"
 #import "APCUser+Bridge.h"
 #import "NSError+APCAdditions.h"
+#import "APCLocalization.h"
 
 static NSString *kInternetNotAvailableErrorMessage1 = @"Internet Not Connected";
 static NSString *kInternetNotAvailableErrorMessage2 = @"BackendServer Not Reachable";

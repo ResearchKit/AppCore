@@ -36,6 +36,7 @@
 #import "APCLog.h"
 #import "APCOnboarding.h"
 #import "APCCustomBackButton.h"
+#import "APCLocalization.h"
 
 #import "UIColor+APCAppearance.h"
 

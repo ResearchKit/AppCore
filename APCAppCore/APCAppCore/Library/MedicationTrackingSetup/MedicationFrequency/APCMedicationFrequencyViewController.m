@@ -35,6 +35,7 @@
 #import "APCFrequencyTableViewTimesCell.h"
 #import "APCFrequencyEverydayTableViewCell.h"
 #import "APCFrequencyDayTableViewCell.h"
+#import "APCLocalization.h"
 
 #import "UIColor+APCAppearance.h"
 #import "NSBundle+Helper.h"

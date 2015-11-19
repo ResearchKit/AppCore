@@ -38,6 +38,7 @@
 #import "APCPermissionButton.h"
 #import "APCPermissionsManager.h"
 #import "APCLog.h"
+#import "APCLocalization.h"
 
 #import "UIAlertController+Helper.h"
 #import "APCUser+Bridge.h"

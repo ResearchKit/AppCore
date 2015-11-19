@@ -32,6 +32,7 @@
 // 
  
 #import "APCAssertionHandler.h"
+#import "APCLocalization.h"
 
 @import UIKit;
 
@@ -55,7 +56,7 @@
 }
 
 - (void) exitGracefully {
-    NSString *alertTitle = APCLocalizedString(@"Somthings Wrong!", @"");
+    NSString *alertTitle = APCLocalizedString(@"Somethings Wrong!", @"");
     
     NSString *alertMessage = APCLocalizedString(@"Oops! Something went wrong. We are really sorry for the inconvenience. Since we are not taking any risk on your data, you may need to restart the app.", @"");
     
