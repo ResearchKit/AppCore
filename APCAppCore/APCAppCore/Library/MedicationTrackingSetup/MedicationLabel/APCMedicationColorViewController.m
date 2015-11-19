@@ -106,7 +106,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
     APCMedTrackerPrescriptionColor  *schedulColor = self.colorsList[indexPath.row];
     
     NSString  *colorname = schedulColor.name;
-    colorname = NSLocalizedString(colorname, nil);
+    colorname = APCLocalizedString(colorname, nil);
     cell.colorNameLabel.text = colorname;
     
     if (self.selectedIndex != nil) {
@@ -183,7 +183,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
         label.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0];
         label.textColor = [UIColor blackColor];
         label.textAlignment = NSTextAlignmentCenter;
-        label.text = NSLocalizedString(kSectionHeaderTitle, nil);
+        label.text = APCLocalizedString(kSectionHeaderTitle, nil);
         [view addSubview:label];
     }
     return  view;
@@ -227,7 +227,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
 
     self.tabulator.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
-    UIBarButtonItem  *donester = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Done", @"Done") style:UIBarButtonItemStyleDone target:self action:@selector(doneButtonTapped:)];
+    UIBarButtonItem  *donester = [[UIBarButtonItem alloc] initWithTitle:APCLocalizedString(@"Done", @"Done") style:UIBarButtonItemStyleDone target:self action:@selector(doneButtonTapped:)];
     self.navigationItem.rightBarButtonItem = donester;
     
     UINib  *colorSwatchTableCellNib = [UINib nibWithNibName:kColorSwatchTableCellName bundle:[NSBundle appleCoreBundle]];

@@ -91,7 +91,7 @@ static CGFloat const kTableViewSectionHeaderHeight = 77;
 {
     [super viewDidLoad];
 
-    self.navigationItem.title = NSLocalizedString(@"Activities", @"Activities");
+    self.navigationItem.title = APCLocalizedString(@"Activities", @"Activities");
     self.tableView.backgroundColor = [UIColor appSecondaryColor4];
 
     NSString *headerViewNibName = NSStringFromClass ([APCActivitiesSectionHeaderView class]);
@@ -306,11 +306,11 @@ static CGFloat const kTableViewSectionHeaderHeight = 77;
 
 - (void)presentSettingsAlert:(NSError *)error
 {
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Permissions Denied", @"") message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *dismiss = [UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction *__unused action) {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:APCLocalizedString(@"Permissions Denied", @"") message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *dismiss = [UIAlertAction actionWithTitle:APCLocalizedString(@"Dismiss", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction *__unused action) {
     }];
     [alertController addAction:dismiss];
-    UIAlertAction *settings = [UIAlertAction actionWithTitle:NSLocalizedString(@"Settings", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
+    UIAlertAction *settings = [UIAlertAction actionWithTitle:APCLocalizedString(@"Settings", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
         // Common misconception, this takes user to our app's settings page, not general settings page
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
     }];

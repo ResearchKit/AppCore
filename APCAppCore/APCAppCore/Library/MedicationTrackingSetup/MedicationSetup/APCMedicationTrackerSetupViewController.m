@@ -279,7 +279,7 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Select F
         label.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0];
         label.textColor = [UIColor blackColor];
         label.textAlignment = NSTextAlignmentCenter;
-        label.text = NSLocalizedString(@"Add Your Medication Details", nil);;
+        label.text = APCLocalizedString(@"Add Your Medication Details", nil);;
         [view addSubview:label];
     }
     return  view;

@@ -51,8 +51,8 @@ NSString * const kSignUpPermissionsCellIdentifier = @"APCPermissionsCell";
     self.detailsLabel.textColor = [UIColor appSecondaryColor1];
     self.detailsLabel.font = [UIFont appRegularFontWithSize:16.f];
     
-    [self.permissionButton setTitle:NSLocalizedString(@"Allow", @"Allow") forState:UIControlStateNormal];
-    [self.permissionButton setTitle:NSLocalizedString(@"Granted", @"Granted") forState:UIControlStateDisabled];
+    [self.permissionButton setTitle:APCLocalizedString(@"Allow", @"Allow") forState:UIControlStateNormal];
+    [self.permissionButton setTitle:APCLocalizedString(@"Granted", @"Granted") forState:UIControlStateDisabled];
 }
 
 - (IBAction)allowPermission:(id)__unused sender

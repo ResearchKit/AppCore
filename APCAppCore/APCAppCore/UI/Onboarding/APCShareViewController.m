@@ -77,7 +77,7 @@
     NSDictionary *initialOptions = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).initializationOptions;
     self.shareMessage = initialOptions[kShareMessageKey];
     
-    self.title = NSLocalizedString(@"Spread the Word", nil);
+    self.title = APCLocalizedString(@"Spread the Word", nil);
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -123,25 +123,25 @@
     switch (indexPath.row) {
         case kAPCShareTypeTwitter:
         {
-            cell.textLabel.text = NSLocalizedString(@"Share on Twitter", nil);
+            cell.textLabel.text = APCLocalizedString(@"Share on Twitter", nil);
             cell.imageView.image = [[UIImage imageNamed:@"twitter_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         }
             break;
         case kAPCShareTypeFacebook:
         {
-            cell.textLabel.text = NSLocalizedString(@"Share on Facebook", nil);
+            cell.textLabel.text = APCLocalizedString(@"Share on Facebook", nil);
             cell.imageView.image = [[UIImage imageNamed:@"facebook_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         }
             break;
         case kAPCShareTypeEmail:
         {
-            cell.textLabel.text = NSLocalizedString(@"Share via Email", nil);
+            cell.textLabel.text = APCLocalizedString(@"Share via Email", nil);
             cell.imageView.image = [[UIImage imageNamed:@"email_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         }
             break;
         case kAPCShareTypeSMS:
         {
-            cell.textLabel.text = NSLocalizedString(@"Share via SMS", nil);
+            cell.textLabel.text = APCLocalizedString(@"Share via SMS", nil);
             cell.imageView.image = [[UIImage imageNamed:@"sms_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         }
             break;
@@ -181,10 +181,10 @@
                 
                 [self presentViewController:mailComposeVC animated:YES completion:NULL];
             } else {
-                NSString *message = NSLocalizedString(@"Looks like you don't have Mail app setup. Please configure to share via email.", nil);
+                NSString *message = APCLocalizedString(@"Looks like you don't have Mail app setup. Please configure to share via email.", nil);
                 
-                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Email", nil) message:message preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *dismiss = [UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", nil) style:UIAlertActionStyleDefault handler:nil];
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:APCLocalizedString(@"Email", nil) message:message preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *dismiss = [UIAlertAction actionWithTitle:APCLocalizedString(@"Dismiss", nil) style:UIAlertActionStyleDefault handler:nil];
                 [alertController addAction:dismiss];
                 [self presentViewController:alertController animated:YES completion:nil];
             }
@@ -199,10 +199,10 @@
                 
                 [self presentViewController:messageComposer animated:YES completion:nil];
             } else {
-                NSString *message = NSLocalizedString(@"Looks like you don't have Messages app setup. Please configure to share via SMS.", nil);
+                NSString *message = APCLocalizedString(@"Looks like you don't have Messages app setup. Please configure to share via SMS.", nil);
                 
-                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Messages", nil) message:message preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *dismiss = [UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", nil) style:UIAlertActionStyleDefault handler:nil];
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:APCLocalizedString(@"Messages", nil) message:message preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *dismiss = [UIAlertAction actionWithTitle:APCLocalizedString(@"Dismiss", nil) style:UIAlertActionStyleDefault handler:nil];
                 [alertController addAction:dismiss];
                 [self presentViewController:alertController animated:YES completion:nil];
             }
@@ -227,8 +227,8 @@
         [composeViewController setInitialText:self.shareMessage];
         [self presentViewController:composeViewController animated:YES completion:nil];
     } else {
-        NSString *updateTwitterClientMessage = NSLocalizedString(@"Your Twitter client does not support sharing from other apps. Please update your Twitter client.", nil);
-        UIAlertController *alertView = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Update Twitter Client", nil)
+        NSString *updateTwitterClientMessage = APCLocalizedString(@"Your Twitter client does not support sharing from other apps. Please update your Twitter client.", nil);
+        UIAlertController *alertView = [UIAlertController alertControllerWithTitle:APCLocalizedString(@"Update Twitter Client", nil)
                                                                            message:updateTwitterClientMessage
                                                                     preferredStyle:UIAlertControllerStyleAlert];
         

@@ -156,7 +156,7 @@
             
             [spinnerController dismissViewControllerAnimated:NO completion:^{
                 
-                UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", @"Dismiss") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
+                UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:APCLocalizedString(@"Dismiss", @"Dismiss") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
                     
                 }];
                 
@@ -169,11 +169,11 @@
         else
         {
             [spinnerController dismissViewControllerAnimated:NO completion:^{
-                UIAlertAction *doneAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Okay", @"Okay") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
+                UIAlertAction *doneAction = [UIAlertAction actionWithTitle:APCLocalizedString(@"Okay", @"Okay") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
                     [weakSelf dismissViewControllerAnimated:YES completion:nil];
                 }];
-                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Success", @"Success")
-                                                                                         message:NSLocalizedString(@"Your data will be emailed to you shortly", @"Your data will be emailed to you shortly")
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:APCLocalizedString(@"Success", @"Success")
+                                                                                         message:APCLocalizedString(@"Your data will be emailed to you shortly", @"Your data will be emailed to you shortly")
                                                                                   preferredStyle:UIAlertControllerStyleAlert];
                 [alertController addAction:doneAction];
                 

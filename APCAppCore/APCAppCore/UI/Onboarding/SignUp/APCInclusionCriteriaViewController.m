@@ -57,9 +57,9 @@
 
 - (void)setupNavAppearance
 {
-    self.title = NSLocalizedString(@"Eligibility", @"");
+    self.title = APCLocalizedString(@"Eligibility", @"");
     
-    UIBarButtonItem *nextBarButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Next", @"") style:UIBarButtonItemStylePlain target:self action:@selector(next)];
+    UIBarButtonItem *nextBarButton = [[UIBarButtonItem alloc] initWithTitle:APCLocalizedString(@"Next", @"") style:UIBarButtonItemStylePlain target:self action:@selector(next)];
     nextBarButton.enabled = [self isContentValid];
     self.navigationItem.rightBarButtonItem = nextBarButton;
     

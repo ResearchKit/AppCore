@@ -39,7 +39,7 @@
 {
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
     
-    UIAlertAction *okayAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", @"") style:UIAlertActionStyleDefault handler:nil];
+    UIAlertAction *okayAction = [UIAlertAction actionWithTitle:APCLocalizedString(@"OK", @"") style:UIAlertActionStyleDefault handler:nil];
     [alertController addAction:okayAction];
     
     return alertController;

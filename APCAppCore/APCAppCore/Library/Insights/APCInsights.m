@@ -97,8 +97,8 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
         _baselineHigh = baselineHigh;
         _baselineHighOther = baselineOther;
         
-        _captionGood = NSLocalizedString(@"Not enough data", @"Not enough data");
-        _captionBad  = NSLocalizedString(@"Not enough data", @"Not enough data");
+        _captionGood = APCLocalizedString(@"Not enough data", @"Not enough data");
+        _captionBad  = APCLocalizedString(@"Not enough data", @"Not enough data");
         _valueGood = @(0);
         _valueBad  = @(0);
         
@@ -141,14 +141,14 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
         {
             self.insightFactorName = HKQuantityTypeIdentifierDistanceWalkingRunning;
             self.insightFactorUnit = [HKUnit meterUnit];
-            self.insightFactorCaption = NSLocalizedString(@"minutes spent active", @"{minutes} minutes spent active");
+            self.insightFactorCaption = APCLocalizedString(@"minutes spent active", @"{minutes} minutes spent active");
         }
             break;
         case APCInsightFactorCarbohydrateConsumption:
         {
             self.insightFactorName = HKQuantityTypeIdentifierDietaryCarbohydrates;
             self.insightFactorUnit = [HKUnit gramUnit];
-            self.insightFactorCaption = NSLocalizedString(@"carbohydrates consumed", @"{grams} carbohydrate consumed");
+            self.insightFactorCaption = APCLocalizedString(@"carbohydrates consumed", @"{grams} carbohydrate consumed");
         }
             break;
         case APCInsightFactorCarbohydrateCalories:
@@ -157,28 +157,28 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
         {
             self.insightFactorName = HKQuantityTypeIdentifierDietaryEnergyConsumed;
             self.insightFactorUnit = [HKUnit kilocalorieUnit];
-            self.insightFactorCaption = NSLocalizedString(@"calories consumed", @"{kilo calories} calories consumed");
+            self.insightFactorCaption = APCLocalizedString(@"calories consumed", @"{kilo calories} calories consumed");
         }
             break;
         case APCInsightFactorSteps:
         {
             self.insightFactorName = HKQuantityTypeIdentifierStepCount;
             self.insightFactorUnit = [HKUnit countUnit];
-            self.insightFactorCaption = NSLocalizedString(@"Steps", @"{step value} steps taken");
+            self.insightFactorCaption = APCLocalizedString(@"Steps", @"{step value} steps taken");
         }
             break;
         case APCInsightFactorSugarConsumption:
         {
             self.insightFactorName = HKQuantityTypeIdentifierDietarySugar;
             self.insightFactorUnit = [HKUnit gramUnit];
-            self.insightFactorCaption = NSLocalizedString(@"sugar consumed", @"{grams} sugar consumed");
+            self.insightFactorCaption = APCLocalizedString(@"sugar consumed", @"{grams} sugar consumed");
         }
             break;
         case APCInsightFactorTimeSlept:
         {
             self.insightFactorName = HKCategoryTypeIdentifierSleepAnalysis;
             self.insightFactorUnit = [HKUnit hourUnit];
-            self.insightFactorCaption = NSLocalizedString(@"slept", @"slept");
+            self.insightFactorCaption = APCLocalizedString(@"slept", @"slept");
         }
             break;
         default:
@@ -360,7 +360,7 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
 {
     APCLogDebug(@"Insights: %@", insightPoints);
     
-    NSString *caption = NSLocalizedString(@"Not enough data", @"Not enough data");
+    NSString *caption = APCLocalizedString(@"Not enough data", @"Not enough data");
     NSNumber *pointValue = nil;
     
     NSArray *goodPoints = [insightPoints filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(%K == %@) AND (%K <> %@)",
@@ -393,7 +393,7 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
         }
 
         self.valueGood = pointValue;
-        self.captionGood = NSLocalizedString(caption, caption);
+        self.captionGood = APCLocalizedString(caption, caption);
     }
     
     if (badPoints.count > 0) {
@@ -414,7 +414,7 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
         }
         
         self.valueBad = pointValue;
-        self.captionBad  = NSLocalizedString(caption, caption);
+        self.captionBad  = APCLocalizedString(caption, caption);
     }
     
     // Check if the difference between the good and bad vaules is at least 10%. Othewise don't show the insight.
@@ -556,8 +556,8 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
 
 - (void)resetInsight
 {
-    self.captionGood = NSLocalizedString(@"Not enough data", @"Not enough data");
-    self.captionBad  = NSLocalizedString(@"Not enough data", @"Not enough data");
+    self.captionGood = APCLocalizedString(@"Not enough data", @"Not enough data");
+    self.captionBad  = APCLocalizedString(@"Not enough data", @"Not enough data");
     self.valueGood = @(0);
     self.valueBad  = @(0);
     

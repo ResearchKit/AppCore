@@ -6,6 +6,20 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		80A98DB71BFD1C5C0060146F /* genstrings */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 80A98DB81BFD1C5C0060146F /* Build configuration list for PBXAggregateTarget "genstrings" */;
+			buildPhases = (
+				80A98DBC1BFD1C710060146F /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = genstrings;
+			productName = genstrings;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		049439811B8FC04000CAE23C /* APCDownloadDataViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 0494397F1B8FC04000CAE23C /* APCDownloadDataViewController.h */; };
 		049439821B8FC04000CAE23C /* APCDownloadDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049439801B8FC04000CAE23C /* APCDownloadDataViewController.m */; };
@@ -317,6 +331,10 @@
 		7BF54F971AA158E50081C935 /* APCHorizontalBottomThinLineView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7BF54F951AA158E50081C935 /* APCHorizontalBottomThinLineView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7BF54F981AA158E50081C935 /* APCHorizontalBottomThinLineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BF54F961AA158E50081C935 /* APCHorizontalBottomThinLineView.m */; };
 		806F24331B3388E700B50664 /* APCCMSSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 806F24321B3388E700B50664 /* APCCMSSupport.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		80A98DB61BFD11580060146F /* APCLocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = 80A98DB51BFD11580060146F /* APCLocalization.m */; };
+		80A98DC01BFD45310060146F /* APCOnboarding.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 80A98DC21BFD45310060146F /* APCOnboarding.storyboard */; };
+		80A98DC41BFD458F0060146F /* APCEmailVerify.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 80A98DC61BFD458F0060146F /* APCEmailVerify.storyboard */; };
+		80A98DCA1BFD46520060146F /* APCEmailVerify.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 80A98DC81BFD46520060146F /* APCEmailVerify.storyboard */; };
 		A7CFE4B51A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = A7CFE4B11A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A7CFE4B61A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7CFE4B21A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.m */; };
 		A7CFE4B71A8B05F4009A171C /* APCStudyOverviewCollectionViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = A7CFE4B31A8B05F4009A171C /* APCStudyOverviewCollectionViewController.h */; };
@@ -1040,6 +1058,11 @@
 		7BF54F951AA158E50081C935 /* APCHorizontalBottomThinLineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCHorizontalBottomThinLineView.h; sourceTree = "<group>"; };
 		7BF54F961AA158E50081C935 /* APCHorizontalBottomThinLineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCHorizontalBottomThinLineView.m; sourceTree = "<group>"; };
 		806F24321B3388E700B50664 /* APCCMSSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = APCCMSSupport.h; path = CMS/APCCMSSupport.h; sourceTree = "<group>"; };
+		80A98DB01BFCFE430060146F /* APCLocalization.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = APCLocalization.h; path = Localization/APCLocalization.h; sourceTree = "<group>"; };
+		80A98DB51BFD11580060146F /* APCLocalization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCLocalization.m; sourceTree = "<group>"; };
+		80A98DC31BFD45620060146F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/APCOnboarding.storyboard; sourceTree = "<group>"; };
+		80A98DC51BFD458F0060146F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/APCEmailVerify.storyboard; sourceTree = "<group>"; };
+		80A98DC91BFD46520060146F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = APCEmailVerify.storyboard; sourceTree = "<group>"; };
 		A7CFE4B11A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCStudyOverviewCollectionViewCell.h; sourceTree = "<group>"; };
 		A7CFE4B21A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCStudyOverviewCollectionViewCell.m; sourceTree = "<group>"; };
 		A7CFE4B31A8B05F4009A171C /* APCStudyOverviewCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCStudyOverviewCollectionViewController.h; sourceTree = "<group>"; };
@@ -1961,6 +1984,23 @@
 			name = "Data Sink";
 			sourceTree = "<group>";
 		};
+		80A98DAF1BFCFDF60060146F /* Localization */ = {
+			isa = PBXGroup;
+			children = (
+				80A98DB01BFCFE430060146F /* APCLocalization.h */,
+				80A98DB51BFD11580060146F /* APCLocalization.m */,
+			);
+			name = Localization;
+			sourceTree = "<group>";
+		};
+		80A98DC71BFD46520060146F /* Base.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				80A98DC81BFD46520060146F /* APCEmailVerify.storyboard */,
+			);
+			path = Base.lproj;
+			sourceTree = "<group>";
+		};
 		CF03CCFB1AA23CE7000437FF /* Main Calendar View */ = {
 			isa = PBXGroup;
 			children = (
@@ -2286,6 +2326,7 @@
 				3651424A1AA78514008A5CFA /* DataArchiverAndUploader */,
 				364D34871A7B1C8F0060B3F5 /* DataVerificationClient */,
 				0894654F1A8C211100A983AC /* Insights */,
+				80A98DAF1BFCFDF60060146F /* Localization */,
 				F5B947681A73272C0034C522 /* Logging */,
 				369E27BA1A96B7A200D35DFA /* MedicationTrackerStorageClasses */,
 				CFFDED2F1A95723600B25581 /* MedicationTracking */,
@@ -3401,6 +3442,9 @@
 				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = "Apple, Inc.";
 				TargetAttributes = {
+					80A98DB71BFD1C5C0060146F = {
+						CreatedOnToolsVersion = 7.1.1;
+					};
 					F5179B2819D09128001DCCB7 = {
 						CreatedOnToolsVersion = 6.0.1;
 					};
@@ -3415,6 +3459,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = F5179B1F19D09128001DCCB7;
 			productRefGroup = F5179B2A19D09128001DCCB7 /* Products */;
@@ -3423,6 +3468,7 @@
 			targets = (
 				F5179B2819D09128001DCCB7 /* APCAppCore */,
 				F5179B3319D09128001DCCB7 /* APCAppCoreTests */,
+				80A98DB71BFD1C5C0060146F /* genstrings */,
 			);
 		};
 /* End PBXProject section */
@@ -3520,6 +3566,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		80A98DBC1BFD1C710060146F /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "mkdir -p APCAppCore/Resources/en.lproj\nfind . -name *.m | xargs genstrings -s APCLocalizedString -o APCAppCore/Resources/en.lproj";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		F5179B2419D09128001DCCB7 /* Sources */ = {
@@ -3817,6 +3879,7 @@
 				7B6C8CBA1AA26ECE0007B560 /* APCConsentInstructionQuestion.m in Sources */,
 				F5B947F71A73272C0034C522 /* APCParametersDashboardTableViewController.m in Sources */,
 				F5F12AAF1A2F78490015982C /* APCSignUpInfoViewController.m in Sources */,
+				80A98DB61BFD11580060146F /* APCLocalization.m in Sources */,
 				F5B948071A73272C0034C522 /* APCScheduleEnumerator.m in Sources */,
 				F5F12ACF1A2F78490015982C /* APCWithdrawCompleteViewController.m in Sources */,
 				369E28031A96B7A200D35DFA /* APCMedTrackerDataStorageManager.m in Sources */,
@@ -4130,6 +4193,16 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		80A98DB81BFD1C5C0060146F /* Build configuration list for PBXAggregateTarget "genstrings" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				80A98DB91BFD1C5C0060146F /* Debug */,
+				80A98DBA1BFD1C5C0060146F /* Development */,
+				80A98DBB1BFD1C5C0060146F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		F5179B2319D09128001DCCB7 /* Build configuration list for PBXProject "APCAppCore" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

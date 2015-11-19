@@ -91,11 +91,11 @@
     
     if (section == 0) {
         headerView = [[UITableViewHeaderFooterView alloc]init];
-        headerView.textLabel.text = NSLocalizedString(@"Select Series 1", nil);
+        headerView.textLabel.text = APCLocalizedString(@"Select Series 1", nil);
     }else{
         if (self.section0Selected) {
             headerView = [[UITableViewHeaderFooterView alloc]init];
-            headerView.textLabel.text = NSLocalizedString(@"Select Series 2", nil);
+            headerView.textLabel.text = APCLocalizedString(@"Select Series 2", nil);
         }
     }
     

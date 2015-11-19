@@ -105,7 +105,7 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
     self.consentVC = [((APCAppDelegate *)[UIApplication sharedApplication].delegate) consentViewController];
     
     self.consentVC.delegate = self;
-    self.consentVC.navigationBar.topItem.title = NSLocalizedString(@"Consent", nil);
+    self.consentVC.navigationBar.topItem.title = APCLocalizedString(@"Consent", nil);
 #ifndef APC_HAVE_CONSENT
 #warning Adding watermark label until you define "APC_HAVE_CONSENT" to indicate that you have a real consenting document
     UILabel *watermarkLabel = [APCExampleLabel watermarkInRect:self.consentVC.view.bounds

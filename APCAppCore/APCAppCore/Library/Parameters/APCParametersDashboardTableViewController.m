@@ -381,7 +381,7 @@ typedef NS_ENUM(NSInteger, APCParametersEnum)
     [alertController setMessage:message];
     
     UIAlertAction *okAction = [UIAlertAction
-                               actionWithTitle:NSLocalizedString(@"OK", @"OK action")
+                               actionWithTitle:APCLocalizedString(@"OK", @"OK action")
                                style:UIAlertActionStyleDefault
                                handler:^(UIAlertAction * __unused action)
                                {

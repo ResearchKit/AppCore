@@ -82,7 +82,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         
         {
             APCTableViewSwitchItem *field = [APCTableViewSwitchItem new];
-            field.caption = NSLocalizedString(@"Enable Reminders", nil);
+            field.caption = APCLocalizedString(@"Enable Reminders", nil);
             field.identifier = kAPCSwitchCellIdentifier;
             field.editable = NO;
             
@@ -96,7 +96,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         
 
             APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
-            field.caption = NSLocalizedString(@"Time", nil);
+            field.caption = APCLocalizedString(@"Time", nil);
             field.pickerData = @[[APCTasksReminderManager reminderTimesArray]];
             field.textAlignnment = NSTextAlignmentRight;
             field.identifier = kAPCDefaultTableViewCellIdentifier;
@@ -109,7 +109,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         
      
         APCTableViewSection *section = [APCTableViewSection new];
-        section.sectionTitle = NSLocalizedString(@"", nil);
+        section.sectionTitle = APCLocalizedString(@"", nil);
         section.rows = [NSArray arrayWithArray:rowItems];
         [items addObject:section];
     }
@@ -122,7 +122,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         for (APCTaskReminder *reminder in appDelegate.tasksReminder.reminders) {
             
             APCTableViewSwitchItem *field = [APCTableViewSwitchItem new];
-            field.caption = NSLocalizedString(reminder.reminderBody, nil);
+            field.caption = APCLocalizedString(reminder.reminderBody, nil);
             field.identifier = kAPCSwitchCellIdentifier;
             field.editable = NO;
             
@@ -151,10 +151,10 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
     switch (section) {
         case 0:
-            headerView.textLabel.text = NSLocalizedString(@"Settings", nil) ;
+            headerView.textLabel.text = APCLocalizedString(@"Settings", nil) ;
             break;
         case 1:
-            headerView.textLabel.text = NSLocalizedString(@"Tasks", nil);
+            headerView.textLabel.text = APCLocalizedString(@"Tasks", nil);
             break;
         default:
             break;
@@ -187,7 +187,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         
         UILabel *reminderLabel = [[UILabel alloc]initWithFrame:labelFrame];
         reminderLabel.numberOfLines = 2;
-        reminderLabel.text = NSLocalizedString(footerText, nil);
+        reminderLabel.text = APCLocalizedString(footerText, nil);
         reminderLabel.textColor = [UIColor grayColor];
         reminderLabel.font = [UIFont appMediumFontWithSize:14.0];
         [footerView.contentView addSubview:reminderLabel];
@@ -356,11 +356,11 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
 - (void)presentSettingsAlert:(NSError *)error
 {
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Permissions Denied", @"") message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *dismiss = [UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction *__unused action) {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:APCLocalizedString(@"Permissions Denied", @"") message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *dismiss = [UIAlertAction actionWithTitle:APCLocalizedString(@"Dismiss", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction *__unused action) {
     }];
     [alertController addAction:dismiss];
-    UIAlertAction *settings = [UIAlertAction actionWithTitle:NSLocalizedString(@"Settings", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
+    UIAlertAction *settings = [UIAlertAction actionWithTitle:APCLocalizedString(@"Settings", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
     }];
     [alertController addAction:settings];
