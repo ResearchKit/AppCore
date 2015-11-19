@@ -45,6 +45,7 @@
 static NSString*    kDocumentHtmlTag                    = @"htmlDocument";
 static NSString*    kInvestigatorShortDescriptionTag    = @"investigatorShortDescription";
 static NSString*    kInvestigatorLongDescriptionTag     = @"investigatorLongDescription";
+static NSString*    kHideSharingStepTag                 = @"hideSharingStep";
 static NSString*    kHtmlContentTag                     = @"htmlContent";
 static NSString*    kIdentifierTag                      = @"identifier";
 static NSString*    kPromptTag                          = @"prompt";
@@ -100,6 +101,7 @@ static NSString*    kStepIdentifierSuffixStart          = @"+X";
 @property (nonatomic, strong) NSArray*          documentSections;
 
 //  Sharing
+@property (nonatomic, assign) BOOL              hideSharingStep;
 @property (nonatomic, copy)   NSString*         investigatorShortDescription;
 @property (nonatomic, copy)   NSString*         investigatorLongDescription;
 @property (nonatomic, copy)   NSString*         sharingHtmlLearnMoreContent;
@@ -185,10 +187,7 @@ static NSString*    kStepIdentifierSuffixStart          = @"+X";
     
     _visualStep  = [[ORKVisualConsentStep alloc] initWithIdentifier:@"visual"
                                                            document:_consentDocument];
-    _sharingStep = [[ORKConsentSharingStep alloc] initWithIdentifier:kSharingTag
-                                        investigatorShortDescription:self.investigatorShortDescription
-                                         investigatorLongDescription:self.investigatorLongDescription
-                                       localizedLearnMoreHTMLContent:self.sharingHtmlLearnMoreContent];
+
     
     APCAppDelegate* delegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
     BOOL disableSignatureInConsent = delegate.disableSignatureInConsent;
@@ -205,7 +204,14 @@ static NSString*    kStepIdentifierSuffixStart          = @"+X";
     
     NSMutableArray* consentSteps = [[NSMutableArray alloc] init];
     [consentSteps addObject:_visualStep];
-    [consentSteps addObject:_sharingStep];
+    
+    if (!self.hideSharingStep) {
+        _sharingStep = [[ORKConsentSharingStep alloc] initWithIdentifier:kSharingTag
+                                            investigatorShortDescription:self.investigatorShortDescription
+                                             investigatorLongDescription:self.investigatorLongDescription
+                                           localizedLearnMoreHTMLContent:self.sharingHtmlLearnMoreContent];
+        [consentSteps addObject:_sharingStep];
+    }
     
     _indexOfFirstCustomStep = consentSteps.count;
     [consentSteps addObjectsFromArray:customSteps];
@@ -512,6 +518,10 @@ static NSString*    kStepIdentifierSuffixStart          = @"+X";
     
     self.investigatorLongDescription = [properties objectForKey:kInvestigatorLongDescriptionTag];
     NSAssert(self.investigatorLongDescription != nil && [self.investigatorLongDescription isKindOfClass:[NSString class]], @"Improper type for Investigator Long Description");
+    
+    if ([properties valueForKey:kHideSharingStepTag] != nil) {
+        self.hideSharingStep = [properties valueForKey:kHideSharingStepTag];
+    }
 
     NSString*   htmlContent = [properties objectForKey:kHtmlContentTag];
     if (htmlContent != nil)

@@ -130,6 +130,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCPasscodeViewController.h>
 #import <APCAppCore/APCConsentTaskViewController.h>
 #import <APCAppCore/APCWebViewController.h>
+#import <APCAppCore/APCThankYouViewController.h>
 
 /*--------------------------
  Dashboard ViewControllers
