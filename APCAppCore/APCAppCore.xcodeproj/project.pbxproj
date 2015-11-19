@@ -1062,6 +1062,14 @@
 		80A98DD51BFD496C0060146F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/APCEmailVerify.storyboard; sourceTree = "<group>"; };
 		80A98DD81BFD49EC0060146F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/APCProfile.storyboard; sourceTree = "<group>"; };
 		80A98DDB1BFD4A290060146F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/APCPasscode.storyboard; sourceTree = "<group>"; };
+		80A98DDE1BFD56C00060146F /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/APCOnboarding.strings; sourceTree = "<group>"; };
+		80A98DDF1BFD56C10060146F /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/APCEmailVerify.strings; sourceTree = "<group>"; };
+		80A98DE01BFD56C10060146F /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/APCProfile.strings; sourceTree = "<group>"; };
+		80A98DE11BFD56C10060146F /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/APCPasscode.strings; sourceTree = "<group>"; };
+		80A98DE21BFD56D70060146F /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/APCOnboarding.strings; sourceTree = "<group>"; };
+		80A98DE31BFD56D70060146F /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/APCEmailVerify.strings; sourceTree = "<group>"; };
+		80A98DE41BFD56D70060146F /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/APCProfile.strings; sourceTree = "<group>"; };
+		80A98DE51BFD56D70060146F /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/APCPasscode.strings; sourceTree = "<group>"; };
 		A7CFE4B11A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCStudyOverviewCollectionViewCell.h; sourceTree = "<group>"; };
 		A7CFE4B21A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCStudyOverviewCollectionViewCell.m; sourceTree = "<group>"; };
 		A7CFE4B31A8B05F4009A171C /* APCStudyOverviewCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCStudyOverviewCollectionViewController.h; sourceTree = "<group>"; };
@@ -3915,6 +3923,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				80A98DCF1BFD49180060146F /* Base */,
+				80A98DDE1BFD56C00060146F /* fr */,
+				80A98DE21BFD56D70060146F /* de */,
 			);
 			name = APCOnboarding.storyboard;
 			sourceTree = "<group>";
@@ -3923,6 +3933,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				80A98DD51BFD496C0060146F /* Base */,
+				80A98DDF1BFD56C10060146F /* fr */,
+				80A98DE31BFD56D70060146F /* de */,
 			);
 			name = APCEmailVerify.storyboard;
 			sourceTree = "<group>";
@@ -3931,6 +3943,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				80A98DD81BFD49EC0060146F /* Base */,
+				80A98DE01BFD56C10060146F /* fr */,
+				80A98DE41BFD56D70060146F /* de */,
 			);
 			name = APCProfile.storyboard;
 			sourceTree = "<group>";
@@ -3939,6 +3953,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				80A98DDB1BFD4A290060146F /* Base */,
+				80A98DE11BFD56C10060146F /* fr */,
+				80A98DE51BFD56D70060146F /* de */,
 			);
 			name = APCPasscode.storyboard;
 			sourceTree = "<group>";
