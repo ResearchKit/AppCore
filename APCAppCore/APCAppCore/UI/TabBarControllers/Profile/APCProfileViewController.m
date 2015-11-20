@@ -1370,7 +1370,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
     [self presentViewController:spinnerController animated:YES completion:nil];
 
-    [self.user pauseSharingOnCompletion:^(NSError *error) {
+    [self.user pauseSharingOnCompletion:^(NSError *error __unused) {
         [spinnerController dismissViewControllerAnimated:NO completion:^{
             [self refreshView];
         }];
@@ -1382,7 +1382,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
     [self presentViewController:spinnerController animated:YES completion:nil];
     
-    [self.user resumeSharingOnCompletion:^(NSError *error) {
+    [self.user resumeSharingOnCompletion:^(NSError *error __unused) {
         [spinnerController dismissViewControllerAnimated:NO completion:^{
             [self refreshView];
         }];
@@ -1441,7 +1441,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     [self.navigationController presentViewController:alertController animated:YES completion:nil];
 }
 
-- (IBAction)pauseStudy:(id)sender {
+- (IBAction)pauseStudy:(id) __unused sender {
     NSString *titleString = nil;
     NSString *messageString = nil;
     NSString *actionString = nil;

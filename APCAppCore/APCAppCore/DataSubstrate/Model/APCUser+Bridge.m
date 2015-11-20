@@ -231,8 +231,6 @@
     }
     else
     {
-        APCAppDelegate *delegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
-        
         [SBBComponent(SBBUserManager) dataSharing:SBBUserDataSharingScopeNone completion:^(id __unused responseObject, NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (!error) {
