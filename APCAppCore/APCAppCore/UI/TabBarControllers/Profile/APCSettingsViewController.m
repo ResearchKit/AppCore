@@ -110,7 +110,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         
      
         APCTableViewSection *section = [APCTableViewSection new];
-        section.sectionTitle = APCLocalizedString(@"", nil);
+        section.sectionTitle = @"";
         section.rows = [NSArray arrayWithArray:rowItems];
         [items addObject:section];
     }
@@ -123,7 +123,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         for (APCTaskReminder *reminder in appDelegate.tasksReminder.reminders) {
             
             APCTableViewSwitchItem *field = [APCTableViewSwitchItem new];
-            field.caption = APCLocalizedString(reminder.reminderBody, nil);
+            field.caption = reminder.reminderBody;
             field.identifier = kAPCSwitchCellIdentifier;
             field.editable = NO;
             
@@ -181,14 +181,15 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     
     if (section == 1 && hasresultsSummaryKey) {
         footerView = [[UITableViewHeaderFooterView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(tableView.frame), tableView.sectionHeaderHeight)];
-        NSString *footerText = [NSString stringWithFormat:@"%@ reminder will be sent 2 hours later.", subtaskTitle];
+        NSString *footerFormat = APCLocalizedString(@"%@ reminder will be sent 2 hours later.", @"Format string for Activity Reminders view Tasks section footer describing when reminder will be sent, to be filled in with the reminder body text.");
+        NSString *footerText = [NSString stringWithFormat:footerFormat, subtaskTitle];
         
         CGRect labelFrame = CGRectMake(20, 0, CGRectGetWidth(footerView.frame)-40, 50);
         footerView.textLabel.frame = labelFrame;
         
         UILabel *reminderLabel = [[UILabel alloc]initWithFrame:labelFrame];
         reminderLabel.numberOfLines = 2;
-        reminderLabel.text = APCLocalizedString(footerText, nil);
+        reminderLabel.text = footerText;
         reminderLabel.textColor = [UIColor grayColor];
         reminderLabel.font = [UIFont appMediumFontWithSize:14.0];
         [footerView.contentView addSubview:reminderLabel];

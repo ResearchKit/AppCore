@@ -78,9 +78,9 @@ static NSString * const kSharingOptionsTableViewCellIdentifier = @"SharingOption
     [self setupDataFromJSON:@"APHConsentSection"];
     
     self.titleLabel.text = APCLocalizedString(@"Sharing Options", @"Sharing Options");
+    NSString *messageFormat = APCLocalizedString(@"%@ will receive your study data from your participation in this study.\n\nSharing your coded study data more broadly (without information such as your name) may benefit this and future research.", @"Format for string explaining data sharing during initial consent process, to be filled in with the (long form) name of the institution running the study.");
     
-    NSString *messageText = [NSString stringWithFormat:@"%@ will receive your study data from your participation in this study.\n\nSharing your coded study data more broadly (without information such as your name) may benefit this and future research.", self.instituteLongName];
-    self.messageLabel.text = APCLocalizedString(messageText, @"");
+    self.messageLabel.text = [NSString stringWithFormat:messageFormat, self.instituteLongName];
     
     
     NSMutableArray *options = [NSMutableArray new];

@@ -35,21 +35,35 @@
 #import "APCLog.h"
 #import "APCLocalization.h"
 
-NSString * const kAPCServerBusyErrorMessage                     = @"Thank you for your interest in this study. We are working hard to process the large volume of interest, and should be back up momentarily. Please try again soon.";
-NSString * const kAPCUnexpectedConditionErrorMessage            = @"An unexpected network condition has occurred. Please try again soon.";
-NSString * const kAPCNotConnectedErrorMessage                   = @"You are currently not connected to the Internet. Please try again when you are connected to a network.";
-NSString * const kAPCServerUnderMaintanenceErrorMessage         = @"The study server is currently undergoing maintanence. Please try again soon.";
-NSString * const kAPCAccountAlreadyExistsErrorMessage           = @"An account has already been created for this email address. Please use a different email address, or sign in using the \"already participating\" link at the bottom of the Welcome page.";
-NSString * const kAPCAccountDoesNotExistErrorMessage            = @"There is no account registered for this email address.";
-NSString * const kAPCBadEmailAddressErrorMessage                = @"The email address submitted is not a valid email address. Please correct the email address and try again.";
-NSString * const kAPCBadPasswordErrorMessage                    = @"The password you have entered is not a valid password.  Please try again.";
-NSString * const kAPCNotReachableErrorMessage                   = @"We are currently not able to reach the study server. Please retry in a few moments.";
-NSString * const kAPCInvalidEmailAddressOrPasswordErrorMessage  = @"Entered email address or password is not valid. Please correct the email address or password and try again.";
+NSString * kAPCServerBusyErrorMessage;
+NSString * kAPCUnexpectedConditionErrorMessage;
+NSString * kAPCNotConnectedErrorMessage;
+NSString * kAPCServerUnderMaintanenceErrorMessage;
+NSString * kAPCAccountAlreadyExistsErrorMessage;
+NSString * kAPCAccountDoesNotExistErrorMessage;
+NSString * kAPCBadEmailAddressErrorMessage;
+NSString * kAPCBadPasswordErrorMessage;
+NSString * kAPCNotReachableErrorMessage;
+NSString * kAPCInvalidEmailAddressOrPasswordErrorMessage;
 
 static NSString * const oneTab = @"    ";
 
 
 @implementation NSError (APCAdditions)
+
++ (void)initialize
+{
+    kAPCServerBusyErrorMessage                     = APCLocalizedString(@"Thank you for your interest in this study. We are working hard to process the large volume of interest, and should be back up momentarily. Please try again soon.", @"Error message when server is too busy to respond");
+    kAPCUnexpectedConditionErrorMessage            = APCLocalizedString(@"An unexpected network condition has occurred. Please try again soon.", @"Error message indicating unexpected network problem");
+    kAPCNotConnectedErrorMessage                   = APCLocalizedString(@"You are currently not connected to the Internet. Please try again when you are connected to a network.", @"Error message when no network connection found");
+    kAPCServerUnderMaintanenceErrorMessage         = APCLocalizedString(@"The study server is currently undergoing maintanence. Please try again soon.", @"Error message when server is undergoing maintenance and temporarily unavailable");
+    kAPCAccountAlreadyExistsErrorMessage           = APCLocalizedString(@"An account has already been created for this email address. Please use a different email address, or sign in using the \"already participating\" link at the bottom of the Welcome page.", @"Error message when participant attempts to sign up for a new account using an email address already associated with an account in this study");
+    kAPCAccountDoesNotExistErrorMessage            = APCLocalizedString(@"There is no account registered for this email address and password combination.", @"Error message when participant attempts to sign in to an existing account with an incorrect email address or password");
+    kAPCBadEmailAddressErrorMessage                = APCLocalizedString(@"The email address submitted is not a valid email address. Please correct the email address and try again.", @"Error message when participant attempts to sign up using a non-valid email address");
+    kAPCBadPasswordErrorMessage                    = APCLocalizedString(@"The password you have entered is not a valid password.  Please try again.", @"Error message when participant attempts to sign up with a non-valid password");
+    kAPCNotReachableErrorMessage                   = APCLocalizedString(@"We are currently not able to reach the study server. Please retry in a few moments.", @"Error message when the app is unable to reach the Bridge server");
+    kAPCInvalidEmailAddressOrPasswordErrorMessage  = APCLocalizedString(@"Entered email address or password is not valid. Please correct the email address or password and try again.", @"Error message when participant attempts to sign up with a non-valid email address or password");
+}
 
 - (NSString*)checkMessageForNonUserTerms:(NSString*)message
 {
@@ -79,19 +93,19 @@ static NSString * const oneTab = @"    ";
     NSString *message;
     
     if (self.code == 409) {
-        message = APCLocalizedString(kAPCAccountAlreadyExistsErrorMessage, nil);
+        message = kAPCAccountAlreadyExistsErrorMessage;
     }
     else if (self.code == 404) {
-        message = APCLocalizedString(kAPCAccountDoesNotExistErrorMessage, nil);
+        message = kAPCAccountDoesNotExistErrorMessage;
     }
     else if (self.code >= 500 && self.code < 600) {
-        message = APCLocalizedString(kAPCServerBusyErrorMessage, nil);
+        message = kAPCServerBusyErrorMessage;
     }
     else if (self.code == kCFURLErrorDNSLookupFailed || self.code == kCFURLErrorInternationalRoamingOff) {
-        message = APCLocalizedString(kAPCNotConnectedErrorMessage, nil);
+        message = kAPCNotConnectedErrorMessage;
     }
     else {
-        message = APCLocalizedString(kAPCUnexpectedConditionErrorMessage, nil);
+        message = kAPCUnexpectedConditionErrorMessage;
     }
     
     return message;
