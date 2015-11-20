@@ -35,6 +35,7 @@
 #import "APCUserInfoConstants.h"
 #import "APCTasksReminderManager.h"
 #import "APCAppDelegate.h"
+#import "APCLocalization.h"
 
 #import <UIKit/UIKit.h>
 #import <CoreMotion/CoreMotion.h>
@@ -395,15 +396,15 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
 - (NSString *)permissionDescriptionForType:(APCSignUpPermissionsType)type {
     switch (type) {
         case kAPCSignUpPermissionsTypeHealthKit:
-            return NSLocalizedString(@"Press “Allow” to individually specify which general health information the app may read from and write to HealthKit", @"");
+            return APCLocalizedString(@"Press “Allow” to individually specify which general health information the app may read from and write to HealthKit", @"");
         case kAPCSignUpPermissionsTypeLocalNotifications:
-            return NSLocalizedString(@"Allowing notifications enables the app to show you reminders.", @"");
+            return APCLocalizedString(@"Allowing notifications enables the app to show you reminders.", @"");
         case kAPCSignUpPermissionsTypeLocation:
-            return NSLocalizedString(@"Using your GPS enables the app to accurately determine distances travelled. Your actual location will never be shared.", @"");
+            return APCLocalizedString(@"Using your GPS enables the app to accurately determine distances travelled. Your actual location will never be shared.", @"");
         case kAPCSignUpPermissionsTypeCoremotion:
-            return NSLocalizedString(@"Using the motion co-processor allows the app to determine your activity, helping the study better understand how activity level may influence disease.", @"");
+            return APCLocalizedString(@"Using the motion co-processor allows the app to determine your activity, helping the study better understand how activity level may influence disease.", @"");
         case kAPCSignUpPermissionsTypeMicrophone:
-            return NSLocalizedString(@"Access to microphone is required for your Voice Recording Activity.", @"");
+            return APCLocalizedString(@"Access to microphone is required for your Voice Recording Activity.", @"");
         case kAPCSignUpPermissionsTypeCamera:
         case kAPCSignUpPermissionsTypePhotoLibrary:
         default:
@@ -418,25 +419,25 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
     
     switch (type) {
         case kAPCSignUpPermissionsTypeHealthKit:
-            message = [NSString localizedStringWithFormat:NSLocalizedString(@"Please go to Settings -> Privacy -> Health -> %@ to re-enable.", nil), appName];
+            message = [NSString localizedStringWithFormat:APCLocalizedString(@"Please go to Settings -> Privacy -> Health -> %@ to re-enable.", nil), appName];
             break;
         case kAPCSignUpPermissionsTypeLocalNotifications:
-            message = [NSString localizedStringWithFormat:NSLocalizedString(@"Tap on Settings -> Notifications and enable 'Allow Notifications'", nil), appName];
+            message = [NSString localizedStringWithFormat:APCLocalizedString(@"Tap on Settings -> Notifications and enable 'Allow Notifications'", nil), appName];
             break;
         case kAPCSignUpPermissionsTypeLocation:
-            message = [NSString localizedStringWithFormat:NSLocalizedString(@"Tap on Settings -> Location and check 'Always'", nil), appName];
+            message = [NSString localizedStringWithFormat:APCLocalizedString(@"Tap on Settings -> Location and check 'Always'", nil), appName];
             break;
         case kAPCSignUpPermissionsTypeCoremotion:
-            message = [NSString localizedStringWithFormat:NSLocalizedString(@"Tap on Settings and enable Motion Activity.", nil), appName];
+            message = [NSString localizedStringWithFormat:APCLocalizedString(@"Tap on Settings and enable Motion Activity.", nil), appName];
             break;
         case kAPCSignUpPermissionsTypeMicrophone:
-            message = [NSString localizedStringWithFormat:NSLocalizedString(@"Tap on Settings and enable Microphone", nil), appName];
+            message = [NSString localizedStringWithFormat:APCLocalizedString(@"Tap on Settings and enable Microphone", nil), appName];
             break;
         case kAPCSignUpPermissionsTypeCamera:
-            message = [NSString localizedStringWithFormat:NSLocalizedString(@"Tap on Settings and enable Camera", nil), appName];
+            message = [NSString localizedStringWithFormat:APCLocalizedString(@"Tap on Settings and enable Camera", nil), appName];
             break;
         case kAPCSignUpPermissionsTypePhotoLibrary:
-            message = [NSString localizedStringWithFormat:NSLocalizedString(@"Tap on Settings and enable Photos", nil), appName];
+            message = [NSString localizedStringWithFormat:APCLocalizedString(@"Tap on Settings and enable Photos", nil), appName];
             break;
         default:
             message = @"";

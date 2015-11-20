@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="13F1066" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9060" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
@@ -11,11 +12,12 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                <rect key="frame" x="0.0" y="0.0" width="287" height="63"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vJf-Z2-oXv" userLabel="Color Swatch">
                         <rect key="frame" x="0.0" y="2" width="4" height="60"/>
+                        <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="4" id="C0I-Oo-bIw"/>
@@ -23,15 +25,17 @@
                     </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Frequency" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="56q-8K-rRa" userLabel="Topic Label">
                         <rect key="frame" x="20" y="12" width="100" height="21"/>
+                        <animations/>
                         <constraints>
                             <constraint firstAttribute="width" constant="100" id="Vpb-RU-B31"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Required" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OnZ-l7-ia0" userLabel="Extra Label">
                         <rect key="frame" x="20" y="35" width="70" height="21"/>
+                        <animations/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="0Cz-gC-zt2"/>
                         </constraints>
@@ -41,6 +45,7 @@
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bhB-7S-Mte" userLabel="Add Topic Label">
                         <rect key="frame" x="128" y="10" width="151" height="44"/>
+                        <animations/>
                         <constraints>
                             <constraint firstAttribute="height" constant="44" id="1Me-d5-rHo"/>
                         </constraints>
@@ -50,12 +55,14 @@
                     </label>
                     <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UKO-Ab-KIn" userLabel="Separator">
                         <rect key="frame" x="0.0" y="62" width="320" height="1"/>
+                        <animations/>
                         <color key="backgroundColor" white="0.89963503649635035" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="1" id="mJQ-2H-nLs"/>
                         </constraints>
                     </view>
                 </subviews>
+                <animations/>
                 <constraints>
                     <constraint firstAttribute="trailing" secondItem="UKO-Ab-KIn" secondAttribute="trailing" constant="-33" id="9Tm-ji-byc"/>
                     <constraint firstAttribute="trailing" secondItem="bhB-7S-Mte" secondAttribute="trailing" constant="8" id="AZF-zh-LjV"/>
@@ -73,6 +80,7 @@
                     <constraint firstItem="vJf-Z2-oXv" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="2" id="qr8-p5-SbI"/>
                 </constraints>
             </tableViewCellContentView>
+            <animations/>
             <connections>
                 <outlet property="addTopicLabel" destination="bhB-7S-Mte" id="Jmd-1F-0T2"/>
                 <outlet property="colorSwatch" destination="vJf-Z2-oXv" id="zHV-Hm-ORX"/>

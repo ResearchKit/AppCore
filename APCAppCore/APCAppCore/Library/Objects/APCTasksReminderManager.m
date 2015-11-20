@@ -42,6 +42,7 @@
 #import "NSManagedObject+APCHelper.h"
 #import "APCTask.h"
 #import "APCTaskGroup.h"
+#import "APCLocalization.h"
 
 #import <UIKit/UIKit.h>
 
@@ -228,7 +229,7 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
     //Add Action for delay reminder
     UIMutableUserNotificationAction *delayReminderAction = [[UIMutableUserNotificationAction alloc] init];
     delayReminderAction.identifier = kDelayReminderIdentifier;
-    delayReminderAction.title = NSLocalizedString(kTaskReminderDelayMessage, nil);
+    delayReminderAction.title = APCLocalizedString(kTaskReminderDelayMessage, nil);
     delayReminderAction.activationMode = UIUserNotificationActivationModeBackground;
     delayReminderAction.destructive = NO;
     delayReminderAction.authenticationRequired = NO;

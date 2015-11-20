@@ -37,6 +37,7 @@
 #import "APCOnboardingManager.h"
 #import "APCUser.h"
 #import "APCLog.h"
+#import "APCLocalization.h"
 
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
@@ -109,7 +110,7 @@ static NSString *kConsentEmailSubject = @"Consent Document";
     if (self.showShareRow){
         
         APCTableViewStudyDetailsItem *shareStudyItem = [APCTableViewStudyDetailsItem new];
-        shareStudyItem.caption = NSLocalizedString(@"Share this Study", nil);
+        shareStudyItem.caption = APCLocalizedString(@"Share this Study", nil);
         shareStudyItem.iconImage = [UIImage imageNamed:@"share_icon"];
         shareStudyItem.tintColor = [UIColor appTertiaryGreenColor];
 
@@ -126,7 +127,7 @@ static NSString *kConsentEmailSubject = @"Consent Document";
     if (self.showConsentRow) {
         
         APCTableViewStudyDetailsItem *reviewConsentItem = [APCTableViewStudyDetailsItem new];
-        reviewConsentItem.caption = NSLocalizedString(@"Review Consent", nil);
+        reviewConsentItem.caption = APCLocalizedString(@"Review Consent", nil);
         reviewConsentItem.iconImage = [UIImage imageNamed:@"consent_icon"];
         reviewConsentItem.tintColor = [UIColor appTertiaryPurpleColor];
         
@@ -397,7 +398,7 @@ static NSString *kConsentEmailSubject = @"Consent Document";
 {
     APCWebViewController *webViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle bundleForClass:[self class]]] instantiateViewControllerWithIdentifier:@"APCWebViewController"];
     [webViewController.webView setDataDetectorTypes:UIDataDetectorTypeAll];
-    webViewController.title = NSLocalizedString(@"Consent", @"Consent");
+    webViewController.title = APCLocalizedString(@"Consent", @"Consent");
     
     UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:webViewController];
     [self.navigationController presentViewController:navController animated:YES completion:^{
@@ -454,7 +455,7 @@ static NSString *kConsentEmailSubject = @"Consent Document";
 {
     APCWebViewController *webViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle bundleForClass:[self class]]] instantiateViewControllerWithIdentifier:@"APCWebViewController"];
     [webViewController.webView setDataDetectorTypes:UIDataDetectorTypeAll];
-    webViewController.title = NSLocalizedString(@"Consent", @"Consent");
+    webViewController.title = APCLocalizedString(@"Consent", @"Consent");
     
     UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:webViewController];
     [self.navigationController presentViewController:navController animated:YES completion:^{

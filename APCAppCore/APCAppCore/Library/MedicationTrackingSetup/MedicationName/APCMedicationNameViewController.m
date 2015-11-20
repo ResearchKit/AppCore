@@ -40,6 +40,7 @@
 #import "NSBundle+Helper.h"
 
 #import "APCLog.h"
+#import "APCLocalization.h"
 
 static  NSString  *kViewControllerName       = @"Medication Name";
 
@@ -198,7 +199,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
         label.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0];
         label.textColor = [UIColor blackColor];
         label.textAlignment = NSTextAlignmentCenter;
-        label.text = NSLocalizedString(@"Select the Medication You Are Currently Taking", nil);
+        label.text = APCLocalizedString(@"Select the Medication You Are Currently Taking", nil);
         [view addSubview:label];
     }
     return  view;
@@ -247,7 +248,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
     
     self.tabulator.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
-    UIBarButtonItem  *donester = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Done", @"Done") style:UIBarButtonItemStyleDone target:self action:@selector(doneButtonTapped:)];
+    UIBarButtonItem  *donester = [[UIBarButtonItem alloc] initWithTitle:APCLocalizedString(@"Done", @"Done") style:UIBarButtonItemStyleDone target:self action:@selector(doneButtonTapped:)];
     self.donester = donester;
     self.navigationItem.rightBarButtonItem = self.donester;
     self.donester.enabled = NO;

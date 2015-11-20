@@ -34,6 +34,8 @@
 #import "APCStudyLandingCollectionViewCell.h"
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
+#import "APCLocalization.h"
+
 @import MessageUI;
 
 NSString *const kAPCStudyLandingCollectionViewCellIdentifier = @"APCStudyLandingCollectionViewCell";
@@ -62,9 +64,9 @@ NSString *const kAPCStudyLandingCollectionViewCellIdentifier = @"APCStudyLanding
     self.swipeLabel.textColor = [UIColor appSecondaryColor3];
     self.swipeLabel.font = [UIFont appMediumFontWithSize:15.f];
     
-    [self.emailConsentButton setTitle:NSLocalizedString(@"Email Consent Document", @"Email Consent Document") forState:UIControlStateNormal];
+    [self.emailConsentButton setTitle:APCLocalizedString(@"Email Consent Document", @"Email Consent Document") forState:UIControlStateNormal];
     
-    [self.readConsentButton setTitle:NSLocalizedString(@"Read Consent Document", @"Read Consent Document") forState:UIControlStateNormal];
+    [self.readConsentButton setTitle:APCLocalizedString(@"Read Consent Document", @"Read Consent Document") forState:UIControlStateNormal];
     [self.readConsentButton setTitleColor:[UIColor appPrimaryColor] forState:UIControlStateNormal];
 
 }

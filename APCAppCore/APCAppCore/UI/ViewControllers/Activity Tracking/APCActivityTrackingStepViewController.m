@@ -126,7 +126,7 @@ static NSInteger const kRegularFontSize = 17;
     self.chartView.legendPaddingHeight = 60.0;
     self.chartView.shouldAnimate = YES;
     self.chartView.shouldAnimateLegend = NO;
-    self.chartView.titleLabel.text = NSLocalizedString(@"Active Minutes", @"Active Minutes");
+    self.chartView.titleLabel.text = APCLocalizedString(@"Active Minutes", @"Active Minutes");
     
     
     APCAppDelegate *appDelegate = (APCAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -234,14 +234,14 @@ static NSInteger const kRegularFontSize = 17;
         daysRemain = 7 - self.numberOfDaysOfFitnessWeek;
     }
 
-    NSString *days = (daysRemain == 1) ? NSLocalizedString(@"Day", @"Day") : NSLocalizedString(@"Days", @"Days");
+    NSString *days = (daysRemain == 1) ? APCLocalizedString(@"Day", @"Day") : APCLocalizedString(@"Days", @"Days");
     
-    NSString *remaining = [NSString stringWithFormat:NSLocalizedString(@"%lu %@ Remaining",
+    NSString *remaining = [NSString stringWithFormat:APCLocalizedString(@"%lu %@ Remaining",
                                                                        @"{count} {day/s} Remaining"), daysRemain, days];
     
     if (daysRemain <= 0)
     {
-        remaining = NSLocalizedString(@"Here is your activity and sleep assessment for the last 7 days", @"");
+        remaining = APCLocalizedString(@"Here is your activity and sleep assessment for the last 7 days", @"");
     }
     
     return remaining;
@@ -335,15 +335,15 @@ static NSInteger const kRegularFontSize = 17;
     
     [[UIView appearanceWhenContainedIn:[UIAlertController class], nil] setTintColor:[UIColor appPrimaryColor]];
     
-    UIAlertController *alertContorller = [UIAlertController alertControllerWithTitle:nil message:NSLocalizedString(@"Resetting your 7 Day Assessment will clear all recorded data from the week.", @"") preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertController *alertContorller = [UIAlertController alertControllerWithTitle:nil message:APCLocalizedString(@"Resetting your 7 Day Assessment will clear all recorded data from the week.", @"") preferredStyle:UIAlertControllerStyleActionSheet];
     
-    UIAlertAction *withdrawAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Continue", @"") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * __unused action) {
+    UIAlertAction *withdrawAction = [UIAlertAction actionWithTitle:APCLocalizedString(@"Continue", @"") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * __unused action) {
         [self reset];
     }];
     [alertContorller addAction:withdrawAction];
     
     
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:APCLocalizedString(@"Cancel", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
         
     }];
     
@@ -479,7 +479,7 @@ static NSInteger const kRegularFontSize = 17;
                                     multiplier:1
                                     constant:0.0]];
     
-    textView.text =NSLocalizedString( kLearnMoreString, nil);
+    textView.text =APCLocalizedString( kLearnMoreString, nil);
     
     textView.textColor = [UIColor blackColor];
     [textView setFont:[UIFont fontWithName:@"HelveticaNeue" size:kRegularFontSize]];

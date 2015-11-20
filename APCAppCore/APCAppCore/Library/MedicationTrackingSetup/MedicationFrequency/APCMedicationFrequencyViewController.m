@@ -35,6 +35,7 @@
 #import "APCFrequencyTableViewTimesCell.h"
 #import "APCFrequencyEverydayTableViewCell.h"
 #import "APCFrequencyDayTableViewCell.h"
+#import "APCLocalization.h"
 
 #import "UIColor+APCAppearance.h"
 #import "NSBundle+Helper.h"
@@ -225,7 +226,7 @@ static  NSString  *sectionTitles[] = { @"How many times a day do you take this m
         label.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0];
         label.textColor = [UIColor blackColor];
         NSString  *title = sectionTitles[section];
-        title = NSLocalizedString(title, nil);
+        title = APCLocalizedString(title, nil);
         label.text = title;
         [view addSubview:label];
     }
@@ -453,7 +454,7 @@ static  NSString  *sectionTitles[] = { @"How many times a day do you take this m
     
     self.tabulator.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
-    UIBarButtonItem  *donester = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Done", @"Done") style:UIBarButtonItemStyleDone target:self action:@selector(doneButtonTapped:)];
+    UIBarButtonItem  *donester = [[UIBarButtonItem alloc] initWithTitle:APCLocalizedString(@"Done", @"Done") style:UIBarButtonItemStyleDone target:self action:@selector(doneButtonTapped:)];
     self.donester = donester;
     self.navigationItem.rightBarButtonItem = donester;
     self.donester.enabled = NO;

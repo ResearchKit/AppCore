@@ -45,6 +45,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 /* -------------------------------------
  Headers
  --------------------------------------- */
+#import <APCAppCore/APCLocalization.h>
 #import <APCAppCore/APCCMSSupport.h>
 #import <APCAppCore/APCConstants.h>
 #import <APCAppCore/APCAppDelegate.h>

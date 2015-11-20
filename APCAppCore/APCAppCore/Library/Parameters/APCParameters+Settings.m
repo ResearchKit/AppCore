@@ -32,6 +32,7 @@
 // 
  
 #import "APCParameters+Settings.h"
+#import "APCLocalization.h"
 
 @implementation APCParameters (Settings)
 
@@ -47,7 +48,7 @@
     NSMutableArray *options = [NSMutableArray new];
     
     for (NSNumber *val in values) {
-        NSString *optionString = [NSString stringWithFormat:@"%ld %@", (long)val.integerValue, NSLocalizedString(@"minutes", nil)];
+        NSString *optionString = [NSString stringWithFormat:@"%ld %@", (long)val.integerValue, APCLocalizedString(@"minutes", nil)];
         [options addObject:optionString];
     }
     

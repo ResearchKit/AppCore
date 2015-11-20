@@ -40,6 +40,7 @@
 #import "APCUser+Bridge.h"
 #import "APCSpinnerViewController.h"
 #import "UIAlertController+Helper.h"
+#import "APCLocalization.h"
 
 static NSString * const kSharingOptionsTableViewCellIdentifier = @"SharingOptionsTableViewCell";
 
@@ -69,30 +70,29 @@ static NSString * const kSharingOptionsTableViewCellIdentifier = @"SharingOption
     
     [self.tableView reloadData];
     
-    self.title = NSLocalizedString(@"Sharing Options", @"Sharing Options");
+    self.title = APCLocalizedString(@"Sharing Options", @"Sharing Options");
 }
 
 - (void)prepareData
 {
     [self setupDataFromJSON:@"APHConsentSection"];
     
-    self.titleLabel.text = NSLocalizedString(@"Sharing Options", @"Sharing Options");
+    self.titleLabel.text = APCLocalizedString(@"Sharing Options", @"Sharing Options");
     
     NSString *messageText = [NSString stringWithFormat:@"%@ will receive your study data from your participation in this study.\n\nSharing your coded study data more broadly (without information such as your name) may benefit this and future research.", self.instituteLongName];
-    self.messageLabel.text = NSLocalizedString(messageText, @"");
+    self.messageLabel.text = APCLocalizedString(messageText, @"");
     
     
     NSMutableArray *options = [NSMutableArray new];
-    NSBundle *appCoreBundle = [NSBundle bundleForClass:[APCUser class]];
     
     {
-        NSString *optionFormat = NSLocalizedStringFromTableInBundle(@"Share my data with %@ and qualified researchers worldwide", nil, appCoreBundle, @"Format string for Profile tab option to share data broadly, to be filled in with the short name of the institution sponsoring the study");
+        NSString *optionFormat = APCLocalizedString(@"Share my data with %@ and qualified researchers worldwide", @"Format string for Profile tab option to share data broadly, to be filled in with the short name of the institution sponsoring the study");
         NSString *option = [NSString stringWithFormat:optionFormat, self.instituteShortName];
         [options addObject:option];
     }
     
     {
-        NSString *optionFormat = NSLocalizedStringFromTableInBundle(@"Only share my data with %@", nil, appCoreBundle, @"Format string for Profile tab option to share data narrowly, to be filled in with the long name of the institution sponsoring the study");
+        NSString *optionFormat = APCLocalizedString(@"Only share my data with %@", @"Format string for Profile tab option to share data narrowly, to be filled in with the long name of the institution sponsoring the study");
         NSString *option = [NSString stringWithFormat:optionFormat, self.instituteLongName];
         [options addObject:option];
     }
@@ -187,7 +187,7 @@ static NSString * const kSharingOptionsTableViewCellIdentifier = @"SharingOption
             if (error) {
                 APCLogError2 (error);
                 
-                UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Sharing Options", @"") message:error.message];
+                UIAlertController *alert = [UIAlertController simpleAlertWithTitle:APCLocalizedString(@"Sharing Options", @"") message:error.message];
                 [weakSelf presentViewController:alert animated:YES completion:nil];
                 
             } else {

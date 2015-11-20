@@ -32,6 +32,7 @@
 // 
  
 #import "APCUser+UserData.h"
+#import "APCLocalization.h"
 
 @implementation APCUser (UserData)
 
@@ -39,16 +40,16 @@
  Biologial Sex 
  ****************/
 + (NSArray *) sexTypesInStringValue {
-    return @[ NSLocalizedString(@"Male", @""), NSLocalizedString(@"Female", @"")];
+    return @[ APCLocalizedString(@"Male", @""), APCLocalizedString(@"Female", @"")];
 }
 
 + (HKBiologicalSex) sexTypeFromStringValue:(NSString *)stringValue {
     HKBiologicalSex sexType;
     
-    if ([stringValue isEqualToString:NSLocalizedString(@"Male", @"")]) {
+    if ([stringValue isEqualToString:APCLocalizedString(@"Male", @"")]) {
         sexType = HKBiologicalSexMale;
     }
-    else if ([stringValue isEqualToString:NSLocalizedString(@"Female", @"")]) {
+    else if ([stringValue isEqualToString:APCLocalizedString(@"Female", @"")]) {
         sexType = HKBiologicalSexFemale;
     }
     else {

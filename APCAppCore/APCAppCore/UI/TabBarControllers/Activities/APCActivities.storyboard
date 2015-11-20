@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14F6a" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="hzw-2n-SwF">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9060" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="hzw-2n-SwF">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -14,6 +15,7 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Hwg-km-YcN">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
                     </navigationBar>
                     <connections>
                         <segue destination="MFJ-Oa-hlb" kind="relationship" relationship="rootViewController" id="Sf4-81-s1l"/>
@@ -35,8 +37,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5z3-pp-dKg" userLabel="There are no tasks to show at this time.">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5z3-pp-dKg" userLabel="There are no tasks to show at this time.">
                                 <rect key="frame" x="16" y="36" width="568" height="381"/>
+                                <animations/>
                                 <string key="text">There are no tasks
 to show at this time.
 
@@ -48,19 +51,21 @@ to show at this time.
                                 <color key="textColor" red="0.25903566919191923" green="0.25903566919191923" blue="0.25903566919191923" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="Svp-s5-r2Y">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="Svp-s5-r2Y">
                                 <rect key="frame" x="0.0" y="20" width="600" height="417"/>
+                                <animations/>
                                 <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="APCActivitiesTintedTableViewCell" rowHeight="65" id="hT2-NM-tlq" customClass="APCActivitiesTintedTableViewCell">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="70"/>
+                                        <rect key="frame" x="0.0" y="50" width="600" height="65"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hT2-NM-tlq" id="hy7-eG-vzT">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="65"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view tag="100" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jxk-nd-Tkf" customClass="APCConfirmationView">
                                                     <rect key="frame" x="16" y="22" width="21" height="21"/>
+                                                    <animations/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="21" id="Wy1-5V-M0B"/>
@@ -69,12 +74,14 @@ to show at this time.
                                                 </view>
                                                 <label opaque="NO" userInteractionEnabled="NO" tag="200" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Timed Walking " lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tKW-bf-Hcq">
                                                     <rect key="frame" x="49" y="13" width="483" height="19"/>
+                                                    <animations/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" tag="200" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="20 seconds" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AKk-ZR-fFa">
-                                                    <rect key="frame" x="49" y="34" width="483" height="16.5"/>
+                                                    <rect key="frame" x="49" y="34" width="483" height="17"/>
+                                                    <animations/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="23" id="LbW-GW-dWr"/>
                                                     </constraints>
@@ -89,6 +96,7 @@ to show at this time.
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" tag="300" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="99" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rfL-sZ-fhY" customClass="APCBadgeLabel">
                                                     <rect key="frame" x="540" y="18" width="39" height="29"/>
+                                                    <animations/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="39" id="Kuq-pt-d4T"/>
                                                         <constraint firstAttribute="height" constant="29" id="eYs-W9-go6"/>
@@ -98,6 +106,7 @@ to show at this time.
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
+                                            <animations/>
                                             <constraints>
                                                 <constraint firstAttribute="centerY" secondItem="tKW-bf-Hcq" secondAttribute="centerY" constant="9.5" id="3q9-Py-X0M"/>
                                                 <constraint firstItem="rfL-sZ-fhY" firstAttribute="leading" secondItem="tKW-bf-Hcq" secondAttribute="trailing" constant="8" id="Be2-Og-tgd"/>
@@ -111,6 +120,7 @@ to show at this time.
                                                 <constraint firstItem="AKk-ZR-fFa" firstAttribute="leading" secondItem="hy7-eG-vzT" secondAttribute="leadingMargin" constant="41" id="wNR-j6-T7v"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <animations/>
                                         <connections>
                                             <outlet property="confirmationView" destination="Jxk-nd-Tkf" id="gpU-fP-0RI"/>
                                             <outlet property="countLabel" destination="rfL-sZ-fhY" id="Hre-3M-RWZ"/>
@@ -120,13 +130,15 @@ to show at this time.
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="APCActivitiesBasicTableViewCell" rowHeight="50" id="ROz-sG-beV" customClass="APCActivitiesBasicTableViewCell">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="115" width="600" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ROz-sG-beV" id="roD-6Q-lt7">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="50"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view tag="100" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tcJ-kx-8kT" customClass="APCConfirmationView">
                                                     <rect key="frame" x="16" y="14" width="21" height="21"/>
+                                                    <animations/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="21" id="3kQ-Px-REU"/>
@@ -135,15 +147,18 @@ to show at this time.
                                                 </view>
                                                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="O1p-0y-Ly4" userLabel="Bottom line">
                                                     <rect key="frame" x="0.0" y="48" width="568" height="1"/>
+                                                    <animations/>
                                                     <color key="backgroundColor" red="0.90980392160000001" green="0.90980392160000001" blue="0.90980392160000001" alpha="1" colorSpace="calibratedRGB"/>
                                                 </view>
                                                 <label opaque="NO" userInteractionEnabled="NO" tag="200" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Medication Tracker" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.75" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="h5f-bY-o0T">
                                                     <rect key="frame" x="45" y="15" width="547" height="19"/>
+                                                    <animations/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
+                                            <animations/>
                                             <constraints>
                                                 <constraint firstItem="h5f-bY-o0T" firstAttribute="trailing" secondItem="roD-6Q-lt7" secondAttribute="trailingMargin" id="Bsm-Im-apy"/>
                                                 <constraint firstAttribute="centerY" secondItem="h5f-bY-o0T" secondAttribute="centerY" id="L8d-wr-Ghr"/>
@@ -152,6 +167,7 @@ to show at this time.
                                                 <constraint firstItem="tcJ-kx-8kT" firstAttribute="leading" secondItem="roD-6Q-lt7" secondAttribute="leadingMargin" constant="8" id="iqd-IK-PSv"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <animations/>
                                         <connections>
                                             <outlet property="confirmationView" destination="tcJ-kx-8kT" id="fjr-Ea-zMo"/>
                                             <outlet property="titleLabel" destination="h5f-bY-o0T" id="yJQ-pq-tQA"/>
@@ -163,11 +179,12 @@ to show at this time.
                                     <outlet property="delegate" destination="i33-e8-YXy" id="fFl-jz-wh7"/>
                                 </connections>
                             </tableView>
-                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ydv-kD-FYe" userLabel="date-range debugger">
+                            <view clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ydv-kD-FYe" userLabel="date-range debugger">
                                 <rect key="frame" x="0.0" y="437" width="600" height="163"/>
                                 <subviews>
-                                    <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="4/5/6" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="27k-7C-Ode">
+                                    <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="4/5/6" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="27k-7C-Ode">
                                         <rect key="frame" x="313" y="39" width="279" height="21"/>
+                                        <animations/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="21" id="cXZ-cs-BzV"/>
                                         </constraints>
@@ -178,8 +195,9 @@ to show at this time.
                                             <outletCollection property="gestureRecognizers" destination="EOZ-du-iwU" appends="YES" id="sll-sy-rNa"/>
                                         </connections>
                                     </label>
-                                    <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1/2/3" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kA8-La-5Ci">
+                                    <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="1/2/3" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kA8-La-5Ci">
                                         <rect key="frame" x="8" y="39" width="279" height="21"/>
+                                        <animations/>
                                         <gestureRecognizers/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="21" id="gb4-1w-uN7"/>
@@ -191,22 +209,25 @@ to show at this time.
                                             <outletCollection property="gestureRecognizers" destination="EOZ-du-iwU" appends="YES" id="ebG-zM-7IS"/>
                                         </connections>
                                     </label>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="afx-lo-uIL">
+                                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="afx-lo-uIL">
                                         <rect key="frame" x="295" y="31" width="10" height="82"/>
+                                        <animations/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="82" id="6VB-7z-dkM"/>
                                             <constraint firstAttribute="width" constant="10" id="vdt-sX-Gct"/>
                                         </constraints>
                                     </view>
-                                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" minimumValue="-14" maximumValue="60" translatesAutoresizingMaskIntoConstraints="NO" id="k4r-Qa-BBw">
+                                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" minimumValue="-14" maximumValue="60" translatesAutoresizingMaskIntoConstraints="NO" id="k4r-Qa-BBw">
                                         <rect key="frame" x="100" y="68" width="94" height="29"/>
+                                        <animations/>
                                         <connections>
                                             <action selector="startDateChangedViaStepper:" destination="i33-e8-YXy" eventType="valueChanged" id="GJg-J2-Qm4"/>
                                         </connections>
                                     </stepper>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tKY-pw-FZR">
+                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tKY-pw-FZR">
                                         <rect key="frame" x="392" y="8" width="200" height="29"/>
+                                        <animations/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="200" id="Vrh-lk-Siz"/>
                                             <constraint firstAttribute="height" constant="29" id="h3E-fL-C4W"/>
@@ -220,6 +241,7 @@ to show at this time.
                                     </button>
                                     <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date Range" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fXE-Zt-1fi">
                                         <rect key="frame" x="8" y="8" width="131" height="29"/>
+                                        <animations/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="131" id="PVn-1M-aDJ"/>
                                             <constraint firstAttribute="height" constant="29" id="Z7c-uR-eKl"/>
@@ -233,6 +255,7 @@ to show at this time.
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ujI-Pt-CbK">
                                         <rect key="frame" x="8" y="133" width="137" height="30"/>
+                                        <animations/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="9w8-Ir-OVw"/>
                                             <constraint firstAttribute="width" constant="137" id="UGr-7D-2Ub"/>
@@ -244,14 +267,16 @@ to show at this time.
                                             <action selector="reloadFromDiskButtonTapped:" destination="i33-e8-YXy" eventType="touchUpInside" id="bo6-df-2XO"/>
                                         </connections>
                                     </button>
-                                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minimumValue="-14" maximumValue="60" translatesAutoresizingMaskIntoConstraints="NO" id="3vV-m9-hcq">
+                                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minimumValue="-14" maximumValue="60" translatesAutoresizingMaskIntoConstraints="NO" id="3vV-m9-hcq">
                                         <rect key="frame" x="405" y="68" width="94" height="29"/>
+                                        <animations/>
                                         <connections>
                                             <action selector="endDateChangedViaStepper:" destination="i33-e8-YXy" eventType="valueChanged" id="EGC-rO-Vt5"/>
                                         </connections>
                                     </stepper>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M2S-V4-iGy">
+                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M2S-V4-iGy">
                                         <rect key="frame" x="405" y="133" width="187" height="30"/>
+                                        <animations/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="187" id="4ia-oR-PzA"/>
                                             <constraint firstAttribute="height" constant="30" id="Cpc-F9-b2Z"/>
@@ -264,6 +289,7 @@ to show at this time.
                                         </connections>
                                     </button>
                                 </subviews>
+                                <animations/>
                                 <color key="backgroundColor" red="0.89096038510101006" green="0.89096038510101006" blue="0.89096038510101006" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstItem="kA8-La-5Ci" firstAttribute="leading" secondItem="ydv-kD-FYe" secondAttribute="leading" constant="8" id="1Qc-P8-gFd"/>
@@ -296,6 +322,7 @@ to show at this time.
                                 </variation>
                             </view>
                         </subviews>
+                        <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="Svp-s5-r2Y" firstAttribute="leading" secondItem="5z3-pp-dKg" secondAttribute="leading" constant="-16" id="8nF-oe-8bN"/>
@@ -352,8 +379,9 @@ to show at this time.
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BdY-Lh-lM3" userLabel="There are no tasks to show at this time.">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BdY-Lh-lM3" userLabel="There are no tasks to show at this time.">
                                 <rect key="frame" x="31" y="111" width="538" height="439"/>
+                                <animations/>
                                 <string key="text">There are no tasks
 to show at this time.
 
@@ -367,17 +395,19 @@ to show at this time.
                             </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="Miq-DF-gzW">
                                 <rect key="frame" x="0.0" y="64" width="600" height="536"/>
+                                <animations/>
                                 <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="APCActivitiesTintedTableViewCell" rowHeight="65" id="qGx-ZH-fxf" customClass="APCActivitiesTintedTableViewCell">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="70"/>
+                                        <rect key="frame" x="0.0" y="50" width="600" height="65"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="qGx-ZH-fxf" id="3qz-lQ-l0C">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="65"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view tag="100" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="i1A-ks-Ce6" customClass="APCConfirmationView">
                                                     <rect key="frame" x="16" y="22" width="21" height="21"/>
+                                                    <animations/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="21" id="oOD-iF-8rb"/>
@@ -386,12 +416,14 @@ to show at this time.
                                                 </view>
                                                 <label opaque="NO" userInteractionEnabled="NO" tag="200" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Timed Walking " lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fmS-Yh-7ed">
                                                     <rect key="frame" x="49" y="13" width="483" height="19"/>
+                                                    <animations/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" tag="200" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="20 seconds" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UI4-kz-eMS">
                                                     <rect key="frame" x="49" y="34" width="483" height="17"/>
+                                                    <animations/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="23" id="KNN-uR-uOm"/>
                                                     </constraints>
@@ -406,6 +438,7 @@ to show at this time.
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" tag="300" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="99" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OF8-Tn-MJ7" customClass="APCBadgeLabel">
                                                     <rect key="frame" x="540" y="18" width="39" height="29"/>
+                                                    <animations/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="29" id="e4f-rT-uaN"/>
                                                         <constraint firstAttribute="width" constant="39" id="e6x-tL-XrO"/>
@@ -415,6 +448,7 @@ to show at this time.
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
+                                            <animations/>
                                             <constraints>
                                                 <constraint firstItem="i1A-ks-Ce6" firstAttribute="leading" secondItem="3qz-lQ-l0C" secondAttribute="leadingMargin" constant="8" id="9cx-Mc-p3c"/>
                                                 <constraint firstItem="fmS-Yh-7ed" firstAttribute="leading" secondItem="3qz-lQ-l0C" secondAttribute="leadingMargin" constant="41" id="ExU-cD-0K8"/>
@@ -428,6 +462,7 @@ to show at this time.
                                                 <constraint firstItem="OF8-Tn-MJ7" firstAttribute="leading" secondItem="fmS-Yh-7ed" secondAttribute="trailing" constant="8" id="qf8-DL-pEy"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <animations/>
                                         <connections>
                                             <outlet property="confirmationView" destination="i1A-ks-Ce6" id="UPq-eR-YOb"/>
                                             <outlet property="countLabel" destination="OF8-Tn-MJ7" id="wh3-pL-Ly5"/>
@@ -437,13 +472,15 @@ to show at this time.
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="APCActivitiesBasicTableViewCell" rowHeight="50" id="HIo-4u-bjL" customClass="APCActivitiesBasicTableViewCell">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="115" width="600" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="HIo-4u-bjL" id="0n7-vh-M3B">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="50"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view tag="100" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2Ve-A9-lBl" customClass="APCConfirmationView">
                                                     <rect key="frame" x="16" y="14" width="21" height="21"/>
+                                                    <animations/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="21" id="1k9-gB-dnA"/>
@@ -452,15 +489,18 @@ to show at this time.
                                                 </view>
                                                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="igj-vC-iqW" userLabel="Bottom line">
                                                     <rect key="frame" x="0.0" y="48" width="568" height="1"/>
+                                                    <animations/>
                                                     <color key="backgroundColor" red="0.90980392160000001" green="0.90980392160000001" blue="0.90980392160000001" alpha="1" colorSpace="calibratedRGB"/>
                                                 </view>
                                                 <label opaque="NO" userInteractionEnabled="NO" tag="200" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Medication Tracker" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.75" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Aoi-d3-tJ7">
                                                     <rect key="frame" x="45" y="15" width="547" height="19"/>
+                                                    <animations/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
+                                            <animations/>
                                             <constraints>
                                                 <constraint firstAttribute="centerY" secondItem="Aoi-d3-tJ7" secondAttribute="centerY" id="8wU-Dv-GBr"/>
                                                 <constraint firstItem="Aoi-d3-tJ7" firstAttribute="leading" secondItem="2Ve-A9-lBl" secondAttribute="trailing" constant="8" id="TJE-G3-k3e"/>
@@ -469,6 +509,7 @@ to show at this time.
                                                 <constraint firstAttribute="centerY" secondItem="2Ve-A9-lBl" secondAttribute="centerY" id="qX0-IO-bAe"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <animations/>
                                         <connections>
                                             <outlet property="confirmationView" destination="2Ve-A9-lBl" id="0s7-LK-pas"/>
                                             <outlet property="titleLabel" destination="Aoi-d3-tJ7" id="Ag7-WD-46F"/>
@@ -481,6 +522,7 @@ to show at this time.
                                 </connections>
                             </tableView>
                         </subviews>
+                        <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="BdY-Lh-lM3" secondAttribute="trailing" constant="15" id="0Ie-D6-Cir"/>

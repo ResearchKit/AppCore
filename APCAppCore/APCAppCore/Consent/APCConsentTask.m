@@ -33,6 +33,7 @@
  
 #import "APCConsentTask.h"
 #import "APCLog.h"
+#import "APCLocalization.h"
 #import "APCConsentQuestion.h"
 #import "APCConsentBooleanQuestion.h"
 #import "APCConsentInstructionQuestion.h"
@@ -174,9 +175,9 @@ static NSString*    kStepIdentifierSuffixStart          = @"+X";
                                                                               identifier:@"participant"];
     ORKConsentDocument*     document  = [[ORKConsentDocument alloc] init];
     
-    document.title                = NSLocalizedString(@"Consent", nil);
-    document.signaturePageTitle   = NSLocalizedString(@"Consent", nil);
-    document.signaturePageContent = NSLocalizedString(@"By agreeing you confirm that you read the consent and that you wish to take part in this research study.", nil);
+    document.title                = APCLocalizedString(@"Consent", nil);
+    document.signaturePageTitle   = APCLocalizedString(@"Consent", nil);
+    document.signaturePageContent = APCLocalizedString(@"By agreeing you confirm that you read the consent and that you wish to take part in this research study.", nil);
     document.sections             = self.documentSections;
     document.htmlReviewContent    = self.documentHtmlContent;
     

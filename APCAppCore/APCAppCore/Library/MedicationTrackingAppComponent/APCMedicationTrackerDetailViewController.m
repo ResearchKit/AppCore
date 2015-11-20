@@ -206,7 +206,7 @@ static  CGFloat    kAPCMedicationRowHeight       = 64.0;
         label.numberOfLines = 0;
         label.font = [UIFont appRegularFontWithSize:kPointSizeForDosesTakenHeader];
         label.textColor = [UIColor blackColor];
-        label.text = NSLocalizedString(@"Log Your Medications", nil);
+        label.text = APCLocalizedString(@"Log Your Medications", nil);
         label.textAlignment = NSTextAlignmentCenter;
         label.lineBreakMode = NSLineBreakByWordWrapping;
         [container addSubview:label];
@@ -267,7 +267,7 @@ static  CGFloat    kAPCMedicationRowHeight       = 64.0;
     
     self.tabulator.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
-    UIBarButtonItem  *donester = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Done", @"Done") style:UIBarButtonItemStyleDone target:self action:@selector(doneButtonWasTapped:)];
+    UIBarButtonItem  *donester = [[UIBarButtonItem alloc] initWithTitle:APCLocalizedString(@"Done", @"Done") style:UIBarButtonItemStyleDone target:self action:@selector(doneButtonWasTapped:)];
     self.donester = donester;
     self.navigationItem.rightBarButtonItem = self.donester;
     self.donester.enabled = YES;

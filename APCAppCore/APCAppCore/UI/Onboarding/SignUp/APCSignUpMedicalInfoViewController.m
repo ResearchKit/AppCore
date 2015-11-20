@@ -38,6 +38,7 @@
 #import "APCPermissionButton.h"
 #import "APCPermissionsManager.h"
 #import "APCLog.h"
+#import "APCLocalization.h"
 
 #import "UIAlertController+Helper.h"
 #import "APCUser+Bridge.h"
@@ -79,7 +80,7 @@
         }];
     }
     
-    self.title = NSLocalizedString(@"Additional Information", @"Additional Information");
+    self.title = APCLocalizedString(@"Additional Information", @"Additional Information");
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -101,7 +102,7 @@
             case kAPCUserInfoItemTypeBloodType:
             {
                 APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
-                field.caption = NSLocalizedString(@"Blood Type", @"");
+                field.caption = APCLocalizedString(@"Blood Type", @"");
                 field.identifier = kAPCDefaultTableViewCellIdentifier;
                 field.selectionStyle = UITableViewCellSelectionStyleGray;
                 field.detailDiscloserStyle = YES;
@@ -125,7 +126,7 @@
             case kAPCUserInfoItemTypeMedicalCondition:
             {
                 APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
-                field.caption = NSLocalizedString(@"Medical Conditions", @"");
+                field.caption = APCLocalizedString(@"Medical Conditions", @"");
                 field.identifier = kAPCDefaultTableViewCellIdentifier;
                 field.selectionStyle = UITableViewCellSelectionStyleGray;
                 field.detailDiscloserStyle = YES;
@@ -148,7 +149,7 @@
             case kAPCUserInfoItemTypeMedication:
             {
                 APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
-                field.caption = NSLocalizedString(@"Medications", @"");
+                field.caption = APCLocalizedString(@"Medications", @"");
                 field.identifier = kAPCDefaultTableViewCellIdentifier;
                 field.selectionStyle = UITableViewCellSelectionStyleGray;
                 field.detailDiscloserStyle = YES;
@@ -172,7 +173,7 @@
             case kAPCUserInfoItemTypeHeight:
             {
                 APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
-                field.caption = NSLocalizedString(@"Height", @"");
+                field.caption = APCLocalizedString(@"Height", @"");
                 field.identifier = kAPCDefaultTableViewCellIdentifier;
                 field.selectionStyle = UITableViewCellSelectionStyleGray;
                 field.detailDiscloserStyle = YES;
@@ -216,8 +217,8 @@
             case kAPCUserInfoItemTypeWeight:
             {
                 APCTableViewTextFieldItem *field = [APCTableViewTextFieldItem new];
-                field.caption = NSLocalizedString(@"Weight", @"");
-                field.placeholder = NSLocalizedString(@"add weight (lb)", @"");
+                field.caption = APCLocalizedString(@"Weight", @"");
+                field.placeholder = APCLocalizedString(@"add weight (lb)", @"");
                 field.style = UITableViewCellStyleValue1;
                 field.identifier = kAPCTextFieldTableViewCellIdentifier;
                 field.regularExpression = kAPCMedicalInfoItemWeightRegEx;
@@ -238,7 +239,7 @@
             case kAPCUserInfoItemTypeWakeUpTime:
             {
                 APCTableViewDatePickerItem *field = [APCTableViewDatePickerItem new];
-                field.caption = NSLocalizedString(@"What time do you generally wake up?", @"");
+                field.caption = APCLocalizedString(@"What time do you generally wake up?", @"");
                 field.placeholder = @"07:00 AM";
                 field.identifier = kAPCDefaultTableViewCellIdentifier;
                 field.selectionStyle = UITableViewCellSelectionStyleGray;
@@ -267,7 +268,7 @@
             case kAPCUserInfoItemTypeSleepTime:
             {
                 APCTableViewDatePickerItem *field = [APCTableViewDatePickerItem new];
-                field.caption = NSLocalizedString(@"What time do you generally go to sleep?", @"");
+                field.caption = APCLocalizedString(@"What time do you generally go to sleep?", @"");
                 field.placeholder = @"09:30 PM";
                 field.style = UITableViewCellStyleValue1;
                 field.identifier = kAPCDefaultTableViewCellIdentifier;

@@ -39,6 +39,7 @@
 #import "APCSignInViewController.h"
 #import "APCUser.h"
 #import "APCLog.h"
+#import "APCLocalization.h"
 
 #import "APCAppDelegate.h"
 
@@ -103,7 +104,7 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     if (self.showShareRow){
         
         APCTableViewStudyDetailsItem *shareStudyItem = [APCTableViewStudyDetailsItem new];
-        shareStudyItem.caption = NSLocalizedString(@"Share this Study", nil);
+        shareStudyItem.caption = APCLocalizedString(@"Share this Study", nil);
         shareStudyItem.iconImage = [UIImage imageNamed:@"share_icon"];
         shareStudyItem.tintColor = [UIColor appTertiaryGreenColor];
 
@@ -120,7 +121,7 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     if (self.showConsentRow) {
         
         APCTableViewStudyDetailsItem *reviewConsentItem = [APCTableViewStudyDetailsItem new];
-        reviewConsentItem.caption = NSLocalizedString(@"Review Consent", nil);
+        reviewConsentItem.caption = APCLocalizedString(@"Review Consent", nil);
         reviewConsentItem.iconImage = [UIImage imageNamed:@"consent_icon"];
         reviewConsentItem.tintColor = [UIColor appTertiaryPurpleColor];
         

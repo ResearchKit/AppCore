@@ -33,6 +33,7 @@
  
 #import "NSError+APCAdditions.h"
 #import "APCLog.h"
+#import "APCLocalization.h"
 
 NSString * const kAPCServerBusyErrorMessage                     = @"Thank you for your interest in this study. We are working hard to process the large volume of interest, and should be back up momentarily. Please try again soon.";
 NSString * const kAPCUnexpectedConditionErrorMessage            = @"An unexpected network condition has occurred. Please try again soon.";
@@ -56,7 +57,7 @@ static NSString * const oneTab = @"    ";
         [message containsString:@"NSURLError"] ||
         [message rangeOfString:@"contact somebody" options:NSCaseInsensitiveSearch].location != NSNotFound)
     {
-        return NSLocalizedString(@"An unknown error occurred", nil);
+        return APCLocalizedString(@"An unknown error occurred", nil);
     }
     return message;
 }
@@ -78,19 +79,19 @@ static NSString * const oneTab = @"    ";
     NSString *message;
     
     if (self.code == 409) {
-        message = NSLocalizedString(kAPCAccountAlreadyExistsErrorMessage, nil);
+        message = APCLocalizedString(kAPCAccountAlreadyExistsErrorMessage, nil);
     }
     else if (self.code == 404) {
-        message = NSLocalizedString(kAPCAccountDoesNotExistErrorMessage, nil);
+        message = APCLocalizedString(kAPCAccountDoesNotExistErrorMessage, nil);
     }
     else if (self.code >= 500 && self.code < 600) {
-        message = NSLocalizedString(kAPCServerBusyErrorMessage, nil);
+        message = APCLocalizedString(kAPCServerBusyErrorMessage, nil);
     }
     else if (self.code == kCFURLErrorDNSLookupFailed || self.code == kCFURLErrorInternationalRoamingOff) {
-        message = NSLocalizedString(kAPCNotConnectedErrorMessage, nil);
+        message = APCLocalizedString(kAPCNotConnectedErrorMessage, nil);
     }
     else {
-        message = NSLocalizedString(kAPCUnexpectedConditionErrorMessage, nil);
+        message = APCLocalizedString(kAPCUnexpectedConditionErrorMessage, nil);
     }
     
     return message;

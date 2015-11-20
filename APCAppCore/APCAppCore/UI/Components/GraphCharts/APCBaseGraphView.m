@@ -33,6 +33,7 @@
  
 #import "APCBaseGraphView.h"
 #import "UIColor+APCAppearance.h"
+#import "APCLocalization.h"
 
 static NSString * const kFadeAnimationKey = @"LayerFadeAnimation";
 static NSString * const kGrowAnimationKey = @"LayerGrowAnimation";
@@ -81,7 +82,7 @@ CGFloat const kAPCPopAnimationDuration  = 0.3;
     _hidesYAxis = NO;
     _shouldHighlightXaxisLastTitle = YES;
     
-    _emptyText = NSLocalizedString(@"No Data", @"No Data");
+    _emptyText = APCLocalizedString(@"No Data", @"No Data");
     
 }
 

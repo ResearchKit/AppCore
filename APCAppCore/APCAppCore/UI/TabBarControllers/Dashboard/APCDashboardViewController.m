@@ -148,10 +148,10 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
         APCDashboardProgressTableViewCell *progressCell = (APCDashboardProgressTableViewCell *)cell;
         
         progressCell.progressView.progress = progressItem.progress;
-        progressCell.title = NSLocalizedString(@"Activity Completion", @"Activity Completion");
+        progressCell.title = APCLocalizedString(@"Activity Completion", @"Activity Completion");
         [self.dateFormatter setDateFormat:@"MMMM d"];
         
-        progressCell.subTitleLabel.text = [NSString stringWithFormat:@"%@, %@", NSLocalizedString(@"Today",@"Today"), [self.dateFormatter stringFromDate:[NSDate date]]];
+        progressCell.subTitleLabel.text = [NSString stringWithFormat:@"%@, %@", APCLocalizedString(@"Today",@"Today"), [self.dateFormatter stringFromDate:[NSDate date]]];
         
         progressCell.delegate = self;
         

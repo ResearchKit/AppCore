@@ -32,6 +32,7 @@
 // 
  
 #import "APCPieGraphView.h"
+#import "APCLocalization.h"
 
 static CGFloat const kAnimationDuration = 0.35f;
 
@@ -111,7 +112,7 @@ static CGFloat const kAnimationDuration = 0.35f;
     [_valueLabel setTextColor:[UIColor colorWithWhite:0.17 alpha:1.0]];
     [_valueLabel setTextAlignment:NSTextAlignmentCenter];
     
-    _emptyText = NSLocalizedString(@"No Data", @"No Data");
+    _emptyText = APCLocalizedString(@"No Data", @"No Data");
 }
 
 - (void)setupEmptyView
