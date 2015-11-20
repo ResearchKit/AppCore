@@ -688,7 +688,7 @@ static CGFloat kHeaderHeight = 157.0f;
                 
                 APCLogError2 (error);
             
-                if (error.code == kSBBInternetNotConnected || error.code == kSBBServerNotReachable || error.code == kSBBServerUnderMaintenance) {
+                if (error.code == SBBErrorCodeInternetNotConnected || error.code == SBBErrorCodeServerNotReachable || error.code == SBBErrorCodeServerUnderMaintenance) {
                     [spinnerController dismissViewControllerAnimated:NO completion:^{
                     
                         UIAlertController *alertView = [UIAlertController alertControllerWithTitle:NSLocalizedStringWithDefaultValue(@"Sign Up", @"APCAppCore", APCBundle(), @"Sign Up", @"")
