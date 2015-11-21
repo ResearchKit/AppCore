@@ -68,8 +68,8 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
 
 + (void)initialize
 {
-    gViewControllerName = APCLocalizedString(@"Medication Label Color", @"Title for view shown to select color of medication label");
-    gSectionHeaderTitle = APCLocalizedString(@"Select a Label Color for Your Medication", @"Prompt to select color of medication label");
+    gViewControllerName = NSLocalizedStringWithDefaultValue(@"Medication Label Color", @"APCAppCore", APCBundle(), @"Medication Label Color", @"Title for view shown to select color of medication label");
+    gSectionHeaderTitle = NSLocalizedStringWithDefaultValue(@"Select a Label Color for Your Medication", @"APCAppCore", APCBundle(), @"Select a Label Color for Your Medication", @"Prompt to select color of medication label");
 }
 
 - (void)dealloc {
@@ -233,7 +233,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
 
     self.tabulator.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
-    UIBarButtonItem  *donester = [[UIBarButtonItem alloc] initWithTitle:APCLocalizedString(@"Done", @"Done") style:UIBarButtonItemStyleDone target:self action:@selector(doneButtonTapped:)];
+    UIBarButtonItem  *donester = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Done", @"APCAppCore", APCBundle(), @"Done", @"Done") style:UIBarButtonItemStyleDone target:self action:@selector(doneButtonTapped:)];
     self.navigationItem.rightBarButtonItem = donester;
     
     UINib  *colorSwatchTableCellNib = [UINib nibWithNibName:kColorSwatchTableCellName bundle:[NSBundle appleCoreBundle]];

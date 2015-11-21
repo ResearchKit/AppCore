@@ -92,11 +92,11 @@
     
     if (section == 0) {
         headerView = [[UITableViewHeaderFooterView alloc]init];
-        headerView.textLabel.text = APCLocalizedString(@"Select Series 1", nil);
+        headerView.textLabel.text = NSLocalizedStringWithDefaultValue(@"Select Series 1", @"APCAppCore", APCBundle(), @"Select Series 1", nil);
     }else{
         if (self.section0Selected) {
             headerView = [[UITableViewHeaderFooterView alloc]init];
-            headerView.textLabel.text = APCLocalizedString(@"Select Series 2", nil);
+            headerView.textLabel.text = NSLocalizedStringWithDefaultValue(@"Select Series 2", @"APCAppCore", APCBundle(), @"Select Series 2", nil);
         }
     }
     

@@ -396,15 +396,15 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
 - (NSString *)permissionDescriptionForType:(APCSignUpPermissionsType)type {
     switch (type) {
         case kAPCSignUpPermissionsTypeHealthKit:
-            return APCLocalizedString(@"Press “Allow” to individually specify which general health information the app may read from and write to HealthKit", @"");
+            return NSLocalizedStringWithDefaultValue(@"Press “Allow” to individually specify which general health information the app may read from and write to HealthKit", @"APCAppCore", APCBundle(), @"Press “Allow” to individually specify which general health information the app may read from and write to HealthKit", @"");
         case kAPCSignUpPermissionsTypeLocalNotifications:
-            return APCLocalizedString(@"Allowing notifications enables the app to show you reminders.", @"");
+            return NSLocalizedStringWithDefaultValue(@"Allowing notifications enables the app to show you reminders.", @"APCAppCore", APCBundle(), @"Allowing notifications enables the app to show you reminders.", @"");
         case kAPCSignUpPermissionsTypeLocation:
-            return APCLocalizedString(@"Using your GPS enables the app to accurately determine distances travelled. Your actual location will never be shared.", @"");
+            return NSLocalizedStringWithDefaultValue(@"Using your GPS enables the app to accurately determine distances travelled. Your actual location will never be shared.", @"APCAppCore", APCBundle(), @"Using your GPS enables the app to accurately determine distances travelled. Your actual location will never be shared.", @"");
         case kAPCSignUpPermissionsTypeCoremotion:
-            return APCLocalizedString(@"Using the motion co-processor allows the app to determine your activity, helping the study better understand how activity level may influence disease.", @"");
+            return NSLocalizedStringWithDefaultValue(@"Using the motion co-processor allows the app to determine your activity, helping the study better understand how activity level may influence disease.", @"APCAppCore", APCBundle(), @"Using the motion co-processor allows the app to determine your activity, helping the study better understand how activity level may influence disease.", @"");
         case kAPCSignUpPermissionsTypeMicrophone:
-            return APCLocalizedString(@"Access to microphone is required for your Voice Recording Activity.", @"");
+            return NSLocalizedStringWithDefaultValue(@"Access to microphone is required for your Voice Recording Activity.", @"APCAppCore", APCBundle(), @"Access to microphone is required for your Voice Recording Activity.", @"");
         case kAPCSignUpPermissionsTypeCamera:
         case kAPCSignUpPermissionsTypePhotoLibrary:
         default:
@@ -419,25 +419,25 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
     
     switch (type) {
         case kAPCSignUpPermissionsTypeHealthKit:
-            message = [NSString localizedStringWithFormat:APCLocalizedString(@"Please go to Settings -> Privacy -> Health -> %@ to re-enable.", nil), appName];
+            message = [NSString localizedStringWithFormat:NSLocalizedStringWithDefaultValue(@"Please go to Settings -> Privacy -> Health -> %@ to re-enable.", @"APCAppCore", APCBundle(), @"Please go to Settings -> Privacy -> Health -> %@ to re-enable.", nil), appName];
             break;
         case kAPCSignUpPermissionsTypeLocalNotifications:
-            message = [NSString localizedStringWithFormat:APCLocalizedString(@"Tap on Settings -> Notifications and enable 'Allow Notifications'", nil), appName];
+            message = [NSString localizedStringWithFormat:NSLocalizedStringWithDefaultValue(@"Tap on Settings -> Notifications and enable 'Allow Notifications'", @"APCAppCore", APCBundle(), @"Tap on Settings -> Notifications and enable 'Allow Notifications'", nil), appName];
             break;
         case kAPCSignUpPermissionsTypeLocation:
-            message = [NSString localizedStringWithFormat:APCLocalizedString(@"Tap on Settings -> Location and check 'Always'", nil), appName];
+            message = [NSString localizedStringWithFormat:NSLocalizedStringWithDefaultValue(@"Tap on Settings -> Location and check 'Always'", @"APCAppCore", APCBundle(), @"Tap on Settings -> Location and check 'Always'", nil), appName];
             break;
         case kAPCSignUpPermissionsTypeCoremotion:
-            message = [NSString localizedStringWithFormat:APCLocalizedString(@"Tap on Settings and enable Motion Activity.", nil), appName];
+            message = [NSString localizedStringWithFormat:NSLocalizedStringWithDefaultValue(@"Tap on Settings and enable Motion Activity.", @"APCAppCore", APCBundle(), @"Tap on Settings and enable Motion Activity.", nil), appName];
             break;
         case kAPCSignUpPermissionsTypeMicrophone:
-            message = [NSString localizedStringWithFormat:APCLocalizedString(@"Tap on Settings and enable Microphone", nil), appName];
+            message = [NSString localizedStringWithFormat:NSLocalizedStringWithDefaultValue(@"Tap on Settings and enable Microphone", @"APCAppCore", APCBundle(), @"Tap on Settings and enable Microphone", nil), appName];
             break;
         case kAPCSignUpPermissionsTypeCamera:
-            message = [NSString localizedStringWithFormat:APCLocalizedString(@"Tap on Settings and enable Camera", nil), appName];
+            message = [NSString localizedStringWithFormat:NSLocalizedStringWithDefaultValue(@"Tap on Settings and enable Camera", @"APCAppCore", APCBundle(), @"Tap on Settings and enable Camera", nil), appName];
             break;
         case kAPCSignUpPermissionsTypePhotoLibrary:
-            message = [NSString localizedStringWithFormat:APCLocalizedString(@"Tap on Settings and enable Photos", nil), appName];
+            message = [NSString localizedStringWithFormat:NSLocalizedStringWithDefaultValue(@"Tap on Settings and enable Photos", @"APCAppCore", APCBundle(), @"Tap on Settings and enable Photos", nil), appName];
             break;
         default:
             message = @"";

@@ -82,7 +82,7 @@ CGFloat const kAPCPopAnimationDuration  = 0.3;
     _hidesYAxis = NO;
     _shouldHighlightXaxisLastTitle = YES;
     
-    _emptyText = APCLocalizedString(@"No Data", @"No Data");
+    _emptyText = NSLocalizedStringWithDefaultValue(@"No Data", @"APCAppCore", APCBundle(), @"No Data", @"No Data");
     
 }
 

@@ -70,15 +70,15 @@ static NSString * const kSharingOptionsTableViewCellIdentifier = @"SharingOption
     
     [self.tableView reloadData];
     
-    self.title = APCLocalizedString(@"Sharing Options", @"Sharing Options");
+    self.title = NSLocalizedStringWithDefaultValue(@"Sharing Options", @"APCAppCore", APCBundle(), @"Sharing Options", @"Sharing Options");
 }
 
 - (void)prepareData
 {
     [self setupDataFromJSON:@"APHConsentSection"];
     
-    self.titleLabel.text = APCLocalizedString(@"Sharing Options", @"Sharing Options");
-    NSString *messageFormat = APCLocalizedString(@"%@ will receive your study data from your participation in this study.\n\nSharing your coded study data more broadly (without information such as your name) may benefit this and future research.", @"Format for string explaining data sharing during initial consent process, to be filled in with the (long form) name of the institution running the study.");
+    self.titleLabel.text = NSLocalizedStringWithDefaultValue(@"Sharing Options", @"APCAppCore", APCBundle(), @"Sharing Options", @"Sharing Options");
+    NSString *messageFormat = NSLocalizedStringWithDefaultValue(@"%@ will receive your study data from your participation in this study.\n\nSharing your coded study data more broadly (without information such as your name) may benefit this and future research.", @"APCAppCore", APCBundle(), @"%@ will receive your study data from your participation in this study.\n\nSharing your coded study data more broadly (without information such as your name) may benefit this and future research.", @"Format for string explaining data sharing during initial consent process, to be filled in with the (long form) name of the institution running the study.");
     
     self.messageLabel.text = [NSString stringWithFormat:messageFormat, self.instituteLongName];
     
@@ -86,13 +86,13 @@ static NSString * const kSharingOptionsTableViewCellIdentifier = @"SharingOption
     NSMutableArray *options = [NSMutableArray new];
     
     {
-        NSString *optionFormat = APCLocalizedString(@"Share my data with %@ and qualified researchers worldwide", @"Format string for Profile tab option to share data broadly, to be filled in with the short name of the institution sponsoring the study");
+        NSString *optionFormat = NSLocalizedStringWithDefaultValue(@"Share my data with %@ and qualified researchers worldwide", @"APCAppCore", APCBundle(), @"Share my data with %@ and qualified researchers worldwide", @"Format string for Profile tab option to share data broadly, to be filled in with the short name of the institution sponsoring the study");
         NSString *option = [NSString stringWithFormat:optionFormat, self.instituteShortName];
         [options addObject:option];
     }
     
     {
-        NSString *optionFormat = APCLocalizedString(@"Only share my data with %@", @"Format string for Profile tab option to share data narrowly, to be filled in with the long name of the institution sponsoring the study");
+        NSString *optionFormat = NSLocalizedStringWithDefaultValue(@"Only share my data with %@", @"APCAppCore", APCBundle(), @"Only share my data with %@", @"Format string for Profile tab option to share data narrowly, to be filled in with the long name of the institution sponsoring the study");
         NSString *option = [NSString stringWithFormat:optionFormat, self.instituteLongName];
         [options addObject:option];
     }
@@ -187,7 +187,7 @@ static NSString * const kSharingOptionsTableViewCellIdentifier = @"SharingOption
             if (error) {
                 APCLogError2 (error);
                 
-                UIAlertController *alert = [UIAlertController simpleAlertWithTitle:APCLocalizedString(@"Sharing Options", @"") message:error.message];
+                UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedStringWithDefaultValue(@"Sharing Options", @"APCAppCore", APCBundle(), @"Sharing Options", @"") message:error.message];
                 [weakSelf presentViewController:alert animated:YES completion:nil];
                 
             } else {

@@ -144,9 +144,9 @@
     NSInteger numberOfPoints = [[self.graphItem.graphData numberOfDataPoints] integerValue];
     
     if (self.graphItem.graphType == kAPCDashboardGraphTypeLine) {
-        self.subTitleLabel.text = (numberOfPoints > 1) ? [NSString stringWithFormat:@"%@ : %@", APCLocalizedString(@"Average", nil),[self.graphItem averageValueString]] : @"";
+        self.subTitleLabel.text = (numberOfPoints > 1) ? [NSString stringWithFormat:@"%@ : %@", NSLocalizedStringWithDefaultValue(@"Average", @"APCAppCore", APCBundle(), @"Average", nil),[self.graphItem averageValueString]] : @"";
     } else {
-        self.subTitleLabel.text = (numberOfPoints > 0) ? [NSString stringWithFormat:@"%@ : %@  %@ : %@", APCLocalizedString(@"Min", nil), [self.graphItem minimumValueString], APCLocalizedString(@"Max", nil), [self.graphItem maximumValueString]] : @"";
+        self.subTitleLabel.text = (numberOfPoints > 0) ? [NSString stringWithFormat:@"%@ : %@  %@ : %@", NSLocalizedStringWithDefaultValue(@"Min", @"APCAppCore", APCBundle(), @"Min", nil), [self.graphItem minimumValueString], NSLocalizedStringWithDefaultValue(@"Max", @"APCAppCore", APCBundle(), @"Max", nil), [self.graphItem maximumValueString]] : @"";
     }
 }
 

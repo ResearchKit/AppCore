@@ -104,7 +104,7 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     if (self.showShareRow){
         
         APCTableViewStudyDetailsItem *shareStudyItem = [APCTableViewStudyDetailsItem new];
-        shareStudyItem.caption = APCLocalizedString(@"Share this Study", nil);
+        shareStudyItem.caption = NSLocalizedStringWithDefaultValue(@"Share this Study", @"APCAppCore", APCBundle(), @"Share this Study", nil);
         shareStudyItem.iconImage = [UIImage imageNamed:@"share_icon"];
         shareStudyItem.tintColor = [UIColor appTertiaryGreenColor];
 
@@ -121,7 +121,7 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     if (self.showConsentRow) {
         
         APCTableViewStudyDetailsItem *reviewConsentItem = [APCTableViewStudyDetailsItem new];
-        reviewConsentItem.caption = APCLocalizedString(@"Review Consent", nil);
+        reviewConsentItem.caption = NSLocalizedStringWithDefaultValue(@"Review Consent", @"APCAppCore", APCBundle(), @"Review Consent", nil);
         reviewConsentItem.iconImage = [UIImage imageNamed:@"consent_icon"];
         reviewConsentItem.tintColor = [UIColor appTertiaryPurpleColor];
         

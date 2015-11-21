@@ -17,12 +17,3 @@
 APC_EXTERN NSBundle *APCBundle();
 APC_EXTERN NSBundle *APCDefaultLocaleBundle();
 
-#define APCDefaultLocalizedValue(key) \
-[APCDefaultLocaleBundle() localizedStringForKey:key value:@"" table:@"APCAppCore"]
-
-#define APCLocalizedString(key, comment) \
-[APCBundle() localizedStringForKey:(key) value:APCDefaultLocalizedValue(key) table:@"APCAppCore"]
-
-#define APCLocalizedStringFromNumber(number) \
-[NSNumberFormatter localizedStringFromNumber:number numberStyle:NSNumberFormatterNoStyle]
-

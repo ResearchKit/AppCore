@@ -96,9 +96,9 @@ static  CGFloat    kAPCMedicationRowHeight          = 64.0;
 
 + (void)initialize
 {
-    gViewControllerName = APCLocalizedString(@"Medication Frequency", @"Title for view shown to select how often medication is taken");
-    gEveryDayOfWeekCaption = APCLocalizedString(@"Every Day", @"Text of choice indicating medication is taken every day");
-    sectionTitles = @[ APCLocalizedString(@"How many times a day do you take this medication?", @"Title for section where user chooses how many times per day they take a medication"), APCLocalizedString(@"On what days do you take this medication?", @"Title for section where user chooses which days of the week they take a medication"), @"        " ];
+    gViewControllerName = NSLocalizedStringWithDefaultValue(@"Medication Frequency", @"APCAppCore", APCBundle(), @"Medication Frequency", @"Title for view shown to select how often medication is taken");
+    gEveryDayOfWeekCaption = NSLocalizedStringWithDefaultValue(@"Every Day", @"APCAppCore", APCBundle(), @"Every Day", @"Text of choice indicating medication is taken every day");
+    sectionTitles = @[ NSLocalizedStringWithDefaultValue(@"How many times a day do you take this medication?", @"APCAppCore", APCBundle(), @"How many times a day do you take this medication?", @"Title for section where user chooses how many times per day they take a medication"), NSLocalizedStringWithDefaultValue(@"On what days do you take this medication?", @"APCAppCore", APCBundle(), @"On what days do you take this medication?", @"Title for section where user chooses which days of the week they take a medication"), @"        " ];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     daysOfWeekNames = [dateFormatter weekdaySymbols];
 }
@@ -458,7 +458,7 @@ static  CGFloat    kAPCMedicationRowHeight          = 64.0;
     
     self.tabulator.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
-    UIBarButtonItem  *donester = [[UIBarButtonItem alloc] initWithTitle:APCLocalizedString(@"Done", @"Done") style:UIBarButtonItemStyleDone target:self action:@selector(doneButtonTapped:)];
+    UIBarButtonItem  *donester = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Done", @"APCAppCore", APCBundle(), @"Done", @"Done") style:UIBarButtonItemStyleDone target:self action:@selector(doneButtonTapped:)];
     self.donester = donester;
     self.navigationItem.rightBarButtonItem = donester;
     self.donester.enabled = NO;

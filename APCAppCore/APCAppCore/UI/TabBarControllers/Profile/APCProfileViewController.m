@@ -156,13 +156,13 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     [self setupDataFromJSONFile:@"StudyOverview"];
     
     if (APCUserConsentSharingScopeNone == self.user.sharingScope) {
-        self.participationLabel.text = APCLocalizedString(@"Your data is not currently being used for this study.", @"Text to show at top of Profile view when 'paused' (not sharing data)");
+        self.participationLabel.text = NSLocalizedStringWithDefaultValue(@"Your data is not currently being used for this study.", @"APCAppCore", APCBundle(), @"Your data is not currently being used for this study.", @"Text to show at top of Profile view when 'paused' (not sharing data)");
         self.applicationNameLabel.hidden = YES;
-        [self.pauseResumeStudyButton setTitle:APCLocalizedString(@"Resume Study", @"Title for Resume button in Profile view") forState:UIControlStateNormal];
+        [self.pauseResumeStudyButton setTitle:NSLocalizedStringWithDefaultValue(@"Resume Study", @"APCAppCore", APCBundle(), @"Resume Study", @"Title for Resume button in Profile view") forState:UIControlStateNormal];
     } else {
-        self.participationLabel.text = APCLocalizedString(@"Currently participating in", @"Text to show at top of Profile view above the study name when not 'paused' (when sharing data)");
+        self.participationLabel.text = NSLocalizedStringWithDefaultValue(@"Currently participating in", @"APCAppCore", APCBundle(), @"Currently participating in", @"Text to show at top of Profile view above the study name when not 'paused' (when sharing data)");
         self.applicationNameLabel.hidden = NO;
-        [self.pauseResumeStudyButton setTitle:APCLocalizedString(@"Pause Study", @"Title for Pause Study button in Profile view") forState:UIControlStateNormal];
+        [self.pauseResumeStudyButton setTitle:NSLocalizedStringWithDefaultValue(@"Pause Study", @"APCAppCore", APCBundle(), @"Pause Study", @"Title for Pause Study button in Profile view") forState:UIControlStateNormal];
     }
     
     [self.view setNeedsLayout];
@@ -433,7 +433,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 case kAPCUserInfoItemTypeBiologicalSex:
                 {
                     APCTableViewItem *field = [APCTableViewItem new];
-                    field.caption = APCLocalizedString(@"Sex", @"");
+                    field.caption = NSLocalizedStringWithDefaultValue(@"Sex", @"APCAppCore", APCBundle(), @"Sex", @"");
                     field.identifier = kAPCDefaultTableViewCellIdentifier;
                     field.editable = NO;
                     field.textAlignnment = NSTextAlignmentRight;
@@ -450,7 +450,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 case kAPCUserInfoItemTypeDateOfBirth:
                 {
                     APCTableViewItem *field = [APCTableViewItem new];
-                    field.caption = APCLocalizedString(@"Birthdate", @"");
+                    field.caption = NSLocalizedStringWithDefaultValue(@"Birthdate", @"APCAppCore", APCBundle(), @"Birthdate", @"");
                     field.identifier = kAPCDefaultTableViewCellIdentifier;
                     field.editable = NO;
                     field.textAlignnment = NSTextAlignmentRight;
@@ -468,7 +468,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 {
                     APCTableViewTextFieldItem *field = [APCTableViewTextFieldItem new];
                     field.textAlignnment = NSTextAlignmentLeft;
-                    field.placeholder = APCLocalizedString(@"custom question", @"");
+                    field.placeholder = NSLocalizedStringWithDefaultValue(@"custom question", @"APCAppCore", APCBundle(), @"custom question", @"");
                     field.caption = @"Daily Scale";
                     if (self.user.customSurveyQuestion) {
                         field.value = self.user.customSurveyQuestion;
@@ -489,7 +489,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 case kAPCUserInfoItemTypeMedicalCondition:
                 {
                     APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
-                    field.caption = APCLocalizedString(@"Medical Conditions", @"");
+                    field.caption = NSLocalizedStringWithDefaultValue(@"Medical Conditions", @"APCAppCore", APCBundle(), @"Medical Conditions", @"");
                     field.pickerData = @[[APCUser medicalConditions]];
                     field.textAlignnment = NSTextAlignmentRight;
                     field.identifier = kAPCDefaultTableViewCellIdentifier;
@@ -513,7 +513,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 case kAPCUserInfoItemTypeMedication:
                 {
                     APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
-                    field.caption = APCLocalizedString(@"Medications", @"");
+                    field.caption = NSLocalizedStringWithDefaultValue(@"Medications", @"APCAppCore", APCBundle(), @"Medications", @"");
                     field.pickerData = @[[APCUser medications]];
                     field.textAlignnment = NSTextAlignmentRight;
                     field.identifier = kAPCDefaultTableViewCellIdentifier;
@@ -538,7 +538,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 {
 
                     APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
-                    field.caption = APCLocalizedString(@"Height", @"");
+                    field.caption = NSLocalizedStringWithDefaultValue(@"Height", @"APCAppCore", APCBundle(), @"Height", @"");
                     field.identifier = kAPCDefaultTableViewCellIdentifier;
                     field.detailDiscloserStyle = YES;
                     field.textAlignnment = NSTextAlignmentRight;
@@ -584,8 +584,8 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 case kAPCUserInfoItemTypeWeight:
                 {
                     APCTableViewTextFieldItem *field = [APCTableViewTextFieldItem new];
-                    field.caption = APCLocalizedString(@"Weight", @"");
-                    field.placeholder = APCLocalizedString(@"add weight (lb)", @"");
+                    field.caption = NSLocalizedStringWithDefaultValue(@"Weight", @"APCAppCore", APCBundle(), @"Weight", @"");
+                    field.placeholder = NSLocalizedStringWithDefaultValue(@"add weight (lb)", @"APCAppCore", APCBundle(), @"add weight (lb)", @"");
                     field.regularExpression = kAPCMedicalInfoItemWeightRegEx;
                     
                     double userWeight = [APCUser weightInPounds:self.user.weight];
@@ -610,8 +610,8 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 {
                     APCTableViewDatePickerItem *field = [APCTableViewDatePickerItem new];
                     field.style = UITableViewCellStyleValue1;
-                    field.caption = APCLocalizedString(@"What time do you generally wake up?", @"");
-                    field.placeholder = APCLocalizedString(@"7:00 AM", @"");
+                    field.caption = NSLocalizedStringWithDefaultValue(@"What time do you generally wake up?", @"APCAppCore", APCBundle(), @"What time do you generally wake up?", @"");
+                    field.placeholder = NSLocalizedStringWithDefaultValue(@"7:00 AM", @"APCAppCore", APCBundle(), @"7:00 AM", @"");
                     field.identifier = kAPCDefaultTableViewCellIdentifier;
                     field.datePickerMode = UIDatePickerModeTime;
                     field.dateFormat = kAPCMedicalInfoItemSleepTimeFormat;
@@ -636,8 +636,8 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 {
                     APCTableViewDatePickerItem *field = [APCTableViewDatePickerItem new];
                     field.style = UITableViewCellStyleValue1;
-                    field.caption = APCLocalizedString(@"What time do you generally go to sleep?", @"");
-                    field.placeholder = APCLocalizedString(@"9:30 PM", @"");
+                    field.caption = NSLocalizedStringWithDefaultValue(@"What time do you generally go to sleep?", @"APCAppCore", APCBundle(), @"What time do you generally go to sleep?", @"");
+                    field.placeholder = NSLocalizedStringWithDefaultValue(@"9:30 PM", @"APCAppCore", APCBundle(), @"9:30 PM", @"");
                     field.identifier = kAPCDefaultTableViewCellIdentifier;
                     field.datePickerMode = UIDatePickerModeTime;
                     field.dateFormat = kAPCMedicalInfoItemSleepTimeFormat;
@@ -674,7 +674,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         
         {
             APCTableViewItem *field = [APCTableViewItem new];
-            field.caption = APCLocalizedString(@"Share this Study", @"");
+            field.caption = NSLocalizedStringWithDefaultValue(@"Share this Study", @"APCAppCore", APCBundle(), @"Share this Study", @"");
             field.identifier = kAPCDefaultTableViewCellIdentifier;
             field.editable = YES;
             
@@ -686,7 +686,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         
         APCTableViewSection *section = [APCTableViewSection new];
         section.rows = [NSArray arrayWithArray:rowItems];
-        section.sectionTitle = APCLocalizedString(@"Help us Spread the Word", @"");
+        section.sectionTitle = NSLocalizedStringWithDefaultValue(@"Help us Spread the Word", @"APCAppCore", APCBundle(), @"Help us Spread the Word", @"");
         [items addObject:section];
     }
     */
@@ -697,7 +697,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     
     {
         APCTableViewItem *field = [APCTableViewItem new];
-        field.caption = APCLocalizedString(@"Activity Reminders", @"");
+        field.caption = NSLocalizedStringWithDefaultValue(@"Activity Reminders", @"APCAppCore", APCBundle(), @"Activity Reminders", @"");
         field.identifier = kAPCDefaultTableViewCellIdentifier;
         field.editable = NO;
         field.showChevron = YES;
@@ -722,7 +722,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
             field.identifier = kAPCDefaultTableViewCellIdentifier;
             field.selectionStyle = self.isEditing ? UITableViewCellSelectionStyleGray : UITableViewCellSelectionStyleNone;
-            field.caption = APCLocalizedString(@"Auto-Lock", @"");
+            field.caption = NSLocalizedStringWithDefaultValue(@"Auto-Lock", @"APCAppCore", APCBundle(), @"Auto-Lock", @"");
             field.detailDiscloserStyle = YES;
             field.textAlignnment = NSTextAlignmentRight;
             field.pickerData = @[[APCProfileViewController autoLockOptionStrings]];
@@ -744,7 +744,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         
         {
             APCTableViewItem *field = [APCTableViewItem new];
-            field.caption = APCLocalizedString(@"Change Passcode", @"");
+            field.caption = NSLocalizedStringWithDefaultValue(@"Change Passcode", @"APCAppCore", APCBundle(), @"Change Passcode", @"");
             field.identifier = kAPCDefaultTableViewCellIdentifier;
             field.textAlignnment = NSTextAlignmentLeft;
             field.editable = NO;
@@ -758,7 +758,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         
         {
             APCTableViewItem *field = [APCTableViewItem new];
-            field.caption = APCLocalizedString(@"Download Data", @"");
+            field.caption = NSLocalizedStringWithDefaultValue(@"Download Data", @"APCAppCore", APCBundle(), @"Download Data", @"");
             field.identifier = kAPCDefaultTableViewCellIdentifier;
             field.textAlignnment = NSTextAlignmentLeft;
             field.editable = NO;
@@ -773,7 +773,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
         {
             APCTableViewItem *field = [APCTableViewItem new];
-            field.caption = APCLocalizedString(@"Sharing Options", @"");
+            field.caption = NSLocalizedStringWithDefaultValue(@"Sharing Options", @"APCAppCore", APCBundle(), @"Sharing Options", @"");
             field.identifier = kAPCDefaultTableViewCellIdentifier;
             field.textAlignnment = NSTextAlignmentLeft;
             field.editable = NO;
@@ -794,7 +794,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         NSMutableArray *rowItems = [NSMutableArray new];
         {
             APCTableViewItem *field = [APCTableViewItem new];
-            field.caption = APCLocalizedString(@"Permissions", @"");
+            field.caption = NSLocalizedStringWithDefaultValue(@"Permissions", @"APCAppCore", APCBundle(), @"Permissions", @"");
             field.identifier = kAPCDefaultTableViewCellIdentifier;
             field.textAlignnment = NSTextAlignmentRight;
             field.editable = NO;
@@ -808,7 +808,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         
         {
             APCTableViewItem *field = [APCTableViewItem new];
-            field.caption = APCLocalizedString(@"Review Consent", @"");
+            field.caption = NSLocalizedStringWithDefaultValue(@"Review Consent", @"APCAppCore", APCBundle(), @"Review Consent", @"");
             field.identifier = kAPCDefaultTableViewCellIdentifier;
             field.textAlignnment = NSTextAlignmentRight;
             field.editable = NO;
@@ -830,7 +830,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         NSMutableArray *rowItems = [NSMutableArray new];
         {
             APCTableViewItem *field = [APCTableViewItem new];
-            field.caption = APCLocalizedString(@"Privacy Policy", @"");
+            field.caption = NSLocalizedStringWithDefaultValue(@"Privacy Policy", @"APCAppCore", APCBundle(), @"Privacy Policy", @"");
             field.identifier = kAPCDefaultTableViewCellIdentifier;
             field.textAlignnment = NSTextAlignmentRight;
             field.editable = NO;
@@ -844,7 +844,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         
         {
             APCTableViewItem *field = [APCTableViewItem new];
-            field.caption = APCLocalizedString(@"License Information", @"");
+            field.caption = NSLocalizedStringWithDefaultValue(@"License Information", @"APCAppCore", APCBundle(), @"License Information", @"");
             field.identifier = kAPCDefaultTableViewCellIdentifier;
             field.textAlignnment = NSTextAlignmentRight;
             field.editable = NO;
@@ -1408,15 +1408,15 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         return;
     }
     
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:APCLocalizedString(@"Sign Out", @"") message:APCLocalizedString(@"Are you sure you want to sign out?", nil) preferredStyle:UIAlertControllerStyleActionSheet];
-    UIAlertAction *signOutAction = [UIAlertAction actionWithTitle:APCLocalizedString(@"Sign Out", @"") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * __unused action) {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedStringWithDefaultValue(@"Sign Out", @"APCAppCore", APCBundle(), @"Sign Out", @"") message:NSLocalizedStringWithDefaultValue(@"Are you sure you want to sign out?", @"APCAppCore", APCBundle(), @"Are you sure you want to sign out?", nil) preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertAction *signOutAction = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Sign Out", @"APCAppCore", APCBundle(), @"Sign Out", @"") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * __unused action) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wundeclared-selector"
         [self performSelector:@selector(logOut)];
 #pragma clang diagnostic pop
     }];
     [alertController addAction:signOutAction];
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:APCLocalizedString(@"Cancel", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Cancel", @"APCAppCore", APCBundle(), @"Cancel", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
        
     }];
     [alertController addAction:cancelAction];
@@ -1427,13 +1427,13 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
 - (IBAction)leaveStudy:(id) __unused sender
 {
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:APCLocalizedString(@"Withdraw", @"") message:APCLocalizedString(@"Are you sure you want to completely withdraw from the study?\nYou will be logged out of your account and no further data will be collected. If you wish to re-enroll at a later date, you will be asked to give informed consent again.", nil) preferredStyle:UIAlertControllerStyleActionSheet];
-    UIAlertAction *withdrawAction = [UIAlertAction actionWithTitle:APCLocalizedString(@"Withdraw", @"") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * __unused action) {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedStringWithDefaultValue(@"Withdraw", @"APCAppCore", APCBundle(), @"Withdraw", @"") message:NSLocalizedStringWithDefaultValue(@"Are you sure you want to completely withdraw from the study?\nYou will be logged out of your account and no further data will be collected. If you wish to re-enroll at a later date, you will be asked to give informed consent again.", @"APCAppCore", APCBundle(), @"Are you sure you want to completely withdraw from the study?\nYou will be logged out of your account and no further data will be collected. If you wish to re-enroll at a later date, you will be asked to give informed consent again.", nil) preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertAction *withdrawAction = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Withdraw", @"APCAppCore", APCBundle(), @"Withdraw", @"") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * __unused action) {
         [self withdraw];
     }];
     [alertController addAction:withdrawAction];
     
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:APCLocalizedString(@"Cancel", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Cancel", @"APCAppCore", APCBundle(), @"Cancel", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
 		
     }];
     [alertController addAction:cancelAction];
@@ -1448,17 +1448,17 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     void (^handler)(UIAlertAction *action);
     if (self.user.savedSharingScope) {
         // we're paused, so resume here
-        titleString = APCLocalizedString(@"Resume", @"Title for action sheet brought up by the Resume button");
-        messageString = APCLocalizedString(@"This will resume sending data you collect to the study.", @"Prompt for action sheet brought up by the Resume button");
-        actionString = APCLocalizedString(@"Resume", @"Title for action sheet item to resume sharing data with the study");
+        titleString = NSLocalizedStringWithDefaultValue(@"APC_PROFILE_RESUME_SHEET_TITLE", @"APCAppCore", APCBundle(), @"Resume", @"Title for action sheet brought up by the Resume button");
+        messageString = NSLocalizedStringWithDefaultValue(@"APC_PROFILE_RESUME_SHEET_PROMPT", @"APCAppCore", APCBundle(), @"This will resume sending data you collect to the study.", @"Prompt for action sheet brought up by the Resume button");
+        actionString = NSLocalizedStringWithDefaultValue(@"APC_PROFILE_RESUME_ITEM_TITLE", @"APCAppCore", APCBundle(), @"Resume", @"Title for action sheet item to resume sharing data with the study");
         handler = [^(UIAlertAction * __unused action) {
             [self resume];
         } copy];
     } else {
         // pause
-        titleString = APCLocalizedString(@"Pause", @"Title for action sheet brought up by the Pause button");
-        messageString = APCLocalizedString(@"Are you sure you want to pause your participation in the study?\nData you collect while paused will remain on your phone and will not be included in the study.", @"Prompt for action sheet brought up by the Pause button");
-        actionString = APCLocalizedString(@"Pause", @"Title for action sheet item to pause sharing data with the study");
+        titleString = NSLocalizedStringWithDefaultValue(@"APC_PROFILE_PAUSE_SHEET_TITLE", @"APCAppCore", APCBundle(), @"Pause", @"Title for action sheet brought up by the Pause button");
+        messageString = NSLocalizedStringWithDefaultValue(@"APC_PROFILE_PAUSE_SHEET_PROMPT", @"APCAppCore", APCBundle(), @"Are you sure you want to pause your participation in the study?\nData you collect while paused will remain on your phone and will not be included in the study.", @"Prompt for action sheet brought up by the Pause button");
+        actionString = NSLocalizedStringWithDefaultValue(@"APC_PROFILE_PAUSE_ITEM_TITLE", @"APCAppCore", APCBundle(), @"Pause", @"Title for action sheet item to pause sharing data with the study");
         handler = [^(UIAlertAction * __unused action) {
             [self pause];
         } copy];
@@ -1467,7 +1467,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     UIAlertAction *action = [UIAlertAction actionWithTitle:actionString style:UIAlertActionStyleDestructive handler:handler];
     [alertController addAction:action];
     
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:APCLocalizedString(@"Cancel", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"APC_PROFILE_PAUSE_CANCEL_TITLE", @"APCAppCore", APCBundle(), @"Cancel", @"Title for Cancel item in Pause/Resume Study action sheets") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
         
     }];
     [alertController addAction:cancelAction];
@@ -1481,7 +1481,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         __weak typeof(self) weakSelf = self;
         
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-        UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:APCLocalizedString(@"Take Photo", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
+        UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Take Photo", @"APCAppCore", APCBundle(), @"Take Photo", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
             
             [self.permissionManager requestForPermissionForType:kAPCSignUpPermissionsTypeCamera withCompletion:^(BOOL granted, NSError *error) {
                 if (granted) {
@@ -1499,7 +1499,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             [alertController addAction:cameraAction];
         }
         
-        UIAlertAction *libraryAction = [UIAlertAction actionWithTitle:APCLocalizedString(@"Choose from Library", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
+        UIAlertAction *libraryAction = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Choose from Library", @"APCAppCore", APCBundle(), @"Choose from Library", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
             [self.permissionManager requestForPermissionForType:kAPCSignUpPermissionsTypePhotoLibrary withCompletion:^(BOOL granted, NSError *error) {
                 if (granted) {
                     dispatch_async(dispatch_get_main_queue(), ^{
@@ -1514,7 +1514,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         }];
         [alertController addAction:libraryAction];
         
-        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:APCLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Cancel", @"APCAppCore", APCBundle(), @"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
             
         }];
         [alertController addAction:cancelAction];
@@ -1545,12 +1545,12 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
 - (void)presentSettingsAlert:(NSError *)error
 {
-    UIAlertController *alertContorller = [UIAlertController alertControllerWithTitle:APCLocalizedString(@"Permissions Denied", @"") message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *dismiss = [UIAlertAction actionWithTitle:APCLocalizedString(@"Dismiss", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
+    UIAlertController *alertContorller = [UIAlertController alertControllerWithTitle:NSLocalizedStringWithDefaultValue(@"Permissions Denied", @"APCAppCore", APCBundle(), @"Permissions Denied", @"") message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *dismiss = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Dismiss", @"APCAppCore", APCBundle(), @"Dismiss", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
         
     }];
     [alertContorller addAction:dismiss];
-    UIAlertAction *settings = [UIAlertAction actionWithTitle:APCLocalizedString(@"Settings", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
+    UIAlertAction *settings = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Settings", @"APCAppCore", APCBundle(), @"Settings", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
     }];
     [alertContorller addAction:settings];
@@ -1565,7 +1565,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             [self hidePickerCell];
         }
         
-        sender.title = APCLocalizedString(@"Edit", @"Edit");
+        sender.title = NSLocalizedStringWithDefaultValue(@"Edit", @"APCAppCore", APCBundle(), @"Edit", @"Edit");
         sender.style = UIBarButtonItemStylePlain;
         
         self.navigationItem.leftBarButtonItem.enabled = YES;
@@ -1580,7 +1580,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         }];
     }
     else {
-        sender.title = APCLocalizedString(@"Done", @"Done");
+        sender.title = NSLocalizedStringWithDefaultValue(@"Done", @"APCAppCore", APCBundle(), @"Done", @"Done");
         sender.style = UIBarButtonItemStyleDone;
         self.profileEditsWerePerformed = YES;
         
@@ -1622,7 +1622,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     NSString *filePath = [[NSBundle mainBundle] pathForResource: @"PrivacyPolicy" ofType:@"html" inDirectory:@"HTMLContent"];
     NSURL *targetURL = [NSURL URLWithString:filePath];
     NSURLRequest *request = [NSURLRequest requestWithURL:targetURL];
-    webViewController.title = APCLocalizedString(@"Privacy Policy", @"");
+    webViewController.title = NSLocalizedStringWithDefaultValue(@"Privacy Policy", @"APCAppCore", APCBundle(), @"Privacy Policy", @"");
     
     UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:webViewController];
     [self.navigationController presentViewController:navController animated:YES completion:^{
@@ -1648,13 +1648,13 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Review Consent" message:@"" preferredStyle:UIAlertControllerStyleActionSheet];
     
     if ([consentReviewActions containsObject:kReviewConsentActionPDF]) {
-        UIAlertAction *pdfAction = [UIAlertAction actionWithTitle:APCLocalizedString(@"View PDF", @"View PDF") style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
+        UIAlertAction *pdfAction = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"View PDF", @"APCAppCore", APCBundle(), @"View PDF", @"View PDF") style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
             
             APCWebViewController *webViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCWebViewController"];
             NSString *filePath = [[NSBundle mainBundle] pathForResource:@"consent" ofType:@"pdf"];
             NSData *data = [NSData dataWithContentsOfFile:filePath];
             [webViewController.webView setDataDetectorTypes:UIDataDetectorTypeAll];
-            webViewController.title = APCLocalizedString(@"Consent", @"Consent");
+            webViewController.title = NSLocalizedStringWithDefaultValue(@"Consent", @"APCAppCore", APCBundle(), @"Consent", @"Consent");
             
             UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:webViewController];
             [weakSelf.navigationController presentViewController:navController animated:YES completion:^{
@@ -1666,7 +1666,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     }
     
     if ([consentReviewActions containsObject:kReviewConsentActionVideo]) {
-        UIAlertAction *videoAction = [UIAlertAction actionWithTitle:APCLocalizedString(@"Watch Video", @"Watch Video") style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
+        UIAlertAction *videoAction = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Watch Video", @"APCAppCore", APCBundle(), @"Watch Video", @"Watch Video") style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
             
             NSURL *fileURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"Intro" ofType:@"mp4"]];
             APCIntroVideoViewController *introVideoViewController = [[APCIntroVideoViewController alloc] initWithContentURL:fileURL];
@@ -1679,14 +1679,14 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     }
     
     if ([consentReviewActions containsObject:kReviewConsentActionSlides]) {
-        UIAlertAction *slidesAction = [UIAlertAction actionWithTitle:APCLocalizedString(@"View Slides", @"View Slides") style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
+        UIAlertAction *slidesAction = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"View Slides", @"APCAppCore", APCBundle(), @"View Slides", @"View Slides") style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
             [weakSelf showConsentSlides];
         }];
         [alertController addAction:slidesAction];
     }
     
     {
-        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:APCLocalizedString(@"Cancel", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Cancel", @"APCAppCore", APCBundle(), @"Cancel", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
             
         }];
         [alertController addAction:cancelAction];
@@ -1701,13 +1701,13 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     
     NSArray*                sections  = [appDelegate consentSectionsAndHtmlContent:nil];
     ORKConsentDocument*     consent   = [[ORKConsentDocument alloc] init];
-    ORKConsentSignature*    signature = [ORKConsentSignature signatureForPersonWithTitle:APCLocalizedString(@"Participant", nil)
+    ORKConsentSignature*    signature = [ORKConsentSignature signatureForPersonWithTitle:NSLocalizedStringWithDefaultValue(@"Participant", @"APCAppCore", APCBundle(), @"Participant", nil)
                                                                         dateFormatString:nil
                                                                               identifier:@"participant"];
     
-    consent.title                = APCLocalizedString(@"Consent", nil);
-    consent.signaturePageTitle   = APCLocalizedString(@"Consent", nil);
-    consent.signaturePageContent = APCLocalizedString(@"I agree to participate in this research Study.", nil);
+    consent.title                = NSLocalizedStringWithDefaultValue(@"Consent", @"APCAppCore", APCBundle(), @"Consent", nil);
+    consent.signaturePageTitle   = NSLocalizedStringWithDefaultValue(@"Consent", @"APCAppCore", APCBundle(), @"Consent", nil);
+    consent.signaturePageContent = NSLocalizedStringWithDefaultValue(@"I agree to participate in this research Study.", @"APCAppCore", APCBundle(), @"I agree to participate in this research Study.", nil);
     consent.sections             = sections;
     
     [consent addSignature:signature];
@@ -1716,7 +1716,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     ORKOrderedTask* task = [[ORKOrderedTask alloc] initWithIdentifier:@"consent" steps:@[step]];
     ORKTaskViewController*  consentVC = [[ORKTaskViewController alloc] initWithTask:task taskRunUUID:[NSUUID UUID]];
     
-    consentVC.navigationBar.topItem.title = APCLocalizedString(@"Consent", nil);
+    consentVC.navigationBar.topItem.title = NSLocalizedStringWithDefaultValue(@"Consent", @"APCAppCore", APCBundle(), @"Consent", nil);
 	consentVC.delegate = self;
     
 #ifndef APC_HAVE_CONSENT
@@ -1743,7 +1743,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     NSMutableArray *options = [NSMutableArray new];
     
     for (NSNumber *val in values) {
-        NSString *optionString = [NSString stringWithFormat:@"%ld %@", (long)val.integerValue, APCLocalizedString(@"minutes", nil)];
+        NSString *optionString = [NSString stringWithFormat:@"%ld %@", (long)val.integerValue, NSLocalizedStringWithDefaultValue(@"minutes", @"APCAppCore", APCBundle(), @"minutes", nil)];
         [options addObject:optionString];
     }
     

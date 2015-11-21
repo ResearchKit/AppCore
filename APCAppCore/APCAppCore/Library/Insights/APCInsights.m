@@ -97,8 +97,8 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
         _baselineHigh = baselineHigh;
         _baselineHighOther = baselineOther;
         
-        _captionGood = APCLocalizedString(@"Not enough data", @"Not enough data");
-        _captionBad  = APCLocalizedString(@"Not enough data", @"Not enough data");
+        _captionGood = NSLocalizedStringWithDefaultValue(@"Not enough data", @"APCAppCore", APCBundle(), @"Not enough data", @"Not enough data");
+        _captionBad  = NSLocalizedStringWithDefaultValue(@"Not enough data", @"APCAppCore", APCBundle(), @"Not enough data", @"Not enough data");
         _valueGood = @(0);
         _valueBad  = @(0);
         
@@ -141,14 +141,14 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
         {
             self.insightFactorName = HKQuantityTypeIdentifierDistanceWalkingRunning;
             self.insightFactorUnit = [HKUnit meterUnit];
-            self.insightFactorCaption = APCLocalizedString(@"%@ minutes spent active", @"Minutes spent active, to be filled in with the number of minutes");
+            self.insightFactorCaption = NSLocalizedStringWithDefaultValue(@"%@ minutes spent active", @"APCAppCore", APCBundle(), @"%@ minutes spent active", @"Minutes spent active, to be filled in with the number of minutes");
         }
             break;
         case APCInsightFactorCarbohydrateConsumption:
         {
             self.insightFactorName = HKQuantityTypeIdentifierDietaryCarbohydrates;
             self.insightFactorUnit = [HKUnit gramUnit];
-            self.insightFactorCaption = APCLocalizedString(@"%@ carbohydrates consumed", @"Grams of carbohydrate consumed, to be filled in with the number of grams");
+            self.insightFactorCaption = NSLocalizedStringWithDefaultValue(@"%@ carbohydrates consumed", @"APCAppCore", APCBundle(), @"%@ carbohydrates consumed", @"Grams of carbohydrate consumed, to be filled in with the number of grams");
         }
             break;
         case APCInsightFactorCarbohydrateCalories:
@@ -157,28 +157,28 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
         {
             self.insightFactorName = HKQuantityTypeIdentifierDietaryEnergyConsumed;
             self.insightFactorUnit = [HKUnit kilocalorieUnit];
-            self.insightFactorCaption = APCLocalizedString(@"%@ calories consumed", @"(Kilo)calories consumed, to be filled in with the number of kilocalories");
+            self.insightFactorCaption = NSLocalizedStringWithDefaultValue(@"%@ calories consumed", @"APCAppCore", APCBundle(), @"%@ calories consumed", @"(Kilo)calories consumed, to be filled in with the number of kilocalories");
         }
             break;
         case APCInsightFactorSteps:
         {
             self.insightFactorName = HKQuantityTypeIdentifierStepCount;
             self.insightFactorUnit = [HKUnit countUnit];
-            self.insightFactorCaption = APCLocalizedString(@"%@ Steps", @"Steps taken, to be filled in with the number of steps");
+            self.insightFactorCaption = NSLocalizedStringWithDefaultValue(@"%@ Steps", @"APCAppCore", APCBundle(), @"%@ Steps", @"Steps taken, to be filled in with the number of steps");
         }
             break;
         case APCInsightFactorSugarConsumption:
         {
             self.insightFactorName = HKQuantityTypeIdentifierDietarySugar;
             self.insightFactorUnit = [HKUnit gramUnit];
-            self.insightFactorCaption = APCLocalizedString(@"%@ sugar consumed", @"Grams of sugar consumed, to be filled in with the number of grams");
+            self.insightFactorCaption = NSLocalizedStringWithDefaultValue(@"%@ sugar consumed", @"APCAppCore", APCBundle(), @"%@ sugar consumed", @"Grams of sugar consumed, to be filled in with the number of grams");
         }
             break;
         case APCInsightFactorTimeSlept:
         {
             self.insightFactorName = HKCategoryTypeIdentifierSleepAnalysis;
             self.insightFactorUnit = [HKUnit hourUnit];
-            self.insightFactorCaption = APCLocalizedString(@"%@ hours slept", @"Hours slept, to be filled in with the number of hours");
+            self.insightFactorCaption = NSLocalizedStringWithDefaultValue(@"%@ hours slept", @"APCAppCore", APCBundle(), @"%@ hours slept", @"Hours slept, to be filled in with the number of hours");
         }
             break;
         default:
@@ -360,7 +360,7 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
 {
     APCLogDebug(@"Insights: %@", insightPoints);
     
-    NSString *caption = APCLocalizedString(@"Not enough data", @"Not enough data");
+    NSString *caption = NSLocalizedStringWithDefaultValue(@"Not enough data", @"APCAppCore", APCBundle(), @"Not enough data", @"Not enough data");
     NSNumber *pointValue = nil;
     
     NSArray *goodPoints = [insightPoints filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(%K == %@) AND (%K <> %@)",
@@ -552,8 +552,8 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
 
 - (void)resetInsight
 {
-    self.captionGood = APCLocalizedString(@"Not enough data", @"Not enough data");
-    self.captionBad  = APCLocalizedString(@"Not enough data", @"Not enough data");
+    self.captionGood = NSLocalizedStringWithDefaultValue(@"Not enough data", @"APCAppCore", APCBundle(), @"Not enough data", @"Not enough data");
+    self.captionBad  = NSLocalizedStringWithDefaultValue(@"Not enough data", @"APCAppCore", APCBundle(), @"Not enough data", @"Not enough data");
     self.valueGood = @(0);
     self.valueBad  = @(0);
     

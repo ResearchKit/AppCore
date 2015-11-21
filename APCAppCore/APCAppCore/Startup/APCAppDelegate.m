@@ -774,7 +774,7 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
     
     {
         //Activities Tab
-        UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:APCLocalizedString(@"Activities", nil) image:[UIImage imageNamed:@"tab_activities"] selectedImage:[UIImage imageNamed:@"tab_activities_selected"]];
+        UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Activities", @"APCAppCore", APCBundle(), @"Activities", nil) image:[UIImage imageNamed:@"tab_activities"] selectedImage:[UIImage imageNamed:@"tab_activities_selected"]];
         [tabBarItems addObject:item];
         
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:kActivitiesStoryBoardKey bundle:[NSBundle appleCoreBundle]];
@@ -784,7 +784,7 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
     
     {
         //Dashboard Tab
-        UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:APCLocalizedString(@"Dashboard", nil) image:[UIImage imageNamed:@"tab_dashboard"] selectedImage:[UIImage imageNamed:@"tab_dashboard_selected"]];
+        UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Dashboard", @"APCAppCore", APCBundle(), @"Dashboard", nil) image:[UIImage imageNamed:@"tab_dashboard"] selectedImage:[UIImage imageNamed:@"tab_dashboard_selected"]];
         [tabBarItems addObject:item];
         
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:kDashBoardStoryBoardKey bundle:[NSBundle mainBundle]];
@@ -794,7 +794,7 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
     
     BOOL newsFeedTab = [self.initializationOptions[kNewsFeedTabKey] boolValue];
     if (newsFeedTab) {
-        UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:APCLocalizedString(@"News Feed", nil) image:[UIImage imageNamed:@"tab_newsfeed"] selectedImage:[UIImage imageNamed:@"tab_newsfeed_selected"]];
+        UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"News Feed", @"APCAppCore", APCBundle(), @"News Feed", nil) image:[UIImage imageNamed:@"tab_newsfeed"] selectedImage:[UIImage imageNamed:@"tab_newsfeed_selected"]];
         [tabBarItems addObject:item];
         
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:kNewsFeedStoryBoardKey bundle:[NSBundle appleCoreBundle]];
@@ -804,7 +804,7 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
     
     {
         //Learn Tab
-        UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:APCLocalizedString(@"Learn", nil) image:[UIImage imageNamed:@"tab_learn"] selectedImage:[UIImage imageNamed:@"tab_learn_selected"]];
+        UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Learn", @"APCAppCore", APCBundle(), @"Learn", nil) image:[UIImage imageNamed:@"tab_learn"] selectedImage:[UIImage imageNamed:@"tab_learn_selected"]];
         [tabBarItems addObject:item];
         
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:kLearnStoryBoardKey bundle:[NSBundle appleCoreBundle]];
@@ -814,7 +814,7 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
     
     {
         //Profile Tab
-        UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:APCLocalizedString(@"Profile", nil) image:[UIImage imageNamed:@"tab_profile"] selectedImage:[UIImage imageNamed:@"tab_profile_selected"]];
+        UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Profile", @"APCAppCore", APCBundle(), @"Profile", nil) image:[UIImage imageNamed:@"tab_profile"] selectedImage:[UIImage imageNamed:@"tab_profile_selected"]];
         [tabBarItems addObject:item];
         
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:kHealthProfileStoryBoardKey bundle:[NSBundle appleCoreBundle]];
