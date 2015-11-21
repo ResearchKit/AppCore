@@ -56,11 +56,11 @@
 }
 
 - (void) exitGracefully {
-    NSString *alertTitle = APCLocalizedString(@"Somethings Wrong!", @"");
+    NSString *alertTitle = NSLocalizedStringWithDefaultValue(@"Somethings Wrong!", @"APCAppCore", APCBundle(), @"Somethings Wrong!", @"");
     
-    NSString *alertMessage = APCLocalizedString(@"Oops! Something went wrong. We are really sorry for the inconvenience. Since we are not taking any risk on your data, you may need to restart the app.", @"");
+    NSString *alertMessage = NSLocalizedStringWithDefaultValue(@"Oops! Something went wrong. We are really sorry for the inconvenience. Since we are not taking any risk on your data, you may need to restart the app.", @"APCAppCore", APCBundle(), @"Oops! Something went wrong. We are really sorry for the inconvenience. Since we are not taking any risk on your data, you may need to restart the app.", @"");
     
-    UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:APCLocalizedString(@"Okay", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
+    UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Okay", @"APCAppCore", APCBundle(), @"Okay", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
         exit(0);
     }];
     

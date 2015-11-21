@@ -80,8 +80,8 @@ static CGFloat kHeaderHeight = 157.0f;
     
     self.items = [self prepareContent];
     
-    self.permissionButton.unconfirmedTitle = APCLocalizedString(@"Enter the study and contribute your data", @"");
-    self.permissionButton.confirmedTitle = APCLocalizedString(@"Enter the study and contribute your data", @"");
+    self.permissionButton.unconfirmedTitle = NSLocalizedStringWithDefaultValue(@"Enter the study and contribute your data", @"APCAppCore", APCBundle(), @"Enter the study and contribute your data", @"");
+    self.permissionButton.confirmedTitle = NSLocalizedStringWithDefaultValue(@"Enter the study and contribute your data", @"APCAppCore", APCBundle(), @"Enter the study and contribute your data", @"");
     self.permissionButton.attributed = NO;
     self.permissionButton.alignment = kAPCPermissionButtonAlignmentLeft;
     
@@ -142,7 +142,7 @@ static CGFloat kHeaderHeight = 157.0f;
     [super setupAppearance];
     
     self.footerLabel.font = [UIFont appRegularFontWithSize:16.0f];
-    self.footerLabel.text = APCLocalizedString(@"Sage Bionetworks, a non-profit biomedical research institute, is helping to collect data for this study and distribute it to the study investigators and other researchers. Please provide a unique email address and password to create a secure account.", @"");
+    self.footerLabel.text = NSLocalizedStringWithDefaultValue(@"Sage Bionetworks, a non-profit biomedical research institute, is helping to collect data for this study and distribute it to the study investigators and other researchers. Please provide a unique email address and password to create a secure account.", @"APCAppCore", APCBundle(), @"Sage Bionetworks, a non-profit biomedical research institute, is helping to collect data for this study and distribute it to the study investigators and other researchers. Please provide a unique email address and password to create a secure account.", @"");
     self.footerLabel.textColor = [UIColor appSecondaryColor2];
     
 }
@@ -192,8 +192,8 @@ static CGFloat kHeaderHeight = 157.0f;
 
     {
         APCTableViewTextFieldItem *field = [APCTableViewTextFieldItem new];
-        field.caption = APCLocalizedString(@"Password", @"");
-        field.placeholder = APCLocalizedString(@"add password", @"");
+        field.caption = NSLocalizedStringWithDefaultValue(@"Password", @"APCAppCore", APCBundle(), @"Password", @"");
+        field.placeholder = NSLocalizedStringWithDefaultValue(@"add password", @"APCAppCore", APCBundle(), @"add password", @"");
         field.keyboardType = UIKeyboardTypeASCIICapable;
         field.returnKeyType = UIReturnKeyNext;
         field.identifier = kAPCTextFieldTableViewCellIdentifier;
@@ -213,8 +213,8 @@ static CGFloat kHeaderHeight = 157.0f;
             case kAPCUserInfoItemTypeDateOfBirth:
             {
                 APCTableViewDatePickerItem *field = [APCTableViewDatePickerItem new];
-                field.caption = APCLocalizedString(@"Birthdate", @"");
-                field.placeholder = APCLocalizedString(@"add birthdate", @"");
+                field.caption = NSLocalizedStringWithDefaultValue(@"Birthdate", @"APCAppCore", APCBundle(), @"Birthdate", @"");
+                field.placeholder = NSLocalizedStringWithDefaultValue(@"add birthdate", @"APCAppCore", APCBundle(), @"add birthdate", @"");
                 field.datePickerMode = UIDatePickerModeDate;
                 field.style = UITableViewCellStyleValue1;
                 field.selectionStyle = UITableViewCellSelectionStyleGray;
@@ -456,7 +456,7 @@ static CGFloat kHeaderHeight = 157.0f;
                         isContentValid = [[(APCTableViewTextFieldItem *)item value] isValidForRegex:kAPCGeneralInfoItemEmailRegEx];
                         
                         if (errorMessage) {
-                            *errorMessage = APCLocalizedString(@"Please enter a valid email address.", @"");
+                            *errorMessage = NSLocalizedStringWithDefaultValue(@"Please enter a valid email address.", @"APCAppCore", APCBundle(), @"Please enter a valid email address.", @"");
                         }
                     }
                         break;
@@ -467,14 +467,14 @@ static CGFloat kHeaderHeight = 157.0f;
                             isContentValid = NO;
                             
                             if (errorMessage) {
-                                *errorMessage = APCLocalizedString(@"Please enter a Password.", @"");
+                                *errorMessage = NSLocalizedStringWithDefaultValue(@"Please enter a Password.", @"APCAppCore", APCBundle(), @"Please enter a Password.", @"");
                             }
                         }
                         else if ([[(APCTableViewTextFieldItem *)item value] length] < kAPCPasswordMinimumLength) {
                             isContentValid = NO;
                             
                             if (errorMessage) {
-                                *errorMessage = [NSString stringWithFormat:APCLocalizedString(@"Password should be at least %d characters", ), kAPCPasswordMinimumLength];
+                                *errorMessage = [NSString stringWithFormat:NSLocalizedStringWithDefaultValue(@"Password should be at least %d characters", @"APCAppCore", APCBundle(), @"Password should be at least %d characters", @"Description of password requirements, to be filled in with the minimum password length"), kAPCPasswordMinimumLength];
                             }
                         }
                     }
@@ -514,11 +514,11 @@ static CGFloat kHeaderHeight = 157.0f;
             fieldValid = [self.emailTextField.text isValidForRegex:kAPCGeneralInfoItemEmailRegEx];
             
             if (errorMessage && !fieldValid) {
-                *errorMessage = APCLocalizedString(@"Please enter a valid email address.", @"");
+                *errorMessage = NSLocalizedStringWithDefaultValue(@"Please enter a valid email address.", @"APCAppCore", APCBundle(), @"Please enter a valid email address.", @"");
             }
         } else {
             if (errorMessage && !fieldValid) {
-                *errorMessage = APCLocalizedString(@"Email address cannot be left empty.", @"");
+                *errorMessage = NSLocalizedStringWithDefaultValue(@"Email address cannot be left empty.", @"APCAppCore", APCBundle(), @"Email address cannot be left empty.", @"");
             }
         }
         
@@ -526,7 +526,7 @@ static CGFloat kHeaderHeight = 157.0f;
         
         if (self.nameTextField.text.length == 0) {
             if (errorMessage && !fieldValid) {
-                *errorMessage = APCLocalizedString(@"Name cannot be left empty.", @"");
+                *errorMessage = NSLocalizedStringWithDefaultValue(@"Name cannot be left empty.", @"APCAppCore", APCBundle(), @"Name cannot be left empty.", @"");
             }
         } else {
             fieldValid = YES;
@@ -537,12 +537,12 @@ static CGFloat kHeaderHeight = 157.0f;
                 if ([[item value] length] == 0) {
                     
                     if (errorMessage) {
-                        *errorMessage = APCLocalizedString(@"Please enter a Password.", @"");
+                        *errorMessage = NSLocalizedStringWithDefaultValue(@"Please enter a Password.", @"APCAppCore", APCBundle(), @"Please enter a Password.", @"");
                     }
                 } else if ([[item value] length] < kAPCPasswordMinimumLength) {
                     
                     if (errorMessage) {
-                        *errorMessage = [NSString stringWithFormat:APCLocalizedString(@"Password should be at least %d characters", ), kAPCPasswordMinimumLength];
+                        *errorMessage = [NSString stringWithFormat:NSLocalizedStringWithDefaultValue(@"Password should be at least %d characters", @"APCAppCore", APCBundle(), @"Password should be at least %d characters", @"Description of password requirements, to be filled in with the minimum password length"), kAPCPasswordMinimumLength];
                     }
                 } else {
                     fieldValid = YES;
@@ -612,7 +612,7 @@ static CGFloat kHeaderHeight = 157.0f;
         [self next];
     }
     else {
-        UIAlertController *alert = [UIAlertController simpleAlertWithTitle:APCLocalizedString(@"General Information", @"") message:message];
+        UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedStringWithDefaultValue(@"General Information", @"APCAppCore", APCBundle(), @"General Information", @"") message:message];
         [self presentViewController:alert animated:YES completion:nil];
     }
 }
@@ -691,7 +691,7 @@ static CGFloat kHeaderHeight = 157.0f;
                 if (error.code == kSBBInternetNotConnected || error.code == kSBBServerNotReachable || error.code == kSBBServerUnderMaintenance) {
                     [spinnerController dismissViewControllerAnimated:NO completion:^{
                     
-                        UIAlertController *alertView = [UIAlertController alertControllerWithTitle:APCLocalizedString(@"Sign Up", @"")
+                        UIAlertController *alertView = [UIAlertController alertControllerWithTitle:NSLocalizedStringWithDefaultValue(@"Sign Up", @"APCAppCore", APCBundle(), @"Sign Up", @"")
                                                                                             message:error.localizedDescription
                                                                                      preferredStyle:UIAlertControllerStyleAlert];
 
@@ -704,14 +704,14 @@ static CGFloat kHeaderHeight = 157.0f;
                 } else {
                     [spinnerController dismissViewControllerAnimated:NO completion:^{
                         
-                        UIAlertController *alertView = [UIAlertController alertControllerWithTitle:APCLocalizedString(@"Sign Up", @"")
+                        UIAlertController *alertView = [UIAlertController alertControllerWithTitle:NSLocalizedStringWithDefaultValue(@"Sign Up", @"APCAppCore", APCBundle(), @"Sign Up", @"")
                                                                                            message:error.message
                                                                                     preferredStyle:UIAlertControllerStyleAlert];
                         
-                        UIAlertAction* okAction = [UIAlertAction actionWithTitle:APCLocalizedString(@"Change Details", @"") style:UIAlertActionStyleDefault
+                        UIAlertAction* okAction = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Change Details", @"APCAppCore", APCBundle(), @"Change Details", @"") style:UIAlertActionStyleDefault
                                                                               handler:^(UIAlertAction * __unused action) {}];
                         
-                        UIAlertAction* changeAction = [UIAlertAction actionWithTitle:APCLocalizedString(@"Send Again", nil) style:UIAlertActionStyleDefault
+                        UIAlertAction* changeAction = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Send Again", @"APCAppCore", APCBundle(), @"Send Again", nil) style:UIAlertActionStyleDefault
                                                                              handler:^(UIAlertAction * __unused action) {[self next];}];
                         
                         
@@ -748,7 +748,7 @@ static CGFloat kHeaderHeight = 157.0f;
     __weak typeof(self) weakSelf = self;
     
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-    UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:APCLocalizedString(@"Take Photo", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
+    UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Take Photo", @"APCAppCore", APCBundle(), @"Take Photo", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
         
         [self.permissionsManager requestForPermissionForType:kAPCSignUpPermissionsTypeCamera withCompletion:^(BOOL granted, NSError *error) {
             if (granted) {
@@ -766,7 +766,7 @@ static CGFloat kHeaderHeight = 157.0f;
         [alertController addAction:cameraAction];
     }
     
-    UIAlertAction *libraryAction = [UIAlertAction actionWithTitle:APCLocalizedString(@"Choose from Library", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
+    UIAlertAction *libraryAction = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Choose from Library", @"APCAppCore", APCBundle(), @"Choose from Library", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
         [self.permissionsManager requestForPermissionForType:kAPCSignUpPermissionsTypePhotoLibrary withCompletion:^(BOOL granted, NSError *error) {
             if (granted) {
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -781,7 +781,7 @@ static CGFloat kHeaderHeight = 157.0f;
     }];
     [alertController addAction:libraryAction];
     
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:APCLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Cancel", @"APCAppCore", APCBundle(), @"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
         
     }];
     [alertController addAction:cancelAction];
@@ -811,12 +811,12 @@ static CGFloat kHeaderHeight = 157.0f;
 
 - (void)presentSettingsAlert:(NSError *)error
 {
-    UIAlertController *alertContorller = [UIAlertController alertControllerWithTitle:APCLocalizedString(@"Permissions Denied", @"") message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *dismiss = [UIAlertAction actionWithTitle:APCLocalizedString(@"Dismiss", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
+    UIAlertController *alertContorller = [UIAlertController alertControllerWithTitle:NSLocalizedStringWithDefaultValue(@"Permissions Denied", @"APCAppCore", APCBundle(), @"Permissions Denied", @"") message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *dismiss = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Dismiss", @"APCAppCore", APCBundle(), @"Dismiss", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
         
     }];
     [alertContorller addAction:dismiss];
-    UIAlertAction *settings = [UIAlertAction actionWithTitle:APCLocalizedString(@"Settings", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
+    UIAlertAction *settings = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Settings", @"APCAppCore", APCBundle(), @"Settings", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
     }];
     [alertContorller addAction:settings];

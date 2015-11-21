@@ -99,7 +99,7 @@ static CGFloat const kHeaderHeight = 127.0f;
 
 - (void)setStepNumber:(NSUInteger)stepNumber title:(NSString *)title
 {
-    NSString *step = [NSString stringWithFormat:APCLocalizedString(@"Step %i", @""), stepNumber];
+    NSString *step = [NSString stringWithFormat:NSLocalizedStringWithDefaultValue(@"Step %i", @"APCAppCore", APCBundle(), @"Step %i", @""), stepNumber];
     
     NSString *string = [NSString stringWithFormat:@"%@: %@", step, title];
     
@@ -212,7 +212,7 @@ static CGFloat const kHeaderHeight = 127.0f;
             isContentValid = NO;
             
             if (errorMessage) {
-                *errorMessage = APCLocalizedString(@"Please enter a valid email address.", @"");
+                *errorMessage = NSLocalizedStringWithDefaultValue(@"Please enter a valid email address.", @"APCAppCore", APCBundle(), @"Please enter a valid email address.", @"");
             }
         }
     }

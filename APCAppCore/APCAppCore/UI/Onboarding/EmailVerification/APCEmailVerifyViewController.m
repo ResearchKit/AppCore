@@ -97,7 +97,7 @@ static NSString * const kAPCPleaseCheckEmailAlertOkButton = @"OK";
 
     [self setupAppearance];
 
-    self.title = APCLocalizedString(@"Email Verification", nil);
+    self.title = NSLocalizedStringWithDefaultValue(@"Email Verification", @"APCAppCore", APCBundle(), @"Email Verification", nil);
     self.pleaseCheckEmailAlert = nil;
 
     // Hide the "johnny appleseed@..."
@@ -336,7 +336,7 @@ static NSString * const kAPCPleaseCheckEmailAlertOkButton = @"OK";
 
     [self hideSpinnerUsingAnimation: YES andThenDoThis:^{
 
-        UIAlertController *alert = [UIAlertController simpleAlertWithTitle:APCLocalizedString(@"User Consent Error", @"") message:error.localizedDescription];
+        UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedStringWithDefaultValue(@"User Consent Error", @"APCAppCore", APCBundle(), @"User Consent Error", @"") message:error.localizedDescription];
 
         [self presentViewController:alert animated:YES completion:nil];
 
@@ -349,7 +349,7 @@ static NSString * const kAPCPleaseCheckEmailAlertOkButton = @"OK";
 
     [self hideSpinnerUsingAnimation: YES andThenDoThis:^{
 
-        UIAlertController *alert = [UIAlertController simpleAlertWithTitle:APCLocalizedString(@"User Sign In Error", @"") message:error.localizedDescription];
+        UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedStringWithDefaultValue(@"User Sign In Error", @"APCAppCore", APCBundle(), @"User Sign In Error", @"") message:error.localizedDescription];
 
         [self presentViewController:alert animated:YES completion:nil];
 

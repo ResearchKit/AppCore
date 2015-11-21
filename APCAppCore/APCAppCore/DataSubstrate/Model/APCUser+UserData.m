@@ -40,16 +40,16 @@
  Biologial Sex 
  ****************/
 + (NSArray *) sexTypesInStringValue {
-    return @[ APCLocalizedString(@"Male", @""), APCLocalizedString(@"Female", @"")];
+    return @[ NSLocalizedStringWithDefaultValue(@"Male", @"APCAppCore", APCBundle(), @"Male", @""), NSLocalizedStringWithDefaultValue(@"Female", @"APCAppCore", APCBundle(), @"Female", @"")];
 }
 
 + (HKBiologicalSex) sexTypeFromStringValue:(NSString *)stringValue {
     HKBiologicalSex sexType;
     
-    if ([stringValue isEqualToString:APCLocalizedString(@"Male", @"")]) {
+    if ([stringValue isEqualToString:NSLocalizedStringWithDefaultValue(@"Male", @"APCAppCore", APCBundle(), @"Male", @"")]) {
         sexType = HKBiologicalSexMale;
     }
-    else if ([stringValue isEqualToString:APCLocalizedString(@"Female", @"")]) {
+    else if ([stringValue isEqualToString:NSLocalizedStringWithDefaultValue(@"Female", @"APCAppCore", APCBundle(), @"Female", @"")]) {
         sexType = HKBiologicalSexFemale;
     }
     else {

@@ -539,6 +539,6 @@
 
 - (NSString *)noInternetString
 {
-    return APCLocalizedString(@"No network connection. Please connect to the internet and try again.", @"No Internet");
+    return NSLocalizedStringWithDefaultValue(@"No network connection. Please connect to the internet and try again.", @"APCAppCore", APCBundle(), @"No network connection. Please connect to the internet and try again.", @"No Internet");
 }
 @end

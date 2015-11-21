@@ -56,8 +56,8 @@ static NSInteger kSecondsPerMinute = 60;
 static NSInteger kMinutesPerHour = 60;
 static NSInteger kSubtaskReminderDelayMinutes = 120;
 
-NSString * const kTaskReminderMessage = @"Please complete your %@ activities today. Thank you for participating in the %@ study! %@";
-NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
+NSString * gTaskReminderMessage;
+NSString * gTaskReminderDelayMessage;
 
 @interface APCTasksReminderManager ()
 @property (strong, nonatomic) NSArray *taskGroups;
@@ -65,6 +65,12 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
 @end
 
 @implementation APCTasksReminderManager
+
++ (void)initialize
+{
+    gTaskReminderMessage = NSLocalizedStringWithDefaultValue(@"Please complete your %@ activities today. Thank you for participating in the %@ study! %@", @"APCAppCore", APCBundle(), @"Please complete your %@ activities today. Thank you for participating in the %@ study! %@", @"Text for daily reminder to complete activities, to be filled in with the name of the study, the name of the study again, and the concatenation of the bodies of the individual reminders of activities yet to complete.");
+    gTaskReminderDelayMessage = NSLocalizedStringWithDefaultValue(@"Remind me in 1 hour", @"APCAppCore", APCBundle(), @"Remind me in 1 hour", @"\"Snooze\" prompt for reminder notification");
+}
 
 - (instancetype)init {
     self = [super init];
@@ -229,7 +235,7 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
     //Add Action for delay reminder
     UIMutableUserNotificationAction *delayReminderAction = [[UIMutableUserNotificationAction alloc] init];
     delayReminderAction.identifier = kDelayReminderIdentifier;
-    delayReminderAction.title = APCLocalizedString(kTaskReminderDelayMessage, nil);
+    delayReminderAction.title = gTaskReminderDelayMessage;
     delayReminderAction.activationMode = UIUserNotificationActivationModeBackground;
     delayReminderAction.destructive = NO;
     delayReminderAction.authenticationRequired = NO;
@@ -267,7 +273,7 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
         }
     }
     
-    return [NSString stringWithFormat:kTaskReminderMessage, [self studyName], [self studyName], reminders];
+    return [NSString stringWithFormat:gTaskReminderMessage, [self studyName], [self studyName], reminders];
 }
 
 -(NSString *)subtaskReminderMessage{
@@ -284,7 +290,7 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
         }
     }
     
-    return [NSString stringWithFormat:kTaskReminderMessage, [self studyName], [self studyName], reminders];;
+    return [NSString stringWithFormat:gTaskReminderMessage, [self studyName], [self studyName], reminders];;
 }
 
 - (NSString *)studyName {

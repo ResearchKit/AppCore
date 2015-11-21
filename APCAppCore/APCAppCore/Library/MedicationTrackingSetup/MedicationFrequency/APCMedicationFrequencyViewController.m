@@ -40,18 +40,16 @@
 #import "UIColor+APCAppearance.h"
 #import "NSBundle+Helper.h"
 
-static  NSString  *kViewControllerName              = @"Medication Frequency";
+static  NSString  *gViewControllerName;
+static  NSArray   *sectionTitles;
 
 static  NSString  *kFrequencyTableTimesCellName     = @"APCFrequencyTableViewTimesCell";
 static  NSString  *kFrequencyEverydayTableCellName  = @"APCFrequencyEverydayTableViewCell";
 static  NSString  *kFrequencyDayTableCellName       = @"APCFrequencyDayTableViewCell";
 
-static  NSString  *kEveryDayOfWeekCaption           = @"Every Day";
+static  NSString  *gEveryDayOfWeekCaption;
 
-static  NSString  *daysOfWeekNames[]                = { @"Monday", @"Tuesday", @"Wednesday", @"Thursday", @"Friday", @"Saturday", @"Sunday" };
-static  NSString  *daysOfWeekNamesAbbreviated[]     = { @"Mon",    @"Tue",     @"Wed",       @"Thu",      @"Fri",    @"Sat",      @"Sun"    };
-
-static  NSUInteger  numberOfDaysOfWeekNames         = (sizeof(daysOfWeekNames) / sizeof(NSString *));
+static  NSArray<NSString *>  *daysOfWeekNames;
 
 static  NSUInteger kAllDaysOfWeekCount              =    7;
 
@@ -96,6 +94,15 @@ static  CGFloat    kAPCMedicationRowHeight          = 64.0;
 
 @implementation APCMedicationFrequencyViewController
 
++ (void)initialize
+{
+    gViewControllerName = NSLocalizedStringWithDefaultValue(@"Medication Frequency", @"APCAppCore", APCBundle(), @"Medication Frequency", @"Title for view shown to select how often medication is taken");
+    gEveryDayOfWeekCaption = NSLocalizedStringWithDefaultValue(@"Every Day", @"APCAppCore", APCBundle(), @"Every Day", @"Text of choice indicating medication is taken every day");
+    sectionTitles = @[ NSLocalizedStringWithDefaultValue(@"How many times a day do you take this medication?", @"APCAppCore", APCBundle(), @"How many times a day do you take this medication?", @"Title for section where user chooses how many times per day they take a medication"), NSLocalizedStringWithDefaultValue(@"On what days do you take this medication?", @"APCAppCore", APCBundle(), @"On what days do you take this medication?", @"Title for section where user chooses which days of the week they take a medication"), @"        " ];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    daysOfWeekNames = [dateFormatter weekdaySymbols];
+}
+
 - (void)dealloc {
     _tabulator.delegate = nil;
     _tabulator.dataSource = nil;
@@ -139,7 +146,7 @@ static  CGFloat    kAPCMedicationRowHeight          = 64.0;
     } else if (indexPath.section == kEveryDayOfWeekSection) {
         APCFrequencyEverydayTableViewCell  *everydayCell = (APCFrequencyEverydayTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kFrequencyEverydayTableCellName];
         everydayCell.selectionStyle = UITableViewCellSelectionStyleNone;
-        everydayCell.everydayTitle.text = kEveryDayOfWeekCaption;
+        everydayCell.everydayTitle.text = gEveryDayOfWeekCaption;
         if ([self numberOfSelectedDays] >= kAllDaysOfWeekCount) {
             everydayCell.accessoryType = UITableViewCellAccessoryCheckmark;
             everydayCell.everydayTitle.textColor = [UIColor appPrimaryColor];
@@ -180,7 +187,7 @@ static  CGFloat    kAPCMedicationRowHeight          = 64.0;
             everydayCell.accessoryType = UITableViewCellAccessoryNone;
             [self updateAllSelectedDaysListToState:NO];
         }
-        for (NSUInteger  day = 0;  day < numberOfDaysOfWeekNames;  day++) {
+        for (NSUInteger  day = 0;  day < daysOfWeekNames.count;  day++) {
             NSIndexPath  *path = [NSIndexPath indexPathForRow:day inSection:kDaysOfWeekSection];
             APCFrequencyDayTableViewCell  *cell = (APCFrequencyDayTableViewCell *)[tableView cellForRowAtIndexPath:path];
             [self setupSelectedCell:cell toSelectedState:self.everyDayWasSelected];
@@ -200,8 +207,6 @@ static  CGFloat    kAPCMedicationRowHeight          = 64.0;
     [self setupDoneButtonState];
     [self setupEverydayCellState];
 }
-
-static  NSString  *sectionTitles[] = { @"How many times a day do you take this medication?", @"On what days do you take this medication?", @"        " };
 
 - (CGFloat)tableView:(UITableView *) __unused tableView heightForHeaderInSection:(NSInteger)section
 {
@@ -226,7 +231,6 @@ static  NSString  *sectionTitles[] = { @"How many times a day do you take this m
         label.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0];
         label.textColor = [UIColor blackColor];
         NSString  *title = sectionTitles[section];
-        title = APCLocalizedString(title, nil);
         label.text = title;
         [view addSubview:label];
     }
@@ -413,7 +417,7 @@ static  NSString  *sectionTitles[] = { @"How many times a day do you take this m
     
     UIButton  *valueButton = [self findSelectedButton];
     
-    for (NSUInteger  day = 0;  day < numberOfDaysOfWeekNames;  day++) {
+    for (NSUInteger  day = 0;  day < daysOfWeekNames.count;  day++) {
         NSNumber  *number = self.selectedDays[day];
         if ([number boolValue]) {
             NSString  *dayName = daysOfWeekNames[day];
@@ -445,7 +449,7 @@ static  NSString  *sectionTitles[] = { @"How many times a day do you take this m
 
 - (NSString *)title
 {
-    return  kViewControllerName;
+    return  gViewControllerName;
 }
 
 - (void)viewDidLoad
@@ -454,7 +458,7 @@ static  NSString  *sectionTitles[] = { @"How many times a day do you take this m
     
     self.tabulator.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
-    UIBarButtonItem  *donester = [[UIBarButtonItem alloc] initWithTitle:APCLocalizedString(@"Done", @"Done") style:UIBarButtonItemStyleDone target:self action:@selector(doneButtonTapped:)];
+    UIBarButtonItem  *donester = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Done", @"APCAppCore", APCBundle(), @"Done", @"Done") style:UIBarButtonItemStyleDone target:self action:@selector(doneButtonTapped:)];
     self.donester = donester;
     self.navigationItem.rightBarButtonItem = donester;
     self.donester.enabled = NO;
@@ -488,7 +492,7 @@ static  NSString  *sectionTitles[] = { @"How many times a day do you take this m
         [self setupEverydayCellState];
     } else {
         self.daysAndDoses = [NSMutableDictionary dictionary];
-        for (NSUInteger  day = 0;  day < numberOfDaysOfWeekNames;  day++) {
+        for (NSUInteger  day = 0;  day < daysOfWeekNames.count;  day++) {
             [self.daysAndDoses setObject:[NSNumber numberWithInteger:0] forKey:daysOfWeekNames[day]];
         }
     }

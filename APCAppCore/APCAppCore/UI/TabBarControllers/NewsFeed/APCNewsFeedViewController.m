@@ -58,7 +58,7 @@
     self.dateFormatter = [NSDateFormatter new];
     self.dateFormatter.dateFormat = @"MM/dd/yy";
     
-    self.title = APCLocalizedString(@"News Feed", nil);
+    self.title = NSLocalizedStringWithDefaultValue(@"News Feed", @"APCAppCore", APCBundle(), @"News Feed", nil);
     
     [self setupAppearance];
 }
@@ -86,7 +86,7 @@
     self.emptyLabel = [UILabel new];
     self.emptyLabel.frame = self.tableView.bounds;
     
-    self.emptyLabel.text = APCLocalizedString(@"There's nothing here yet.", nil);
+    self.emptyLabel.text = NSLocalizedStringWithDefaultValue(@"There's nothing here yet.", @"APCAppCore", APCBundle(), @"There's nothing here yet.", nil);
     self.emptyLabel.textColor = [UIColor appSecondaryColor3];
     self.emptyLabel.textAlignment = NSTextAlignmentCenter;
     self.emptyLabel.font = [UIFont appMediumFontWithSize:22];
@@ -166,7 +166,7 @@
         if (!error) {
             strongSelf.posts = posts;
         } else {
-            UIAlertController *alert = [UIAlertController simpleAlertWithTitle:APCLocalizedString(@"Fetch Error",nil) message:APCLocalizedString(@"An error occured while fetching news feed.",nil)];
+            UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedStringWithDefaultValue(@"Fetch Error", @"APCAppCore", APCBundle(), @"Fetch Error", nil) message:NSLocalizedStringWithDefaultValue(@"An error occured while fetching news feed.", @"APCAppCore", APCBundle(), @"An error occured while fetching news feed.", nil)];
             [strongSelf presentViewController:alert animated:YES completion:nil];
         }
         

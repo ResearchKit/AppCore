@@ -112,7 +112,7 @@ static CGFloat const kAnimationDuration = 0.35f;
     [_valueLabel setTextColor:[UIColor colorWithWhite:0.17 alpha:1.0]];
     [_valueLabel setTextAlignment:NSTextAlignmentCenter];
     
-    _emptyText = APCLocalizedString(@"No Data", @"No Data");
+    _emptyText = NSLocalizedStringWithDefaultValue(@"No Data", @"APCAppCore", APCBundle(), @"No Data", @"No Data");
 }
 
 - (void)setupEmptyView

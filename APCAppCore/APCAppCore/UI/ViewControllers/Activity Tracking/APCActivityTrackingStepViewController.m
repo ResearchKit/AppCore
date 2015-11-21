@@ -39,7 +39,7 @@ static NSInteger const kYesterdaySegmentIndex    = 0;
 static NSInteger const kTodaySegmentIndex        = 1;
 static NSInteger const kWeekSegmentIndex         = 2;
 
-static NSString   *kLearnMoreString = @"The circle shows estimates of the proportion of time you have been spending in different levels of activity, based on sensor data from your phone or wearable device. It also estimates your accumulated “active minutes,” which combines moderate and vigorous activities, and daily steps. This is intended to be informational, as accurate assessment of every type of activity from sensors is an ongoing area of research and development. Your data can help us refine these estimates and better understand the relationship between activity and heart health.";
+static NSString   *kLearnMoreString;
 
 static NSInteger const kSmallerFontSize = 16;
 static NSInteger const kRegularFontSize = 17;
@@ -68,6 +68,11 @@ static NSInteger const kRegularFontSize = 17;
 @implementation APCActivityTrackingStepViewController
 
 #pragma mark - Lifecycle
+
++ (void)initialize
+{
+    kLearnMoreString = NSLocalizedStringWithDefaultValue(@"The circle shows estimates of the proportion of time you have been spending in different levels of activity, based on sensor data from your phone or wearable device. It also estimates your accumulated “active minutes,” which combines moderate and vigorous activities, and daily steps. This is intended to be informational, as accurate assessment of every type of activity from sensors is an ongoing area of research and development. Your data can help us refine these estimates and better understand the relationship between activity and heart health.", @"APCAppCore", APCBundle(), @"The circle shows estimates of the proportion of time you have been spending in different levels of activity, based on sensor data from your phone or wearable device. It also estimates your accumulated “active minutes,” which combines moderate and vigorous activities, and daily steps. This is intended to be informational, as accurate assessment of every type of activity from sensors is an ongoing area of research and development. Your data can help us refine these estimates and better understand the relationship between activity and heart health.", @"Description of activity tracking");
+}
 
 - (void)viewDidLoad {
     
@@ -126,7 +131,7 @@ static NSInteger const kRegularFontSize = 17;
     self.chartView.legendPaddingHeight = 60.0;
     self.chartView.shouldAnimate = YES;
     self.chartView.shouldAnimateLegend = NO;
-    self.chartView.titleLabel.text = APCLocalizedString(@"Active Minutes", @"Active Minutes");
+    self.chartView.titleLabel.text = NSLocalizedStringWithDefaultValue(@"Active Minutes", @"APCAppCore", APCBundle(), @"Active Minutes", @"Active Minutes");
     
     
     APCAppDelegate *appDelegate = (APCAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -234,14 +239,13 @@ static NSInteger const kRegularFontSize = 17;
         daysRemain = 7 - self.numberOfDaysOfFitnessWeek;
     }
 
-    NSString *days = (daysRemain == 1) ? APCLocalizedString(@"Day", @"Day") : APCLocalizedString(@"Days", @"Days");
+    NSString *days = (daysRemain == 1) ? NSLocalizedStringWithDefaultValue(@"Day", @"APCAppCore", APCBundle(), @"Day", @"Day") : NSLocalizedStringWithDefaultValue(@"Days", @"APCAppCore", APCBundle(), @"Days", @"Days");
     
-    NSString *remaining = [NSString stringWithFormat:APCLocalizedString(@"%lu %@ Remaining",
-                                                                       @"{count} {day/s} Remaining"), daysRemain, days];
+    NSString *remaining = [NSString stringWithFormat:NSLocalizedStringWithDefaultValue(@"%lu %@ Remaining", @"APCAppCore", APCBundle(), @"%lu %@ Remaining", @"{count} {day/s} Remaining"), daysRemain, days];
     
     if (daysRemain <= 0)
     {
-        remaining = APCLocalizedString(@"Here is your activity and sleep assessment for the last 7 days", @"");
+        remaining = NSLocalizedStringWithDefaultValue(@"Here is your activity and sleep assessment for the last 7 days", @"APCAppCore", APCBundle(), @"Here is your activity and sleep assessment for the last 7 days", @"");
     }
     
     return remaining;
@@ -335,15 +339,15 @@ static NSInteger const kRegularFontSize = 17;
     
     [[UIView appearanceWhenContainedIn:[UIAlertController class], nil] setTintColor:[UIColor appPrimaryColor]];
     
-    UIAlertController *alertContorller = [UIAlertController alertControllerWithTitle:nil message:APCLocalizedString(@"Resetting your 7 Day Assessment will clear all recorded data from the week.", @"") preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertController *alertContorller = [UIAlertController alertControllerWithTitle:nil message:NSLocalizedStringWithDefaultValue(@"Resetting your 7 Day Assessment will clear all recorded data from the week.", @"APCAppCore", APCBundle(), @"Resetting your 7 Day Assessment will clear all recorded data from the week.", @"") preferredStyle:UIAlertControllerStyleActionSheet];
     
-    UIAlertAction *withdrawAction = [UIAlertAction actionWithTitle:APCLocalizedString(@"Continue", @"") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * __unused action) {
+    UIAlertAction *withdrawAction = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Continue", @"APCAppCore", APCBundle(), @"Continue", @"") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * __unused action) {
         [self reset];
     }];
     [alertContorller addAction:withdrawAction];
     
     
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:APCLocalizedString(@"Cancel", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Cancel", @"APCAppCore", APCBundle(), @"Cancel", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
         
     }];
     
@@ -479,7 +483,7 @@ static NSInteger const kRegularFontSize = 17;
                                     multiplier:1
                                     constant:0.0]];
     
-    textView.text =APCLocalizedString( kLearnMoreString, nil);
+    textView.text = kLearnMoreString;
     
     textView.textColor = [UIColor blackColor];
     [textView setFont:[UIFont fontWithName:@"HelveticaNeue" size:kRegularFontSize]];

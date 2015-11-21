@@ -32,6 +32,7 @@
 //
 
 #import "NSError+Bridge.h"
+#import "NSError+APCAdditions.h"
 #import "APCLog.h"
 #import <BridgeSDK/BridgeSDK.h>
 #import "APCLog.h"
@@ -46,6 +47,12 @@ static NSString *kSageInvalidUsernameOrPassword  = @"Invalid username or passwor
 
 @implementation NSError (Bridge)
 
++ (void)initialize
+{
+    // This class depends on strings that are localized in the +initialize method of NSError+APCAdditions, so we need to
+    // ensure that it has been initialized before anything in this class gets used
+    [NSError errorWithCode:0 domain:@"APCDummyErrorDomain" failureReason:nil recoverySuggestion:nil];
+}
 
 - (NSString*)bridgeErrorMessage
 {
@@ -62,7 +69,7 @@ static NSString *kSageInvalidUsernameOrPassword  = @"Invalid username or passwor
 		
 		if (e.code == kCFURLErrorNotConnectedToInternet)
 		{
-			message = APCLocalizedString(kAPCNotConnectedErrorMessage, nil);
+			message = kAPCNotConnectedErrorMessage;
 		}
 		else
 		{
@@ -76,44 +83,44 @@ static NSString *kSageInvalidUsernameOrPassword  = @"Invalid username or passwor
 		NSDictionary * errors = [code valueForKey: kSageErrorsKey];
 		if([errors valueForKey: kSageErrorEmailKey])
 		{
-			message = APCLocalizedString(kAPCBadEmailAddressErrorMessage, nil);
+			message = kAPCBadEmailAddressErrorMessage;
 		}
 		else if([errors valueForKey: kSageErrorPasswordKey])
 		{
-			message = APCLocalizedString(kAPCBadPasswordErrorMessage, nil);
+			message = kAPCBadPasswordErrorMessage;
 		} else
 		{
-			message = APCLocalizedString(kAPCInvalidEmailAddressOrPasswordErrorMessage, nil);
+			message = kAPCInvalidEmailAddressOrPasswordErrorMessage;
 		}
 		
 	}
 	else if (self.code == 409)
 	{
-		message = APCLocalizedString(kAPCAccountAlreadyExistsErrorMessage, nil);
+		message = kAPCAccountAlreadyExistsErrorMessage;
 	}
 	else if (self.code == 404)
 	{
-		message = APCLocalizedString(kAPCAccountDoesNotExistErrorMessage, nil);
+		message = kAPCAccountDoesNotExistErrorMessage;
 	}
 	else if ([code isEqual:@(503)] || self.code == 503)
 	{
-		message = APCLocalizedString(kAPCServerBusyErrorMessage, nil);
+		message = kAPCServerBusyErrorMessage;
 	}
 	else if ([code  isEqual: @(kSBBInternetNotConnected)])
 	{
-		message = APCLocalizedString(kAPCNotConnectedErrorMessage, nil);
+		message = kAPCNotConnectedErrorMessage;
 	}
 	else if ([code isEqual:@(kSBBServerNotReachable)])
 	{
-		message = APCLocalizedString(kAPCNotReachableErrorMessage, nil);
+		message = kAPCNotReachableErrorMessage;
 	}
 	else if ([code isEqual:@(kSBBServerUnderMaintenance)])
 	{
-		message = APCLocalizedString(kAPCServerUnderMaintanenceErrorMessage, nil);
+		message = kAPCServerUnderMaintanenceErrorMessage;
 	}
 	else
 	{
-		message = APCLocalizedString(kAPCUnexpectedConditionErrorMessage, nil);
+		message = kAPCUnexpectedConditionErrorMessage;
 	}
 	
 	return message;

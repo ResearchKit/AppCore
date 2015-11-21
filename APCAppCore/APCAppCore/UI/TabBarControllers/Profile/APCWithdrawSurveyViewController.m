@@ -263,7 +263,7 @@
         if (error) {
             APCLogError2 (error);
             [spinnerController dismissViewControllerAnimated:NO completion:^{
-                UIAlertController *alert = [UIAlertController simpleAlertWithTitle:APCLocalizedString(@"Withdraw", @"") message:error.message];
+                UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedStringWithDefaultValue(@"Withdraw", @"APCAppCore", APCBundle(), @"Withdraw", @"") message:error.message];
                 [weakSelf presentViewController:alert animated:YES completion:nil];
             }];
         }

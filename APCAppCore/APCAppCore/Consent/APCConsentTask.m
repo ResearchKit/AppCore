@@ -175,9 +175,9 @@ static NSString*    kStepIdentifierSuffixStart          = @"+X";
                                                                               identifier:@"participant"];
     ORKConsentDocument*     document  = [[ORKConsentDocument alloc] init];
     
-    document.title                = APCLocalizedString(@"Consent", nil);
-    document.signaturePageTitle   = APCLocalizedString(@"Consent", nil);
-    document.signaturePageContent = APCLocalizedString(@"By agreeing you confirm that you read the consent and that you wish to take part in this research study.", nil);
+    document.title                = NSLocalizedStringWithDefaultValue(@"Consent", @"APCAppCore", APCBundle(), @"Consent", nil);
+    document.signaturePageTitle   = NSLocalizedStringWithDefaultValue(@"Consent", @"APCAppCore", APCBundle(), @"Consent", nil);
+    document.signaturePageContent = NSLocalizedStringWithDefaultValue(@"By agreeing you confirm that you read the consent and that you wish to take part in this research study.", @"APCAppCore", APCBundle(), @"By agreeing you confirm that you read the consent and that you wish to take part in this research study.", nil);
     document.sections             = self.documentSections;
     document.htmlReviewContent    = self.documentHtmlContent;
     

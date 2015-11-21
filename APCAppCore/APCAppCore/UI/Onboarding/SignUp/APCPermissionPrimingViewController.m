@@ -50,8 +50,8 @@
     [self setupAppearance];
     [self setupNavAppearance];
     
-    self.title = APCLocalizedString(@"Consent", @"Consent");
-    self.titleLabel.text = APCLocalizedString(@"What to Expect", @"What to Expect");
+    self.title = NSLocalizedStringWithDefaultValue(@"Consent", @"APCAppCore", APCBundle(), @"Consent", @"Consent");
+    self.titleLabel.text = NSLocalizedStringWithDefaultValue(@"What to Expect", @"APCAppCore", APCBundle(), @"What to Expect", @"What to Expect");
     
     APCPermissionsManager *permissionsManager = [self onboardingManager].permissionsManager;
     self.detailTextLabel.text = [permissionsManager permissionDescriptionForType:kAPCSignUpPermissionsTypeHealthKit];

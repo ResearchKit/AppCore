@@ -156,7 +156,7 @@
             
             [spinnerController dismissViewControllerAnimated:NO completion:^{
                 
-                UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:APCLocalizedString(@"Dismiss", @"Dismiss") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
+                UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Dismiss", @"APCAppCore", APCBundle(), @"Dismiss", @"Dismiss") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
                     
                 }];
                 
@@ -169,11 +169,11 @@
         else
         {
             [spinnerController dismissViewControllerAnimated:NO completion:^{
-                UIAlertAction *doneAction = [UIAlertAction actionWithTitle:APCLocalizedString(@"Okay", @"Okay") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
+                UIAlertAction *doneAction = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Okay", @"APCAppCore", APCBundle(), @"Okay", @"Okay") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
                     [weakSelf dismissViewControllerAnimated:YES completion:nil];
                 }];
-                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:APCLocalizedString(@"Success", @"Success")
-                                                                                         message:APCLocalizedString(@"Your data will be emailed to you shortly", @"Your data will be emailed to you shortly")
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedStringWithDefaultValue(@"Success", @"APCAppCore", APCBundle(), @"Success", @"Success")
+                                                                                         message:NSLocalizedStringWithDefaultValue(@"Your data will be emailed to you shortly", @"APCAppCore", APCBundle(), @"Your data will be emailed to you shortly", @"Your data will be emailed to you shortly")
                                                                                   preferredStyle:UIAlertControllerStyleAlert];
                 [alertController addAction:doneAction];
                 

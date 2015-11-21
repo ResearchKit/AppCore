@@ -77,10 +77,10 @@
         self.passcodeView.alpha = 0;
         self.titleLabel.alpha = 0;
         self.touchIdButton.alpha = 0;
-        self.titleLabel.text = APCLocalizedString(@"Touch ID or Enter Passcode", nil);
+        self.titleLabel.text = NSLocalizedStringWithDefaultValue(@"Touch ID or Enter Passcode", @"APCAppCore", APCBundle(), @"Touch ID or Enter Passcode", nil);
     } else {
         self.touchIdButton.hidden = YES;
-        self.titleLabel.text = APCLocalizedString(@"Enter Passcode", nil);
+        self.titleLabel.text = NSLocalizedStringWithDefaultValue(@"Enter Passcode", @"APCAppCore", APCBundle(), @"Enter Passcode", nil);
     }
 }
 
@@ -156,7 +156,7 @@
                 self.wrongAttemptsCount++;
                 
             } else {
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:APCLocalizedString(@"Wrong Passcode", nil) message:APCLocalizedString(@"Please enter again.", nil) preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedStringWithDefaultValue(@"Wrong Passcode", @"APCAppCore", APCBundle(), @"Wrong Passcode", nil) message:NSLocalizedStringWithDefaultValue(@"Please enter again.", @"APCAppCore", APCBundle(), @"Please enter again.", nil) preferredStyle:UIAlertControllerStyleAlert];
                 UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
                     [self.passcodeView reset];
                     [self makePasscodeViewBecomeFirstResponder];
@@ -181,9 +181,9 @@
     NSError *error = nil;
     self.touchContext = [LAContext new];
     if ([self.touchContext canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error]) {
-        self.touchContext.localizedFallbackTitle = APCLocalizedString(@"Enter Passcode", @"");
+        self.touchContext.localizedFallbackTitle = NSLocalizedStringWithDefaultValue(@"Enter Passcode", @"APCAppCore", APCBundle(), @"Enter Passcode", @"");
         
-        NSString *localizedReason = APCLocalizedString(@"Please authenticate with Touch ID", @"");
+        NSString *localizedReason = NSLocalizedStringWithDefaultValue(@"Please authenticate with Touch ID", @"APCAppCore", APCBundle(), @"Please authenticate with Touch ID", @"");
         
         [self.touchContext evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics
                           localizedReason:localizedReason

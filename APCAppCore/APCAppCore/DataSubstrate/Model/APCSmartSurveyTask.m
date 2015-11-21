@@ -572,7 +572,7 @@ static APCDummyObject * _dummyObject;
         [options addObject: choice];
     }];
     if (localConstraints.allowOtherValue) {
-        [options addObject:APCLocalizedString(@"Other", @"Spinner Option")];
+        [options addObject:NSLocalizedStringWithDefaultValue(@"Other", @"APCAppCore", APCBundle(), @"Other", @"Spinner Option")];
     }
     retAnswer = [ORKAnswerFormat choiceAnswerFormatWithStyle:localConstraints.allowMultipleValue ? ORKChoiceAnswerStyleMultipleChoice : ORKChoiceAnswerStyleSingleChoice textChoices:options];
     return retAnswer;

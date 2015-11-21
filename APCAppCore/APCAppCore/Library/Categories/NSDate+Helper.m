@@ -147,11 +147,11 @@ typedef enum : NSUInteger {
     NSString * retValue;
     if([date isEqual:today])
     {
-        retValue = APCLocalizedString(@"Today", nil);
+        retValue = NSLocalizedStringWithDefaultValue(@"Today", @"APCAppCore", APCBundle(), @"Today", nil);
     }
     else if([date isEqual:yesterday])
     {
-        retValue = APCLocalizedString(@"Yesterday", nil);
+        retValue = NSLocalizedStringWithDefaultValue(@"Yesterday", @"APCAppCore", APCBundle(), @"Yesterday", nil);
     }
     else if(([date laterDate:oneWeekAgo] == date) && ([date laterDate:tomorrow] == tomorrow))
     {
