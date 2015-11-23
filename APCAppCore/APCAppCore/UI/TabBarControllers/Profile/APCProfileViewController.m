@@ -1658,7 +1658,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             
             UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:webViewController];
             [weakSelf.navigationController presentViewController:navController animated:YES completion:^{
-                [webViewController.webView loadData:data MIMEType:@"application/pdf" textEncodingName:@"utf-8" baseURL:nil];
+                [webViewController.webView loadData:data MIMEType:@"application/pdf" textEncodingName:@"utf-8" baseURL:[NSURL URLWithString:@"http://"]];
             }];
             
         }];
