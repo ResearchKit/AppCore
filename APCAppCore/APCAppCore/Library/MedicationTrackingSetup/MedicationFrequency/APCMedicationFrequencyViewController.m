@@ -40,14 +40,11 @@
 #import "UIColor+APCAppearance.h"
 #import "NSBundle+Helper.h"
 
-static  NSString  *gViewControllerName;
 static  NSArray   *sectionTitles;
 
 static  NSString  *kFrequencyTableTimesCellName     = @"APCFrequencyTableViewTimesCell";
 static  NSString  *kFrequencyEverydayTableCellName  = @"APCFrequencyEverydayTableViewCell";
 static  NSString  *kFrequencyDayTableCellName       = @"APCFrequencyDayTableViewCell";
-
-static  NSString  *gEveryDayOfWeekCaption;
 
 static  NSArray<NSString *>  *daysOfWeekNames;
 
@@ -96,11 +93,16 @@ static  CGFloat    kAPCMedicationRowHeight          = 64.0;
 
 + (void)initialize
 {
-    gViewControllerName = NSLocalizedStringWithDefaultValue(@"Medication Frequency", @"APCAppCore", APCBundle(), @"Medication Frequency", @"Title for view shown to select how often medication is taken");
-    gEveryDayOfWeekCaption = NSLocalizedStringWithDefaultValue(@"Every Day", @"APCAppCore", APCBundle(), @"Every Day", @"Text of choice indicating medication is taken every day");
-    sectionTitles = @[ NSLocalizedStringWithDefaultValue(@"How many times a day do you take this medication?", @"APCAppCore", APCBundle(), @"How many times a day do you take this medication?", @"Title for section where user chooses how many times per day they take a medication"), NSLocalizedStringWithDefaultValue(@"On what days do you take this medication?", @"APCAppCore", APCBundle(), @"On what days do you take this medication?", @"Title for section where user chooses which days of the week they take a medication"), @"        " ];
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    daysOfWeekNames = [dateFormatter weekdaySymbols];
+    void (^localizeBlock)() = [^{
+        sectionTitles = @[ NSLocalizedStringWithDefaultValue(@"APC_MEDICATION_FREQUENCY_TIMES_PER_DAY_PROMPT", @"APCAppCore", APCBundle(), @"How many times a day do you take this medication?", @"Prompt for section where user chooses how many times per day they take a medication"), NSLocalizedStringWithDefaultValue(@"APC_MEDICATION_FREQUENCY_DAYS_PROMPT", @"APCAppCore", APCBundle(), @"On what days do you take this medication?", @"Prompt for section where user chooses which days of the week they take a medication"), @"        " ];
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        daysOfWeekNames = [dateFormatter weekdaySymbols];
+    } copy];
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:NSCurrentLocaleDidChangeNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull __unused note) {
+        localizeBlock();
+    }];
+    localizeBlock();
 }
 
 - (void)dealloc {
@@ -146,7 +148,7 @@ static  CGFloat    kAPCMedicationRowHeight          = 64.0;
     } else if (indexPath.section == kEveryDayOfWeekSection) {
         APCFrequencyEverydayTableViewCell  *everydayCell = (APCFrequencyEverydayTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kFrequencyEverydayTableCellName];
         everydayCell.selectionStyle = UITableViewCellSelectionStyleNone;
-        everydayCell.everydayTitle.text = gEveryDayOfWeekCaption;
+        everydayCell.everydayTitle.text = NSLocalizedStringWithDefaultValue(@"APC_MEDICATION_FREQUENCY_DAILY", @"APCAppCore", APCBundle(), @"Every Day", @"Text of choice indicating medication is taken every day");
         if ([self numberOfSelectedDays] >= kAllDaysOfWeekCount) {
             everydayCell.accessoryType = UITableViewCellAccessoryCheckmark;
             everydayCell.everydayTitle.textColor = [UIColor appPrimaryColor];
@@ -449,7 +451,7 @@ static  CGFloat    kAPCMedicationRowHeight          = 64.0;
 
 - (NSString *)title
 {
-    return  gViewControllerName;
+    return  NSLocalizedStringWithDefaultValue(@"APC_MEDICATION_FREQUENCY_TITLE", @"APCAppCore", APCBundle(), @"Medication Frequency", @"Title for view shown to select how often medication is taken");
 }
 
 - (void)viewDidLoad

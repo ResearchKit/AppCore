@@ -42,10 +42,6 @@
 #import "APCLog.h"
 #import "APCLocalization.h"
 
-static  NSString  *gViewControllerName;
-
-static  NSString  *gSectionHeaderTitle;
-
 static  NSString  *kColorSwatchTableCellName = @"APCColorSwatchTableViewCell";
 
 static  CGFloat    kSectionHeaderHeight      = 77.0;
@@ -65,12 +61,6 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
 @end
 
 @implementation APCMedicationColorViewController
-
-+ (void)initialize
-{
-    gViewControllerName = NSLocalizedStringWithDefaultValue(@"Medication Label Color", @"APCAppCore", APCBundle(), @"Medication Label Color", @"Title for view shown to select color of medication label");
-    gSectionHeaderTitle = NSLocalizedStringWithDefaultValue(@"Select a Label Color for Your Medication", @"APCAppCore", APCBundle(), @"Select a Label Color for Your Medication", @"Prompt to select color of medication label");
-}
 
 - (void)dealloc {
     _tabulator.delegate = nil;
@@ -189,7 +179,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
         label.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0];
         label.textColor = [UIColor blackColor];
         label.textAlignment = NSTextAlignmentCenter;
-        label.text = gSectionHeaderTitle;
+        label.text = NSLocalizedStringWithDefaultValue(@"APC_MEDICATION_COLOR_PROMPT", @"APCAppCore", APCBundle(), @"Select a Label Color for Your Medication", @"Prompt to select color of medication label");
         [view addSubview:label];
     }
     return  view;
@@ -211,7 +201,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
 
 - (NSString *)title
 {
-    return  gViewControllerName;
+    return  NSLocalizedStringWithDefaultValue(@"APC_MEDICATION_COLOR_TITLE", @"APCAppCore", APCBundle(), @"Medication Label Color", @"Title for view shown to select color of medication label");
 }
 
 - (void)viewWillDisappear:(BOOL)animated
