@@ -17,8 +17,8 @@
 /* Class = "UILabel"; text = "Label"; ObjectID = "AuT-nK-R7J"; */
 "AuT-nK-R7J.text" = "Label";
 
-/* Class = "UILabel"; text = "Thank you for your contribution to this study. We are sorry that you could not continue."; ObjectID = "BcC-vd-hvB"; */
-"BcC-vd-hvB.text" = "Thank you for your contribution to this study. We are sorry that you could not continue.";
+/* Class = "UILabel"; text = "Thank you for your contribution to this study. We are sorry that you could not continue."; ObjectID = "BcC-vd-hvB"; */
+"BcC-vd-hvB.text" = "Thank you for your contribution to this study. We are sorry that you could not continue.";
 
 /* Class = "UIBarButtonItem"; title = "Cancel"; ObjectID = "BoM-Yo-Bi2"; */
 "BoM-Yo-Bi2.title" = "Cancel";

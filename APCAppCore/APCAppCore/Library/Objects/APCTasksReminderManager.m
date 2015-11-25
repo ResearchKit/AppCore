@@ -68,8 +68,15 @@ NSString * gTaskReminderDelayMessage;
 
 + (void)initialize
 {
-    gTaskReminderMessage = NSLocalizedStringWithDefaultValue(@"Please complete your %@ activities today. Thank you for participating in the %@ study! %@", @"APCAppCore", APCBundle(), @"Please complete your %@ activities today. Thank you for participating in the %@ study! %@", @"Text for daily reminder to complete activities, to be filled in with the name of the study, the name of the study again, and the concatenation of the bodies of the individual reminders of activities yet to complete.");
-    gTaskReminderDelayMessage = NSLocalizedStringWithDefaultValue(@"Remind me in 1 hour", @"APCAppCore", APCBundle(), @"Remind me in 1 hour", @"\"Snooze\" prompt for reminder notification");
+    void (^localizeBlock)() = [^{
+        gTaskReminderMessage = NSLocalizedStringWithDefaultValue(@"Please complete your %@ activities today. Thank you for participating in the %@ study! %@", @"APCAppCore", APCBundle(), @"Please complete your %@ activities today. Thank you for participating in the %@ study! %@", @"Text for daily reminder to complete activities, to be filled in with the name of the study, the name of the study again, and the concatenation of the bodies of the individual reminders of activities yet to complete.");
+        gTaskReminderDelayMessage = NSLocalizedStringWithDefaultValue(@"Remind me in 1 hour", @"APCAppCore", APCBundle(), @"Remind me in 1 hour", @"\"Snooze\" prompt for reminder notification");
+    } copy];
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:NSCurrentLocaleDidChangeNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull __unused note) {
+        localizeBlock();
+    }];
+    localizeBlock();
 }
 
 - (instancetype)init {
