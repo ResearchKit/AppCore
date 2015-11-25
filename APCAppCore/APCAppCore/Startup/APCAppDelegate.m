@@ -41,6 +41,7 @@
 #import "APCDemographicUploader.h"
 #import "APCConstants.h"
 #import "APCUtilities.h"
+#import "APCCatastrophicErrorViewController.h"
 
 #import <AVFoundation/AVFoundation.h>
 #import <AudioToolbox/AudioToolbox.h>
@@ -619,23 +620,58 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
 
 - (void) showCatastrophicStartupError
 {
+    [self showCatastrophicStartupErrorWithMessage:nil buttonTitle:nil action:nil];
+}
+
+- (void) showCatastrophicStartupErrorWithMessage:(NSString *)message
+                                     buttonTitle:(NSString *)buttonTitle
+                                          action:(void(^)(void))action
+{
     UIStoryboard *storyBoard = [UIStoryboard storyboardWithName: @"CatastrophicError"
                                                          bundle: [NSBundle appleCoreBundle]];
 
-    UIViewController *errorViewController = [storyBoard instantiateInitialViewController];
+    APCCatastrophicErrorViewController *errorViewController = (APCCatastrophicErrorViewController*)[storyBoard instantiateInitialViewController];
+    
+    errorViewController.message = message;
+    errorViewController.buttonTitle = buttonTitle;
+    errorViewController.buttonAction = action;
 
     self.window.rootViewController = errorViewController;
-    NSError *error = self.catastrophicStartupError;
+    
+    if (message.length == 0) {
+        
+        NSError *error = self.catastrophicStartupError;
+        __block APCAppDelegate *blockSafeSelf = self;
 
-    __block APCAppDelegate *blockSafeSelf = self;
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
 
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            UIAlertController *alert = [UIAlertController simpleAlertWithTitle: error.userInfo [NSLocalizedFailureReasonErrorKey]
+                                                                       message: error.userInfo [NSLocalizedRecoverySuggestionErrorKey]];
 
-        UIAlertController *alert = [UIAlertController simpleAlertWithTitle: error.userInfo [NSLocalizedFailureReasonErrorKey]
-                                                                   message: error.userInfo [NSLocalizedRecoverySuggestionErrorKey]];
+            [blockSafeSelf.window.rootViewController presentViewController: alert animated: YES completion: nil];
+        }];
+    }
+}
 
-        [blockSafeSelf.window.rootViewController presentViewController: alert animated: YES completion: nil];
-    }];
+/*********************************************************************************/
+#pragma mark - Unsupported App Version
+/*********************************************************************************/
+- (BOOL)handleUnsupportedAppVersionError:(NSError*)error bridgeNetworkManager:(id <SBBBridgeNetworkManagerProtocol> __unused)bridgeNetworkManager
+{
+    NSString *localizedButtonTitle = NSLocalizedStringWithDefaultValue(@"APC_BUTTON_TITLE_GOTO_APP_STORE", @"APCAppCore", APCBundle(), @"Open App Store", @"Button title: Open App Store");
+    self.catastrophicStartupError = error;
+    
+    [self showCatastrophicStartupErrorWithMessage:[error localizedDescription]
+                                      buttonTitle:localizedButtonTitle
+                                           action:^{
+                                               [[UIApplication sharedApplication] openURL:[self appStoreLinkURL]];
+                                           }];
+    return YES;
+}
+
+- (NSURL *)appStoreLinkURL
+{
+    return [[NSBundle mainBundle] appStoreLinkURL];
 }
 
 /*********************************************************************************/

@@ -35,4 +35,8 @@
 
 @interface APCCatastrophicErrorViewController : UIViewController
 
+@property (nonatomic) NSString * _Nullable message;
+@property (nonatomic) NSString * _Nullable buttonTitle;
+@property (nonatomic, copy) void (^ _Nullable buttonAction)(void);
+
 @end
