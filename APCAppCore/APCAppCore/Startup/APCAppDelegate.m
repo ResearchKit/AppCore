@@ -425,7 +425,7 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
     
     if (documentHtmlContent != nil && htmlContent != nil)
     {
-        NSString*   path    = [[NSBundle mainBundle] pathForResource:documentHtmlContent ofType:@"html" inDirectory:@"HTMLContent"];
+        NSString*   path    = [[NSBundle mainBundle] pathForResource:documentHtmlContent ofType:@"html"];
         NSAssert(path != nil, @"Unable to locate HTML file: %@", documentHtmlContent);
         
         NSError*    error   = nil;
@@ -492,7 +492,7 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
         
         if (htmlContent != nil)
         {
-            NSString*   path    = [[NSBundle mainBundle] pathForResource:htmlContent ofType:@"html" inDirectory:@"HTMLContent"];
+            NSString*   path    = [[NSBundle mainBundle] pathForResource:htmlContent ofType:@"html"];
             NSAssert(path != nil, @"Unable to locate HTML file: %@", htmlContent);
             
             NSError*    error   = nil;

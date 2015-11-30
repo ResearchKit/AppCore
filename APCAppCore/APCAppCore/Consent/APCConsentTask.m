@@ -499,7 +499,7 @@ static NSString*    kStepIdentifierSuffixStart          = @"+X";
     
     if (documentHtmlContent != nil)
     {
-        NSString*   path    = [[NSBundle mainBundle] pathForResource:documentHtmlContent ofType:@"html" inDirectory:@"HTMLContent"];
+        NSString*   path    = [[NSBundle mainBundle] pathForResource:documentHtmlContent ofType:@"html"];
         NSAssert(path != nil, @"Unable to locate HTML file: %@", documentHtmlContent);
         
         if (path != nil)
@@ -527,7 +527,7 @@ static NSString*    kStepIdentifierSuffixStart          = @"+X";
     NSString*   htmlContent = [properties objectForKey:kHtmlContentTag];
     if (htmlContent != nil)
     {
-        NSString*   path    = [[NSBundle mainBundle] pathForResource:htmlContent ofType:@"html" inDirectory:@"HTMLContent"];
+        NSString*   path    = [[NSBundle mainBundle] pathForResource:htmlContent ofType:@"html"];
         NSAssert(path != nil, @"Unable to locate HTML file: %@", htmlContent);
         
         NSError*    error   = nil;
@@ -790,7 +790,7 @@ static NSString*    kStepIdentifierSuffixStart          = @"+X";
         
         if (htmlContent != nil)
         {
-            NSString*   path    = [[NSBundle mainBundle] pathForResource:htmlContent ofType:@"html" inDirectory:@"HTMLContent"];
+            NSString*   path    = [[NSBundle mainBundle] pathForResource:htmlContent ofType:@"html"];
             NSAssert(path != nil, @"Unable to locate HTML file: %@", htmlContent);
             
             NSError*    error   = nil;
