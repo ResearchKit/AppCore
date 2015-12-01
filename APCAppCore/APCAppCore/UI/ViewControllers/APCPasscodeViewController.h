@@ -43,6 +43,6 @@
 
 @protocol APCPasscodeViewControllerDelegate <NSObject>
 
-- (void)passcodeViewControllerDidSucceed:(APCPasscodeViewController *)viewController;
-- (void)passcodeViewControllerDidFail:(APCPasscodeViewController *)viewController;
+- (void)passcodeViewControllerDidSucceed:(APCPasscodeViewController * _Nonnull)viewController;
+- (void)passcodeViewControllerDidFail:(APCPasscodeViewController * _Nonnull)viewController;
 @end

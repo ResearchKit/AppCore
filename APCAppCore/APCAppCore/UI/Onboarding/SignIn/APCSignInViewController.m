@@ -172,7 +172,7 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
                     if (error) {
                         APCLogError2 (error);
                     
-                        if (error.code == kSBBServerPreconditionNotMet) {
+                        if (error.code == SBBErrorCodeServerPreconditionNotMet) {
                             [self showConsent];
                         } else {
                             NSString *errorMessage = [error message];
@@ -193,7 +193,7 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
                         if (error) {
                             APCLogError2 (error);
                             
-                            if (error.code == kSBBServerPreconditionNotMet) {
+                            if (error.code == SBBErrorCodeServerPreconditionNotMet) {
                                 [self showConsent];
                             } else {
                                 UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedStringWithDefaultValue(@"Sign In", @"APCAppCore", APCBundle(), @"Sign In", @"") message:error.message];

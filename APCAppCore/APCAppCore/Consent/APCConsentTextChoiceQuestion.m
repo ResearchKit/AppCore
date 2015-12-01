@@ -53,18 +53,16 @@
 
 - (BOOL)evaluate:(ORKStepResult*)stepResult
 {
-    ORKChoiceQuestionResult*    questionResult   = stepResult.results.firstObject;
-    BOOL                        evaulationResult = false;
+    ORKChoiceQuestionResult* _Nullable questionResult = (ORKChoiceQuestionResult*)stepResult.results.firstObject;
+    BOOL evaulationResult = false;
     
-    if ([questionResult isKindOfClass:[ORKChoiceQuestionResult class]])
+    if ([questionResult isKindOfClass:[ORKChoiceQuestionResult class]]
+        && questionResult.choiceAnswers != nil && questionResult.choiceAnswers.count > 0)
     {
-        if (questionResult != nil && questionResult.choiceAnswers != nil && questionResult.choiceAnswers.count > 0)
-        {
-            NSString*   answer = questionResult.choiceAnswers.firstObject;
-            NSUInteger  index = [self.answers indexOfObject:answer];
-            
-            evaulationResult = index == self.indexOfExpectedAnswer;
-        }
+        NSString*   answer = questionResult.choiceAnswers.firstObject;
+        NSUInteger  index = [self.answers indexOfObject:answer];
+        
+        evaulationResult = (index == self.indexOfExpectedAnswer);
     }
     
     return evaulationResult;

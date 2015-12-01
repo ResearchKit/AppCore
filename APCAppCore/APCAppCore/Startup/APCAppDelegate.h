@@ -44,7 +44,7 @@ static NSString*    const kDatabaseName                     = @"db.sqlite";
 
 @class APCDataSubstrate, APCDataMonitor, APCScheduler, APCPasscodeViewController, APCTasksReminderManager, APCPassiveDataCollector, APCFitnessAllocation;
 
-@interface APCAppDelegate : UIResponder <UIApplicationDelegate, APCOnboardingManagerProvider, APCPasscodeViewControllerDelegate>
+@interface APCAppDelegate : UIResponder <UIApplicationDelegate, APCOnboardingManagerProvider, APCPasscodeViewControllerDelegate, SBBBridgeAppDelegate>
 
 @property (nonatomic, strong) APCFitnessAllocation *sevenDayFitnessAllocationData;
 @property (strong, nonatomic) UITabBarController *tabBarController;
@@ -78,6 +78,11 @@ static NSString*    const kDatabaseName                     = @"db.sqlite";
 - (UIWindow *)window;
 
 - (NSString*) certificateFileName;
+
+/**
+ * link for opening the app store. AppDelegate implementations can override.
+ */
+- (NSURL *)appStoreLinkURL;
 
 //Show Methods
 - (void) showTabBar;
