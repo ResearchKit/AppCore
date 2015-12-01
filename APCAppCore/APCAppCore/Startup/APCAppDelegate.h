@@ -44,7 +44,7 @@ static NSString*    const kDatabaseName                     = @"db.sqlite";
 
 @class APCDataSubstrate, APCDataMonitor, APCScheduler, APCPasscodeViewController, APCTasksReminderManager, APCPassiveDataCollector, APCFitnessAllocation;
 
-@interface APCAppDelegate : UIResponder <UIApplicationDelegate, APCOnboardingManagerProvider, APCPasscodeViewControllerDelegate, SSBBridgeAppDelegate>
+@interface APCAppDelegate : UIResponder <UIApplicationDelegate, APCOnboardingManagerProvider, APCPasscodeViewControllerDelegate, SBBBridgeAppDelegate>
 
 @property (nonatomic, strong) APCFitnessAllocation *sevenDayFitnessAllocationData;
 @property (strong, nonatomic) UITabBarController *tabBarController;

@@ -656,7 +656,7 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
 /*********************************************************************************/
 #pragma mark - Unsupported App Version
 /*********************************************************************************/
-- (BOOL)handleUnsupportedAppVersionError:(NSError*)error bridgeNetworkManager:(id <SBBBridgeNetworkManagerProtocol> __unused)bridgeNetworkManager
+- (BOOL)handleUnsupportedAppVersionError:(NSError*)error networkManager:(id <SBBNetworkManagerProtocol> __unused)networkManager
 {
     NSString *localizedButtonTitle = NSLocalizedStringWithDefaultValue(@"APC_BUTTON_TITLE_GOTO_APP_STORE", @"APCAppCore", APCBundle(), @"Open App Store", @"Button title: Open App Store");
     self.catastrophicStartupError = error;
