@@ -106,15 +106,15 @@ static NSString *kSageInvalidUsernameOrPassword  = @"Invalid username or passwor
 	{
 		message = kAPCServerBusyErrorMessage;
 	}
-	else if ([code  isEqual: @(kSBBInternetNotConnected)])
+	else if ([code  isEqual: @(SBBErrorCodeInternetNotConnected)])
 	{
 		message = kAPCNotConnectedErrorMessage;
 	}
-	else if ([code isEqual:@(kSBBServerNotReachable)])
+	else if ([code isEqual:@(SBBErrorCodeServerNotReachable)])
 	{
 		message = kAPCNotReachableErrorMessage;
 	}
-	else if ([code isEqual:@(kSBBServerUnderMaintenance)])
+	else if ([code isEqual:@(SBBErrorCodeServerUnderMaintenance)])
 	{
 		message = kAPCServerUnderMaintanenceErrorMessage;
 	}

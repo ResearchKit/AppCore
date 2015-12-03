@@ -1,4 +1,4 @@
-// 
+//
 //  APCCatastrophicErrorViewController.m 
 //  APCAppCore 
 // 
@@ -36,6 +36,8 @@
 
 @interface APCCatastrophicErrorViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *appNameLabel;
+@property (weak, nonatomic) IBOutlet UILabel *optionalMessageLabel;
+@property (weak, nonatomic) IBOutlet UIButton *optionalActionButton;
 @end
 
 @implementation APCCatastrophicErrorViewController
@@ -46,5 +48,31 @@
 
     self.appNameLabel.text = [APCUtilities appName];
 }
+
+- (void)setMessage:(NSString *)message
+{
+    _message = message;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.optionalMessageLabel.text = message;
+        self.optionalMessageLabel.hidden = (message.length == 0);
+    });
+}
+
+- (void)setButtonTitle:(NSString *)buttonTitle
+{
+    _buttonTitle = buttonTitle;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.optionalActionButton setTitle:buttonTitle forState:UIControlStateNormal];
+        self.optionalActionButton.hidden = (buttonTitle.length == 0);
+    });
+}
+
+- (IBAction)buttonTapped:(id __unused)sender
+{
+    if (self.buttonAction) {
+        self.buttonAction();
+    }
+}
+
 
 @end

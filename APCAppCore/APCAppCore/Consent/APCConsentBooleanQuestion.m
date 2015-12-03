@@ -48,7 +48,7 @@
 
 - (BOOL)evaluate:(ORKStepResult*)stepResult
 {
-    ORKBooleanQuestionResult*   questionResult   = stepResult.results.firstObject;
+    ORKBooleanQuestionResult* _Nullable  questionResult   = stepResult.results.firstObject;
     BOOL                        evaulationResult = false;
     
     if ([questionResult isKindOfClass:[ORKBooleanQuestionResult class]])
