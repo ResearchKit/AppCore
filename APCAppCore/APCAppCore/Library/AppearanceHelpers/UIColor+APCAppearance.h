@@ -54,6 +54,7 @@
 + (UIColor *) appTertiaryGrayColor;
 
 + (UIColor *) appBorderLineColor;
++ (UIColor *) appPrimaryNavBarColor;
 
 + (UIColor *)tertiaryColorForString:(NSString *)colorName;
 

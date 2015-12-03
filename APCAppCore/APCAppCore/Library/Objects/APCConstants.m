@@ -218,6 +218,7 @@ NSString *const kTertiaryYellowColorKey = @"TertiaryYellowColorKey";
 NSString *const kTertiaryPurpleColorKey = @"TertiaryPurpleColorKey";
 NSString *const kTertiaryGrayColorKey   = @"TertiaryGrayColorKey";
 NSString *const kBorderLineColor        = @"LightGrayBorderColorKey";
+NSString *const kPrimaryNavBarColorKey  = @"PrimaryNavBarColorKey";
 
 NSString *const kTasksReminderDefaultsOnOffKey = @"TasksReminderDefaultsOnOffKey";
 NSString *const kTasksReminderDefaultsTimeKey = @"TasksReminderDefaultsTimeKey";
