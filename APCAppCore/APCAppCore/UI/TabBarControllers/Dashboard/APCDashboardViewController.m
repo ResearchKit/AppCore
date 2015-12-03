@@ -100,7 +100,7 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
 }
 
 -(void)setUpAppearance{
-    [self.navigationController.navigationBar setBarTintColor:[UIColor whiteColor]];
+    [self.navigationController.navigationBar setBarTintColor:[UIColor appPrimaryNavBarColor]];
     self.navigationController.navigationBar.translucent = NO;
 }
 

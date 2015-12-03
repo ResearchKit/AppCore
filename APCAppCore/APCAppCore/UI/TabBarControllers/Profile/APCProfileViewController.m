@@ -905,7 +905,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
 - (void)setupAppearance
 {
-    [self.navigationController.navigationBar setBarTintColor:[UIColor whiteColor]];
+    [self.navigationController.navigationBar setBarTintColor:[UIColor appPrimaryNavBarColor]];
     
     [self.nameTextField setTextColor:[UIColor blackColor]];
     

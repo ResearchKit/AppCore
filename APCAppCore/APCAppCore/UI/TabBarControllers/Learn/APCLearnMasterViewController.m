@@ -74,7 +74,7 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
 }
 
 -(void)setUpNavigationBarAppearance{
-    [self.navigationController.navigationBar setBarTintColor:[UIColor whiteColor]];
+    [self.navigationController.navigationBar setBarTintColor:[UIColor appPrimaryNavBarColor]];
     self.navigationController.navigationBar.translucent = NO;
 }
 

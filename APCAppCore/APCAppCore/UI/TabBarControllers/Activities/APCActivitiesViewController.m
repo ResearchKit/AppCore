@@ -173,7 +173,7 @@ static CGFloat const kTableViewSectionHeaderHeight = 77;
 
 - (void) setUpNavigationBarAppearance
 {
-    [self.navigationController.navigationBar setBarTintColor: [UIColor whiteColor]];
+    [self.navigationController.navigationBar setBarTintColor: [UIColor appPrimaryNavBarColor]];
 
     self.navigationController.navigationBar.translucent = NO;
 }

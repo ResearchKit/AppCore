@@ -134,6 +134,11 @@
     return [APCAppearanceInfo valueForAppearanceKey:kBorderLineColor];
 }
 
++ (UIColor *)appPrimaryNavBarColor
+{
+    return [APCAppearanceInfo valueForAppearanceKey:kPrimaryNavBarColorKey];
+}
+
 + (UIColor *)colorForTaskId:(NSString *)taskId
 {
     return [APCAppearanceInfo valueForAppearanceKey:taskId];
