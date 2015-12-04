@@ -122,7 +122,8 @@ static  CGFloat    kAPCMedicationRowHeight       = 64.0;
     
     NSString *doseFormat = NSLocalizedStringWithDefaultValue(@"Dose Quantity", @"APCAppCore", APCBundle(), @"Dose %@",
                                                              @"Title for a list item with a medical dose of %@ amount.");
-    NSString  *doseNumberString = [NSString stringWithFormat:doseFormat, @(indexPath.row + 1)];
+    NSString *doseQtyFormat = [NSNumberFormatter localizedStringFromNumber:@(indexPath.row + 1) numberStyle:NSNumberFormatterNoStyle];
+    NSString  *doseNumberString = [NSString stringWithFormat:doseFormat, doseQtyFormat];
     cell.doseNumber.text = doseNumberString;
     
     cell.doseAmount.text = self.lozenge.prescription.dosage.name;
