@@ -48,12 +48,12 @@
 
 - (BOOL)evaluate:(ORKStepResult*)stepResult
 {
-    ORKBooleanQuestionResult* _Nullable  questionResult   = stepResult.results.firstObject;
+    ORKResult* _Nullable  questionResult   = stepResult.results.firstObject;
     BOOL                        evaulationResult = false;
     
     if ([questionResult isKindOfClass:[ORKBooleanQuestionResult class]])
     {
-        evaulationResult = [questionResult booleanAnswer].boolValue == self.expectedAnswer;
+        evaulationResult = [(ORKBooleanQuestionResult*)questionResult booleanAnswer].boolValue == self.expectedAnswer;
     }
     
     return evaulationResult;

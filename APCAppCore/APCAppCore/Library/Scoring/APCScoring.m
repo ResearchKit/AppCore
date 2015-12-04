@@ -422,7 +422,7 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
     }
     
     //check they are now even
-    NSAssert(self.dataPoints.count == self.correlatedScoring.dataPoints.count, @"Arrays are not of equal length. dataPoints.count = %li, correlatedScoring.dataPoints.count = %li", self.dataPoints.count, self.correlatedScoring.dataPoints.count);
+    NSAssert(self.dataPoints.count == self.correlatedScoring.dataPoints.count, @"Arrays are not of equal length. dataPoints.count = %@, correlatedScoring.dataPoints.count = %@", @(self.dataPoints.count), @(self.correlatedScoring.dataPoints.count));
     
     //Arrays are not guaranteed to have non-NSNotFound data beginning at the same index
     NSUInteger dataPointsIndex = [self.dataPoints indexOfObjectPassingTest:^BOOL(id obj, NSUInteger __unused idx, BOOL *stop) {

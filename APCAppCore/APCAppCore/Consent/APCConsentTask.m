@@ -387,7 +387,7 @@ static NSString*    kStepIdentifierSuffixStart          = @"+X";
         else
         {
             self.currentQuestionStepSuffixValue = self.currentQuestionStepSuffixValue + 1;
-            self.currentQuestionStepSuffix = [NSString stringWithFormat:@"%@%04lu", kStepIdentifierSuffixStart, self.currentQuestionStepSuffixValue];
+            self.currentQuestionStepSuffix = [NSString stringWithFormat:@"%@%04lu", kStepIdentifierSuffixStart, (unsigned long)self.currentQuestionStepSuffixValue];
             
             NSMutableArray  *replacer = [NSMutableArray array];
             
@@ -521,7 +521,7 @@ static NSString*    kStepIdentifierSuffixStart          = @"+X";
     NSAssert(self.investigatorLongDescription != nil && [self.investigatorLongDescription isKindOfClass:[NSString class]], @"Improper type for Investigator Long Description");
     
     if ([properties valueForKey:kHideSharingStepTag] != nil) {
-        self.hideSharingStep = [properties valueForKey:kHideSharingStepTag];
+        self.hideSharingStep = [[properties valueForKey:kHideSharingStepTag] boolValue];
     }
 
     NSString*   htmlContent = [properties objectForKey:kHtmlContentTag];
