@@ -62,7 +62,6 @@ static NSString * const kAPCErrorFetchingUsersReason = @"Unable to Fetch Users";
 static NSString * const kAPCErrorFetchingUsersSuggestion = @"Unable to fetch users during migration. This doesn't mean there are no users in the database; it means we can't tell. You may wish to make sure the migration is happening correctly.";
 
 
-
 @implementation APCDataMigrationPolicy_Model4ToModel6
 
 
@@ -94,7 +93,7 @@ static NSString * const kAPCErrorFetchingUsersSuggestion = @"Unable to fetch use
         NSFetchRequest *request = [APCTask requestWithPredicate: [NSPredicate predicateWithFormat: @"%K == %@ && %K == %@",
                                                                   NSStringFromSelector (@selector (taskID)),
                                                                   taskIdV6,
-                                                                  NSStringFromSelector (@selector (taskVersionNumber)),
+                                                                  @"taskVersionNumber",
                                                                   taskVersionV6]];
 
         NSArray *tasks = [context executeFetchRequest: request

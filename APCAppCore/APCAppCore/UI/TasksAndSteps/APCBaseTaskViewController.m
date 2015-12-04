@@ -521,7 +521,8 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
     APCTask * scheduledTask = (APCTask*)[appDelegate.dataSubstrate.mainContext objectWithID:objID];
     id localRestorationData = [coder decodeObjectForKey:@"restorationData"];
     if (scheduledTask) {
-        APCBaseTaskViewController * tvc =[[self alloc] initWithTask:task restorationData:localRestorationData delegate:self];
+        APCBaseTaskViewController * tvc =[[self alloc] initWithTask:task restorationData:localRestorationData delegate:nil];
+        tvc.delegate = tvc;
         tvc.scheduledTask = scheduledTask;
         tvc.restorationIdentifier = [task identifier];
         tvc.restorationClass = self;
