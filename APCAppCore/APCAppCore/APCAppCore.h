@@ -301,6 +301,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCTaskReminder.h>
 #import <APCAppCore/APCFeedParser.h>
 #import <APCAppCore/APCNewsFeedManager.h>
+#import <APCAppCore/APCActivitiesViewSection.h>
 
 /* -------------------------
  Categories
