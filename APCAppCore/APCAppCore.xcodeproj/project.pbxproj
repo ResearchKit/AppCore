@@ -114,7 +114,7 @@
 		369B47551A853E8500777639 /* APCUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 369B47531A853E8500777639 /* APCUtilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		369B47561A853E8500777639 /* APCUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 369B47541A853E8500777639 /* APCUtilities.m */; };
 		369C77931B1F9171007DD687 /* APCDataVerificationServerAccessControl.h in Headers */ = {isa = PBXBuildFile; fileRef = 369C77921B1F9171007DD687 /* APCDataVerificationServerAccessControl.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		369C77961B1FB317007DD687 /* APCActivitiesViewSection.h in Headers */ = {isa = PBXBuildFile; fileRef = 369C77941B1FB317007DD687 /* APCActivitiesViewSection.h */; };
+		369C77961B1FB317007DD687 /* APCActivitiesViewSection.h in Headers */ = {isa = PBXBuildFile; fileRef = 369C77941B1FB317007DD687 /* APCActivitiesViewSection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		369C77971B1FB317007DD687 /* APCActivitiesViewSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 369C77951B1FB317007DD687 /* APCActivitiesViewSection.m */; };
 		369E27EB1A96B7A200D35DFA /* APCMedicationActualMedicine.h in Headers */ = {isa = PBXBuildFile; fileRef = 369E27BB1A96B7A200D35DFA /* APCMedicationActualMedicine.h */; };
 		369E27EC1A96B7A200D35DFA /* APCMedicationActualMedicine.m in Sources */ = {isa = PBXBuildFile; fileRef = 369E27BC1A96B7A200D35DFA /* APCMedicationActualMedicine.m */; };
