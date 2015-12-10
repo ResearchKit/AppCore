@@ -734,6 +734,9 @@
 		F5F12B2B1A2F864B0015982C /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5F12B2A1A2F864B0015982C /* libz.dylib */; };
 		F5F12B2D1A2F86550015982C /* libarchive.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5F12B2C1A2F86550015982C /* libarchive.dylib */; };
 		F5F12B2F1A2F86600015982C /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5F12B2E1A2F86600015982C /* libbz2.dylib */; };
+		FFF698DD1C18B9E200DC56CC /* ORKOrderedTask+APCHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = FFF698DB1C18B9E200DC56CC /* ORKOrderedTask+APCHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FFF698DE1C18B9E200DC56CC /* ORKOrderedTask+APCHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = FFF698DC1C18B9E200DC56CC /* ORKOrderedTask+APCHelper.m */; };
+		FFF698DF1C18B9E200DC56CC /* ORKOrderedTask+APCHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = FFF698DC1C18B9E200DC56CC /* ORKOrderedTask+APCHelper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -1471,6 +1474,8 @@
 		F5F12B2A1A2F864B0015982C /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		F5F12B2C1A2F86550015982C /* libarchive.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libarchive.dylib; path = usr/lib/libarchive.dylib; sourceTree = SDKROOT; };
 		F5F12B2E1A2F86600015982C /* libbz2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbz2.dylib; path = usr/lib/libbz2.dylib; sourceTree = SDKROOT; };
+		FFF698DB1C18B9E200DC56CC /* ORKOrderedTask+APCHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ORKOrderedTask+APCHelper.h"; sourceTree = "<group>"; };
+		FFF698DC1C18B9E200DC56CC /* ORKOrderedTask+APCHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ORKOrderedTask+APCHelper.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2390,6 +2395,8 @@
 				36B7D2541A8D848D0043F968 /* ORKAnswerFormat+Helper.m */,
 				6C6AA33E1B55EA6C0056AD47 /* ORKFileResult+Filename.h */,
 				6C6AA33F1B55EA6C0056AD47 /* ORKFileResult+Filename.m */,
+				FFF698DB1C18B9E200DC56CC /* ORKOrderedTask+APCHelper.h */,
+				FFF698DC1C18B9E200DC56CC /* ORKOrderedTask+APCHelper.m */,
 				F5306CCB1A8BE7F600732E60 /* ORKQuestionResult+APCHelper.h */,
 				F5306CCC1A8BE7F600732E60 /* ORKQuestionResult+APCHelper.m */,
 				366345931B1F863A003CC0EF /* SBBSchedule+APCHelper.h */,
@@ -3070,6 +3077,7 @@
 				CFFDED7A1A95731F00B25581 /* APCMedicationTrackerMedicationsDisplayView.h in Headers */,
 				F5F12AB21A2F78490015982C /* APCSignupPasscodeViewController.h in Headers */,
 				F5B947C91A73272C0034C522 /* NSString+Helper.h in Headers */,
+				FFF698DD1C18B9E200DC56CC /* ORKOrderedTask+APCHelper.h in Headers */,
 				F5B947BF1A73272C0034C522 /* NSDateComponents+Helper.h in Headers */,
 				5B0601CD1AE79B50009D6D65 /* APCFeedTableViewCell.h in Headers */,
 				5B9B36AB1A95DC1700389F42 /* APCActivitiesTableViewCell.h in Headers */,
@@ -3596,6 +3604,7 @@
 				5B0432A01A318AA2000DC9ED /* APCSignInTask.m in Sources */,
 				F5F12A0F1A2F78490015982C /* APCUser+UserData.m in Sources */,
 				F5F12AC11A2F78490015982C /* APCGraphViewController.m in Sources */,
+				FFF698DE1C18B9E200DC56CC /* ORKOrderedTask+APCHelper.m in Sources */,
 				5B534ED51B2179550049C6AB /* APCNewsFeedManager.m in Sources */,
 				7B558D291AE587DF00129167 /* CLLocation+APCAdditions.m in Sources */,
 				5BD6EBA31A9A46BB00C3BFB0 /* APCStudyLandingCollectionViewCell.m in Sources */,
@@ -3856,6 +3865,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FFF698DF1C18B9E200DC56CC /* ORKOrderedTask+APCHelper.m in Sources */,
 				36CCF3A01AA45B790086CD1D /* APCConstants.m in Sources */,
 				36CCF38F1AA4573D0086CD1D /* APCScheduleExpressionParser.m in Sources */,
 				36CCF38B1AA4573D0086CD1D /* APCDayOfMonthSelector.m in Sources */,

@@ -54,6 +54,21 @@ static NSString * const kFileInfoNameKey            = @"filename";
 static NSString * const kFileInfoTimeStampKey       = @"timestamp";
 static NSString * const kFileInfoContentTypeKey     = @"contentType";
 
+//
+//    Interval Tapping Dictionary Keys
+//
+static  NSString  *const  kTappingViewSizeKey                           = @"TappingViewSize";
+static  NSString  *const  kButtonRectLeftKey                            = @"ButtonRectLeft";
+static  NSString  *const  kButtonRectRightKey                           = @"ButtonRectRight";
+static  NSString  *const  kTappingSamplesKey                            = @"TappingSamples";
+static  NSString  *const  kTappedButtonIdKey                            = @"TappedButtonId";
+static  NSString  *const  kTappedButtonNoneKey                          = @"TappedButtonNone";
+static  NSString  *const  kTappedButtonLeftKey                          = @"TappedButtonLeft";
+static  NSString  *const  kTappedButtonRightKey                         = @"TappedButtonRight";
+static  NSString  *const  kTapTimeStampKey                              = @"TapTimeStamp";
+static  NSString  *const  kTapCoordinateKey                             = @"TapCoordinate";
+
+
 // Upload constants
 static NSInteger        kDefaultSchemaRevision      = 1;
 
@@ -347,7 +362,7 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
 - (void) archiveResults
 {
     //get a fresh archive
-    self.archive = [[APCDataArchive alloc]initWithReference:self.task.identifier task:self.scheduledTask];
+    self.archive = [[APCDataArchive alloc] initWithReference:self.task.identifier task:self.scheduledTask];
     
     // Track filenames. Occasionally RK spit out 2 files with the same name which causes trouble on the backend
     // if the archive has 2 files named the same. See BRIDGE-789.
@@ -416,8 +431,47 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
     
 }
 
-- (void)addTappingResultsToArchive:(ORKTappingIntervalResult *)__unused result
+- (void)addTappingResultsToArchive:(ORKTappingIntervalResult *)result
 {
+    NSString *result_filename = result.identifier;
+    NSMutableDictionary  *rawTappingResults = [NSMutableDictionary dictionary];
+    
+    NSString  *tappingViewSize = NSStringFromCGSize(result.stepViewSize);
+    rawTappingResults[kTappingViewSizeKey] = tappingViewSize;
+    
+    rawTappingResults[kStartDateKey] = result.startDate;
+    rawTappingResults[kEndDateKey]   = result.endDate;
+    
+    NSString  *leftButtonRect = NSStringFromCGRect(result.buttonRect1);
+    rawTappingResults[kButtonRectLeftKey] = leftButtonRect;
+    
+    NSString  *rightButtonRect = NSStringFromCGRect(result.buttonRect2);
+    rawTappingResults[kButtonRectRightKey] = rightButtonRect;
+    
+    NSArray  *samples = result.samples;
+    NSMutableArray  *sampleResults = [NSMutableArray array];
+    for (ORKTappingSample *sample  in  samples) {
+        NSMutableDictionary  *aSampleDictionary = [NSMutableDictionary dictionary];
+        
+        aSampleDictionary[kTapTimeStampKey]     = @(sample.timestamp);
+        
+        aSampleDictionary[kTapCoordinateKey]   = NSStringFromCGPoint(sample.location);
+        
+        if (sample.buttonIdentifier == ORKTappingButtonIdentifierNone) {
+            aSampleDictionary[kTappedButtonIdKey] = kTappedButtonNoneKey;
+        } else if (sample.buttonIdentifier == ORKTappingButtonIdentifierLeft) {
+            aSampleDictionary[kTappedButtonIdKey] = kTappedButtonLeftKey;
+        } else if (sample.buttonIdentifier == ORKTappingButtonIdentifierRight) {
+            aSampleDictionary[kTappedButtonIdKey] = kTappedButtonRightKey;
+        }
+        [sampleResults addObject:aSampleDictionary];
+    }
+    rawTappingResults[kTappingSamplesKey] = sampleResults;
+    rawTappingResults[kItemKey] = result_filename;
+    
+    NSDictionary *serializableData = [APCJSONSerializer serializableDictionaryFromSourceDictionary: rawTappingResults];
+    
+    [self.archive insertIntoArchive:serializableData filename:result_filename];
     
 }
 
