@@ -87,21 +87,21 @@ NSString *const APCLeftHandIdentifier            = @"left";
     {
         // Copy steps to duplicate for both right and left hands
         NSString *handIdentifier = rightHand ? APCRightHandIdentifier : APCLeftHandIdentifier;
-        ORKInstructionStep *instructionStep = [tappingInstructionStep copyWithIdentifier:[NSString stringWithFormat:@"%@_%@", APCTapInstructionStepIdentifier, handIdentifier]];
-        ORKActiveStep *activeStep = [tappingStep copyWithIdentifier:[NSString stringWithFormat:@"%@_%@", APCTapTappingStepIdentifier, handIdentifier]];
+        ORKInstructionStep *instructionStep = [tappingInstructionStep copyWithIdentifier:[NSString stringWithFormat:@"%@.%@", APCTapInstructionStepIdentifier, handIdentifier]];
+        ORKActiveStep *activeStep = [tappingStep copyWithIdentifier:[NSString stringWithFormat:@"%@.%@", APCTapTappingStepIdentifier, handIdentifier]];
         activeStep.optional = YES;
 
         // Set instructions and image for right/left hands
         if (rightHand) {
             instructionStep.title = NSLocalizedStringWithDefaultValue(@"Right Hand", @"APCAppCore", APCBundle(), @"Right Hand", @"Title for instruction step for right hand.");
             activeStep.title = NSLocalizedStringWithDefaultValue(@"Right Hand Tap Step Title", @"APCAppCore", APCBundle(),
-                                                                 @"Tap the buttons as quickly as you can using your RIGHT hand.",
+                                                                 @"Tap the buttons using your RIGHT hand.",
                                                                  @"Tapping activity instructions explicitly calling out using the right hand.");
         }
         else {
             instructionStep.title = NSLocalizedStringWithDefaultValue(@"Left Hand", @"APCAppCore", APCBundle(), @"Left Hand", @"Title for instruction step for left hand.");
             activeStep.title = NSLocalizedStringWithDefaultValue(@"Left Hand Tap Step Title", @"APCAppCore", APCBundle(),
-                                                                 @"Tap the buttons as quickly as you can using your LEFT hand.",
+                                                                 @"Tap the buttons using your LEFT hand.",
                                                                  @"Tapping activity instructions explicitly calling out using the left hand.");
             instructionStep.image = [instructionStep.image flippedImage:UIImageOrientationUpMirrored];
         }
