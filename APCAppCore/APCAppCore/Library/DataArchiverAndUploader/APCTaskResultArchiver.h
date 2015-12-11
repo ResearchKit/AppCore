@@ -1,5 +1,5 @@
 //
-//  ORKFileResult+Filename.h
+//  APCTaskResultArchiver.h
 //  APCAppCore
 //
 // Copyright (c) 2015, Apple Inc. All rights reserved.
@@ -31,18 +31,39 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
+#import <Foundation/Foundation.h>
 #import <ResearchKit/ResearchKit.h>
 
-@interface ORKFileResult (Filename)
+NS_ASSUME_NONNULL_BEGIN
+
+@class APCDataArchive;
+@class APCTask;
+
+extern NSString * const APCDefaultTranslationFilename;
+
+@interface APCTaskResultArchiver : NSObject
+
+- (APCDataArchive*)createDataArchiveWithReference:(NSString *)reference task:(APCTask *)task result:(ORKTaskResult *)result;
+
+/**
+ * Dictionary used for the translation of a step result identifier into 
+ * the filename to use when archiving. By default, this dictionary is populated by 
+ * a file FilenameTranslation.json embedded as a resource in the main bundle.
+ */
+@property (nonatomic, strong) NSDictionary *filenameTranslationDictionary;
 
 /**
  Translates the fileResult identifier and stepIdentifier via concatenation in the following scheme:
  fileResultIdentifier_stepIdentifer.
+ Looks up the concatenated identifiers in FilenameTranslation.json.
+ If the file exists and the string exists in the file, returns the value for the key in the json file.
  
  @param     fileResultIdentifier        ORKResult identifier
  @param     stepIdentifier              ORKStep identifier
- @return    filename                    the concatenated string fileResultIdentifier_stepIdentifer.
+ @return    filename                    translated filename if exists in FilenameTranslation.json, else the concatenated string fileResultIdentifier_stepIdentifer.
  */
-+ (NSString *)rawFilenameForFileResultIdentifier: (NSString *)fileResultIdentifier stepIdentifier: (NSString *)stepIdentifier;
+- (NSString *)filenameForFileResultIdentifier: (NSString * _Nullable )fileResultIdentifier stepIdentifier: (NSString * _Nullable)stepIdentifier;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -7,7 +7,7 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
-#import "APCPointSelector.h"
+#import <APCAppCore/APCPointSelector.h>
 
 
 @interface APCScheduleExpressionPointSelectorTests : XCTestCase
@@ -26,10 +26,10 @@
 
 	selector.unitType = kMinutes;
 	
-	XCTAssertEqual(selector.defaultBeginPeriod, expectedBegin);
-	XCTAssertEqual(selector.defaultEndPeriod, expectedEnd);
-	XCTAssertEqual(selector.begin, expectedBegin);
-	XCTAssertEqual(selector.end, expectedEnd);
+	XCTAssertEqualObjects(selector.defaultBeginPeriod, expectedBegin);
+	XCTAssertEqualObjects(selector.defaultEndPeriod, expectedEnd);
+	XCTAssertEqualObjects(selector.begin, expectedBegin);
+	XCTAssertEqualObjects(selector.end, expectedEnd);
 }
 
 - (void)testHourSelectorCreation
@@ -41,10 +41,10 @@
 																				step: nil];
 	selector.unitType = kHours;
 	
-	XCTAssertEqual(selector.defaultBeginPeriod, expectedBegin);
-	XCTAssertEqual(selector.defaultEndPeriod, expectedEnd);
-	XCTAssertEqual(selector.begin, expectedBegin);
-	XCTAssertEqual(selector.end, expectedEnd);
+	XCTAssertEqualObjects(selector.defaultBeginPeriod, expectedBegin);
+	XCTAssertEqualObjects(selector.defaultEndPeriod, expectedEnd);
+	XCTAssertEqualObjects(selector.begin, expectedBegin);
+	XCTAssertEqualObjects(selector.end, expectedEnd);
 }
 
 - (void)testDayOfMonthSelectorCreation
@@ -56,10 +56,10 @@
 																				step: nil];
 	selector.unitType = kDayOfMonth;
 	
-	XCTAssertEqual(selector.defaultBeginPeriod, expectedBegin);
-	XCTAssertEqual(selector.defaultEndPeriod, expectedEnd);
-	XCTAssertEqual(selector.begin, expectedBegin);
-	XCTAssertEqual(selector.end, expectedEnd);
+	XCTAssertEqualObjects(selector.defaultBeginPeriod, expectedBegin);
+	XCTAssertEqualObjects(selector.defaultEndPeriod, expectedEnd);
+	XCTAssertEqualObjects(selector.begin, expectedBegin);
+	XCTAssertEqualObjects(selector.end, expectedEnd);
 }
 
 - (void)testMonthSelectorCreation
@@ -71,10 +71,10 @@
 																				step: nil];
 	selector.unitType = kMonth;
 	
-	XCTAssertEqual(selector.defaultBeginPeriod, expectedBegin);
-	XCTAssertEqual(selector.defaultEndPeriod, expectedEnd);
-	XCTAssertEqual(selector.begin, expectedBegin);
-	XCTAssertEqual(selector.end, expectedEnd);
+	XCTAssertEqualObjects(selector.defaultBeginPeriod, expectedBegin);
+	XCTAssertEqualObjects(selector.defaultEndPeriod, expectedEnd);
+	XCTAssertEqualObjects(selector.begin, expectedBegin);
+	XCTAssertEqualObjects(selector.end, expectedEnd);
 }
 
 - (void)testDayOfWeekSelectorCreation
@@ -86,10 +86,10 @@
 																				step: nil];
 	selector.unitType = kDayOfWeek;
 	
-	XCTAssertEqual(selector.defaultBeginPeriod, expectedBegin);
-	XCTAssertEqual(selector.defaultEndPeriod, expectedEnd);
-	XCTAssertEqual(selector.begin, expectedBegin);
-	XCTAssertEqual(selector.end, expectedEnd);
+	XCTAssertEqualObjects(selector.defaultBeginPeriod, expectedBegin);
+	XCTAssertEqualObjects(selector.defaultEndPeriod, expectedEnd);
+	XCTAssertEqualObjects(selector.begin, expectedBegin);
+	XCTAssertEqualObjects(selector.end, expectedEnd);
 }
 
 

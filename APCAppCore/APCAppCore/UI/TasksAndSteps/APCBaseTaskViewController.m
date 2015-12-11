@@ -37,47 +37,13 @@
 #import "APCDataVerificationClient.h"
 #import "APCDataVerificationServerAccessControl.h"
 #import "APCDataUploader.h"
+#import "APCTaskResultArchiver.h"
 
-#import <objc/runtime.h>
+
 #import <ResearchKit/ResearchKit.h>
-
-static NSString * const kQuestionTypeKey            = @"questionType";
-static NSString * const kQuestionTypeNameKey        = @"questionTypeName";
-static NSString * const kTaskRunKey                 = @"taskRun";
-static NSString * const kItemKey                    = @"item";
-static NSString * const kAppNameKey                 = @"appName";
-static NSString * const kAppVersionKey              = @"appVersion";
-static NSString * const kPhoneInfoKey               = @"phoneInfo";
-static NSString * const kUploadTimeKey              = @"uploadTime";
-static NSString * const kFilesKey                   = @"files";
-static NSString * const kFileInfoNameKey            = @"filename";
-static NSString * const kFileInfoTimeStampKey       = @"timestamp";
-static NSString * const kFileInfoContentTypeKey     = @"contentType";
-
-//
-//    Interval Tapping Dictionary Keys
-//
-static  NSString  *const  kTappingViewSizeKey                           = @"TappingViewSize";
-static  NSString  *const  kButtonRectLeftKey                            = @"ButtonRectLeft";
-static  NSString  *const  kButtonRectRightKey                           = @"ButtonRectRight";
-static  NSString  *const  kTappingSamplesKey                            = @"TappingSamples";
-static  NSString  *const  kTappedButtonIdKey                            = @"TappedButtonId";
-static  NSString  *const  kTappedButtonNoneKey                          = @"TappedButtonNone";
-static  NSString  *const  kTappedButtonLeftKey                          = @"TappedButtonLeft";
-static  NSString  *const  kTappedButtonRightKey                         = @"TappedButtonRight";
-static  NSString  *const  kTapTimeStampKey                              = @"TapTimeStamp";
-static  NSString  *const  kTapCoordinateKey                             = @"TapCoordinate";
-
 
 // Upload constants
 static NSInteger        kDefaultSchemaRevision      = 1;
-
-//    ORK Result Base Class property keys
-//
-static NSString * const kIdentifierKey              = @"identifier";
-static NSString * const kStartDateKey               = @"startDate";
-static NSString * const kEndDateKey                 = @"endDate";
-static NSString * const kUserInfoKey                = @"userInfo";
 
 @interface APCBaseTaskViewController () <UIViewControllerRestoration>
 
@@ -134,9 +100,6 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
 
     return result;
 }
-
-
-
 
 @implementation APCBaseTaskViewController
 
@@ -222,6 +185,14 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
 - (APCAppDelegate *) appDelegate
 {
     return [APCAppDelegate sharedAppDelegate];
+}
+
+- (APCTaskResultArchiver *)taskResultArchiver
+{
+    if (_taskResultArchiver == nil) {
+        _taskResultArchiver = [[APCTaskResultArchiver alloc] init];
+    }
+    return _taskResultArchiver;
 }
 
 
@@ -361,118 +332,11 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
  **/
 - (void) archiveResults
 {
-    //get a fresh archive
-    self.archive = [[APCDataArchive alloc] initWithReference:self.task.identifier task:self.scheduledTask];
-    
-    // Track filenames. Occasionally RK spit out 2 files with the same name which causes trouble on the backend
-    // if the archive has 2 files named the same. See BRIDGE-789.
-    NSMutableSet *filenames = [NSMutableSet new];
-    
-    __weak typeof(self) weakSelf = self;
-    //add dictionaries or json data to the archive, calling completeArchive when done
-    for (ORKStepResult *stepResult in self.result.results) {
-        [stepResult.results enumerateObjectsUsingBlock:^(ORKResult *result, NSUInteger __unused idx, BOOL *__unused stop) {
-            __strong typeof(self) strongSelf = weakSelf;
-            //Update date if needed
-            if (!result.startDate) {
-                result.startDate = stepResult.startDate;
-                result.endDate = stepResult.endDate;
-            }
-            
-            //this is used in BreastCancer
-            if ([result isKindOfClass:[APCDataResult class]])
-            {
-                APCDataResult * dataResult = (APCDataResult*) result;
-                dataResult.identifier = dataResult.identifier ? : (stepResult.identifier ? : [NSUUID UUID].UUIDString);
-                NSString *fileName = [dataResult.identifier stringByAppendingString:@"_data"];
-                [strongSelf.archive insertJSONDataIntoArchive:dataResult.data filename:fileName];
-            }
-            
-            else if ([result isKindOfClass:[ORKFileResult class]])
-            {
-                ORKFileResult * fileResult = (ORKFileResult*) result;
-                NSString *translatedFilename = [ORKFileResult filenameForFileResultIdentifier:fileResult.identifier stepIdentifier:stepResult.identifier];
-                if (fileResult.fileURL && ![filenames containsObject:translatedFilename]) {
-                    [filenames addObject:translatedFilename];
-                    [strongSelf.archive insertDataAtURLIntoArchive:fileResult.fileURL fileName:translatedFilename];
-                }
-            }
-            
-            else if ([result isKindOfClass:[ORKTappingIntervalResult class]])
-            {
-                ORKTappingIntervalResult  *tappingResult = (ORKTappingIntervalResult *)result;
-                [self addTappingResultsToArchive:tappingResult];
-            }
-            
-            else if ([result isKindOfClass:[ORKSpatialSpanMemoryResult class]])
-            {
-                ORKSpatialSpanMemoryResult  *spatialSpanMemoryResult = (ORKSpatialSpanMemoryResult *)result;
-                [self addSpatialSpanMemoryResultsToArchive:spatialSpanMemoryResult];
-            }
-            
-            else if ([result isKindOfClass:[ORKQuestionResult class]])
-            {
-                [self addResultToArchive:result];
-            }
-            else
-            {
-                APCLogError(@"Result not processed for : %@", result.identifier);
-            }
-        }];
-    }
-}
-
-/**
- Subclasses should override these methods
- */
-
-- (void)addSpatialSpanMemoryResultsToArchive:(ORKSpatialSpanMemoryResult *) __unused result
-{
-    
-}
-
-- (void)addTappingResultsToArchive:(ORKTappingIntervalResult *)result
-{
-    NSString *result_filename = result.identifier;
-    NSMutableDictionary  *rawTappingResults = [NSMutableDictionary dictionary];
-    
-    NSString  *tappingViewSize = NSStringFromCGSize(result.stepViewSize);
-    rawTappingResults[kTappingViewSizeKey] = tappingViewSize;
-    
-    rawTappingResults[kStartDateKey] = result.startDate;
-    rawTappingResults[kEndDateKey]   = result.endDate;
-    
-    NSString  *leftButtonRect = NSStringFromCGRect(result.buttonRect1);
-    rawTappingResults[kButtonRectLeftKey] = leftButtonRect;
-    
-    NSString  *rightButtonRect = NSStringFromCGRect(result.buttonRect2);
-    rawTappingResults[kButtonRectRightKey] = rightButtonRect;
-    
-    NSArray  *samples = result.samples;
-    NSMutableArray  *sampleResults = [NSMutableArray array];
-    for (ORKTappingSample *sample  in  samples) {
-        NSMutableDictionary  *aSampleDictionary = [NSMutableDictionary dictionary];
-        
-        aSampleDictionary[kTapTimeStampKey]     = @(sample.timestamp);
-        
-        aSampleDictionary[kTapCoordinateKey]   = NSStringFromCGPoint(sample.location);
-        
-        if (sample.buttonIdentifier == ORKTappingButtonIdentifierNone) {
-            aSampleDictionary[kTappedButtonIdKey] = kTappedButtonNoneKey;
-        } else if (sample.buttonIdentifier == ORKTappingButtonIdentifierLeft) {
-            aSampleDictionary[kTappedButtonIdKey] = kTappedButtonLeftKey;
-        } else if (sample.buttonIdentifier == ORKTappingButtonIdentifierRight) {
-            aSampleDictionary[kTappedButtonIdKey] = kTappedButtonRightKey;
-        }
-        [sampleResults addObject:aSampleDictionary];
-    }
-    rawTappingResults[kTappingSamplesKey] = sampleResults;
-    rawTappingResults[kItemKey] = result_filename;
-    
-    NSDictionary *serializableData = [APCJSONSerializer serializableDictionaryFromSourceDictionary: rawTappingResults];
-    
-    [self.archive insertIntoArchive:serializableData filename:result_filename];
-    
+    // get a fresh archive
+    // Note: by current design this is UI blocking if run on main thread. TODO: move off main thread? syoung 12/11/2015
+    self.archive = [self.taskResultArchiver createDataArchiveWithReference:self.task.identifier
+                                                                      task:self.scheduledTask
+                                                                    result:self.result];
 }
 
 - (APCSignUpPermissionsType)requiredPermission
@@ -589,64 +453,8 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
 
 #pragma mark - Utilities
 
-- (void) addResultToArchive: (ORKResult*) result
-{
-    NSMutableArray * propertyNames = [NSMutableArray array];
-    
-    /*
-     Get the names of all properties of our result's class
-     and all its superclasses.  Stop when we hit ORKResult.
-     */
-    Class klass = result.class;
-    BOOL done = NO;
-    NSArray *propertyNamesForOneClass = nil;
-    
-    while (klass != nil && ! done)
-    {
-        propertyNamesForOneClass = [self classPropsFor: klass];
-        
-        [propertyNames addObjectsFromArray: propertyNamesForOneClass];
-        
-        if (klass == [ORKResult class])
-        {
-            done = YES;
-        }
-        else
-        {
-            klass = [klass superclass];
-        }
-    }
-    
-    NSDictionary *propertiesToSave = [result dictionaryWithValuesForKeys: propertyNames];
-    NSDictionary *serializableData = [APCJSONSerializer serializableDictionaryFromSourceDictionary: propertiesToSave];
-    
-    APCLogDebug(@"%@", serializableData);
-    
-    NSString *filename = [result.identifier stringByAppendingString:@".json"];
-    [self.archive insertIntoArchive:serializableData filename:filename];
-}
 
-- (NSArray *)classPropsFor:(Class)klass
-{
-    if (klass == NULL) {
-        return nil;
-    }
-    
-    NSMutableArray *results = [NSMutableArray array];
-    
-    unsigned int outCount, i;
-    objc_property_t *properties = class_copyPropertyList(klass, &outCount);
-    for (i = 0; i < outCount; i++) {
-        objc_property_t property = properties[i];
-        const char *propName = property_getName(property);
-        if(propName) {
-            NSString *propertyName = [NSString stringWithUTF8String:propName];
-            [results addObject:propertyName];
-        }
-    }
-    free(properties);
-    
-    return [NSArray arrayWithArray:results];
-}
+
+
 
 @end

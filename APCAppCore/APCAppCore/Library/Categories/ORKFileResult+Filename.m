@@ -33,27 +33,7 @@
 
 #import "ORKFileResult+Filename.h"
 
-static NSString *kJSONExtension = @"json";
-static NSString *kTranslationFilename = @"FilenameTranslation";
-
 @implementation ORKFileResult (Filename)
-
-+ (NSString *)filenameForFileResultIdentifier: (NSString *)fileResultIdentifier stepIdentifier: (NSString *)stepIdentifier
-{
-    fileResultIdentifier = [self rawFilenameForFileResultIdentifier:fileResultIdentifier stepIdentifier:stepIdentifier];
-    
-    NSString *translatedFilename;
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:kTranslationFilename ofType:kJSONExtension];
-    
-    NSString *JSONString = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:NULL];
-    NSError *parseError;
-    
-    NSDictionary *translationDictionary = [NSJSONSerialization JSONObjectWithData:[JSONString dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:&parseError];
-    
-    translatedFilename = [translationDictionary objectForKey:fileResultIdentifier] ? : fileResultIdentifier;
-    
-    return translatedFilename;
-}
 
 + (NSString *)rawFilenameForFileResultIdentifier: (NSString *)fileResultIdentifier stepIdentifier: (NSString *)stepIdentifier
 {

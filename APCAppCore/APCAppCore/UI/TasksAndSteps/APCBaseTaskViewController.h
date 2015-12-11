@@ -39,6 +39,7 @@
 
 @class APCAppDelegate;
 @class APCDataArchive;
+@class APCTaskResultArchiver;
 
 @interface APCBaseTaskViewController : ORKTaskViewController <ORKTaskViewControllerDelegate, ORKStepViewControllerDelegate>
 
@@ -49,6 +50,8 @@
 
 //exposed for subclasses
 @property (strong, nonatomic) APCDataArchive *archive;
+
+@property (strong, nonatomic) APCTaskResultArchiver *taskResultArchiver;
 
 /**
  Older, default version of an initialization method.  Initializes
@@ -72,14 +75,12 @@
                        resultSummary: (NSString *) resultSummary
                         usingContext: (NSManagedObjectContext *) context;
 
+- (void) archiveResults;
+
 /**
  Subclasses should override these methods
  */
-- (void)addSpatialSpanMemoryResultsToArchive:(ORKSpatialSpanMemoryResult *) __unused result;
-- (void)addTappingResultsToArchive:(ORKTappingIntervalResult *)__unused result;
 - (APCSignUpPermissionsType)requiredPermission;
 - (void) updateSchemaRevision;
-
-- (void) archiveResults;
 
 @end

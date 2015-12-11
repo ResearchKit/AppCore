@@ -7,8 +7,8 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
-#import "APCScheduleExpression.h"
-#import "NSDate+Helper.h"
+#import <APCAppCore/APCScheduleExpression.h>
+#import <APCAppCore/NSDate+Helper.h>
 
 @interface APCScheduleExpressionRealLifeTests : XCTestCase
 @property (nonatomic, strong) NSDateFormatter *dateFormatterInGregorianUTC;
