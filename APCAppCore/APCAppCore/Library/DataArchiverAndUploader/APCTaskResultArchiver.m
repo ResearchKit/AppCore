@@ -104,72 +104,101 @@ static  NSString  *const  kSpatialSpanMemoryTouchSampleIsCorrectKey     = @"Memo
 
 @interface APCTaskResultArchiver ()
 
-@property (nonatomic, strong) APCDataArchive *archive;
+@property (nonatomic, strong) NSMutableSet *filenames;
 
 @end
 
 @implementation APCTaskResultArchiver
 
-- (APCDataArchive*)createDataArchiveWithReference:(NSString *)reference task:(APCTask *)task result:(ORKTaskResult *)result
+- (void)appendArchive:(APCDataArchive*)archive withTaskResult:(ORKTaskResult *)result
 {
-    //get a fresh archive
-    self.archive = [[APCDataArchive alloc] initWithReference:reference task:task];
-    
     // Track filenames. Occasionally RK spit out 2 files with the same name which causes trouble on the backend
     // if the archive has 2 files named the same. See BRIDGE-789.
-    __block NSMutableSet *filenames = [NSMutableSet new];
+    self.filenames = [NSMutableSet new];
     
     //add dictionaries or json data to the archive, calling completeArchive when done
     for (ORKStepResult *stepResult in result.results) {
         [stepResult.results enumerateObjectsUsingBlock:^(ORKResult *result, NSUInteger __unused idx, BOOL *__unused stop) {
+            
             //Update date if needed
             if (!result.startDate) {
                 result.startDate = stepResult.startDate;
                 result.endDate = stepResult.endDate;
             }
             
-            if ([result isKindOfClass:[APCDataResult class]])
-            {
-                APCDataResult * dataResult = (APCDataResult*) result;
-                dataResult.identifier = dataResult.identifier ? : (stepResult.identifier ? : [NSUUID UUID].UUIDString);
-                NSString *fileName = [dataResult.identifier stringByAppendingString:@"_data"];
-                [self.archive insertJSONDataIntoArchive:dataResult.data filename:fileName];
-            }
-            
-            else if ([result isKindOfClass:[ORKFileResult class]])
-            {
-                ORKFileResult * fileResult = (ORKFileResult*) result;
-                NSString *translatedFilename = [self filenameForFileResultIdentifier:fileResult.identifier stepIdentifier:stepResult.identifier];
-                if (fileResult.fileURL && ![filenames containsObject:translatedFilename]) {
-                    [filenames addObject:translatedFilename];
-                    [self.archive insertDataAtURLIntoArchive:fileResult.fileURL fileName:translatedFilename];
-                }
-            }
-            
-            else if ([result isKindOfClass:[ORKTappingIntervalResult class]])
-            {
-                ORKTappingIntervalResult  *tappingResult = (ORKTappingIntervalResult *)result;
-                [self addTappingResultsToArchive:tappingResult];
-            }
-            
-            else if ([result isKindOfClass:[ORKSpatialSpanMemoryResult class]])
-            {
-                ORKSpatialSpanMemoryResult  *spatialSpanMemoryResult = (ORKSpatialSpanMemoryResult *)result;
-                [self addSpatialSpanMemoryResultsToArchive:spatialSpanMemoryResult];
-            }
-            
-            else if ([result isKindOfClass:[ORKQuestionResult class]])
-            {
-                [self addQuestionResultToArchive:(ORKQuestionResult*)result];
-            }
-            else
+            if (![self appendArchive:archive withResult:result forStepResult:stepResult])
             {
                 APCLogError(@"Result not processed for : %@", result.identifier);
             }
         }];
     }
     
-    return self.archive;
+    self.filenames = nil;
+}
+
+- (BOOL)appendArchive:(APCDataArchive*)archive withResult:(ORKResult *)result forStepResult:(ORKStepResult*)stepResult
+{
+    BOOL success = NO;
+    
+    if ([result isKindOfClass:[APCDataResult class]])
+    {
+        APCDataResult * dataResult = (APCDataResult*) result;
+        success = [self appendArchive:archive withJSONDataResult:dataResult forStepResult:stepResult];
+    }
+    
+    else if ([result isKindOfClass:[ORKFileResult class]])
+    {
+        ORKFileResult * fileResult = (ORKFileResult*) result;
+        success = [self appendArchive:archive withFileResult:fileResult forStepResult:stepResult];
+    }
+    
+    else if ([result isKindOfClass:[ORKTappingIntervalResult class]])
+    {
+        ORKTappingIntervalResult  *tappingResult = (ORKTappingIntervalResult *)result;
+        success = [self appendArchive:archive withTappingResult:tappingResult];
+    }
+    
+    else if ([result isKindOfClass:[ORKSpatialSpanMemoryResult class]])
+    {
+        ORKSpatialSpanMemoryResult  *spatialSpanMemoryResult = (ORKSpatialSpanMemoryResult *)result;
+        success = [self appendArchive:archive withSpatialSpanMemoryResult:spatialSpanMemoryResult];
+    }
+    
+    else if ([result isKindOfClass:[ORKQuestionResult class]])
+    {
+        ORKQuestionResult *questionResult = (ORKQuestionResult*)result;
+        success = [self appendArchive:archive withQuestionResult:questionResult];
+    }
+    
+    return success;
+}
+
+
+/*********************************************************************************/
+#pragma mark - Add Task-Specific Results — File
+/*********************************************************************************/
+
+- (BOOL)appendArchive:(APCDataArchive *)archive withJSONDataResult:(APCDataResult*)dataResult forStepResult:(ORKStepResult*)stepResult
+{
+    dataResult.identifier = dataResult.identifier ? : (stepResult.identifier ? : [NSUUID UUID].UUIDString);
+    NSString *fileName = [dataResult.identifier stringByAppendingString:@"_data"];
+    [archive insertJSONDataIntoArchive:dataResult.data filename:fileName];
+    return YES;
+}
+
+
+/*********************************************************************************/
+#pragma mark - Add Task-Specific Results — File
+/*********************************************************************************/
+
+- (BOOL)appendArchive:(APCDataArchive *)archive withFileResult:(ORKFileResult*)fileResult forStepResult:(ORKStepResult*)stepResult
+{
+    NSString *translatedFilename = [self filenameForFileResultIdentifier:fileResult.identifier stepIdentifier:stepResult.identifier extension:nil];
+    if (fileResult.fileURL && ![self.filenames containsObject:translatedFilename]) {
+        [self.filenames addObject:translatedFilename];
+        [archive insertDataAtURLIntoArchive:fileResult.fileURL fileName:translatedFilename];
+    }
+    return YES;
 }
 
 
@@ -177,10 +206,11 @@ static  NSString  *const  kSpatialSpanMemoryTouchSampleIsCorrectKey     = @"Memo
 #pragma mark - Add Task-Specific Results — Tapping
 /*********************************************************************************/
 
-- (void)addTappingResultsToArchive:(ORKTappingIntervalResult *)result
+- (BOOL)appendArchive:(APCDataArchive *)archive withTappingResult:(ORKTappingIntervalResult *)result
 {
-    NSString *result_filename = [self filenameForFileResultIdentifier:nil
-                                                       stepIdentifier:result.identifier];
+    NSString *result_filename = [self filenameForFileResultIdentifier:result.identifier
+                                                       stepIdentifier:nil
+                                                            extension:@"json"];
     
     NSMutableDictionary  *rawTappingResults = [NSMutableDictionary dictionary];
     
@@ -219,8 +249,8 @@ static  NSString  *const  kSpatialSpanMemoryTouchSampleIsCorrectKey     = @"Memo
     
     NSDictionary *serializableData = [APCJSONSerializer serializableDictionaryFromSourceDictionary: rawTappingResults];
     
-    [self.archive insertIntoArchive:serializableData filename:result_filename];
-    
+    [archive insertDictionaryIntoArchive:serializableData filename:result_filename];
+    return YES;
 }
 
 
@@ -228,9 +258,8 @@ static  NSString  *const  kSpatialSpanMemoryTouchSampleIsCorrectKey     = @"Memo
 #pragma mark - Add Task-Specific Results — Spatial Span Memory
 /*********************************************************************************/
 
-- (void)addSpatialSpanMemoryResultsToArchive:(ORKSpatialSpanMemoryResult *)result
+- (BOOL)appendArchive:(APCDataArchive *)archive withSpatialSpanMemoryResult:(ORKSpatialSpanMemoryResult *)result
 {
-    
     NSString  *gameStatusKeys[] = { kSpatialSpanMemoryGameStatusUnknownKey, kSpatialSpanMemoryGameStatusSuccessKey, kSpatialSpanMemoryGameStatusFailureKey, kSpatialSpanMemoryGameStatusTimeoutKey };
     
     NSMutableDictionary  *memoryGameResults = [NSMutableDictionary dictionary];
@@ -276,7 +305,11 @@ static  NSString  *const  kSpatialSpanMemoryTouchSampleIsCorrectKey     = @"Memo
     memoryGameResults[kSpatialSpanMemorySummaryGameRecordsKey] = gameRecords;
     
     NSDictionary  *serializableData = [APCJSONSerializer serializableDictionaryFromSourceDictionary: memoryGameResults];
-    [self.archive insertIntoArchive:serializableData filename:kSpatialSpanMemorySummaryFilenameKey];
+    NSString *result_filename = [self filenameForFileResultIdentifier:result.identifier
+                                                       stepIdentifier:nil
+                                                            extension:@"json"];
+    [archive insertDictionaryIntoArchive:serializableData filename:result_filename];
+    return YES;
 }
 
 - (NSArray *)makeTouchSampleRecords:(NSArray *)touchSamples
@@ -314,7 +347,7 @@ static  NSString  *const  kSpatialSpanMemoryTouchSampleIsCorrectKey     = @"Memo
 #pragma mark - Add Task-Specific Results — Question Survey
 /*********************************************************************************/
 
-- (void)addQuestionResultToArchive: (ORKQuestionResult*) result
+- (BOOL)appendArchive:(APCDataArchive *)archive withQuestionResult: (ORKQuestionResult*) result
 {
     NSMutableArray * propertyNames = [NSMutableArray array];
     
@@ -343,12 +376,16 @@ static  NSString  *const  kSpatialSpanMemoryTouchSampleIsCorrectKey     = @"Memo
     }
     
     NSDictionary *propertiesToSave = [result dictionaryWithValuesForKeys: propertyNames];
-    NSDictionary *serializableData = [APCJSONSerializer serializableDictionaryFromSourceDictionary: propertiesToSave];
+    NSDictionary *serializableDictionary = [APCJSONSerializer serializableDictionaryFromSourceDictionary: propertiesToSave];
     
-    APCLogDebug(@"%@", serializableData);
+    APCLogDebug(@"%@", serializableDictionary);
     
-    NSString *filename = [result.identifier stringByAppendingString:@".json"];
-    [self.archive insertIntoArchive:serializableData filename:filename];
+    NSString *filename = [self filenameForFileResultIdentifier:result.identifier
+                                                stepIdentifier:nil
+                                                     extension:@"json"];
+    
+    [archive insertDictionaryIntoArchive:serializableDictionary filename:filename];
+    return YES;
 }
 
 
@@ -361,19 +398,49 @@ static  NSString  *const  kSpatialSpanMemoryTouchSampleIsCorrectKey     = @"Memo
     if (_filenameTranslationDictionary == nil) {
         NSString *filePath = [[NSBundle mainBundle] pathForResource:APCDefaultTranslationFilename ofType:kJSONExtension];
         NSString *JSONString = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:NULL];
-        NSError *parseError;
-        
-       _filenameTranslationDictionary = [NSJSONSerialization JSONObjectWithData:[JSONString dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:&parseError];
+        if (JSONString == nil) {
+            _filenameTranslationDictionary = @{};
+        }
+        else {
+            NSError *parseError;
+            _filenameTranslationDictionary = [NSJSONSerialization JSONObjectWithData:[JSONString dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:&parseError];
+        }
     }
     return _filenameTranslationDictionary;
 }
 
-- (NSString *)filenameForFileResultIdentifier: (NSString * _Nullable )fileResultIdentifier stepIdentifier: (NSString * _Nullable)stepIdentifier
+- (NSString *)filenameForResult:(ORKResult*)result stepResult:(ORKStepResult *)stepResult
+{
+    if ([result isKindOfClass:[APCDataResult class]])
+    {
+        result.identifier = result.identifier ?: (stepResult.identifier ?: [NSUUID UUID].UUIDString);
+        return [result.identifier stringByAppendingString:@"_data"];
+    }
+    else if ([result isKindOfClass:[ORKFileResult class]])
+    {
+        return [self filenameForFileResultIdentifier:result.identifier stepIdentifier:stepResult.identifier extension:nil];
+    }
+    else
+    {
+        return [self filenameForFileResultIdentifier:result.identifier stepIdentifier:nil extension:@"json"];
+    }
+}
+
+- (NSString *)filenameForFileResultIdentifier: (NSString * _Nullable )fileResultIdentifier stepIdentifier: (NSString * _Nullable)stepIdentifier extension:(NSString * _Nullable)extension
 {
     fileResultIdentifier = [ORKFileResult rawFilenameForFileResultIdentifier:fileResultIdentifier stepIdentifier:stepIdentifier];
 
     NSDictionary *translationDictionary = self.filenameTranslationDictionary;
-    NSString *translatedFilename = [translationDictionary objectForKey:fileResultIdentifier] ?: fileResultIdentifier;
+    NSString *translatedFilename = [translationDictionary objectForKey:fileResultIdentifier];
+    
+    if (translatedFilename == nil) {
+        if (extension != nil) {
+            translatedFilename = [NSString stringWithFormat:@"%@.%@", fileResultIdentifier, extension];
+        }
+        else {
+            translatedFilename = fileResultIdentifier;
+        }
+    }
     
     return translatedFilename;
 }

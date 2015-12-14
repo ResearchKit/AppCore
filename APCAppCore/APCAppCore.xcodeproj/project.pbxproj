@@ -713,6 +713,7 @@
 		FF44E50A1C1A3BB200F07DA9 /* BridgeSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF44E5091C1A3BB200F07DA9 /* BridgeSDK.framework */; };
 		FF44E50D1C1B585900F07DA9 /* APCTaskResultArchiver.h in Headers */ = {isa = PBXBuildFile; fileRef = FF44E50B1C1B585900F07DA9 /* APCTaskResultArchiver.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FF44E50E1C1B585900F07DA9 /* APCTaskResultArchiver.m in Sources */ = {isa = PBXBuildFile; fileRef = FF44E50C1C1B585900F07DA9 /* APCTaskResultArchiver.m */; };
+		FF44E51B1C1B94A700F07DA9 /* APCTaskResultArchiverTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FF44E51A1C1B94A700F07DA9 /* APCTaskResultArchiverTests.m */; };
 		FF9469871C1A2D4000CF7075 /* APCAppCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5179B2919D09128001DCCB7 /* APCAppCore.framework */; };
 		FF9469881C1A2F0400CF7075 /* ORKOrderedTask+APCHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FF9469831C1A294E00CF7075 /* ORKOrderedTask+APCHelperTests.m */; };
 		FF9469891C1A2F0900CF7075 /* APCScheduleExpressionEnumeratorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129DF1A2F78490015982C /* APCScheduleExpressionEnumeratorTests.m */; };
@@ -1459,6 +1460,7 @@
 		FF44E5091C1A3BB200F07DA9 /* BridgeSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BridgeSDK.framework; path = "../../../../../Library/Developer/Xcode/DerivedData/Parkinson-dphbgsbdqdzhcbeketqhdiecbfyz/Build/Products/Debug-iphoneos/BridgeSDK.framework"; sourceTree = "<group>"; };
 		FF44E50B1C1B585900F07DA9 /* APCTaskResultArchiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCTaskResultArchiver.h; sourceTree = "<group>"; };
 		FF44E50C1C1B585900F07DA9 /* APCTaskResultArchiver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCTaskResultArchiver.m; sourceTree = "<group>"; };
+		FF44E51A1C1B94A700F07DA9 /* APCTaskResultArchiverTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCTaskResultArchiverTests.m; sourceTree = "<group>"; };
 		FF9469831C1A294E00CF7075 /* ORKOrderedTask+APCHelperTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ORKOrderedTask+APCHelperTests.m"; sourceTree = "<group>"; };
 		FFF698DB1C18B9E200DC56CC /* ORKOrderedTask+APCHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ORKOrderedTask+APCHelper.h"; sourceTree = "<group>"; };
 		FFF698DC1C18B9E200DC56CC /* ORKOrderedTask+APCHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ORKOrderedTask+APCHelper.m"; sourceTree = "<group>"; };
@@ -3047,6 +3049,7 @@
 			isa = PBXGroup;
 			children = (
 				FF9469831C1A294E00CF7075 /* ORKOrderedTask+APCHelperTests.m */,
+				FF44E51A1C1B94A700F07DA9 /* APCTaskResultArchiverTests.m */,
 			);
 			name = ActivityTests;
 			sourceTree = "<group>";
@@ -3860,6 +3863,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FF94698E1C1A2F0D00CF7075 /* NSDateComponentsHelperTests.m in Sources */,
+				FF44E51B1C1B94A700F07DA9 /* APCTaskResultArchiverTests.m in Sources */,
 				FF94698A1C1A2F0900CF7075 /* APCScheduleExpressionListSelectorTests.m in Sources */,
 				FF9469881C1A2F0400CF7075 /* ORKOrderedTask+APCHelperTests.m in Sources */,
 				FF9469891C1A2F0900CF7075 /* APCScheduleExpressionEnumeratorTests.m in Sources */,

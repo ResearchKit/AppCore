@@ -334,9 +334,8 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
 {
     // get a fresh archive
     // Note: by current design this is UI blocking if run on main thread. TODO: move off main thread? syoung 12/11/2015
-    self.archive = [self.taskResultArchiver createDataArchiveWithReference:self.task.identifier
-                                                                      task:self.scheduledTask
-                                                                    result:self.result];
+    self.archive = [[APCDataArchive alloc] initWithReference:self.task.identifier task:self.scheduledTask];
+    [self.taskResultArchiver appendArchive:self.archive withTaskResult:self.result];
 }
 
 - (APCSignUpPermissionsType)requiredPermission

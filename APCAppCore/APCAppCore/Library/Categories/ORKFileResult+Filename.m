@@ -37,17 +37,20 @@
 
 + (NSString *)rawFilenameForFileResultIdentifier: (NSString *)fileResultIdentifier stepIdentifier: (NSString *)stepIdentifier
 {
-    if (! fileResultIdentifier) {
-        fileResultIdentifier = @"";
-    }else{
-        fileResultIdentifier = [fileResultIdentifier stringByAppendingString:@"_"];
+    NSMutableString *result = [[NSMutableString alloc] init];
+    
+    if (fileResultIdentifier != nil) {
+        [result appendString:fileResultIdentifier];
     }
     
-    if (! stepIdentifier) {
-        stepIdentifier = @"";
+    if (stepIdentifier != nil) {
+        if (result.length > 0) {
+            [result appendString:@"_"];
+        }
+        [result appendString:stepIdentifier];
     }
     
-    return [fileResultIdentifier stringByAppendingString:stepIdentifier];
+    return [result copy];
 }
 
 @end

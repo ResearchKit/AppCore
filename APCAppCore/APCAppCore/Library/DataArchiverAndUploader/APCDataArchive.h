@@ -89,7 +89,18 @@
  
  @param     filename                Filename for the json data to be included without path extension
  */
-- (void)insertIntoArchive:(NSDictionary *)dictionary filename: (NSString *)filename;
+- (void)insertDictionaryIntoArchive:(NSDictionary *)dictionary filename: (NSString *)filename;
+
+
+/**
+ Converts a dictionary into json data and inserts into the archive.
+ 
+ @param     dictionary              Dictionary to be inserted into the zip archive.
+ 
+ @param     filename                Filename for the json data to be included without path extension
+ @Deprecated
+ */
+- (void)insertIntoArchive:(NSDictionary *)dictionary filename: (NSString *)filename  __attribute__((deprecated("Please use -insertDictionaryIntoArchive instead.")));
 
 /**
  Inserts the data from the file at the url.
