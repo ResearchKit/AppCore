@@ -396,17 +396,27 @@ static  NSString  *const  kSpatialSpanMemoryTouchSampleIsCorrectKey     = @"Memo
 - (NSDictionary *)filenameTranslationDictionary
 {
     if (_filenameTranslationDictionary == nil) {
-        NSString *filePath = [[NSBundle mainBundle] pathForResource:APCDefaultTranslationFilename ofType:kJSONExtension];
-        NSString *JSONString = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:NULL];
-        if (JSONString == nil) {
-            _filenameTranslationDictionary = @{};
-        }
-        else {
-            NSError *parseError;
-            _filenameTranslationDictionary = [NSJSONSerialization JSONObjectWithData:[JSONString dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:&parseError];
-        }
+        [self setFilenameTranslationDictionaryWithJSONFileAtPath:
+         [[NSBundle mainBundle] pathForResource:APCDefaultTranslationFilename ofType:kJSONExtension]];;
     }
     return _filenameTranslationDictionary;
+}
+
+- (void)setFilenameTranslationDictionaryWithJSONFileAtPath:(NSString * _Nonnull)filePath
+{
+    NSString *JSONString = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:NULL];
+    if (JSONString != nil) {
+        NSError *parseError;
+        _filenameTranslationDictionary = [NSJSONSerialization JSONObjectWithData:[JSONString dataUsingEncoding:NSUTF8StringEncoding]
+                                                                         options:NSJSONReadingMutableContainers
+                                                                           error:&parseError];
+        if (parseError) {
+            APCLogDebug(@"%@", parseError);
+        }
+    }
+    if (_filenameTranslationDictionary == nil) {
+        _filenameTranslationDictionary = @{};
+    }
 }
 
 - (NSString *)filenameForResult:(ORKResult*)result stepResult:(ORKStepResult *)stepResult

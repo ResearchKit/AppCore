@@ -96,6 +96,34 @@
     XCTAssertEqualObjects(result, @"abc_xyz.dat");
 }
 
+#pragma mark - setFilenameTranslationDictionaryWithJSONFileAtPath:
+
+- (void)testSetFilenameTranslationDictionaryWithJSONFileAtPath
+{
+    NSString *filepath = [[NSBundle bundleForClass:[self class]] pathForResource:@"FilenameTranslation_test" ofType:@"json"];
+    
+    APCTaskResultArchiver *archiver = [[APCTaskResultArchiver alloc] init];
+    [archiver setFilenameTranslationDictionaryWithJSONFileAtPath:filepath];
+    
+    NSDictionary *expectedDictionary = @{
+                                         @"audio_countdown" : @"audio_countdown.m4a",
+                                         @"audio_audio" : @"audio_audio.m4a",
+                                         @"accelerometer_tapping.right" : @"accel_tapping_right.json",
+                                         @"accelerometer_tapping.left" : @"accel_tapping_left.json",
+                                         @"tapping.right" : @"tapping_right.json",
+                                         @"tapping.left" : @"tapping_left.json",
+                                         @"cognitive.memory.spatialspan" : @"MemoryGameResults.json",
+                                         @"pedometer_walking.outbound" : @"pedometer_walking_outbound.json",
+                                         @"accelerometer_walking.outbound" : @"accel_walking_outbound.json",
+                                         @"deviceMotion_walking.outbound" : @"deviceMotion_walking_outbound.json",
+                                         @"accelerometer_walking.rest" : @"accel_walking_rest.json",
+                                         @"deviceMotion_walking.rest" : @"deviceMotion_walking_rest.json",
+                                         @"momentInDayFormat" : @"momentInDayFormat.json"
+                                         };
+    XCTAssertEqualObjects(archiver.filenameTranslationDictionary, expectedDictionary);
+    
+}
+
 #pragma mark - filenameForResult:stepResult:
 
 - (void)testFilenameForResult_APCDataResult
