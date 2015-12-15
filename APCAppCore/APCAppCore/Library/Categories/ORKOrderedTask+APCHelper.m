@@ -66,7 +66,7 @@ NSString *const APCLeftHandIdentifier            = @"left";
         [orkTask.steps[tappingInstructionIdx] isKindOfClass:[ORKInstructionStep class]])
     {
         tappingInstructionStep = (ORKInstructionStep *)orkTask.steps[tappingInstructionIdx];
-        tappingInstructionStep.detailText = NSLocalizedStringWithDefaultValue(@"Step Detail Text", @"APCAppCore", APCBundle(),
+        tappingInstructionStep.detailText = NSLocalizedStringWithDefaultValue(@"Tapping Instruction Step Detail Text", @"APCAppCore", APCBundle(),
                                                                               @"Tap the Next button to begin.",
                                                                               @"Tap the Next button to begin.");
         [steps removeObject:tappingInstructionStep];
