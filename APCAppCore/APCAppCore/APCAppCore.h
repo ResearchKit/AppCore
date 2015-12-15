@@ -79,11 +79,11 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
  Data Archiver & Passive Data Collectors
  --------------------------------------- */
 #import <APCAppCore/APCDataArchiverAndUploader.h>
-#import <APCAppCore/APCDataArchiver.h>
 #import <APCAppCore/APCDataArchive.h>
 #import <APCAppCore/APCDataEncryptor.h>
 #import <APCAppCore/APCDataUploader.h>
 #import <APCAppCore/APCDataArchiveUploader.h>
+#import <APCAppCore/APCTaskResultArchiver.h>
 #import <APCAppCore/zipzap.h>
 #import <APCAppCore/ZZArchive.h>
 #import "APCAppCore/ZZArchiveEntry.h"
@@ -321,6 +321,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/NSDictionary+APCAdditions.h>
 #import <APCAppCore/APCDeviceHardware+APCHelper.h>
 #import <APCAppCore/ORKFileResult+Filename.h>
+#import <APCAppCore/ORKOrderedTask+APCHelper.h>
 #import <APCAppCore/ORKQuestionResult+APCHelper.h>
 #import <APCAppCore/NSOperationQueue+Helper.h>
 #import <APCAppCore/CMMotionActivity+Helper.h>

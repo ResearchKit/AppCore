@@ -16,4 +16,5 @@
 
 APC_EXTERN NSBundle *APCBundle();
 APC_EXTERN NSBundle *APCDefaultLocaleBundle();
+APC_EXTERN NSDateComponentsFormatter *APCDurationStringFormatter();
 

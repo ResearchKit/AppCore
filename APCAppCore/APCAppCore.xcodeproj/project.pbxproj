@@ -74,7 +74,6 @@
 		08BABB431AD62D5D00059C35 /* APCExampleLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 08BABB411AD62D5D00059C35 /* APCExampleLabel.m */; };
 		08EA2AB31A7AD564007549C0 /* UIImage+ImageEffects.h in Headers */ = {isa = PBXBuildFile; fileRef = 08EA2AB11A7AD564007549C0 /* UIImage+ImageEffects.h */; };
 		08EA2AB41A7AD564007549C0 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 08EA2AB21A7AD564007549C0 /* UIImage+ImageEffects.m */; };
-		360C63D11A339746002EC86C /* NSDateComponentsHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 360C63D01A339746002EC86C /* NSDateComponentsHelperTests.m */; };
 		36257FBD1AA714B60060B95A /* CMMotionActivity+Helper.h in Headers */ = {isa = PBXBuildFile; fileRef = 36257FBB1AA714B60060B95A /* CMMotionActivity+Helper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		36257FBE1AA714B60060B95A /* CMMotionActivity+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 36257FBC1AA714B60060B95A /* CMMotionActivity+Helper.m */; };
 		3627D3481A9A7517006B02E8 /* APCMedTrackerMedication.h in Headers */ = {isa = PBXBuildFile; fileRef = 3627D3461A9A7517006B02E8 /* APCMedTrackerMedication.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -100,8 +99,6 @@
 		3663458E1B1F860A003CC0EF /* APCTaskGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 3663458C1B1F860A003CC0EF /* APCTaskGroup.m */; };
 		366345911B1F8627003CC0EF /* NSArray+APCHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 3663458F1B1F8627003CC0EF /* NSArray+APCHelper.h */; };
 		366345921B1F8627003CC0EF /* NSArray+APCHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 366345901B1F8627003CC0EF /* NSArray+APCHelper.m */; };
-		366345951B1F863A003CC0EF /* SBBSchedule+APCHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 366345931B1F863A003CC0EF /* SBBSchedule+APCHelper.h */; };
-		366345961B1F863A003CC0EF /* SBBSchedule+APCHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 366345941B1F863A003CC0EF /* SBBSchedule+APCHelper.m */; };
 		366345A71B1F8666003CC0EF /* APCTaskGroupCacheEntry.h in Headers */ = {isa = PBXBuildFile; fileRef = 366345A31B1F8666003CC0EF /* APCTaskGroupCacheEntry.h */; };
 		366345A81B1F8666003CC0EF /* APCTaskGroupCacheEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 366345A41B1F8666003CC0EF /* APCTaskGroupCacheEntry.m */; };
 		36829A411A96B937000AA2AB /* APCMedTrackerPredefinedMedications.plist in Resources */ = {isa = PBXBuildFile; fileRef = 369E27E41A96B7A200D35DFA /* APCMedTrackerPredefinedMedications.plist */; };
@@ -161,23 +158,8 @@
 		36B7D2561A8D848D0043F968 /* ORKAnswerFormat+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 36B7D2541A8D848D0043F968 /* ORKAnswerFormat+Helper.m */; };
 		36C8B3EC1A38D9FF0051096B /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36C8B3EB1A38D9FF0051096B /* Security.framework */; };
 		36C8B3EE1A38DA4C0051096B /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36C8B3ED1A38DA4C0051096B /* SystemConfiguration.framework */; };
-		36CCF38A1AA4572F0086CD1D /* APCLog.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B9476A1A73272C0034C522 /* APCLog.m */; };
-		36CCF38B1AA4573D0086CD1D /* APCDayOfMonthSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B947961A73272C0034C522 /* APCDayOfMonthSelector.m */; };
-		36CCF38C1AA4573D0086CD1D /* APCListSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B947981A73272C0034C522 /* APCListSelector.m */; };
-		36CCF38D1AA4573D0086CD1D /* APCPointSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B9479A1A73272C0034C522 /* APCPointSelector.m */; };
-		36CCF38E1AA4573D0086CD1D /* APCScheduleEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B9479C1A73272C0034C522 /* APCScheduleEnumerator.m */; };
-		36CCF38F1AA4573D0086CD1D /* APCScheduleExpressionParser.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B9479E1A73272C0034C522 /* APCScheduleExpressionParser.m */; };
-		36CCF3901AA4573D0086CD1D /* APCScheduleExpressionToken.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B947A01A73272C0034C522 /* APCScheduleExpressionToken.m */; };
-		36CCF3911AA4573D0086CD1D /* APCScheduleExpressionTokenizer.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B947A21A73272C0034C522 /* APCScheduleExpressionTokenizer.m */; };
-		36CCF3921AA4573D0086CD1D /* APCTimeSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B947A41A73272C0034C522 /* APCTimeSelector.m */; };
-		36CCF3931AA4573D0086CD1D /* APCTimeSelectorEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B947A61A73272C0034C522 /* APCTimeSelectorEnumerator.m */; };
-		36CCF3951AA457420086CD1D /* APCScheduleExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B947931A73272C0034C522 /* APCScheduleExpression.m */; };
-		36CCF3A01AA45B790086CD1D /* APCConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B947701A73272C0034C522 /* APCConstants.m */; };
-		36CCF3A11AA45B9D0086CD1D /* NSDateComponents+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B9474B1A73272C0034C522 /* NSDateComponents+Helper.m */; };
-		36CCF3A21AA45BC40086CD1D /* NSDate+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B947491A73272C0034C522 /* NSDate+Helper.m */; };
 		36D0510E1ABB92F0008FC9B3 /* NSFileManager+Helper.h in Headers */ = {isa = PBXBuildFile; fileRef = 36D0510C1ABB92F0008FC9B3 /* NSFileManager+Helper.h */; };
 		36D0510F1ABB92F0008FC9B3 /* NSFileManager+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 36D0510D1ABB92F0008FC9B3 /* NSFileManager+Helper.m */; };
-		36E06F1C1A33F071005D6EB0 /* APCScheduleExpressionRealLifeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 36E06F1B1A33F071005D6EB0 /* APCScheduleExpressionRealLifeTests.m */; };
 		5B04329F1A318AA2000DC9ED /* APCSignInTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B04329D1A318AA2000DC9ED /* APCSignInTask.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B0432A01A318AA2000DC9ED /* APCSignInTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B04329E1A318AA2000DC9ED /* APCSignInTask.m */; };
 		5B0432A71A322BEE000DC9ED /* APCOnboardingTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B0432A51A322BEE000DC9ED /* APCOnboardingTask.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -264,8 +246,6 @@
 		747FB1451ABDDFAE00345000 /* ResearchKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 747FB1441ABDDFAE00345000 /* ResearchKit.framework */; };
 		7B07B8AE1ACDD7B400734558 /* APCHealthKitBackgroundDataCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = 7B07B8AA1ACDD7B400734558 /* APCHealthKitBackgroundDataCollector.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7B07B8AF1ACDD7B400734558 /* APCHealthKitBackgroundDataCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B07B8AB1ACDD7B400734558 /* APCHealthKitBackgroundDataCollector.m */; };
-		7B362C061B02A34500127051 /* APCDataArchiver.h in Headers */ = {isa = PBXBuildFile; fileRef = 7B362C041B02A34500127051 /* APCDataArchiver.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7B362C071B02A34500127051 /* APCDataArchiver.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B362C051B02A34500127051 /* APCDataArchiver.m */; };
 		7B544B331ADF084F00361FB6 /* APCDisplacementTrackingCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = 7B544B311ADF084F00361FB6 /* APCDisplacementTrackingCollector.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7B544B341ADF084F00361FB6 /* APCDisplacementTrackingCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B544B321ADF084F00361FB6 /* APCDisplacementTrackingCollector.m */; };
 		7B544B3B1ADF09E900361FB6 /* APCPassiveDisplacementTrackingDataUploader.h in Headers */ = {isa = PBXBuildFile; fileRef = 7B544B391ADF09E900361FB6 /* APCPassiveDisplacementTrackingDataUploader.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -725,15 +705,25 @@
 		F5F12B0B1A2F78490015982C /* APCPasscodeView.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129D61A2F78490015982C /* APCPasscodeView.m */; };
 		F5F12B0C1A2F78490015982C /* APCPermissionButton.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F129D71A2F78490015982C /* APCPermissionButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5F12B0D1A2F78490015982C /* APCPermissionButton.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129D81A2F78490015982C /* APCPermissionButton.m */; };
-		F5F12B151A2F78870015982C /* APCScheduleExpressionListSelectorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129DA1A2F78490015982C /* APCScheduleExpressionListSelectorTests.m */; };
-		F5F12B171A2F78870015982C /* APCScheduleExpressionPointSelectorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129DC1A2F78490015982C /* APCScheduleExpressionPointSelectorTests.m */; };
-		F5F12B181A2F78870015982C /* APCScheduleExpressionParserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129DD1A2F78490015982C /* APCScheduleExpressionParserTests.m */; };
-		F5F12B1A1A2F78870015982C /* APCScheduleExpressionEnumeratorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129DF1A2F78490015982C /* APCScheduleExpressionEnumeratorTests.m */; };
 		F5F12B231A2F861F0015982C /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5F12B221A2F861F0015982C /* CoreLocation.framework */; };
 		F5F12B251A2F86280015982C /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5F12B241A2F86280015982C /* HealthKit.framework */; };
 		F5F12B2B1A2F864B0015982C /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5F12B2A1A2F864B0015982C /* libz.dylib */; };
 		F5F12B2D1A2F86550015982C /* libarchive.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5F12B2C1A2F86550015982C /* libarchive.dylib */; };
 		F5F12B2F1A2F86600015982C /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5F12B2E1A2F86600015982C /* libbz2.dylib */; };
+		FF44E50A1C1A3BB200F07DA9 /* BridgeSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF44E5091C1A3BB200F07DA9 /* BridgeSDK.framework */; };
+		FF44E50D1C1B585900F07DA9 /* APCTaskResultArchiver.h in Headers */ = {isa = PBXBuildFile; fileRef = FF44E50B1C1B585900F07DA9 /* APCTaskResultArchiver.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FF44E50E1C1B585900F07DA9 /* APCTaskResultArchiver.m in Sources */ = {isa = PBXBuildFile; fileRef = FF44E50C1C1B585900F07DA9 /* APCTaskResultArchiver.m */; };
+		FF44E51B1C1B94A700F07DA9 /* APCTaskResultArchiverTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FF44E51A1C1B94A700F07DA9 /* APCTaskResultArchiverTests.m */; };
+		FF9469871C1A2D4000CF7075 /* APCAppCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5179B2919D09128001DCCB7 /* APCAppCore.framework */; };
+		FF9469881C1A2F0400CF7075 /* ORKOrderedTask+APCHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FF9469831C1A294E00CF7075 /* ORKOrderedTask+APCHelperTests.m */; };
+		FF9469891C1A2F0900CF7075 /* APCScheduleExpressionEnumeratorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129DF1A2F78490015982C /* APCScheduleExpressionEnumeratorTests.m */; };
+		FF94698A1C1A2F0900CF7075 /* APCScheduleExpressionListSelectorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129DA1A2F78490015982C /* APCScheduleExpressionListSelectorTests.m */; };
+		FF94698B1C1A2F0900CF7075 /* APCScheduleExpressionParserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129DD1A2F78490015982C /* APCScheduleExpressionParserTests.m */; };
+		FF94698C1C1A2F0900CF7075 /* APCScheduleExpressionPointSelectorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129DC1A2F78490015982C /* APCScheduleExpressionPointSelectorTests.m */; };
+		FF94698D1C1A2F0900CF7075 /* APCScheduleExpressionRealLifeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 36E06F1B1A33F071005D6EB0 /* APCScheduleExpressionRealLifeTests.m */; };
+		FF94698E1C1A2F0D00CF7075 /* NSDateComponentsHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 360C63D01A339746002EC86C /* NSDateComponentsHelperTests.m */; };
+		FFF698DD1C18B9E200DC56CC /* ORKOrderedTask+APCHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = FFF698DB1C18B9E200DC56CC /* ORKOrderedTask+APCHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FFF698DE1C18B9E200DC56CC /* ORKOrderedTask+APCHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = FFF698DC1C18B9E200DC56CC /* ORKOrderedTask+APCHelper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -841,8 +831,6 @@
 		3663458C1B1F860A003CC0EF /* APCTaskGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCTaskGroup.m; sourceTree = "<group>"; };
 		3663458F1B1F8627003CC0EF /* NSArray+APCHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+APCHelper.h"; sourceTree = "<group>"; };
 		366345901B1F8627003CC0EF /* NSArray+APCHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+APCHelper.m"; sourceTree = "<group>"; };
-		366345931B1F863A003CC0EF /* SBBSchedule+APCHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SBBSchedule+APCHelper.h"; sourceTree = "<group>"; };
-		366345941B1F863A003CC0EF /* SBBSchedule+APCHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SBBSchedule+APCHelper.m"; sourceTree = "<group>"; };
 		366345A31B1F8666003CC0EF /* APCTaskGroupCacheEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCTaskGroupCacheEntry.h; sourceTree = "<group>"; };
 		366345A41B1F8666003CC0EF /* APCTaskGroupCacheEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCTaskGroupCacheEntry.m; sourceTree = "<group>"; };
 		36829A511A96B98F000AA2AB /* NSOperationQueue+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSOperationQueue+Helper.h"; sourceTree = "<group>"; };
@@ -987,8 +975,6 @@
 		747FB1441ABDDFAE00345000 /* ResearchKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ResearchKit.framework; path = "../../researchkit/build/Debug-iphoneos/ResearchKit.framework"; sourceTree = "<group>"; };
 		7B07B8AA1ACDD7B400734558 /* APCHealthKitBackgroundDataCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCHealthKitBackgroundDataCollector.h; sourceTree = "<group>"; };
 		7B07B8AB1ACDD7B400734558 /* APCHealthKitBackgroundDataCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCHealthKitBackgroundDataCollector.m; sourceTree = "<group>"; };
-		7B362C041B02A34500127051 /* APCDataArchiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDataArchiver.h; sourceTree = "<group>"; };
-		7B362C051B02A34500127051 /* APCDataArchiver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDataArchiver.m; sourceTree = "<group>"; };
 		7B544B311ADF084F00361FB6 /* APCDisplacementTrackingCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDisplacementTrackingCollector.h; sourceTree = "<group>"; };
 		7B544B321ADF084F00361FB6 /* APCDisplacementTrackingCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDisplacementTrackingCollector.m; sourceTree = "<group>"; };
 		7B544B391ADF09E900361FB6 /* APCPassiveDisplacementTrackingDataUploader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCPassiveDisplacementTrackingDataUploader.h; sourceTree = "<group>"; };
@@ -1471,6 +1457,13 @@
 		F5F12B2A1A2F864B0015982C /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		F5F12B2C1A2F86550015982C /* libarchive.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libarchive.dylib; path = usr/lib/libarchive.dylib; sourceTree = SDKROOT; };
 		F5F12B2E1A2F86600015982C /* libbz2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbz2.dylib; path = usr/lib/libbz2.dylib; sourceTree = SDKROOT; };
+		FF44E5091C1A3BB200F07DA9 /* BridgeSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BridgeSDK.framework; path = "../../../../../Library/Developer/Xcode/DerivedData/Parkinson-dphbgsbdqdzhcbeketqhdiecbfyz/Build/Products/Debug-iphoneos/BridgeSDK.framework"; sourceTree = "<group>"; };
+		FF44E50B1C1B585900F07DA9 /* APCTaskResultArchiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCTaskResultArchiver.h; sourceTree = "<group>"; };
+		FF44E50C1C1B585900F07DA9 /* APCTaskResultArchiver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCTaskResultArchiver.m; sourceTree = "<group>"; };
+		FF44E51A1C1B94A700F07DA9 /* APCTaskResultArchiverTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCTaskResultArchiverTests.m; sourceTree = "<group>"; };
+		FF9469831C1A294E00CF7075 /* ORKOrderedTask+APCHelperTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ORKOrderedTask+APCHelperTests.m"; sourceTree = "<group>"; };
+		FFF698DB1C18B9E200DC56CC /* ORKOrderedTask+APCHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ORKOrderedTask+APCHelper.h"; sourceTree = "<group>"; };
+		FFF698DC1C18B9E200DC56CC /* ORKOrderedTask+APCHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ORKOrderedTask+APCHelper.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1496,6 +1489,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF44E50A1C1A3BB200F07DA9 /* BridgeSDK.framework in Frameworks */,
+				FF9469871C1A2D4000CF7075 /* APCAppCore.framework in Frameworks */,
 				F55653B21A6F08E0003E0B0C /* libMobileGestalt.dylib in Frameworks */,
 				36B1AAE51A38DEA800CE7DB5 /* Security.framework in Frameworks */,
 				36B1AAE61A38DEAF00CE7DB5 /* SystemConfiguration.framework in Frameworks */,
@@ -1657,6 +1652,8 @@
 				6C6AA2781B4E056C0056AD47 /* APCDataEncryptor.m */,
 				6C6AA2791B4E056C0056AD47 /* APCDataUploader.h */,
 				6C6AA27A1B4E056C0056AD47 /* APCDataUploader.m */,
+				FF44E50B1C1B585900F07DA9 /* APCTaskResultArchiver.h */,
+				FF44E50C1C1B585900F07DA9 /* APCTaskResultArchiver.m */,
 			);
 			path = DataArchiverAndUploader;
 			sourceTree = "<group>";
@@ -1934,8 +1931,6 @@
 		7BCF702F1ACB6C4A00838717 /* PassiveDataCollector */ = {
 			isa = PBXGroup;
 			children = (
-				7B362C041B02A34500127051 /* APCDataArchiver.h */,
-				7B362C051B02A34500127051 /* APCDataArchiver.m */,
 				7BCF70301ACB6C5C00838717 /* APCPassiveDataCollector.h */,
 				7BCF70311ACB6C5C00838717 /* APCPassiveDataCollector.m */,
 				7BEFD7D51AD595FB0087F46C /* Data Sink */,
@@ -2390,10 +2385,10 @@
 				36B7D2541A8D848D0043F968 /* ORKAnswerFormat+Helper.m */,
 				6C6AA33E1B55EA6C0056AD47 /* ORKFileResult+Filename.h */,
 				6C6AA33F1B55EA6C0056AD47 /* ORKFileResult+Filename.m */,
+				FFF698DB1C18B9E200DC56CC /* ORKOrderedTask+APCHelper.h */,
+				FFF698DC1C18B9E200DC56CC /* ORKOrderedTask+APCHelper.m */,
 				F5306CCB1A8BE7F600732E60 /* ORKQuestionResult+APCHelper.h */,
 				F5306CCC1A8BE7F600732E60 /* ORKQuestionResult+APCHelper.m */,
-				366345931B1F863A003CC0EF /* SBBSchedule+APCHelper.h */,
-				366345941B1F863A003CC0EF /* SBBSchedule+APCHelper.m */,
 				F5B9475A1A73272C0034C522 /* UIAlertController+Helper.h */,
 				F5B9475B1A73272C0034C522 /* UIAlertController+Helper.m */,
 				F5B9475C1A73272C0034C522 /* UIImage+APCHelper.h */,
@@ -3023,8 +3018,9 @@
 		F5F129D91A2F78490015982C /* APCAppCoreTests */ = {
 			isa = PBXGroup;
 			children = (
-				36EE894F1A2FEFD700AEA9E6 /* APCScheduleExpressionTests */,
 				F5F129E01A2F78490015982C /* Info.plist */,
+				FF9469821C1A28E800CF7075 /* ActivityTests */,
+				36EE894F1A2FEFD700AEA9E6 /* APCScheduleExpressionTests */,
 				360C63CF1A33971B002EC86C /* NSDateComponents+HelperTests */,
 			);
 			path = APCAppCoreTests;
@@ -3033,6 +3029,7 @@
 		F5F12B211A2F85FF0015982C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FF44E5091C1A3BB200F07DA9 /* BridgeSDK.framework */,
 				747FB1441ABDDFAE00345000 /* ResearchKit.framework */,
 				5B5523A91AC915140068B51D /* Social.framework */,
 				F5B948161A7328F30034C522 /* ImageIO.framework */,
@@ -3046,6 +3043,15 @@
 				F5F12B221A2F861F0015982C /* CoreLocation.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		FF9469821C1A28E800CF7075 /* ActivityTests */ = {
+			isa = PBXGroup;
+			children = (
+				FF9469831C1A294E00CF7075 /* ORKOrderedTask+APCHelperTests.m */,
+				FF44E51A1C1B94A700F07DA9 /* APCTaskResultArchiverTests.m */,
+			);
+			name = ActivityTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -3070,6 +3076,7 @@
 				CFFDED7A1A95731F00B25581 /* APCMedicationTrackerMedicationsDisplayView.h in Headers */,
 				F5F12AB21A2F78490015982C /* APCSignupPasscodeViewController.h in Headers */,
 				F5B947C91A73272C0034C522 /* NSString+Helper.h in Headers */,
+				FFF698DD1C18B9E200DC56CC /* ORKOrderedTask+APCHelper.h in Headers */,
 				F5B947BF1A73272C0034C522 /* NSDateComponents+Helper.h in Headers */,
 				5B0601CD1AE79B50009D6D65 /* APCFeedTableViewCell.h in Headers */,
 				5B9B36AB1A95DC1700389F42 /* APCActivitiesTableViewCell.h in Headers */,
@@ -3145,6 +3152,7 @@
 				F5F12A951A2F78490015982C /* APCStudyOverviewViewController.h in Headers */,
 				F5B9464A1A7309A20034C522 /* ZZStoreOutputStream.h in Headers */,
 				CFFDED7E1A95731F00B25581 /* NSDictionary+MedicationTracker.h in Headers */,
+				FF44E50D1C1B585900F07DA9 /* APCTaskResultArchiver.h in Headers */,
 				CFFDEDE01A95734000B25581 /* APCMedicationFrequencyViewController.h in Headers */,
 				7B6C8CBB1AA26ECE0007B560 /* APCConsentQuestion.h in Headers */,
 				5BD6EBB71A9C77D900C3BFB0 /* APCBaseGraphView.h in Headers */,
@@ -3174,7 +3182,6 @@
 				F5F12A901A2F78490015982C /* APCSpinnerViewController.h in Headers */,
 				CFFDEDFA1A95734000B25581 /* APCSetupTableViewCell.h in Headers */,
 				5BE106F01A9EE2D900CA5A07 /* APCDashboardGraphTableViewCell.h in Headers */,
-				7B362C061B02A34500127051 /* APCDataArchiver.h in Headers */,
 				F5B946211A7309A20034C522 /* zipzap.h in Headers */,
 				CFFDEDDD1A95734000B25581 /* APCFrequencyTableViewTimesCell.h in Headers */,
 				369E27F11A96B7A200D35DFA /* APCMedicationDosageTaken.h in Headers */,
@@ -3369,7 +3376,6 @@
 				7BBC9BCB1ACF416700E022DB /* APCDataCollector.h in Headers */,
 				F5B947B91A73272C0034C522 /* HKHealthStore+APCExtensions.h in Headers */,
 				F5F12AE01A2F78490015982C /* APCSwitchTableViewCell.h in Headers */,
-				366345951B1F863A003CC0EF /* SBBSchedule+APCHelper.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3550,7 +3556,6 @@
 			files = (
 				F5F129F51A2F78490015982C /* APCResult+AddOn.m in Sources */,
 				5B827B561A80CB0400C685A3 /* APCFadeAnimator.m in Sources */,
-				366345961B1F863A003CC0EF /* SBBSchedule+APCHelper.m in Sources */,
 				36D0510F1ABB92F0008FC9B3 /* NSFileManager+Helper.m in Sources */,
 				F5F12AF11A2F78490015982C /* APCDashboardProgressTableViewCell.m in Sources */,
 				08BABB431AD62D5D00059C35 /* APCExampleLabel.m in Sources */,
@@ -3569,6 +3574,7 @@
 				CF7945871AA7AEC70019160F /* APCFrequencyEverydayTableViewCell.m in Sources */,
 				366345A81B1F8666003CC0EF /* APCTaskGroupCacheEntry.m in Sources */,
 				7B6C8CC51AA26F150007B560 /* APCStack.m in Sources */,
+				FF44E50E1C1B585900F07DA9 /* APCTaskResultArchiver.m in Sources */,
 				7B544B3C1ADF09E900361FB6 /* APCPassiveDisplacementTrackingDataUploader.m in Sources */,
 				F5F129F91A2F78490015982C /* APCResult.m in Sources */,
 				F5F12A0D1A2F78490015982C /* APCUser+Bridge.m in Sources */,
@@ -3591,11 +3597,11 @@
 				F5B946351A7309A20034C522 /* ZZError.m in Sources */,
 				5BE106F11A9EE2D900CA5A07 /* APCDashboardGraphTableViewCell.m in Sources */,
 				CFFDEDF31A95734000B25581 /* APCMedicationSummaryTableViewCell.m in Sources */,
-				7B362C071B02A34500127051 /* APCDataArchiver.m in Sources */,
 				7B8DBEC51AA1871D007B4026 /* APCVerticalThinLineView.m in Sources */,
 				5B0432A01A318AA2000DC9ED /* APCSignInTask.m in Sources */,
 				F5F12A0F1A2F78490015982C /* APCUser+UserData.m in Sources */,
 				F5F12AC11A2F78490015982C /* APCGraphViewController.m in Sources */,
+				FFF698DE1C18B9E200DC56CC /* ORKOrderedTask+APCHelper.m in Sources */,
 				5B534ED51B2179550049C6AB /* APCNewsFeedManager.m in Sources */,
 				7B558D291AE587DF00129167 /* CLLocation+APCAdditions.m in Sources */,
 				5BD6EBA31A9A46BB00C3BFB0 /* APCStudyLandingCollectionViewCell.m in Sources */,
@@ -3856,27 +3862,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				36CCF3A01AA45B790086CD1D /* APCConstants.m in Sources */,
-				36CCF38F1AA4573D0086CD1D /* APCScheduleExpressionParser.m in Sources */,
-				36CCF38B1AA4573D0086CD1D /* APCDayOfMonthSelector.m in Sources */,
-				36CCF38A1AA4572F0086CD1D /* APCLog.m in Sources */,
-				36CCF3A11AA45B9D0086CD1D /* NSDateComponents+Helper.m in Sources */,
-				36CCF38C1AA4573D0086CD1D /* APCListSelector.m in Sources */,
-				F5F12B1A1A2F78870015982C /* APCScheduleExpressionEnumeratorTests.m in Sources */,
-				36CCF38E1AA4573D0086CD1D /* APCScheduleEnumerator.m in Sources */,
-				36CCF3901AA4573D0086CD1D /* APCScheduleExpressionToken.m in Sources */,
-				36CCF3921AA4573D0086CD1D /* APCTimeSelector.m in Sources */,
-				F5F12B181A2F78870015982C /* APCScheduleExpressionParserTests.m in Sources */,
-				F5F12B171A2F78870015982C /* APCScheduleExpressionPointSelectorTests.m in Sources */,
-				36CCF3A21AA45BC40086CD1D /* NSDate+Helper.m in Sources */,
-				36CCF3951AA457420086CD1D /* APCScheduleExpression.m in Sources */,
-				360C63D11A339746002EC86C /* NSDateComponentsHelperTests.m in Sources */,
-				36E06F1C1A33F071005D6EB0 /* APCScheduleExpressionRealLifeTests.m in Sources */,
-				36CCF3911AA4573D0086CD1D /* APCScheduleExpressionTokenizer.m in Sources */,
-				36CCF38D1AA4573D0086CD1D /* APCPointSelector.m in Sources */,
-				36CCF3931AA4573D0086CD1D /* APCTimeSelectorEnumerator.m in Sources */,
-				F5F12B151A2F78870015982C /* APCScheduleExpressionListSelectorTests.m in Sources */,
+				FF94698E1C1A2F0D00CF7075 /* NSDateComponentsHelperTests.m in Sources */,
+				FF44E51B1C1B94A700F07DA9 /* APCTaskResultArchiverTests.m in Sources */,
+				FF94698A1C1A2F0900CF7075 /* APCScheduleExpressionListSelectorTests.m in Sources */,
+				FF9469881C1A2F0400CF7075 /* ORKOrderedTask+APCHelperTests.m in Sources */,
+				FF9469891C1A2F0900CF7075 /* APCScheduleExpressionEnumeratorTests.m in Sources */,
 				0833AE1E1A76C016001D8AA0 /* (null) in Sources */,
+				FF94698B1C1A2F0900CF7075 /* APCScheduleExpressionParserTests.m in Sources */,
+				FF94698D1C1A2F0900CF7075 /* APCScheduleExpressionRealLifeTests.m in Sources */,
+				FF94698C1C1A2F0900CF7075 /* APCScheduleExpressionPointSelectorTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

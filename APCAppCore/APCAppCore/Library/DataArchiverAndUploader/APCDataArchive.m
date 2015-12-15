@@ -150,7 +150,12 @@ static NSString * kJsonInfoFilename                 = @"info.json";
 // Converts the dictionary into json and inserts into the archive using the given filename
 - (void)insertIntoArchive:(NSDictionary *)dictionary filename: (NSString *)filename
 {
-    
+    [self insertDictionaryIntoArchive:dictionary filename:filename];
+}
+
+- (void)insertDictionaryIntoArchive:(NSDictionary *)dictionary filename: (NSString *)filename
+{
+
     NSError * serializationError;
     NSData * jsonData;
     

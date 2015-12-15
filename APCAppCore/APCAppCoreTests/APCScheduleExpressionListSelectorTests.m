@@ -7,8 +7,8 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
-#import "APCListSelector.h"
-#import "APCPointSelector.h"
+#import <APCAppCore/APCListSelector.h>
+#import <APCAppCore/APCPointSelector.h>
 
 @interface APCScheduleExpressionListSelectorTests : XCTestCase
 

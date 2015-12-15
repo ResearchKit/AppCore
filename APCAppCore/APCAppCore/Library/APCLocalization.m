@@ -31,3 +31,16 @@ NSBundle *APCDefaultLocaleBundle() {
     
     return __bundle;
 }
+
+NSDateComponentsFormatter *APCDurationStringFormatter() {
+    static NSDateComponentsFormatter *durationFormatter = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        durationFormatter = [[NSDateComponentsFormatter alloc] init];
+        [durationFormatter setUnitsStyle:NSDateComponentsFormatterUnitsStyleFull];
+        [durationFormatter setAllowedUnits: NSCalendarUnitMinute | NSCalendarUnitSecond];
+        [durationFormatter setFormattingContext:NSFormattingContextStandalone];
+        [durationFormatter setMaximumUnitCount: 2];
+    });
+    return durationFormatter;
+}
