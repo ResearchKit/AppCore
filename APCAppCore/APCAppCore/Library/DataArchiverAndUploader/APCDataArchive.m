@@ -214,7 +214,7 @@ static NSString * kJsonInfoFilename                 = @"info.json";
             [self.infoDict setObject:isoCreatedString forKey:kSurveyCreatedOnKey];
         }
         
-        [self insertIntoArchive:self.infoDict filename:kJsonInfoFilename];
+        [self insertDictionaryIntoArchive:self.infoDict filename:kJsonInfoFilename];
         
         NSError * error;
         if (![self.zipArchive updateEntries:self.zipEntries error:&error]) {

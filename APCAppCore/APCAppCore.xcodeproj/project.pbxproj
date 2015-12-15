@@ -724,6 +724,7 @@
 		FF94698E1C1A2F0D00CF7075 /* NSDateComponentsHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 360C63D01A339746002EC86C /* NSDateComponentsHelperTests.m */; };
 		FFF698DD1C18B9E200DC56CC /* ORKOrderedTask+APCHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = FFF698DB1C18B9E200DC56CC /* ORKOrderedTask+APCHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FFF698DE1C18B9E200DC56CC /* ORKOrderedTask+APCHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = FFF698DC1C18B9E200DC56CC /* ORKOrderedTask+APCHelper.m */; };
+		FFFA23A91C20A4D800727DA8 /* FilenameTranslation_test.json in Resources */ = {isa = PBXBuildFile; fileRef = FFFA23A81C20A4D800727DA8 /* FilenameTranslation_test.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -1464,6 +1465,7 @@
 		FF9469831C1A294E00CF7075 /* ORKOrderedTask+APCHelperTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ORKOrderedTask+APCHelperTests.m"; sourceTree = "<group>"; };
 		FFF698DB1C18B9E200DC56CC /* ORKOrderedTask+APCHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ORKOrderedTask+APCHelper.h"; sourceTree = "<group>"; };
 		FFF698DC1C18B9E200DC56CC /* ORKOrderedTask+APCHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ORKOrderedTask+APCHelper.m"; sourceTree = "<group>"; };
+		FFFA23A81C20A4D800727DA8 /* FilenameTranslation_test.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = FilenameTranslation_test.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3018,6 +3020,7 @@
 		F5F129D91A2F78490015982C /* APCAppCoreTests */ = {
 			isa = PBXGroup;
 			children = (
+				FFFA23A71C20A49700727DA8 /* test files */,
 				F5F129E01A2F78490015982C /* Info.plist */,
 				FF9469821C1A28E800CF7075 /* ActivityTests */,
 				36EE894F1A2FEFD700AEA9E6 /* APCScheduleExpressionTests */,
@@ -3052,6 +3055,15 @@
 				FF44E51A1C1B94A700F07DA9 /* APCTaskResultArchiverTests.m */,
 			);
 			name = ActivityTests;
+			sourceTree = "<group>";
+		};
+		FFFA23A71C20A49700727DA8 /* test files */ = {
+			isa = PBXGroup;
+			children = (
+				FFFA23A81C20A4D800727DA8 /* FilenameTranslation_test.json */,
+			);
+			name = "test files";
+			path = test_files;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -3541,6 +3553,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FFFA23A91C20A4D800727DA8 /* FilenameTranslation_test.json in Resources */,
 				36829A411A96B937000AA2AB /* APCMedTrackerPredefinedMedications.plist in Resources */,
 				36829A431A96B937000AA2AB /* APCMedTrackerPredefinedPrescriptionColors.plist in Resources */,
 				36829A421A96B937000AA2AB /* APCMedTrackerPredefinedPossibleDosages.plist in Resources */,

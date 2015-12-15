@@ -67,9 +67,14 @@ extern NSString * const APCDefaultTranslationFilename;
  Dictionary used for the translation of a step result identifier into
  the filename to use when archiving. By default, this dictionary is populated by
  a file FilenameTranslation.json embedded as a resource in the main bundle.
-  If the file does not exist then an empty one is created.
+ If the file does not exist then an empty one is created.
  */
 @property (nonatomic, strong) NSDictionary *filenameTranslationDictionary;
+
+/**
+ Optional method for setting the filepath for getting the translation dictionary.
+ */
+- (void)setFilenameTranslationDictionaryWithJSONFileAtPath:(NSString * _Nonnull)filePath;
 
 /**
  Translates the fileResult identifier and stepIdentifier via concatenation in the following scheme:
