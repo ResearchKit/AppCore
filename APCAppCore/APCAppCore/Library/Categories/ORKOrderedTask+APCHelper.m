@@ -105,7 +105,7 @@ NSString *const APCLeftHandIdentifier            = @"left";
         case APCTapHandOptionRight:
             rightHand = YES; break;
         default:
-            rightHand = (((NSUInteger)[NSDate timeIntervalSinceReferenceDate])%2 == 0); break;
+            rightHand = (arc4random()%2 == 0); break;
     }
     
     for (NSUInteger hand=1; hand <= handCount; hand++)
