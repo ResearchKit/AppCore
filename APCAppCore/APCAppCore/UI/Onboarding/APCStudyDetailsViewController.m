@@ -55,7 +55,8 @@
     
     self.title = self.studyDetails.caption;
     
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:self.studyDetails.detailText ofType:@"html"];
+    NSBundle *resourceBundle = [[APCAppDelegate sharedAppDelegate] resourceBundle];
+    NSString *filePath = [resourceBundle pathForResource:self.studyDetails.detailText ofType:@"html"];
     NSURL *targetURL = [NSURL URLWithString:filePath];
     NSURLRequest *request = [NSURLRequest requestWithURL:targetURL];
     self.webView.delegate = self;

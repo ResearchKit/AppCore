@@ -35,6 +35,7 @@
 #import "APCNewsFeedManager.h"
 #import "APCFeedParser.h"
 #import "APCLog.h"
+#import "APCAppDelegate.h"
 
 NSString * const kAPCNewsFeedUpdateNotification = @"APCNewsFeedUpdateNotification";
 
@@ -128,7 +129,8 @@ static NSString * const kAPCBlogUrlKey   = @"BlogUrlKey";
 
 - (NSString *)blogUrlFromJSONFile:(NSString *)jsonFileName
 {
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:jsonFileName ofType:@"json"];
+    NSBundle *resourceBundle = [[APCAppDelegate sharedAppDelegate] resourceBundle];
+    NSString *filePath = [resourceBundle pathForResource:jsonFileName ofType:@"json"];
     NSString *JSONString = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:NULL];
     
     NSError *parseError;

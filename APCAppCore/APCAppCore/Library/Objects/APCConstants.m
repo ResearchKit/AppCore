@@ -185,8 +185,9 @@ NSString *const kHKWorkoutTypeKey       = @"HKWorkoutType";
 NSString * const kPasswordKey                    = @"Password";
 NSString * const kNumberOfMinutesForPasscodeKey  = @"NumberOfMinutesForPasscodeKey";
 
-NSUInteger     const kAPCActivitiesTabIndex                                 = 0;
-NSUInteger     const kAPCNewsFeedTabIndex                                   = 2;
+NSInteger     const kAPCActivitiesTabTag                                   = 100;
+NSInteger     const kAPCNewsFeedTabTag                                     = 102;
+NSInteger     const kAPCProfileTabTag                                      = 103;
 
 NSInteger      const kAPCSigninErrorCode_NotSignedIn                        = 404;
 NSUInteger     const kAPCSigninNumRetriesBeforePause                        = 10;

@@ -301,7 +301,8 @@ NSString * gTaskReminderDelayMessage;
 }
 
 - (NSString *)studyName {
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"StudyOverview" ofType:@"json"];
+    NSBundle *resourceBundle = [[APCAppDelegate sharedAppDelegate] resourceBundle];
+    NSString *filePath = [resourceBundle pathForResource:@"StudyOverview" ofType:@"json"];
     NSString *JSONString = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:NULL];
     
     NSError *parseError;

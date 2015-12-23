@@ -290,6 +290,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCKeychainStore+Passcode.h>
 #import <APCAppCore/APCPresentAnimator.h>
 #import <APCAppCore/APCFadeAnimator.h>
+#import <APCAppCore/APCScene.h>
 #import <APCAppCore/APCScoring.h>
 #import <APCAppCore/APCDeviceHardware.h>
 #import <APCAppCore/APCInsights.h>

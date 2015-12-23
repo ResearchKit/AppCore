@@ -42,6 +42,13 @@
 extern NSUInteger   const kTheEntireDataModelOfTheApp;
 static NSString*    const kDatabaseName                     = @"db.sqlite";
 
+// Default tab controller tab keys
+extern NSString *const kDashBoardStoryBoardKey;
+extern NSString *const kLearnStoryBoardKey;
+extern NSString *const kActivitiesStoryBoardKey;
+extern NSString *const kHealthProfileStoryBoardKey;
+extern NSString *const kNewsFeedStoryBoardKey;
+
 @class APCDataSubstrate, APCDataMonitor, APCScheduler, APCPasscodeViewController, APCTasksReminderManager, APCPassiveDataCollector, APCFitnessAllocation;
 
 @interface APCAppDelegate : UIResponder <UIApplicationDelegate, APCOnboardingManagerProvider, APCPasscodeViewControllerDelegate, SBBBridgeAppDelegate>
@@ -96,6 +103,9 @@ static NSString*    const kDatabaseName                     = @"db.sqlite";
 - (NSString *) applicationDocumentsDirectory;
 - (NSUInteger)obtainPreviousVersion;
 
+//Default bundle for resources and storyboards
+- (NSBundle*)resourceBundle;
+
 //SetupMethods
 - (void) setUpInitializationOptions;
 - (void) setUpAppAppearance;
@@ -125,5 +135,9 @@ static NSString*    const kDatabaseName                     = @"db.sqlite";
 - (NSDate*)applicationBecameActiveDate;
 
 - (void)updateNewsFeedBadgeCount;
+
+
+// List of the tabs to use to setup the tabbar
+- (NSMutableArray <APCScene *> *)tabBarScenes;
 
 @end

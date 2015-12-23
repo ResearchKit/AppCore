@@ -80,26 +80,4 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-
-/**
- *  Simple container to hold on to a specific view controller in a storyboard.
- */
-@interface APCScene : NSObject
-
-/** Refers to StoryboardID. */
-@property (nonatomic, strong) NSString *name;
-
-/** The name of the storyboard. */
-@property (nonatomic, strong) NSString *storyboardName;
-
-/** Defaults to the bundle this class resides in. */
-@property (nonatomic, strong) NSBundle *bundle;
-
-- (instancetype)initWithName:(NSString *)name inStoryboard:(NSString *)storyboardName;
-
-/** Instantiates the view controller as defined by this scene. */
-- (nullable UIViewController *)instantiateViewController;
-
-@end
-
 NS_ASSUME_NONNULL_END

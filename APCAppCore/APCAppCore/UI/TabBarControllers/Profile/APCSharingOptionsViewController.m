@@ -102,7 +102,8 @@ static NSString * const kSharingOptionsTableViewCellIdentifier = @"SharingOption
 
 - (void)setupDataFromJSON:(NSString *)jsonFileName
 {
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:jsonFileName ofType:@"json"];
+    NSBundle *resourceBundle = [[APCAppDelegate sharedAppDelegate] resourceBundle];
+    NSString *filePath = [resourceBundle pathForResource:jsonFileName ofType:@"json"];
     NSString *JSONString = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:NULL];
     
     NSError *parseError;
