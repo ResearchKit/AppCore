@@ -276,8 +276,7 @@ static NSArray *legalTimeSpecifierFormats = nil;
 {
     id <ORKTask> rkSurvey = nil;
     
-    NSBundle *resourceBundle = [[APCAppDelegate sharedAppDelegate] resourceBundle];
-    NSString *surveyFilePath = [resourceBundle pathForResource: surveyContentFileBaseName
+    NSString *surveyFilePath = [[APCAppDelegate sharedAppDelegate] pathForResource: surveyContentFileBaseName
                                                                ofType: kAPCFileExtension_JSON];
     
     if (! surveyFilePath)
@@ -407,8 +406,7 @@ static NSArray *legalTimeSpecifierFormats = nil;
         
         // Set up TaskId->TaskViewController dictionary
         // TODO: move this init stuff out of a situation where it will be called many times
-        NSBundle *resourceBundle = [[APCAppDelegate sharedAppDelegate] resourceBundle];
-        NSString *filePath = [resourceBundle pathForResource:kTaskIdToViewControllerMappingJSON ofType:@"json"];
+        NSString *filePath = [[APCAppDelegate sharedAppDelegate] pathForResource:kTaskIdToViewControllerMappingJSON ofType:@"json"];
         NSString *JSONString = [[NSString alloc] initWithContentsOfFile:filePath
                                                                encoding:NSUTF8StringEncoding
                                                                   error:NULL];

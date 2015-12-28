@@ -261,8 +261,7 @@ NSString *const kBypassServerProperty                   = @"bypassServer";
     //This is used for unit testing
     //        NSBundle *bundle = [NSBundle bundleForClass:[self class]];
     //        NSString *bundlePath = [bundle pathForResource:fileNameAndExtension[0] ofType:fileNameAndExtension[1]];
-    NSBundle *resourceBundle = [[APCAppDelegate sharedAppDelegate] resourceBundle];
-    NSString *bundlePath = [resourceBundle pathForResource:fileNameAndExtension[0] ofType:fileNameAndExtension[1]];
+    NSString *bundlePath = [[APCAppDelegate sharedAppDelegate] pathForResource:fileNameAndExtension[0] ofType:fileNameAndExtension[1]];
     
     BOOL           fileExists = [[NSFileManager defaultManager] fileExistsAtPath:bundlePath];
     if (fileExists) {

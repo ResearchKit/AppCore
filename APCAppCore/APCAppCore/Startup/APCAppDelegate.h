@@ -105,6 +105,7 @@ extern NSString *const kNewsFeedStoryBoardKey;
 
 //Default bundle for resources and storyboards
 - (NSBundle*)resourceBundle;
+- (NSString*)pathForResource:(NSString*)resourceName ofType:(NSString*)resourceType;
 
 //SetupMethods
 - (void) setUpInitializationOptions;

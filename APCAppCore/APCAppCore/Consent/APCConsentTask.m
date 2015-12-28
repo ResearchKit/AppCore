@@ -463,9 +463,9 @@ static NSString*    kStepIdentifierSuffixStart          = @"+X";
 
 - (void)loadFromJson:(NSString*)fileName
 {
-    NSBundle *resourceBundle = [[APCAppDelegate sharedAppDelegate] resourceBundle];
+    APCAppDelegate *appDelegate = [APCAppDelegate sharedAppDelegate];
     
-    NSString*       filePath = [resourceBundle pathForResource:fileName ofType:@"json"];
+    NSString*       filePath = [appDelegate pathForResource:fileName ofType:@"json"];
     NSAssert(filePath != nil, @"Unable to location file with Consent Section in main bundle");
     
     NSData*         fileContent = [NSData dataWithContentsOfFile:filePath];
@@ -496,14 +496,14 @@ static NSString*    kStepIdentifierSuffixStart          = @"+X";
 
 - (void)loadDocumentProperties:(NSDictionary*)properties
 {
-    NSBundle *resourceBundle = [[APCAppDelegate sharedAppDelegate] resourceBundle];
+    APCAppDelegate *appDelegate = [APCAppDelegate sharedAppDelegate];
     
     NSString*   documentHtmlContent = [properties objectForKey:kDocumentHtmlTag];
     NSAssert(documentHtmlContent == nil || documentHtmlContent != nil && [documentHtmlContent isKindOfClass:[NSString class]], @"Improper Document HTML Content type");
     
     if (documentHtmlContent != nil)
     {
-        NSString*   path    = [resourceBundle pathForResource:documentHtmlContent ofType:@"html"];
+        NSString*   path    = [appDelegate pathForResource:documentHtmlContent ofType:@"html"];
         NSAssert(path != nil, @"Unable to locate HTML file: %@", documentHtmlContent);
         
         if (path != nil)
@@ -531,7 +531,7 @@ static NSString*    kStepIdentifierSuffixStart          = @"+X";
     NSString*   htmlContent = [properties objectForKey:kHtmlContentTag];
     if (htmlContent != nil)
     {
-        NSString*   path    = [resourceBundle pathForResource:htmlContent ofType:@"html"];
+        NSString*   path    = [appDelegate pathForResource:htmlContent ofType:@"html"];
         NSAssert(path != nil, @"Unable to locate HTML file: %@", htmlContent);
         
         NSError*    error   = nil;
@@ -742,7 +742,7 @@ static NSString*    kStepIdentifierSuffixStart          = @"+X";
     static NSString*   kSectionAnimationUrl    = @"sectionAnimationUrl";
     
     NSMutableArray* consentSections = [NSMutableArray arrayWithCapacity:properties.count];
-    NSBundle *resourceBundle = [[APCAppDelegate sharedAppDelegate] resourceBundle];
+    APCAppDelegate *appDelegate = [APCAppDelegate sharedAppDelegate];
     
     for (NSDictionary* section in properties)
     {
@@ -796,7 +796,7 @@ static NSString*    kStepIdentifierSuffixStart          = @"+X";
         if (htmlContent != nil)
         {
             
-            NSString*   path    = [resourceBundle pathForResource:htmlContent ofType:@"html"];
+            NSString*   path    = [appDelegate pathForResource:htmlContent ofType:@"html"];
             NSAssert(path != nil, @"Unable to locate HTML file: %@", htmlContent);
             
             NSError*    error   = nil;
@@ -824,7 +824,7 @@ static NSString*    kStepIdentifierSuffixStart          = @"+X";
             {
                 nameWithScaleFactor = [nameWithScaleFactor stringByAppendingString:@"@2x"];
             }
-            NSURL*      url   = [resourceBundle URLForResource:nameWithScaleFactor withExtension:@"m4v"];
+            NSURL*      url   = [[appDelegate resourceBundle] URLForResource:nameWithScaleFactor withExtension:@"m4v"];
             NSError*    error = nil;
             
             NSAssert([url checkResourceIsReachableAndReturnError:&error], @"Animation file--%@--not reachable: %@", animationUrl, error);

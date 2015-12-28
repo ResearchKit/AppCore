@@ -397,8 +397,7 @@ static  NSString  *const  kSpatialSpanMemoryTouchSampleIsCorrectKey     = @"Memo
 - (NSDictionary *)filenameTranslationDictionary
 {
     if (_filenameTranslationDictionary == nil) {
-        NSBundle *resourceBundle = [[APCAppDelegate sharedAppDelegate] resourceBundle];
-        NSString *path = [resourceBundle pathForResource:APCDefaultTranslationFilename ofType:kJSONExtension];
+        NSString *path = [[APCAppDelegate sharedAppDelegate] pathForResource:APCDefaultTranslationFilename ofType:kJSONExtension];
         [self setFilenameTranslationDictionaryWithJSONFileAtPath:path];
     }
     return _filenameTranslationDictionary;

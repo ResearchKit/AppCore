@@ -99,9 +99,18 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
     return appDelegate;
 }
 
+/*********************************************************************************/
+#pragma mark - Resource handling
+/*********************************************************************************/
+
 - (NSBundle*)resourceBundle
 {
     return [NSBundle mainBundle];
+}
+
+- (NSString*)pathForResource:(NSString*)resourceName ofType:(NSString*)resourceType
+{
+    return [[self resourceBundle] pathForResource:resourceName ofType:resourceType];
 }
 
 /*********************************************************************************/
@@ -416,7 +425,7 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
     NSString*   kSectionImage           = @"sectionImage";
     NSString*   kSectionAnimationUrl    = @"sectionAnimationUrl";
     
-    NSString*       resource = [[self resourceBundle] pathForResource:self.initializationOptions[kConsentSectionFileNameKey] ofType:@"json"];
+    NSString*       resource = [self pathForResource:self.initializationOptions[kConsentSectionFileNameKey] ofType:@"json"];
     NSAssert(resource != nil, @"Unable to location file with Consent Section in main bundle");
     
     NSData*         consentSectionData = [NSData dataWithContentsOfFile:resource];
@@ -431,7 +440,7 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
     
     if (documentHtmlContent != nil && htmlContent != nil)
     {
-        NSString*   path    = [[self resourceBundle] pathForResource:documentHtmlContent ofType:@"html"];
+        NSString*   path    = [self pathForResource:documentHtmlContent ofType:@"html"];
         NSAssert(path != nil, @"Unable to locate HTML file: %@", documentHtmlContent);
         
         NSError*    error   = nil;
@@ -498,7 +507,7 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
         
         if (htmlContent != nil)
         {
-            NSString*   path    = [[self resourceBundle] pathForResource:htmlContent ofType:@"html"];
+            NSString*   path    = [self pathForResource:htmlContent ofType:@"html"];
             NSAssert(path != nil, @"Unable to locate HTML file: %@", htmlContent);
             
             NSError*    error   = nil;

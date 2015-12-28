@@ -199,8 +199,7 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
 
 - (NSArray *)studyDetailsFromJSONFile:(NSString *)jsonFileName
 {
-    NSBundle *resourceBundle = [[APCAppDelegate sharedAppDelegate] resourceBundle];
-    NSString *filePath = [resourceBundle pathForResource:jsonFileName ofType:@"json"];
+    NSString *filePath = [[APCAppDelegate sharedAppDelegate] pathForResource:jsonFileName ofType:@"json"];
     NSString *JSONString = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:NULL];
     
     NSError *parseError;
