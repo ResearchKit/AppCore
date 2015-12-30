@@ -59,6 +59,10 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *signOutButton;
 
+@property (weak, nonatomic) IBOutlet UILabel *applicationNameLabel;
+
+@property (weak, nonatomic) IBOutlet UILabel *participationLabel;
+
 @property (weak, nonatomic) IBOutlet UIButton *leaveStudyButton;
 
 @property (weak, nonatomic) IBOutlet UIButton *pauseResumeStudyButton;
