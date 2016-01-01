@@ -168,7 +168,7 @@
 		5B0601C31AE79AE0009D6D65 /* APCFeedParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0601C11AE79AE0009D6D65 /* APCFeedParser.m */; };
 		5B0601CD1AE79B50009D6D65 /* APCFeedTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B0601CB1AE79B50009D6D65 /* APCFeedTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B0601CE1AE79B50009D6D65 /* APCFeedTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0601CC1AE79B50009D6D65 /* APCFeedTableViewCell.m */; };
-		5B09ED1F1ABC1BEF003C5061 /* APCLicenseInfoViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B09ED1D1ABC1BEF003C5061 /* APCLicenseInfoViewController.h */; };
+		5B09ED1F1ABC1BEF003C5061 /* APCLicenseInfoViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B09ED1D1ABC1BEF003C5061 /* APCLicenseInfoViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B09ED201ABC1BEF003C5061 /* APCLicenseInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B09ED1E1ABC1BEF003C5061 /* APCLicenseInfoViewController.m */; };
 		5B234E141A329BF300A5A3A0 /* APCWithdrawDescriptionViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B234E121A329BF300A5A3A0 /* APCWithdrawDescriptionViewController.h */; };
 		5B234E151A329BF300A5A3A0 /* APCWithdrawDescriptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B234E131A329BF300A5A3A0 /* APCWithdrawDescriptionViewController.m */; };
@@ -3073,6 +3073,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5B09ED1F1ABC1BEF003C5061 /* APCLicenseInfoViewController.h in Headers */,
 				CFFDED731A95731F00B25581 /* APCMedicationTrackerCalendarWeeklyView.h in Headers */,
 				F5F12AF01A2F78490015982C /* APCDashboardProgressTableViewCell.h in Headers */,
 				08EA2AB31A7AD564007549C0 /* UIImage+ImageEffects.h in Headers */,
@@ -3157,7 +3158,6 @@
 				6C6AA27F1B4E056C0056AD47 /* APCDataEncryptor.h in Headers */,
 				5B534ED41B2179550049C6AB /* APCNewsFeedManager.h in Headers */,
 				F5F12AE41A2F78490015982C /* APCTintedTableViewCell.h in Headers */,
-				5B09ED1F1ABC1BEF003C5061 /* APCLicenseInfoViewController.h in Headers */,
 				7BCF70321ACB6C5C00838717 /* APCPassiveDataCollector.h in Headers */,
 				F5B948001A73272C0034C522 /* APCDayOfMonthSelector.h in Headers */,
 				F5F12AEE1A2F78490015982C /* APCDashboardPieGraphTableViewCell.h in Headers */,
