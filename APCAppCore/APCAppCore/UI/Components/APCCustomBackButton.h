@@ -38,4 +38,10 @@
 + (APCCustomBackButton *)customBackButtonWithTarget:(id)aTarget action:(SEL)anAction tintColor:(UIColor *)aTintColor;
 + (UIBarButtonItem *)customBackBarButtonItemWithTarget:(id)aTarget action:(SEL)anAction tintColor:(UIColor *)aTintColor;
 
+/**
+ * @param view controller that owns this button, will be used to pop itself from nav controller when clicked
+ */
++ (UIBarButtonItem *)customBackBarButtonItemWithVc:(__weak UIViewController*)vc
+                                         tintColor:(UIColor *)aTintColor;
+
 @end
