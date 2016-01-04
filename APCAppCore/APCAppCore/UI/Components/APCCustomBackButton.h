@@ -39,6 +39,9 @@
 + (UIBarButtonItem *)customBackBarButtonItemWithTarget:(id)aTarget action:(SEL)anAction tintColor:(UIColor *)aTintColor;
 
 /**
+ This method provides the custom back button w/ tint while still making default navigation possible. This
+ is not appropriate in onboarding when the onboarding manager needs to be notified, but great in other
+ parts of the app where we just want it to pop back if pressed.
  * @param view controller that owns this button, will be used to pop itself from nav controller when clicked
  */
 + (UIBarButtonItem *)customBackBarButtonItemWithVc:(__weak UIViewController*)vc
