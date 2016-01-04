@@ -35,6 +35,7 @@
 #import "APCSignUpTask.h"
 #import "APCSignInTask.h"
 #import "APCLog.h"
+#import "APCScene.h"
 
 
 @interface APCOnboarding ()
@@ -229,28 +230,4 @@
 @end
 
 
-@implementation APCScene
 
-- (nonnull instancetype)initWithName:(NSString *)name inStoryboard:(NSString *)storyboardName {
-    NSParameterAssert([name length] > 0);
-    NSParameterAssert([storyboardName length] > 0);
-    self = [super init];
-    if (self) {
-        self.name = name;
-        self.storyboardName = storyboardName;
-    }
-    return self;
-}
-
-- (nonnull NSBundle *)bundle {
-    if (!_bundle) {
-        _bundle = [NSBundle bundleForClass:[self class]];
-    }
-    return _bundle;
-}
-
-- (nullable UIViewController *)instantiateViewController {
-    return [[UIStoryboard storyboardWithName:self.storyboardName bundle:self.bundle] instantiateViewControllerWithIdentifier:self.name];
-}
-
-@end

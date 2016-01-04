@@ -149,7 +149,7 @@
     NSUInteger leftCount = 0;
     NSUInteger rightCount = 0;
     NSUInteger totalCount = 100;
-    NSUInteger threshold = 45;
+    NSUInteger threshold = 35;
     
     for (int ii=0; ii<totalCount; ii++)
     {

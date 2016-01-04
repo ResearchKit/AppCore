@@ -40,6 +40,7 @@
 #import "UIAlertController+Helper.h"
 #import "APCDemographicUploader.h"
 #import "APCConstants.h"
+#import "APCScene.h"
 #import "APCUtilities.h"
 #import "APCCatastrophicErrorViewController.h"
 
@@ -63,11 +64,11 @@ static NSString*    const kDBStatusCurrentVersion           = @"v1.0";
 /*********************************************************************************/
 #pragma mark - Tab bar Constants
 /*********************************************************************************/
-static NSString *const kDashBoardStoryBoardKey     = @"APHDashboard";
-static NSString *const kLearnStoryBoardKey         = @"APCLearn";
-static NSString *const kActivitiesStoryBoardKey    = @"APCActivities";
-static NSString *const kHealthProfileStoryBoardKey = @"APCProfile";
-static NSString *const kNewsFeedStoryBoardKey      = @"APCNewsFeed";
+NSString *const kDashBoardStoryBoardKey     = @"APCDashboard";
+NSString *const kLearnStoryBoardKey         = @"APCLearn";
+NSString *const kActivitiesStoryBoardKey    = @"APCActivities";
+NSString *const kHealthProfileStoryBoardKey = @"APCProfile";
+NSString *const kNewsFeedStoryBoardKey      = @"APCNewsFeed";
 
 /*********************************************************************************/
 #pragma mark - User Defaults Keys
@@ -98,6 +99,19 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
     return appDelegate;
 }
 
+/*********************************************************************************/
+#pragma mark - Resource handling
+/*********************************************************************************/
+
+- (NSBundle*)resourceBundle
+{
+    return [NSBundle mainBundle];
+}
+
+- (NSString*)pathForResource:(NSString*)resourceName ofType:(NSString*)resourceType
+{
+    return [[self resourceBundle] pathForResource:resourceName ofType:resourceType];
+}
 
 /*********************************************************************************/
 #pragma mark - App Delegate Methods
@@ -411,7 +425,7 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
     NSString*   kSectionImage           = @"sectionImage";
     NSString*   kSectionAnimationUrl    = @"sectionAnimationUrl";
     
-    NSString*       resource = [[NSBundle mainBundle] pathForResource:self.initializationOptions[kConsentSectionFileNameKey] ofType:@"json"];
+    NSString*       resource = [self pathForResource:self.initializationOptions[kConsentSectionFileNameKey] ofType:@"json"];
     NSAssert(resource != nil, @"Unable to location file with Consent Section in main bundle");
     
     NSData*         consentSectionData = [NSData dataWithContentsOfFile:resource];
@@ -426,7 +440,7 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
     
     if (documentHtmlContent != nil && htmlContent != nil)
     {
-        NSString*   path    = [[NSBundle mainBundle] pathForResource:documentHtmlContent ofType:@"html"];
+        NSString*   path    = [self pathForResource:documentHtmlContent ofType:@"html"];
         NSAssert(path != nil, @"Unable to locate HTML file: %@", documentHtmlContent);
         
         NSError*    error   = nil;
@@ -493,7 +507,7 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
         
         if (htmlContent != nil)
         {
-            NSString*   path    = [[NSBundle mainBundle] pathForResource:htmlContent ofType:@"html"];
+            NSString*   path    = [self pathForResource:htmlContent ofType:@"html"];
             NSAssert(path != nil, @"Unable to locate HTML file: %@", htmlContent);
             
             NSError*    error   = nil;
@@ -518,7 +532,7 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
             } else {
                 nameWithScaleFactor = [nameWithScaleFactor stringByAppendingString:@"@2x"];
             }
-            NSURL*      url   = [[NSBundle mainBundle] URLForResource:nameWithScaleFactor withExtension:@"m4v"];
+            NSURL*      url   = [[self resourceBundle] URLForResource:nameWithScaleFactor withExtension:@"m4v"];
             NSError*    error = nil;
             
             NSAssert([url checkResourceIsReachableAndReturnError:&error], @"Animation file--%@--not reachable: %@", animationUrl, error);
@@ -729,23 +743,7 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
 - (void)newsFeedUpdated:(NSNotification *)__unused notification
 {
     if ([self.window.rootViewController isKindOfClass:[UITabBarController class]]) {
-        UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
-        
-        BOOL newsFeedTab = [self.initializationOptions[kNewsFeedTabKey] boolValue];
-        
-        if (newsFeedTab){
-            NSArray *items = tabBarController.tabBar.items;
-            UITabBarItem *item = items[kAPCNewsFeedTabIndex];
-            
-            NSUInteger unreadPostsCount = [self.dataSubstrate.newsFeedManager unreadPostsCount];
-            NSNumber *unreadValue = @(unreadPostsCount);
-            
-            if (unreadPostsCount != 0) {
-                item.badgeValue = [unreadValue stringValue];
-            } else {
-                item.badgeValue = nil;
-            }
-        }
+        [self updateNewsFeedBadgeCount];
     }
 }
 
@@ -754,8 +752,6 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
 {
     return ([self.initializationOptions[kBridgeEnvironmentKey] integerValue] == SBBEnvironmentStaging) ? [self.initializationOptions[kAppPrefixKey] stringByAppendingString:@"-staging"] :self.initializationOptions[kAppPrefixKey];
 }
-
-
 
 #pragma mark - Other Abstract Implmentations
 - (void) setUpInitializationOptions {/*Abstract Implementation*/}
@@ -800,91 +796,87 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
 #pragma mark - Tab Bar Stuff
 /*********************************************************************************/
 
+- (BOOL)shouldIncludeNewsFeedTab
+{
+    return [self.initializationOptions[kNewsFeedTabKey] boolValue];
+}
+
+- (UITabBarItem * _Nullable)newsFeedTabBarItem
+{
+    NSString *key = NSStringFromSelector(@selector(tag));
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K == %@", key, @(kAPCNewsFeedTabTag)];
+    return [[self.tabBarController.tabBar.items filteredArrayUsingPredicate:predicate] firstObject];
+}
+
+
+- (NSMutableArray <APCScene *> *)tabBarScenes
+{
+    NSMutableArray *scenes = [NSMutableArray array];
+
+    // Add the activities scene
+    APCScene *activities = [[APCScene alloc] init];
+    activities.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Activities", @"APCAppCore", APCBundle(), @"Activities", nil) image:[UIImage imageNamed:@"tab_activities"] selectedImage:[UIImage imageNamed:@"tab_activities_selected"]];
+    activities.tabBarItem.tag = kAPCActivitiesTabTag;
+    activities.storyboardName = kActivitiesStoryBoardKey;
+    activities.bundle = [NSBundle appleCoreBundle];
+    [scenes addObject:activities];
+    
+    // Add the dashboard scene
+    APCScene *dashboard = [[APCScene alloc] init];
+    dashboard.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Dashboard", @"APCAppCore", APCBundle(), @"Dashboard", nil) image:[UIImage imageNamed:@"tab_dashboard"] selectedImage:[UIImage imageNamed:@"tab_dashboard_selected"]];
+    dashboard.storyboardName = kDashBoardStoryBoardKey;
+    dashboard.bundle = [NSBundle appleCoreBundle];
+    [scenes addObject:dashboard];
+
+    // Add news tab if there is news
+    if ([self shouldIncludeNewsFeedTab]) {
+        APCScene *news = [[APCScene alloc] init];
+        news.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"News Feed", @"APCAppCore", APCBundle(), @"News Feed", nil) image:[UIImage imageNamed:@"tab_newsfeed"] selectedImage:[UIImage imageNamed:@"tab_newsfeed_selected"]];
+        news.tabBarItem.tag = kAPCNewsFeedTabTag;
+        news.storyboardName = kNewsFeedStoryBoardKey;
+        news.bundle = [NSBundle appleCoreBundle];
+        [scenes addObject:news];
+    }
+    
+    // Add learn tab
+    APCScene *learn = [[APCScene alloc] init];
+    learn.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Learn", @"APCAppCore", APCBundle(), @"Learn", nil) image:[UIImage imageNamed:@"tab_learn"] selectedImage:[UIImage imageNamed:@"tab_learn_selected"]];
+    learn.storyboardName = kLearnStoryBoardKey;
+    learn.bundle = [NSBundle appleCoreBundle];
+    [scenes addObject:learn];
+    
+    //Profile Tab
+    APCScene *profile = [[APCScene alloc] init];
+    profile.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Profile", @"APCAppCore", APCBundle(), @"Profile", nil) image:[UIImage imageNamed:@"tab_profile"] selectedImage:[UIImage imageNamed:@"tab_profile_selected"]];
+    profile.tabBarItem.tag = kAPCProfileTabTag;
+    profile.storyboardName = kHealthProfileStoryBoardKey;
+    profile.bundle = [NSBundle appleCoreBundle];
+    [scenes addObject:profile];
+    
+    return scenes;
+}
+
 - (void)showTabBar
 {
     self.tabBarController = [[UITabBarController alloc] init];
-    NSUInteger selectedItemIndex = kAPCActivitiesTabIndex;
+    NSUInteger selectedItemIndex = 0;
     
-    NSMutableArray *tabBarItems = [NSMutableArray new];
+    // Set the view controllers
     NSMutableArray *viewControllers = [NSMutableArray new];
-    
-    {
-        //Activities Tab
-        UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Activities", @"APCAppCore", APCBundle(), @"Activities", nil) image:[UIImage imageNamed:@"tab_activities"] selectedImage:[UIImage imageNamed:@"tab_activities_selected"]];
-        [tabBarItems addObject:item];
-        
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:kActivitiesStoryBoardKey bundle:[NSBundle appleCoreBundle]];
-        UIViewController *viewController = [storyboard instantiateInitialViewController];
-        [viewControllers addObject:viewController];
+    for (APCScene *scene in [self tabBarScenes]) {
+        UIViewController *vc = [scene instantiateViewController];
+        [viewControllers addObject:vc];
     }
-    
-    {
-        //Dashboard Tab
-        UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Dashboard", @"APCAppCore", APCBundle(), @"Dashboard", nil) image:[UIImage imageNamed:@"tab_dashboard"] selectedImage:[UIImage imageNamed:@"tab_dashboard_selected"]];
-        [tabBarItems addObject:item];
-        
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:kDashBoardStoryBoardKey bundle:[NSBundle mainBundle]];
-        UIViewController *viewController = [storyboard instantiateInitialViewController];
-        [viewControllers addObject:viewController];
-    }
-    
-    BOOL newsFeedTab = [self.initializationOptions[kNewsFeedTabKey] boolValue];
-    if (newsFeedTab) {
-        UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"News Feed", @"APCAppCore", APCBundle(), @"News Feed", nil) image:[UIImage imageNamed:@"tab_newsfeed"] selectedImage:[UIImage imageNamed:@"tab_newsfeed_selected"]];
-        [tabBarItems addObject:item];
-        
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:kNewsFeedStoryBoardKey bundle:[NSBundle appleCoreBundle]];
-        UIViewController *viewController = [storyboard instantiateInitialViewController];
-        [viewControllers addObject:viewController];
-    }
-    
-    {
-        //Learn Tab
-        UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Learn", @"APCAppCore", APCBundle(), @"Learn", nil) image:[UIImage imageNamed:@"tab_learn"] selectedImage:[UIImage imageNamed:@"tab_learn_selected"]];
-        [tabBarItems addObject:item];
-        
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:kLearnStoryBoardKey bundle:[NSBundle appleCoreBundle]];
-        UIViewController *viewController = [storyboard instantiateInitialViewController];
-        [viewControllers addObject:viewController];
-    }
-    
-    {
-        //Profile Tab
-        UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Profile", @"APCAppCore", APCBundle(), @"Profile", nil) image:[UIImage imageNamed:@"tab_profile"] selectedImage:[UIImage imageNamed:@"tab_profile_selected"]];
-        [tabBarItems addObject:item];
-        
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:kHealthProfileStoryBoardKey bundle:[NSBundle appleCoreBundle]];
-        UIViewController *viewController = [storyboard instantiateInitialViewController];
-        [viewControllers addObject:viewController];
-    }
-    
     [self.tabBarController setViewControllers:[NSArray arrayWithArray:viewControllers]];
-    
-    NSArray *items = self.tabBarController.tabBar.items;
-    
-    for (NSUInteger i=0; i<items.count; i++) {
-        UITabBarItem *item = items[i];
-        UITabBarItem *tabBarItem = tabBarItems[i];
-        
-        item.image = tabBarItem.image;
-        item.selectedImage = tabBarItem.selectedImage;
-        item.title = tabBarItem.title;
-        item.tag = i;
-        
-        if (i == kAPCNewsFeedTabIndex && newsFeedTab){
-            [self updateNewsFeedBadgeCount];
-        }
+
+    // The tab bar icons take the default tint color from UIView Appearance tintin iOS8. In order to fix this for we are selecting each of the tabs.
+    for (NSUInteger ii = 0; ii < self.tabBarController.viewControllers.count; ii++){
+        [self.tabBarController setSelectedIndex:ii];
     }
     
-    //The tab bar icons take the default tint color from UIView Appearance tintin iOS8. In order to fix this for we are selecting each of the tabs.
-    {
-        [self.tabBarController setSelectedIndex:0];
-        [self.tabBarController setSelectedIndex:1];
-        [self.tabBarController setSelectedIndex:2];
-        [self.tabBarController setSelectedIndex:3];
-        if (newsFeedTab) {
-            [self.tabBarController setSelectedIndex:4];
-        }
+    // Update the news feed badge
+    if ([self shouldIncludeNewsFeedTab]) {
+        [self updateNewsFeedBadgeCount];
     }
     
     [self.tabBarController setSelectedIndex:selectedItemIndex];
@@ -899,10 +891,9 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
         
         NSUInteger  controllerIndex = [tabBarController.viewControllers indexOfObject:viewController];
         
-        BOOL newsFeedTab = [self.initializationOptions[kNewsFeedTabKey] boolValue];
-        NSUInteger indexOfProfileTab = newsFeedTab ? 4 : 3;
+        UITabBarItem *item = self.tabBarController.tabBar.items[controllerIndex];
         
-        if (controllerIndex == indexOfProfileTab)
+        if (item.tag == kAPCProfileTabTag)
         {
             UINavigationController * profileNavigationController = (UINavigationController *) viewController;
             
@@ -913,8 +904,8 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
                 self.profileViewController.delegate = [self profileExtenderDelegate];
             }
         }
-        
-        if(controllerIndex == kAPCNewsFeedTabIndex && newsFeedTab){
+        else if (item.tag == kAPCNewsFeedTabTag)
+        {
             [self updateNewsFeedBadgeCount];
         }
     }
@@ -925,7 +916,7 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
     NSUInteger unreadPostsCount = [self.dataSubstrate.newsFeedManager unreadPostsCount];
     NSNumber *unreadValue = @(unreadPostsCount);
     
-    UITabBarItem *item = self.tabBarController.tabBar.items[kAPCNewsFeedTabIndex];
+    UITabBarItem *item = [self newsFeedTabBarItem];
     
     if (unreadPostsCount != 0) {
         item.badgeValue = [unreadValue stringValue];
@@ -1048,7 +1039,7 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
         self.secureView = [[UIView alloc] initWithFrame:self.window.rootViewController.view.bounds];
         
         UIImage *blurredImage = [viewForSnapshot blurredSnapshot];
-        UIImage *appIcon = [UIImage imageNamed:@"logo_disease_large" inBundle:[NSBundle mainBundle] compatibleWithTraitCollection:nil];
+        UIImage *appIcon = [UIImage imageNamed:@"logo_disease_large" inBundle:[self resourceBundle] compatibleWithTraitCollection:nil];
         UIImageView *blurredImageView = [[UIImageView alloc] initWithImage:blurredImage];
         UIImageView *appIconImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0,0, 180, 180)];
         

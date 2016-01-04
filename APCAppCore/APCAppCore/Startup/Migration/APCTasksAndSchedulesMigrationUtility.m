@@ -65,7 +65,7 @@ NSString *const kTasksAndSchedulesJSONFileName   = @"APHTasksAndSchedules";
     self.dataSubstrate  = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate;
     self.needsMigration = NO;
     
-    NSString*       resource = [[NSBundle mainBundle] pathForResource:tasksAndSchedulesFileName ofType:@"json"];
+    NSString*       resource = [[APCAppDelegate sharedAppDelegate] pathForResource:tasksAndSchedulesFileName ofType:@"json"];
     NSData*         jsonData = [NSData dataWithContentsOfFile:resource];
     NSError*        error;
     NSDictionary*   taskAndSchedules = [NSJSONSerialization JSONObjectWithData:jsonData

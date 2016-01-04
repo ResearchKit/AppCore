@@ -704,7 +704,7 @@ static CGFloat const kTableViewSectionHeaderHeight = 77;
 
     for (UITabBarItem *item in tabBar.items)
     {
-        if (item.tag == (NSInteger) kAPCActivitiesTabIndex)
+        if (item.tag == (NSInteger) kAPCActivitiesTabTag)
         {
             activitiesTab = item;
             break;

@@ -32,6 +32,7 @@
 //
 
 #import "APCTaskResultArchiver.h"
+#import "APCAppDelegate.h"
 #import "APCLog.h"
 #import "APCDataArchive.h"
 #import "APCTask.h"
@@ -396,8 +397,8 @@ static  NSString  *const  kSpatialSpanMemoryTouchSampleIsCorrectKey     = @"Memo
 - (NSDictionary *)filenameTranslationDictionary
 {
     if (_filenameTranslationDictionary == nil) {
-        [self setFilenameTranslationDictionaryWithJSONFileAtPath:
-         [[NSBundle mainBundle] pathForResource:APCDefaultTranslationFilename ofType:kJSONExtension]];;
+        NSString *path = [[APCAppDelegate sharedAppDelegate] pathForResource:APCDefaultTranslationFilename ofType:kJSONExtension];
+        [self setFilenameTranslationDictionaryWithJSONFileAtPath:path];
     }
     return _filenameTranslationDictionary;
 }

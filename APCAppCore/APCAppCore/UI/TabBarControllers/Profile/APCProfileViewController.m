@@ -1344,7 +1344,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
 - (void)setupDataFromJSONFile:(NSString *)jsonFileName
 {
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:jsonFileName ofType:@"json"];
+    NSString *filePath = [[APCAppDelegate sharedAppDelegate] pathForResource:jsonFileName ofType:@"json"];
     NSString *JSONString = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:NULL];
     
     NSError *parseError;
@@ -1620,7 +1620,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 - (void)showPrivacyPolicy
 {
     APCWebViewController *webViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCWebViewController"];
-    NSString *filePath = [[NSBundle mainBundle] pathForResource: @"PrivacyPolicy" ofType:@"html"];
+    NSString *filePath = [[APCAppDelegate sharedAppDelegate] pathForResource: @"PrivacyPolicy" ofType:@"html"];
     NSURL *targetURL = [NSURL URLWithString:filePath];
     NSURLRequest *request = [NSURLRequest requestWithURL:targetURL];
     webViewController.title = NSLocalizedStringWithDefaultValue(@"Privacy Policy", @"APCAppCore", APCBundle(), @"Privacy Policy", @"");
@@ -1652,7 +1652,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         UIAlertAction *pdfAction = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"View PDF", @"APCAppCore", APCBundle(), @"View PDF", @"View PDF") style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
             
             APCWebViewController *webViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCWebViewController"];
-            NSString *filePath = [[NSBundle mainBundle] pathForResource:@"consent" ofType:@"pdf"];
+            NSString *filePath = [appDelegate pathForResource:@"consent" ofType:@"pdf"];
             NSData *data = [NSData dataWithContentsOfFile:filePath];
             [webViewController.webView setDataDetectorTypes:UIDataDetectorTypeAll];
             webViewController.title = NSLocalizedStringWithDefaultValue(@"Consent", @"APCAppCore", APCBundle(), @"Consent", @"Consent");
@@ -1669,7 +1669,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     if ([consentReviewActions containsObject:kReviewConsentActionVideo]) {
         UIAlertAction *videoAction = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Watch Video", @"APCAppCore", APCBundle(), @"Watch Video", @"Watch Video") style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
             
-            NSURL *fileURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"Intro" ofType:@"mp4"]];
+            NSURL *fileURL = [NSURL fileURLWithPath:[appDelegate pathForResource:@"Intro" ofType:@"mp4"]];
             APCIntroVideoViewController *introVideoViewController = [[APCIntroVideoViewController alloc] initWithContentURL:fileURL];
             
             UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:introVideoViewController];

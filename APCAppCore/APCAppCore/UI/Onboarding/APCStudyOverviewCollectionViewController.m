@@ -237,7 +237,7 @@ static NSString *kConsentEmailSubject = @"Consent Document";
     } else {
         APCStudyOverviewCollectionViewCell *webViewCell = (APCStudyOverviewCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:kAPCStudyOverviewCollectionViewCellIdentifier forIndexPath:indexPath];
         
-        NSString *filePath = [[NSBundle mainBundle] pathForResource: studyDetails.detailText ofType:@"html"];
+        NSString *filePath = [[APCAppDelegate sharedAppDelegate] pathForResource: studyDetails.detailText ofType:@"html"];
         NSAssert(filePath, @"Expecting file \"%@.html\" to be present in Resources, but didn't find it", studyDetails.detailText);
         NSURL *targetURL = [NSURL URLWithString:filePath];
         NSURLRequest *request = [NSURLRequest requestWithURL:targetURL];
@@ -283,7 +283,7 @@ static NSString *kConsentEmailSubject = @"Consent Document";
 - (NSArray *)studyDetailsFromJSONFile:(NSString *)jsonFileName
 {
     NSParameterAssert(jsonFileName);
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:jsonFileName ofType:@"json"];
+    NSString *filePath = [[APCAppDelegate sharedAppDelegate] pathForResource:jsonFileName ofType:@"json"];
     NSAssert(filePath, @"Must include file \"%@.json\" in bundle", jsonFileName);
     NSString *JSONString = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:NULL];
     
@@ -384,7 +384,7 @@ static NSString *kConsentEmailSubject = @"Consent Document";
 {
     APCTableViewStudyDetailsItem *studyDetails = (APCTableViewStudyDetailsItem *)[self itemForIndexPath:[self.collectionView indexPathForCell:cell]];
     
-    NSURL *fileURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:studyDetails.videoName ofType:@"mp4"]];
+    NSURL *fileURL = [NSURL fileURLWithPath:[[APCAppDelegate sharedAppDelegate] pathForResource:studyDetails.videoName ofType:@"mp4"]];
     NSAssert(fileURL, @"Must include the consent video with filename \"%@.mp4\" in the app bundle", studyDetails.videoName);
     APCIntroVideoViewController *introVideoViewController = [[APCIntroVideoViewController alloc] initWithContentURL:fileURL];
     
@@ -467,7 +467,7 @@ static NSString *kConsentEmailSubject = @"Consent Document";
 
 - (NSData *)PDFDataOfConsent
 {
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"consent" ofType:@"pdf"];
+    NSString *filePath = [[APCAppDelegate sharedAppDelegate] pathForResource:@"consent" ofType:@"pdf"];
     NSAssert(filePath, @"Must include the consent PDF with filename \"consent.pdf\" in the app bundle");
     NSData *fileData = [NSData dataWithContentsOfFile:filePath];
     NSAssert(fileData, @"Failed to create an NSData representation of \"consent.pdf\"");

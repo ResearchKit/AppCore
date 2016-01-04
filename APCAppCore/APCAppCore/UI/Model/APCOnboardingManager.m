@@ -36,6 +36,7 @@
 #import "APCPermissionsManager.h"
 #import "APCUserInfoConstants.h"
 #import "APCLog.h"
+#import "APCScene.h"
 
 #import <HealthKit/HealthKit.h>
 

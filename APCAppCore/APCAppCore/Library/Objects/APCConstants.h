@@ -202,8 +202,9 @@ FOUNDATION_EXPORT NSString *const kHKWorkoutTypeKey;
 FOUNDATION_EXPORT NSString * const kPasswordKey;
 FOUNDATION_EXPORT NSString * const kNumberOfMinutesForPasscodeKey;
 
-FOUNDATION_EXPORT NSUInteger     const kAPCActivitiesTabIndex;
-FOUNDATION_EXPORT NSUInteger     const kAPCNewsFeedTabIndex;
+FOUNDATION_EXPORT NSInteger     const kAPCActivitiesTabTag;
+FOUNDATION_EXPORT NSInteger     const kAPCNewsFeedTabTag;
+FOUNDATION_EXPORT NSInteger     const kAPCProfileTabTag;
 
 FOUNDATION_EXPORT NSInteger      const kAPCSigninErrorCode_NotSignedIn;
 FOUNDATION_EXPORT NSUInteger     const kAPCSigninNumRetriesBeforePause;
