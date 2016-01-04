@@ -40,6 +40,10 @@ static  const  CGFloat  kLayerHeight     = 44.0;
 
 static  const  CGFloat  kArrowLineWeight =  2.0;
 
+@interface APCCustomBackButton ()
+@property (nonatomic, weak) UIViewController* owner;
+@end
+
 @implementation APCCustomBackButton
 
 + (APCCustomBackButton *)customBackButtonWithTarget:(id)aTarget action:(SEL)anAction tintColor:(UIColor *)aTintColor
@@ -47,7 +51,14 @@ static  const  CGFloat  kArrowLineWeight =  2.0;
     APCCustomBackButton  *button = [APCCustomBackButton buttonWithType:UIButtonTypeCustom];
     CGRect  frame = CGRectMake(0.0, 0.0, kButtonWidth, kButtonHeight);
     button.frame = frame;
-    [button addTarget:aTarget action:anAction forControlEvents:UIControlEventTouchUpInside];
+
+    if (aTarget != nil)
+    {
+        [button addTarget:aTarget action:anAction forControlEvents:UIControlEventTouchUpInside];
+    }
+    else{
+        [button addTarget:button action:@selector(defaultBack) forControlEvents:UIControlEventTouchUpInside];
+    }
     
     CGMutablePathRef  path = CGPathCreateMutable();
     
@@ -76,9 +87,23 @@ static  const  CGFloat  kArrowLineWeight =  2.0;
     return  button;
 }
 
+- (void)defaultBack
+{
+    [self.owner.navigationController popViewControllerAnimated:YES];
+}
+
 + (UIBarButtonItem *)customBackBarButtonItemWithTarget:(id)aTarget action:(SEL)anAction tintColor:(UIColor *)aTintColor
 {
     APCCustomBackButton  *button = [self customBackButtonWithTarget:aTarget action:anAction tintColor:aTintColor];
+    UIBarButtonItem  *barButton = [[UIBarButtonItem alloc] initWithCustomView:button];
+    return  barButton;
+}
+
++ (UIBarButtonItem *)customBackBarButtonItemWithVc:(__weak UIViewController*)vc
+                                         tintColor:(UIColor *)aTintColor
+{
+    APCCustomBackButton *button = [self customBackButtonWithTarget:nil action:nil tintColor:aTintColor];
+    button.owner = vc;
     UIBarButtonItem  *barButton = [[UIBarButtonItem alloc] initWithCustomView:button];
     return  barButton;
 }
