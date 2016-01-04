@@ -89,10 +89,6 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *studyLabelCenterYConstraint;
 @property (strong, nonatomic) APCPermissionsManager *permissionManager;
 
-@property (weak, nonatomic) IBOutlet UILabel *applicationNameLabel;
-
-@property (weak, nonatomic) IBOutlet UILabel *participationLabel;
-
 @property (strong, nonatomic) APCDemographicUploader  *demographicUploader;
 @property (nonatomic, assign) BOOL                    profileEditsWerePerformed;
 
