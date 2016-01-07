@@ -617,6 +617,61 @@ static CGFloat kHeaderHeight = 157.0f;
     }
 }
 
+- (void) signUp {
+    APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
+    [self presentViewController:spinnerController animated:YES completion:nil];
+    
+    typeof(self) __weak weakSelf = self;
+    [self.user signUpOnCompletion:^(NSError *error) {
+        if (error) {
+            
+            APCLogError2 (error);
+            
+            if (error.code == SBBErrorCodeInternetNotConnected || error.code == SBBErrorCodeServerNotReachable || error.code == SBBErrorCodeServerUnderMaintenance) {
+                [spinnerController dismissViewControllerAnimated:NO completion:^{
+                    
+                    UIAlertController *alertView = [UIAlertController alertControllerWithTitle:NSLocalizedStringWithDefaultValue(@"Sign Up", @"APCAppCore", APCBundle(), @"Sign Up", @"")
+                                                                                       message:error.localizedDescription
+                                                                                preferredStyle:UIAlertControllerStyleAlert];
+                    
+                    UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+                                                                          handler:^(UIAlertAction * __unused action) {}];
+                    
+                    [alertView addAction:defaultAction];
+                    [self presentViewController:alertView animated:YES completion:nil];
+                }];
+            } else {
+                [spinnerController dismissViewControllerAnimated:NO completion:^{
+                    
+                    UIAlertController *alertView = [UIAlertController alertControllerWithTitle:NSLocalizedStringWithDefaultValue(@"Sign Up", @"APCAppCore", APCBundle(), @"Sign Up", @"")
+                                                                                       message:error.message
+                                                                                preferredStyle:UIAlertControllerStyleAlert];
+                    
+                    UIAlertAction* okAction = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Change Details", @"APCAppCore", APCBundle(), @"Change Details", @"") style:UIAlertActionStyleDefault
+                                                                     handler:^(UIAlertAction * __unused action) {}];
+                    
+                    UIAlertAction* changeAction = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Send Again", @"APCAppCore", APCBundle(), @"Send Again", nil) style:UIAlertActionStyleDefault
+                                                                         handler:^(UIAlertAction * __unused action) {[self next];}];
+                    
+                    
+                    [alertView addAction:okAction];
+                    [alertView addAction:changeAction];
+                    [self presentViewController:alertView animated:YES completion:nil];
+                    
+                }];
+            }
+        }
+        else
+        {
+            [spinnerController dismissViewControllerAnimated:NO completion:^{
+                
+                UIViewController *viewController = [[self onboarding] nextScene];
+                [weakSelf.navigationController pushViewController:viewController animated:YES];
+            }];
+        }
+    }];
+}
+
 #pragma mark - APCTermsAndConditionsViewControllerDelegate methods
 
 - (void)termsAndConditionsViewControllerDidAgree
@@ -679,58 +734,7 @@ static CGFloat kHeaderHeight = 157.0f;
         
         [self loadProfileValuesInModel];
         
-        APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
-        [self presentViewController:spinnerController animated:YES completion:nil];
-        
-        typeof(self) __weak weakSelf = self;
-        [self.user signUpOnCompletion:^(NSError *error) {
-            if (error) {
-                
-                APCLogError2 (error);
-            
-                if (error.code == SBBErrorCodeInternetNotConnected || error.code == SBBErrorCodeServerNotReachable || error.code == SBBErrorCodeServerUnderMaintenance) {
-                    [spinnerController dismissViewControllerAnimated:NO completion:^{
-                    
-                        UIAlertController *alertView = [UIAlertController alertControllerWithTitle:NSLocalizedStringWithDefaultValue(@"Sign Up", @"APCAppCore", APCBundle(), @"Sign Up", @"")
-                                                                                            message:error.localizedDescription
-                                                                                     preferredStyle:UIAlertControllerStyleAlert];
-
-                        UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
-                                                                              handler:^(UIAlertAction * __unused action) {}];
-                        
-                        [alertView addAction:defaultAction];
-                        [self presentViewController:alertView animated:YES completion:nil];
-                    }];
-                } else {
-                    [spinnerController dismissViewControllerAnimated:NO completion:^{
-                        
-                        UIAlertController *alertView = [UIAlertController alertControllerWithTitle:NSLocalizedStringWithDefaultValue(@"Sign Up", @"APCAppCore", APCBundle(), @"Sign Up", @"")
-                                                                                           message:error.message
-                                                                                    preferredStyle:UIAlertControllerStyleAlert];
-                        
-                        UIAlertAction* okAction = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Change Details", @"APCAppCore", APCBundle(), @"Change Details", @"") style:UIAlertActionStyleDefault
-                                                                              handler:^(UIAlertAction * __unused action) {}];
-                        
-                        UIAlertAction* changeAction = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Send Again", @"APCAppCore", APCBundle(), @"Send Again", nil) style:UIAlertActionStyleDefault
-                                                                             handler:^(UIAlertAction * __unused action) {[self next];}];
-                        
-                        
-                        [alertView addAction:okAction];
-                        [alertView addAction:changeAction];
-                        [self presentViewController:alertView animated:YES completion:nil];
-                        
-                    }];
-                }
-            }
-            else
-            {
-                [spinnerController dismissViewControllerAnimated:NO completion:^{
-                    
-                    UIViewController *viewController = [[self onboarding] nextScene];
-                    [weakSelf.navigationController pushViewController:viewController animated:YES];
-                }];
-            }
-        }];
+        [self signUp];
     }
 }
 

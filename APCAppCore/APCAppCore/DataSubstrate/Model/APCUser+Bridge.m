@@ -47,6 +47,11 @@
 
 - (void)signUpOnCompletion:(void (^)(NSError *))completionBlock
 {
+    [self signUpWithDataGroups:nil onCompletion:completionBlock];
+}
+
+- (void)signUpWithDataGroups:(NSArray<NSString *> *)dataGroups onCompletion:(void (^)(NSError *))completionBlock
+{
     if ([self serverDisabled]) {
         if (completionBlock) {
             completionBlock(nil);
@@ -57,21 +62,22 @@
         NSParameterAssert(self.email);
         NSParameterAssert(self.password);
         [SBBComponent(SBBAuthManager) signUpWithEmail: self.email
-											 username: self.email
-											 password: self.password
-										   completion: ^(NSURLSessionDataTask * __unused task,
-														 id __unused responseObject,
-														 NSError *error)
-		 {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (!error) {
-                    APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Signed Up"}));
-                }
-                if (completionBlock) {
-                    completionBlock(error);
-                }
-            });
-        }];
+                                             username: self.email
+                                             password: self.password
+                                           dataGroups:dataGroups
+                                           completion: ^(NSURLSessionDataTask * __unused task,
+                                                         id __unused responseObject,
+                                                         NSError *error)
+         {
+             dispatch_async(dispatch_get_main_queue(), ^{
+                 if (!error) {
+                     APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Signed Up"}));
+                 }
+                 if (completionBlock) {
+                     completionBlock(error);
+                 }
+             });
+         }];
     }
 }
 
