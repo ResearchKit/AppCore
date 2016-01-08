@@ -304,6 +304,20 @@ static NSString *const kSignedInKey = @"SignedIn";
     return bestGuessConsentDate;
 }
 
+- (NSString *)subpopulationGuid {
+    NSString *guid = [APCKeychainStore stringForKey:kSavedSubpopulationGuidKey];
+    if (guid) {
+        return guid;
+    } else {
+        NSLog(@"No subpopulationGuid found for user, returning study identifier instead");
+        return gSBBAppStudy;
+    }
+}
+
+- (void)setSubpopulationGuid:(NSString *)subpopulationGuid {
+    [APCKeychainStore setString:subpopulationGuid forKey:kSavedSubpopulationGuidKey];
+}
+
 
 /*********************************************************************************/
 #pragma mark - Setters for Properties in Core Data
@@ -669,27 +683,13 @@ static NSString *const kSignedInKey = @"SignedIn";
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:kSavedSharingScopeKey];
     }
 }
+
 - (NSArray *)dataGroups {
     return [[NSUserDefaults standardUserDefaults] objectForKey:kSavedDataGroupsKey];
 }
 
 - (void)setDataGroups:(NSArray *)dataGroups {
     [[NSUserDefaults standardUserDefaults] setObject:dataGroups forKey:kSavedDataGroupsKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
-- (NSString *)subpopulationGuid {
-    NSString *guid = [[NSUserDefaults standardUserDefaults] stringForKey:kSavedSubpopulationGuidKey];
-    if (guid) {
-        return guid;
-    } else {
-        NSLog(@"No subpopulationGuid found for user, returning study identifier instead");
-        return gSBBAppStudy;
-    }
-}
-
-- (void)setSubpopulationGuid:(NSString *)subpopulationGuid {
-    [[NSUserDefaults standardUserDefaults] setObject:subpopulationGuid forKey:kSavedSubpopulationGuidKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
