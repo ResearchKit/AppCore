@@ -421,7 +421,7 @@
                 if ([consentSignature isKindOfClass:[SBBConsentSignature class]]) {
                     SBBConsentSignature *cSig = consentSignature;
                     self.consentSignatureName = cSig.name;
-                    self.consentSignatureImage = UIImagePNGRepresentation([cSig signatureImage]);
+                    self.consentSignatureImage = cSig.imageData ? [[NSData alloc] initWithBase64EncodedString:cSig.imageData options:kNilOptions] : nil;
                 }
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
