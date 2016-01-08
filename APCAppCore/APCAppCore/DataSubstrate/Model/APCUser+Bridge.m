@@ -318,7 +318,10 @@
                     for (id key in consentStatuses) {
                         NSDictionary *status = [consentStatuses objectForKey:key];
                         NSString *guid = status[@"subpopulationGuid"];
-                        self.subpopulationGuid = guid;
+                        BOOL required = status[@"required"];
+                        if (required) {
+                            self.subpopulationGuid = guid;
+                        }
                     }
                     
                     APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Signed In"}));
