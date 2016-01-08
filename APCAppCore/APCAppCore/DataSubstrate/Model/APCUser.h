@@ -118,6 +118,8 @@ typedef NS_ENUM(NSInteger, APCUserConsentSharingScope) {
 @property (nonatomic, getter=isSignedUp) BOOL signedUp;
 @property (nonatomic, getter=isSignedIn) BOOL signedIn;
 @property (nonatomic) NSNumber * savedSharingScope;
+@property (nonatomic) NSArray * dataGroups;
+@property (nonatomic) NSString * subpopulationGuid;
 
 - (BOOL) isLoggedOut;
 
