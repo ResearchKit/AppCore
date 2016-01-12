@@ -176,7 +176,7 @@
     }
     else
     {
-        [SBBComponent(SBBConsentManager) withdrawConsentWithReason:reason completion:^(id __unused responseObject, NSError * __unused error) {
+        [SBBComponent(SBBConsentManager) withdrawConsentForSubpopulation:[self subpopulationGuid] withReason:reason completion:^(id __unused responseObject, NSError * __unused error) {
             if (!error) {
                 [self signOutOnCompletion:^(NSError *error) {
                     dispatch_async(dispatch_get_main_queue(), ^{
@@ -293,8 +293,7 @@
                                                             NSError *signInError)
          {
             dispatch_async(dispatch_get_main_queue(), ^{
-                if (!signInError) {
-                    
+                if (!signInError || signInError.code == SBBErrorCodeServerPreconditionNotMet) {
                     NSDictionary *responseDictionary = (NSDictionary *) responseObject;
                     if (responseDictionary) {
                         NSNumber *dataSharing = responseDictionary[@"dataSharing"];
@@ -310,6 +309,21 @@
                             self.sharingScope = APCUserConsentSharingScopeNone;
                         }
                     }
+                    
+                    NSArray *dataGroups = responseDictionary[@"dataGroups"];
+                    self.dataGroups = dataGroups;
+                    
+                    // TODO: Handle multiple consent groups with separate sub populations
+                    NSDictionary *consentStatuses = responseDictionary[@"consentStatuses"];
+                    for (id key in consentStatuses) {
+                        NSDictionary *status = [consentStatuses objectForKey:key];
+                        NSString *guid = status[@"subpopulationGuid"];
+                        BOOL required = status[@"required"];
+                        if (required) {
+                            self.subpopulationGuid = guid;
+                        }
+                    }
+                    
                     APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Signed In"}));
                 }
                 
@@ -366,6 +380,7 @@
         NSNumber *selected = delegate.dataSubstrate.currentUser.sharedOptionSelection;
         
         [SBBComponent(SBBConsentManager) consentSignature:name
+                                     forSubpopulationGuid:[self subpopulationGuid]
                                                 birthdate: [birthDate startOfDay]
                                            signatureImage:consentImage
                                                 dataSharing:[selected integerValue]
@@ -392,10 +407,8 @@
     }
     else
     {
-        [SBBComponent(SBBConsentManager) retrieveConsentSignatureWithCompletion: ^(NSString*          name,
-                                                                                   NSString* __unused birthdate,
-                                                                                   UIImage*           signatureImage,
-                                                                                   NSError*           error)
+        [SBBComponent(SBBConsentManager) getConsentSignatureForSubpopulation:[self subpopulationGuid]
+                                                                  completion: ^(id consentSignature, NSError *error)
 		 {
             if (error) {
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -404,8 +417,12 @@
                     }
                 });
             } else {
-                self.consentSignatureName = name;
-                self.consentSignatureImage = UIImagePNGRepresentation(signatureImage);
+                // parse consent signature dictionary, if we have one
+                if ([consentSignature isKindOfClass:[SBBConsentSignature class]]) {
+                    SBBConsentSignature *cSig = consentSignature;
+                    self.consentSignatureName = cSig.name;
+                    self.consentSignatureImage = cSig.imageData ? [[NSData alloc] initWithBase64EncodedString:cSig.imageData options:kNilOptions] : nil;
+                }
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (!error) {

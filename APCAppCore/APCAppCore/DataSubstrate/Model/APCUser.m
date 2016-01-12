@@ -42,6 +42,8 @@
 #import "HKHealthStore+APCExtensions.h"
 
 static NSString *const kSavedSharingScopeKey = @"SavedSharingScope";
+static NSString *const kSavedDataGroupsKey = @"SavedDataGroups";
+static NSString *const kSavedSubpopulationGuidKey = @"SavedSubpopulationGuid";
 
 static NSString *const kNamePropertytName = @"name";
 static NSString *const kFirstNamePropertytName = @"firstName";
@@ -300,6 +302,20 @@ static NSString *const kSignedInKey = @"SignedIn";
     }
 
     return bestGuessConsentDate;
+}
+
+- (NSString *)subpopulationGuid {
+    NSString *guid = [APCKeychainStore stringForKey:kSavedSubpopulationGuidKey];
+    if (guid) {
+        return guid;
+    } else {
+        NSLog(@"No subpopulationGuid found for user, returning study identifier instead");
+        return gSBBAppStudy;
+    }
+}
+
+- (void)setSubpopulationGuid:(NSString *)subpopulationGuid {
+    [APCKeychainStore setString:subpopulationGuid forKey:kSavedSubpopulationGuidKey];
 }
 
 
@@ -666,6 +682,15 @@ static NSString *const kSignedInKey = @"SignedIn";
     } else {
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:kSavedSharingScopeKey];
     }
+}
+
+- (NSArray *)dataGroups {
+    return [[NSUserDefaults standardUserDefaults] objectForKey:kSavedDataGroupsKey];
+}
+
+- (void)setDataGroups:(NSArray *)dataGroups {
+    [[NSUserDefaults standardUserDefaults] setObject:dataGroups forKey:kSavedDataGroupsKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 @end

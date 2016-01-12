@@ -61,6 +61,7 @@ typedef NS_ENUM(NSInteger, APCUserConsentSharingScope) {
 @property (nonatomic, strong) NSString * email;
 @property (nonatomic, strong) NSString * password;
 @property (nonatomic, strong) NSString * sessionToken;
+@property (nonatomic) NSString * subpopulationGuid;
 
 /*********************************************************************************/
 #pragma mark - Stored Properties in Core Data
@@ -118,6 +119,7 @@ typedef NS_ENUM(NSInteger, APCUserConsentSharingScope) {
 @property (nonatomic, getter=isSignedUp) BOOL signedUp;
 @property (nonatomic, getter=isSignedIn) BOOL signedIn;
 @property (nonatomic) NSNumber * savedSharingScope;
+@property (nonatomic) NSArray * dataGroups;
 
 - (BOOL) isLoggedOut;
 
