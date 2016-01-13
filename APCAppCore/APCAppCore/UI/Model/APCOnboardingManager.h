@@ -38,6 +38,7 @@
 
 @class APCOnboardingManager;
 @class APCPermissionsManager;
+@class APCDataGroupsManager;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -51,6 +52,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (APCOnboardingManager *)onboardingManager;
 /** The permissions manager for the app. */
 - (APCPermissionsManager *)permissionsManager;
+/** The data groups manager for the app. */
+- (APCDataGroupsManager *)dataGroupsManagerForUser:(APCUser*)user;
 @optional
 /**
  *  Kept for backwards compatibility: return the inclusion criteria scene.
@@ -81,6 +84,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// The permissions manager defining and requesting needed permissions.
 @property (strong, nonatomic, readonly) APCPermissionsManager *permissionsManager;
+
+/// The data groups manager defining data groups mapping
+@property (strong, nonatomic, readonly) APCDataGroupsManager *dataGroupsManager;
 
 /// Whether a sign-in action, to resume a study previously enrolled in, is supported. Defaults to YES.
 @property (nonatomic, getter=isSignInSupported) BOOL signInSupported;

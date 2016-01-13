@@ -653,6 +653,33 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     [rowItems addObject:row];
                 }
                     break;
+                    
+                case kAPCUserInfoItemTypeDataGroups:
+                {
+                    
+//                    APCTableViewDatePickerItem *field = [APCTableViewDatePickerItem new];
+//                    field.style = UITableViewCellStyleValue1;
+//                    field.caption = NSLocalizedStringWithDefaultValue(@"What time do you generally go to sleep?", @"APCAppCore", APCBundle(), @"What time do you generally go to sleep?", @"");
+//                    field.placeholder = NSLocalizedStringWithDefaultValue(@"9:30 PM", @"APCAppCore", APCBundle(), @"9:30 PM", @"");
+//                    field.identifier = kAPCDefaultTableViewCellIdentifier;
+//                    field.datePickerMode = UIDatePickerModeTime;
+//                    field.dateFormat = kAPCMedicalInfoItemSleepTimeFormat;
+//                    field.textAlignnment = NSTextAlignmentRight;
+//                    field.detailDiscloserStyle = YES;
+//                    field.selectionStyle = self.isEditing ? UITableViewCellSelectionStyleGray : UITableViewCellSelectionStyleNone;
+//                    field.editable = NO;
+//                    
+//                    if (self.user.sleepTime) {
+//                        field.date = self.user.sleepTime;
+//                        field.detailText = [field.date toStringWithFormat:kAPCMedicalInfoItemSleepTimeFormat];
+//                    }
+//                    
+//                    APCTableViewRow *row = [APCTableViewRow new];
+//                    row.item = field;
+//                    row.itemType = kAPCUserInfoItemTypeSleepTime;
+//                    [rowItems addObject:row];
+                }
+                    break;
                 
                 default:
                     break;

@@ -52,6 +52,8 @@ NSString * const kAPCOnboardingStoryboardName = @"APCOnboarding";
 
 @property (strong, nonatomic, readwrite) APCPermissionsManager *permissionsManager;
 
+@property (strong, nonatomic, readwrite) APCDataGroupsManager *dataGroupsManager;
+
 @end
 
 
@@ -126,6 +128,13 @@ NSString * const kAPCOnboardingStoryboardName = @"APCOnboarding";
         _permissionsManager = [self.provider permissionsManager];
     }
     return _permissionsManager;
+}
+
+- (APCDataGroupsManager *)dataGroupsManager {
+    if (!_dataGroupsManager) {
+        _dataGroupsManager = [self.provider dataGroupsManagerForUser:self.user];
+    }
+    return _dataGroupsManager;
 }
 
 #pragma mark - APCOnboardingDelegate

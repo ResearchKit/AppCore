@@ -1003,6 +1003,10 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
     return _onboardingManager;
 }
 
+- (APCDataGroupsManager *)dataGroupsManagerForUser:(APCUser*)user {
+    return [[APCDataGroupsManager alloc] initWithDataGroups:user.dataGroups mapping:nil];
+}
+
 - (APCPermissionsManager *)permissionsManager {
     return [APCPermissionsManager new];
 }
