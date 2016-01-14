@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class APCUser, APCTableViewRow;
+@class APCUser, APCTableViewRow, APCTableViewItem;
 
 @interface APCDataGroupsManager : NSObject
 
@@ -24,6 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)isStudyControlGroup;
 - (NSArray <APCTableViewRow *> * _Nullable)surveyItems;
 - (void)setSurveyAnswerWithIdentifier:(NSString*)identifier selectedIndices:(NSArray*)selectedIndices;
+- (void)setSurveyAnswerWithItem:(APCTableViewItem*)item;
 
 @end
 

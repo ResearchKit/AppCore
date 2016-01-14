@@ -140,7 +140,7 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
 {
     APCTableViewItem *dashboardItem = [self itemForIndexPath:indexPath];
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:dashboardItem.identifier];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:dashboardItem.reuseIdentifier];
 
     if ([dashboardItem isKindOfClass:[APCTableViewDashboardProgressItem class]]) {
         

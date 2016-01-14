@@ -16,6 +16,7 @@ NSString * const APCDataGroupsMappingQuestionsKey = @"questions";
 NSString * const APCDataGroupsMappingSurveyQuestionIdentifierKey = @"identifier";
 NSString * const APCDataGroupsMappingSurveyQuestionTypeKey = @"type";
 NSString * const APCDataGroupsMappingSurveyQuestionPromptKey = @"prompt";
+NSString * const APCDataGroupsMappingSurveyQuestionProfileCaptionKey = @"profileCaption";
 NSString * const APCDataGroupsMappingSurveyQuestionValueMapKey = @"valueMap";
 NSString * const APCDataGroupsMappingSurveyQuestionTypeBoolean = @"boolean";
 NSString * const APCDataGroupsMappingSurveyQuestionValueMapValueKey = @"value";
@@ -100,27 +101,35 @@ NSString * const APCDataGroupsMappingSurveyQuestionValueMapGroupsKey = @"groups"
         if ([questionType isEqualToString:APCDataGroupsMappingSurveyQuestionTypeBoolean])
         {
             APCTableViewCustomPickerItem *item = [[APCTableViewCustomPickerItem alloc] init];
-            item.identifier = question[APCDataGroupsMappingSurveyQuestionIdentifierKey];
-            item.caption = question[APCDataGroupsMappingSurveyQuestionPromptKey];
+            item.questionIdentifier = question[APCDataGroupsMappingSurveyQuestionIdentifierKey];
+            item.reuseIdentifier = kAPCDefaultTableViewCellIdentifier;
+            item.caption = question[APCDataGroupsMappingSurveyQuestionProfileCaptionKey] ?: question[APCDataGroupsMappingSurveyQuestionPromptKey];
             item.textAlignnment = NSTextAlignmentRight;
             
             // Set the values to YES or NO
             NSArray *valueMap = question[APCDataGroupsMappingSurveyQuestionValueMapKey];
             NSString *yes = NSLocalizedStringWithDefaultValue(@"YES", @"APCAppCore", APCBundle(), @"Yes", @"Yes");
             NSString *no = NSLocalizedStringWithDefaultValue(@"NO", @"APCAppCore", APCBundle(), @"No", @"No");
+            NSArray *options = nil;
+            NSArray *valueOrder = nil;
             if ([valueMap[0][APCDataGroupsMappingSurveyQuestionValueMapValueKey] boolValue]) {
-                item.pickerData = @[yes, no];
+                options = @[yes, no];
+                valueOrder = @[@YES, @NO];
             }
             else {
-                item.pickerData = @[no, yes];
+                options = @[no, yes];
+                valueOrder = @[@NO, @YES];
             }
+            item.pickerData = @[options];
             
             // Set selected rows
-            NSString *selectedValue = [[self selectedValuesForMap:valueMap] firstObject];
-            if (selectedValue != nil) {
-                item.selectedRowIndices = [selectedValue boolValue] ? @[@0] : @[@1];
+            id selectedValue = [self selectedValueForMap:valueMap];
+            NSUInteger idx = (selectedValue != nil) ? [valueOrder indexOfObject:selectedValue] : NSNotFound;
+            if (idx != NSNotFound) {
+                item.selectedRowIndices = @[@(idx)];
             }
             
+            // Create row
             APCTableViewRow *row = [APCTableViewRow new];
             row.item = item;
             row.itemType = kAPCUserInfoItemTypeDataGroups;
@@ -135,23 +144,27 @@ NSString * const APCDataGroupsMappingSurveyQuestionValueMapGroupsKey = @"groups"
     return [result copy];
 }
 
-- (NSArray *)selectedValuesForMap:(NSArray*)valueMap {
-    
-    if (self.dataGroups.count == 0) {
-        return nil;
-    }
-    
-    NSMutableArray *values = [NSMutableArray new];
-    NSSet *groupSet = [NSSet setWithArray:self.dataGroups];
-    for (NSDictionary *map in valueMap) {
-        NSMutableSet *mapSet = [NSMutableSet setWithArray:map[APCDataGroupsMappingSurveyQuestionValueMapGroupsKey]];
-        [mapSet intersectSet:groupSet];
-        if (mapSet.count > 0) {
-            [values addObject:map[APCDataGroupsMappingSurveyQuestionValueMapValueKey]];
+- (id)selectedValueForMap:(NSArray*)valueMap {
+    if (self.dataGroups.count > 0) {
+        NSSet *groupSet = [NSSet setWithArray:self.dataGroups];
+        for (NSDictionary *map in valueMap) {
+            NSMutableSet *mapSet = [NSMutableSet setWithArray:map[APCDataGroupsMappingSurveyQuestionValueMapGroupsKey]];
+            [mapSet intersectSet:groupSet];
+            if (mapSet.count > 0) {
+                return map[APCDataGroupsMappingSurveyQuestionValueMapValueKey];
+            }
         }
     }
-    
-    return values;
+    return nil;
+}
+
+- (void)setSurveyAnswerWithItem:(APCTableViewItem*)item {
+    if ([item isKindOfClass:[APCTableViewCustomPickerItem class]]) {
+        [self setSurveyAnswerWithIdentifier:item.questionIdentifier selectedIndices:((APCTableViewCustomPickerItem*)item).selectedRowIndices];
+    }
+    else {
+        NSAssert1(NO, @"Data groups survey question of class %@ is not handled.", [item class]);
+    }
 }
 
 - (void)setSurveyAnswerWithIdentifier:(NSString*)identifier selectedIndices:(NSArray*)selectedIndices {
@@ -162,6 +175,9 @@ NSString * const APCDataGroupsMappingSurveyQuestionValueMapGroupsKey = @"groups"
     // Get all the groups that are defined by this question
     NSArray *groupsMap = [question[APCDataGroupsMappingSurveyQuestionValueMapKey] valueForKey:APCDataGroupsMappingSurveyQuestionValueMapGroupsKey];
     
+    NSAssert(selectedIndices.count <= 1, @"Data groups with multi-part picker are not currently handled");
+    
+    // build the include and exclude sets
     NSMutableSet *excludeSet = [NSMutableSet new];
     NSMutableSet *includeSet = [NSMutableSet new];
     for (NSUInteger idx = 0; idx < groupsMap.count; idx++) {

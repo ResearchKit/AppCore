@@ -40,6 +40,7 @@
 - (void) signUpWithDataGroups:(NSArray<NSString *> *)dataGroups onCompletion:(void (^)(NSError *))completionBlock;
 - (void) signInOnCompletion:(void (^)(NSError * error))completionBlock;
 - (void) signOutOnCompletion:(void (^)(NSError * error))completionBlock;
+- (void) updateDataGroups:(NSArray<NSString *> *)dataGroups onCompletion:(void (^)(NSError * error))completionBlock;
 - (void) updateProfileOnCompletion:(void (^)(NSError * error))completionBlock;
 - (void) updateCustomProfile:(SBBUserProfile*)profile onCompletion:(void (^)(NSError * error))completionBlock;
 - (void) getProfileOnCompletion:(void (^)(NSError *error))completionBlock;

@@ -59,10 +59,11 @@
     APCTableViewCustomPickerItem *item = (APCTableViewCustomPickerItem *)[[rows firstObject] item];
     XCTAssertTrue([item isKindOfClass:[APCTableViewCustomPickerItem class]]);
     
-    XCTAssertEqualObjects(item.identifier, @"control");
+    XCTAssertNotNil(item.reuseIdentifier);
+    XCTAssertEqualObjects(item.questionIdentifier, @"control");
     XCTAssertEqualObjects(item.caption, @"Have you been diagnosed with XYZ?");
     
-    NSArray *expectedPickerOptions = @[@"Yes", @"No"];
+    NSArray *expectedPickerOptions = @[@[@"Yes", @"No"]];
     XCTAssertEqualObjects(item.pickerData, expectedPickerOptions);
     
     NSArray *expectedSelectedIndices = @[@1];
@@ -79,10 +80,11 @@
     APCTableViewCustomPickerItem *item = (APCTableViewCustomPickerItem *)[[rows firstObject] item];
     XCTAssertTrue([item isKindOfClass:[APCTableViewCustomPickerItem class]]);
     
-    XCTAssertEqualObjects(item.identifier, @"control");
+    XCTAssertNotNil(item.reuseIdentifier);
+    XCTAssertEqualObjects(item.questionIdentifier, @"control");
     XCTAssertEqualObjects(item.caption, @"Have you been diagnosed with XYZ?");
     
-    NSArray *expectedPickerOptions = @[@"Yes", @"No"];
+    NSArray *expectedPickerOptions = @[@[@"Yes", @"No"]];
     XCTAssertEqualObjects(item.pickerData, expectedPickerOptions);
     
     NSArray *expectedSelectedIndices = @[@0];

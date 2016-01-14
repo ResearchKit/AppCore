@@ -50,7 +50,9 @@
 
 @property (nonatomic, copy) NSString *detailText;
 
-@property (nonatomic, copy) NSString *identifier;
+@property (nonatomic, copy) NSString *reuseIdentifier;
+
+@property (nonatomic, copy) NSString *questionIdentifier;
 
 @property (nonatomic, copy) NSString *regularExpression;
 
