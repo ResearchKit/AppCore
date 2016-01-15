@@ -33,6 +33,7 @@
 //
 
 #import "APCOnboardingManager.h"
+#import "APCDataGroupsManager.h"
 #import "APCPermissionsManager.h"
 #import "APCUserInfoConstants.h"
 #import "APCLog.h"
@@ -159,6 +160,13 @@ NSString * const kAPCOnboardingStoryboardName = @"APCOnboarding";
     if ([type isEqualToString:kAPCSignUpPermissionsPrimingStepIdentifier]) {
         return [[APCScene alloc] initWithName:@"APCPermissionPrimingViewController" inStoryboard:kAPCOnboardingStoryboardName];     // "What to Expect" screen
     }
+    if ([type isEqualToString:kAPCSignUpDataGroupsStepIdentifier]) {
+        ORKStep *step = [self.dataGroupsManager surveyStep];
+        if (step != nil) {
+            return [[APCScene alloc] initWithStep:step];
+        }
+        return nil;
+    }
     if ([type isEqualToString:kAPCSignUpGeneralInfoStepIdentifier]) {
         return [[APCScene alloc] initWithName:@"APCSignUpGeneralInfoViewController" inStoryboard:kAPCOnboardingStoryboardName];
     }
@@ -166,6 +174,7 @@ NSString * const kAPCOnboardingStoryboardName = @"APCOnboarding";
         return [[APCScene alloc] initWithName:@"APCSignUpMedicalInfoViewController" inStoryboard:kAPCOnboardingStoryboardName];
     }
     if ([type isEqualToString:kAPCSignUpCustomInfoStepIdentifier]) {
+        // Check if there is a custom step
         if ([_provider respondsToSelector:@selector(customInfoSceneForOnboarding:)]) {
             return [_provider performSelector:@selector(customInfoSceneForOnboarding:) withObject:onboarding];
         }
@@ -199,6 +208,13 @@ NSString * const kAPCOnboardingStoryboardName = @"APCOnboarding";
 
 - (NSInteger)numberOfServicesInPermissionsListForOnboardingTask:(APCOnboardingTask *)__unused task {
     return [self.permissionsManager.signUpPermissionTypes count];
+}
+
+- (void)onboarding:(APCOnboarding * __unused)onboarding didFinishStepWithResult:(ORKStepResult*)stepResult {
+    if ([stepResult.identifier isEqualToString:APCDataGroupsStepIdentifier]) {
+        [self.dataGroupsManager setSurveyAnswerWithStepResult:stepResult];
+        self.user.dataGroups = self.dataGroupsManager.dataGroups;
+    }
 }
 
 @end

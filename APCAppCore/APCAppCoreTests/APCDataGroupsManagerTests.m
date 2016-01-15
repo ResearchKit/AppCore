@@ -60,8 +60,8 @@
     XCTAssertTrue([item isKindOfClass:[APCTableViewCustomPickerItem class]]);
     
     XCTAssertNotNil(item.reuseIdentifier);
-    XCTAssertEqualObjects(item.questionIdentifier, @"control");
-    XCTAssertEqualObjects(item.caption, @"Have you been diagnosed with XYZ?");
+    XCTAssertEqualObjects(item.questionIdentifier, @"control_question");
+    XCTAssertEqualObjects(item.caption, @"Have you ever been diagnosed with XYZ?");
     
     NSArray *expectedPickerOptions = @[@[@"Yes", @"No"]];
     XCTAssertEqualObjects(item.pickerData, expectedPickerOptions);
@@ -81,8 +81,8 @@
     XCTAssertTrue([item isKindOfClass:[APCTableViewCustomPickerItem class]]);
     
     XCTAssertNotNil(item.reuseIdentifier);
-    XCTAssertEqualObjects(item.questionIdentifier, @"control");
-    XCTAssertEqualObjects(item.caption, @"Have you been diagnosed with XYZ?");
+    XCTAssertEqualObjects(item.questionIdentifier, @"control_question");
+    XCTAssertEqualObjects(item.caption, @"Have you ever been diagnosed with XYZ?");
     
     NSArray *expectedPickerOptions = @[@[@"Yes", @"No"]];
     XCTAssertEqualObjects(item.pickerData, expectedPickerOptions);
@@ -96,7 +96,7 @@
     APCDataGroupsManager * manager = [self createDataGroupsManagerWithDataGroups:@[@"studyA", @"studyB"]];
     
     // Change the survey answer
-    [manager setSurveyAnswerWithIdentifier:@"control" selectedIndices:@[@1]];
+    [manager setSurveyAnswerWithIdentifier:@"control_question" selectedIndices:@[@1]];
     
     // Check results using set b/c order of the groups does not matter
     NSSet *expectedGroups = [NSSet setWithArray:@[@"control", @"studyB"]];
@@ -110,7 +110,7 @@
     APCDataGroupsManager * manager = [self createDataGroupsManagerWithDataGroups:@[@"control", @"studyB"]];
     
     // Change the survey answer
-    [manager setSurveyAnswerWithIdentifier:@"control" selectedIndices:@[@0]];
+    [manager setSurveyAnswerWithIdentifier:@"control_question" selectedIndices:@[@0]];
     
     // Check the results using a set b/c the order of the groups does not matter
     NSSet *expectedGroups = [NSSet setWithArray:@[@"studyA", @"studyB"]];
@@ -124,7 +124,7 @@
     APCDataGroupsManager * manager = [self createDataGroupsManagerWithDataGroups:@[@"control", @"studyB"]];
     
     // Change the survey answer
-    [manager setSurveyAnswerWithIdentifier:@"control" selectedIndices:@[@1]];
+    [manager setSurveyAnswerWithIdentifier:@"control_question" selectedIndices:@[@1]];
     
     // Check the results using a set b/c the order of the groups does not matter
     NSSet *expectedGroups = [NSSet setWithArray:@[@"control", @"studyB"]];
@@ -132,6 +132,70 @@
     XCTAssertEqualObjects(actualGroups, expectedGroups);
     XCTAssertFalse(manager.hasChanges);
 }
+
+- (void)testSurveySteps
+{
+    APCDataGroupsManager * manager = [self createDataGroupsManagerWithDataGroups:nil];
+    
+    ORKFormStep * step = [manager surveyStep];
+
+    XCTAssertNotNil(step);
+    XCTAssertFalse(step.optional);
+    XCTAssertEqualObjects(step.title, @"Are you in Control?");
+    XCTAssertEqualObjects(step.text, @"Engineers and scientists like classifications. To help us better classify you, please answer these required questions.");
+    
+    XCTAssertEqual(step.formItems.count, 1);
+    ORKFormItem  *item = step.formItems.firstObject;
+    XCTAssertEqualObjects(item.identifier, @"control_question");
+    XCTAssertEqualObjects(item.text, @"Have you ever been diagnosed with XYZ?");
+    
+    ORKTextChoiceAnswerFormat *answerFormat = (ORKTextChoiceAnswerFormat *)item.answerFormat;
+    XCTAssertTrue([answerFormat isKindOfClass:[ORKTextChoiceAnswerFormat class]]);
+    XCTAssertEqual(answerFormat.style, ORKChoiceAnswerStyleSingleChoice);
+    
+    XCTAssertEqual(answerFormat.textChoices.count, 2);
+    NSArray *expectedChoices = @[[ORKTextChoice choiceWithText:@"Yes" value:@YES],
+                                 [ORKTextChoice choiceWithText:@"No" value:@NO]];
+    XCTAssertEqualObjects(answerFormat.textChoices, expectedChoices);
+}
+
+- (void)testSetSurveyAnswerWithStepResult_StudyA
+{
+    APCDataGroupsManager * manager = [self createDataGroupsManagerWithDataGroups:nil];
+    
+    // Change the survey answer
+    ORKChoiceQuestionResult *result = [[ORKChoiceQuestionResult alloc] initWithIdentifier:@"control_question"];
+    result.choiceAnswers = @[@YES];
+    ORKStepResult *stepResult = [[ORKStepResult alloc] initWithStepIdentifier:APCDataGroupsStepIdentifier results:@[result]];
+    
+    [manager setSurveyAnswerWithStepResult:stepResult];
+    
+    // Check the results using a set b/c the order of the groups does not matter
+    XCTAssertEqual(manager.dataGroups.count, 1);
+    NSString *actualGroup = [manager.dataGroups firstObject];
+    XCTAssertTrue([actualGroup isKindOfClass:[NSString class]], @"%@", NSStringFromClass([actualGroup class]));
+    XCTAssertEqualObjects(actualGroup, @"studyA");
+}
+
+- (void)testSetSurveyAnswerWithStepResult_Control
+{
+    APCDataGroupsManager * manager = [self createDataGroupsManagerWithDataGroups:nil];
+    
+    // Change the survey answer
+    ORKChoiceQuestionResult *result = [[ORKChoiceQuestionResult alloc] initWithIdentifier:@"control_question"];
+    result.choiceAnswers = @[@NO];
+    ORKStepResult *stepResult = [[ORKStepResult alloc] initWithStepIdentifier:APCDataGroupsStepIdentifier results:@[result]];
+    
+    [manager setSurveyAnswerWithStepResult:stepResult];
+    
+    // Check the results using a set b/c the order of the groups does not matter
+    XCTAssertEqual(manager.dataGroups.count, 1);
+    NSString *actualGroup = [manager.dataGroups firstObject];
+    XCTAssertTrue([actualGroup isKindOfClass:[NSString class]], @"%@", NSStringFromClass([actualGroup class]));
+    XCTAssertEqualObjects(actualGroup, @"control");
+}
+
+#pragma mark - heper methods
 
 - (APCDataGroupsManager*)createDataGroupsManagerWithDataGroups:(NSArray*)dataGroups {
     
@@ -147,11 +211,13 @@
                        }
                   ],
         @"required": @(true),
+        @"title": @"Are you in Control?",
+        @"detail": @"Engineers and scientists like classifications. To help us better classify you, please answer these required questions.",
         @"questions":
         @[
          @{
-             @"identifier": @"control",
-             @"prompt": @"Have you been diagnosed with XYZ?",
+             @"identifier": @"control_question",
+             @"prompt": @"Have you ever been diagnosed with XYZ?",
              @"type": @"boolean",
              @"valueMap": @[@{ @"value" : @YES,
                                @"groups" : @[@"studyA"]},

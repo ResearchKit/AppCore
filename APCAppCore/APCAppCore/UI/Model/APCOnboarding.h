@@ -66,6 +66,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)isSignInSupported;
 
+- (BOOL)hasNextStep:(ORKStep *)step;
+- (BOOL)hasPreviousStep:(ORKStep *)step;
+
 @end
 
 
@@ -77,6 +80,18 @@ NS_ASSUME_NONNULL_BEGIN
  *  Return the scene for the desired type, or nil if the scene should be skipped.
  */
 - (nullable APCScene *)onboarding:(APCOnboarding *)onboarding sceneOfType:(NSString *)type;
+
+@optional
+
+/**
+ * Called whenever the step result changes for a given step
+ */
+- (void)onboarding:(APCOnboarding *)onboarding didFinishStepWithResult:(ORKStepResult*)stepResult;
+
+/**
+ * Called when finished
+ */
+- (void)onboardingDidFinish;
 
 @end
 

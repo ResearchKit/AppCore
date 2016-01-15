@@ -9,10 +9,14 @@
 #import "APCDataGroupsManager.h"
 #import "APCAppCore.h"
 
+NSString * const APCDataGroupsStepIdentifier = @"dataGroups";
+
 NSString * const APCDataGroupsMappingItemsKey = @"items";
 NSString * const APCDataGroupsMappingRequiredKey = @"required";
 NSString * const APCDataGroupsMappingQuestionsKey = @"questions";
 
+NSString * const APCDataGroupsMappingSurveyTitleKey = @"title";
+NSString * const APCDataGroupsMappingSurveyDetailKey = @"detail";
 NSString * const APCDataGroupsMappingSurveyQuestionIdentifierKey = @"identifier";
 NSString * const APCDataGroupsMappingSurveyQuestionTypeKey = @"type";
 NSString * const APCDataGroupsMappingSurveyQuestionPromptKey = @"prompt";
@@ -88,6 +92,44 @@ NSString * const APCDataGroupsMappingSurveyQuestionValueMapGroupsKey = @"groups"
     return [self.mapping[APCDataGroupsMappingItemsKey] filteredArrayUsingPredicate:predicate];
 }
 
+- (ORKFormStep *)surveyStep {
+    
+    NSArray *questions = self.mapping[APCDataGroupsMappingQuestionsKey];
+    if (questions.count == 0) {
+        return nil;
+    }
+
+    NSString *detail = self.mapping[APCDataGroupsMappingSurveyDetailKey];
+    BOOL useQuestionPrompt = (questions.count == 1) && (detail.length == 0);
+    if (useQuestionPrompt) {
+        detail = questions[0][APCDataGroupsMappingSurveyQuestionPromptKey];
+    }
+    
+    // Create the step
+    ORKFormStep *step = [[ORKFormStep alloc] initWithIdentifier:APCDataGroupsStepIdentifier
+                                                          title:self.mapping[APCDataGroupsMappingSurveyTitleKey]
+                                                           text:detail];
+    step.optional = NO;
+    
+    // Add the questions from the mapping
+    NSMutableArray *formItems = [NSMutableArray new];
+    for (NSDictionary *question in questions) {
+        ORKAnswerFormat *format = [ORKTextChoiceAnswerFormat
+                                   choiceAnswerFormatWithStyle:ORKChoiceAnswerStyleSingleChoice
+                                   textChoices:[self choicesForQuestion:question]];
+        NSString *text = !useQuestionPrompt ? question[APCDataGroupsMappingSurveyQuestionPromptKey] : nil;
+        ORKFormItem  *item = [[ORKFormItem alloc] initWithIdentifier:question[APCDataGroupsMappingSurveyQuestionIdentifierKey]
+                                                                text:text
+                                                        answerFormat:format];
+        [formItems addObject:item];
+    }
+    step.formItems = formItems;
+    
+    // If there is only one question, move the language around a little bit
+    
+    return step;
+}
+
 - (NSArray <APCTableViewRow *> * _Nullable)surveyItems {
     
     NSArray *questions = self.mapping[APCDataGroupsMappingQuestionsKey];
@@ -97,51 +139,57 @@ NSString * const APCDataGroupsMappingSurveyQuestionValueMapGroupsKey = @"groups"
 
     NSMutableArray *result = [NSMutableArray new];
     for (NSDictionary *question in questions) {
-        NSString *questionType = question[APCDataGroupsMappingSurveyQuestionTypeKey];
-        if ([questionType isEqualToString:APCDataGroupsMappingSurveyQuestionTypeBoolean])
-        {
-            APCTableViewCustomPickerItem *item = [[APCTableViewCustomPickerItem alloc] init];
-            item.questionIdentifier = question[APCDataGroupsMappingSurveyQuestionIdentifierKey];
-            item.reuseIdentifier = kAPCDefaultTableViewCellIdentifier;
-            item.caption = question[APCDataGroupsMappingSurveyQuestionProfileCaptionKey] ?: question[APCDataGroupsMappingSurveyQuestionPromptKey];
-            item.textAlignnment = NSTextAlignmentRight;
-            
-            // Set the values to YES or NO
-            NSArray *valueMap = question[APCDataGroupsMappingSurveyQuestionValueMapKey];
-            NSString *yes = NSLocalizedStringWithDefaultValue(@"YES", @"APCAppCore", APCBundle(), @"Yes", @"Yes");
-            NSString *no = NSLocalizedStringWithDefaultValue(@"NO", @"APCAppCore", APCBundle(), @"No", @"No");
-            NSArray *options = nil;
-            NSArray *valueOrder = nil;
-            if ([valueMap[0][APCDataGroupsMappingSurveyQuestionValueMapValueKey] boolValue]) {
-                options = @[yes, no];
-                valueOrder = @[@YES, @NO];
-            }
-            else {
-                options = @[no, yes];
-                valueOrder = @[@NO, @YES];
-            }
-            item.pickerData = @[options];
-            
-            // Set selected rows
-            id selectedValue = [self selectedValueForMap:valueMap];
-            NSUInteger idx = (selectedValue != nil) ? [valueOrder indexOfObject:selectedValue] : NSNotFound;
-            if (idx != NSNotFound) {
-                item.selectedRowIndices = @[@(idx)];
-            }
-            
-            // Create row
-            APCTableViewRow *row = [APCTableViewRow new];
-            row.item = item;
-            row.itemType = kAPCUserInfoItemTypeDataGroups;
-            [result addObject:row];
+
+        // Create the item
+        APCTableViewCustomPickerItem *item = [[APCTableViewCustomPickerItem alloc] init];
+        item.questionIdentifier = question[APCDataGroupsMappingSurveyQuestionIdentifierKey];
+        item.reuseIdentifier = kAPCDefaultTableViewCellIdentifier;
+        item.caption = question[APCDataGroupsMappingSurveyQuestionProfileCaptionKey] ?: question[APCDataGroupsMappingSurveyQuestionPromptKey];
+        item.textAlignnment = NSTextAlignmentRight;
+        
+        // Get the choices
+        NSArray <ORKTextChoice *> *choices = [self choicesForQuestion:question];
+        item.pickerData = @[[choices valueForKey:NSStringFromSelector(@selector(text))]];
+        
+        // Set selected rows
+        id selectedValue = [self selectedValueForMap:question[APCDataGroupsMappingSurveyQuestionValueMapKey]];
+        NSArray *valueOrder = [choices valueForKey:NSStringFromSelector(@selector(value))];
+        NSUInteger idx = (selectedValue != nil) ? [valueOrder indexOfObject:selectedValue] : NSNotFound;
+        if (idx != NSNotFound) {
+            item.selectedRowIndices = @[@(idx)];
         }
-        else
-        {
-            NSAssert1(NO, @"Data groups survey question of type %@ is not handled.", questionType);
-        }
+        
+        // Create row
+        APCTableViewRow *row = [APCTableViewRow new];
+        row.item = item;
+        row.itemType = kAPCUserInfoItemTypeDataGroups;
+        [result addObject:row];
     }
     
     return [result copy];
+}
+
+- (NSArray <ORKTextChoice *> *) choicesForQuestion:(NSDictionary *)question {
+    NSString *questionType = question[APCDataGroupsMappingSurveyQuestionTypeKey];
+    if ([questionType isEqualToString:APCDataGroupsMappingSurveyQuestionTypeBoolean]) {
+        
+        ORKTextChoice *yesChoice = [ORKTextChoice choiceWithText:NSLocalizedStringWithDefaultValue(@"YES", @"APCAppCore", APCBundle(), @"Yes", @"Yes") value:@YES];
+        ORKTextChoice *noChoice = [ORKTextChoice choiceWithText:NSLocalizedStringWithDefaultValue(@"NO", @"APCAppCore", APCBundle(), @"No", @"No") value:@NO];
+        
+        // Use the ordering defined by the mapping
+        NSArray *valueMap = question[APCDataGroupsMappingSurveyQuestionValueMapKey];
+        if ([valueMap[0][APCDataGroupsMappingSurveyQuestionValueMapValueKey] boolValue]) {
+            return @[yesChoice, noChoice];
+        }
+        else {
+            return @[noChoice, yesChoice];
+        }
+    }
+    else {
+        NSAssert1(NO, @"Data groups survey question of type %@ is not handled.", questionType);
+    }
+
+    return nil;
 }
 
 - (id)selectedValueForMap:(NSArray*)valueMap {
@@ -158,9 +206,49 @@ NSString * const APCDataGroupsMappingSurveyQuestionValueMapGroupsKey = @"groups"
     return nil;
 }
 
+- (NSDictionary*)questionWithIndentifier:(NSString*)identifier {
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K = %@", APCDataGroupsMappingSurveyQuestionIdentifierKey, identifier];
+    NSDictionary *question = [[self.mapping[APCDataGroupsMappingQuestionsKey] filteredArrayUsingPredicate:predicate] firstObject];
+    return question;
+}
+
+- (void)setSurveyAnswerWithStepResult:(ORKStepResult *)stepResult {
+    for (ORKResult *result in stepResult.results) {
+        if ([result isKindOfClass:[ORKChoiceQuestionResult class]]) {
+            ORKChoiceQuestionResult *choiceResult = (ORKChoiceQuestionResult *)result;
+            NSDictionary *question = [self questionWithIndentifier:choiceResult.identifier];
+            NSArray *valueMap = question[APCDataGroupsMappingSurveyQuestionValueMapKey];
+            
+            // Get the groups that are to be included
+            NSPredicate *includePredicate = [NSPredicate predicateWithFormat:@"%K IN %@", APCDataGroupsMappingSurveyQuestionValueMapValueKey, choiceResult.choiceAnswers];
+            NSArray *includeGroups = [[valueMap filteredArrayUsingPredicate:includePredicate] valueForKey:APCDataGroupsMappingSurveyQuestionValueMapGroupsKey];
+            
+            // Get the groups that are changing to be excluded
+            NSPredicate *excludePredicate = [NSCompoundPredicate notPredicateWithSubpredicate:includePredicate];
+            NSArray *excludeGroups = [[valueMap filteredArrayUsingPredicate:excludePredicate] valueForKey:APCDataGroupsMappingSurveyQuestionValueMapGroupsKey];
+            
+            // Remove data groups that are *not* in the selected subset
+            for (NSArray *groups in excludeGroups) {
+                [self.dataGroupsSet minusSet:[NSSet setWithArray:groups]];
+            }
+            
+            // Union data groups that *are* in the selected subset
+            for (NSArray *groups in includeGroups) {
+                [self.dataGroupsSet unionSet:[NSSet setWithArray:groups]];
+            }
+        }
+        else {
+            NSAssert1(NO, @"Data groups survey question of class %@ is not handled.", [result class]);
+        }
+    }
+}
+
 - (void)setSurveyAnswerWithItem:(APCTableViewItem*)item {
     if ([item isKindOfClass:[APCTableViewCustomPickerItem class]]) {
-        [self setSurveyAnswerWithIdentifier:item.questionIdentifier selectedIndices:((APCTableViewCustomPickerItem*)item).selectedRowIndices];
+        NSArray *selectedIndices = ((APCTableViewCustomPickerItem*)item).selectedRowIndices;
+        NSAssert(selectedIndices.count <= 1, @"Data groups with multi-part picker are not implemented.");
+        
+        [self setSurveyAnswerWithIdentifier:item.questionIdentifier selectedIndices:selectedIndices];
     }
     else {
         NSAssert1(NO, @"Data groups survey question of class %@ is not handled.", [item class]);
@@ -169,13 +257,10 @@ NSString * const APCDataGroupsMappingSurveyQuestionValueMapGroupsKey = @"groups"
 
 - (void)setSurveyAnswerWithIdentifier:(NSString*)identifier selectedIndices:(NSArray*)selectedIndices {
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K = %@", APCDataGroupsMappingSurveyQuestionIdentifierKey, identifier];
-    NSDictionary *question = [[self.mapping[APCDataGroupsMappingQuestionsKey] filteredArrayUsingPredicate:predicate] firstObject];
+    NSDictionary *question = [self questionWithIndentifier:identifier];
     
     // Get all the groups that are defined by this question
     NSArray *groupsMap = [question[APCDataGroupsMappingSurveyQuestionValueMapKey] valueForKey:APCDataGroupsMappingSurveyQuestionValueMapGroupsKey];
-    
-    NSAssert(selectedIndices.count <= 1, @"Data groups with multi-part picker are not currently handled");
     
     // build the include and exclude sets
     NSMutableSet *excludeSet = [NSMutableSet new];

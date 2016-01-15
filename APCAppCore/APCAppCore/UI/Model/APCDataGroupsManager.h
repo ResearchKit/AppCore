@@ -7,10 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <ResearchKit/ResearchKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 @class APCUser, APCTableViewRow, APCTableViewItem;
+
+extern NSString * const APCDataGroupsStepIdentifier;
 
 @interface APCDataGroupsManager : NSObject
 
@@ -22,9 +25,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)needsUserInfoDataGroups;
 - (BOOL)isStudyControlGroup;
+
 - (NSArray <APCTableViewRow *> * _Nullable)surveyItems;
-- (void)setSurveyAnswerWithIdentifier:(NSString*)identifier selectedIndices:(NSArray*)selectedIndices;
+- (ORKFormStep *)surveyStep;
+
 - (void)setSurveyAnswerWithItem:(APCTableViewItem*)item;
+- (void)setSurveyAnswerWithStepResult:(ORKStepResult *)result;
+- (void)setSurveyAnswerWithIdentifier:(NSString*)identifier selectedIndices:(NSArray*)selectedIndices;
+
 
 @end
 

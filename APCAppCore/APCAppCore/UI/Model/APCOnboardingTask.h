@@ -44,6 +44,7 @@ typedef NS_ENUM(NSUInteger, APCOnboardingTaskType) {
 FOUNDATION_EXPORT NSString *const kAPCSignUpInclusionCriteriaStepIdentifier;
 FOUNDATION_EXPORT NSString *const kAPCSignUpEligibleStepIdentifier;
 FOUNDATION_EXPORT NSString *const kAPCSignUpIneligibleStepIdentifier;
+FOUNDATION_EXPORT NSString *const kAPCSignUpDataGroupsStepIdentifier;
 FOUNDATION_EXPORT NSString *const kAPCSignUpGeneralInfoStepIdentifier;
 FOUNDATION_EXPORT NSString *const kAPCSignUpMedicalInfoStepIdentifier;
 FOUNDATION_EXPORT NSString *const kAPCSignUpCustomInfoStepIdentifier;
@@ -80,6 +81,8 @@ FOUNDATION_EXPORT NSString *const kAPCSignUpShareAppStepIdentifier;
 @property (nonatomic, strong) ORKStep *ineligibleStep;
 
 @property (nonatomic, strong) ORKStep *permissionsPrimingStep;
+
+@property (nonatomic, strong) ORKStep *dataGroupsStep;
 
 @property (nonatomic, strong) ORKStep *generalInfoStep;
 

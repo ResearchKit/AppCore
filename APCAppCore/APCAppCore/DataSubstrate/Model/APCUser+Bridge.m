@@ -47,7 +47,7 @@
 
 - (void)signUpOnCompletion:(void (^)(NSError *))completionBlock
 {
-    [self signUpWithDataGroups:nil onCompletion:completionBlock];
+    [self signUpWithDataGroups:self.dataGroups onCompletion:completionBlock];
 }
 
 - (void)signUpWithDataGroups:(NSArray<NSString *> *)dataGroups onCompletion:(void (^)(NSError *))completionBlock

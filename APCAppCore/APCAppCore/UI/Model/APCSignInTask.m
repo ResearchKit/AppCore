@@ -50,9 +50,9 @@ static NSInteger const kMinimumNumberOfSteps = 2; //MedicalInfo + Passcode
     
     if (!step) {
         nextStep = self.signInStep;
-    } else if ([step.identifier isEqualToString:kAPCSignInStepIdentifier]) {
+    } else if ([step.identifier isEqualToString:self.signInStep.identifier]) {
         nextStep = self.permissionsPrimingStep;
-    } else if ([step.identifier isEqualToString:kAPCSignUpPermissionsPrimingStepIdentifier]) {
+    } else if ([step.identifier isEqualToString:self.permissionsPrimingStep.identifier]) {
         if (self.user.isSecondaryInfoSaved) {
             nextStep = nil;
         } else{
@@ -60,7 +60,7 @@ static NSInteger const kMinimumNumberOfSteps = 2; //MedicalInfo + Passcode
             self.currentStepNumber += 1;
         }
         
-    } else if ([step.identifier isEqualToString:kAPCSignUpMedicalInfoStepIdentifier]) {
+    } else if ([step.identifier isEqualToString:self.medicalInfoStep.identifier]) {
         if (self.customStepIncluded) {
             nextStep = self.customInfoStep;
         } else{
@@ -68,21 +68,21 @@ static NSInteger const kMinimumNumberOfSteps = 2; //MedicalInfo + Passcode
             self.user.secondaryInfoSaved = YES;
         }
         self.currentStepNumber += 1;
-    } else if ([step.identifier isEqualToString:kAPCSignUpCustomInfoStepIdentifier]) {
+    } else if ([step.identifier isEqualToString:self.customInfoStep.identifier]) {
         nextStep = self.passcodeStep;
         self.user.secondaryInfoSaved = YES;
         self.currentStepNumber += 1;
-    } else if ([step.identifier isEqualToString:kAPCSignUpPasscodeStepIdentifier]) {
+    } else if ([step.identifier isEqualToString:self.passcodeStep.identifier]) {
         if (self.permissionScreenSkipped) {
             nextStep = nil;
         } else {
             nextStep = self.permissionsStep;
             self.currentStepNumber += 1;
         }
-    } else if ([step.identifier isEqualToString:kAPCSignUpPermissionsStepIdentifier]) {
+    } else if ([step.identifier isEqualToString:self.permissionsStep.identifier]) {
         nextStep = self.thankyouStep;
         self.currentStepNumber += 1;
-    } else if ([step.identifier isEqualToString:kAPCSignUpThankYouStepIdentifier]) {
+    } else if ([step.identifier isEqualToString:self.thankyouStep.identifier]) {
         nextStep = nil;
     }
     
@@ -93,19 +93,19 @@ static NSInteger const kMinimumNumberOfSteps = 2; //MedicalInfo + Passcode
 {
     ORKStep *prevStep;
     
-    if ([step.identifier isEqualToString:kAPCSignUpMedicalInfoStepIdentifier]) {
+    if ([step.identifier isEqualToString:self.medicalInfoStep.identifier]) {
         prevStep = nil;
-    } else if ([step.identifier isEqualToString:kAPCSignUpCustomInfoStepIdentifier]) {
+    } else if ([step.identifier isEqualToString:self.customInfoStep.identifier]) {
         prevStep = self.medicalInfoStep;
         self.currentStepNumber -= 1;
-    } else if ([step.identifier isEqualToString:kAPCSignUpPasscodeStepIdentifier]) {
+    } else if ([step.identifier isEqualToString:self.passcodeStep.identifier]) {
         if (self.customStepIncluded) {
             prevStep = self.customInfoStep;
         } else {
             prevStep = self.medicalInfoStep;
         }
         self.currentStepNumber -= 1;
-    } else if ([step.identifier isEqualToString:kAPCSignUpPermissionsStepIdentifier]) {
+    } else if ([step.identifier isEqualToString:self.permissionsStep.identifier]) {
         prevStep = self.passcodeStep;
         self.currentStepNumber -= 1;
     }

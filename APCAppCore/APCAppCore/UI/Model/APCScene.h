@@ -32,6 +32,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <ResearchKit/ResearchKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -40,21 +41,24 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface APCScene : NSObject
 
-@property (nonatomic, strong) NSString *identifier;
+@property (nonatomic, copy) NSString *identifier;
+
+@property (nonatomic, strong) ORKStep *step;
 
 /** Refers to the tabbar item (if applicable) */
 @property (nonatomic, strong) UITabBarItem * _Nullable tabBarItem;
 
 /** Refers to StoryboardID. */
-@property (nonatomic, strong) NSString * _Nullable storyboardId;
+@property (nonatomic, copy) NSString * _Nullable storyboardId;
 
 /** The name of the storyboard. */
-@property (nonatomic, strong) NSString *storyboardName;
+@property (nonatomic, copy) NSString * _Nullable storyboardName;
 
 /** Defaults to the bundle this class resides in. */
 @property (nonatomic, strong) NSBundle *bundle;
 
 - (instancetype)initWithName:(NSString *_Nullable)storyboardId inStoryboard:(NSString *)storyboardName;
+- (instancetype)initWithStep:(ORKStep*)step;
 
 /** Instantiates the view controller as defined by this scene. */
 - (UIViewController * _Nullable)instantiateViewController;
