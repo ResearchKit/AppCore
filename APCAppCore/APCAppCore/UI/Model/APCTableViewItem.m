@@ -51,6 +51,14 @@
     return self;
 }
 
+- (NSString *)identifier {
+    return _reuseIdentifier;
+}
+
+- (void)setIdentifier:(NSString *)identifier {
+    _reuseIdentifier = [identifier copy];
+}
+
 @end
 
 

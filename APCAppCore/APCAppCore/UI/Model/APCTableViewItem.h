@@ -62,6 +62,13 @@
 
 @property (nonatomic, readwrite, getter=isEditable) BOOL editable;
 
+/**
+ * @Deprecated
+ * Use of "identifier" instead of reuseIdentifier (UITableViewCell naming convention) is confusing and conflicts
+ * with the idea of a unique identifier used elsewhere in the SDK. syoung 01/15/2015
+ */
+@property NSString *identifier __attribute__((deprecated("Please use -reuseIdentifier instead.")));
+
 @end
 
 
