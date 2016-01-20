@@ -74,6 +74,16 @@
 - (id)initWithReference: (NSString *)reference task:(APCTask *)task;
 
 /**
+ Designated Initializer
+ 
+ @param     reference           Reference for the archive used as a directory name in temp directory
+ @param     schemaRevision      Schema revision associated with this task
+ 
+ @return    APCDataArchive      An instance of APCDataArchive
+ */
+- (id)initWithReference: (NSString *)reference schemaRevision:(NSNumber *)schemaRevision;
+
+/**
  Inserts json data into the archive.
  
  @param     jsonData            JSON data to be inserted into the zip archive.
