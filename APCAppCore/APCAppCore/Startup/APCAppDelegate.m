@@ -1004,6 +1004,9 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
 }
 
 - (APCDataGroupsManager *)dataGroupsManagerForUser:(APCUser*)user {
+    if (user == nil) {
+        user = self.dataSubstrate.currentUser;
+    }
     return [[APCDataGroupsManager alloc] initWithDataGroups:user.dataGroups mapping:nil];
 }
 

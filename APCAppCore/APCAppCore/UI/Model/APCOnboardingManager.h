@@ -53,7 +53,7 @@ NS_ASSUME_NONNULL_BEGIN
 /** The permissions manager for the app. */
 - (APCPermissionsManager *)permissionsManager;
 /** The data groups manager for the app. */
-- (APCDataGroupsManager *)dataGroupsManagerForUser:(APCUser*)user;
+- (APCDataGroupsManager *)dataGroupsManagerForUser:(APCUser * _Nullable)user;
 @optional
 /**
  *  Kept for backwards compatibility: return the inclusion criteria scene.
