@@ -61,7 +61,7 @@ extern NSString * const APCDataGroupsStepIdentifier;
 - (BOOL)isStudyControlGroup;
 
 - (NSArray <APCTableViewRow *> * _Nullable)surveyItems;
-- (ORKFormStep *)surveyStep;
+- (ORKFormStep * _Nullable)surveyStep;
 
 - (void)setSurveyAnswerWithItem:(APCTableViewItem*)item;
 - (void)setSurveyAnswerWithStepResult:(ORKStepResult *)result;
