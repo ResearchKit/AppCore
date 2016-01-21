@@ -69,7 +69,7 @@
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *rightBarButton;
 
-@property (assign) id <APCProfileViewControllerDelegate> delegate;
+@property (nonatomic, weak) id <APCProfileViewControllerDelegate> delegate;
 
 @property (nonatomic, strong) UIImage *profileImage;
 
