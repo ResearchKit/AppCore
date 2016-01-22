@@ -114,7 +114,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     APCUser  *user = appDelegate.dataSubstrate.currentUser;
     self.demographicUploader = [[APCDemographicUploader alloc] initWithUser:user];
     
-    
+    [self refreshView];
 }
 
 - (void)refreshView
