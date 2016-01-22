@@ -33,11 +33,12 @@
 
 #import "APCScene.h"
 
+
 @implementation APCScene
 
 - (NSString *)identifier {
     if (_identifier == nil) {
-        _identifier = self.storyboardName;
+        _identifier = [_storyboardName copy] ?: [_step.identifier copy];
     }
     return _identifier;
 }
@@ -46,9 +47,19 @@
     NSParameterAssert([storyboardName length] > 0);
     self = [super init];
     if (self) {
-        _identifier = storyboardName;
-        _storyboardId = storyboardId;
-        _storyboardName = storyboardName;
+        _identifier = [storyboardName copy];
+        _storyboardId = [storyboardId copy];
+        _storyboardName = [storyboardName copy];
+    }
+    return self;
+}
+
+- (instancetype)initWithStep:(ORKStep*)step {
+    NSParameterAssert(step != nil);
+    self = [super init];
+    if (self) {
+        _identifier = [step.identifier copy];
+        _step = step;
     }
     return self;
 }
@@ -61,17 +72,38 @@
 }
 
 - (UIViewController * _Nullable)instantiateViewController {
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:self.storyboardName bundle:self.bundle];
-    UIViewController *viewController;
-    if (self.storyboardId != nil) {
-        viewController = [storyboard instantiateViewControllerWithIdentifier:self.storyboardId];
+    
+    UIViewController *viewController = nil;
+    
+    // Look for the view controller in a storyboard
+    if (self.storyboardName) {
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:self.storyboardName bundle:self.bundle];
+        if (self.storyboardId != nil) {
+            viewController = [storyboard instantiateViewControllerWithIdentifier:self.storyboardId];
+        }
+        else {
+            viewController = [storyboard instantiateInitialViewController];
+        }
+        // If the view controller returned by the storyboard is a step view controller
+        // then point the step at it.
+        if ([viewController isKindOfClass:[ORKStepViewController class]]) {
+            ((ORKStepViewController*)viewController).step = self.step;
+        }
     }
-    else {
-        viewController = [storyboard instantiateInitialViewController];
+    
+    // Factory method for creating the view controller that is defined on ORKStep
+    // is private to ResearchKit so just define factory for the type of step that
+    // that we are interested in.
+    // TODO: clean this up when pointing against ResearchKit 1.3 (syoung 01/14/2016)
+    if ((viewController == nil) && [self.step isKindOfClass:[ORKFormStep class]]) {
+        viewController = [[ORKFormStepViewController alloc] initWithStep:self.step];
     }
+    
+    // Add the tab bar item (if applicable)
     if (self.tabBarItem) {
         viewController.tabBarItem = self.tabBarItem;
     }
+    
     return viewController;
 }
 

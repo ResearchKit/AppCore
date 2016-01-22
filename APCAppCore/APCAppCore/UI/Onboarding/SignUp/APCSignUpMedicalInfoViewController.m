@@ -103,7 +103,7 @@
             {
                 APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
                 field.caption = NSLocalizedStringWithDefaultValue(@"Blood Type", @"APCAppCore", APCBundle(), @"Blood Type", @"");
-                field.identifier = kAPCDefaultTableViewCellIdentifier;
+                field.reuseIdentifier = kAPCDefaultTableViewCellIdentifier;
                 field.selectionStyle = UITableViewCellSelectionStyleGray;
                 field.detailDiscloserStyle = YES;
                 
@@ -127,7 +127,7 @@
             {
                 APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
                 field.caption = NSLocalizedStringWithDefaultValue(@"Medical Conditions", @"APCAppCore", APCBundle(), @"Medical Conditions", @"");
-                field.identifier = kAPCDefaultTableViewCellIdentifier;
+                field.reuseIdentifier = kAPCDefaultTableViewCellIdentifier;
                 field.selectionStyle = UITableViewCellSelectionStyleGray;
                 field.detailDiscloserStyle = YES;
                 field.pickerData = @[ [APCUser medicalConditions] ];
@@ -150,7 +150,7 @@
             {
                 APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
                 field.caption = NSLocalizedStringWithDefaultValue(@"Medications", @"APCAppCore", APCBundle(), @"Medications", @"");
-                field.identifier = kAPCDefaultTableViewCellIdentifier;
+                field.reuseIdentifier = kAPCDefaultTableViewCellIdentifier;
                 field.selectionStyle = UITableViewCellSelectionStyleGray;
                 field.detailDiscloserStyle = YES;
                 field.textAlignnment = NSTextAlignmentRight;
@@ -174,7 +174,7 @@
             {
                 APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
                 field.caption = NSLocalizedStringWithDefaultValue(@"Height", @"APCAppCore", APCBundle(), @"Height", @"");
-                field.identifier = kAPCDefaultTableViewCellIdentifier;
+                field.reuseIdentifier = kAPCDefaultTableViewCellIdentifier;
                 field.selectionStyle = UITableViewCellSelectionStyleGray;
                 field.detailDiscloserStyle = YES;
                 field.textAlignnment = NSTextAlignmentRight;
@@ -220,7 +220,7 @@
                 field.caption = NSLocalizedStringWithDefaultValue(@"Weight", @"APCAppCore", APCBundle(), @"Weight", @"");
                 field.placeholder = NSLocalizedStringWithDefaultValue(@"add weight (lb)", @"APCAppCore", APCBundle(), @"add weight (lb)", @"");
                 field.style = UITableViewCellStyleValue1;
-                field.identifier = kAPCTextFieldTableViewCellIdentifier;
+                field.reuseIdentifier = kAPCTextFieldTableViewCellIdentifier;
                 field.regularExpression = kAPCMedicalInfoItemWeightRegEx;
                 field.keyboardType = UIKeyboardTypeDecimalPad;
                 field.textAlignnment = NSTextAlignmentRight;
@@ -241,7 +241,7 @@
                 APCTableViewDatePickerItem *field = [APCTableViewDatePickerItem new];
                 field.caption = NSLocalizedStringWithDefaultValue(@"What time do you generally wake up?", @"APCAppCore", APCBundle(), @"What time do you generally wake up?", @"");
                 field.placeholder = @"07:00 AM";
-                field.identifier = kAPCDefaultTableViewCellIdentifier;
+                field.reuseIdentifier = kAPCDefaultTableViewCellIdentifier;
                 field.selectionStyle = UITableViewCellSelectionStyleGray;
                 field.datePickerMode = UIDatePickerModeTime;
                 field.dateFormat = kAPCMedicalInfoItemSleepTimeFormat;
@@ -271,7 +271,7 @@
                 field.caption = NSLocalizedStringWithDefaultValue(@"What time do you generally go to sleep?", @"APCAppCore", APCBundle(), @"What time do you generally go to sleep?", @"");
                 field.placeholder = @"09:30 PM";
                 field.style = UITableViewCellStyleValue1;
-                field.identifier = kAPCDefaultTableViewCellIdentifier;
+                field.reuseIdentifier = kAPCDefaultTableViewCellIdentifier;
                 field.selectionStyle = UITableViewCellSelectionStyleGray;
                 field.datePickerMode = UIDatePickerModeTime;
                 field.dateFormat = kAPCMedicalInfoItemSleepTimeFormat;

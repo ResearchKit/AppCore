@@ -32,6 +32,7 @@
 // 
  
 #import "APCProfileViewController.h"
+#import "APCDataGroupsManager.h"
 #import "APCPermissionsManager.h"
 #import "APCSharingOptionsViewController.h"
 #import "APCLicenseInfoViewController.h"
@@ -88,6 +89,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *studyDetailsViewHeightConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *studyLabelCenterYConstraint;
 @property (strong, nonatomic) APCPermissionsManager *permissionManager;
+@property (strong, nonatomic) APCDataGroupsManager *dataGroupsManager;
 
 @property (strong, nonatomic) APCDemographicUploader  *demographicUploader;
 @property (nonatomic, assign) BOOL                    profileEditsWerePerformed;
@@ -111,6 +113,8 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     APCAppDelegate *appDelegate = (APCAppDelegate *)[UIApplication sharedApplication].delegate;
     APCUser  *user = appDelegate.dataSubstrate.currentUser;
     self.demographicUploader = [[APCDemographicUploader alloc] initWithUser:user];
+    
+    
 }
 
 - (void)refreshView
@@ -129,6 +133,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     
     [self.profileImageButton.imageView setContentMode:UIViewContentModeScaleAspectFill];
     
+    self.dataGroupsManager = [[APCAppDelegate sharedAppDelegate] dataGroupsManagerForUser:self.user];
     self.items = [self prepareContent];
     [self.tableView reloadData];
     
@@ -148,6 +153,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     }
     
     self.permissionManager = [[APCPermissionsManager alloc] init];
+
     
     [self setupDataFromJSONFile:@"StudyOverview"];
     
@@ -290,7 +296,10 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             }
             
             if (field) {
-                cell = [tableView dequeueReusableCellWithIdentifier:field.identifier];
+                cell = [tableView dequeueReusableCellWithIdentifier:field.reuseIdentifier];
+                if (!cell) {
+                    cell = [tableView dequeueReusableCellWithIdentifier:kAPCDefaultTableViewCellIdentifier forIndexPath:indexPath];
+                }
                 
                 cell.selectionStyle = field.selectionStyle;
                 cell.textLabel.text = field.caption;
@@ -398,7 +407,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 }
                 else {
                     if (!cell) {
-                        cell = [[UITableViewCell alloc] initWithStyle:field.style reuseIdentifier:field.identifier];
+                        cell = [[UITableViewCell alloc] initWithStyle:field.style reuseIdentifier:field.reuseIdentifier];
                         
                         cell.textLabel.frame = CGRectMake(12.0, cell.textLabel.frame.origin.y, cell.textLabel.frame.size.width, cell.textLabel.frame.size.height);
                     }
@@ -430,7 +439,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 {
                     APCTableViewItem *field = [APCTableViewItem new];
                     field.caption = NSLocalizedStringWithDefaultValue(@"Sex", @"APCAppCore", APCBundle(), @"Sex", @"");
-                    field.identifier = kAPCDefaultTableViewCellIdentifier;
+                    field.reuseIdentifier = kAPCDefaultTableViewCellIdentifier;
                     field.editable = NO;
                     field.textAlignnment = NSTextAlignmentRight;
                     field.detailText = [APCUser stringValueFromSexType:self.user.biologicalSex];
@@ -447,7 +456,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 {
                     APCTableViewItem *field = [APCTableViewItem new];
                     field.caption = NSLocalizedStringWithDefaultValue(@"Birthdate", @"APCAppCore", APCBundle(), @"Birthdate", @"");
-                    field.identifier = kAPCDefaultTableViewCellIdentifier;
+                    field.reuseIdentifier = kAPCDefaultTableViewCellIdentifier;
                     field.editable = NO;
                     field.textAlignnment = NSTextAlignmentRight;
                     field.detailText = [self.user.birthDate toStringWithFormat:NSDateDefaultDateFormat];
@@ -470,7 +479,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                         field.value = self.user.customSurveyQuestion;
                     }
                     field.keyboardType = UIKeyboardTypeAlphabet;
-                    field.identifier = kAPCTextFieldTableViewCellIdentifier;
+                    field.reuseIdentifier = kAPCTextFieldTableViewCellIdentifier;
                     field.selectionStyle = self.isEditing ? UITableViewCellSelectionStyleGray : UITableViewCellSelectionStyleNone;
                     
                     field.style = UITableViewStylePlain;
@@ -488,7 +497,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     field.caption = NSLocalizedStringWithDefaultValue(@"Medical Conditions", @"APCAppCore", APCBundle(), @"Medical Conditions", @"");
                     field.pickerData = @[[APCUser medicalConditions]];
                     field.textAlignnment = NSTextAlignmentRight;
-                    field.identifier = kAPCDefaultTableViewCellIdentifier;
+                    field.reuseIdentifier = kAPCDefaultTableViewCellIdentifier;
                     field.selectionStyle = self.isEditing ? UITableViewCellSelectionStyleGray : UITableViewCellSelectionStyleNone;
                     field.editable = NO;
                     
@@ -512,7 +521,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     field.caption = NSLocalizedStringWithDefaultValue(@"Medications", @"APCAppCore", APCBundle(), @"Medications", @"");
                     field.pickerData = @[[APCUser medications]];
                     field.textAlignnment = NSTextAlignmentRight;
-                    field.identifier = kAPCDefaultTableViewCellIdentifier;
+                    field.reuseIdentifier = kAPCDefaultTableViewCellIdentifier;
                     field.selectionStyle = self.isEditing ? UITableViewCellSelectionStyleGray : UITableViewCellSelectionStyleNone;
                     field.editable = NO;
                     
@@ -535,7 +544,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
                     APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
                     field.caption = NSLocalizedStringWithDefaultValue(@"Height", @"APCAppCore", APCBundle(), @"Height", @"");
-                    field.identifier = kAPCDefaultTableViewCellIdentifier;
+                    field.reuseIdentifier = kAPCDefaultTableViewCellIdentifier;
                     field.detailDiscloserStyle = YES;
                     field.textAlignnment = NSTextAlignmentRight;
                     field.pickerData = [APCUser heights];
@@ -592,7 +601,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     
                     field.keyboardType = UIKeyboardTypeDecimalPad;
                     field.textAlignnment = NSTextAlignmentRight;
-                    field.identifier = kAPCTextFieldTableViewCellIdentifier;
+                    field.reuseIdentifier = kAPCTextFieldTableViewCellIdentifier;
                     field.selectionStyle = self.isEditing ? UITableViewCellSelectionStyleGray : UITableViewCellSelectionStyleNone;
                     
                     APCTableViewRow *row = [APCTableViewRow new];
@@ -608,7 +617,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     field.style = UITableViewCellStyleValue1;
                     field.caption = NSLocalizedStringWithDefaultValue(@"What time do you generally wake up?", @"APCAppCore", APCBundle(), @"What time do you generally wake up?", @"");
                     field.placeholder = NSLocalizedStringWithDefaultValue(@"7:00 AM", @"APCAppCore", APCBundle(), @"7:00 AM", @"");
-                    field.identifier = kAPCDefaultTableViewCellIdentifier;
+                    field.reuseIdentifier = kAPCDefaultTableViewCellIdentifier;
                     field.datePickerMode = UIDatePickerModeTime;
                     field.dateFormat = kAPCMedicalInfoItemSleepTimeFormat;
                     field.textAlignnment = NSTextAlignmentRight;
@@ -634,7 +643,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     field.style = UITableViewCellStyleValue1;
                     field.caption = NSLocalizedStringWithDefaultValue(@"What time do you generally go to sleep?", @"APCAppCore", APCBundle(), @"What time do you generally go to sleep?", @"");
                     field.placeholder = NSLocalizedStringWithDefaultValue(@"9:30 PM", @"APCAppCore", APCBundle(), @"9:30 PM", @"");
-                    field.identifier = kAPCDefaultTableViewCellIdentifier;
+                    field.reuseIdentifier = kAPCDefaultTableViewCellIdentifier;
                     field.datePickerMode = UIDatePickerModeTime;
                     field.dateFormat = kAPCMedicalInfoItemSleepTimeFormat;
                     field.textAlignnment = NSTextAlignmentRight;
@@ -651,6 +660,15 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     row.item = field;
                     row.itemType = kAPCUserInfoItemTypeSleepTime;
                     [rowItems addObject:row];
+                }
+                    break;
+                    
+                case kAPCUserInfoItemTypeDataGroups:
+                {
+                    NSArray *rows = [self.dataGroupsManager surveyItems];
+                    if (rows.count > 0) {
+                        [rowItems addObjectsFromArray:rows];
+                    }
                 }
                     break;
                 
@@ -694,7 +712,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     {
         APCTableViewItem *field = [APCTableViewItem new];
         field.caption = NSLocalizedStringWithDefaultValue(@"Activity Reminders", @"APCAppCore", APCBundle(), @"Activity Reminders", @"");
-        field.identifier = kAPCDefaultTableViewCellIdentifier;
+        field.reuseIdentifier = kAPCDefaultTableViewCellIdentifier;
         field.editable = NO;
         field.showChevron = YES;
         field.selectionStyle = self.isEditing ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleGray;
@@ -716,7 +734,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         
         {
             APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
-            field.identifier = kAPCDefaultTableViewCellIdentifier;
+            field.reuseIdentifier = kAPCDefaultTableViewCellIdentifier;
             field.selectionStyle = self.isEditing ? UITableViewCellSelectionStyleGray : UITableViewCellSelectionStyleNone;
             field.caption = NSLocalizedStringWithDefaultValue(@"Auto-Lock", @"APCAppCore", APCBundle(), @"Auto-Lock", @"");
             field.detailDiscloserStyle = YES;
@@ -741,7 +759,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         {
             APCTableViewItem *field = [APCTableViewItem new];
             field.caption = NSLocalizedStringWithDefaultValue(@"Change Passcode", @"APCAppCore", APCBundle(), @"Change Passcode", @"");
-            field.identifier = kAPCDefaultTableViewCellIdentifier;
+            field.reuseIdentifier = kAPCDefaultTableViewCellIdentifier;
             field.textAlignnment = NSTextAlignmentLeft;
             field.editable = NO;
             field.selectionStyle = UITableViewCellSelectionStyleGray;
@@ -755,7 +773,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         {
             APCTableViewItem *field = [APCTableViewItem new];
             field.caption = NSLocalizedStringWithDefaultValue(@"Download Data", @"APCAppCore", APCBundle(), @"Download Data", @"");
-            field.identifier = kAPCDefaultTableViewCellIdentifier;
+            field.reuseIdentifier = kAPCDefaultTableViewCellIdentifier;
             field.textAlignnment = NSTextAlignmentLeft;
             field.editable = NO;
             field.selectionStyle = UITableViewCellSelectionStyleGray;
@@ -770,7 +788,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         {
             APCTableViewItem *field = [APCTableViewItem new];
             field.caption = NSLocalizedStringWithDefaultValue(@"Sharing Options", @"APCAppCore", APCBundle(), @"Sharing Options", @"");
-            field.identifier = kAPCDefaultTableViewCellIdentifier;
+            field.reuseIdentifier = kAPCDefaultTableViewCellIdentifier;
             field.textAlignnment = NSTextAlignmentLeft;
             field.editable = NO;
             field.selectionStyle = UITableViewCellSelectionStyleGray;
@@ -791,7 +809,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         {
             APCTableViewItem *field = [APCTableViewItem new];
             field.caption = NSLocalizedStringWithDefaultValue(@"Permissions", @"APCAppCore", APCBundle(), @"Permissions", @"");
-            field.identifier = kAPCDefaultTableViewCellIdentifier;
+            field.reuseIdentifier = kAPCDefaultTableViewCellIdentifier;
             field.textAlignnment = NSTextAlignmentRight;
             field.editable = NO;
             field.selectionStyle = UITableViewCellSelectionStyleGray;
@@ -805,7 +823,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         {
             APCTableViewItem *field = [APCTableViewItem new];
             field.caption = NSLocalizedStringWithDefaultValue(@"Review Consent", @"APCAppCore", APCBundle(), @"Review Consent", @"");
-            field.identifier = kAPCDefaultTableViewCellIdentifier;
+            field.reuseIdentifier = kAPCDefaultTableViewCellIdentifier;
             field.textAlignnment = NSTextAlignmentRight;
             field.editable = NO;
             field.selectionStyle = UITableViewCellSelectionStyleGray;
@@ -827,7 +845,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         {
             APCTableViewItem *field = [APCTableViewItem new];
             field.caption = NSLocalizedStringWithDefaultValue(@"Privacy Policy", @"APCAppCore", APCBundle(), @"Privacy Policy", @"");
-            field.identifier = kAPCDefaultTableViewCellIdentifier;
+            field.reuseIdentifier = kAPCDefaultTableViewCellIdentifier;
             field.textAlignnment = NSTextAlignmentRight;
             field.editable = NO;
             field.selectionStyle = UITableViewCellSelectionStyleGray;
@@ -841,7 +859,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         {
             APCTableViewItem *field = [APCTableViewItem new];
             field.caption = NSLocalizedStringWithDefaultValue(@"License Information", @"APCAppCore", APCBundle(), @"License Information", @"");
-            field.identifier = kAPCDefaultTableViewCellIdentifier;
+            field.reuseIdentifier = kAPCDefaultTableViewCellIdentifier;
             field.textAlignnment = NSTextAlignmentRight;
             field.editable = NO;
             field.showChevron = YES;
@@ -1306,6 +1324,10 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 case kAPCUserInfoItemTypeWakeUpTime:
                     self.user.wakeUpTime = [(APCTableViewDatePickerItem *)item date];
                     break;
+                    
+                case kAPCUserInfoItemTypeDataGroups:
+                    [self.dataGroupsManager setSurveyAnswerWithItem:item];
+                    break;
                 
                 case kAPCSettingsItemTypeAutoLock:
                     break;
@@ -1601,6 +1623,14 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     else {
         if ([self.delegate respondsToSelector:@selector(hasFinishedEditing)]) {
             [self.delegate hasFinishedEditing];
+        }
+        
+        // If the data groups manager has changes, then send changes to server
+        if ([self.dataGroupsManager hasChanges]) {
+            typeof(self) __weak weakSelf = self;
+            [self.user updateDataGroups:self.dataGroupsManager.dataGroups onCompletion:^(NSError * error __unused){
+                [weakSelf refreshView];
+            }];
         }
     }
 

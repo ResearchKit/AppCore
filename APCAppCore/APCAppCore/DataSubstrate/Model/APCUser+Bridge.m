@@ -47,7 +47,7 @@
 
 - (void)signUpOnCompletion:(void (^)(NSError *))completionBlock
 {
-    [self signUpWithDataGroups:nil onCompletion:completionBlock];
+    [self signUpWithDataGroups:self.dataGroups onCompletion:completionBlock];
 }
 
 - (void)signUpWithDataGroups:(NSArray<NSString *> *)dataGroups onCompletion:(void (^)(NSError *))completionBlock
@@ -76,6 +76,40 @@
                  if (completionBlock) {
                      completionBlock(error);
                  }
+             });
+         }];
+    }
+}
+
+- (void) updateDataGroups:(NSArray<NSString *> *)dataGroups onCompletion:(void (^)(NSError * error))completionBlock
+{
+    typeof(self) __weak weakSelf = self;
+    void (^completion)(NSError *) = ^(NSError * error) {
+        if (!error) {
+            weakSelf.dataGroups = dataGroups;
+        }
+        if (completionBlock) {
+            completionBlock(error);
+        }
+    };
+    
+    if ([self serverDisabled]) {
+        completion(nil);
+    }
+    else
+    {
+        SBBDataGroups *groups = [SBBDataGroups new];
+        groups.dataGroups = [NSSet setWithArray:dataGroups];
+        
+        [SBBComponent(SBBUserManager) updateDataGroupsWithGroups:groups
+                                                      completion: ^(id __unused responseObject,
+                                                                      NSError *error)
+         {
+             dispatch_async(dispatch_get_main_queue(), ^{
+                 if (!error) {
+                     APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Data Groups Updated To Bridge"}));
+                 }
+                 completion(error);
              });
          }];
     }

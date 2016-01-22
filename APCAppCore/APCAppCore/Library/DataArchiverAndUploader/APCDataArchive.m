@@ -63,6 +63,7 @@ static NSString * kJsonInfoFilename                 = @"info.json";
 
 @property (nonatomic, strong) NSString *reference;
 @property (nonatomic, strong) APCTask *task;
+@property (nonatomic, strong) NSNumber *schemaRevision;
 @property (nonatomic, strong) ZZArchive *zipArchive;
 @property (nonatomic, strong) NSMutableArray *zipEntries;
 @property (nonatomic, strong) NSMutableArray *filesList;
@@ -91,6 +92,19 @@ static NSString * kJsonInfoFilename                 = @"info.json";
     if (self) {
         _reference = reference;
         _task = task;
+        _schemaRevision = task.taskSchemaRevision;
+        [self createArchive];
+    }
+    
+    return self;
+}
+
+- (id)initWithReference: (NSString *)reference schemaRevision:(NSNumber *)schemaRevision
+{
+    self = [super init];
+    if (self) {
+        _reference = reference;
+        _schemaRevision = schemaRevision;
         [self createArchive];
     }
     
@@ -204,8 +218,8 @@ static NSString * kJsonInfoFilename                 = @"info.json";
         [self.infoDict setObject:[APCUtilities phoneInfo] forKey:kPhoneInfoKey];
         [self.infoDict setObject:[NSUUID new].UUIDString forKey:kTaskRunKey];
         [self.infoDict setObject:self.reference forKey:kItemKey];
-        if (self.task.taskSchemaRevision) {
-            [self.infoDict setObject:self.task.taskSchemaRevision forKey:kSchemaRevisionKey];
+        if (self.schemaRevision) {
+            [self.infoDict setObject:self.schemaRevision forKey:kSchemaRevisionKey];
         }
         if ([self.task.taskType isEqualToNumber:@(APCTaskTypeSurveyTask)]) {
             // Survey schema is better matched by created date and survey guid

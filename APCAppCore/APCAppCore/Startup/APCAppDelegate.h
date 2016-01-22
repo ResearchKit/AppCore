@@ -49,7 +49,7 @@ extern NSString *const kActivitiesStoryBoardKey;
 extern NSString *const kHealthProfileStoryBoardKey;
 extern NSString *const kNewsFeedStoryBoardKey;
 
-@class APCDataSubstrate, APCDataMonitor, APCScheduler, APCPasscodeViewController, APCTasksReminderManager, APCPassiveDataCollector, APCFitnessAllocation;
+@class APCDataSubstrate, APCDataMonitor, APCScheduler, APCPasscodeViewController, APCTasksReminderManager, APCPassiveDataCollector, APCFitnessAllocation, APCDataGroupsManager;
 
 @interface APCAppDelegate : UIResponder <UIApplicationDelegate, APCOnboardingManagerProvider, APCPasscodeViewControllerDelegate, SBBBridgeAppDelegate>
 
@@ -136,7 +136,6 @@ extern NSString *const kNewsFeedStoryBoardKey;
 - (NSDate*)applicationBecameActiveDate;
 
 - (void)updateNewsFeedBadgeCount;
-
 
 // List of the tabs to use to setup the tabbar
 - (NSMutableArray <APCScene *> *)tabBarScenes;

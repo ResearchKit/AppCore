@@ -145,7 +145,7 @@ static CGFloat const kPickerCellHeight = 164.0f;
         
         if (field) {
             
-            cell = [tableView dequeueReusableCellWithIdentifier:field.identifier];
+            cell = [tableView dequeueReusableCellWithIdentifier:field.reuseIdentifier];
             
             cell.selectionStyle = field.selectionStyle;
             cell.textLabel.text = field.caption;
@@ -235,7 +235,7 @@ static CGFloat const kPickerCellHeight = 164.0f;
                 [self setupSwitchCellAppearance:switchCell];
             } else {
                 if (!cell) {
-                    cell = [[UITableViewCell alloc] initWithStyle:field.style reuseIdentifier:field.identifier];
+                    cell = [[UITableViewCell alloc] initWithStyle:field.style reuseIdentifier:field.reuseIdentifier];
                 }
                 [self setupBasicCellAppearance:cell];
             }

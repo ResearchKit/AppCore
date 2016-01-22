@@ -1,8 +1,8 @@
 //
-//  APCScene.h
+//  APCDataGroupsManager.h
 //  APCAppCore
 //
-// Copyright (c) 2015, Apple Inc. All rights reserved.
+// Copyright (c) 2015, Sage Bionetworks. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
@@ -31,37 +31,42 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 #import <ResearchKit/ResearchKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class APCUser, APCTableViewRow, APCTableViewItem;
+
+extern NSString * const APCDataGroupsStepIdentifier;
+
 /**
- *  Simple container to hold on to a specific view controller in a storyboard.
+ *  Manager to configure and handle setting and updating of the data groups during onboarding and from the profile.
+ *
+ *  This superclass returns information about the data groups used by this app. The generic version included in AppCore
+ *  uses a dictionary to define the data groups, which group (if any) is the "control" group, and to allow updating of
+ *  data groups via either a survey result (onboarding) or a tableViewItem (profile). This manager does *not* include a 
+ *  pointer to the user and is intended as a temporary object for managing state during onboarding or while viewing or 
+ *  editing the user's profile.
  */
-@interface APCScene : NSObject
+@interface APCDataGroupsManager : NSObject
 
-@property (nonatomic, copy) NSString *identifier;
+@property (nonatomic, readonly) BOOL hasChanges;
+@property (nonatomic, readonly) NSArray * _Nullable dataGroups;
+@property (nonatomic, readonly) NSDictionary * _Nullable mapping;
 
-@property (nonatomic, strong) ORKStep *step;
+- (instancetype)initWithDataGroups:(NSArray * _Nullable)dataGroups mapping:(NSDictionary * _Nullable)mapping;
 
-/** Refers to the tabbar item (if applicable) */
-@property (nonatomic, strong) UITabBarItem * _Nullable tabBarItem;
+- (BOOL)needsUserInfoDataGroups;
+- (BOOL)isStudyControlGroup;
 
-/** Refers to StoryboardID. */
-@property (nonatomic, copy) NSString * _Nullable storyboardId;
+- (NSArray <APCTableViewRow *> * _Nullable)surveyItems;
+- (ORKFormStep * _Nullable)surveyStep;
 
-/** The name of the storyboard. */
-@property (nonatomic, copy) NSString * _Nullable storyboardName;
+- (void)setSurveyAnswerWithItem:(APCTableViewItem*)item;
+- (void)setSurveyAnswerWithStepResult:(ORKStepResult *)result;
+- (void)setSurveyAnswerWithIdentifier:(NSString*)identifier selectedIndices:(NSArray*)selectedIndices;
 
-/** Defaults to the bundle this class resides in. */
-@property (nonatomic, strong) NSBundle *bundle;
-
-- (instancetype)initWithName:(NSString *_Nullable)storyboardId inStoryboard:(NSString *)storyboardName;
-- (instancetype)initWithStep:(ORKStep*)step;
-
-/** Instantiates the view controller as defined by this scene. */
-- (UIViewController * _Nullable)instantiateViewController;
 
 @end
 

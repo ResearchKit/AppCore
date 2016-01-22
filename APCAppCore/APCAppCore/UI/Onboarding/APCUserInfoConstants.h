@@ -54,6 +54,7 @@ typedef NS_ENUM(APCTableViewItemType, APCUserInfoItemType) {
     kAPCUserInfoItemTypeWakeUpTime,
     kAPCUserInfoItemTypeGlucoseLevel,
     kAPCUserInfoItemTypeCustomSurvey,
+    kAPCUserInfoItemTypeDataGroups,
     kAPCSettingsItemTypeAutoLock,
     kAPCSettingsItemTypePasscode,
     kAPCSettingsItemTypeReminderOnOff,
