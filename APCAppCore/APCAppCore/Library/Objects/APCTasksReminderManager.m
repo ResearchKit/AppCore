@@ -46,11 +46,11 @@
 
 #import <UIKit/UIKit.h>
 
-
 NSString * const kTaskReminderUserInfo = @"CurrentTaskReminder";
 NSString * const kSubtaskReminderUserInfo = @"CurrentSubtaskReminder";
 NSString * const kTaskReminderUserInfoKey = @"TaskReminderUserInfoKey";
 NSString * const kSubtaskReminderUserInfoKey = @"SubtaskReminderUserInfoKey";
+NSString * const kTaskReminderDayUserInfoKey = @"TaskReminderDayUserInfoKey";
 
 static NSInteger kSecondsPerMinute = 60;
 static NSInteger kMinutesPerHour = 60;
@@ -62,6 +62,7 @@ NSString * gTaskReminderDelayMessage;
 @interface APCTasksReminderManager ()
 @property (strong, nonatomic) NSArray *taskGroups;
 @property (strong, nonatomic) NSMutableDictionary *remindersToSend;
+
 @end
 
 @implementation APCTasksReminderManager
@@ -89,6 +90,9 @@ NSString * gTaskReminderDelayMessage;
         
         self.reminders = [NSMutableArray new];
         self.remindersToSend = [NSMutableDictionary new];
+        
+        self.daysOfTheWeekToRepeat = @[@(kAPCTaskReminderDayOfWeekEveryDay)];
+        
         [self updateTasksReminder];
     }
     return self;
@@ -122,36 +126,62 @@ NSString * gTaskReminderDelayMessage;
 
 - (void) updateTasksReminder
 {
+    [self cancelLocalNotificationsIfExist];
     
-    if (self.reminderOn) {
-        [self createTaskReminder];
+    if (self.reminderOn)
+    {
+        if ([self isDailyRepeating])
+        {
+            [self createDailyTaskReminder];
+        }
+        else
+        {
+            [self createWeeklyTaskReminders];
+        }
     }
-    else {
-        [self cancelLocalNotificationsIfExist];
-    }
-    
+}
+
+- (BOOL) isDailyRepeating {
+    return self.daysOfTheWeekToRepeat.count == 1 &&
+           [self.daysOfTheWeekToRepeat[0] unsignedIntegerValue] == kAPCTaskReminderDayOfWeekEveryDay;
 }
 
 - (NSArray *) existingLocalNotifications {
     UIApplication *app = [UIApplication sharedApplication];
+    
+    // This line has inconsistant behavior see
+    // http://stackoverflow.com/questions/25948037/ios-8-uiapplication-sharedapplication-scheduledlocalnotifications-empty
     NSArray *eventArray = [app scheduledLocalNotifications];
+    
     NSMutableArray *appNotifications = [NSMutableArray new];
     
     for (UILocalNotification *notification in eventArray) {
         NSDictionary *userInfoCurrent = notification.userInfo;
         if ([userInfoCurrent[kTaskReminderUserInfoKey] isEqualToString:kTaskReminderUserInfo] ||
-            [userInfoCurrent[kSubtaskReminderUserInfoKey] isEqualToString:kSubtaskReminderUserInfo]) {
+            [userInfoCurrent[kSubtaskReminderUserInfoKey] isEqualToString:kSubtaskReminderUserInfo])
+        {
             [appNotifications addObject:notification];
         }
     }
 
     return appNotifications;
-    
 }
 
-- (void) cancelLocalNotificationsIfExist {
-    NSArray *notifications = [self existingLocalNotifications];
+- (void) cancelLocalNotificationsIfExist
+{
     UIApplication *app = [UIApplication sharedApplication];
+    
+    // In my experience, the "existingLocalNotifications" method called below had inconsistant behavior
+    // To mitigate the inconsistancy, you can simply remove all local notifications from this app
+    // See http://stackoverflow.com/questions/25948037/ios-8-uiapplication-sharedapplication-scheduledlocalnotifications-empty
+    
+    if (self.updatingRemindersRemovesAllLocalNotifications)
+    {
+        [app cancelAllLocalNotifications];
+        return;
+    }
+    
+    NSArray *notifications = [self existingLocalNotifications];
     
     for (UILocalNotification * notification in notifications) {
         [app cancelLocalNotification:notification];
@@ -160,28 +190,61 @@ NSString * gTaskReminderDelayMessage;
     }
 }
 
-- (void) createTaskReminder {
-    
-    [self cancelLocalNotificationsIfExist];
-    
+- (void) createDailyTaskReminder
+{
+    [self createTaskReminderWithRepeatInterval:NSCalendarUnitDay
+                                   withWeekday:kAPCTaskReminderDayOfWeekEveryDay];
+}
+
+- (void) createWeeklyTaskReminders
+{
+    for (NSNumber* dayOfWeekNumber in self.daysOfTheWeekToRepeat)
+    {
+        NSUInteger dayOfWeekInt = [dayOfWeekNumber unsignedIntegerValue];
+        [self createTaskReminderWithRepeatInterval:NSCalendarUnitWeekOfYear
+                                       withWeekday:dayOfWeekInt];
+    }
+}
+
+- (void) createTaskReminderWithRepeatInterval:(NSCalendarUnit)repeatInterval
+                                  withWeekday:(NSUInteger)weekdayIfRepeatIsWeekly
+{
     // Schedule the Task notification
     UILocalNotification* taskNotification = [[UILocalNotification alloc] init];
     taskNotification.alertBody = [self reminderMessage];
-
+    
     BOOL subtaskReminderOnly = NO;
-    if (self.remindersToSend.count >0) {
+    
+    // After the reminder message has been formed, we can correctly calculate the fire dates
+    NSDate* subtaskFireDate = [self calculateDailySubtaskReminderFireDate];
+    NSDate* normalFireDate = [self calculateDailyTaskReminderFireDate];
+    
+    if (repeatInterval == NSCalendarUnitWeekOfYear)
+    {
+        subtaskFireDate = [self calculateWeeklySubtaskReminderFireDateFromWeekday:weekdayIfRepeatIsWeekly];
+        normalFireDate = [self calculateWeeklyTaskReminderFireDateFromWeekday:weekdayIfRepeatIsWeekly];
+    }
+    
+    // If we are repeating per weekday, still schedule notifications for next week if we have already completed this week's
+    // This will ensure that it gets shown for next week if the user doesnt enter the app again until then
+    if (self.remindersToSend.count > 0 || repeatInterval  == NSCalendarUnitWeekOfYear) {
         
         if (self.remindersToSend.count == 1 && [self shouldSendSubtaskReminder]) {
             subtaskReminderOnly = YES;
         }
         
-        taskNotification.fireDate = subtaskReminderOnly ? [self calculateSubtaskReminderFireDate] : [self calculateTaskReminderFireDate];
+        taskNotification.fireDate = subtaskReminderOnly ? subtaskFireDate : normalFireDate;
+        taskNotification.repeatInterval = repeatInterval;
+        
         taskNotification.timeZone = [NSTimeZone localTimeZone];
-        taskNotification.repeatInterval = NSCalendarUnitDay;
         taskNotification.soundName = UILocalNotificationDefaultSoundName;
         
         NSMutableDictionary *notificationInfo = [[NSMutableDictionary alloc] init];
-        notificationInfo[kTaskReminderUserInfoKey] = kTaskReminderUserInfo;//Task Reminder
+        notificationInfo[kTaskReminderUserInfoKey] = kTaskReminderUserInfo; // Task Reminder
+        
+        // This line makes weekly notifications unique
+        notificationInfo[kTaskReminderDayUserInfoKey] = @(weekdayIfRepeatIsWeekly);
+        
         taskNotification.userInfo = notificationInfo;
         taskNotification.category = kTaskReminderDelayCategory;
         
@@ -205,22 +268,23 @@ NSString * gTaskReminderDelayMessage;
         APCLogEventWithData(kSchedulerEvent, (@{@"event_detail":[NSString stringWithFormat:@"Scheduled Reminder: %@. Body: %@", taskNotification, taskNotification.alertBody]}));
     }
     
-    //create a subtask reminder if needed
+    // Create a subtask reminder if needed
     if ([self shouldSendSubtaskReminder] && !subtaskReminderOnly) {
-        [self createSubtaskReminder];
+        [self createSubtaskReminderWithRepeatInterval:repeatInterval
+                                          andFireDate:subtaskFireDate];
     }
-    
 }
 
-- (void) createSubtaskReminder {
-    
+- (void) createSubtaskReminderWithRepeatInterval:(NSCalendarUnit)repeatInterval
+                                     andFireDate:(NSDate*)fireDate
+{
     // Schedule the Subtask notification
     UILocalNotification* subtaskReminder = [[UILocalNotification alloc] init];
     
-    subtaskReminder.alertBody = [self subtaskReminderMessage];//include only the subtask reminder body
-    subtaskReminder.fireDate = [self calculateSubtaskReminderFireDate];//delay by subtask reminder delay
+    subtaskReminder.alertBody = [self subtaskReminderMessage]; //include only the subtask reminder body
+    subtaskReminder.fireDate = fireDate;  //delay by subtask reminder delay
     subtaskReminder.timeZone = [NSTimeZone localTimeZone];
-    subtaskReminder.repeatInterval = NSCalendarUnitDay;
+    subtaskReminder.repeatInterval = repeatInterval;
     subtaskReminder.soundName = UILocalNotificationDefaultSoundName;
     
     NSMutableDictionary *notificationInfo = [[NSMutableDictionary alloc] init];
@@ -262,7 +326,7 @@ NSString * gTaskReminderDelayMessage;
 /*********************************************************************************/
 #pragma mark - Reminder Parameters
 /*********************************************************************************/
--(NSString *)reminderMessage{
+-(NSString *)reminderMessage {
     
     NSString *reminders = @"\n";
     //concatenate body of each message with \n
@@ -297,7 +361,7 @@ NSString * gTaskReminderDelayMessage;
         }
     }
     
-    return [NSString stringWithFormat:gTaskReminderMessage, [self studyName], [self studyName], reminders];;
+    return [NSString stringWithFormat:gTaskReminderMessage, [self studyName], [self studyName], reminders];
 }
 
 - (NSString *)studyName {
@@ -378,7 +442,7 @@ NSString * gTaskReminderDelayMessage;
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-- (NSDate*) calculateTaskReminderFireDate
+- (NSDate*) calculateDailyTaskReminderFireDate
 {
     NSTimeInterval reminderOffset = ([[APCTasksReminderManager reminderTimesArray] indexOfObject:self.reminderTime]) * kMinutesPerHour * kSecondsPerMinute;
     
@@ -392,13 +456,44 @@ NSString * gTaskReminderDelayMessage;
     return dateToSet;
 }
 
-- (NSDate*) calculateSubtaskReminderFireDate
+- (NSDate*) calculateDailySubtaskReminderFireDate
 {
     NSTimeInterval reminderOffset = ([[APCTasksReminderManager reminderTimesArray] indexOfObject:self.reminderTime]) * kMinutesPerHour * kSecondsPerMinute;
     //add subtask reminder delay
     reminderOffset += kSubtaskReminderDelayMinutes * kSecondsPerMinute;
     
     return [[NSDate todayAtMidnight] dateByAddingTimeInterval:reminderOffset];
+}
+
+- (NSDate*) calculateWeeklyTaskReminderFireDateFromWeekday:(NSUInteger)dayOfTheWeekInt
+{
+    NSTimeInterval reminderOffset = ([[APCTasksReminderManager reminderTimesArray] indexOfObject:self.reminderTime]) * kMinutesPerHour * kSecondsPerMinute;
+    
+    NSDate *now = [NSDate new];
+    NSDate *dateToSet = [NSDate priorSundayAtMidnightFromDate:now];
+    
+    // If we completed all the tasks for this week, we will remind them again starting next week
+    if (self.remindersToSend.count == 0)
+    {
+        dateToSet = [NSDate nextSundayAtMidnightFromDate:now];
+    }
+    
+    dateToSet = [dateToSet dateByAddingDays:(dayOfTheWeekInt - kAPCTaskReminderDayOfWeekSunday)];
+    
+    // Make sure the date is in the future, otherwise the local notification wont trigger
+    while (([dateToSet timeIntervalSince1970] + reminderOffset) < [now timeIntervalSince1970])
+    {
+        // this removes hours component, so add that back in when we return the date in the method
+        dateToSet = [dateToSet dateByAddingDays:kDateHelperDaysInAWeek];
+    }
+    
+    return [dateToSet dateByAddingTimeInterval:reminderOffset];
+}
+
+- (NSDate*) calculateWeeklySubtaskReminderFireDateFromWeekday:(NSUInteger)dayOfTheWeekInt
+{
+    // For weekly, the sub-task reminder is the same as the normal reminder, so just return that
+    return [self calculateWeeklyTaskReminderFireDateFromWeekday:dayOfTheWeekInt];
 }
 
 - (BOOL) shouldSendSubtaskReminder{
@@ -417,6 +512,30 @@ NSString * gTaskReminderDelayMessage;
     }
     
     return shouldSend;
+}
+
+/**
+ * This method will make sure if the user adds kAPCTaskReminderDayOfWeekEveryDay, it will limit it to only item in the array
+ */
+- (void)setDaysOfTheWeekToRepeat:(NSArray *)daysOfTheWeekToRepeat
+{
+    BOOL containsEveryDayOfWeek = NO;
+    for (NSNumber* dayOfTheWeek in daysOfTheWeekToRepeat)
+    {
+        if ([dayOfTheWeek unsignedIntegerValue] == kAPCTaskReminderDayOfWeekEveryDay)
+        {
+            containsEveryDayOfWeek = YES;
+        }
+    }
+    
+    if (containsEveryDayOfWeek)
+    {
+        _daysOfTheWeekToRepeat = @[@(kAPCTaskReminderDayOfWeekEveryDay)];
+    }
+    else
+    {
+        _daysOfTheWeekToRepeat = daysOfTheWeekToRepeat;
+    }
 }
 
 /*********************************************************************************/

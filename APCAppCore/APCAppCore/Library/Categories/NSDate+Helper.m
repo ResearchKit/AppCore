@@ -68,8 +68,6 @@ typedef enum : NSUInteger {
     APCDateDirectionBackwards,
 }   APCDateDirection;
 
-
-
 @implementation NSDate (Helper)
 
 /**
@@ -343,6 +341,12 @@ typedef enum : NSUInteger {
     NSDateComponents *components = [cal components:(NSCalendarUnitWeekOfYear | NSCalendarUnitMonth | NSCalendarUnitYear) fromDate:date];
     [components setWeekday:1];//Sunday
     return [cal dateFromComponents:components];
+}
+
++(instancetype)nextSundayAtMidnightFromDate:(NSDate *)date
+{
+    NSDate* priorSunday = [self priorSundayAtMidnightFromDate:date];
+    return [priorSunday dateByAddingDays:kDateHelperDaysInAWeek];
 }
 
 - (BOOL) isEarlierThanDate: (NSDate*) otherDate
