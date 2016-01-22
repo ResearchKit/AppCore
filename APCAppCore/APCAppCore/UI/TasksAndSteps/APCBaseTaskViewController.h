@@ -76,6 +76,7 @@
                         usingContext: (NSManagedObjectContext *) context;
 
 - (void) archiveResults;
+- (void) uploadResultSummary: (NSString *)resultSummary;
 
 /**
  Subclasses should override these methods

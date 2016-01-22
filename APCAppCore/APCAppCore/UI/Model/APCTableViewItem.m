@@ -35,6 +35,7 @@
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
 #import "APCLocalization.h"
+#import "APCDefaultTableViewCell.h"
 
 @implementation APCTableViewItem
 
@@ -45,8 +46,17 @@
         _style = UITableViewCellStyleValue1;
         _selectionStyle = UITableViewCellSelectionStyleGray;
         _editable = YES;
+        _reuseIdentifier = kAPCDefaultTableViewCellIdentifier;
     }
     return self;
+}
+
+- (NSString *)identifier {
+    return _reuseIdentifier;
+}
+
+- (void)setIdentifier:(NSString *)identifier {
+    _reuseIdentifier = [identifier copy];
 }
 
 @end

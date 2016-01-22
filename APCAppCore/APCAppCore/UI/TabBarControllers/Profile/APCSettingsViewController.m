@@ -84,7 +84,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         {
             APCTableViewSwitchItem *field = [APCTableViewSwitchItem new];
             field.caption = NSLocalizedStringWithDefaultValue(@"Enable Reminders", @"APCAppCore", APCBundle(), @"Enable Reminders", nil);
-            field.identifier = kAPCSwitchCellIdentifier;
+            field.reuseIdentifier = kAPCSwitchCellIdentifier;
             field.editable = NO;
             
             field.on = reminderOnState;
@@ -100,7 +100,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             field.caption = NSLocalizedStringWithDefaultValue(@"Time", @"APCAppCore", APCBundle(), @"Time", nil);
             field.pickerData = @[[APCTasksReminderManager reminderTimesArray]];
             field.textAlignnment = NSTextAlignmentRight;
-            field.identifier = kAPCDefaultTableViewCellIdentifier;
+            field.reuseIdentifier = kAPCDefaultTableViewCellIdentifier;
             field.selectedRowIndices = @[@([[APCTasksReminderManager reminderTimesArray] indexOfObject:appDelegate.tasksReminder.reminderTime])];
 
             APCTableViewRow *row = [APCTableViewRow new];
@@ -124,7 +124,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             
             APCTableViewSwitchItem *field = [APCTableViewSwitchItem new];
             field.caption = reminder.reminderBody;
-            field.identifier = kAPCSwitchCellIdentifier;
+            field.reuseIdentifier = kAPCSwitchCellIdentifier;
             field.editable = NO;
             
             field.on = [[NSUserDefaults standardUserDefaults]objectForKey:reminder.reminderIdentifier] ? YES : NO;

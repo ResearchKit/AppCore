@@ -196,7 +196,7 @@ static CGFloat kHeaderHeight = 157.0f;
         field.placeholder = NSLocalizedStringWithDefaultValue(@"add password", @"APCAppCore", APCBundle(), @"add password", @"");
         field.keyboardType = UIKeyboardTypeASCIICapable;
         field.returnKeyType = UIReturnKeyNext;
-        field.identifier = kAPCTextFieldTableViewCellIdentifier;
+        field.reuseIdentifier = kAPCTextFieldTableViewCellIdentifier;
         field.style = UITableViewCellStyleValue1;
         
         APCTableViewRow *row = [APCTableViewRow new];
@@ -218,7 +218,7 @@ static CGFloat kHeaderHeight = 157.0f;
                 field.datePickerMode = UIDatePickerModeDate;
                 field.style = UITableViewCellStyleValue1;
                 field.selectionStyle = UITableViewCellSelectionStyleGray;
-                field.identifier = kAPCDefaultTableViewCellIdentifier;
+                field.reuseIdentifier = kAPCDefaultTableViewCellIdentifier;
                 
                 NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier: NSCalendarIdentifierGregorian];
                 NSDate *currentDate = [[NSDate date] startOfDay];
@@ -247,7 +247,7 @@ static CGFloat kHeaderHeight = 157.0f;
                 APCTableViewSegmentItem *field = [APCTableViewSegmentItem new];
                 field.style = UITableViewCellStyleValue1;
                 field.segments = [APCUser sexTypesInStringValue];
-                field.identifier = kAPCSegmentedTableViewCellIdentifier;
+                field.reuseIdentifier = kAPCSegmentedTableViewCellIdentifier;
                 
                 if (self.permissionGranted && self.user.biologicalSex) {
                     field.selectedIndex = [APCUser stringIndexFromSexType:self.user.biologicalSex];
