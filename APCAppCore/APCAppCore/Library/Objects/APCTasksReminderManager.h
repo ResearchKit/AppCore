@@ -61,6 +61,14 @@ static NSUInteger const kAPCTaskReminderDayOfWeekSaturday    = 7;
  */
 @property (nonatomic) BOOL updatingRemindersRemovesAllLocalNotifications;
 
+/*
+ * Update reminder messaging
+ * This defualts to...
+ * "Please complete your TeamStudy activities today. Thank you for participating in the TeamStudy study!"
+ */
+- (void) setReminderMessage:(NSString*)reminderMessage
+            andDelayMessage:(NSString*)delayMessage;
+
 - (void) updateTasksReminder;
 - (void)manageTaskReminder:(APCTaskReminder *)reminder;
 + (NSArray*) reminderTimesArray;

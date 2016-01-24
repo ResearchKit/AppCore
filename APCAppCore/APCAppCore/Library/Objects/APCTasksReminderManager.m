@@ -62,27 +62,20 @@ NSString * gTaskReminderDelayMessage;
 @interface APCTasksReminderManager ()
 @property (strong, nonatomic) NSArray *taskGroups;
 @property (strong, nonatomic) NSMutableDictionary *remindersToSend;
+@property (strong, nonatomic) id <NSObject> localeChangeNotification;
 
 @end
 
 @implementation APCTasksReminderManager
 
-+ (void)initialize
+- (instancetype)init
 {
-    void (^localizeBlock)() = [^{
-        gTaskReminderMessage = NSLocalizedStringWithDefaultValue(@"Please complete your %@ activities today. Thank you for participating in the %@ study! %@", @"APCAppCore", APCBundle(), @"Please complete your %@ activities today. Thank you for participating in the %@ study! %@", @"Text for daily reminder to complete activities, to be filled in with the name of the study, the name of the study again, and the concatenation of the bodies of the individual reminders of activities yet to complete.");
-        gTaskReminderDelayMessage = NSLocalizedStringWithDefaultValue(@"Remind me in 1 hour", @"APCAppCore", APCBundle(), @"Remind me in 1 hour", @"\"Snooze\" prompt for reminder notification");
-    } copy];
-    
-    [[NSNotificationCenter defaultCenter] addObserverForName:NSCurrentLocaleDidChangeNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull __unused note) {
-        localizeBlock();
-    }];
-    localizeBlock();
-}
-
-- (instancetype)init {
     self = [super init];
-    if (self) {
+    if (self)
+    {
+        [self setReminderMessage:NSLocalizedStringWithDefaultValue(@"Please complete your %@ activities today. Thank you for participating in the %@ study! %@", @"APCAppCore", APCBundle(), @"Please complete your %@ activities today. Thank you for participating in the %@ study! %@", @"Text for daily reminder to complete activities, to be filled in with the name of the study, the name of the study again, and the concatenation of the bodies of the individual reminders of activities yet to complete.")
+                 andDelayMessage:NSLocalizedStringWithDefaultValue(@"Remind me in 1 hour", @"APCAppCore", APCBundle(), @"Remind me in 1 hour", @"\"Snooze\" prompt for reminder notification")];
+        
         //posted by APCSettingsViewController on turning reminders on/off
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateTasksReminder) name:APCUpdateTasksReminderNotification object:nil];
         //posted by APCBaseTaskViewController when user completes an activity
@@ -204,6 +197,34 @@ NSString * gTaskReminderDelayMessage;
         [self createTaskReminderWithRepeatInterval:NSCalendarUnitWeekOfYear
                                        withWeekday:dayOfWeekInt];
     }
+}
+
+- (void) setReminderMessage:(NSString*)reminderMessage
+            andDelayMessage:(NSString*)delayMessage
+{
+    if (_localeChangeNotification)
+    {
+        [[NSNotificationCenter defaultCenter] removeObserver:_localeChangeNotification
+                                                        name:NSCurrentLocaleDidChangeNotification
+                                                      object:nil];
+    }
+    
+    void (^localizeBlock)() = [^{
+        gTaskReminderMessage = reminderMessage;
+        gTaskReminderDelayMessage = delayMessage;
+    } copy];
+    
+    _localeChangeNotification = [[NSNotificationCenter defaultCenter]
+                                 addObserverForName:NSCurrentLocaleDidChangeNotification
+                                 object:nil
+                                 queue:nil
+                                 usingBlock:^(NSNotification * _Nonnull __unused note)
+                                 {
+                                     localizeBlock();
+                                 }];
+    
+    // Set the messages
+    localizeBlock();
 }
 
 - (void) createTaskReminderWithRepeatInterval:(NSCalendarUnit)repeatInterval
