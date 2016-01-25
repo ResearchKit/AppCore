@@ -196,8 +196,20 @@
                 MFMessageComposeViewController *messageComposer = [[MFMessageComposeViewController alloc] init];
                 messageComposer.messageComposeDelegate = self;
                 messageComposer.body = self.shareMessage;
+
+                if (_textMessageNavTintColor)
+                {
+                    messageComposer.navigationBar.tintColor = _textMessageNavTintColor;
+                }
                 
-                [self presentViewController:messageComposer animated:YES completion:nil];
+                [self presentViewController:messageComposer animated:YES completion:^
+                {
+                    if (_textMessageStatusBarStyleLight)
+                    {
+                        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+                    }
+                }];
+                
             } else {
                 NSString *message = NSLocalizedStringWithDefaultValue(@"Looks like you don't have Messages app setup. Please configure to share via SMS.", @"APCAppCore", APCBundle(), @"Looks like you don't have Messages app setup. Please configure to share via SMS.", nil);
                 
