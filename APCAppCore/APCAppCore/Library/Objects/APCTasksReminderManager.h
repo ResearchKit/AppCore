@@ -64,7 +64,7 @@ static NSUInteger const kAPCTaskReminderDayOfWeekSaturday    = 7;
 /*
  * Update reminder messaging
  * This defualts to...
- * "Please complete your TeamStudy activities today. Thank you for participating in the TeamStudy study!"
+ * "Please complete your StudyName activities today. Thank you for participating in the StudyName study!"
  */
 - (void) setReminderMessage:(NSString*)reminderMessage
             andDelayMessage:(NSString*)delayMessage;
