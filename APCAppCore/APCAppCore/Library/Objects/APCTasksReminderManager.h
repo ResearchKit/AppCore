@@ -75,4 +75,10 @@ static NSUInteger const kAPCTaskReminderDayOfWeekSaturday    = 7;
 + (NSSet *) taskReminderCategories;
 
 - (void)handleActivitiesUpdateWithTodaysTaskGroups:(NSArray *) todaysTaskGroups;
+
+/*
+ * Get the name of the study
+ */
++ (NSString *)studyName;
+
 @end

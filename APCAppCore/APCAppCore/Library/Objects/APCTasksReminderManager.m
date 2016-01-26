@@ -73,8 +73,12 @@ NSString * gTaskReminderDelayMessage;
     self = [super init];
     if (self)
     {
-        [self setReminderMessage:NSLocalizedStringWithDefaultValue(@"Please complete your %@ activities today. Thank you for participating in the %@ study! %@", @"APCAppCore", APCBundle(), @"Please complete your %@ activities today. Thank you for participating in the %@ study! %@", @"Text for daily reminder to complete activities, to be filled in with the name of the study, the name of the study again, and the concatenation of the bodies of the individual reminders of activities yet to complete.")
-                 andDelayMessage:NSLocalizedStringWithDefaultValue(@"Remind me in 1 hour", @"APCAppCore", APCBundle(), @"Remind me in 1 hour", @"\"Snooze\" prompt for reminder notification")];
+        NSString* reminderMessage = [NSString stringWithFormat:NSLocalizedStringWithDefaultValue(@"Please complete your %@ activities today. Thank you for participating in the %@ study! %@", @"APCAppCore", APCBundle(), @"Please complete your %@ activities today. Thank you for participating in the %@ study!", @"Text for daily reminder to complete activities, to be filled in with the name of the study, the name of the study again, and the concatenation of the bodies of the individual reminders of activities yet to complete."), [APCTasksReminderManager studyName], [APCTasksReminderManager studyName]];
+        
+        NSString* reminderDelayMessage = NSLocalizedStringWithDefaultValue(@"Remind me in 1 hour", @"APCAppCore", APCBundle(), @"Remind me in 1 hour", @"\"Snooze\" prompt for reminder notification");
+        
+        [self setReminderMessage:reminderMessage
+                 andDelayMessage:reminderDelayMessage];
         
         //posted by APCSettingsViewController on turning reminders on/off
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateTasksReminder) name:APCUpdateTasksReminderNotification object:nil];
@@ -365,7 +369,7 @@ NSString * gTaskReminderDelayMessage;
         }
     }
     
-    return [NSString stringWithFormat:gTaskReminderMessage, [self studyName], [self studyName], reminders];
+    return [NSString stringWithFormat:@"%@%@", gTaskReminderMessage, reminders];
 }
 
 -(NSString *)subtaskReminderMessage{
@@ -382,10 +386,10 @@ NSString * gTaskReminderDelayMessage;
         }
     }
     
-    return [NSString stringWithFormat:gTaskReminderMessage, [self studyName], [self studyName], reminders];
+    return [NSString stringWithFormat:@"%@%@", gTaskReminderMessage, reminders];
 }
 
-- (NSString *)studyName {
++ (NSString *)studyName {
     NSString *filePath = [[APCAppDelegate sharedAppDelegate] pathForResource:@"StudyOverview" ofType:@"json"];
     NSString *JSONString = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:NULL];
     
