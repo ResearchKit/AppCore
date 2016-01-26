@@ -45,4 +45,10 @@ typedef NS_ENUM(NSUInteger, APCShareType) {
 @property (nonatomic) BOOL goBackIfUserHitsOkay;
 @property (nonatomic) BOOL hidesOkayButton;
 
+/*
+ * These colors only apply when adjusting the send a text message view controller
+ */
+@property (nonatomic, strong) UIColor* textMessageNavTintColor;
+@property (nonatomic) BOOL textMessageStatusBarStyleLight;
+
 @end
