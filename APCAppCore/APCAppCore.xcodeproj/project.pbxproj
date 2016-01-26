@@ -307,6 +307,9 @@
 		A7CFE4B61A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7CFE4B21A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.m */; };
 		A7CFE4B71A8B05F4009A171C /* APCStudyOverviewCollectionViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = A7CFE4B31A8B05F4009A171C /* APCStudyOverviewCollectionViewController.h */; };
 		A7CFE4B81A8B05F4009A171C /* APCStudyOverviewCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7CFE4B41A8B05F4009A171C /* APCStudyOverviewCollectionViewController.m */; };
+		CBC2593A1C58077A0091308E /* MockAPCTasksReminderManager.h in Headers */ = {isa = PBXBuildFile; fileRef = CBC259391C58077A0091308E /* MockAPCTasksReminderManager.h */; };
+		CBD5DBF21C57FFB400AD654E /* MockAPCTasksReminderManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CBD5DBF11C57FFB400AD654E /* MockAPCTasksReminderManager.m */; };
+		CBD5DBF61C5806AD00AD654E /* APCTasksReminderManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CBD5DBF51C5806AD00AD654E /* APCTasksReminderManagerTests.m */; };
 		CF03CD021AA23DA2000437FF /* APCMedicationDetailsTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = CF03CCFF1AA23DA2000437FF /* APCMedicationDetailsTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF03CD031AA23DA2000437FF /* APCMedicationDetailsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CF03CD001AA23DA2000437FF /* APCMedicationDetailsTableViewCell.m */; };
 		CF03CD041AA23DA2000437FF /* APCMedicationDetailsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CF03CD011AA23DA2000437FF /* APCMedicationDetailsTableViewCell.xib */; };
@@ -718,7 +721,6 @@
 		FF44E51B1C1B94A700F07DA9 /* APCTaskResultArchiverTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FF44E51A1C1B94A700F07DA9 /* APCTaskResultArchiverTests.m */; };
 		FF9469871C1A2D4000CF7075 /* APCAppCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5179B2919D09128001DCCB7 /* APCAppCore.framework */; };
 		FF9469881C1A2F0400CF7075 /* ORKOrderedTask+APCHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FF9469831C1A294E00CF7075 /* ORKOrderedTask+APCHelperTests.m */; };
-		FF9469891C1A2F0900CF7075 /* APCScheduleExpressionEnumeratorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129DF1A2F78490015982C /* APCScheduleExpressionEnumeratorTests.m */; };
 		FF94698A1C1A2F0900CF7075 /* APCScheduleExpressionListSelectorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129DA1A2F78490015982C /* APCScheduleExpressionListSelectorTests.m */; };
 		FF94698B1C1A2F0900CF7075 /* APCScheduleExpressionParserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129DD1A2F78490015982C /* APCScheduleExpressionParserTests.m */; };
 		FF94698C1C1A2F0900CF7075 /* APCScheduleExpressionPointSelectorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129DC1A2F78490015982C /* APCScheduleExpressionPointSelectorTests.m */; };
@@ -1048,6 +1050,9 @@
 		A7CFE4B21A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCStudyOverviewCollectionViewCell.m; sourceTree = "<group>"; };
 		A7CFE4B31A8B05F4009A171C /* APCStudyOverviewCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCStudyOverviewCollectionViewController.h; sourceTree = "<group>"; };
 		A7CFE4B41A8B05F4009A171C /* APCStudyOverviewCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = APCStudyOverviewCollectionViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		CBC259391C58077A0091308E /* MockAPCTasksReminderManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MockAPCTasksReminderManager.h; path = "Reminder Tests/MockAPCTasksReminderManager.h"; sourceTree = "<group>"; };
+		CBD5DBF11C57FFB400AD654E /* MockAPCTasksReminderManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MockAPCTasksReminderManager.m; path = "Reminder Tests/MockAPCTasksReminderManager.m"; sourceTree = "<group>"; };
+		CBD5DBF51C5806AD00AD654E /* APCTasksReminderManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = APCTasksReminderManagerTests.m; path = "Reminder Tests/APCTasksReminderManagerTests.m"; sourceTree = "<group>"; };
 		CF03CCFF1AA23DA2000437FF /* APCMedicationDetailsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = APCMedicationDetailsTableViewCell.h; path = MedicationTrackingAppComponent/APCMedicationDetailsTableViewCell.h; sourceTree = "<group>"; };
 		CF03CD001AA23DA2000437FF /* APCMedicationDetailsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = APCMedicationDetailsTableViewCell.m; path = MedicationTrackingAppComponent/APCMedicationDetailsTableViewCell.m; sourceTree = "<group>"; };
 		CF03CD011AA23DA2000437FF /* APCMedicationDetailsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = APCMedicationDetailsTableViewCell.xib; path = MedicationTrackingAppComponent/APCMedicationDetailsTableViewCell.xib; sourceTree = "<group>"; };
@@ -1979,6 +1984,16 @@
 				80A98DB51BFD11580060146F /* APCLocalization.m */,
 			);
 			name = Localization;
+			sourceTree = "<group>";
+		};
+		CB1B241F1C57FE5A009DD367 /* Reminder Tests */ = {
+			isa = PBXGroup;
+			children = (
+				CBD5DBF11C57FFB400AD654E /* MockAPCTasksReminderManager.m */,
+				CBC259391C58077A0091308E /* MockAPCTasksReminderManager.h */,
+				CBD5DBF51C5806AD00AD654E /* APCTasksReminderManagerTests.m */,
+			);
+			name = "Reminder Tests";
 			sourceTree = "<group>";
 		};
 		CF03CCFB1AA23CE7000437FF /* Main Calendar View */ = {
@@ -3026,6 +3041,7 @@
 		F5F129D91A2F78490015982C /* APCAppCoreTests */ = {
 			isa = PBXGroup;
 			children = (
+				CB1B241F1C57FE5A009DD367 /* Reminder Tests */,
 				FFFA23A71C20A49700727DA8 /* test files */,
 				F5F129E01A2F78490015982C /* Info.plist */,
 				FF9469821C1A28E800CF7075 /* ActivityTests */,
@@ -3287,6 +3303,7 @@
 				F5B9480A1A73272C0034C522 /* APCScheduleExpressionToken.h in Headers */,
 				F5F12AD01A2F78490015982C /* APCWithdrawSurveyViewController.h in Headers */,
 				368BAFE91A9AD91A00F04ABB /* APCMedTrackerDailyDosageRecord.h in Headers */,
+				CBC2593A1C58077A0091308E /* MockAPCTasksReminderManager.h in Headers */,
 				F5B947F61A73272C0034C522 /* APCParametersDashboardTableViewController.h in Headers */,
 				F5F12AF21A2F78490015982C /* APCBaseTaskViewController.h in Headers */,
 				F5F12AF41A2F78490015982C /* APCBaseWithProgressTaskViewController.h in Headers */,
@@ -3883,12 +3900,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CBD5DBF21C57FFB400AD654E /* MockAPCTasksReminderManager.m in Sources */,
 				FF94698E1C1A2F0D00CF7075 /* NSDateComponentsHelperTests.m in Sources */,
 				FF44E51B1C1B94A700F07DA9 /* APCTaskResultArchiverTests.m in Sources */,
 				FF94698A1C1A2F0900CF7075 /* APCScheduleExpressionListSelectorTests.m in Sources */,
 				FF9469881C1A2F0400CF7075 /* ORKOrderedTask+APCHelperTests.m in Sources */,
-				FF9469891C1A2F0900CF7075 /* APCScheduleExpressionEnumeratorTests.m in Sources */,
 				0833AE1E1A76C016001D8AA0 /* (null) in Sources */,
+				CBD5DBF61C5806AD00AD654E /* APCTasksReminderManagerTests.m in Sources */,
 				FF94698B1C1A2F0900CF7075 /* APCScheduleExpressionParserTests.m in Sources */,
 				FF94698D1C1A2F0900CF7075 /* APCScheduleExpressionRealLifeTests.m in Sources */,
 				FF94698C1C1A2F0900CF7075 /* APCScheduleExpressionPointSelectorTests.m in Sources */,

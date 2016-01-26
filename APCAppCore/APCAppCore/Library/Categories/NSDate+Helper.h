@@ -92,6 +92,8 @@ static NSUInteger const kDateHelperDaysInAWeek = 7;
 
 +(instancetype) todayAtMidnight;
 +(instancetype) tomorrowAtMidnight;
++(instancetype)todayAtMidnightFromDate:(NSDate*)date;
++(instancetype)tomorrowAtMidnightFromDate:(NSDate*)date;
 +(instancetype) yesterdayAtMidnight;
 +(instancetype) weekAgoAtMidnight;
 

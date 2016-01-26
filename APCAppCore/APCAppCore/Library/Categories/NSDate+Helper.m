@@ -302,19 +302,27 @@ typedef enum : NSUInteger {
     return [cal dateFromComponents:components];
 }
 
++(instancetype)todayAtMidnightFromDate:(NSDate*)date
+{
+    return [self startOfDay:date];
+}
+
++(instancetype)tomorrowAtMidnightFromDate:(NSDate*)date
+{
+    NSCalendar *cal = [NSCalendar currentCalendar];
+    NSDateComponents *components = [cal components:(NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear) fromDate:date];
+    [components setDay:[components day] + 1];
+    return [cal dateFromComponents:components];
+}
+
 +(instancetype)todayAtMidnight
 {
-    NSDate *today = [NSDate date];
-    return [self startOfDay:today];
+    return [self todayAtMidnightFromDate:[NSDate date]];
 }
 
 +(instancetype)tomorrowAtMidnight
 {
-    NSDate *today = [NSDate date];
-    NSCalendar *cal = [NSCalendar currentCalendar];
-    NSDateComponents *components = [cal components:(NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear) fromDate:today];
-    [components setDay:[components day] + 1];
-    return [cal dateFromComponents:components];
+    return [self tomorrowAtMidnightFromDate:[NSDate date]];
 }
 
 +(instancetype)yesterdayAtMidnight

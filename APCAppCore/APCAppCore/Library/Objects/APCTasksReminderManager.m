@@ -63,36 +63,50 @@ NSString * gTaskReminderDelayMessage;
 @property (strong, nonatomic) NSArray *taskGroups;
 @property (strong, nonatomic) NSMutableDictionary *remindersToSend;
 @property (strong, nonatomic) id <NSObject> localeChangeNotification;
-
+@property (strong, nonatomic) NSUserDefaults* storedDefaults;
 @end
 
 @implementation APCTasksReminderManager
 
-- (instancetype)init
-{
+- (instancetype)init {
+    return [self initWithUserDefaultsWithSuiteName:nil];
+}
+
+- (instancetype)initWithUserDefaultsWithSuiteName:(NSString*)suiteName {
     self = [super init];
     if (self)
     {
-        NSString* reminderMessage = [NSString stringWithFormat:NSLocalizedStringWithDefaultValue(@"Please complete your %@ activities today. Thank you for participating in the %@ study! %@", @"APCAppCore", APCBundle(), @"Please complete your %@ activities today. Thank you for participating in the %@ study!", @"Text for daily reminder to complete activities, to be filled in with the name of the study, the name of the study again, and the concatenation of the bodies of the individual reminders of activities yet to complete."), [APCTasksReminderManager studyName], [APCTasksReminderManager studyName]];
+        _storedDefaults = [[NSUserDefaults alloc] initWithSuiteName:suiteName];
         
-        NSString* reminderDelayMessage = NSLocalizedStringWithDefaultValue(@"Remind me in 1 hour", @"APCAppCore", APCBundle(), @"Remind me in 1 hour", @"\"Snooze\" prompt for reminder notification");
+        [self initializeDefaultReminderMessages];
+        [self addNotificationListeners];
         
-        [self setReminderMessage:reminderMessage
-                 andDelayMessage:reminderDelayMessage];
+        _reminders = [NSMutableArray new];
+        _remindersToSend = [NSMutableDictionary new];
         
-        //posted by APCSettingsViewController on turning reminders on/off
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateTasksReminder) name:APCUpdateTasksReminderNotification object:nil];
-        //posted by APCBaseTaskViewController when user completes an activity
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateTasksReminder) name:APCActivityCompletionNotification object:nil];
-        
-        self.reminders = [NSMutableArray new];
-        self.remindersToSend = [NSMutableDictionary new];
-        
-        self.daysOfTheWeekToRepeat = @[@(kAPCTaskReminderDayOfWeekEveryDay)];
+        _daysOfTheWeekToRepeat = @[@(kAPCTaskReminderDayOfWeekEveryDay)];
         
         [self updateTasksReminder];
     }
     return self;
+
+}
+
+- (void) initializeDefaultReminderMessages
+{
+    NSString* reminderMessage = [NSString stringWithFormat:NSLocalizedStringWithDefaultValue(@"Please complete your %@ activities today. Thank you for participating in the %@ study! %@", @"APCAppCore", APCBundle(), @"Please complete your %@ activities today. Thank you for participating in the %@ study!", @"Text for daily reminder to complete activities, to be filled in with the name of the study, the name of the study again, and the concatenation of the bodies of the individual reminders of activities yet to complete."), [APCTasksReminderManager studyName], [APCTasksReminderManager studyName]];
+    
+    NSString* reminderDelayMessage = NSLocalizedStringWithDefaultValue(@"Remind me in 1 hour", @"APCAppCore", APCBundle(), @"Remind me in 1 hour", @"\"Snooze\" prompt for reminder notification");
+    
+    [self setReminderMessage:reminderMessage
+             andDelayMessage:reminderDelayMessage];
+}
+
+- (void)addNotificationListeners {
+    //posted by APCSettingsViewController on turning reminders on/off
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateTasksReminder) name:APCUpdateTasksReminderNotification object:nil];
+    //posted by APCBaseTaskViewController when user completes an activity
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateTasksReminder) name:APCActivityCompletionNotification object:nil];
 }
 
 - (void)dealloc
@@ -261,7 +275,7 @@ NSString * gTaskReminderDelayMessage;
         taskNotification.fireDate = subtaskReminderOnly ? subtaskFireDate : normalFireDate;
         taskNotification.repeatInterval = repeatInterval;
         
-        taskNotification.timeZone = [NSTimeZone localTimeZone];
+        taskNotification.timeZone = [self timeZone];
         taskNotification.soundName = UILocalNotificationDefaultSoundName;
         
         NSMutableDictionary *notificationInfo = [[NSMutableDictionary alloc] init];
@@ -274,21 +288,9 @@ NSString * gTaskReminderDelayMessage;
         taskNotification.category = kTaskReminderDelayCategory;
         
         //migration if notifications were registered without a category.
-        if ([[UIApplication sharedApplication] currentUserNotificationSettings].categories.count == 0 &&
-            [[UIApplication sharedApplication] currentUserNotificationSettings].types == (UIUserNotificationTypeAlert
-                                                                                          |UIUserNotificationTypeBadge
-                                                                                          |UIUserNotificationTypeSound))
-        {
-            UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert
-                                                                                                 |UIUserNotificationTypeBadge
-                                                                                                 |UIUserNotificationTypeSound)
-                                                                                     categories:[APCTasksReminderManager taskReminderCategories]];
-            
-            [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
-            [[NSUserDefaults standardUserDefaults]synchronize];
-        }
+        [self addNotificationCategoryIfNeeded];
         
-        [[UIApplication sharedApplication] scheduleLocalNotification:taskNotification];
+        [self scheduleLocalNotification:taskNotification];
         
         APCLogEventWithData(kSchedulerEvent, (@{@"event_detail":[NSString stringWithFormat:@"Scheduled Reminder: %@. Body: %@", taskNotification, taskNotification.alertBody]}));
     }
@@ -300,6 +302,28 @@ NSString * gTaskReminderDelayMessage;
     }
 }
 
+- (void) scheduleLocalNotification:(UILocalNotification*)notification
+{
+    [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+}
+
+- (void) addNotificationCategoryIfNeeded
+{
+    if ([[UIApplication sharedApplication] currentUserNotificationSettings].categories.count == 0 &&
+        [[UIApplication sharedApplication] currentUserNotificationSettings].types == (UIUserNotificationTypeAlert
+                                                                             |UIUserNotificationTypeBadge
+                                                                             |UIUserNotificationTypeSound))
+    {
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert
+                                                                                             |UIUserNotificationTypeBadge
+                                                                                             |UIUserNotificationTypeSound)
+                                                                                 categories:[APCTasksReminderManager taskReminderCategories]];
+        
+        [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+        [self.storedDefaults synchronize];
+    }
+}
+
 - (void) createSubtaskReminderWithRepeatInterval:(NSCalendarUnit)repeatInterval
                                      andFireDate:(NSDate*)fireDate
 {
@@ -308,7 +332,7 @@ NSString * gTaskReminderDelayMessage;
     
     subtaskReminder.alertBody = [self subtaskReminderMessage]; //include only the subtask reminder body
     subtaskReminder.fireDate = fireDate;  //delay by subtask reminder delay
-    subtaskReminder.timeZone = [NSTimeZone localTimeZone];
+    subtaskReminder.timeZone = [self timeZone];
     subtaskReminder.repeatInterval = repeatInterval;
     subtaskReminder.soundName = UILocalNotificationDefaultSoundName;
     
@@ -319,12 +343,16 @@ NSString * gTaskReminderDelayMessage;
     
     if (self.remindersToSend.count >0) {
         
-        [[UIApplication sharedApplication] scheduleLocalNotification:subtaskReminder];
+        [self scheduleLocalNotification:subtaskReminder];
         
         APCLogEventWithData(kSchedulerEvent, (@{@"event_detail":[NSString stringWithFormat:@"Scheduled Subtask Reminder: %@. Body: %@", subtaskReminder, subtaskReminder.alertBody]}));
     }
 }
 
+- (NSTimeZone*) timeZone
+{
+    return [NSTimeZone localTimeZone];
+}
 
 +(NSSet *)taskReminderCategories{
     
@@ -409,25 +437,30 @@ NSString * gTaskReminderDelayMessage;
 /*********************************************************************************/
 
 - (BOOL)reminderOn {
-    NSNumber * flag = [[NSUserDefaults standardUserDefaults] objectForKey:kTasksReminderDefaultsOnOffKey];
+    NSNumber * flag = [self.storedDefaults objectForKey:kTasksReminderDefaultsOnOffKey];
     //Setting up defaults using initialization options
     if (flag == nil) {
         //default to on if user has given Notification permissions
-        if ([[UIApplication sharedApplication] currentUserNotificationSettings].types != UIUserNotificationTypeNone){
+        if ([self notificationsAreEnabled]) {
             flag = @YES;
-            [[NSUserDefaults standardUserDefaults] setObject:flag forKey:kTasksReminderDefaultsOnOffKey];
-            [[NSUserDefaults standardUserDefaults] synchronize];
+            [self.storedDefaults setObject:flag forKey:kTasksReminderDefaultsOnOffKey];
+            [self.storedDefaults synchronize];
         }
     }
     
     //if Notifications are not enabled, set Reminders to off
-    if ([[UIApplication sharedApplication] currentUserNotificationSettings].types == UIUserNotificationTypeNone) {
+    if (![self notificationsAreEnabled]) {
         flag = @NO;
-        [[NSUserDefaults standardUserDefaults] setObject:flag forKey:kTasksReminderDefaultsOnOffKey];
-        [[NSUserDefaults standardUserDefaults] synchronize];
+        [self.storedDefaults setObject:flag forKey:kTasksReminderDefaultsOnOffKey];
+        [self.storedDefaults synchronize];
     }
     
     return [flag boolValue];
+}
+
+- (BOOL) notificationsAreEnabled
+{
+    return [[UIApplication sharedApplication] currentUserNotificationSettings].types != UIUserNotificationTypeNone;
 }
 
 - (void)setReminderOn:(BOOL)reminderOn
@@ -438,23 +471,28 @@ NSString * gTaskReminderDelayMessage;
 
 - (void) updateReminderOn: (BOOL) reminderOn
 {
-    [[NSUserDefaults standardUserDefaults] setObject:@(reminderOn) forKey:kTasksReminderDefaultsOnOffKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    [self.storedDefaults setObject:@(reminderOn) forKey:kTasksReminderDefaultsOnOffKey];
+    [self.storedDefaults synchronize];
 }
 
 - (NSString *)reminderTime {
-    NSString * timeString = [[NSUserDefaults standardUserDefaults] objectForKey:kTasksReminderDefaultsTimeKey];
+    NSString * timeString = [self.storedDefaults objectForKey:kTasksReminderDefaultsTimeKey];
     if (timeString == nil) {
-        APCAppDelegate * delegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
-        NSString * timeDefault = delegate.initializationOptions[kTaskReminderStartupDefaultTimeKey];
-        timeString = timeDefault?:@"5:00 PM";
-        [[NSUserDefaults standardUserDefaults] setObject:timeString forKey:kTasksReminderDefaultsTimeKey];
-        [[NSUserDefaults standardUserDefaults] synchronize];
+        timeString = [self initializeDefaultTime];
+        [self.storedDefaults setObject:timeString forKey:kTasksReminderDefaultsTimeKey];
+        [self.storedDefaults synchronize];
     }
     return timeString;
 }
 
-- (void)setReminderTime:(NSString *)reminderTime 
+- (NSString*) initializeDefaultTime
+{
+    APCAppDelegate * delegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
+    NSString * timeDefault = delegate.initializationOptions[kTaskReminderStartupDefaultTimeKey];
+    return timeDefault ? : @"5:00 PM";
+}
+
+- (void)setReminderTime:(NSString *)reminderTime
 {
     [self updateReminderTime:reminderTime];
     [self updateTasksReminder];
@@ -463,19 +501,19 @@ NSString * gTaskReminderDelayMessage;
 - (void)updateReminderTime:(NSString *)reminderTime
 {
     NSAssert([[APCTasksReminderManager reminderTimesArray] containsObject:reminderTime], @"reminder time should be in the reminder times array");
-    [[NSUserDefaults standardUserDefaults] setObject:reminderTime forKey:kTasksReminderDefaultsTimeKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    [self.storedDefaults setObject:reminderTime forKey:kTasksReminderDefaultsTimeKey];
+    [self.storedDefaults synchronize];
 }
 
 - (NSDate*) calculateDailyTaskReminderFireDate
 {
     NSTimeInterval reminderOffset = ([[APCTasksReminderManager reminderTimesArray] indexOfObject:self.reminderTime]) * kMinutesPerHour * kSecondsPerMinute;
     
-    NSDate *dateToSet = [NSDate new];
+    NSDate *dateToSet = [self now];
     if (self.remindersToSend.count == 0) {
-        dateToSet = [[NSDate tomorrowAtMidnight] dateByAddingTimeInterval:reminderOffset];
+        dateToSet = [[NSDate tomorrowAtMidnightFromDate:[self now]] dateByAddingTimeInterval:reminderOffset];
     }else{
-        dateToSet = [[NSDate todayAtMidnight] dateByAddingTimeInterval:reminderOffset];
+        dateToSet = [[NSDate todayAtMidnightFromDate:[self now]] dateByAddingTimeInterval:reminderOffset];
     }
     
     return dateToSet;
@@ -487,14 +525,14 @@ NSString * gTaskReminderDelayMessage;
     //add subtask reminder delay
     reminderOffset += kSubtaskReminderDelayMinutes * kSecondsPerMinute;
     
-    return [[NSDate todayAtMidnight] dateByAddingTimeInterval:reminderOffset];
+    return [[NSDate todayAtMidnightFromDate:[self now]] dateByAddingTimeInterval:reminderOffset];
 }
 
 - (NSDate*) calculateWeeklyTaskReminderFireDateFromWeekday:(NSUInteger)dayOfTheWeekInt
 {
     NSTimeInterval reminderOffset = ([[APCTasksReminderManager reminderTimesArray] indexOfObject:self.reminderTime]) * kMinutesPerHour * kSecondsPerMinute;
     
-    NSDate *now = [NSDate new];
+    NSDate *now = [self now];
     NSDate *dateToSet = [NSDate priorSundayAtMidnightFromDate:now];
     
     // If we completed all the tasks for this week, we will remind them again starting next week
@@ -563,6 +601,11 @@ NSString * gTaskReminderDelayMessage;
     }
 }
 
+- (NSDate*) now
+{
+    return [NSDate date];
+}
+
 /*********************************************************************************/
 #pragma mark - Helper
 /*********************************************************************************/
@@ -606,7 +649,7 @@ NSString * gTaskReminderDelayMessage;
     BOOL includeTask = NO;
     
     //the reminderIdentifier shall be added to NSUserDefaults only when the task reminder is set to ON
-    if (![[NSUserDefaults standardUserDefaults] objectForKey: taskReminder.reminderIdentifier]) {
+    if (![self.storedDefaults objectForKey: taskReminder.reminderIdentifier]) {
         //the reminder for this task is off
         return includeTask;
     }
