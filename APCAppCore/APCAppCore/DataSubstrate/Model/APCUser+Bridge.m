@@ -352,7 +352,7 @@
                     for (id key in consentStatuses) {
                         NSDictionary *status = [consentStatuses objectForKey:key];
                         NSString *guid = status[@"subpopulationGuid"];
-                        BOOL required = status[@"required"];
+                        BOOL required = [status[@"required"] boolValue];
                         if (required) {
                             self.subpopulationGuid = guid;
                         }
