@@ -197,14 +197,14 @@
                 messageComposer.messageComposeDelegate = self;
                 messageComposer.body = self.shareMessage;
 
-                if (_textMessageNavTintColor)
+                if (self.textMessageNavTintColor != nil)
                 {
-                    messageComposer.navigationBar.tintColor = _textMessageNavTintColor;
+                    messageComposer.navigationBar.tintColor = self.textMessageNavTintColor;
                 }
                 
                 [self presentViewController:messageComposer animated:YES completion:^
                 {
-                    if (_textMessageStatusBarStyleLight)
+                    if (self.textMessageStatusBarStyleLight)
                     {
                         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
                     }
