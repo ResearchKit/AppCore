@@ -67,7 +67,6 @@ extern NSString * const APCDataGroupsStepIdentifier;
 - (void)setSurveyAnswerWithStepResult:(ORKStepResult *)result;
 - (void)setSurveyAnswerWithIdentifier:(NSString*)identifier selectedIndices:(NSArray*)selectedIndices;
 
-
 @end
 
 NS_ASSUME_NONNULL_END

@@ -158,7 +158,7 @@
     XCTAssertFalse(manager.hasChanges);
 }
 
-- (void)testSurveySteps
+- (void)testSurveySteps_NotOptional
 {
     APCDataGroupsManager * manager = [self createDataGroupsManagerWithDataGroups:nil];
     
@@ -167,7 +167,7 @@
     XCTAssertNotNil(step);
     XCTAssertFalse(step.optional);
     XCTAssertEqualObjects(step.title, @"Are you in Control?");
-    XCTAssertEqualObjects(step.text, @"Engineers and scientists like classifications. To help us better classify you, please answer these required questions.");
+    XCTAssertEqualObjects(step.text, @"Engineers and scientists like classifications. To help us better classify you, please answer this question.");
     
     XCTAssertEqual(step.formItems.count, 1);
     ORKFormItem  *item = step.formItems.firstObject;
@@ -181,6 +181,33 @@
     XCTAssertEqual(answerFormat.textChoices.count, 2);
     NSArray *expectedChoices = @[[ORKTextChoice choiceWithText:@"Yes" value:@YES],
                                  [ORKTextChoice choiceWithText:@"No" value:@NO]];
+    XCTAssertEqualObjects(answerFormat.textChoices, expectedChoices);
+}
+
+- (void)testSurveySteps_Optional
+{
+    APCDataGroupsManager * manager = [self createDataGroupsManagerWithDataGroups:nil required:NO questionOptional:YES];
+    
+    ORKFormStep * step = [manager surveyStep];
+    
+    XCTAssertNotNil(step);
+    XCTAssertFalse(step.optional);
+    XCTAssertEqualObjects(step.title, @"Are you in Control?");
+    XCTAssertEqualObjects(step.text, @"Engineers and scientists like classifications. To help us better classify you, please answer this question.");
+    
+    XCTAssertEqual(step.formItems.count, 1);
+    ORKFormItem  *item = step.formItems.firstObject;
+    XCTAssertEqualObjects(item.identifier, @"control_question");
+    XCTAssertEqualObjects(item.text, @"Have you ever been diagnosed with XYZ?");
+    
+    ORKTextChoiceAnswerFormat *answerFormat = (ORKTextChoiceAnswerFormat *)item.answerFormat;
+    XCTAssertTrue([answerFormat isKindOfClass:[ORKTextChoiceAnswerFormat class]]);
+    XCTAssertEqual(answerFormat.style, ORKChoiceAnswerStyleSingleChoice);
+    
+    NSArray *expectedChoices = @[[ORKTextChoice choiceWithText:@"Yes" value:@YES],
+                                 [ORKTextChoice choiceWithText:@"No" value:@NO],
+                                 [ORKTextChoice choiceWithText:@"Prefer not to answer" value:@(NSNotFound)]];
+    XCTAssertEqual(answerFormat.textChoices.count, expectedChoices.count);
     XCTAssertEqualObjects(answerFormat.textChoices, expectedChoices);
 }
 
@@ -220,9 +247,31 @@
     XCTAssertEqualObjects(actualGroup, @"control");
 }
 
+- (void)testSetSurveyAnswerWithStepResult_Skipped
+{
+    APCDataGroupsManager * manager = [self createDataGroupsManagerWithDataGroups:nil required:NO questionOptional:YES];
+    
+    // Change the survey answer
+    ORKChoiceQuestionResult *result = [[ORKChoiceQuestionResult alloc] initWithIdentifier:@"control_question"];
+    result.choiceAnswers = @[@(NSNotFound)];
+    ORKStepResult *stepResult = [[ORKStepResult alloc] initWithStepIdentifier:APCDataGroupsStepIdentifier results:@[result]];
+    
+    [manager setSurveyAnswerWithStepResult:stepResult];
+    
+    // For a skipped question, the data groups are *not* set to anything
+    XCTAssertEqual(manager.dataGroups.count, 0);
+    XCTAssertFalse(manager.hasChanges);
+
+}
+
 #pragma mark - heper methods
 
 - (APCDataGroupsManager*)createDataGroupsManagerWithDataGroups:(NSArray*)dataGroups {
+    return [self createDataGroupsManagerWithDataGroups:dataGroups required:YES questionOptional:NO];
+}
+
+- (APCDataGroupsManager*)createDataGroupsManagerWithDataGroups:(NSArray*)dataGroups required:(BOOL)required questionOptional:(BOOL)questionOptional {
+
     
     NSDictionary *mapping = @{
         @"items": @[@{ @"group_name"            : @"control",
@@ -235,15 +284,16 @@
                        @"is_control_group"      : @(false),
                        }
                   ],
-        @"required": @(true),
+        @"required": @(required),
         @"title": @"Are you in Control?",
-        @"detail": @"Engineers and scientists like classifications. To help us better classify you, please answer these required questions.",
+        @"detail": @"Engineers and scientists like classifications. To help us better classify you, please answer this question.",
         @"questions":
         @[
          @{
              @"identifier": @"control_question",
-             @"prompt": @"Have you ever been diagnosed with XYZ?",
+             @"text": @"Have you ever been diagnosed with XYZ?",
              @"type": @"boolean",
+             @"optional": @(questionOptional),
              @"valueMap": @[@{ @"value" : @YES,
                                @"groups" : @[@"studyA"]},
                             @{ @"value" : @NO,

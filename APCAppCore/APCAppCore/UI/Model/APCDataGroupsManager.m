@@ -44,8 +44,9 @@ NSString * const APCDataGroupsMappingSurveyTitleKey = @"title";
 NSString * const APCDataGroupsMappingSurveyDetailKey = @"detail";
 NSString * const APCDataGroupsMappingSurveyQuestionIdentifierKey = @"identifier";
 NSString * const APCDataGroupsMappingSurveyQuestionTypeKey = @"type";
-NSString * const APCDataGroupsMappingSurveyQuestionPromptKey = @"prompt";
-NSString * const APCDataGroupsMappingSurveyQuestionProfileCaptionKey = @"profileCaption";
+NSString * const APCDataGroupsMappingSurveyQuestionPromptKey = @"text";
+NSString * const APCDataGroupsMappingSurveyQuestionProfileCaptionKey = @"shortText";
+NSString * const APCDataGroupsMappingSurveyQuestionOptionalKey = @"optional";
 NSString * const APCDataGroupsMappingSurveyQuestionValueMapKey = @"valueMap";
 NSString * const APCDataGroupsMappingSurveyQuestionTypeBoolean = @"boolean";
 NSString * const APCDataGroupsMappingSurveyQuestionValueMapValueKey = @"value";
@@ -139,9 +140,18 @@ NSString * const APCDataGroupsMappingSurveyQuestionValueMapGroupsKey = @"groups"
     // Add the questions from the mapping
     NSMutableArray *formItems = [NSMutableArray new];
     for (NSDictionary *question in questions) {
+        
+        // Get the default choices and add the skip choice if this question is optional
+        NSArray *textChoices = [self choicesForQuestion:question];
+        if ([question[APCDataGroupsMappingSurveyQuestionOptionalKey] boolValue]) {
+            ORKTextChoice *skipChoice = [ORKTextChoice choiceWithText:NSLocalizedStringWithDefaultValue(@"APC_SKIP_CHOICE", @"APCAppCore", APCBundle(), @"Prefer not to answer", @"Choice text for skipping a question") value:@(NSNotFound)];
+            textChoices = [textChoices arrayByAddingObject:skipChoice];
+        }
+        
         ORKAnswerFormat *format = [ORKTextChoiceAnswerFormat
                                    choiceAnswerFormatWithStyle:ORKChoiceAnswerStyleSingleChoice
-                                   textChoices:[self choicesForQuestion:question]];
+                                   textChoices:textChoices];
+        
         NSString *text = !useQuestionPrompt ? question[APCDataGroupsMappingSurveyQuestionPromptKey] : nil;
         ORKFormItem  *item = [[ORKFormItem alloc] initWithIdentifier:question[APCDataGroupsMappingSurveyQuestionIdentifierKey]
                                                                 text:text
