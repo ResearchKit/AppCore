@@ -76,7 +76,7 @@
 
 - (NSTimeZone*) timeZone
 {
-    return [NSTimeZone timeZoneForSecondsFromGMT:0];
+    return [NSTimeZone defaultTimeZone];
 }
 
 -(BOOL)includeTaskInReminder:(APCTaskReminder *)taskReminder {

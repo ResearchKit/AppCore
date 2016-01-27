@@ -19,6 +19,7 @@ static NSString* const kBalanceName = @"Balance Assessment";
 
 @interface APCTasksReminderManagerTests : XCTestCase
 @property (nonatomic, strong) MockAPCTasksReminderManager* reminderManager;
+@property (nonatomic, strong) NSTimeZone* originalTimeZone;
 @end
 
 @implementation APCTasksReminderManagerTests
@@ -27,6 +28,9 @@ static NSString* const kBalanceName = @"Balance Assessment";
 - (void) setUp
 {
     [super setUp];
+    
+    self.originalTimeZone = [NSTimeZone defaultTimeZone];
+    [NSTimeZone setDefaultTimeZone:[NSTimeZone timeZoneWithName:@"America/New_York"]];
     
     self.reminderManager = [[MockAPCTasksReminderManager alloc] init];
     
@@ -64,6 +68,7 @@ static NSString* const kBalanceName = @"Balance Assessment";
 - (void) tearDown
 {
     [super tearDown];
+    self.originalTimeZone = self.originalTimeZone;
 }
 
 - (void) testRemindersTurnedOff
