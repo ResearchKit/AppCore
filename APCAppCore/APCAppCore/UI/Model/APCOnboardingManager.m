@@ -161,9 +161,11 @@ NSString * const kAPCOnboardingStoryboardName = @"APCOnboarding";
         return [[APCScene alloc] initWithName:@"APCPermissionPrimingViewController" inStoryboard:kAPCOnboardingStoryboardName];     // "What to Expect" screen
     }
     if ([type isEqualToString:kAPCSignUpDataGroupsStepIdentifier]) {
-        ORKStep *step = [self.dataGroupsManager surveyStep];
-        if (step != nil) {
-            return [[APCScene alloc] initWithStep:step];
+        if ([self.dataGroupsManager needsUserInfoDataGroups]) {
+            ORKStep *step = [self.dataGroupsManager surveyStep];
+            if (step != nil) {
+                return [[APCScene alloc] initWithStep:step];
+            }            
         }
         return nil;
     }
