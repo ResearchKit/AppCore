@@ -119,13 +119,7 @@ typedef enum : NSUInteger {
 
 - (NSDate *)dateByAddingDays:(NSInteger)inDays
 {
-    static NSCalendar *cal;
-    static dispatch_once_t once;
-    dispatch_once(&once, ^
-                  {
-                      cal = [NSCalendar currentCalendar];
-                  });
-    
+    NSCalendar* cal = [NSCalendar currentCalendar];
     NSDateComponents *components = [cal components:(NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear) fromDate:self];
     [components setDay:[components day] + inDays];
     return [cal dateFromComponents:components];
