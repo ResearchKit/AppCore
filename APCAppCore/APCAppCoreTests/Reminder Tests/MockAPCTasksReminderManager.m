@@ -53,6 +53,15 @@
     return self.mockNow;
 }
 
+- (NSTimeZone*) timeZone
+{
+    if (self.mockTimeZone == nil)
+    {
+        self.mockTimeZone = [NSTimeZone defaultTimeZone];
+    }
+    return self.mockTimeZone;
+}
+
 - (void) setAllReminders:(BOOL)on
 {
     [[self storedDefaults] setObject:@(on) forKey:kTasksReminderDefaultsOnOffKey];
@@ -72,11 +81,6 @@
 - (void) initializeDefaultReminderMessages
 {
     // no implementation
-}
-
-- (NSTimeZone*) timeZone
-{
-    return [NSTimeZone defaultTimeZone];
 }
 
 -(BOOL)includeTaskInReminder:(APCTaskReminder *)taskReminder {

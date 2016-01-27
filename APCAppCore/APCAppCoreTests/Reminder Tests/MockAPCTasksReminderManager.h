@@ -10,6 +10,7 @@
 @interface MockAPCTasksReminderManager : APCTasksReminderManager
 
 @property (nonatomic, strong) NSDate* mockNow;
+@property (nonatomic, strong) NSTimeZone* mockTimeZone;
 
 - (void) setReminderKey:(NSString*)reminderKey toOn:(BOOL)on;
 - (void) setAllReminders:(BOOL)on;

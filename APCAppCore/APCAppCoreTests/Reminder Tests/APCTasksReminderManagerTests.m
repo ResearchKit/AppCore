@@ -223,6 +223,36 @@ static NSString* const kBalanceName = @"Balance Assessment";
     XCTAssertEqual(NO,  [sundayAt5Pm.alertBody containsString:kBalanceName]);
 }
 
+- (void) testTimeZoneChange
+{
+    NSTimeZone* oldTimeZone = [NSTimeZone defaultTimeZone];
+    NSTimeZone* newTimeZone = [NSTimeZone timeZoneWithName:@"America/Denver"];
+    [NSTimeZone setDefaultTimeZone:newTimeZone];
+    self.reminderManager.mockTimeZone = newTimeZone;
+    
+    // Saturday
+    self.reminderManager.mockNow = [NSDate dateWithISO8601String:@"2016-01-23T10:00:00+00:00"];
+    
+    self.reminderManager.daysOfTheWeekToRepeat = @[@(kAPCTaskReminderDayOfWeekSunday),
+                                                   @(kAPCTaskReminderDayOfWeekTuesday)];
+    
+    [self.reminderManager updateTasksReminder];
+    
+    XCTAssertEqual(2, self.reminderManager.scheduledLocalNotification.count);
+    
+    UILocalNotification* sundayAt5Pm = self.reminderManager.scheduledLocalNotification[0];
+    UILocalNotification* tuesdayAt5Pm = self.reminderManager.scheduledLocalNotification[1];
+    
+    NSDate* nextSundayAt5PM = [NSDate dateWithISO8601String:@"2016-01-25T00:00:00+00:00"];
+    XCTAssertEqual(nextSundayAt5PM, sundayAt5Pm.fireDate);
+    
+    NSDate* nextTuesdayAt5PM = [NSDate dateWithISO8601String:@"2016-01-27T00:00:00+00:00"];
+    XCTAssertEqual(nextTuesdayAt5PM, tuesdayAt5Pm.fireDate);
+    
+    [NSTimeZone setDefaultTimeZone:oldTimeZone];
+    self.reminderManager.mockTimeZone = oldTimeZone;
+}
+
 - (void) testMPowerDaily
 {
     // Saturday
