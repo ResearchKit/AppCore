@@ -38,15 +38,15 @@ NSString * const APCDataGroupsStepIdentifier = @"dataGroups";
 
 NSString * const APCDataGroupsMappingItemsKey = @"items";
 NSString * const APCDataGroupsMappingRequiredKey = @"required";
+NSString * const APCDataGroupsMappingProfileKey = @"profile";
+NSString * const APCDataGroupsMappingSurveyKey = @"survey";
 NSString * const APCDataGroupsMappingQuestionsKey = @"questions";
 
 NSString * const APCDataGroupsMappingSurveyTitleKey = @"title";
-NSString * const APCDataGroupsMappingSurveyDetailKey = @"detail";
-NSString * const APCDataGroupsMappingSurveyQuestionIdentifierKey = @"identifier";
+NSString * const APCDataGroupsMappingSurveyTextKey = @"text";
+NSString * const APCDataGroupsMappingSurveyOptionalKey = @"optional";
+NSString * const APCDataGroupsMappingSurveyIdentifierKey = @"identifier";
 NSString * const APCDataGroupsMappingSurveyQuestionTypeKey = @"type";
-NSString * const APCDataGroupsMappingSurveyQuestionPromptKey = @"text";
-NSString * const APCDataGroupsMappingSurveyQuestionProfileCaptionKey = @"shortText";
-NSString * const APCDataGroupsMappingSurveyQuestionOptionalKey = @"optional";
 NSString * const APCDataGroupsMappingSurveyQuestionValueMapKey = @"valueMap";
 NSString * const APCDataGroupsMappingSurveyQuestionTypeBoolean = @"boolean";
 NSString * const APCDataGroupsMappingSurveyQuestionValueMapValueKey = @"value";
@@ -56,6 +56,9 @@ NSString * const APCDataGroupsMappingSurveyQuestionValueMapGroupsKey = @"groups"
 
 @property (nonatomic, copy) NSSet *originalDataGroupsSet;
 @property (nonatomic, strong) NSMutableSet *dataGroupsSet;
+
+@property (nonatomic, readonly) NSDictionary *survey;
+@property (nonatomic, readonly) NSDictionary *profile;
 
 @end
 
@@ -89,6 +92,8 @@ NSString * const APCDataGroupsMappingSurveyQuestionValueMapGroupsKey = @"groups"
         _mapping = [mapping copy] ?: [[self class] defaultMapping];
         _originalDataGroupsSet = (dataGroups.count > 0) ? [NSSet setWithArray:dataGroups] : [NSSet new];
         _dataGroupsSet = (dataGroups.count > 0) ? [NSMutableSet setWithArray:dataGroups] : [NSMutableSet new];
+        _survey = _mapping[APCDataGroupsMappingSurveyKey];
+        _profile = _mapping[APCDataGroupsMappingProfileKey];
     }
     return self;
 }
@@ -120,22 +125,22 @@ NSString * const APCDataGroupsMappingSurveyQuestionValueMapGroupsKey = @"groups"
 
 - (ORKFormStep *)surveyStep {
     
-    NSArray *questions = self.mapping[APCDataGroupsMappingQuestionsKey];
+    NSArray *questions = self.survey[APCDataGroupsMappingQuestionsKey];
     if (questions.count == 0) {
         return nil;
     }
 
-    NSString *detail = self.mapping[APCDataGroupsMappingSurveyDetailKey];
+    NSString *detail = self.survey[APCDataGroupsMappingSurveyTextKey];
     BOOL useQuestionPrompt = (questions.count == 1) && (detail.length == 0);
     if (useQuestionPrompt) {
-        detail = questions[0][APCDataGroupsMappingSurveyQuestionPromptKey];
+        detail = questions[0][APCDataGroupsMappingSurveyTextKey];
     }
     
     // Create the step
     ORKFormStep *step = [[ORKFormStep alloc] initWithIdentifier:APCDataGroupsStepIdentifier
-                                                          title:self.mapping[APCDataGroupsMappingSurveyTitleKey]
+                                                          title:self.survey[APCDataGroupsMappingSurveyTitleKey]
                                                            text:detail];
-    step.optional = NO;
+    step.optional = [self.survey[APCDataGroupsMappingSurveyOptionalKey] boolValue];
     
     // Add the questions from the mapping
     NSMutableArray *formItems = [NSMutableArray new];
@@ -143,7 +148,7 @@ NSString * const APCDataGroupsMappingSurveyQuestionValueMapGroupsKey = @"groups"
         
         // Get the default choices and add the skip choice if this question is optional
         NSArray *textChoices = [self choicesForQuestion:question];
-        if ([question[APCDataGroupsMappingSurveyQuestionOptionalKey] boolValue]) {
+        if ([question[APCDataGroupsMappingSurveyOptionalKey] boolValue]) {
             ORKTextChoice *skipChoice = [ORKTextChoice choiceWithText:NSLocalizedStringWithDefaultValue(@"APC_SKIP_CHOICE", @"APCAppCore", APCBundle(), @"Prefer not to answer", @"Choice text for skipping a question") value:@(NSNotFound)];
             textChoices = [textChoices arrayByAddingObject:skipChoice];
         }
@@ -152,8 +157,8 @@ NSString * const APCDataGroupsMappingSurveyQuestionValueMapGroupsKey = @"groups"
                                    choiceAnswerFormatWithStyle:ORKChoiceAnswerStyleSingleChoice
                                    textChoices:textChoices];
         
-        NSString *text = !useQuestionPrompt ? question[APCDataGroupsMappingSurveyQuestionPromptKey] : nil;
-        ORKFormItem  *item = [[ORKFormItem alloc] initWithIdentifier:question[APCDataGroupsMappingSurveyQuestionIdentifierKey]
+        NSString *text = !useQuestionPrompt ? question[APCDataGroupsMappingSurveyTextKey] : nil;
+        ORKFormItem  *item = [[ORKFormItem alloc] initWithIdentifier:question[APCDataGroupsMappingSurveyIdentifierKey]
                                                                 text:text
                                                         answerFormat:format];
         [formItems addObject:item];
@@ -167,7 +172,7 @@ NSString * const APCDataGroupsMappingSurveyQuestionValueMapGroupsKey = @"groups"
 
 - (NSArray <APCTableViewRow *> * _Nullable)surveyItems {
     
-    NSArray *questions = self.mapping[APCDataGroupsMappingQuestionsKey];
+    NSArray *questions = self.profile[APCDataGroupsMappingQuestionsKey];
     if (questions.count == 0) {
         return nil;
     }
@@ -177,9 +182,9 @@ NSString * const APCDataGroupsMappingSurveyQuestionValueMapGroupsKey = @"groups"
 
         // Create the item
         APCTableViewCustomPickerItem *item = [[APCTableViewCustomPickerItem alloc] init];
-        item.questionIdentifier = question[APCDataGroupsMappingSurveyQuestionIdentifierKey];
+        item.questionIdentifier = question[APCDataGroupsMappingSurveyIdentifierKey];
         item.reuseIdentifier = kAPCDefaultTableViewCellIdentifier;
-        item.caption = question[APCDataGroupsMappingSurveyQuestionProfileCaptionKey] ?: question[APCDataGroupsMappingSurveyQuestionPromptKey];
+        item.caption = question[APCDataGroupsMappingSurveyTextKey];
         item.textAlignnment = NSTextAlignmentRight;
         
         // Get the choices
@@ -241,17 +246,14 @@ NSString * const APCDataGroupsMappingSurveyQuestionValueMapGroupsKey = @"groups"
     return nil;
 }
 
-- (NSDictionary*)questionWithIndentifier:(NSString*)identifier {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K = %@", APCDataGroupsMappingSurveyQuestionIdentifierKey, identifier];
-    NSDictionary *question = [[self.mapping[APCDataGroupsMappingQuestionsKey] filteredArrayUsingPredicate:predicate] firstObject];
-    return question;
-}
-
 - (void)setSurveyAnswerWithStepResult:(ORKStepResult *)stepResult {
     for (ORKResult *result in stepResult.results) {
         if ([result isKindOfClass:[ORKChoiceQuestionResult class]]) {
             ORKChoiceQuestionResult *choiceResult = (ORKChoiceQuestionResult *)result;
-            NSDictionary *question = [self questionWithIndentifier:choiceResult.identifier];
+
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K = %@", APCDataGroupsMappingSurveyIdentifierKey, choiceResult.identifier];
+            NSDictionary *question = [[self.survey[APCDataGroupsMappingQuestionsKey] filteredArrayUsingPredicate:predicate] firstObject];
+            
             NSArray *valueMap = question[APCDataGroupsMappingSurveyQuestionValueMapKey];
             
             // Get the groups that are to be included based on the answer to this question
@@ -284,38 +286,36 @@ NSString * const APCDataGroupsMappingSurveyQuestionValueMapGroupsKey = @"groups"
         NSArray *selectedIndices = ((APCTableViewCustomPickerItem*)item).selectedRowIndices;
         NSAssert(selectedIndices.count <= 1, @"Data groups with multi-part picker are not implemented.");
         
-        [self setSurveyAnswerWithIdentifier:item.questionIdentifier selectedIndices:selectedIndices];
+        NSString *identifier = item.questionIdentifier;
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K = %@", APCDataGroupsMappingSurveyIdentifierKey, identifier];
+        NSDictionary *question = [[self.profile[APCDataGroupsMappingQuestionsKey] filteredArrayUsingPredicate:predicate] firstObject];
+        
+        // Get all the groups that are defined by this question
+        NSArray *groupsMap = [question[APCDataGroupsMappingSurveyQuestionValueMapKey] valueForKey:APCDataGroupsMappingSurveyQuestionValueMapGroupsKey];
+        
+        // build the include and exclude sets
+        NSMutableSet *excludeSet = [NSMutableSet new];
+        NSMutableSet *includeSet = [NSMutableSet new];
+        for (NSUInteger idx = 0; idx < groupsMap.count; idx++) {
+            if ([selectedIndices containsObject:@(idx)]) {
+                [includeSet addObjectsFromArray:groupsMap[idx]];
+            }
+            else {
+                [excludeSet addObjectsFromArray:groupsMap[idx]];
+            }
+        }
+        
+        // Remove data groups that are *not* in the selected indices (and are instead associated
+        // with a choice that was *not* selected)
+        [self.dataGroupsSet minusSet:excludeSet];
+        
+        // Union data groups that *are* in the selected indices
+        [self.dataGroupsSet unionSet:includeSet];
+        
     }
     else {
         NSAssert1(NO, @"Data groups survey question of class %@ is not handled.", [item class]);
     }
-}
-
-- (void)setSurveyAnswerWithIdentifier:(NSString*)identifier selectedIndices:(NSArray*)selectedIndices {
-    
-    NSDictionary *question = [self questionWithIndentifier:identifier];
-    
-    // Get all the groups that are defined by this question
-    NSArray *groupsMap = [question[APCDataGroupsMappingSurveyQuestionValueMapKey] valueForKey:APCDataGroupsMappingSurveyQuestionValueMapGroupsKey];
-    
-    // build the include and exclude sets
-    NSMutableSet *excludeSet = [NSMutableSet new];
-    NSMutableSet *includeSet = [NSMutableSet new];
-    for (NSUInteger idx = 0; idx < groupsMap.count; idx++) {
-        if ([selectedIndices containsObject:@(idx)]) {
-            [includeSet addObjectsFromArray:groupsMap[idx]];
-        }
-        else {
-            [excludeSet addObjectsFromArray:groupsMap[idx]];
-        }
-    }
-    
-    // Remove data groups that are *not* in the selected indices (and are instead associated
-    // with a choice that was *not* selected)
-    [self.dataGroupsSet minusSet:excludeSet];
-    
-    // Union data groups that *are* in the selected indices
-    [self.dataGroupsSet unionSet:includeSet];
 }
 
 @end
