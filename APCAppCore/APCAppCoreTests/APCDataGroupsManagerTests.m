@@ -116,12 +116,24 @@
     XCTAssertEqualObjects(item.selectedRowIndices, expectedSelectedIndices);
 }
 
+- (void)testSurveyItems_NoProfile {
+    
+    APCDataGroupsManager * manager = [self createDataGroupsManagerWithDataGroups:@[@"studyA", @"studyB"] required:NO questionOptional:NO includeProfile:NO];
+    NSArray <APCTableViewRow *> * rows = [manager surveyItems];
+    
+    // If the data groups should *not* show up in the profile (by default) then should return nil
+    XCTAssertNil(rows);
+}
+
 - (void)testSetSurveyAnswer_ChangeToControl
 {
     APCDataGroupsManager * manager = [self createDataGroupsManagerWithDataGroups:@[@"studyA", @"studyB"]];
+    APCTableViewCustomPickerItem *item = (APCTableViewCustomPickerItem *)[[[manager surveyItems] firstObject] item];
+    XCTAssertNotNil(item);
     
     // Change the survey answer
-    [manager setSurveyAnswerWithIdentifier:@"control_question" selectedIndices:@[@1]];
+    item.selectedRowIndices = @[@1];
+    [manager setSurveyAnswerWithItem:item];
     
     // Check results using set b/c order of the groups does not matter
     NSSet *expectedGroups = [NSSet setWithArray:@[@"control", @"studyB"]];
@@ -133,9 +145,12 @@
 - (void)testSetSurveyAnswer_ChangeToStudyA
 {
     APCDataGroupsManager * manager = [self createDataGroupsManagerWithDataGroups:@[@"control", @"studyB"]];
+    APCTableViewCustomPickerItem *item = (APCTableViewCustomPickerItem *)[[[manager surveyItems] firstObject] item];
+    XCTAssertNotNil(item);
     
     // Change the survey answer
-    [manager setSurveyAnswerWithIdentifier:@"control_question" selectedIndices:@[@0]];
+    item.selectedRowIndices = @[@0];
+    [manager setSurveyAnswerWithItem:item];
     
     // Check the results using a set b/c the order of the groups does not matter
     NSSet *expectedGroups = [NSSet setWithArray:@[@"studyA", @"studyB"]];
@@ -147,9 +162,11 @@
 - (void)testSetSurveyAnswer_NoChange
 {
     APCDataGroupsManager * manager = [self createDataGroupsManagerWithDataGroups:@[@"control", @"studyB"]];
+    APCTableViewCustomPickerItem *item = (APCTableViewCustomPickerItem *)[[[manager surveyItems] firstObject] item];
+    XCTAssertNotNil(item);
     
     // Change the survey answer
-    [manager setSurveyAnswerWithIdentifier:@"control_question" selectedIndices:@[@1]];
+    [manager setSurveyAnswerWithItem:item];
     
     // Check the results using a set b/c the order of the groups does not matter
     NSSet *expectedGroups = [NSSet setWithArray:@[@"control", @"studyB"]];
@@ -186,7 +203,7 @@
 
 - (void)testSurveySteps_Optional
 {
-    APCDataGroupsManager * manager = [self createDataGroupsManagerWithDataGroups:nil required:NO questionOptional:YES];
+    APCDataGroupsManager * manager = [self createDataGroupsManagerWithDataGroups:nil required:NO questionOptional:YES includeProfile:NO];
     
     ORKFormStep * step = [manager surveyStep];
     
@@ -249,7 +266,7 @@
 
 - (void)testSetSurveyAnswerWithStepResult_Skipped
 {
-    APCDataGroupsManager * manager = [self createDataGroupsManagerWithDataGroups:nil required:NO questionOptional:YES];
+    APCDataGroupsManager * manager = [self createDataGroupsManagerWithDataGroups:nil required:NO questionOptional:YES includeProfile:NO];
     
     // Change the survey answer
     ORKChoiceQuestionResult *result = [[ORKChoiceQuestionResult alloc] initWithIdentifier:@"control_question"];
@@ -264,14 +281,67 @@
 
 }
 
+- (void)testStepResult_Control {
+    APCDataGroupsManager * manager = [self createDataGroupsManagerWithDataGroups:@[@"control", @"studyB"]];
+    
+    ORKStepResult *result = [manager stepResult];
+    
+    XCTAssertNotNil(result);
+    XCTAssertEqualObjects(result.identifier, APCDataGroupsStepIdentifier);
+    XCTAssertEqual(result.results.count, 1);
+    
+    ORKChoiceQuestionResult *questionResult = (ORKChoiceQuestionResult*)[result.results firstObject];
+    XCTAssertTrue([questionResult isKindOfClass:[ORKChoiceQuestionResult class]]);
+    XCTAssertEqualObjects(questionResult.identifier, @"control_question");
+    XCTAssertEqualObjects(questionResult.choiceAnswers, @[@NO]);
+}
+
+- (void)testStepResult_StudyA {
+    APCDataGroupsManager * manager = [self createDataGroupsManagerWithDataGroups:@[@"studyA", @"studyB"]];
+    
+    ORKStepResult *result = [manager stepResult];
+    
+    XCTAssertNotNil(result);
+    XCTAssertEqualObjects(result.identifier, APCDataGroupsStepIdentifier);
+    XCTAssertEqual(result.results.count, 1);
+    
+    ORKChoiceQuestionResult *questionResult = (ORKChoiceQuestionResult*)[result.results firstObject];
+    XCTAssertTrue([questionResult isKindOfClass:[ORKChoiceQuestionResult class]]);
+    XCTAssertEqualObjects(questionResult.identifier, @"control_question");
+    XCTAssertEqualObjects(questionResult.choiceAnswers, @[@YES]);
+}
+
+- (void)testStepResult_None {
+    APCDataGroupsManager * manager = [self createDataGroupsManagerWithDataGroups:@[@"studyB"]];
+    
+    XCTAssertNil([manager stepResult]);
+}
+
 #pragma mark - heper methods
 
 - (APCDataGroupsManager*)createDataGroupsManagerWithDataGroups:(NSArray*)dataGroups {
-    return [self createDataGroupsManagerWithDataGroups:dataGroups required:YES questionOptional:NO];
+    return [self createDataGroupsManagerWithDataGroups:dataGroups required:YES questionOptional:NO includeProfile:YES];
 }
 
-- (APCDataGroupsManager*)createDataGroupsManagerWithDataGroups:(NSArray*)dataGroups required:(BOOL)required questionOptional:(BOOL)questionOptional {
+- (APCDataGroupsManager*)createDataGroupsManagerWithDataGroups:(NSArray*)dataGroups
+                                                      required:(BOOL)required
+                                              questionOptional:(BOOL)questionOptional includeProfile:(BOOL)includeProfile {
 
+    
+    NSArray *questions = @[
+                           @{
+                               @"identifier": @"control_question",
+                               @"text": @"Have you ever been diagnosed with XYZ?",
+                               @"type": @"boolean",
+                               @"optional": @(questionOptional),
+                               @"valueMap": @[@{ @"value" : @YES,
+                                                 @"groups" : @[@"studyA"]},
+                                              @{ @"value" : @NO,
+                                                 @"groups" : @[@"control"]}
+                                              ]
+                               },
+                           ];
+    NSDictionary *profile = includeProfile ? @{@"questions": questions} : @{};
     
     NSDictionary *mapping = @{
         @"items": @[@{ @"group_name"            : @"control",
@@ -285,23 +355,12 @@
                        }
                   ],
         @"required": @(required),
-        @"title": @"Are you in Control?",
-        @"detail": @"Engineers and scientists like classifications. To help us better classify you, please answer this question.",
-        @"questions":
-        @[
-         @{
-             @"identifier": @"control_question",
-             @"text": @"Have you ever been diagnosed with XYZ?",
-             @"type": @"boolean",
-             @"optional": @(questionOptional),
-             @"valueMap": @[@{ @"value" : @YES,
-                               @"groups" : @[@"studyA"]},
-                            @{ @"value" : @NO,
-                               @"groups" : @[@"control"]}
-                            ]
-             },
-         ]
-        };
+        @"profile": profile,
+        @"survey": @{
+            @"title": @"Are you in Control?",
+            @"text": @"Engineers and scientists like classifications. To help us better classify you, please answer this question.",
+            @"questions":questions,
+            }};
     
     return [[APCDataGroupsManager alloc] initWithDataGroups:dataGroups mapping:mapping];
 }

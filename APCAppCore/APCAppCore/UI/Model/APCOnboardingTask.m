@@ -132,7 +132,7 @@ NSString *const kAPCSignUpShareAppStepIdentifier            = @"ShareApp";
 }
 
 - (ORKStep *)dataGroupsStep {
-    if (_dataGroupsStep) {
+    if (!_dataGroupsStep) {
         _dataGroupsStep = [[ORKStep alloc] initWithIdentifier:kAPCSignUpDataGroupsStepIdentifier];
     }
     return _dataGroupsStep;
