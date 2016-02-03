@@ -281,6 +281,42 @@
 
 }
 
+- (void)testStepResult_Control {
+    APCDataGroupsManager * manager = [self createDataGroupsManagerWithDataGroups:@[@"control", @"studyB"]];
+    
+    ORKStepResult *result = [manager stepResult];
+    
+    XCTAssertNotNil(result);
+    XCTAssertEqualObjects(result.identifier, APCDataGroupsStepIdentifier);
+    XCTAssertEqual(result.results.count, 1);
+    
+    ORKChoiceQuestionResult *questionResult = (ORKChoiceQuestionResult*)[result.results firstObject];
+    XCTAssertTrue([questionResult isKindOfClass:[ORKChoiceQuestionResult class]]);
+    XCTAssertEqualObjects(questionResult.identifier, @"control_question");
+    XCTAssertEqualObjects(questionResult.choiceAnswers, @[@NO]);
+}
+
+- (void)testStepResult_StudyA {
+    APCDataGroupsManager * manager = [self createDataGroupsManagerWithDataGroups:@[@"studyA", @"studyB"]];
+    
+    ORKStepResult *result = [manager stepResult];
+    
+    XCTAssertNotNil(result);
+    XCTAssertEqualObjects(result.identifier, APCDataGroupsStepIdentifier);
+    XCTAssertEqual(result.results.count, 1);
+    
+    ORKChoiceQuestionResult *questionResult = (ORKChoiceQuestionResult*)[result.results firstObject];
+    XCTAssertTrue([questionResult isKindOfClass:[ORKChoiceQuestionResult class]]);
+    XCTAssertEqualObjects(questionResult.identifier, @"control_question");
+    XCTAssertEqualObjects(questionResult.choiceAnswers, @[@YES]);
+}
+
+- (void)testStepResult_None {
+    APCDataGroupsManager * manager = [self createDataGroupsManagerWithDataGroups:@[@"studyB"]];
+    
+    XCTAssertNil([manager stepResult]);
+}
+
 #pragma mark - heper methods
 
 - (APCDataGroupsManager*)createDataGroupsManagerWithDataGroups:(NSArray*)dataGroups {
