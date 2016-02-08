@@ -288,6 +288,20 @@ typedef enum : NSUInteger {
     return [self dateByAddingDays: 1];
 }
 
+- (instancetype) startOfWeekGregorian
+{
+    NSCalendar *cal = [NSCalendar currentCalendar];
+    NSDateComponents *components = [cal components:(NSCalendarUnitDay | NSCalendarUnitWeekday | NSCalendarUnitMonth | NSCalendarUnitYear) fromDate:self];
+    int daysSinceStartOfWeek = (components.weekday - cal.firstWeekday) % 7;
+    [components setDay:[components day] - daysSinceStartOfWeek];
+    return [cal dateFromComponents:components];
+}
+
++ (instancetype) startOfWeekGregorian: (NSDate*) date
+{
+    return [date startOfWeekGregorian];
+}
+
 + (instancetype) startOfTomorrow: (NSDate*) date
 {
     NSCalendar *cal = [NSCalendar currentCalendar];
