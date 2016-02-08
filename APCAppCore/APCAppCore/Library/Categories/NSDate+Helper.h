@@ -80,8 +80,8 @@ static NSUInteger const kDateHelperDaysInAWeek = 7;
 + (NSUInteger)ageFromDateOfBirth:(NSDate *)dateOfBirth;
 + (instancetype) startOfDay: (NSDate*) date;
 + (instancetype) endOfDay: (NSDate*) date;
-- (instancetype) startOfWeek;
-+ (instancetype) startOfWeek: (NSDate*) date;
+- (instancetype) startOfWeekGregorian;
++ (instancetype) startOfWeekGregorian: (NSDate*) date;
 + (instancetype) startOfTomorrow: (NSDate*) date;
 + (instancetype) startOfYear: (NSDate*) date;
 
