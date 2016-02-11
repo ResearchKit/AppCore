@@ -278,8 +278,6 @@ static  NSString  *const  kSpatialSpanMemoryTouchSampleIsCorrectKey     = @"Memo
     memoryGameResults[kSpatialSpanMemorySummaryNumberOfFailuresKey] = @(result.numberOfFailures);
     memoryGameResults[kSpatialSpanMemorySummaryOverallScoreKey]     = @(result.score);
     
-    memoryGameResults[kItemKey] = kSpatialSpanMemorySummaryFilenameKey;
-    
     //
     //    Memory Game Records
     //
@@ -304,11 +302,13 @@ static  NSString  *const  kSpatialSpanMemoryTouchSampleIsCorrectKey     = @"Memo
         [gameRecords addObject:aGameRecord];
     }
     memoryGameResults[kSpatialSpanMemorySummaryGameRecordsKey] = gameRecords;
-    
-    NSDictionary  *serializableData = [APCJSONSerializer serializableDictionaryFromSourceDictionary: memoryGameResults];
     NSString *result_filename = [self filenameForFileResultIdentifier:result.identifier
                                                        stepIdentifier:nil
                                                             extension:@"json"];
+    memoryGameResults[kItemKey] = result_filename;
+    
+    NSDictionary  *serializableData = [APCJSONSerializer serializableDictionaryFromSourceDictionary: memoryGameResults];
+
     [archive insertDictionaryIntoArchive:serializableData filename:result_filename];
     return YES;
 }
