@@ -39,17 +39,53 @@
 
 + (UIFont*) appRegularFontWithSize: (CGFloat) size
 {
-    return [UIFont fontWithName:[APCAppearanceInfo valueForAppearanceKey:kRegularFontNameKey] size:size];
+    NSString* fontName = [APCAppearanceInfo valueForAppearanceKey:kRegularFontNameKey];
+    if ([fontName isEqualToString:kAPCAppearanceSystemFont])
+    {
+        if ([[UIFont class] respondsToSelector:@selector(systemFontOfSize:weight:)])
+        {
+            return [UIFont systemFontOfSize:size weight:UIFontWeightRegular];
+        }
+        else  // iOS version less than 8.2
+        {
+            return [UIFont systemFontOfSize:size];
+        }
+    }
+    return [UIFont fontWithName:fontName size:size];
 }
 
 + (UIFont*) appMediumFontWithSize: (CGFloat) size
 {
-    return [UIFont fontWithName:[APCAppearanceInfo valueForAppearanceKey:kMediumFontNameKey] size:size];
+    NSString* fontName = [APCAppearanceInfo valueForAppearanceKey:kMediumFontNameKey];
+    if ([fontName isEqualToString:kAPCAppearanceSystemFont])
+    {
+        if ([[UIFont class] respondsToSelector:@selector(systemFontOfSize:weight:)])
+        {
+            return [UIFont systemFontOfSize:size weight:UIFontWeightMedium];
+        }
+        else  // iOS version less than 8.2
+        {
+            return [UIFont boldSystemFontOfSize:size];
+        }
+    }
+    return [UIFont fontWithName:fontName size:size];
 }
 
 + (UIFont*) appLightFontWithSize: (CGFloat) size
 {
-    return [UIFont fontWithName:[APCAppearanceInfo valueForAppearanceKey:kLightFontNameKey] size:size];
+    NSString* fontName = [APCAppearanceInfo valueForAppearanceKey:kLightFontNameKey];
+    if ([fontName isEqualToString:kAPCAppearanceSystemFont])
+    {
+        if ([[UIFont class] respondsToSelector:@selector(systemFontOfSize:weight:)])
+        {
+            return [UIFont systemFontOfSize:size weight:UIFontWeightLight];
+        }
+        else  // iOS version less than 8.2
+        {
+            return [UIFont systemFontOfSize:size];
+        }
+    }
+    return [UIFont fontWithName:fontName size:size];
 }
 
 + (UIFont*) appNavBarTitleFont {
