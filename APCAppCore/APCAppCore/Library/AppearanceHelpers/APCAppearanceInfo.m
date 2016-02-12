@@ -34,6 +34,7 @@
 #import "APCAppearanceInfo.h"
 #import "UIColor+APCAppearance.h"
 #import "APCConstants.h"
+#import "UIFont+APCAppearance.h"
 
 static NSDictionary * localAppearanceDictionary;
 
@@ -49,9 +50,9 @@ static NSDictionary * localAppearanceDictionary;
 {
     return @{
              //Fonts
-             kRegularFontNameKey                : @"HelveticaNeue",
-             kMediumFontNameKey                 : @"HelveticaNeue-Medium",
-             kLightFontNameKey                  : @"HelveticaNeue-Light",
+             kRegularFontNameKey                : kAPCAppearanceSystemFont,
+             kMediumFontNameKey                 : kAPCAppearanceSystemFont,
+             kLightFontNameKey                  : kAPCAppearanceSystemFont,
              
              //Colors
              kPrimaryAppColorKey                : [UIColor colorWithRed:0.176 green:0.706 blue:0.980 alpha:1.000],  //#2db4fa
