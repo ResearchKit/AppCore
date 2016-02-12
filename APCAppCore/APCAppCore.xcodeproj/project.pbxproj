@@ -296,6 +296,7 @@
 		7BEFD7E11AD596070087F46C /* APCPassiveDataSink.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BEFD7DA1AD596070087F46C /* APCPassiveDataSink.m */; };
 		7BF54F971AA158E50081C935 /* APCHorizontalBottomThinLineView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7BF54F951AA158E50081C935 /* APCHorizontalBottomThinLineView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7BF54F981AA158E50081C935 /* APCHorizontalBottomThinLineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BF54F961AA158E50081C935 /* APCHorizontalBottomThinLineView.m */; };
+		803237A61C6E8A6E00208365 /* APCFudgeTestsToKnowAboutSwiftByAddingASwiftTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 803237A51C6E8A6E00208365 /* APCFudgeTestsToKnowAboutSwiftByAddingASwiftTestCase.swift */; };
 		806F24331B3388E700B50664 /* APCCMSSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 806F24321B3388E700B50664 /* APCCMSSupport.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		80A98DB61BFD11580060146F /* APCLocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = 80A98DB51BFD11580060146F /* APCLocalization.m */; };
 		80A98DCE1BFD49180060146F /* APCOnboarding.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 80A98DD01BFD49180060146F /* APCOnboarding.storyboard */; };
@@ -1036,6 +1037,8 @@
 		7BF54F901AA1354D0081C935 /* APCVerticalThinLineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCVerticalThinLineView.m; sourceTree = "<group>"; };
 		7BF54F951AA158E50081C935 /* APCHorizontalBottomThinLineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCHorizontalBottomThinLineView.h; sourceTree = "<group>"; };
 		7BF54F961AA158E50081C935 /* APCHorizontalBottomThinLineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCHorizontalBottomThinLineView.m; sourceTree = "<group>"; };
+		803237A41C6E8A6900208365 /* APCAppCoreTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "APCAppCoreTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		803237A51C6E8A6E00208365 /* APCFudgeTestsToKnowAboutSwiftByAddingASwiftTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APCFudgeTestsToKnowAboutSwiftByAddingASwiftTestCase.swift; sourceTree = "<group>"; };
 		806F24321B3388E700B50664 /* APCCMSSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = APCCMSSupport.h; path = CMS/APCCMSSupport.h; sourceTree = "<group>"; };
 		80A98DB01BFCFE430060146F /* APCLocalization.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = APCLocalization.h; path = Localization/APCLocalization.h; sourceTree = "<group>"; };
 		80A98DB51BFD11580060146F /* APCLocalization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCLocalization.m; sourceTree = "<group>"; };
@@ -3053,6 +3056,8 @@
 		F5F129D91A2F78490015982C /* APCAppCoreTests */ = {
 			isa = PBXGroup;
 			children = (
+				803237A51C6E8A6E00208365 /* APCFudgeTestsToKnowAboutSwiftByAddingASwiftTestCase.swift */,
+				803237A41C6E8A6900208365 /* APCAppCoreTests-Bridging-Header.h */,
 				CB1B241F1C57FE5A009DD367 /* Reminder Tests */,
 				FFFA23A71C20A49700727DA8 /* test files */,
 				F5F129E01A2F78490015982C /* Info.plist */,
@@ -3475,6 +3480,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = APC;
+				LastSwiftUpdateCheck = 0720;
 				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = "Apple, Inc.";
 				TargetAttributes = {
@@ -3922,6 +3928,7 @@
 				FF94698A1C1A2F0900CF7075 /* APCScheduleExpressionListSelectorTests.m in Sources */,
 				CBC2593B1C5838940091308E /* APCScheduleExpressionEnumeratorTests.m in Sources */,
 				FF9469881C1A2F0400CF7075 /* ORKOrderedTask+APCHelperTests.m in Sources */,
+				803237A61C6E8A6E00208365 /* APCFudgeTestsToKnowAboutSwiftByAddingASwiftTestCase.swift in Sources */,
 				0833AE1E1A76C016001D8AA0 /* (null) in Sources */,
 				CBD5DBF61C5806AD00AD654E /* APCTasksReminderManagerTests.m in Sources */,
 				FF94698B1C1A2F0900CF7075 /* APCScheduleExpressionParserTests.m in Sources */,
@@ -4116,6 +4123,7 @@
 		F5179B4019D09128001DCCB7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
@@ -4131,12 +4139,15 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = APCAppCoreTests;
+				SWIFT_OBJC_BRIDGING_HEADER = "APCAppCoreTests/APCAppCoreTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
 		F5179B4119D09128001DCCB7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
@@ -4148,6 +4159,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = APCAppCoreTests;
+				SWIFT_OBJC_BRIDGING_HEADER = "APCAppCoreTests/APCAppCoreTests-Bridging-Header.h";
 			};
 			name = Release;
 		};
@@ -4229,6 +4241,7 @@
 		F58767F519E4A20E00254897 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
@@ -4244,6 +4257,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = APCAppCoreTests;
+				SWIFT_OBJC_BRIDGING_HEADER = "APCAppCoreTests/APCAppCoreTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Development;
 		};
