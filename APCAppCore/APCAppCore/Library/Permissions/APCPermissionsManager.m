@@ -51,12 +51,17 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
     kPermissionsErrorAccessDenied = -100,
 };
 
+/*
+ * APCPermissionsManager should probably be a singleton itself, but to minimize changes
+ * and work with priorities, we are only making coreMotionPermissionStatus be static
+ * This solves the bug with it being reset to undetermined everytime a new instance is made
+ */
+static APCPermissionStatus coreMotionPermissionStatus;
+
 @interface APCPermissionsManager () <CLLocationManagerDelegate>
 
 @property (nonatomic, strong) CMMotionActivityManager *motionActivityManager;
 @property (nonatomic, strong) CLLocationManager *locationManager;
-
-@property (nonatomic) APCPermissionStatus coreMotionPermissionStatus;
 
 @property (nonatomic, copy) APCPermissionsBlock completionBlock;
 
@@ -80,8 +85,14 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidRegisterForRemoteNotifications:) name:APCAppDidRegisterUserNotification object:nil];
 
-        _coreMotionPermissionStatus = kPermissionStatusNotDetermined;
-                
+        // Make sure coreMotionPermissionStatus is in a valid state, and it isn't overwritten
+        // If we already have a value for it
+        if (coreMotionPermissionStatus != kPermissionStatusAuthorized &&
+            coreMotionPermissionStatus != kPermissionStatusDenied)
+        {
+            coreMotionPermissionStatus = kPermissionStatusNotDetermined;
+        }
+        
     }
     return self;
 }
@@ -153,7 +164,7 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
 #if TARGET_IPHONE_SIMULATOR
             isGranted = YES;
 #else
-            isGranted = self.coreMotionPermissionStatus == kPermissionStatusAuthorized;
+            isGranted = coreMotionPermissionStatus == kPermissionStatusAuthorized;
 #endif
         }
             break;
@@ -286,28 +297,22 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             break;
         case kAPCSignUpPermissionsTypeCoremotion:
         {
-            
-            
-            [self.motionActivityManager queryActivityStartingFromDate:[NSDate date] toDate:[NSDate date] toQueue:[NSOperationQueue new] withHandler:^(NSArray * __unused activities, NSError *error) {
+            // Usually this method is called on another thread, but since we are searching
+            // within same date to same date, it will return immediately, so put it on the main thread
+            [self.motionActivityManager queryActivityStartingFromDate:[NSDate date] toDate:[NSDate date] toQueue:[NSOperationQueue mainQueue] withHandler:^(NSArray * __unused activities, NSError *error) {
                 if (!error) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                    weakSelf.coreMotionPermissionStatus = kPermissionStatusAuthorized;
+                    coreMotionPermissionStatus = kPermissionStatusAuthorized;
                     if (completion) {
                         completion(YES, nil);
                     }
-                    });
                 } else if (error != nil && error.code == CMErrorMotionActivityNotAuthorized) {
-                    weakSelf.coreMotionPermissionStatus = kPermissionStatusDenied;
+                    coreMotionPermissionStatus = kPermissionStatusDenied;
                     
                     if (completion) {
-                        dispatch_async(dispatch_get_main_queue(), ^{
                         completion(NO, [self permissionDeniedErrorForType:kAPCSignUpPermissionsTypeCoremotion]);
-                        });
                     }
-                    
                 }
             }];
-            
         }
             break;
         case kAPCSignUpPermissionsTypeMicrophone:
