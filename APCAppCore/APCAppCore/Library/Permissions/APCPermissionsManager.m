@@ -56,7 +56,7 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
  * and work with priorities, we are only making coreMotionPermissionStatus be static
  * This solves the bug with it being reset to undetermined everytime a new instance is made
  */
-static APCPermissionStatus coreMotionPermissionStatus;
+static APCPermissionStatus coreMotionPermissionStatus = kPermissionStatusNotDetermined;
 
 @interface APCPermissionsManager () <CLLocationManagerDelegate>
 
@@ -83,16 +83,7 @@ static APCPermissionStatus coreMotionPermissionStatus;
         _locationManager = [[CLLocationManager alloc] init];
         _locationManager.delegate = self;
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidRegisterForRemoteNotifications:) name:APCAppDidRegisterUserNotification object:nil];
-
-        // Make sure coreMotionPermissionStatus is in a valid state, and it isn't overwritten
-        // If we already have a value for it
-        if (coreMotionPermissionStatus != kPermissionStatusAuthorized &&
-            coreMotionPermissionStatus != kPermissionStatusDenied)
-        {
-            coreMotionPermissionStatus = kPermissionStatusNotDetermined;
-        }
-        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidRegisterForRemoteNotifications:) name:APCAppDidRegisterUserNotification object:nil];        
     }
     return self;
 }
