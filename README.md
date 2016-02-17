@@ -14,6 +14,15 @@ including:
 
 We are excited about how helpful AppCore has been in the development of several ResearchKit apps. In order to help the ResearchKit community derive the most utility from the individual components in AppCore, we’re working hard with many developers to transition components of AppCore into the main ResearchKit repo. As a result, we will only be accepting bug fixes to AppCore moving forward and hope you’ll continue giving feature and UI enhancements once the pieces are fully integrated into ResearchKit’s repo.
 
+We posted AppCore at the time the ResearchKit was released as a way to provide functionality that the ResearchKit framework did not have at the time. Since then, there have been many improvements to ResearchKit which make it no longer necessary to use AppCore. 
+
+Before you decide to use AppCore, consider these ResearchKit alternatives for AppCore’s components:
+* Dashboard — Use the chart library in ResearchKit: http://researchkit.org/docs/docs/Charts/ChartsAndGraph.html
+* JSON serialization and deserialization — Use the ResearchKit has JSON serialization functionality: https://github.com/ResearchKit/ResearchKit/blob/master/Testing/ORKTest/ORKTest/ORKESerialization.h
+* Integration with Sage Bionetworks' Bridge service — Use [Sage Bridge SDK](https://github.com/Sage-Bionetworks/Bridge-iOS-SDK) instead.
+
+Also take a look the ResearchKit sample app (ORKSample) to see how to use the latest ResearchKit capabilities. https://github.com/ResearchKit/ResearchKit/tree/master/samples/ORKSample/ORKSample
+
 Building AppCore
 ----------------
 
