@@ -56,6 +56,7 @@ NSString *kAPCFeedTableViewCellIdentifier = @"APCFeedTableViewCell";
         self.titleLabel.font = [UIFont appMediumFontWithSize:19.0f];
         self.descriptionLabel.font = [UIFont appMediumFontWithSize:16.0f];
         self.dateLabel.font = [UIFont appMediumFontWithSize:14.0f];
+        self.backgroundColor = [UIColor whiteColor];
     }
     
     self.titleLabel.textColor = [UIColor appSecondaryColor1];
