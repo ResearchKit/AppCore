@@ -122,9 +122,13 @@ NSString * const kAPCOnboardingStoryboardName = @"APCOnboarding";
 
 - (APCPermissionsManager *)permissionsManager {
     if (!_permissionsManager) {
-        _permissionsManager = [self.provider permissionsManager];
+        _permissionsManager = [self createPermissionsManager];
     }
     return _permissionsManager;
+}
+
+- (APCPermissionsManager *)createPermissionsManager {
+    return [self.provider permissionsManager];
 }
 
 #pragma mark - APCOnboardingDelegate

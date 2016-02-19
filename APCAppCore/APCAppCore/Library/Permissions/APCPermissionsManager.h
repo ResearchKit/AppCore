@@ -47,9 +47,18 @@ typedef NS_ENUM(NSUInteger, APCPermissionStatus) {
 @property (copy, nonatomic) NSArray *userInfoItemTypes;
 @property (copy, nonatomic) NSArray *signUpPermissionTypes;
 
+/**
+ *  Designated initializer.
+ *
+ *  @param characteristicTypesToRead Array of strings defined as `HKCharacteristicTypeIdentifier*` constants
+ *  @param quantityTypesToRead Array of strings defined as `HKQuantityTypeIdentifier*` constants or dictionaries encoding other types (TODO: improve and document)
+ *  @param quantityTypesToWrite Array of strings defined as `HKQuantityTypeIdentifier*` constants or dictionaries encoding other types (TODO: improve and document)
+ *  @param userInfoItemTypes Array of numbers representing `APCUserInfoItemType` types
+ *  @param signUpPermissionTypes Array of numbers representing `APCSignUpPermissionsType` types
+ */
 - (id)initWithHealthKitCharacteristicTypesToRead:(NSArray *)characteristicTypesToRead
                     healthKitQuantityTypesToRead:(NSArray *)quantityTypesToRead
-                   healthKitQuantityTypesToWrite:(NSArray *)QuantityTypesToWrite
+                   healthKitQuantityTypesToWrite:(NSArray *)quantityTypesToWrite
                                userInfoItemTypes:(NSArray *)userInfoItemTypes
                            signUpPermissionTypes:(NSArray *)signUpPermissionTypes;
 

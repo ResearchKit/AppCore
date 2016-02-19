@@ -87,7 +87,7 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
 
 - (id)initWithHealthKitCharacteristicTypesToRead:(NSArray *)characteristicTypesToRead
                     healthKitQuantityTypesToRead:(NSArray *)quantityTypesToRead
-                   healthKitQuantityTypesToWrite:(NSArray *)QuantityTypesToWrite
+                   healthKitQuantityTypesToWrite:(NSArray *)quantityTypesToWrite
                                userInfoItemTypes:(NSArray *)userInfoItemTypes
                            signUpPermissionTypes:(NSArray *)signUpPermissionTypes
 {
@@ -96,7 +96,7 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
     if (self) {
         self.healthKitCharacteristicTypesToRead = characteristicTypesToRead;
         self.healthKitTypesToRead = quantityTypesToRead;
-        self.healthKitTypesToWrite = QuantityTypesToWrite;
+        self.healthKitTypesToWrite = quantityTypesToWrite;
         self.signUpPermissionTypes = signUpPermissionTypes;
         self.userInfoItemTypes = userInfoItemTypes;
     }
