@@ -39,8 +39,9 @@
  */
 
 FOUNDATION_EXPORT CGFloat const kAPCFadeAnimationDuration;
-FOUNDATION_EXPORT CGFloat const kAPCGrowAnimationDuration;
-FOUNDATION_EXPORT CGFloat const kAPCPopAnimationDuration;
+FOUNDATION_EXPORT CGFloat const kAPCStrokeAnimationDuration;
+FOUNDATION_EXPORT CGFloat const kAPCScaleAnimationDuration;
+FOUNDATION_EXPORT CGFloat const kAPCPathAnimationDuration;
 
 @protocol APCBaseGraphViewDelegate;
 
@@ -105,7 +106,7 @@ FOUNDATION_EXPORT CGFloat const kAPCPopAnimationDuration;
 
 - (void)refreshGraph;
 
-- (void)animateLayer:(CAShapeLayer *)shapeLayer withAnimationType:(APCGraphAnimationType)animationType toValue:(CGFloat)toValue startDelay:(CGFloat)delay;
+- (void)animateLayer:(CAShapeLayer *)shapeLayer withAnimationType:(APCGraphAnimationType)animationType toValue:(id)toValue startDelay:(CGFloat)delay;
 
 @end
 

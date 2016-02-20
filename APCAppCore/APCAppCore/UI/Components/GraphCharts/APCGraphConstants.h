@@ -34,8 +34,10 @@
 typedef NS_ENUM(NSUInteger, APCGraphAnimationType) {
     kAPCGraphAnimationTypeNone,
     kAPCGraphAnimationTypeFade,
-    kAPCGraphAnimationTypeGrow,
-    kAPCGraphAnimationTypePop
+    kAPCGraphAnimationTypeStrokeStart,
+    kAPCGraphAnimationTypeStrokeEnd,
+    kAPCGraphAnimationTypeScale,
+    kAPCGraphAnimationTypePath
 };
 
 typedef NS_ENUM(NSUInteger, APCGraphAxisType) {

@@ -1,40 +1,39 @@
-// 
-//  APCLineGraphView.m 
-//  APCAppCore 
-// 
-// Copyright (c) 2015, Apple Inc. All rights reserved. 
-// 
+//
+//  APCBarGraphView.m
+//  APCAppCore
+//
+// Copyright (c) 2015, Apple Inc. All rights reserved.
+//
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
-// 
+//
 // 1.  Redistributions of source code must retain the above copyright notice, this
 // list of conditions and the following disclaimer.
-// 
-// 2.  Redistributions in binary form must reproduce the above copyright notice, 
-// this list of conditions and the following disclaimer in the documentation and/or 
-// other materials provided with the distribution. 
-// 
-// 3.  Neither the name of the copyright holder(s) nor the names of any contributors 
-// may be used to endorse or promote products derived from this software without 
-// specific prior written permission. No license is granted to the trademarks of 
-// the copyright holders even if such marks are included in this software. 
-// 
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
-// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
-// ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE 
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL 
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR 
-// SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
-// CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, 
-// OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
-// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
-// 
- 
-#import "APCLineGraphView.h"
+//
+// 2.  Redistributions in binary form must reproduce the above copyright notice,
+// this list of conditions and the following disclaimer in the documentation and/or
+// other materials provided with the distribution.
+//
+// 3.  Neither the name of the copyright holder(s) nor the names of any contributors
+// may be used to endorse or promote products derived from this software without
+// specific prior written permission. No license is granted to the trademarks of
+// the copyright holders even if such marks are included in this software.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+// SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+// CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+// OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+
+#import "APCBarGraphView.h"
 #import "APCCircleView.h"
 #import "APCAxisView.h"
-#import "APCCubicCurveAlgorithm.h"
 
 static CGFloat const kYAxisPaddingFactor = 0.15f;
 static CGFloat const kAPCGraphLeftPadding = 10.f;
@@ -42,7 +41,25 @@ static CGFloat const kAxisMarkingRulerLength = 8.0f;
 
 static CGFloat const kSnappingClosenessFactor = 0.3f;
 
-@interface APCLineGraphView ()
+
+@interface APCShapeLayer : CAShapeLayer
+
++ (instancetype)layer;
+
+@property (nonatomic, strong) UIBezierPath *finalPath;
+
+@end
+
+@implementation APCShapeLayer
+
++ (instancetype)layer
+{
+    return [super layer];
+}
+
+@end
+
+@interface APCBarGraphView ()
 
 @property (nonatomic, strong) NSMutableArray *dataPoints;//actual data
 @property (nonatomic, strong) NSMutableArray *xAxisPoints;
@@ -64,22 +81,17 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 @property (nonatomic) NSInteger numberOfXAxisTitles;
 
 @property (nonatomic, strong) NSMutableArray *referenceLines;
-@property (nonatomic, strong) NSMutableArray *pathLines;
-@property (nonatomic, strong) NSMutableArray *dots;
-@property (nonatomic, strong) NSMutableArray *fillLayers;
+@property (nonatomic, strong) NSMutableArray *barLayers;
 
 @property (nonatomic) BOOL shouldAnimate;
 
-@property (nonatomic, strong) APCCubicCurveAlgorithm *smoothCurveGenerator;
-
 @end
 
-@implementation APCLineGraphView
+@implementation APCBarGraphView
 
 @synthesize tintColor = _tintColor;
 @synthesize maximumValue = _maximumValue;
 @synthesize minimumValue = _minimumValue;
-
 
 /********************************/
 #pragma mark - Init
@@ -111,20 +123,16 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     _xAxisTitles = [NSMutableArray new];
     
     _referenceLines = [NSMutableArray new];
-    _pathLines = [NSMutableArray new];
-    _dots = [NSMutableArray new];
-    _fillLayers = [NSMutableArray new];
+    _barLayers = [NSMutableArray new];
     
     _tintColor = [UIColor colorWithRed:244/255.f green:190/255.f blue:74/255.f alpha:1.f];
     
+    _hasDataPoint = NO;
     _shouldAnimate = YES;
     
-    _hasDataPoint = NO;
-    _showsFillPath = NO;
+    _barWidth = 20.f;
     
     [self setupViews];
-    
-    _smoothCurveGenerator = [APCCubicCurveAlgorithm new];
 }
 
 - (void)setupViews
@@ -170,8 +178,8 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 
 - (void)setDefaults
 {
-    _minimumValue = MAXFLOAT;
-    _maximumValue = -MAXFLOAT;
+    self.minimumValue = MAXFLOAT;
+    self.maximumValue = -MAXFLOAT;
 }
 
 - (NSString *)formatNumber:(NSNumber *)value
@@ -266,9 +274,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     
     [self calculateXAxisPoints];
     
-    [self.dots removeAllObjects];
-    [self.pathLines removeAllObjects];
-    [self.fillLayers removeAllObjects];
+    [self.barLayers removeAllObjects];
     
     for (int i=0; i<[self numberOfPlots]; i++) {
         if ([self numberOfPointsInPlot:i] <= 1) {
@@ -312,8 +318,8 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 {
     NSInteger numberOfPlots = 1;
     
-    if ([self.datasource respondsToSelector:@selector(numberOfPlotsInLineGraph:)]) {
-        numberOfPlots = [self.datasource numberOfPlotsInLineGraph:self];
+    if ([self.datasource respondsToSelector:@selector(numberOfPlotsInBarGraph:)]) {
+        numberOfPlots = [self.datasource numberOfPlotsInBarGraph:self];
     }
     
     return numberOfPlots;
@@ -323,8 +329,8 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 {
     NSInteger numberOfPoints = 0;
     
-    if ([self.datasource respondsToSelector:@selector(lineGraph:numberOfPointsInPlot:)]) {
-        numberOfPoints = [self.datasource lineGraph:self numberOfPointsInPlot:plotIndex];
+    if ([self.datasource respondsToSelector:@selector(barGraph:numberOfPointsInPlot:)]) {
+        numberOfPoints = [self.datasource barGraph:self numberOfPointsInPlot:plotIndex];
         
     }
     
@@ -335,8 +341,8 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 {
     _numberOfXAxisTitles = 0;
     
-    if ([self.datasource respondsToSelector:@selector(numberOfDivisionsInXAxisForLineGraph:)]) {
-        _numberOfXAxisTitles = [self.datasource numberOfDivisionsInXAxisForLineGraph:self];
+    if ([self.datasource respondsToSelector:@selector(numberOfDivisionsInXAxisForBarGraph:)]) {
+        _numberOfXAxisTitles = [self.datasource numberOfDivisionsInXAxisForBarGraph:self];
     } else {
         _numberOfXAxisTitles = [self numberOfPointsInPlot:0];
     }
@@ -344,11 +350,24 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     return _numberOfXAxisTitles;
 }
 
+- (UIColor *)colorForStackedLayerIndex:(NSInteger)index
+{
+    UIColor *fillColor = self.tintColor;
+    
+    if ([self.datasource respondsToSelector:@selector(barGraph:fillColorForStackedLayerAtIndex:)]) {
+        fillColor = [self.datasource barGraph:self fillColorForStackedLayerAtIndex:index];
+    } else {
+        fillColor = [self.tintColor colorWithAlphaComponent:(1 - 0.25*index)];
+    }
+    
+    return fillColor;
+}
+
 - (void)calculateXAxisPoints
 {
     [self.xAxisPoints removeAllObjects];
     
-    for (NSUInteger i=0 ; i < [self.dataPoints count]; i++) {
+    for (int i=0 ; i<[self.dataPoints count]; i++) {
         
         CGFloat positionOnXAxis = ((CGRectGetWidth(self.plotsView.frame) / (self.yAxisPoints.count - 1)) * i);
         positionOnXAxis = round(positionOnXAxis);
@@ -363,17 +382,13 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     self.hasDataPoint = NO;
     for (int i = 0; i<[self numberOfPointsInPlot:plotIndex]; i++) {
         
-        if ([self.datasource respondsToSelector:@selector(lineGraph:plot:valueForPointAtIndex:)]) {
-            CGFloat value = [self.datasource lineGraph:self plot:plotIndex valueForPointAtIndex:i];
+        if ([self.datasource respondsToSelector:@selector(barGraph:plot:valueForPointAtIndex:)]) {
+            APCStackedDataPoint *values = [self.datasource barGraph:self plot:plotIndex valueForPointAtIndex:i];
             
-            if (value) {
-                [self.dataPoints addObject:@(value)];
-            }
-            
-            if (value != NSNotFound){
+            if (values) {
+                [self.dataPoints addObject:values];
                 self.hasDataPoint = YES;
             }
-            
         }
     }
     
@@ -390,8 +405,8 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     [self.xAxisTitles removeAllObjects];
     
     for (int i=0; i<self.numberOfXAxisTitles; i++) {
-        if ([self.datasource respondsToSelector:@selector(lineGraph:titleForXAxisAtIndex:)]) {
-            NSString *title = [self.datasource lineGraph:self titleForXAxisAtIndex:i];
+        if ([self.datasource respondsToSelector:@selector(barGraph:titleForXAxisAtIndex:)]) {
+            NSString *title = [self.datasource barGraph:self titleForXAxisAtIndex:i];
             
             [self.xAxisTitles addObject:title];
         }
@@ -405,7 +420,6 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     self.xAxisView = [[APCAxisView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.plotsView.frame), CGRectGetWidth(self.plotsView.frame), kXAxisHeight)];
     self.xAxisView.landscapeMode = self.landscapeMode;
     self.xAxisView.tintColor = self.tintColor;
-    self.xAxisView.shouldHighlightLastLabel = self.shouldHighlightXaxisLastTitle;
     [self.xAxisView setupLabels:self.xAxisTitles forAxisType:kAPCGraphAxisTypeX];
     self.xAxisView.leftOffset = kAPCGraphLeftPadding;
     [self insertSubview:self.xAxisView belowSubview:self.plotsView];
@@ -510,7 +524,6 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
         }
     }
     
-    self.yAxisView.hidden = self.hidesYAxis;
 }
 
 - (void)drawhorizontalReferenceLines
@@ -554,153 +567,96 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 {
     [self prepareDataForPlotIndex:plotIndex];
     
-    if ([self numberOfValidValues] > 1) {
-        [self drawLinesForPlotIndex:plotIndex];
-    }
-    
-    if (!self.hidesDataPoints) {
-        [self drawPointCirclesForPlotIndex:plotIndex];
+    if ([self numberOfValidValues] > 0) {
+        [self drawBarsForPlotIndex:plotIndex];
     }
 }
 
-- (void)drawPointCirclesForPlotIndex:(NSInteger)plotIndex
+- (void)drawBarsForPlotIndex:(NSInteger)plotIndex
 {
+    CGFloat positionOnXAxis = CGFLOAT_MAX;
+    APCStackedDataPoint *positionOnYAxisValues = nil;
     
-    NSUInteger smallestArrayCount = self.yAxisPoints.count < self.xAxisPoints.count ?: self.xAxisPoints.count;
+    CGFloat barWidth = MIN(self.barWidth, [self maximumAllowedBarWidth]);
+    
+    for (NSUInteger i=0; i<self.yAxisPoints.count; i++) {
+        
+        APCStackedDataPoint *dataPointVal = self.dataPoints[i];
+        
+        if (dataPointVal.total > 0) {
 
-    for (NSUInteger i=0 ; i< smallestArrayCount; i++) {
-        
-        CGFloat dataPointVal = [self.dataPoints[i] floatValue];
-        
-        CGFloat positionOnXAxis = [self.xAxisPoints[i] floatValue];
-        
-        if (dataPointVal != NSNotFound) {
-            CGFloat positionOnYAxis = ((NSNumber*)self.yAxisPoints[i]).floatValue;
+            positionOnXAxis = [self.xAxisPoints[i] floatValue];
+            positionOnXAxis += [self offsetForPlotIndex:plotIndex];
             
-            CGFloat pointSize = self.isLandscapeMode ? 10.0f : 8.0f;
-            APCCircleView *point = [[APCCircleView alloc] initWithFrame:CGRectMake(0, 0, pointSize, pointSize)];
-            point.tintColor = (plotIndex == 0) ? self.tintColor : self.secondaryTintColor;
-            point.center = CGPointMake(positionOnXAxis, positionOnYAxis);
-            [self.plotsView.layer addSublayer:point.layer];
+            positionOnYAxisValues = ((APCStackedDataPoint *)self.yAxisPoints[i]);
             
-            if (self.shouldAnimate) {
-                point.alpha = 0;
-            }
+            CGFloat prevYValue = CGRectGetHeight(self.plotsView.bounds);
             
-            [self.dots addObject:point];
-        }
-    }
-}
-
-- (void)drawLinesForPlotIndex:(NSInteger)plotIndex
-{
-    UIBezierPath *fillPath = [UIBezierPath bezierPath];
-    
-    CGPoint position = CGPointMake(CGFLOAT_MAX, CGFLOAT_MAX);
-    CGPoint prevPosition = CGPointMake(CGFLOAT_MAX, CGFLOAT_MAX);
-    
-    NSMutableArray *pointsArray = [NSMutableArray new];
-    
-    NSUInteger smallestArrayCount = self.yAxisPoints.count < self.xAxisPoints.count ?: self.xAxisPoints.count;
-    
-    for (NSUInteger i=0; i< smallestArrayCount; i++) {
-        CGPoint point = CGPointMake([self.xAxisPoints[i] doubleValue], [self.yAxisPoints[i] doubleValue]);
-        [pointsArray addObject:[NSValue valueWithCGPoint:point]];
-    }
-    
-    NSArray *controlPoints = [self.smoothCurveGenerator controlPointsFromPoints:pointsArray];
-    
-    BOOL emptyDataPresent = NO;
-    
-    for (NSUInteger i=0; i<smallestArrayCount; i++) {
-        
-        CGFloat dataPointVal = [self.dataPoints[i] floatValue];
-        
-        if (dataPointVal != NSNotFound) {
-            
-            UIBezierPath *plotLinePath = [UIBezierPath bezierPath];
-            
-            position = CGPointMake([self.xAxisPoints[i] floatValue], [self.yAxisPoints[i] floatValue]);
-            
-            if (prevPosition.x != CGFLOAT_MAX) {
-                //Prev point exists
-                [plotLinePath moveToPoint:prevPosition];
-                if ([fillPath isEmpty]) {
-                    [fillPath moveToPoint:CGPointMake(prevPosition.x, CGRectGetHeight(self.plotsView.frame))];
-                    [fillPath addLineToPoint:prevPosition];
-                } 
-            }
-            
-            if (![plotLinePath isEmpty]) {
+            for (int j=0; j<[positionOnYAxisValues.stackedValues count]; j++) {
                 
-                if (self.smoothLines && (self.yAxisPoints.count>2)) {
-                    
-                    APCCubicCurveSegment *segment = controlPoints[i-1];
-                    
-                    [plotLinePath addCurveToPoint:position controlPoint1:segment.controlPoint1 controlPoint2:segment.controlPoint2];
-                    [fillPath addCurveToPoint:position controlPoint1:segment.controlPoint1 controlPoint2:segment.controlPoint2];
-                    
-                } else {
-                    [plotLinePath addLineToPoint:position];
-                    [fillPath addLineToPoint:position];
-                }
+                CGFloat yPositionValue = [positionOnYAxisValues.stackedValues[j] floatValue];
                 
-                CAShapeLayer *plotLineLayer = [CAShapeLayer layer];
-                plotLineLayer.path = plotLinePath.CGPath;
-                plotLineLayer.fillColor = [UIColor clearColor].CGColor;
-                plotLineLayer.strokeColor = (plotIndex == 0) ? self.tintColor.CGColor : self.secondaryTintColor.CGColor;
-                plotLineLayer.lineJoin = kCALineJoinRound;
-                plotLineLayer.lineCap = kCALineCapRound;
-                plotLineLayer.lineWidth = self.isLandscapeMode ? 3.0 : 2.0;
+                CGFloat barHeight = fabs(yPositionValue - prevYValue);
                 
-                if (emptyDataPresent) {
-                    plotLineLayer.lineDashPattern = self.isLandscapeMode ? @[@12, @7] : @[@12, @6];
-                    emptyDataPresent = NO;
-                }
+                UIBezierPath *barPath = [UIBezierPath bezierPathWithRect:CGRectMake(positionOnXAxis - barWidth/2, prevYValue - barHeight, barWidth, barHeight)];
                 
-                [self.plotsView.layer addSublayer:plotLineLayer];
+                APCShapeLayer *barLayer = [APCShapeLayer layer];
                 
                 if (self.shouldAnimate) {
-                    plotLineLayer.strokeEnd = 0;
+                    UIBezierPath *zeroHeightBarPath = [UIBezierPath bezierPathWithRect:CGRectMake(positionOnXAxis - barWidth/2, CGRectGetHeight(self.plotsView.bounds), barWidth, 0)];
+                    barLayer.path = zeroHeightBarPath.CGPath;
+                    barLayer.finalPath = barPath;
+                    
+                    [self.barLayers addObject:barLayer];
+                    
+                } else {
+                    barLayer.path = barPath.CGPath;
                 }
-                [self.pathLines addObject:plotLineLayer];
-            } else {
-                emptyDataPresent = NO;
+                
+                barLayer.fillColor = [self colorForStackedLayerIndex:j].CGColor;
+                [self.plotsView.layer addSublayer:barLayer];
+                
+                prevYValue = yPositionValue;
             }
-            
-        } else {
-            emptyDataPresent = YES;
         }
-        
-        prevPosition = position;
-    }
-    
-    [fillPath addLineToPoint:CGPointMake(position.x, CGRectGetHeight(self.plotsView.frame))];
-    
-    CAShapeLayer *fillPathLayer = [CAShapeLayer layer];
-    fillPathLayer.path = fillPath.CGPath;
-    fillPathLayer.fillColor = (plotIndex == 0) ? [self.tintColor colorWithAlphaComponent:0.4].CGColor : [self.secondaryTintColor colorWithAlphaComponent:0.2].CGColor;
-    [self.plotsView.layer addSublayer:fillPathLayer];
-    
-    if (self.shouldAnimate) {
-        fillPathLayer.opacity = 0;
-    }
-    
-    if (self.showsFillPath) {
-        [self.fillLayers addObject:fillPathLayer];
     }
 }
 
-/********************************/
+- (CGFloat)offsetForPlotIndex:(NSInteger)plotIndex
+{
+    CGFloat barWidth = MIN(self.barWidth, [self maximumAllowedBarWidth]);
+    
+    NSInteger numberOfPlots = [self numberOfPlots];
+    
+    CGFloat offset = 0;
+    
+    if (numberOfPlots%2 == 0) {
+        //Even
+        offset = (plotIndex - numberOfPlots/2 + 0.5) * barWidth;
+    } else {
+        //Odd
+        offset = (plotIndex - numberOfPlots/2) * barWidth;
+    }
+    
+    return offset;
+}
+
+- (CGFloat)maximumAllowedBarWidth
+{
+    CGFloat maxWidth = CGRectGetWidth(self.plotsView.bounds)/[self.dataPoints count];
+    maxWidth = maxWidth/[self numberOfPlots];
+    
+    return maxWidth;
+}
+
 #pragma mark - Graph Calculations
-/********************************/
 
 - (NSInteger)numberOfValidValues
 {
     NSInteger count = 0;
     
-    for (NSNumber *dataVal in self.dataPoints) {
-        if (dataVal.floatValue != NSNotFound) {
+    for (APCStackedDataPoint *dataVal in self.dataPoints) {
+        if (dataVal.stackedValues) {
             count ++;
         }
     }
@@ -712,17 +668,17 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     [self setDefaults];
     
     //Min
-    if ([self.datasource respondsToSelector:@selector(minimumValueForLineGraph:)]) {
-        self.minimumValue = [self.datasource minimumValueForLineGraph:self];
+    if ([self.datasource respondsToSelector:@selector(minimumValueForBarGraph:)]) {
+        self.minimumValue = [self.datasource minimumValueForBarGraph:self];
     } else {
         
         if (self.dataPoints.count) {
-            self.minimumValue = [self.dataPoints[0] floatValue];
+            self.minimumValue = ((APCStackedDataPoint *)self.dataPoints[0]).total;
             
             for (NSUInteger i=1; i<self.dataPoints.count; i++) {
-                NSNumber *num = self.dataPoints[i];
-                if ((self.minimumValue == NSNotFound) || (num.floatValue < self.minimumValue)) {
-                    self.minimumValue = num.floatValue;
+                CGFloat num = ((APCStackedDataPoint *)self.dataPoints[i]).total;
+                if ((self.minimumValue == NSNotFound) || (num < self.minimumValue)) {
+                    self.minimumValue = num;
                 }
             }
         }
@@ -730,16 +686,16 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     }
     
     //Max
-    if ([self.datasource respondsToSelector:@selector(maximumValueForLineGraph:)]) {
-        self.maximumValue = [self.datasource maximumValueForLineGraph:self];
+    if ([self.datasource respondsToSelector:@selector(maximumValueForBarGraph:)]) {
+        self.maximumValue = [self.datasource maximumValueForBarGraph:self];
     } else {
         if (self.dataPoints.count) {
-            self.maximumValue = [self.dataPoints[0] floatValue];
+            self.maximumValue = ((APCStackedDataPoint *)self.dataPoints[0]).total;
             
             for (NSUInteger i=1; i<self.dataPoints.count; i++) {
-                NSNumber *num = self.dataPoints[i];
-                if (((num.floatValue != NSNotFound) && (num.floatValue > self.maximumValue)) || (self.maximumValue == NSNotFound)) {
-                    self.maximumValue = num.floatValue;
+                CGFloat num = ((APCStackedDataPoint *)self.dataPoints[i]).total;
+                if (((num != NSNotFound) && (num > self.maximumValue)) || (self.maximumValue == NSNotFound)) {
+                    self.maximumValue = num;
                 }
             }
         }
@@ -754,19 +710,35 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     
     for (NSUInteger i=0; i<self.dataPoints.count; i++) {
         
-        CGFloat normalizedPointValue;
-        CGFloat dataPointValue = [self.dataPoints[i] floatValue];
+        APCStackedDataPoint *dataPointValue = (APCStackedDataPoint *)self.dataPoints[i];
         
-        if (dataPointValue == NSNotFound){
-            normalizedPointValue = canvasSize.height;
+        NSMutableArray *normalizedStackedValues = [NSMutableArray new];
+        
+        if (dataPointValue.total == 0){
+            
+            for (int j=0; j<[dataPointValue.stackedValues count]; j++) {
+                [normalizedStackedValues addObject:@(canvasSize.height)];
+            }
         } else if (self.minimumValue == self.maximumValue) {
-            normalizedPointValue = canvasSize.height/2;
+            
+            for (int j=0; j<[dataPointValue.stackedValues count]; j++) {
+                [normalizedStackedValues addObject:@(0)];
+            }
         } else {
             CGFloat range = self.maximumValue - self.minimumValue;
-            CGFloat normalizedValue = (dataPointValue - self.minimumValue)/range * canvasSize.height;
-            normalizedPointValue = canvasSize.height - normalizedValue;
+            
+            CGFloat sum = 0;
+            for (NSNumber *value in dataPointValue.stackedValues) {
+                sum += value.floatValue;
+                CGFloat normalizedValue = (sum - self.minimumValue)/range * canvasSize.height;
+                normalizedValue = canvasSize.height - normalizedValue;
+                
+                [normalizedStackedValues addObject:@(normalizedValue)];
+            }
         }
-        [normalizedPoints addObject:@(normalizedPointValue)];
+        
+        APCStackedDataPoint *normalizedStackedPoint = [[APCStackedDataPoint alloc] initWithStackedValues:[NSArray arrayWithArray:normalizedStackedValues]];
+        [normalizedPoints addObject:normalizedStackedPoint];
     }
     
     return [NSArray arrayWithArray:normalizedPoints];
@@ -791,61 +763,32 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
             }
         }
         
-        value = [self.dataPoints[positionIndex] floatValue];
+        value = ((APCStackedDataPoint *)self.dataPoints[positionIndex]).total;
         
     }
     
-    if (value == NSNotFound){
-        for (positionIndex = 0; positionIndex<self.xAxisPoints.count-1; positionIndex++) {
-            CGFloat xAxisPointVal = [self.xAxisPoints[positionIndex] floatValue];
-            if (xAxisPointVal > xPosition) {
-                break;
-            }
-        }
-        
-        NSInteger nextValidIndex = [self nextValidPositionIndexForPosition:positionIndex];
-        NSInteger prevValidIndex = [self prevValidPositionIndexForPosition:positionIndex];
-        
-        CGFloat x1 = [self.xAxisPoints[prevValidIndex] floatValue];
-        CGFloat x2 = [self.xAxisPoints[nextValidIndex] floatValue];
-        
-        CGFloat y1 = [self.dataPoints[prevValidIndex] floatValue];
-        CGFloat y2 = [self.dataPoints[nextValidIndex] floatValue];
-        
-        CGFloat slope = (y2 - y1)/(x2 - x1);
-        
-        //  (y2 - y3)/(x2 - x3) = m
-        value = y2 - (slope * (x2 - xPosition));
-    }
     return value;
 }
 
 //Scrubber Y position
 - (CGFloat)canvasYPointForXPosition:(CGFloat)xPosition
 {
-    CGFloat canvasYPosition;
+    BOOL snapped = [self.xAxisPoints containsObject:@(xPosition)];
     
-    NSUInteger positionIndex;
-    for (positionIndex = 0; positionIndex<self.xAxisPoints.count - 1; positionIndex++) {
-        CGFloat xAxisPointVal = [self.xAxisPoints[positionIndex] floatValue];
-        if (xAxisPointVal > xPosition) {
-            break;
+    CGFloat canvasYPosition = 0;
+    
+    NSUInteger positionIndex = 0;
+    
+    if (snapped) {
+        for (positionIndex = 0; positionIndex<self.xAxisPoints.count-1; positionIndex++) {
+            CGFloat xAxisPointVal = [self.xAxisPoints[positionIndex] floatValue];
+            if (xAxisPointVal == xPosition) {
+                break;
+            }
         }
+        
+        canvasYPosition = [[((APCStackedDataPoint *)self.yAxisPoints[positionIndex]).stackedValues lastObject] floatValue];
     }
-    
-    NSInteger nextValidIndex = [self nextValidPositionIndexForPosition:positionIndex];
-    NSInteger prevValidIndex = [self prevValidPositionIndexForPosition:positionIndex];
-    
-    CGFloat x1 = [self.xAxisPoints[prevValidIndex] floatValue];
-    CGFloat x2 = [self.xAxisPoints[nextValidIndex] floatValue];
-    
-    CGFloat y1 = [self.yAxisPoints[prevValidIndex] floatValue];
-    CGFloat y2 = [self.yAxisPoints[nextValidIndex] floatValue];
-    
-    CGFloat slope = (y2 - y1)/(x2 - x1);
-    
-    //  (y2 - y3)/(x2 - x3) = m
-    canvasYPosition = y2 - (slope * (x2 - xPosition));
     
     return canvasYPosition;
 }
@@ -856,7 +799,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     NSUInteger validPosition = positionIndex;
     
     while (validPosition < (self.dataPoints.count-1)) {
-        if ([self.dataPoints[validPosition] floatValue] != NSNotFound) {
+        if (((APCStackedDataPoint *)self.dataPoints[validPosition]).stackedValues) {
             break;
         }
         validPosition ++;
@@ -870,7 +813,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     NSInteger validPosition = positionIndex - 1;
     
     while (validPosition > 0) {
-        if ([self.dataPoints[validPosition] floatValue] != NSNotFound) {
+        if (((APCStackedDataPoint *)self.dataPoints[validPosition]).stackedValues) {
             break;
         }
         validPosition --;
@@ -886,7 +829,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     NSUInteger positionIndex;
     for (positionIndex = 0; positionIndex<self.xAxisPoints.count; positionIndex++) {
         
-        CGFloat dataPointVal = [self.dataPoints[positionIndex] floatValue];
+        CGFloat dataPointVal = ((APCStackedDataPoint *)self.dataPoints[positionIndex]).total;
         
         if (dataPointVal != NSNotFound) {
             CGFloat num = [self.xAxisPoints[positionIndex] floatValue];
@@ -898,6 +841,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
         
     }
     
+    
     return xPosition;
 }
 
@@ -907,24 +851,11 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 
 - (void)animateLayersSequentially
 {
-    CGFloat delay = 0.1;
+    CGFloat delay = 0.2;
     
-    for (NSUInteger i=0; i<self.dots.count; i++) {
-        CAShapeLayer *layer = [self.dots[i] shapeLayer];
-        [self animateLayer:layer withAnimationType:kAPCGraphAnimationTypeFade toValue:@1.0 startDelay:delay];
-        delay += 0.1;
-    }
-    
-    for (NSUInteger i=0; i<self.pathLines.count; i++) {
-        CAShapeLayer *layer = self.pathLines[i];
-        [self animateLayer:layer withAnimationType:kAPCGraphAnimationTypeStrokeEnd toValue:@1.0 startDelay:delay];
-        delay += kAPCStrokeAnimationDuration;
-    }
-    
-    for (NSUInteger i=0; i<self.fillLayers.count; i++) {
-        CAShapeLayer *layer = self.fillLayers[i];
-        [self animateLayer:layer withAnimationType:kAPCGraphAnimationTypeFade toValue:@1.0 startDelay:delay];
-        delay += kAPCStrokeAnimationDuration;
+    for (NSUInteger i=0; i<[self.barLayers count]; i++) {
+        APCShapeLayer *layer = self.barLayers[i];
+        [self animateLayer:layer withAnimationType:kAPCGraphAnimationTypePath toValue:(__bridge id)layer.finalPath.CGPath startDelay:delay];
     }
 }
 
@@ -953,11 +884,10 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 
 - (void)handlePanGesture:(UIPanGestureRecognizer *)gestureRecognizer
 {
-    
     if ((self.dataPoints.count > 0) && [self numberOfValidValues] > 0) {
         CGPoint location = [gestureRecognizer locationInView:self.plotsView];
         
-        location = CGPointMake(location.x - kAPCGraphLeftPadding, location.y);
+        location = CGPointMake(location.x, location.y);
         
         CGFloat maxX = round(CGRectGetWidth(self.plotsView.bounds));
         CGFloat minX = 0;
@@ -977,7 +907,6 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
         }
         
         if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
-            
             [self setScrubberViewsHidden:NO animated:YES];
             if ([self.delegate respondsToSelector:@selector(graphViewTouchesBegan:)]) {
                 [self.delegate graphViewTouchesBegan:self];
@@ -993,9 +922,11 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 
 - (void)scrubberViewForXPosition:(CGFloat)xPosition
 {
+    
     self.scrubberLine.center = CGPointMake(xPosition + kAPCGraphLeftPadding, self.scrubberLine.center.y);
     
     CGFloat scrubbingVal = [self valueForCanvasXPosition:(xPosition)];
+    
     self.scrubberLabel.text = [NSString stringWithFormat:@"%.0f", scrubbingVal];
     
     CGSize textSize = [self.scrubberLabel.text boundingRectWithSize:CGSizeMake(320, CGRectGetHeight(self.scrubberLabel.bounds)) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:@{NSFontAttributeName:self.scrubberLabel.font} context:nil].size;
@@ -1026,6 +957,37 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     if (self.dataPoints.count > 1) {
         [self scrubberViewForXPosition:xPosition];
     }
+}
+@end
+
+
+/**************************************/
+/* Stacked Data Point Implementation */
+/************************************/
+
+@implementation APCStackedDataPoint
+
+- (instancetype)initWithStackedValues:(NSArray *)values
+{
+    self = [super init];
+    if (self) {
+        _total = 0;
+        _stackedValues = values;
+    }
+    return self;
+}
+
+- (CGFloat)total
+{
+    CGFloat sum = 0;
+    
+    if (self.stackedValues) {
+        for (NSNumber *value in self.stackedValues) {
+            sum += [value floatValue];
+        }
+    }
+    
+    return sum;
 }
 
 @end
