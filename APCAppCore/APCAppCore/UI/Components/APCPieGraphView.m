@@ -197,8 +197,8 @@ static CGFloat const kAnimationDuration = 0.35f;
 {
     NSInteger count = 0;
     
-    if ([self.datasource respondsToSelector:@selector(numberOfSegmentsInPieGraphView)]) {
-        count = [self.datasource numberOfSegmentsInPieGraphView];
+    if ([self.datasource respondsToSelector:@selector(numberOfSegmentsInPieGraphView:)]) {
+        count = [self.datasource numberOfSegmentsInPieGraphView:self];
     }
     
     return count;

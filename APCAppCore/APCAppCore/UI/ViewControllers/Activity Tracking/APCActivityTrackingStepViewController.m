@@ -311,7 +311,7 @@ static NSInteger const kRegularFontSize = 17;
 
 #pragma mark - PieGraphView Delegates
 
--(NSInteger)numberOfSegmentsInPieGraphView
+-(NSInteger)numberOfSegmentsInPieGraphView:(APCPieGraphView *) __unused pieGraphView
 {
     return [self.allocationDataset count];
 }
