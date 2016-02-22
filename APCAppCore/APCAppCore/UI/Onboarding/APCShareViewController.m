@@ -179,6 +179,11 @@
                 
                 [mailComposeVC setMessageBody:self.shareMessage isHTML:NO];
                 
+                if (self.shareEmailSubject != nil)
+                {
+                    [mailComposeVC setSubject:self.shareEmailSubject];
+                }
+                
                 [self presentViewController:mailComposeVC animated:YES completion:NULL];
             } else {
                 NSString *message = NSLocalizedStringWithDefaultValue(@"Looks like you don't have Mail app setup. Please configure to share via email.", @"APCAppCore", APCBundle(), @"Looks like you don't have Mail app setup. Please configure to share via email.", nil);

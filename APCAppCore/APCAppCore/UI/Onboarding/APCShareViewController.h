@@ -51,4 +51,9 @@ typedef NS_ENUM(NSUInteger, APCShareType) {
 @property (nonatomic, strong) UIColor* textMessageNavTintColor;
 @property (nonatomic) BOOL textMessageStatusBarStyleLight;
 
+/*
+ * The subject of the share email template, if nil, none will be provided
+ */
+@property (nonatomic, strong) NSString* shareEmailSubject;
+
 @end
