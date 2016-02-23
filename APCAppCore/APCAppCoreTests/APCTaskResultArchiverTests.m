@@ -296,7 +296,7 @@
     XCTAssertNotNil(json);
     XCTAssertNotNil(json[@"startDate"]);
     XCTAssertNotNil(json[@"endDate"]);
-    XCTAssertEqualObjects(json[@"item"],@"cognitive.memory.spatialspan");
+    XCTAssertEqualObjects(json[@"item"],@"abc.json");
     XCTAssertEqualObjects(json[@"MemoryGameNumberOfFailures"],@2);
     XCTAssertEqualObjects(json[@"MemoryGameNumberOfGames"],@3);
     XCTAssertEqualObjects(json[@"MemoryGameOverallScore"],@1);

@@ -65,6 +65,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (nullable APCScene *)customInfoSceneForOnboarding:(APCOnboarding *)onboarding;
 
+/**
+ * Allow for a custom handling of onboarding
+ */
+- (BOOL)didHandleSignupFromViewController:(UIViewController*)viewController;
+
 @end
 
 /**

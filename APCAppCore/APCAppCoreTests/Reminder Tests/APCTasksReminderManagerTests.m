@@ -94,10 +94,10 @@ static NSString* const kBalanceName = @"Balance Assessment";
     UILocalNotification* tuesdayAt5Pm = self.reminderManager.scheduledLocalNotification[1];
     
     NSDate* nextSundayAt5PM = [NSDate dateWithISO8601String:@"2016-01-24T22:00:00+00:00"];
-    XCTAssertEqual(nextSundayAt5PM, sundayAt5Pm.fireDate);
+    XCTAssertEqualObjects(nextSundayAt5PM, sundayAt5Pm.fireDate);
     
     NSDate* nextTuesdayAt5PM = [NSDate dateWithISO8601String:@"2016-01-26T22:00:00+00:00"];
-    XCTAssertEqual(nextTuesdayAt5PM, tuesdayAt5Pm.fireDate);
+    XCTAssertEqualObjects(nextTuesdayAt5PM, tuesdayAt5Pm.fireDate);
 }
 
 - (void) testFphsSundayTuesdayNoneCompleteOnTuesday
@@ -116,10 +116,10 @@ static NSString* const kBalanceName = @"Balance Assessment";
     UILocalNotification* tuesdayAt5Pm = self.reminderManager.scheduledLocalNotification[1];
     
     NSDate* nextSundayAt5PM = [NSDate dateWithISO8601String:@"2016-01-31T22:00:00+00:00"];
-    XCTAssertEqual(nextSundayAt5PM, sundayAt5Pm.fireDate);
+    XCTAssertEqualObjects(nextSundayAt5PM, sundayAt5Pm.fireDate);
     
     NSDate* nextTuesdayAt5PM = [NSDate dateWithISO8601String:@"2016-01-26T22:00:00+00:00"];
-    XCTAssertEqual(nextTuesdayAt5PM, tuesdayAt5Pm.fireDate);
+    XCTAssertEqualObjects(nextTuesdayAt5PM, tuesdayAt5Pm.fireDate);
 }
 
 - (void) testFphsSundayTuesdayAllCompleteOnSundayScheduleNextWeek
@@ -143,10 +143,10 @@ static NSString* const kBalanceName = @"Balance Assessment";
     UILocalNotification* tuesdayAt5Pm = self.reminderManager.scheduledLocalNotification[1];
     
     NSDate* nextSundayAt5PM = [NSDate dateWithISO8601String:@"2016-01-31T22:00:00+00:00"];
-    XCTAssertEqual(nextSundayAt5PM, sundayAt5Pm.fireDate);
+    XCTAssertEqualObjects(nextSundayAt5PM, sundayAt5Pm.fireDate);
     
     NSDate* nextTuesdayAt5PM = [NSDate dateWithISO8601String:@"2016-02-2T22:00:00+00:00"];
-    XCTAssertEqual(nextTuesdayAt5PM, tuesdayAt5Pm.fireDate);
+    XCTAssertEqualObjects(nextTuesdayAt5PM, tuesdayAt5Pm.fireDate);
     
     XCTAssertEqual(NO, [sundayAt5Pm.alertBody containsString:kWalkingName]);
     XCTAssertEqual(NO,  [sundayAt5Pm.alertBody containsString:kCardiacName]);
@@ -177,10 +177,10 @@ static NSString* const kBalanceName = @"Balance Assessment";
     UILocalNotification* tuesdayAt5Pm = self.reminderManager.scheduledLocalNotification[1];
     
     NSDate* nextSundayAt5PM = [NSDate dateWithISO8601String:@"2016-01-31T22:00:00+00:00"];
-    XCTAssertEqual(nextSundayAt5PM, sundayAt5Pm.fireDate);
+    XCTAssertEqualObjects(nextSundayAt5PM, sundayAt5Pm.fireDate);
     
     NSDate* nextTuesdayAt5PM = [NSDate dateWithISO8601String:@"2016-02-2T22:00:00+00:00"];
-    XCTAssertEqual(nextTuesdayAt5PM, tuesdayAt5Pm.fireDate);
+    XCTAssertEqualObjects(nextTuesdayAt5PM, tuesdayAt5Pm.fireDate);
     
     XCTAssertEqual(NO, [sundayAt5Pm.alertBody containsString:kWalkingName]);
     XCTAssertEqual(NO,  [sundayAt5Pm.alertBody containsString:kCardiacName]);
@@ -244,10 +244,10 @@ static NSString* const kBalanceName = @"Balance Assessment";
     UILocalNotification* tuesdayAt5Pm = self.reminderManager.scheduledLocalNotification[1];
     
     NSDate* nextSundayAt5PM = [NSDate dateWithISO8601String:@"2016-01-25T00:00:00+00:00"];
-    XCTAssertEqual(nextSundayAt5PM, sundayAt5Pm.fireDate);
+    XCTAssertEqualObjects(nextSundayAt5PM, sundayAt5Pm.fireDate);
     
     NSDate* nextTuesdayAt5PM = [NSDate dateWithISO8601String:@"2016-01-27T00:00:00+00:00"];
-    XCTAssertEqual(nextTuesdayAt5PM, tuesdayAt5Pm.fireDate);
+    XCTAssertEqualObjects(nextTuesdayAt5PM, tuesdayAt5Pm.fireDate);
     
     [NSTimeZone setDefaultTimeZone:oldTimeZone];
     self.reminderManager.mockTimeZone = oldTimeZone;
@@ -267,7 +267,7 @@ static NSString* const kBalanceName = @"Balance Assessment";
     UILocalNotification* saturdayAt5Pm = self.reminderManager.scheduledLocalNotification[0];
     
     NSDate* thisSaturdayAt5PM = [NSDate dateWithISO8601String:@"2016-01-23T22:00:00+00:00"];
-    XCTAssertEqual(thisSaturdayAt5PM, saturdayAt5Pm.fireDate);
+    XCTAssertEqualObjects(thisSaturdayAt5PM, saturdayAt5Pm.fireDate);
     
     XCTAssertEqual(NSCalendarUnitDay, saturdayAt5Pm.repeatInterval);
 }
