@@ -96,38 +96,22 @@ static NSString* const kTestDataGroup = @"test_user";
          withTestUserPromptVc:(__weak UIViewController*)vc
                  onCompletion:(void (^)(NSError *))completionBlock
 {
-    [self signUpWithDataGroups:dataGroups
-          withTestUserPromptVc:vc
-              includeTestCheck:shouldPerformTestUserEmailCheckOnSignup
-                verifiedTester:NO
-                  onCompletion:completionBlock];
-}
-
-- (void) signUpWithDataGroups:(NSArray<NSString *> *)dataGroups
-         withTestUserPromptVc:(__weak UIViewController*)vc
-             includeTestCheck:(BOOL)includeTestCheck
-               verifiedTester:(BOOL)userVerifiedAsTester
-                 onCompletion:(void (^)(NSError *))completionBlock
-{
-    if (!includeTestCheck ||
+    if (!shouldPerformTestUserEmailCheckOnSignup ||
         ![[self.email lowercaseString] containsString:kHiddenTestEmailString])
     {
         [self signUpWithDataGroups:dataGroups onCompletion:completionBlock];
         return;
     }
     
-    if (!userVerifiedAsTester)
+    [self showTestUserVerificationAlertWithVc:vc onCompletion:^(BOOL userWantsToBeTester)
     {
-        [self showTestUserVerificationAlertWithDataGroups:dataGroups
-                                     withTestUserPromptVc:vc
-                                             onCompletion:completionBlock];
-    }
-    else
-    {
-        NSMutableArray* dataGroupsWithTest = [dataGroups mutableCopy];
-        [dataGroupsWithTest addObject:kTestDataGroup];
-        [self signUpWithDataGroups:dataGroupsWithTest onCompletion:completionBlock];
-    }
+        NSMutableArray* mutableDataGroups = [dataGroups mutableCopy];
+        if (userWantsToBeTester)
+        {
+            [mutableDataGroups addObject:kTestDataGroup];
+        }
+        [self signUpWithDataGroups:mutableDataGroups onCompletion:completionBlock];
+    }];
 }
 
 - (void) updateDataGroups:(NSArray<NSString *> *)dataGroups onCompletion:(void (^)(NSError * error))completionBlock
@@ -621,80 +605,60 @@ static NSString* const kTestDataGroup = @"test_user";
 #pragma mark - UI Methods
 /*********************************************************************************/
 
-- (void) showTestUserVerificationAlertWithDataGroups:(NSArray<NSString *> *)dataGroups
-                                withTestUserPromptVc:(__weak UIViewController*)vc
-                                        onCompletion:(void (^)(NSError *))completionBlock
+- (void) showTestUserVerificationAlertWithVc:(__weak UIViewController*)vc
+                                onCompletion:(void (^)(BOOL userWantsToBeTester))completionBlock
 {
     UIViewController* previousPresentedVc = vc.presentedViewController;
+    
+    void (^showVcBlock)() = ^
+    {
+        NSString* yesStr = NSLocalizedString(@"YES", @"Positive Answer");
+        NSString* noStr =  NSLocalizedString(@"NO", @"Negative Answer");
+        NSString* title =  NSLocalizedString(@"Are you a tester?", @"Question if the user is a quality assurance tester");
+        NSString* msg = [NSString stringWithFormat:NSLocalizedString(@"Based on your email address, we have detected you are a tester for %@.  If this is correct, select %@ so we can store your data separately.", @"Message informing user if and what happens if they are a tester"), [APCUtilities appName], [yesStr lowercaseString]];
+        
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:title
+                                                                       message:msg
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction* noAction = [UIAlertAction actionWithTitle:noStr
+                                                           style:UIAlertActionStyleDefault
+                                                         handler:^(__unused UIAlertAction * _Nonnull action)
+        {
+           if (previousPresentedVc != nil)
+           {
+               [vc presentViewController:previousPresentedVc animated:YES completion:nil];
+           }
+           completionBlock(NO);
+        }];
+        [alert addAction:noAction];
+        
+        UIAlertAction* yesAction = [UIAlertAction actionWithTitle:yesStr
+                                                            style:UIAlertActionStyleDefault
+                                                          handler:^(__unused UIAlertAction * _Nonnull action)
+        {
+            if (previousPresentedVc != nil)
+            {
+                [vc presentViewController:previousPresentedVc animated:YES completion:nil];
+            }
+            completionBlock(YES);
+        }];
+        [alert addAction:yesAction];
+        
+        [vc presentViewController:alert animated:alert completion:nil];
+    };
     
     if (previousPresentedVc != nil)
     {
         [vc dismissViewControllerAnimated:YES completion:^
         {
-            [self showTestUserVerificationAlertWithDataGroups:dataGroups
-                                         withTestUserPromptVc:vc
-                                                 onCompletion:completionBlock
-                                          previousPresentedVc:previousPresentedVc];
+            showVcBlock();
         }];
     }
     else
     {
-        [self showTestUserVerificationAlertWithDataGroups:dataGroups
-                                     withTestUserPromptVc:vc
-                                             onCompletion:completionBlock
-                                      previousPresentedVc:previousPresentedVc];
+        showVcBlock();
     }
-}
-
-- (void) showTestUserVerificationAlertWithDataGroups:(NSArray<NSString *> *)dataGroups
-                                withTestUserPromptVc:(__weak UIViewController*)vc
-                                        onCompletion:(void (^)(NSError *))completionBlock
-                                 previousPresentedVc:(UIViewController*)previousPresentedVc
-{
-    NSString* yesStr = NSLocalizedString(@"YES", @"Positive Answer");
-    NSString* noStr =  NSLocalizedString(@"NO", @"Negative Answer");
-    NSString* title =  NSLocalizedString(@"Are you a tester?", @"Question if the user is a quality assurance tester");
-    NSString* msg = [NSString stringWithFormat:NSLocalizedString(@"Based on your email address, we have detected you are a tester for %@.  If this is correct, select %@ so we can store your data separately.", @"Message informing user if and what happens if they are a tester"), [APCUtilities appName], [yesStr lowercaseString]];
-    
-    UIAlertController* alert = [UIAlertController alertControllerWithTitle:title
-                                                                   message:msg
-                                                            preferredStyle:UIAlertControllerStyleAlert];
-    
-    UIAlertAction* noAction = [UIAlertAction actionWithTitle:noStr
-                                                       style:UIAlertActionStyleDefault
-                                                     handler:^(__unused UIAlertAction * _Nonnull action)
-                               {
-                                   [self signUpWithDataGroups:dataGroups
-                                         withTestUserPromptVc:vc
-                                             includeTestCheck:NO
-                                               verifiedTester:NO
-                                                 onCompletion:completionBlock];
-                                   
-                                   if (previousPresentedVc != nil)
-                                   {
-                                       [vc presentViewController:previousPresentedVc animated:YES completion:nil];
-                                   }
-                               }];
-    [alert addAction:noAction];
-    
-    UIAlertAction* yesAction = [UIAlertAction actionWithTitle:yesStr
-                                                        style:UIAlertActionStyleDefault
-                                                      handler:^(__unused UIAlertAction * _Nonnull action)
-                                {
-                                    [self signUpWithDataGroups:dataGroups
-                                          withTestUserPromptVc:vc
-                                              includeTestCheck:YES
-                                                verifiedTester:YES
-                                                  onCompletion:completionBlock];
-                                    
-                                    if (previousPresentedVc != nil)
-                                    {
-                                        [vc presentViewController:previousPresentedVc animated:YES completion:nil];
-                                    }
-                                }];
-    [alert addAction:yesAction];
-    
-    [vc presentViewController:alert animated:alert completion:nil];
 }
 
 /*********************************************************************************/
