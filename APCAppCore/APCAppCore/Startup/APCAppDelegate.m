@@ -78,14 +78,14 @@ static NSString*    const kDemographicDataWasUploadedKey    = @"kDemographicData
 static NSString*    const kLastUsedTimeKey                  = @"APHLastUsedTime";
 static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterForegroundTime";
 
-@interface APCAppDelegate  ( )  <UITabBarControllerDelegate>
+@interface APCAppDelegate  ( )  <UITabBarControllerDelegate, ORKPasscodeDelegate>
 
 @property (nonatomic) BOOL isPasscodeShowing;
 @property (nonatomic, strong) UIView *secureView;
 @property (nonatomic, strong) NSError *catastrophicStartupError;
 @property (nonatomic, strong) NSOperationQueue *healthKitCollectorQueue;
 @property (nonatomic, strong) APCDemographicUploader  *demographicUploader;
-@property (nonatomic, strong) APCPasscodeViewController *passcodeViewController;
+@property (nonatomic, strong) UIViewController *passcodeViewController;
 
 @property (nonatomic, strong, readwrite) APCOnboardingManager *onboardingManager;
 
@@ -229,7 +229,7 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
 
 - (void)applicationWillTerminate:(UIApplication *) __unused application
 {
-    if (self.dataSubstrate.currentUser.signedIn && !self.isPasscodeShowing) {
+    if (self.onboardingManager.hasPasscode && !self.isPasscodeShowing) {
         [[NSUserDefaults standardUserDefaults] setObject: [NSNumber numberWithLong:uptime()] forKey:kLastUsedTimeKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
@@ -243,7 +243,7 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
 
 - (void)applicationDidEnterBackground:(UIApplication *) __unused application
 {
-    if (self.dataSubstrate.currentUser.signedIn && !self.isPasscodeShowing) {
+    if (self.onboardingManager.hasPasscode && !self.isPasscodeShowing) {
         [[NSUserDefaults standardUserDefaults] setObject: [NSNumber numberWithLong:uptime()] forKey:kLastUsedTimeKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
@@ -928,6 +928,8 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
 /*********************************************************************************/
 #pragma mark - Show Methods
 /*********************************************************************************/
+
+
 - (void) showAppropriateVC
 {
     if (self.hadCatastrophicStartupError)
@@ -940,7 +942,12 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
     }
     else if (self.dataSubstrate.currentUser.isSignedUp)
     {
-        [self showNeedsEmailVerification];
+        if (self.onboardingManager.hasPasscode) {
+            [self showPasscodeViewController];
+        }
+        else {
+            [self showNeedsEmailVerification];
+        }
     }
     else
     {
@@ -948,9 +955,21 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
     }
 }
 
+- (void)showAppropriateVCFollowingPasscodeEntry
+{
+    if (self.dataSubstrate.currentUser.isSignedIn)
+    {
+        [self showTabBar];
+    }
+    else
+    {
+        [self showNeedsEmailVerification];
+    }
+}
+
 - (void)showPasscodeIfNecessary
 {
-    if (self.dataSubstrate.currentUser.isSignedIn && !self.isPasscodeShowing) {
+    if (self.onboardingManager.hasPasscode && !self.isPasscodeShowing) {
         NSInteger numberOfMinutes = [self.dataSubstrate.parameters integerForKey:kNumberOfMinutesForPasscodeKey];
         NSNumber *lastPasscodeSuccessTime = [[NSUserDefaults standardUserDefaults] objectForKey:kLastUsedTimeKey];
         long timeDifference = uptime() - lastPasscodeSuccessTime.longValue;
@@ -963,8 +982,7 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
 - (void)showPasscodeViewController
 {
     if (!self.passcodeViewController) {
-        self.passcodeViewController = [[UIStoryboard storyboardWithName:@"APCPasscode" bundle:[NSBundle appleCoreBundle]] instantiateInitialViewController];
-        self.passcodeViewController.passcodeViewControllerDelegate = self;
+        self.passcodeViewController = [self.onboardingManager instantiatePasscodeViewControllerWithDelegate:self];
     }
     
     self.window.rootViewController = self.passcodeViewController;
@@ -984,12 +1002,15 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
 {
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:viewController];
     navController.navigationBar.translucent = NO;
-    
+    [self transitionToRootViewController:viewController];
+}
+
+- (void) transitionToRootViewController:(UIViewController*) viewController {
     [UIView transitionWithView:self.window
                       duration:0.6
                        options:UIViewAnimationOptionTransitionNone
                     animations:^{
-                        self.window.rootViewController = navController;
+                        self.window.rootViewController = viewController;
                     }
                     completion:nil];
 }
@@ -1074,18 +1095,37 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
 
 - (void)passcodeViewControllerDidSucceed:(APCPasscodeViewController *)__unused viewController
 {
+    [self passcodeViewControllerDidSucceed];
+}
+
+- (void)passcodeViewControllerDidFail:(APCPasscodeViewController *) __unused viewController
+{
+    [self passcodeViewControllerDidFail];
+}
+
+- (void)passcodeViewControllerDidFinishWithSuccess:(UIViewController *) __unused viewController {
+    [self passcodeViewControllerDidSucceed];
+}
+
+- (void)passcodeViewControllerDidFailAuthentication:(UIViewController *) __unused viewController {
+    [self passcodeViewControllerDidFail];
+}
+
+- (void)passcodeViewControllerDidSucceed
+{
     //set the tabbar controller as the rootViewController
-    [self showTabBar];
+    [self showAppropriateVCFollowingPasscodeEntry];
     self.isPasscodeShowing = NO;
     self.passcodeViewController = nil;
     [[NSUserDefaults standardUserDefaults] setObject: [NSNumber numberWithLong:uptime()] forKey:kLastUsedTimeKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-- (void)passcodeViewControllerDidFail:(APCPasscodeViewController *) __unused viewController
+- (void)passcodeViewControllerDidFail
 {
     //retain the passcodeViewController as the Root View Controller and do not reset timeout
     self.isPasscodeShowing = YES;
 }
+
 
 @end

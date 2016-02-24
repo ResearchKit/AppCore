@@ -39,6 +39,7 @@
 #import "APCPermissionsManager.h"
 #import "APCLog.h"
 #import "APCLocalization.h"
+#import "APCContainerStepViewController.h"
 
 #import "UIAlertController+Helper.h"
 #import "APCUser+Bridge.h"
@@ -393,8 +394,15 @@
 - (IBAction) next {
     [self loadProfileValuesInModel];
     
-    UIViewController *viewController = [[self onboarding] nextScene];
-    [self.navigationController pushViewController:viewController animated:YES];
+    if (self.parentStepViewController != nil) {
+        // If this has a step view controller parent then call goForward on the parent
+        [self.parentStepViewController goForward];
+    }
+    else {
+        // Otherwise, this uses APCOnboarding to handle navigation
+        UIViewController *viewController = [[self onboarding] nextScene];
+        [self.navigationController pushViewController:viewController animated:YES];
+    }
 }
 
 @end

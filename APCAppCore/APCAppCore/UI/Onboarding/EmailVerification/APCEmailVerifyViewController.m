@@ -359,14 +359,21 @@ static NSString * const kAPCPleaseCheckEmailAlertOkButton = @"OK";
 - (void) showThankYouPage
 {
     [self hideSpinnerUsingAnimation: YES andThenDoThis:^{
+        
+        if (self.step) {
+            // If this has a step then it is part of a taskViewController
+            [self goForward];
+        }
+        else {
 
-        // load the thank you view controller
-        UIStoryboard *sbOnboarding = [UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]];
-        APCThankYouViewController *allSetVC = (APCThankYouViewController *)[sbOnboarding instantiateViewControllerWithIdentifier:@"APCThankYouViewController"];
+            // load the thank you view controller
+            UIStoryboard *sbOnboarding = [UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]];
+            APCThankYouViewController *allSetVC = (APCThankYouViewController *)[sbOnboarding instantiateViewControllerWithIdentifier:@"APCThankYouViewController"];
 
-        allSetVC.emailVerified = YES;
+            allSetVC.emailVerified = YES;
 
-        [self presentViewController:allSetVC animated:YES completion:nil];
+            [self presentViewController:allSetVC animated:YES completion:nil];
+        }
 
     }];
 }

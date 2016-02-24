@@ -32,9 +32,12 @@
 // 
  
 #import <UIKit/UIKit.h>
+#import <ResearchKit/ResearchKit.h>
 #import "APCUserInfoViewController.h"
 #import "APCSignUpProgressing.h"
 #import "APCFormTextField.h"
+
+@class APCContainerStepViewController;
 
 @interface APCSignUpInfoViewController : APCUserInfoViewController <APCSignUpProgressing, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
@@ -56,5 +59,7 @@
 - (void)setupAppearance;
 
 - (APCUser *)user;
+
+@property (nonatomic, readonly) APCContainerStepViewController *parentStepViewController;
 
 @end

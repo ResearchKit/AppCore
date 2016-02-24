@@ -32,6 +32,7 @@
 // 
  
 #import "APCSignUpPermissionsViewController.h"
+#import "APCContainerStepViewController.h"
 #import "APCOnboardingManager.h"
 #import "APCPermissionsManager.h"
 #import "APCDataSubstrate.h"
@@ -309,6 +310,13 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
 
 #pragma mark - Permissions
 
+- (ORKStepViewController *)parentStepViewController {
+    if ([self.parentViewController isKindOfClass:[APCContainerStepViewController class]]) {
+        return (APCContainerStepViewController*)self.parentViewController;
+    }
+    return nil;
+}
+
 - (IBAction) next: (id) __unused sender
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -316,7 +324,11 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
     if (self.onboarding.taskType == kAPCOnboardingTaskTypeSignIn) {
         UIViewController *viewController = [[self onboarding] nextScene];
         [self.navigationController pushViewController:viewController animated:YES];
-    } else {
+    }
+    else if (self.parentStepViewController != nil) {
+        [self.parentStepViewController goForward];
+    }
+    else {
         [self finishOnboarding];
     }
 }
