@@ -34,6 +34,12 @@
 #import "APCUser+Bridge.h"
 #import "APCAppCore.h"
 
+// If YES, sign up process will check for special string in email addresses to auto-detect test users
+// If NO, sign up will treat all emails and data as valid in production
+static BOOL shouldPerformTestUserEmailCheckOnSignup = NO;
+static NSString* const kHiddenTestEmailString = @"+test";
+static NSString* const kTestDataGroup = @"test_user";
+
 @implementation APCUser (Bridge)
 
 - (BOOL) serverDisabled
@@ -43,6 +49,11 @@
 #else
     return ((APCAppDelegate*)[UIApplication sharedApplication].delegate).dataSubstrate.parameters.bypassServer;
 #endif
+}
+
++ (void) setShouldPerformTestUserEmailCheckOnSignup:(BOOL)shouldPerform
+{
+    shouldPerformTestUserEmailCheckOnSignup = shouldPerform;
 }
 
 - (void)signUpOnCompletion:(void (^)(NSError *))completionBlock
@@ -79,6 +90,28 @@
              });
          }];
     }
+}
+
+- (void) signUpWithDataGroups:(NSArray<NSString *> *)dataGroups
+         withTestUserPromptVc:(__weak UIViewController*)vc
+                 onCompletion:(void (^)(NSError *))completionBlock
+{
+    if (!shouldPerformTestUserEmailCheckOnSignup ||
+        ![[self.email lowercaseString] containsString:kHiddenTestEmailString])
+    {
+        [self signUpWithDataGroups:dataGroups onCompletion:completionBlock];
+        return;
+    }
+    
+    [self showTestUserVerificationAlertWithVc:vc onCompletion:^(BOOL userWantsToBeTester)
+    {
+        NSMutableArray* mutableDataGroups = [dataGroups mutableCopy];
+        if (userWantsToBeTester)
+        {
+            [mutableDataGroups addObject:kTestDataGroup];
+        }
+        [self signUpWithDataGroups:mutableDataGroups onCompletion:completionBlock];
+    }];
 }
 
 - (void) updateDataGroups:(NSArray<NSString *> *)dataGroups onCompletion:(void (^)(NSError * error))completionBlock
@@ -565,6 +598,66 @@
                  }
              });
          }];
+    }
+}
+
+/*********************************************************************************/
+#pragma mark - UI Methods
+/*********************************************************************************/
+
+- (void) showTestUserVerificationAlertWithVc:(__weak UIViewController*)vc
+                                onCompletion:(void (^)(BOOL userWantsToBeTester))completionBlock
+{
+    UIViewController* previousPresentedVc = vc.presentedViewController;
+    
+    void (^showVcBlock)() = ^
+    {
+        NSString* yesStr = NSLocalizedString(@"YES", @"Positive Answer");
+        NSString* noStr =  NSLocalizedString(@"NO", @"Negative Answer");
+        NSString* title =  NSLocalizedString(@"Are you a tester?", @"Question if the user is a quality assurance tester");
+        NSString* msg = [NSString stringWithFormat:NSLocalizedString(@"Based on your email address, we have detected you are a tester for %@.  If this is correct, select %@ so we can store your data separately.", @"Message informing user if and what happens if they are a tester"), [APCUtilities appName], [yesStr lowercaseString]];
+        
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:title
+                                                                       message:msg
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction* noAction = [UIAlertAction actionWithTitle:noStr
+                                                           style:UIAlertActionStyleDefault
+                                                         handler:^(__unused UIAlertAction * _Nonnull action)
+        {
+           if (previousPresentedVc != nil)
+           {
+               [vc presentViewController:previousPresentedVc animated:YES completion:nil];
+           }
+           completionBlock(NO);
+        }];
+        [alert addAction:noAction];
+        
+        UIAlertAction* yesAction = [UIAlertAction actionWithTitle:yesStr
+                                                            style:UIAlertActionStyleDefault
+                                                          handler:^(__unused UIAlertAction * _Nonnull action)
+        {
+            if (previousPresentedVc != nil)
+            {
+                [vc presentViewController:previousPresentedVc animated:YES completion:nil];
+            }
+            completionBlock(YES);
+        }];
+        [alert addAction:yesAction];
+        
+        [vc presentViewController:alert animated:alert completion:nil];
+    };
+    
+    if (previousPresentedVc != nil)
+    {
+        [vc dismissViewControllerAnimated:YES completion:^
+        {
+            showVcBlock();
+        }];
+    }
+    else
+    {
+        showVcBlock();
     }
 }
 
