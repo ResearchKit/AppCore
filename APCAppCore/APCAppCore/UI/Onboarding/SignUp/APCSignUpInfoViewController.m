@@ -39,6 +39,7 @@
 #import "APCLog.h"
 #import "APCStepProgressBar.h"
 #import "APCLocalization.h"
+#import "APCContainerStepViewController.h"
 
 #import "NSString+Helper.h"
 #import "UIColor+APCAppearance.h"
@@ -61,6 +62,13 @@ static CGFloat const kHeaderHeight = 127.0f;
 - (void)dealloc {
     _nameTextField.delegate = nil;
     _emailTextField.delegate = nil;
+}
+
+- (APCContainerStepViewController *)parentStepViewController {
+    if ([self.parentViewController isKindOfClass:[APCContainerStepViewController class]]) {
+        return (APCContainerStepViewController*)self.parentViewController;
+    }
+    return nil;
 }
 
 - (void)viewDidLoad {

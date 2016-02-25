@@ -140,4 +140,6 @@ extern NSString *const kNewsFeedStoryBoardKey;
 // List of the tabs to use to setup the tabbar
 - (NSMutableArray <APCScene *> *)tabBarScenes;
 
+- (void) transitionToRootViewController:(UIViewController*) viewController;
+
 @end

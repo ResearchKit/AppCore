@@ -63,6 +63,9 @@ NS_ASSUME_NONNULL_BEGIN
 /** Instantiates the view controller as defined by this scene. */
 - (UIViewController * _Nullable)instantiateViewController;
 
+/** Instantiates a step view controller as defined by this scene. */
+- (ORKStepViewController * _Nullable)instantiateStepViewController;
+
 @end
 
 NS_ASSUME_NONNULL_END

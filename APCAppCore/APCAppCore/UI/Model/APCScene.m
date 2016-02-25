@@ -32,7 +32,7 @@
 //
 
 #import "APCScene.h"
-
+#import "APCContainerStepViewController.h"
 
 @implementation APCScene
 
@@ -69,6 +69,14 @@
         _bundle = [NSBundle bundleForClass:[self class]];
     }
     return _bundle;
+}
+
+- (ORKStepViewController * _Nullable)instantiateStepViewController {
+    UIViewController *vc = [self instantiateViewController];
+    if (vc != nil && ![vc isKindOfClass:[ORKStepViewController class]]) {
+        vc = [[APCContainerStepViewController alloc] initWithStep:self.step childViewController:vc];
+    }
+    return (ORKStepViewController *)vc;
 }
 
 - (UIViewController * _Nullable)instantiateViewController {

@@ -307,7 +307,11 @@
 
 - (IBAction) okayTapped: (id) __unused sender
 {
-    if (self.goBackIfUserHitsOkay) {
+    if (self.step != nil) {
+        // If this is a step view controller then dismiss
+        [self goForward];
+    }
+    else if (self.goBackIfUserHitsOkay) {
         [self back];
     } else {
         [self.navigationController popToRootViewControllerAnimated:YES];

@@ -716,6 +716,10 @@
 		F5F12B2B1A2F864B0015982C /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5F12B2A1A2F864B0015982C /* libz.dylib */; };
 		F5F12B2D1A2F86550015982C /* libarchive.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5F12B2C1A2F86550015982C /* libarchive.dylib */; };
 		F5F12B2F1A2F86600015982C /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5F12B2E1A2F86600015982C /* libbz2.dylib */; };
+		FB4E46631C7D8EFB00CADC1F /* APCContainerStepViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = FB4E46611C7D8EFB00CADC1F /* APCContainerStepViewController.h */; };
+		FB4E46641C7D8EFB00CADC1F /* APCContainerStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB4E46621C7D8EFB00CADC1F /* APCContainerStepViewController.m */; };
+		FB4E468B1C7E6E0000CADC1F /* APCNavigationFooter.h in Headers */ = {isa = PBXBuildFile; fileRef = FB4E46891C7E6E0000CADC1F /* APCNavigationFooter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FB4E468C1C7E6E0000CADC1F /* APCNavigationFooter.m in Sources */ = {isa = PBXBuildFile; fileRef = FB4E468A1C7E6E0000CADC1F /* APCNavigationFooter.m */; };
 		FF0B4A961C29D98C00224EF7 /* APCScene.h in Headers */ = {isa = PBXBuildFile; fileRef = FF0B4A941C29D98C00224EF7 /* APCScene.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FF0B4A971C29D98C00224EF7 /* APCScene.m in Sources */ = {isa = PBXBuildFile; fileRef = FF0B4A951C29D98C00224EF7 /* APCScene.m */; };
 		FF44E50A1C1A3BB200F07DA9 /* BridgeSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF44E5091C1A3BB200F07DA9 /* BridgeSDK.framework */; };
@@ -1474,6 +1478,10 @@
 		F5F12B2A1A2F864B0015982C /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		F5F12B2C1A2F86550015982C /* libarchive.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libarchive.dylib; path = usr/lib/libarchive.dylib; sourceTree = SDKROOT; };
 		F5F12B2E1A2F86600015982C /* libbz2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbz2.dylib; path = usr/lib/libbz2.dylib; sourceTree = SDKROOT; };
+		FB4E46611C7D8EFB00CADC1F /* APCContainerStepViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCContainerStepViewController.h; sourceTree = "<group>"; };
+		FB4E46621C7D8EFB00CADC1F /* APCContainerStepViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCContainerStepViewController.m; sourceTree = "<group>"; };
+		FB4E46891C7E6E0000CADC1F /* APCNavigationFooter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCNavigationFooter.h; sourceTree = "<group>"; };
+		FB4E468A1C7E6E0000CADC1F /* APCNavigationFooter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCNavigationFooter.m; sourceTree = "<group>"; };
 		FF0B4A941C29D98C00224EF7 /* APCScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCScene.h; sourceTree = "<group>"; };
 		FF0B4A951C29D98C00224EF7 /* APCScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScene.m; sourceTree = "<group>"; };
 		FF44E5091C1A3BB200F07DA9 /* BridgeSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BridgeSDK.framework; path = "../../../../../Library/Developer/Xcode/DerivedData/Parkinson-dphbgsbdqdzhcbeketqhdiecbfyz/Build/Products/Debug-iphoneos/BridgeSDK.framework"; sourceTree = "<group>"; };
@@ -3032,6 +3040,8 @@
 				F5F129CF1A2F78490015982C /* APCPasscodeViewController.m */,
 				F5F129D01A2F78490015982C /* APCUserInfoViewController.h */,
 				F5F129D11A2F78490015982C /* APCUserInfoViewController.m */,
+				FB4E46611C7D8EFB00CADC1F /* APCContainerStepViewController.h */,
+				FB4E46621C7D8EFB00CADC1F /* APCContainerStepViewController.m */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -3039,6 +3049,8 @@
 		F5F129D21A2F78490015982C /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				FB4E46891C7E6E0000CADC1F /* APCNavigationFooter.h */,
+				FB4E468A1C7E6E0000CADC1F /* APCNavigationFooter.m */,
 				F5F129D31A2F78490015982C /* APCImageButton.h */,
 				F5F129D41A2F78490015982C /* APCImageButton.m */,
 				F5F129D51A2F78490015982C /* APCPasscodeView.h */,
@@ -3117,6 +3129,7 @@
 				5B09ED1F1ABC1BEF003C5061 /* APCLicenseInfoViewController.h in Headers */,
 				CFFDED731A95731F00B25581 /* APCMedicationTrackerCalendarWeeklyView.h in Headers */,
 				F5F12AF01A2F78490015982C /* APCDashboardProgressTableViewCell.h in Headers */,
+				FB4E468B1C7E6E0000CADC1F /* APCNavigationFooter.h in Headers */,
 				08EA2AB31A7AD564007549C0 /* UIImage+ImageEffects.h in Headers */,
 				5BB10C0A1A91D540002D2DD2 /* APCStudyVideoCollectionViewCell.h in Headers */,
 				7B558D281AE587DF00129167 /* CLLocation+APCAdditions.h in Headers */,
@@ -3375,6 +3388,7 @@
 				36257FBD1AA714B60060B95A /* CMMotionActivity+Helper.h in Headers */,
 				F5C363601A40E21000113129 /* APCSmartSurveyTask.h in Headers */,
 				087468061AA691A400BE2572 /* APCThankYouViewController.h in Headers */,
+				FB4E46631C7D8EFB00CADC1F /* APCContainerStepViewController.h in Headers */,
 				6C7346081A7ECD3B00DA9CD8 /* APCConsentTaskViewController.h in Headers */,
 				F5B9462A1A7309A20034C522 /* ZZChannelOutput.h in Headers */,
 				F5F12AB41A2F78490015982C /* APCSignUpPermissionsViewController.h in Headers */,
@@ -3766,6 +3780,7 @@
 				F5F129F31A2F78490015982C /* APCModel.xcdatamodeld in Sources */,
 				087255C11ABA390500586492 /* APCJSONSerializer.m in Sources */,
 				6C6AA2841B4E056C0056AD47 /* APCDataVerificationDaemon.m in Sources */,
+				FB4E46641C7D8EFB00CADC1F /* APCContainerStepViewController.m in Sources */,
 				F5F129E51A2F78490015982C /* APCDataMonitor.m in Sources */,
 				CFFDEDDE1A95734000B25581 /* APCFrequencyTableViewTimesCell.m in Sources */,
 				712AB44D1A9E692400556DA2 /* APCMotionHistoryData.m in Sources */,
@@ -3789,6 +3804,7 @@
 				EE64F4321B02517000A402A7 /* APCOnboardingManager.m in Sources */,
 				F5F12A7A1A2F78490015982C /* APCAxisView.m in Sources */,
 				6CD8B6751AC5011D0061E6D6 /* APCTaskReminder.m in Sources */,
+				FB4E468C1C7E6E0000CADC1F /* APCNavigationFooter.m in Sources */,
 				F5B947EC1A73272C0034C522 /* APCDebugWindow.m in Sources */,
 				7BBC9BCC1ACF416700E022DB /* APCDataCollector.m in Sources */,
 				F5B947C41A73272C0034C522 /* NSError+APCAdditions.m in Sources */,

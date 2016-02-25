@@ -106,6 +106,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)instantiateOnboardingForType:(APCOnboardingTaskType)type;
 
+- (BOOL)hasPasscode;
+- (UIViewController*)instantiatePasscodeViewControllerWithDelegate:(id)delegate;
+- (UIViewController*)instantiateChangePasscodeViewController;
+
+
 #pragma mark Onboarding
 
 /** Called when the user has agreed to and completed all consenting steps. */

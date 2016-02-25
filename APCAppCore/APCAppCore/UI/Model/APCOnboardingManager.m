@@ -38,6 +38,9 @@
 #import "APCUserInfoConstants.h"
 #import "APCLog.h"
 #import "APCScene.h"
+#import "APCPasscodeViewController.h"
+#import "APCChangePasscodeViewController.h"
+#import "NSBundle+Helper.h"
 
 #import <HealthKit/HealthKit.h>
 
@@ -217,6 +220,23 @@ NSString * const kAPCOnboardingStoryboardName = @"APCOnboarding";
         [self.dataGroupsManager setSurveyAnswerWithStepResult:stepResult];
         self.user.dataGroups = self.dataGroupsManager.dataGroups;
     }
+}
+
+#pragma mark - passcode
+
+- (BOOL)hasPasscode {
+    return self.user.isSignedIn;
+}
+
+- (UIViewController*)instantiatePasscodeViewControllerWithDelegate:(id)delegate {
+    APCPasscodeViewController *passcodeVC = [[UIStoryboard storyboardWithName:@"APCPasscode" bundle:[NSBundle appleCoreBundle]] instantiateInitialViewController];
+    passcodeVC.passcodeViewControllerDelegate = delegate;
+    return passcodeVC;
+}
+
+- (UIViewController*)instantiateChangePasscodeViewController {
+    APCChangePasscodeViewController *changePasscodeViewController = [[UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"ChangePasscodeVC"];
+    return changePasscodeViewController;
 }
 
 @end

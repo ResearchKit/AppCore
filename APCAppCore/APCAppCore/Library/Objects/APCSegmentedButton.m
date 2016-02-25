@@ -80,6 +80,9 @@
     if ([self.delegate respondsToSelector:@selector(segmentedButtonPressed:selectedIndex:)]) {
         [self.delegate segmentedButtonPressed:button selectedIndex:self.selectedIndex];
     }
+    if ([self.delegate respondsToSelector:@selector(segmentedButton:didSelectIndex:)]) {
+        [self.delegate segmentedButton:self didSelectIndex:self.selectedIndex];
+    }
     
 }
 

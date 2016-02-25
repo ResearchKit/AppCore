@@ -48,6 +48,8 @@
 #import "APCUser+Bridge.h"
 #import "NSError+APCAdditions.h"
 #import "APCLocalization.h"
+#import "APCContainerStepViewController.h"
+#import "APCNavigationFooter.h"
 
 static NSString *kInternetNotAvailableErrorMessage1 = @"Internet Not Connected";
 static NSString *kInternetNotAvailableErrorMessage2 = @"BackendServer Not Reachable";
@@ -55,7 +57,7 @@ static NSString * const kInternalMaxParticipantsMessage = @"has reached the limi
 
 static CGFloat kHeaderHeight = 157.0f;
 
-@interface APCSignUpGeneralInfoViewController () <APCTermsAndConditionsViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, APCFormTextFieldDelegate>
+@interface APCSignUpGeneralInfoViewController () <APCTermsAndConditionsViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, APCFormTextFieldDelegate, APCNavigationFooterDelegate>
 
 @property (nonatomic, strong) APCPermissionsManager *permissionsManager;
 @property (nonatomic) BOOL permissionGranted;
@@ -71,6 +73,14 @@ static CGFloat kHeaderHeight = 157.0f;
 
 @implementation APCSignUpGeneralInfoViewController
 
+- (UIBarButtonItem *)nextBarButton {
+    UIBarButtonItem *overrideBtn = self.parentStepViewController.cancelButtonItem;
+    if (overrideBtn != nil) {
+        return overrideBtn;
+    }
+    return _nextBarButton;
+}
+
 #pragma mark - View Life Cycle
 
 - (void) viewDidLoad {
@@ -85,18 +95,22 @@ static CGFloat kHeaderHeight = 157.0f;
     self.permissionButton.attributed = NO;
     self.permissionButton.alignment = kAPCPermissionButtonAlignmentLeft;
     
-    self.permissionsManager = [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager].permissionsManager;
-    
-    __weak typeof(self) weakSelf = self;
-    [self.permissionsManager requestForPermissionForType:kAPCSignUpPermissionsTypeHealthKit withCompletion:^(BOOL granted, NSError * __unused error) {
-        if (granted) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                weakSelf.permissionGranted = YES;
-                weakSelf.items = [self prepareContent];
-                [weakSelf.tableView reloadData];
-            });
-        }
-    }];
+    // Do NOT use info from HealthKit if there is a step associated with this
+    // view controller. In that case, permissions will be asked for later.
+    if (self.parentStepViewController == nil) {
+        self.permissionsManager = [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager].permissionsManager;
+        
+        __weak typeof(self) weakSelf = self;
+        [self.permissionsManager requestForPermissionForType:kAPCSignUpPermissionsTypeHealthKit withCompletion:^(BOOL granted, NSError * __unused error) {
+            if (granted) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    weakSelf.permissionGranted = YES;
+                    weakSelf.items = [self prepareContent];
+                    [weakSelf.tableView reloadData];
+                });
+            }
+        }];
+    }
     
     //Set Default Values
     [self.profileImageButton setImage:[UIImage imageNamed:@"profilePlaceholder"] forState:UIControlStateNormal];
@@ -149,10 +163,17 @@ static CGFloat kHeaderHeight = 157.0f;
 
 - (void)setupNavAppearance
 {
-    UIBarButtonItem *backBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
-                                                                                   target:self
-                                                                                   action:@selector(back)];
-    [self.navigationItem setLeftBarButtonItem:backBarButton];
+    if (self.parentStepViewController != nil) {
+        NSString *nextTitle = NSLocalizedStringWithDefaultValue(@"APC_NEXT_TITLE", nil, APCBundle(), @"Next", @"Title of the 'Next' button");
+        self.parentStepViewController.cancelButtonItem = [[UIBarButtonItem alloc]initWithTitle:nextTitle style:UIBarButtonItemStylePlain target:self action:@selector(next)];
+    }
+    else {
+        UIBarButtonItem *backBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+                                                                                       target:self
+                                                                                       action:@selector(back)];
+        [self.navigationItem setLeftBarButtonItem:backBarButton];
+    }
+    
     
     self.nextBarButton.enabled = NO;
 }
@@ -665,8 +686,19 @@ static CGFloat kHeaderHeight = 157.0f;
         {
             [spinnerController dismissViewControllerAnimated:NO completion:^{
                 
-                UIViewController *viewController = [[self onboarding] nextScene];
-                [weakSelf.navigationController pushViewController:viewController animated:YES];
+                if (self.parentStepViewController != nil) {
+                    
+                    // hack-around to set the signup flag
+                    self.user.signedUp = YES;
+                    
+                    // If this has a step view controller parent then call goForward on the parent
+                    [self.parentStepViewController goForward];
+                }
+                else {
+                    // Otherwise, this uses APCOnboarding to handle navigation
+                    UIViewController *viewController = [[self onboarding] nextScene];
+                    [weakSelf.navigationController pushViewController:viewController animated:YES];
+                }
             }];
         }
     }];
@@ -723,6 +755,10 @@ static CGFloat kHeaderHeight = 157.0f;
 {
     // Disable the secret button to do nothing.
     return;
+}
+
+- (void)goForward {
+    [self next];
 }
 
 - (IBAction)next

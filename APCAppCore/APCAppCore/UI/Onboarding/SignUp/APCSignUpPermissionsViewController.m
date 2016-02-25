@@ -32,6 +32,7 @@
 // 
  
 #import "APCSignUpPermissionsViewController.h"
+#import "APCContainerStepViewController.h"
 #import "APCOnboardingManager.h"
 #import "APCPermissionsManager.h"
 #import "APCDataSubstrate.h"
@@ -41,6 +42,7 @@
 #import "APCStepProgressBar.h"
 #import "APCCustomBackButton.h"
 #import "APCLocalization.h"
+#import "APCNavigationFooter.h"
 
 #import "UIColor+APCAppearance.h"
 #import "NSBundle+Helper.h"
@@ -51,7 +53,7 @@
 
 static CGFloat const kTableViewRowHeight                 = 200.0f;
 
-@interface APCSignUpPermissionsViewController () <UITableViewDelegate, UITableViewDataSource, APCPermissionCellDelegate>
+@interface APCSignUpPermissionsViewController () <UITableViewDelegate, UITableViewDataSource, APCPermissionCellDelegate, APCNavigationFooterDelegate>
 
 @property (nonatomic, strong) APCPermissionsManager *permissionsManager;
 
@@ -93,6 +95,11 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
     [super viewDidLoad];
     self.permissions = [self prepareData].mutableCopy;
     [self setupNavAppearance];
+    
+    // Remove the navigation footer if unused
+    if ([self parentStepViewController] == nil) {
+        self.tableView.tableFooterView = nil;
+    }
     
 }
 
@@ -309,6 +316,17 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
 
 #pragma mark - Permissions
 
+- (ORKStepViewController *)parentStepViewController {
+    if ([self.parentViewController isKindOfClass:[APCContainerStepViewController class]]) {
+        return (APCContainerStepViewController*)self.parentViewController;
+    }
+    return nil;
+}
+
+- (void)goForward {
+    [self next:nil];
+}
+
 - (IBAction) next: (id) __unused sender
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -316,7 +334,11 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
     if (self.onboarding.taskType == kAPCOnboardingTaskTypeSignIn) {
         UIViewController *viewController = [[self onboarding] nextScene];
         [self.navigationController pushViewController:viewController animated:YES];
-    } else {
+    }
+    else if (self.parentStepViewController != nil) {
+        [self.parentStepViewController goForward];
+    }
+    else {
         [self finishOnboarding];
     }
 }

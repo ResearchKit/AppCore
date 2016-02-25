@@ -1031,7 +1031,8 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             case kAPCSettingsItemTypePasscode:
             {
                 if (!self.isEditing) {
-                    APCChangePasscodeViewController *changePasscodeViewController = [[UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"ChangePasscodeVC"];
+                    APCOnboardingManager *manager = [(id<APCOnboardingManagerProvider>)[[UIApplication sharedApplication] delegate] onboardingManager];
+                    UIViewController *changePasscodeViewController = [manager instantiateChangePasscodeViewController];
                     [self.navigationController presentViewController:changePasscodeViewController animated:YES completion:nil];
                 }
                 else {
