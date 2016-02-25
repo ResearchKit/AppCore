@@ -40,12 +40,13 @@
 #import "APCLog.h"
 #import "APCLocalization.h"
 #import "APCContainerStepViewController.h"
+#import "APCNavigationFooter.h"
 
 #import "UIAlertController+Helper.h"
 #import "APCUser+Bridge.h"
 
 
-@interface APCSignUpMedicalInfoViewController ()
+@interface APCSignUpMedicalInfoViewController () <APCNavigationFooterDelegate>
 
 @property (nonatomic, strong) APCPermissionsManager *permissionsManager;
 @property (nonatomic) BOOL permissionGranted;
@@ -79,6 +80,10 @@
                 });
             }
         }];
+    }
+    
+    if (self.parentStepViewController == nil) {
+        self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 44)];
     }
     
     self.title = NSLocalizedStringWithDefaultValue(@"Additional Information", @"APCAppCore", APCBundle(), @"Additional Information", @"Additional Information");
@@ -389,6 +394,10 @@
         }
     }
     
+}
+
+- (void)goForward {
+    [self next];
 }
 
 - (IBAction) next {

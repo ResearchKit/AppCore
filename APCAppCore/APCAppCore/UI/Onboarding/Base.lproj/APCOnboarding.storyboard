@@ -1326,20 +1326,23 @@
             </objects>
             <point key="canvasLocation" x="224" y="2415"/>
         </scene>
-        <!--Additional Information-->
+        <!--Additional Info-->
         <scene sceneID="lj2-4X-z4Y">
             <objects>
-                <tableViewController storyboardIdentifier="APCSignUpMedicalInfoViewController" id="Plg-FM-GW9" customClass="APCSignUpMedicalInfoViewController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="APCSignUpMedicalInfoViewController" id="Plg-FM-GW9" userLabel="Additional Info" customClass="APCSignUpMedicalInfoViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="onDrag" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="65" sectionHeaderHeight="22" sectionFooterHeight="22" id="6vu-NN-B7Z">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.97254901959999995" green="0.97254901959999995" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="separatorColor" red="0.85098039219999999" green="0.85098039219999999" blue="0.85098039219999999" alpha="1" colorSpace="calibratedRGB"/>
                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                        <view key="tableFooterView" contentMode="scaleToFill" id="gV4-YU-vnP">
-                            <rect key="frame" x="0.0" y="380" width="320" height="41"/>
+                        <view key="tableFooterView" contentMode="scaleToFill" id="gV4-YU-vnP" customClass="APCNavigationFooter">
+                            <rect key="frame" x="0.0" y="380" width="320" height="84"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.97254901959999995" green="0.97254901959999995" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <outlet property="delegate" destination="Plg-FM-GW9" id="XoO-Vr-9Xy"/>
+                            </connections>
                         </view>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="APCDefaultTableViewCell" id="lJ6-Qj-KGv" customClass="APCDefaultTableViewCell">
@@ -1557,11 +1560,19 @@
         <!--Permissions-->
         <scene sceneID="feY-9J-9za">
             <objects>
-                <tableViewController storyboardIdentifier="APCSignUpPermissionsViewController" id="gi8-ng-0fk" customClass="APCSignUpPermissionsViewController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="APCSignUpPermissionsViewController" id="gi8-ng-0fk" userLabel="Permissions" customClass="APCSignUpPermissionsViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="195" sectionHeaderHeight="22" sectionFooterHeight="22" id="bQj-Om-9lG">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.97254901959999995" green="0.97254901959999995" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>
+                        <view key="tableFooterView" contentMode="scaleToFill" id="4oe-zK-vQ9" customClass="APCNavigationFooter">
+                            <rect key="frame" x="0.0" y="286" width="320" height="84"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <connections>
+                                <outlet property="delegate" destination="gi8-ng-0fk" id="mEG-EE-JHN"/>
+                            </connections>
+                        </view>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="APCPermissionsCell" rowHeight="200" id="vFr-f4-IcR" customClass="APCPermissionsCell">
                                 <rect key="frame" x="0.0" y="86" width="320" height="200"/>

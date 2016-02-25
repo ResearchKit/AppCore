@@ -49,6 +49,7 @@
 #import "NSError+APCAdditions.h"
 #import "APCLocalization.h"
 #import "APCContainerStepViewController.h"
+#import "APCNavigationFooter.h"
 
 static NSString *kInternetNotAvailableErrorMessage1 = @"Internet Not Connected";
 static NSString *kInternetNotAvailableErrorMessage2 = @"BackendServer Not Reachable";
@@ -56,7 +57,7 @@ static NSString * const kInternalMaxParticipantsMessage = @"has reached the limi
 
 static CGFloat kHeaderHeight = 157.0f;
 
-@interface APCSignUpGeneralInfoViewController () <APCTermsAndConditionsViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, APCFormTextFieldDelegate>
+@interface APCSignUpGeneralInfoViewController () <APCTermsAndConditionsViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, APCFormTextFieldDelegate, APCNavigationFooterDelegate>
 
 @property (nonatomic, strong) APCPermissionsManager *permissionsManager;
 @property (nonatomic) BOOL permissionGranted;
@@ -754,6 +755,10 @@ static CGFloat kHeaderHeight = 157.0f;
 {
     // Disable the secret button to do nothing.
     return;
+}
+
+- (void)goForward {
+    [self next];
 }
 
 - (IBAction)next

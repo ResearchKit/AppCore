@@ -42,6 +42,7 @@
 #import "APCStepProgressBar.h"
 #import "APCCustomBackButton.h"
 #import "APCLocalization.h"
+#import "APCNavigationFooter.h"
 
 #import "UIColor+APCAppearance.h"
 #import "NSBundle+Helper.h"
@@ -52,7 +53,7 @@
 
 static CGFloat const kTableViewRowHeight                 = 200.0f;
 
-@interface APCSignUpPermissionsViewController () <UITableViewDelegate, UITableViewDataSource, APCPermissionCellDelegate>
+@interface APCSignUpPermissionsViewController () <UITableViewDelegate, UITableViewDataSource, APCPermissionCellDelegate, APCNavigationFooterDelegate>
 
 @property (nonatomic, strong) APCPermissionsManager *permissionsManager;
 
@@ -94,6 +95,11 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
     [super viewDidLoad];
     self.permissions = [self prepareData].mutableCopy;
     [self setupNavAppearance];
+    
+    // Remove the navigation footer if unused
+    if ([self parentStepViewController] == nil) {
+        self.tableView.tableFooterView = nil;
+    }
     
 }
 
@@ -315,6 +321,10 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
         return (APCContainerStepViewController*)self.parentViewController;
     }
     return nil;
+}
+
+- (void)goForward {
+    [self next:nil];
 }
 
 - (IBAction) next: (id) __unused sender
