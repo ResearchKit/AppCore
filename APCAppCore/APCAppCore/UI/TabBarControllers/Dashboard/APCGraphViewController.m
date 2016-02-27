@@ -49,15 +49,22 @@
     // Do any additional setup after loading the view.
     
     APCBaseGraphView *graphView;
-    
-    if (self.graphItem.graphType == kAPCDashboardGraphTypeLine) {
-        graphView = self.lineGraphView;
-        self.lineGraphView.datasource = self.graphItem.graphData;
-        self.discreteGraphView.hidden = YES;
-    } else if (self.graphItem.graphType == kAPCDashboardGraphTypeDiscrete) {
-        graphView = self.discreteGraphView;
-        self.discreteGraphView.datasource = self.graphItem.graphData;
-        self.lineGraphView.hidden = YES;
+
+    switch (self.graphItem.graphType) {
+        case kAPCDashboardGraphTypeLine:
+            graphView = self.lineGraphView;
+            self.lineGraphView.datasource = self.graphItem.graphData;
+            self.discreteGraphView.hidden = YES;
+            break;
+        case kAPCDashboardGraphTypeDiscreteRanged:
+		case kAPCDashboardGraphTypeDiscreteScatter:
+			graphView = self.discreteGraphView;
+			self.discreteGraphView.shouldConnectRanges = self.graphItem.graphType != kAPCDashboardGraphTypeDiscreteScatter;
+			self.discreteGraphView.datasource = self.graphItem.graphData;
+			self.lineGraphView.hidden = YES;
+			break;
+		default:
+			break;
     }
     
     graphView.tintColor = self.graphItem.tintColor;
@@ -83,7 +90,7 @@
     
     if (self.graphItem.graphType == kAPCDashboardGraphTypeLine) {
         [self.lineGraphView refreshGraph];
-    } else if (self.graphItem.graphType == kAPCDashboardGraphTypeDiscrete) {
+    } else if (self.graphItem.graphType == kAPCDashboardGraphTypeDiscreteRanged || self.graphItem.graphType == kAPCDashboardGraphTypeDiscreteScatter) {
         [self.discreteGraphView refreshGraph];
     }
 
@@ -234,7 +241,7 @@
     
     if (self.graphItem.graphType == kAPCDashboardGraphTypeLine) {
         graphView = self.lineGraphView;
-    } else if (self.graphItem.graphType == kAPCDashboardGraphTypeDiscrete) {
+    } else if (self.graphItem.graphType == kAPCDashboardGraphTypeDiscreteRanged || self.graphItem.graphType == kAPCDashboardGraphTypeDiscreteScatter) {
         graphView = self.discreteGraphView;
     }
     
