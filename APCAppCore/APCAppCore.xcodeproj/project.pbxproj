@@ -305,6 +305,8 @@
 		80A98DDA1BFD4A290060146F /* APCPasscode.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 80A98DDC1BFD4A290060146F /* APCPasscode.storyboard */; };
 		80A98DDD1BFD517C0060146F /* APCLocalization.h in Headers */ = {isa = PBXBuildFile; fileRef = 80A98DB01BFCFE430060146F /* APCLocalization.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		80F856641C57EB3200AB321C /* ResearchKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80F856631C57EB3200AB321C /* ResearchKit.framework */; };
+		A637EF3D1C8236E900943CC8 /* APCPolygonView.h in Headers */ = {isa = PBXBuildFile; fileRef = A637EF3B1C8236E800943CC8 /* APCPolygonView.h */; };
+		A637EF3E1C8236E900943CC8 /* APCPolygonView.m in Sources */ = {isa = PBXBuildFile; fileRef = A637EF3C1C8236E900943CC8 /* APCPolygonView.m */; };
 		A7CFE4B51A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = A7CFE4B11A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A7CFE4B61A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7CFE4B21A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.m */; };
 		A7CFE4B71A8B05F4009A171C /* APCStudyOverviewCollectionViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = A7CFE4B31A8B05F4009A171C /* APCStudyOverviewCollectionViewController.h */; };
@@ -1059,6 +1061,8 @@
 		80A98DE41BFD56D70060146F /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/APCProfile.strings; sourceTree = "<group>"; };
 		80A98DE51BFD56D70060146F /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/APCPasscode.strings; sourceTree = "<group>"; };
 		80F856631C57EB3200AB321C /* ResearchKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ResearchKit.framework; path = "../../researchkit/build/Debug-iphoneos/ResearchKit.framework"; sourceTree = "<group>"; };
+		A637EF3B1C8236E800943CC8 /* APCPolygonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCPolygonView.h; sourceTree = "<group>"; };
+		A637EF3C1C8236E900943CC8 /* APCPolygonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCPolygonView.m; sourceTree = "<group>"; };
 		A7CFE4B11A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCStudyOverviewCollectionViewCell.h; sourceTree = "<group>"; };
 		A7CFE4B21A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCStudyOverviewCollectionViewCell.m; sourceTree = "<group>"; };
 		A7CFE4B31A8B05F4009A171C /* APCStudyOverviewCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCStudyOverviewCollectionViewController.h; sourceTree = "<group>"; };
@@ -2720,6 +2724,8 @@
 				F5F129391A2F78490015982C /* APCPresentAnimator.m */,
 				F5F1293A1A2F78490015982C /* APCResizeView.h */,
 				F5F1293B1A2F78490015982C /* APCResizeView.m */,
+				A637EF3B1C8236E800943CC8 /* APCPolygonView.h */,
+				A637EF3C1C8236E900943CC8 /* APCPolygonView.m */,
 			);
 			path = GraphCharts;
 			sourceTree = "<group>";
@@ -3299,6 +3305,7 @@
 				089465451A8C179700A983AC /* APCDashboardInsightsTableViewCell.h in Headers */,
 				F5F12AAA1A2F78490015982C /* APCInEligibleViewController.h in Headers */,
 				F5F12A751A2F78490015982C /* APCPieGraphView.h in Headers */,
+				A637EF3D1C8236E900943CC8 /* APCPolygonView.h in Headers */,
 				F5B948121A73272C0034C522 /* APCScheduler.h in Headers */,
 				CFFDEDF21A95734000B25581 /* APCMedicationSummaryTableViewCell.h in Headers */,
 				F5B946471A7309A20034C522 /* ZZStandardCryptoEngine.h in Headers */,
@@ -3632,6 +3639,7 @@
 				F5F12AF11A2F78490015982C /* APCDashboardProgressTableViewCell.m in Sources */,
 				08BABB431AD62D5D00059C35 /* APCExampleLabel.m in Sources */,
 				F5B9480F1A73272C0034C522 /* APCTimeSelector.m in Sources */,
+				A637EF3E1C8236E900943CC8 /* APCPolygonView.m in Sources */,
 				F5F12A0B1A2F78490015982C /* APCTask.m in Sources */,
 				F5B9463E1A7309A20034C522 /* ZZNewArchiveEntry.mm in Sources */,
 				F5F12A861A2F78490015982C /* APCOnboarding.m in Sources */,
