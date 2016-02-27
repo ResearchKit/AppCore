@@ -41,5 +41,9 @@
 
 -(instancetype)initWithIdentifier: (NSString*) identifier survey:(SBBSurvey *)survey;
 
+/*
+ * @param if YES, will check if all other survey answers are lowercase, and make "other" option lowercase as well, if NO, "Other" will always be capitalized
+ */
++ (void) setAPCSmartSurveyAutoCapitalization:(BOOL)autoCapitalization;
 
 @end
