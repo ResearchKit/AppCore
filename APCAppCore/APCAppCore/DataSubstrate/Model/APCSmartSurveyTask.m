@@ -574,16 +574,14 @@ static APCDummyObject * _dummyObject;
     }];
     if (localConstraints.allowOtherValue)
     {
+        NSString* otherStr = NSLocalizedStringWithDefaultValue(@"Other", @"APCAppCore", APCBundle(), @"Other", @"Spinner Option");
         // Smart capitalization will lowercase the "Other" option if all the other answers are lowercase
         if (sAPCSmartSurveyEnableOtherAutoCapitalization &&
             [self allLowercaseOptions:localConstraints])
         {
-            [options addObject:NSLocalizedStringWithDefaultValue(@"other", @"APCAppCore", APCBundle(), @"other", @"Spinner Option")];
+            otherStr = [otherStr lowercaseString];
         }
-        else
-        {
-            [options addObject:NSLocalizedStringWithDefaultValue(@"Other", @"APCAppCore", APCBundle(), @"Other", @"Spinner Option")];
-        }
+        [options addObject:otherStr];
     }
     retAnswer = [ORKAnswerFormat choiceAnswerFormatWithStyle:localConstraints.allowMultipleValue ? ORKChoiceAnswerStyleMultipleChoice : ORKChoiceAnswerStyleSingleChoice textChoices:options];
     return retAnswer;
