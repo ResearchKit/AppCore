@@ -55,6 +55,7 @@ NSString *const kConstraintsKey   = @"constraints";
 NSString *const kUiHintKey   = @"uihint";
 NSString *const kSliderValue   = @"slider";
 
+static BOOL sAPCSmartSurveyEnableOtherAutoCapitalization = NO;
 
 @class APCDummyObject;
 static APCDummyObject * _dummyObject;
@@ -571,11 +572,37 @@ static APCDummyObject * _dummyObject;
         ORKTextChoice * choice = [ORKTextChoice choiceWithText:option.label detailText:detailText value:option.value exclusive:!localConstraints.allowMultipleValue];
         [options addObject: choice];
     }];
-    if (localConstraints.allowOtherValue) {
-        [options addObject:NSLocalizedStringWithDefaultValue(@"Other", @"APCAppCore", APCBundle(), @"Other", @"Spinner Option")];
+    if (localConstraints.allowOtherValue)
+    {
+        NSString* otherStr = NSLocalizedStringWithDefaultValue(@"Other", @"APCAppCore", APCBundle(), @"Other", @"Spinner Option");
+        // Smart capitalization will lowercase the "Other" option if all the other answers are lowercase
+        if (sAPCSmartSurveyEnableOtherAutoCapitalization &&
+            [self allLowercaseOptions:localConstraints])
+        {
+            otherStr = [otherStr lowercaseString];
+        }
+        [options addObject:otherStr];
     }
     retAnswer = [ORKAnswerFormat choiceAnswerFormatWithStyle:localConstraints.allowMultipleValue ? ORKChoiceAnswerStyleMultipleChoice : ORKChoiceAnswerStyleSingleChoice textChoices:options];
     return retAnswer;
+}
+
++ (void) setAPCSmartSurveyAutoCapitalization:(BOOL)autoCapitalization
+{
+    sAPCSmartSurveyEnableOtherAutoCapitalization = autoCapitalization;
+}
+
+- (BOOL) allLowercaseOptions:(SBBMultiValueConstraints*)options
+{
+    for(SBBSurveyQuestionOption* option in options.enumeration)
+    {
+        if (option.label != nil &&
+            ![option.label isEqualToString:[option.label lowercaseString]])
+        {
+            return NO;
+        }
+    }
+    return YES;
 }
 
 - (ORKAnswerFormat *)rkNumericAnswerFormat:(NSDictionary *)objectDictionary
