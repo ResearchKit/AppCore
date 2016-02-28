@@ -10,8 +10,8 @@
 
 @interface APCPolygonView : UIView
 
-@property (nonatomic) UIColor *tintColor;
-@property (nonatomic) int numberOfSides;
+@property(nonatomic) UIColor *tintColor;
+@property(nonatomic) int numberOfSides;
 
 - (instancetype)initWithFrame:(CGRect)frame andNumberOfSides:(int)sides;
 
