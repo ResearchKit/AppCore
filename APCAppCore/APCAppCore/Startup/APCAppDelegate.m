@@ -689,6 +689,25 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
 }
 
 /*********************************************************************************/
+#pragma mark - Reconsent user
+/*********************************************************************************/
+
+- (BOOL)handleUserNotConsentedError:(NSError *  __unused)error sessionInfo:(id __unused)sessionInfo networkManager:(id<SBBNetworkManagerProtocol>  __unused)networkManager
+{
+    APCUser *user = self.dataSubstrate.currentUser;
+    if (user.isUserConsented && user.isConsented && user.isSignedUp && user.isSignedIn) {
+        // If the user is marked as having been fully consented, then this is a reconsent.
+        user.userConsented = NO;
+        user.consented = NO;
+        [self showAppropriateVC];
+        return YES;
+    }
+    else {
+        return NO;
+    }
+}
+
+/*********************************************************************************/
 #pragma mark - Respond to Notifications
 /*********************************************************************************/
 - (void) registerNotifications {
