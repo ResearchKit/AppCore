@@ -48,14 +48,14 @@ NSString * const kAPCStudyVideoCollectionViewCellIdentifier = @"APCStudyVideoCol
 
 - (void)setupAppearance
 {
-    self.titleLabel.textColor = [UIColor appSecondaryColor1];
-    self.titleLabel.font = [UIFont appLightFontWithSize:26.f];
+    self.titleLabel.textColor = [UIColor appPrimaryColor];
+    self.titleLabel.font = [UIFont appRegularFontWithSize:20.f];
     
     self.videoMessageLabel.textColor = [UIColor appSecondaryColor1];
-    self.videoMessageLabel.font = [UIFont appRegularFontWithSize:22.f];
+    self.videoMessageLabel.font = [UIFont appRegularFontWithSize:12.f];
     
-    [self.videoButton setImage:[UIImage imageNamed:@"video_icon"] forState:UIControlStateNormal];
-
+    UIImage *videoIconImage = [[UIImage imageNamed:@"video_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    [self.videoButton setImage:videoIconImage forState:UIControlStateNormal];
 }
 
 - (IBAction)watchVideo:(id) __unused sender

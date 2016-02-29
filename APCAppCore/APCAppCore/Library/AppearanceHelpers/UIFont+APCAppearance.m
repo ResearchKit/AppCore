@@ -88,6 +88,23 @@
     return [UIFont fontWithName:fontName size:size];
 }
 
++ (UIFont*) appThinFontWithSize: (CGFloat) size
+{
+    NSString* fontName = [APCAppearanceInfo valueForAppearanceKey:kLightFontNameKey];
+    if ([fontName isEqualToString:kAPCAppearanceSystemFont])
+    {
+        if ([[UIFont class] respondsToSelector:@selector(systemFontOfSize:weight:)])
+        {
+            return [UIFont systemFontOfSize:size weight:UIFontWeightThin];
+        }
+        else  // iOS version less than 8.2
+        {
+            return [UIFont systemFontOfSize:size];
+        }
+    }
+    return [UIFont fontWithName:fontName size:size];
+}
+
 + (UIFont*) appNavBarTitleFont {
     return [UIFont appMediumFontWithSize:17.0f];
 }
