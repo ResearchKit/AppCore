@@ -39,6 +39,7 @@
 #import "APCUser+Bridge.h"
 #import "APCSpinnerViewController.h"
 #import "UIAlertController+Helper.h"
+#import "APCLocalJSONParser.h"
 
 static NSString * const kSharingOptionsTableViewCellIdentifier = @"SharingOptionsTableViewCell";
 static NSInteger kNumberOfRows = 2;
@@ -99,14 +100,8 @@ static NSInteger kNumberOfRows = 2;
 
 - (void)setupDataFromJSON:(NSString *)jsonFileName
 {
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:jsonFileName ofType:@"json"];
-    NSString *JSONString = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:NULL];
-    
-    NSError *parseError;
-    NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:[JSONString dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:&parseError];
-    
-    
-    if (!parseError) {
+    NSDictionary *jsonDictionary = [APCLocalJSONParser dictionaryFromJSONFileName:jsonFileName];
+    if (jsonDictionary != nil) {
         NSDictionary *infoDictionary = jsonDictionary[@"documentProperties"];
         self.instituteLongName = infoDictionary[@"investigatorLongDescription"];
         self.instituteShortName = infoDictionary[@"investigatorShortDescription"];
@@ -193,4 +188,5 @@ static NSInteger kNumberOfRows = 2;
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
+
 @end
