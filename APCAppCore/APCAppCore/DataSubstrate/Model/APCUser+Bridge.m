@@ -105,7 +105,7 @@ static NSString* const kTestDataGroup = @"test_user";
     
     [self showTestUserVerificationAlertWithVc:vc onCompletion:^(BOOL userWantsToBeTester)
     {
-        NSMutableArray* mutableDataGroups = [dataGroups mutableCopy];
+        NSMutableArray* mutableDataGroups = [dataGroups mutableCopy] ?: [NSMutableArray new];
         if (userWantsToBeTester)
         {
             [mutableDataGroups addObject:kTestDataGroup];
