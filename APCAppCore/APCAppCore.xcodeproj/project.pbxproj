@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0595C6611C84292700210852 /* APCLocalJSONParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 0595C65F1C84292700210852 /* APCLocalJSONParser.h */; };
+		0595C6621C84292700210852 /* APCLocalJSONParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 0595C6601C84292700210852 /* APCLocalJSONParser.m */; };
 		08023C4F1AA94F48008E6DDA /* APCAllSetContentViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 08023C4D1AA94F48008E6DDA /* APCAllSetContentViewController.h */; };
 		08023C501AA94F48008E6DDA /* APCAllSetContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08023C4E1AA94F48008E6DDA /* APCAllSetContentViewController.m */; };
 		08023C531AAA12DF008E6DDA /* APCAllSetTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 08023C511AAA12DF008E6DDA /* APCAllSetTableViewCell.h */; };
@@ -777,6 +779,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0595C65F1C84292700210852 /* APCLocalJSONParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCLocalJSONParser.h; sourceTree = "<group>"; };
+		0595C6601C84292700210852 /* APCLocalJSONParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCLocalJSONParser.m; sourceTree = "<group>"; };
 		08023C4D1AA94F48008E6DDA /* APCAllSetContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCAllSetContentViewController.h; sourceTree = "<group>"; };
 		08023C4E1AA94F48008E6DDA /* APCAllSetContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCAllSetContentViewController.m; sourceTree = "<group>"; };
 		08023C511AAA12DF008E6DDA /* APCAllSetTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCAllSetTableViewCell.h; sourceTree = "<group>"; };
@@ -1577,6 +1581,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0595C65E1C8428FA00210852 /* LocalJSONParser */ = {
+			isa = PBXGroup;
+			children = (
+				0595C65F1C84292700210852 /* APCLocalJSONParser.h */,
+				0595C6601C84292700210852 /* APCLocalJSONParser.m */,
+			);
+			path = LocalJSONParser;
+			sourceTree = "<group>";
+		};
 		08027A3A1A7319AC00B358CC /* Assets */ = {
 			isa = PBXGroup;
 			children = (
@@ -2424,6 +2437,7 @@
 		F5B947341A73272C0034C522 /* Library */ = {
 			isa = PBXGroup;
 			children = (
+				0595C65E1C8428FA00210852 /* LocalJSONParser */,
 				5B0601BF1AE79AE0009D6D65 /* FeedParser */,
 				F5B947351A73272C0034C522 /* AppearanceHelpers */,
 				F5B9473C1A73272C0034C522 /* AssertionHandler */,
@@ -3402,6 +3416,7 @@
 				F5F12AD21A2F78490015982C /* APCAddressTableViewCell.h in Headers */,
 				F5F12ADC1A2F78490015982C /* APCSegmentedTableViewCell.h in Headers */,
 				F5F129E21A2F78490015982C /* APCDataMonitor+Bridge.h in Headers */,
+				0595C6611C84292700210852 /* APCLocalJSONParser.h in Headers */,
 				F5B947D31A73272C0034C522 /* UIScrollView+Helper.h in Headers */,
 				F5F12A811A2F78490015982C /* APCPresentAnimator.h in Headers */,
 				F5B9462B1A7309A20034C522 /* ZZConstants.h in Headers */,
@@ -3882,6 +3897,7 @@
 				F5B947C61A73272C0034C522 /* NSManagedObject+APCHelper.m in Sources */,
 				F5B947DC1A73272C0034C522 /* APCLog.m in Sources */,
 				08023C501AA94F48008E6DDA /* APCAllSetContentViewController.m in Sources */,
+				0595C6621C84292700210852 /* APCLocalJSONParser.m in Sources */,
 				F5F12AD31A2F78490015982C /* APCAddressTableViewCell.m in Sources */,
 				F5F12A701A2F78490015982C /* APCCircularProgressView.m in Sources */,
 				5B827B611A81CAE200C685A3 /* APCDashboardTableViewCell.m in Sources */,
@@ -3895,7 +3911,6 @@
 				F5B9480D1A73272C0034C522 /* APCScheduleExpressionTokenizer.m in Sources */,
 				6C7346091A7ECD3B00DA9CD8 /* APCConsentTaskViewController.m in Sources */,
 				EE64F4321B02517000A402A7 /* APCOnboardingManager.m in Sources */,
-				F54DDD281A8026010073E4B4 /* APCDataTracker.m in Sources */,
 				F5F12A7A1A2F78490015982C /* APCAxisView.m in Sources */,
 				6CD8B6751AC5011D0061E6D6 /* APCTaskReminder.m in Sources */,
 				F5B947EC1A73272C0034C522 /* APCDebugWindow.m in Sources */,

@@ -39,6 +39,7 @@
 #import "UIImage+APCHelper.h"
 #import "APCAppCore.h"
 #import "APCUser+Bridge.h"
+#import "APCLocalJSONParser.h"
 
 @interface APCWithdrawSurveyViewController ()<APCWithdrawDescriptionViewControllerDelegate>
 
@@ -173,16 +174,11 @@
 
 - (NSArray *)surveyFromJSONFile:(NSString *)jsonFileName
 {
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:jsonFileName ofType:@"json"];
-    NSString *JSONString = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:NULL];
-    
-    NSError *parseError;
-    NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:[JSONString dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:&parseError];
+    NSDictionary *jsonDictionary = [APCLocalJSONParser dictionaryFromJSONFileName:jsonFileName];
     
     NSMutableArray *items = [NSMutableArray new];
     
-    if (!parseError) {
-        
+    if (jsonDictionary != nil) {
         NSArray *options = jsonDictionary[@"options"];
         
         NSMutableArray *rowItems = [NSMutableArray new];
