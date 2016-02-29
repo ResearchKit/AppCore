@@ -12,7 +12,9 @@
 
 @property(nonatomic) UIColor *tintColor;
 @property(nonatomic) int numberOfSides;
+@property(nonatomic) CGFloat value;
 
 - (instancetype)initWithFrame:(CGRect)frame andNumberOfSides:(int)sides;
+- (CAShapeLayer *)shapeLayer;
 
 @end

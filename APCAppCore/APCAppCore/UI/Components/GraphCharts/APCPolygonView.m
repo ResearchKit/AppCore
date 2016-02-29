@@ -15,85 +15,70 @@
 - (instancetype)initWithFrame:(CGRect)frame andNumberOfSides:(int)sides {
 	if (self = [super initWithFrame:frame]) {
 		self.numberOfSides = sides;
-		self.backgroundColor = [UIColor clearColor];
+		[self setupPolygon];
 	}
 
 	return self;
 }
 
+- (void)setupPolygon {
+	self.backgroundColor = [UIColor clearColor];
+
+	self.shapeLayer.lineWidth = 2.f;
+	self.shapeLayer.path = [self layoutPath].CGPath;
+}
+
 #pragma mark - Polygon Methods
-
-- (NSArray *)polygonPointArrayWithXOrigin:(CGFloat)x
-								  yOrigin:(CGFloat)y
-								   radius:(CGFloat)radius
-								   offset:(CGFloat)offset {
-
-	CGFloat angle = M_PI * (2 / self.numberOfSides);
+- (UIBezierPath *)layoutPath {
+	CGPoint origin = CGPointMake(CGRectGetWidth(self.frame) / 2.f, CGRectGetHeight(self.frame) / 2.f);
+	CGFloat radius = CGRectGetWidth(self.frame) / 4;
+	
+	CGFloat angle = (CGFloat) (M_PI * (2.f / self.numberOfSides));
 	NSMutableArray *points = [[NSMutableArray alloc] init];
 	for (int i = 0; i <= self.numberOfSides; i++) {
-		CGFloat xpo = (CGFloat) (x + radius * cos(angle * i - (M_PI * offset / 180)));
-		CGFloat ypo = (CGFloat) (y + radius * sin(angle * i - (M_PI * offset / 180)));
+		CGFloat xpo = (CGFloat) (origin.x + radius * cos(angle * i));
+		CGFloat ypo = (CGFloat) (origin.y + radius * sin(angle * i));
 		[points addObject:[NSValue valueWithCGPoint:CGPointMake(xpo, ypo)]];
 	}
 
-	return [points copy];
-}
-
-- (CGPathRef)polygonPathWithX:(CGFloat)x
-							y:(CGFloat)y
-					   radius:(CGFloat)radius
-					   offset:(CGFloat)offset {
-
-	CGMutablePathRef mutableCGPath = CGPathCreateMutable();
-	NSArray *points = [self polygonPointArrayWithXOrigin:x yOrigin:y radius:radius offset:offset];
 	NSValue *initialPoint = (NSValue *) points[0];
 	CGPoint cpg = initialPoint.CGPointValue;
-	CGPathMoveToPoint(mutableCGPath, nil, cpg.x, cpg.y);
+	UIBezierPath *bezierPath = [[UIBezierPath alloc] init];
+	[bezierPath moveToPoint:cpg];
 	for (NSValue *pointValue in points) {
 		CGPoint point = pointValue.CGPointValue;
-		CGPathAddLineToPoint(mutableCGPath, nil, point.x, point.y);
+		[bezierPath addLineToPoint:point];
 	}
 
-	CGPathCloseSubpath(mutableCGPath);
-	return mutableCGPath;
-}
-
-- (UIBezierPath *)drawPolygonBezierWithX:(CGFloat)x
-									   y:(CGFloat)y
-								  radius:(CGFloat)radius
-								   color:(UIColor *)color
-								  offset:(CGFloat)offset {
-
-	CGPathRef path = [self polygonPathWithX:x y:y radius:radius offset:offset];
-	UIBezierPath *bezierPath = [UIBezierPath bezierPathWithCGPath:path];
-	bezierPath.lineWidth = 2;
-	[color setStroke];
-	[bezierPath stroke];
+	[bezierPath closePath];
 
 	return bezierPath;
 }
 
-- (CAShapeLayer *)drawPolygonLayerWithX:(CGFloat)x
-									  y:(CGFloat)y
-								 radius:(CGFloat)radius
-								 offset:(CGFloat)offset {
-
-	CAShapeLayer *shape = [[CAShapeLayer alloc] init];
-	shape.path = [self polygonPathWithX:x y:y radius:radius offset:offset];
-	shape.strokeColor = self.tintColor.CGColor;
-	shape.lineWidth = 2;
-	return shape;
-}
-
 #pragma mark - other
 
-- (void)drawRect:(CGRect)rect {
-	NSLog(@"drawingRect");
-	[self drawPolygonBezierWithX:CGRectGetMidX(rect)
-							   y:CGRectGetMidY(rect)
-						  radius:CGRectGetWidth(rect) / 4
-						   color:[UIColor redColor]
-						  offset:0];
++ (Class)layerClass {
+	return CAShapeLayer.class;
+}
+
+- (CAShapeLayer *)shapeLayer {
+	return (CAShapeLayer *) self.layer;
+}
+
+- (void)layoutSubviews {
+	[super layoutSubviews];
+
+	self.shapeLayer.path = [self layoutPath].CGPath;
+}
+
+#pragma mark - Setter methods
+
+- (void)setTintColor:(UIColor *)tintColor
+{
+	_tintColor = tintColor;
+
+	self.shapeLayer.fillColor = [UIColor whiteColor].CGColor;
+	self.shapeLayer.strokeColor = _tintColor.CGColor;
 }
 
 @end
