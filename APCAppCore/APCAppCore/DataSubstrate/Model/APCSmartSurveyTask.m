@@ -532,6 +532,12 @@ static APCDummyObject * _dummyObject;
     }
     return copy;
 }
+
++ (void) setAPCSmartSurveyAutoCapitalization:(BOOL)autoCapitalization
+{
+    sAPCSmartSurveyEnableOtherAutoCapitalization = autoCapitalization;
+}
+
 @end
 
 @implementation APCDummyObject
@@ -585,11 +591,6 @@ static APCDummyObject * _dummyObject;
     }
     retAnswer = [ORKAnswerFormat choiceAnswerFormatWithStyle:localConstraints.allowMultipleValue ? ORKChoiceAnswerStyleMultipleChoice : ORKChoiceAnswerStyleSingleChoice textChoices:options];
     return retAnswer;
-}
-
-+ (void) setAPCSmartSurveyAutoCapitalization:(BOOL)autoCapitalization
-{
-    sAPCSmartSurveyEnableOtherAutoCapitalization = autoCapitalization;
 }
 
 - (BOOL) allLowercaseOptions:(SBBMultiValueConstraints*)options
