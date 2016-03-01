@@ -59,7 +59,6 @@ typedef NS_ENUM(NSUInteger, APCDashboardMessageType) {
 typedef NS_ENUM(NSUInteger, APCDashboardGraphType) {
     kAPCDashboardGraphTypeLine,
     kAPCDashboardGraphTypeDiscrete,
-    kAPCDashboardGraphTypeScatter,
 };
 
 /**

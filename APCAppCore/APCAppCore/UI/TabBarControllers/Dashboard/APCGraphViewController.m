@@ -54,17 +54,10 @@
         graphView = self.lineGraphView;
         self.lineGraphView.datasource = self.graphItem.graphData;
         self.discreteGraphView.hidden = YES;
-        self.scatterGraphView.hidden = YES;
     } else if (self.graphItem.graphType == kAPCDashboardGraphTypeDiscrete) {
         graphView = self.discreteGraphView;
         self.discreteGraphView.datasource = self.graphItem.graphData;
         self.lineGraphView.hidden = YES;
-        self.scatterGraphView.hidden = YES;
-    } else if (self.graphItem.graphType == kAPCDashboardGraphTypeScatter) {
-        graphView = self.scatterGraphView;
-        self.scatterGraphView.dataSource = self.graphItem.graphData;
-        self.lineGraphView.hidden = YES;
-        self.discreteGraphView.hidden = YES;
     }
     
     graphView.tintColor = self.graphItem.tintColor;
@@ -92,8 +85,6 @@
         [self.lineGraphView refreshGraph];
     } else if (self.graphItem.graphType == kAPCDashboardGraphTypeDiscrete) {
         [self.discreteGraphView refreshGraph];
-    } else if (self.graphItem.graphType == kAPCDashboardGraphTypeScatter) {
-        [self.scatterGraphView refreshGraph];
     }
 
     APCLogViewControllerAppeared();
@@ -245,8 +236,6 @@
         graphView = self.lineGraphView;
     } else if (self.graphItem.graphType == kAPCDashboardGraphTypeDiscrete) {
         graphView = self.discreteGraphView;
-    } else if (self.graphItem.graphType == kAPCDashboardGraphTypeScatter) {
-        graphView = self.scatterGraphView;
     }
     
     __weak typeof(self) weakSelf = self;

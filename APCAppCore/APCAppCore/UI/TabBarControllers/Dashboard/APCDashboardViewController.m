@@ -167,7 +167,6 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
             [graphCell.legendButton setAttributedTitle:graphItem.legend forState:UIControlStateNormal];
             graphCell.lineGraphView.hidden = NO;
             graphCell.discreteGraphView.hidden = YES;
-            graphCell.scatterGraphView.hidden = YES;
             
         } else if (graphItem.graphType == kAPCDashboardGraphTypeDiscrete) {
             graphView = (APCDiscreteGraphView *)graphCell.discreteGraphView;
@@ -175,15 +174,6 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
             [graphCell.legendButton setAttributedTitle:graphItem.legend forState:UIControlStateNormal];
             graphCell.discreteGraphView.hidden = NO;
             graphCell.lineGraphView.hidden = YES;
-            graphCell.scatterGraphView.hidden = YES;
-            
-        } else if (graphItem.graphData == kAPCDashboardGraphTypeScatter) {
-            graphView = (APCScatterGraphView *)graphCell.scatterGraphView;
-            graphCell.scatterGraphView.dataSource = graphItem.graphData;
-            [graphCell.legendButton setAttributedTitle:graphItem.legend forState:UIControlStateNormal];
-            graphCell.scatterGraphView.hidden = NO;
-            graphCell.lineGraphView.hidden = YES;
-            graphCell.discreteGraphView.hidden = YES;
         }
         
         [graphCell.legendButton setUserInteractionEnabled:graphItem.legend ? YES : NO];
@@ -309,9 +299,6 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
             
         } else if (graphItem.graphType == kAPCDashboardGraphTypeDiscrete) {
             graphView = (APCDiscreteGraphView *)graphCell.discreteGraphView;
-            
-        } else if (graphItem.graphType == kAPCDashboardGraphTypeScatter) {
-            graphView = (APCScatterGraphView *)graphCell.scatterGraphView;
         }
         
         [graphView setNeedsLayout];
