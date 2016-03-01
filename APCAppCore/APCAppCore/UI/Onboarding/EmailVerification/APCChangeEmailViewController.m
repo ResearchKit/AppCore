@@ -126,7 +126,7 @@ static NSString *kInternetNotAvailableErrorMessage2 = @"BackendServer Not Reacha
             user.email = self.emailTextField.text;
             
             typeof(self) __weak weakSelf = self;
-            [user signUpOnCompletion:^(NSError *error) {
+            [user signUpWithDataGroups:user.dataGroups withTestUserPromptVc:self onCompletion:^(NSError *error) {
                 if (error) {
                     
                     APCLogError2 (error);
