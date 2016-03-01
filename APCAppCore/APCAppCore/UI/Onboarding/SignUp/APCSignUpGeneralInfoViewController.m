@@ -643,7 +643,7 @@ static CGFloat kHeaderHeight = 157.0f;
     [self presentViewController:spinnerController animated:YES completion:nil];
     
     typeof(self) __weak weakSelf = self;
-    [self.user signUpOnCompletion:^(NSError *error) {
+    [self.user signUpWithDataGroups:self.user.dataGroups withTestUserPromptVc:self onCompletion:^(NSError *error) {
         if (error) {
             
             APCLogError2 (error);
