@@ -22,25 +22,27 @@
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    if (self = [super initWithCoder:aDecoder]) {
-        [self setupPolygon];
-    }
-    
-    return self;
+	if (self = [super initWithCoder:aDecoder]) {
+		[self setupPolygon];
+	}
+
+	return self;
 }
 
 - (void)setupPolygon {
 	self.backgroundColor = [UIColor clearColor];
 
 	self.shapeLayer.lineWidth = 2.f;
+	self.fillColor = [UIColor whiteColor];
 	self.shapeLayer.path = [self layoutPath].CGPath;
 }
 
 #pragma mark - Polygon Methods
+
 - (UIBezierPath *)layoutPath {
 	CGPoint origin = CGPointMake(CGRectGetWidth(self.frame) / 2.f, CGRectGetHeight(self.frame) / 2.f);
 	CGFloat radius = CGRectGetWidth(self.frame) / 4;
-	
+
 	CGFloat angle = (CGFloat) (M_PI * (2.f / self.numberOfSides));
 	NSMutableArray *points = [[NSMutableArray alloc] init];
 	for (int i = 0; i <= self.numberOfSides; i++) {
@@ -61,7 +63,7 @@
 	[bezierPath closePath];
 
 	[bezierPath applyTransform:CGAffineTransformMakeTranslation(-origin.x, -origin.y)];
-	[bezierPath applyTransform:CGAffineTransformMakeRotation((CGFloat) (M_PI/2-M_PI/self.numberOfSides))];
+	[bezierPath applyTransform:CGAffineTransformMakeRotation((CGFloat) (M_PI / 2 - M_PI / self.numberOfSides))];
 	[bezierPath applyTransform:CGAffineTransformMakeTranslation(origin.x, origin.y)];
 
 	return bezierPath;
@@ -85,12 +87,16 @@
 
 #pragma mark - Setter methods
 
-- (void)setTintColor:(UIColor *)tintColor
-{
+- (void)setTintColor:(UIColor *)tintColor {
 	_tintColor = tintColor;
 
-	self.shapeLayer.fillColor = [UIColor whiteColor].CGColor;
 	self.shapeLayer.strokeColor = _tintColor.CGColor;
+}
+
+- (void)setFillColor:(UIColor *)fillColor {
+	_fillColor = fillColor;
+
+	self.shapeLayer.fillColor = fillColor.CGColor;
 }
 
 @end

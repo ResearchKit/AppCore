@@ -11,6 +11,7 @@
 @interface APCPolygonView : UIView
 
 @property(nonatomic) UIColor *tintColor;
+@property(nonatomic) UIColor *fillColor;
 @property(nonatomic) int numberOfSides;
 @property(nonatomic) CGFloat value;
 
