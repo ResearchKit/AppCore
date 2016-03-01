@@ -48,6 +48,14 @@
     return self;
 }
 
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    if (self = [super initWithCoder:aDecoder]) {
+        // Initialization code
+        [self setupCircle];
+    }
+    return self;
+}
+
 - (void)setupCircle
 {
     self.backgroundColor = [UIColor clearColor];

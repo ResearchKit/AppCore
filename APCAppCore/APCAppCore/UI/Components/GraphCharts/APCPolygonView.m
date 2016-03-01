@@ -21,6 +21,14 @@
 	return self;
 }
 
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    if (self = [super initWithCoder:aDecoder]) {
+        [self setupPolygon];
+    }
+    
+    return self;
+}
+
 - (void)setupPolygon {
 	self.backgroundColor = [UIColor clearColor];
 
