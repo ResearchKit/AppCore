@@ -34,6 +34,7 @@
 #import <HealthKit/HealthKit.h>
 #import "APCLineGraphView.h"
 #import "APCDiscreteGraphView.h"
+#import "APCScatterGraphView.h"
 
 extern NSString *const kDatasetDateKey;
 extern NSString *const kDatasetValueKey;
@@ -56,7 +57,7 @@ typedef NS_ENUM(NSUInteger, APHTimelineGroups)
 
 @end
 
-@interface APCScoring : NSEnumerator <APCLineGraphViewDataSource, APCDiscreteGraphViewDataSource>
+@interface APCScoring : NSEnumerator <APCLineGraphViewDataSource, APCDiscreteGraphViewDataSource, APCScatterGraphViewDataSource>
 
 @property (nonatomic) CGFloat customMaximumPoint;
 @property (nonatomic) CGFloat customMinimumPoint;

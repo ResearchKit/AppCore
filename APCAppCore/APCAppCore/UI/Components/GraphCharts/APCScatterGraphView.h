@@ -6,7 +6,8 @@
 //  Copyright © 2016 Apple, Inc. All rights reserved.
 //
 
-#import <APCAppCore/APCAppCore.h>
+#import <UIKit/UIKit.h>
+#import "APCBaseGraphView.h"
 
 @protocol APCScatterGraphViewDataSource;
 
