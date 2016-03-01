@@ -52,6 +52,10 @@
 
 	[bezierPath closePath];
 
+	[bezierPath applyTransform:CGAffineTransformMakeTranslation(-origin.x, -origin.y)];
+	[bezierPath applyTransform:CGAffineTransformMakeRotation((CGFloat) (M_PI/2-M_PI/self.numberOfSides))];
+	[bezierPath applyTransform:CGAffineTransformMakeTranslation(origin.x, origin.y)];
+
 	return bezierPath;
 }
 
