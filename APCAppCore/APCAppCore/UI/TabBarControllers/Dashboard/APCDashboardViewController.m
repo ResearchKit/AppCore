@@ -168,7 +168,7 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
             graphCell.discreteGraphView.hidden = YES;
             graphCell.lineGraphView.hidden = NO;
             
-        } else if (graphItem.graphType == kAPCDashboardGraphTypeDiscreteRanged || graphItem.graphType == kAPCDashboardGraphTypeDiscreteScatter) {
+        } else if (graphItem.graphType == kAPCDashboardGraphTypeDiscrete) {
             graphView = (APCDiscreteGraphView *)graphCell.discreteGraphView;
             graphCell.discreteGraphView.datasource = graphItem.graphData;
             [graphCell.legendButton setAttributedTitle:graphItem.legend forState:UIControlStateNormal];
@@ -293,18 +293,12 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
         APCDashboardGraphTableViewCell *graphCell = (APCDashboardGraphTableViewCell *)cell;
         
         APCBaseGraphView *graphView;
-
-        switch (graphItem.graphType) {
-            case kAPCDashboardGraphTypeLine:
-                graphView = (APCLineGraphView *)graphCell.lineGraphView;
-                break;
-            case kAPCDashboardGraphTypeDiscreteRanged:
-            case kAPCDashboardGraphTypeDiscreteScatter:
-                graphCell.discreteGraphView.shouldConnectRanges = graphItem.graphType != kAPCDashboardGraphTypeDiscreteScatter;
-                graphView = (APCDiscreteGraphView *)graphCell.discreteGraphView;
-                break;
-            default:
-                break;
+        
+        if (graphItem.graphType == kAPCDashboardGraphTypeLine) {
+            graphView = (APCLineGraphView *)graphCell.lineGraphView;
+            
+        } else if (graphItem.graphType == kAPCDashboardGraphTypeDiscrete) {
+            graphView = (APCDiscreteGraphView *)graphCell.discreteGraphView;
         }
         
         [graphView setNeedsLayout];
