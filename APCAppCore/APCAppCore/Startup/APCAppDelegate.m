@@ -1021,7 +1021,7 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
 {
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:viewController];
     navController.navigationBar.translucent = NO;
-    [self transitionToRootViewController:viewController];
+    [self transitionToRootViewController:navController];
 }
 
 - (void) transitionToRootViewController:(UIViewController*) viewController {

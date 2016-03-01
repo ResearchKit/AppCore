@@ -359,6 +359,7 @@ static NSString *kConsentEmailSubject = @"Consent Document";
     
     UIViewController *viewController = [manager.onboarding nextScene];
     NSAssert(viewController, @"Expecting the first scene's view controller for sign-in onboarding but got nothing");
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
     [self.navigationController pushViewController:viewController animated:YES];
 }
 
@@ -376,6 +377,7 @@ static NSString *kConsentEmailSubject = @"Consent Document";
     
     UIViewController *viewController = [manager.onboarding nextScene];
     NSAssert(viewController, @"Expecting the first scene's view controller for sign-up onboarding but got nothing");
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
     [self.navigationController pushViewController:viewController animated:YES];
 }
 
