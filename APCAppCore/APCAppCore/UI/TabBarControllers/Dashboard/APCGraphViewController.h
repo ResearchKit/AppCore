@@ -41,6 +41,7 @@
 
 @property (weak, nonatomic) IBOutlet APCLineGraphView *lineGraphView;
 @property (weak, nonatomic) IBOutlet APCDiscreteGraphView *discreteGraphView;
+@property (weak, nonatomic) IBOutlet APCScatterGraphView *scatterGraphView;
 
 @property (nonatomic, strong) APCTableViewDashboardGraphItem *graphItem;
 
