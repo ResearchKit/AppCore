@@ -307,7 +307,7 @@
 
 - (IBAction) okayTapped: (id) __unused sender
 {
-    if (self.step != nil) {
+    if (self.taskViewController != nil) {
         // If this is a step view controller then dismiss
         [self goForward];
     }

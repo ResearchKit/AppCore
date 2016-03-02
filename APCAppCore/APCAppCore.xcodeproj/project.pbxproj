@@ -720,6 +720,8 @@
 		FB4E46641C7D8EFB00CADC1F /* APCContainerStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB4E46621C7D8EFB00CADC1F /* APCContainerStepViewController.m */; };
 		FB4E468B1C7E6E0000CADC1F /* APCNavigationFooter.h in Headers */ = {isa = PBXBuildFile; fileRef = FB4E46891C7E6E0000CADC1F /* APCNavigationFooter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FB4E468C1C7E6E0000CADC1F /* APCNavigationFooter.m in Sources */ = {isa = PBXBuildFile; fileRef = FB4E468A1C7E6E0000CADC1F /* APCNavigationFooter.m */; };
+		FBAE3D5E1C878064003CEC4A /* APCOptionalStepViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = FBAE3D5C1C878064003CEC4A /* APCOptionalStepViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FBAE3D5F1C878064003CEC4A /* APCOptionalStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FBAE3D5D1C878064003CEC4A /* APCOptionalStepViewController.m */; };
 		FF0B4A961C29D98C00224EF7 /* APCScene.h in Headers */ = {isa = PBXBuildFile; fileRef = FF0B4A941C29D98C00224EF7 /* APCScene.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FF0B4A971C29D98C00224EF7 /* APCScene.m in Sources */ = {isa = PBXBuildFile; fileRef = FF0B4A951C29D98C00224EF7 /* APCScene.m */; };
 		FF44E50A1C1A3BB200F07DA9 /* BridgeSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF44E5091C1A3BB200F07DA9 /* BridgeSDK.framework */; };
@@ -1482,6 +1484,8 @@
 		FB4E46621C7D8EFB00CADC1F /* APCContainerStepViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCContainerStepViewController.m; sourceTree = "<group>"; };
 		FB4E46891C7E6E0000CADC1F /* APCNavigationFooter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCNavigationFooter.h; sourceTree = "<group>"; };
 		FB4E468A1C7E6E0000CADC1F /* APCNavigationFooter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCNavigationFooter.m; sourceTree = "<group>"; };
+		FBAE3D5C1C878064003CEC4A /* APCOptionalStepViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCOptionalStepViewController.h; sourceTree = "<group>"; };
+		FBAE3D5D1C878064003CEC4A /* APCOptionalStepViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCOptionalStepViewController.m; sourceTree = "<group>"; };
 		FF0B4A941C29D98C00224EF7 /* APCScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCScene.h; sourceTree = "<group>"; };
 		FF0B4A951C29D98C00224EF7 /* APCScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScene.m; sourceTree = "<group>"; };
 		FF44E5091C1A3BB200F07DA9 /* BridgeSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BridgeSDK.framework; path = "../../../../../Library/Developer/Xcode/DerivedData/Parkinson-dphbgsbdqdzhcbeketqhdiecbfyz/Build/Products/Debug-iphoneos/BridgeSDK.framework"; sourceTree = "<group>"; };
@@ -3042,6 +3046,8 @@
 				F5F129D11A2F78490015982C /* APCUserInfoViewController.m */,
 				FB4E46611C7D8EFB00CADC1F /* APCContainerStepViewController.h */,
 				FB4E46621C7D8EFB00CADC1F /* APCContainerStepViewController.m */,
+				FBAE3D5C1C878064003CEC4A /* APCOptionalStepViewController.h */,
+				FBAE3D5D1C878064003CEC4A /* APCOptionalStepViewController.m */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -3373,6 +3379,7 @@
 				369E27FE1A96B7A200D35DFA /* APCMedTrackerDailyDosageRecord+Helper.h in Headers */,
 				F5F129F01A2F78490015982C /* APCDBStatus.h in Headers */,
 				08BABB421AD62D5D00059C35 /* APCExampleLabel.h in Headers */,
+				FBAE3D5E1C878064003CEC4A /* APCOptionalStepViewController.h in Headers */,
 				F5F129F41A2F78490015982C /* APCResult+AddOn.h in Headers */,
 				F5B946481A7309A20034C522 /* ZZStandardDecryptInputStream.h in Headers */,
 				712AB44C1A9E692400556DA2 /* APCMotionHistoryData.h in Headers */,
@@ -3849,6 +3856,7 @@
 				F5B947B41A73272C0034C522 /* APCAssertionHandler.m in Sources */,
 				CFFDED741A95731F00B25581 /* APCMedicationTrackerCalendarWeeklyView.m in Sources */,
 				5B0601CE1AE79B50009D6D65 /* APCFeedTableViewCell.m in Sources */,
+				FBAE3D5F1C878064003CEC4A /* APCOptionalStepViewController.m in Sources */,
 				7B6C8CB81AA26ECE0007B560 /* APCConsentBooleanQuestion.m in Sources */,
 				FF0B4A971C29D98C00224EF7 /* APCScene.m in Sources */,
 				F5F12A941A2F78490015982C /* APCStudyDetailsViewController.m in Sources */,
