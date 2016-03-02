@@ -57,6 +57,7 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
 @property (nonatomic, strong) APCScoring *correlatedScoring;
 @property (nonatomic, weak) APCScoring *weakParentScoring;
 @property (nonatomic, strong) NSMutableArray *dataPoints;
+@property (nonatomic, strong) NSMutableArray *rawDataPoints;
 @property (nonatomic, strong) NSMutableArray *updatedDataPoints;
 
 @property (nonatomic, strong) NSArray *timeline;
@@ -235,6 +236,7 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
         }
         
         self.dataPoints = [self dataPointsArrayForDays:_numberOfDays groupBy:_groupBy];
+        self.rawDataPoints = [self dataPointsArrayForDays:_numberOfDays groupBy:_groupBy];
         
         [self queryTaskId:taskId
                   forDays:numberOfDays
@@ -683,7 +685,11 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
                             }
                         }
                     }
+                    
+                    dataPoint[@"datasetTaskResult"] = taskResult;
+                    
                     [self.dataPoints addObject:dataPoint];
+                    [self.rawDataPoints addObject:dataPoint];
                 }
             }
         }

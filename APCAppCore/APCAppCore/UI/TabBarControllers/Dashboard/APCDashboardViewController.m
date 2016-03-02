@@ -165,15 +165,15 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
             graphView = (APCLineGraphView *)graphCell.lineGraphView;
             graphCell.lineGraphView.datasource = graphItem.graphData;
             [graphCell.legendButton setAttributedTitle:graphItem.legend forState:UIControlStateNormal];
-            graphCell.discreteGraphView.hidden = YES;
             graphCell.lineGraphView.hidden = NO;
+            graphCell.discreteGraphView.hidden = YES;
             
         } else if (graphItem.graphType == kAPCDashboardGraphTypeDiscrete) {
             graphView = (APCDiscreteGraphView *)graphCell.discreteGraphView;
             graphCell.discreteGraphView.datasource = graphItem.graphData;
             [graphCell.legendButton setAttributedTitle:graphItem.legend forState:UIControlStateNormal];
-            graphCell.lineGraphView.hidden = YES;
             graphCell.discreteGraphView.hidden = NO;
+            graphCell.lineGraphView.hidden = YES;
         }
         
         [graphCell.legendButton setUserInteractionEnabled:graphItem.legend ? YES : NO];
