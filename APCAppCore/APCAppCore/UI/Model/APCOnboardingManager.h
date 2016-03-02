@@ -70,6 +70,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (BOOL)didHandleSignupFromViewController:(UIViewController*)viewController;
 
+/**
+ * Allow for a custom handling of onboarding
+ */
+- (BOOL)didHandleSignInFromViewController:(UIViewController*)viewController;
+
 @end
 
 /**

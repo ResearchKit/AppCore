@@ -354,7 +354,15 @@ static NSString *kConsentEmailSubject = @"Consent Document";
 }
 
 - (void)signInTapped:(id)__unused sender {
-    APCOnboardingManager *manager = [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager];
+    
+    id <APCOnboardingManagerProvider> provider = (id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate;
+    if ([provider respondsToSelector:@selector(didHandleSignInFromViewController:)] &&
+        [provider didHandleSignInFromViewController:self]) {
+        // If the custom handling is implemented then nothing else is required.
+        return; // Exit
+    }
+    
+    APCOnboardingManager *manager = [provider onboardingManager];
     [manager instantiateOnboardingForType:kAPCOnboardingTaskTypeSignIn];
     
     UIViewController *viewController = [manager.onboarding nextScene];

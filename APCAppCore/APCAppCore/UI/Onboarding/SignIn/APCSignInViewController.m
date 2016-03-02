@@ -36,6 +36,7 @@
 #import "APCEmailVerifyViewController.h"
 #import "APCOnboardingManager.h"
 #import "APCLog.h"
+#import "APCContainerStepViewController.h"
 
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
@@ -45,6 +46,8 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
 
 @interface APCSignInViewController () <ORKTaskViewControllerDelegate>
 
+@property (nonatomic, readonly) APCContainerStepViewController *parentStepViewController;
+
 @end
 
 @implementation APCSignInViewController
@@ -52,6 +55,13 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
 - (void)dealloc {
     _userHandleTextField.delegate = nil;
     _passwordTextField.delegate = nil;
+}
+
+- (APCContainerStepViewController *)parentStepViewController {
+    if ([self.parentViewController isKindOfClass:[APCContainerStepViewController class]]) {
+        return (APCContainerStepViewController*)self.parentViewController;
+    }
+    return nil;
 }
 
 #pragma mark - Life Cycle
@@ -225,10 +235,14 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
         APCLogError2 (error);
     }];
     
-    if (user.isSecondaryInfoSaved) {
+    if (self.parentStepViewController != nil) {
+        [self.parentStepViewController goForward];
+    }
+    else if (user.isSecondaryInfoSaved) {
         user.signedIn = YES;
         [[NSNotificationCenter defaultCenter] postNotificationName:APCUserSignedInNotification object:self];
-    } else{
+    }
+    else {
         UIViewController *viewController = [[self onboarding] nextScene];
         [self.navigationController pushViewController:viewController animated:YES];
     }
@@ -240,11 +254,11 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
     ORKTaskViewController *consentViewController = [((APCAppDelegate*)[UIApplication sharedApplication].delegate) consentViewController];
     consentViewController.delegate = self;
     
-    NSUInteger subviewsCount = consentViewController.view.subviews.count;
-    UILabel *watermarkLabel = [APCExampleLabel watermarkInRect:consentViewController.view.bounds
-                                                    withCenter:consentViewController.view.center];
-    
-    [consentViewController.view insertSubview:watermarkLabel atIndex:subviewsCount];
+//    NSUInteger subviewsCount = consentViewController.view.subviews.count;
+//    UILabel *watermarkLabel = [APCExampleLabel watermarkInRect:consentViewController.view.bounds
+//                                                    withCenter:consentViewController.view.center];
+//    
+//    [consentViewController.view insertSubview:watermarkLabel atIndex:subviewsCount];
     
     [self.navigationController presentViewController:consentViewController animated:YES completion:nil];
 }
