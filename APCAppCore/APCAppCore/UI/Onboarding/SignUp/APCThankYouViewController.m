@@ -64,7 +64,7 @@
     typeof(self) __weak weakSelf = self;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if (weakSelf != nil) {
-            if (weakSelf.step) {
+            if (weakSelf.taskViewController) {
                 [weakSelf goForward];
             }
             else if (forceSignIn) {

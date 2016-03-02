@@ -360,7 +360,7 @@ static NSString * const kAPCPleaseCheckEmailAlertOkButton = @"OK";
 {
     [self hideSpinnerUsingAnimation: YES andThenDoThis:^{
         
-        if (self.step) {
+        if (self.taskViewController != nil) {
             // If this has a step then it is part of a taskViewController
             [self goForward];
         }

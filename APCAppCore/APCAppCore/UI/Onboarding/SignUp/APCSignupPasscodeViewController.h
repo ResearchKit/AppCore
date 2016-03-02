@@ -32,10 +32,9 @@
 // 
  
 #import <UIKit/UIKit.h>
-#import <ResearchKit/ResearchKit.h>
 #import "APCSignUpProgressing.h"
 #import "APCUserInfoConstants.h"
 
-@interface APCSignupPasscodeViewController : ORKStepViewController <APCSignUpProgressing>
+@interface APCSignupPasscodeViewController : UIViewController <APCSignUpProgressing>
 
 @end

@@ -32,8 +32,9 @@
 // 
  
 #import <ResearchKit/ResearchKit.h>
+#import "APCOptionalStepViewController.h"
 
-@interface APCEmailVerifyViewController : ORKStepViewController
+@interface APCEmailVerifyViewController : APCOptionalStepViewController
 
 
 @property (weak, nonatomic) IBOutlet UIImageView *logoImageView;

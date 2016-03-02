@@ -33,6 +33,7 @@
  
 #import <UIKit/UIKit.h>
 #import <ResearchKit/ResearchKit.h>
+#import "APCOptionalStepViewController.h"
 
 typedef NS_ENUM(NSUInteger, APCShareType) {
     kAPCShareTypeTwitter,
@@ -41,7 +42,7 @@ typedef NS_ENUM(NSUInteger, APCShareType) {
     kAPCShareTypeSMS
 };
 
-@interface APCShareViewController : ORKStepViewController
+@interface APCShareViewController : APCOptionalStepViewController
 
 @property (nonatomic) BOOL goBackIfUserHitsOkay;
 @property (nonatomic) BOOL hidesOkayButton;

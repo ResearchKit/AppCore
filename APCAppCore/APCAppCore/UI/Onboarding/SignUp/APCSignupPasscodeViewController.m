@@ -33,7 +33,6 @@
  
 #import "APCSignupPasscodeViewController.h"
 #import "APCSignUpPermissionsViewController.h"
-#import "APCContainerStepViewController.h"
 #import "APCOnboardingManager.h"
 #import "APCDataSubstrate.h"
 #import "APCConstants.h"
@@ -145,13 +144,9 @@
 #pragma mark - Private Methods
 
 - (void)next:(id)__unused sender {
-    if (self.step != nil) {
-        [self goForward];
-    }
-    else if ([self onboarding].onboardingTask.permissionScreenSkipped) {
+    if ([self onboarding].onboardingTask.permissionScreenSkipped) {
         [self finishOnboarding];
-    }
-    else {
+    } else {
         UIViewController *viewController = [[self onboarding] nextScene];
         [self.navigationController pushViewController:viewController animated:YES];
     }
@@ -183,14 +178,9 @@
 {
     self.passcodeView.delegate = nil;
     self.retryPasscodeView.delegate = nil;
+    [self.navigationController popViewControllerAnimated:YES];
     
-    if (self.step) {
-        [self goBackward];
-    }
-    else {
-        [self.navigationController popViewControllerAnimated:YES];
-        [[self onboarding] popScene];
-    }
+    [[self onboarding] popScene];
 }
 
 - (void)finishOnboarding {
