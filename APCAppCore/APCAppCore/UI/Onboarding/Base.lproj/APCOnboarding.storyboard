@@ -1145,7 +1145,7 @@
                                                         <constraint firstAttribute="height" constant="35" id="joF-z1-SEO"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="alphabet" keyboardAppearance="light" returnKeyType="done" secureTextEntry="YES"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="alphabet" keyboardAppearance="light" returnKeyType="go" secureTextEntry="YES"/>
                                                     <connections>
                                                         <outlet property="delegate" destination="dLU-jN-G7r" id="V5q-ul-u6f"/>
                                                     </connections>
