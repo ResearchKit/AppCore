@@ -685,6 +685,9 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
                             }
                         }
                     }
+                    
+                    dataPoint[@"datasetTaskResult"] = taskResult;
+                    
                     [self.dataPoints addObject:dataPoint];
                     [self.rawDataPoints addObject:dataPoint];
                 }
