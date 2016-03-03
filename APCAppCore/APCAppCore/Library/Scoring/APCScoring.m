@@ -1428,4 +1428,36 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
     return (self.customMaximumPoint == CGFLOAT_MAX) ? [[self maximumDataPoint] doubleValue] : self.customMaximumPoint;
 }
 
+
+#pragma mark - NSCopying
+
+- (id)copyWithZone:(nullable NSZone *) __unused zone
+{
+    id copy;
+
+    if (self.usesHealthKitData) {
+        copy = [[[self class] alloc] initWithHealthKitQuantityType:self.quantityType
+                                                              unit:self.unit
+                                                      numberOfDays:self.numberOfDays
+                                                           groupBy:self.groupBy];
+    } else {
+        copy = [[[self class] alloc] initWithTask:self.taskId
+                                     numberOfDays:self.numberOfDays
+                                         valueKey:self.valueKey
+                                          dataKey:self.dataKey
+                                          sortKey:self.sortKey
+                                       latestOnly:self.latestOnly
+                                          groupBy:self.groupBy];
+    }
+    
+    [copy setCustomMaximumPoint:self.customMaximumPoint];
+    [copy setCustomMinimumPoint:self.customMinimumPoint];
+    [copy setCaption:self.caption];
+    [copy setScoringDelegate:self.scoringDelegate];
+    [copy setSeries1Name:self.series1Name];
+    [copy setSeries2Name:self.series2Name];
+    
+    return copy;
+}
+
 @end

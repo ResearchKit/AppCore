@@ -56,7 +56,7 @@ typedef NS_ENUM(NSUInteger, APHTimelineGroups)
 
 @end
 
-@interface APCScoring : NSEnumerator <APCLineGraphViewDataSource, APCDiscreteGraphViewDataSource>
+@interface APCScoring : NSEnumerator <APCLineGraphViewDataSource, APCDiscreteGraphViewDataSource, NSCopying>
 
 @property (nonatomic) CGFloat customMaximumPoint;
 @property (nonatomic) CGFloat customMinimumPoint;
