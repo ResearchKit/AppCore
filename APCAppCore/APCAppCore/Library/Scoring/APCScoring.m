@@ -34,10 +34,12 @@
 #import "APCScoring.h"
 #import "APCAppCore.h"
 
-NSString *const kDatasetDateKey        = @"datasetDateKey";
-NSString *const kDatasetValueKey       = @"datasetValueKey";
-NSString *const kDatasetRangeValueKey  = @"datasetRangeValueKey";
-NSString *const kDatasetRawDataKey     = @"datasetRawData";
+NSString *const kDatasetDateKey          = @"datasetDateKey";
+NSString *const kDatasetValueKey         = @"datasetValueKey";
+NSString *const kDatasetRangeValueKey    = @"datasetRangeValueKey";
+NSString *const kDatasetRawDataKey       = @"datasetRawData";
+NSString *const kDatasetRawDataPointsKey = @"datasetRawDataPoints";
+NSString *const kDatasetTaskResultKey    = @"datasetTaskResult";
 
 static NSString *const kDatasetSortKey        = @"datasetSortKey";
 static NSString *const kDatasetValueKindKey   = @"datasetValueKindKey";
@@ -686,7 +688,7 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
                         }
                     }
                     
-                    dataPoint[@"datasetTaskResult"] = taskResult;
+                    dataPoint[kDatasetTaskResultKey] = taskResult;
                     
                     [self.dataPoints addObject:dataPoint];
                     [self.rawDataPoints addObject:dataPoint];
