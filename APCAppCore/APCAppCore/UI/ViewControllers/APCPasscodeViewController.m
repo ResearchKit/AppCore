@@ -32,11 +32,16 @@
 // 
  
 #import "APCPasscodeViewController.h"
+#import "APCSignInViewController.h"
+#import "APCOnboardingManager.h"
+#import "NSBundle+Helper.h"
 #import <LocalAuthentication/LocalAuthentication.h>
 #import "UIAlertController+Helper.h"
 #import "APCPasscodeView.h"
 #import "APCLog.h"
 #import "APCLocalization.h"
+#import "APCConstants.h"
+#import "APCAppDelegate.h"
 
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
@@ -53,6 +58,8 @@
 @property (weak, nonatomic) IBOutlet UIImageView *logoImageView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *touchIdButtonBottomConstraint;
 @property (nonatomic) NSInteger wrongAttemptsCount;
+
+- (IBAction)forgotPasscodeButtonTapped:(__unused id)sender;
 
 @end
 
@@ -212,6 +219,11 @@
     }
 }
 
+- (IBAction)forgotPasscodeButtonTapped:(__unused id)sender
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:APCUserForgotPasscodeNotification object:nil];
+}
+
 #pragma mark - Keyboard Notifications
 
 - (void)keyboardWillShow:(NSNotification *)notifcation
@@ -222,8 +234,7 @@
     
     [UIView animateWithDuration:animationDuration animations:^{
         self.touchIdButtonBottomConstraint.constant = keyboardHeight + 15;
-    }];
-    
+    }];    
 }
 
 #pragma mark - Application Notifications

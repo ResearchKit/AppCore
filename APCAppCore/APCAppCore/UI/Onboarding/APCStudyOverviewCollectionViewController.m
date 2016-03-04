@@ -77,6 +77,12 @@ static NSString *kConsentEmailSubject = @"Consent Document";
     self.items = [self prepareContent];
     [self setUpPageView];
     [self setupCollectionView];
+        
+    if (self.transitionToSignInOnLoad)
+    {
+        self.transitionToSignInOnLoad = NO;
+        [self signInTapped:self];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
