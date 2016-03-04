@@ -1478,7 +1478,6 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
 }
 
 - (BOOL)isEqual:(id)anObject {
-    NSLog(@"self.dataPoints: %@", [self.dataPoints isEqual:((APCScoring *) anObject).dataPoints] ? @"yes" : @"no");
     return
         [anObject isKindOfClass:[APCScoring class]] &&
             (self.customMaximumPoint == ((APCScoring *) anObject).customMaximumPoint) &&
@@ -1493,7 +1492,7 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
 
             (self.correlatedScoring == ((APCScoring *) anObject).correlatedScoring || [self.correlatedScoring isEqual:((APCScoring *) anObject).correlatedScoring]) &&
             (self.weakParentScoring == ((APCScoring *) anObject).weakParentScoring || [self.weakParentScoring isEqual:((APCScoring *) anObject).weakParentScoring]) && 
-//            (self.dataPoints == ((APCScoring *) anObject).dataPoints || [self.dataPoints isEqual:((APCScoring *) anObject).dataPoints]) &&
+            (self.dataPoints == ((APCScoring *) anObject).dataPoints || [self.dataPoints isEqual:((APCScoring *) anObject).dataPoints]) &&
             (self.rawDataPoints == ((APCScoring *) anObject).rawDataPoints || [self.rawDataPoints isEqual:((APCScoring *) anObject).rawDataPoints]) &&
             (self.updatedDataPoints == ((APCScoring *) anObject).updatedDataPoints || [self.updatedDataPoints isEqual:((APCScoring *) anObject).updatedDataPoints]) &&
             (self.timeline == ((APCScoring *) anObject).timeline || [self.timeline isEqual:((APCScoring *) anObject).timeline]) &&
@@ -1505,6 +1504,13 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
             (self.latestOnly == ((APCScoring *) anObject).latestOnly) &&
             (self.dataKey == ((APCScoring *) anObject).dataKey || [self.dataKey isEqualToString:((APCScoring *) anObject).dataKey]) &&
             (self.sortKey == ((APCScoring *) anObject).sortKey || [self.sortKey isEqualToString:((APCScoring *) anObject).sortKey]);
+}
+
+
+- (NSUInteger)hash
+{
+    NSUInteger dataHash = [[self.taskId dataUsingEncoding:NSUTF8StringEncoding] hash];
+    return (((NSUInteger)dataHash) << (CHAR_BIT * sizeof(NSUInteger)) / 2) | (((NSUInteger)dataHash) >> ((CHAR_BIT * sizeof(NSUInteger) - (CHAR_BIT * sizeof(NSUInteger)) / 2))) ^ [self.valueKey hash];
 }
 
 @end
