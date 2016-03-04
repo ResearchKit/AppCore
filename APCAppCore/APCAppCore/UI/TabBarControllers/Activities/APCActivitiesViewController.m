@@ -46,6 +46,7 @@
 #import "APCTaskGroup.h"
 #import "APCTasksReminderManager.h"
 #import "APCUtilities.h"
+#import "APCUser+Bridge.h"
 #import "NSBundle+Helper.h"
 #import "NSDate+Helper.h"
 #import "UIAlertController+Helper.h"
@@ -75,6 +76,10 @@ static CGFloat const kTableViewSectionHeaderHeight = 77;
 @property (nonatomic, strong) NSArray               *sections;
 @property (nonatomic, assign) BOOL                  isFetchingFromCoreDataRightNow;
 @property (nonatomic, strong) UIRefreshControl      *refreshControl;
+
+@property (nonatomic, readonly) APCUser *user;
+@property (nonatomic, getter=isShowingConsentFlow) BOOL showingConsentFlow;
+@property (nonatomic, getter=isAttemptingReconsent) BOOL attemptingReconsent;
 
 @property (strong, nonatomic) APCPermissionsManager *permissionManager;
 
@@ -112,14 +117,24 @@ static CGFloat const kTableViewSectionHeaderHeight = 77;
 - (void) viewWillAppear: (BOOL) animated
 {
     [super viewWillAppear: animated];
-
-    [self setupNotifications];
+    
+    if (!self.user.isConsented) {
+        self.showingConsentFlow = NO;
+        [self showReconsentIfNecessary];
+    }
+    else {
+        [self reloadData];
+    }
+    
     [self setUpNavigationBarAppearance];
-
-    [self reloadTasksFromCoreData];
-    [self checkForAndMaybeRespondToSystemDateChange];
     
     APCLogViewControllerAppeared();
+}
+
+- (void) reloadData {
+    [self setupNotifications];
+    [self reloadTasksFromCoreData];
+    [self checkForAndMaybeRespondToSystemDateChange];
 }
 
 - (void) viewDidDisappear: (BOOL) animated
@@ -712,6 +727,66 @@ static CGFloat const kTableViewSectionHeaderHeight = 77;
     }
 
     return activitiesTab;
+}
+
+#pragma mark - Reconsent
+
+- (APCUser *)user {
+    return [[APCAppDelegate sharedAppDelegate] dataSubstrate].currentUser;
+}
+
+- (void)showReconsentIfNecessary {
+    if (!self.user.userConsented) {
+        if (!self.isShowingConsentFlow) {
+            self.showingConsentFlow = YES;
+            UIViewController *vc = [[APCAppDelegate sharedAppDelegate] consentViewController];
+            [self presentViewController:vc animated:YES completion:nil];
+        }
+    }
+    else if (!self.isAttemptingReconsent) {
+        self.attemptingReconsent = YES;
+        [self sendReconsentToServer];
+    }
+}
+
+- (void)sendReconsentToServer {
+    // If this is a reconsent, then send the reconsent
+    __weak typeof(self) weakSelf = self;
+    [self.user signInOnCompletion: ^(NSError *error) {
+        [weakSelf handleSigninResponseWithError: error];
+    }];
+}
+
+- (void)handleSigninResponseWithError:(NSError *)error {
+    if ((error != nil) && (error.code != SBBErrorCodeServerPreconditionNotMet)) {
+        APCLogError2(error);
+        [self showConsentError: error];
+    }
+    else {
+        __weak typeof(self) weakSelf = self;
+        [self.user sendUserConsentedToBridgeOnCompletion: ^(NSError *error) {
+            [weakSelf handleConsentResponseWithError: error];
+        }];
+    }
+}
+
+- (void)handleConsentResponseWithError:(NSError *)error {
+    if (error) {
+        APCLogError2(error);
+        [self showConsentError: error];
+    }
+    else {
+        self.attemptingReconsent = NO;
+        self.user.consented = YES;
+        [[NSNotificationCenter defaultCenter] postNotificationName:APCUserDidConsentNotification object:nil];
+        [self reloadData];
+    }
+}
+
+- (void)showConsentError:(NSError *)error {
+    self.attemptingReconsent = NO;
+    UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedStringWithDefaultValue(@"User Consent Error", @"APCAppCore", APCBundle(), @"User Consent Error", @"") message:error.localizedDescription];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 @end
