@@ -76,6 +76,7 @@ typedef NS_ENUM(NSUInteger, APHTimelineGroups)
 @property (nonatomic, strong) HKQuantityType *quantityType;
 @property (nonatomic, strong) HKUnit *unit;
 
+- (BOOL)isEqual:(id)anObject;
 - (instancetype)initWithHealthKitQuantityType:(HKQuantityType *)quantityType
                                          unit:(HKUnit *)unit
                                  numberOfDays:(NSInteger)numberOfDays;

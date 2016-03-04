@@ -1477,4 +1477,34 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
     return copy;
 }
 
+- (BOOL)isEqual:(id)anObject {
+    NSLog(@"self.dataPoints: %@", [self.dataPoints isEqual:((APCScoring *) anObject).dataPoints] ? @"yes" : @"no");
+    return
+        [anObject isKindOfClass:[APCScoring class]] &&
+            (self.customMaximumPoint == ((APCScoring *) anObject).customMaximumPoint) &&
+            (self.customMinimumPoint == ((APCScoring *) anObject).customMinimumPoint) &&
+            (self.caption == ((APCScoring *) anObject).caption || [self.caption isEqualToString:((APCScoring *) anObject).caption]) &&
+            (self.series1Name == ((APCScoring *) anObject).series1Name || [self.series1Name isEqualToString:((APCScoring *) anObject).series1Name]) &&
+            (self.series2Name == ((APCScoring *) anObject).series2Name || [self.series2Name isEqualToString:((APCScoring *) anObject).series2Name]) &&
+            (self.taskId == ((APCScoring *) anObject).taskId || [self.taskId isEqualToString:((APCScoring *) anObject).taskId]) &&
+            (self.valueKey == ((APCScoring *) anObject).valueKey || [self.valueKey isEqualToString:((APCScoring *) anObject).valueKey]) &&
+            (self.quantityType == ((APCScoring *) anObject).quantityType || [self.quantityType isEqual:((APCScoring *) anObject).quantityType]) &&
+            (self.unit == ((APCScoring *) anObject).unit || [self.unit isEqual:((APCScoring *) anObject).unit]) &&
+
+            (self.correlatedScoring == ((APCScoring *) anObject).correlatedScoring || [self.correlatedScoring isEqual:((APCScoring *) anObject).correlatedScoring]) &&
+            (self.weakParentScoring == ((APCScoring *) anObject).weakParentScoring || [self.weakParentScoring isEqual:((APCScoring *) anObject).weakParentScoring]) && 
+//            (self.dataPoints == ((APCScoring *) anObject).dataPoints || [self.dataPoints isEqual:((APCScoring *) anObject).dataPoints]) &&
+            (self.rawDataPoints == ((APCScoring *) anObject).rawDataPoints || [self.rawDataPoints isEqual:((APCScoring *) anObject).rawDataPoints]) &&
+            (self.updatedDataPoints == ((APCScoring *) anObject).updatedDataPoints || [self.updatedDataPoints isEqual:((APCScoring *) anObject).updatedDataPoints]) &&
+            (self.timeline == ((APCScoring *) anObject).timeline || [self.timeline isEqual:((APCScoring *) anObject).timeline]) &&
+            (self.groupBy == ((APCScoring *) anObject).groupBy) &&
+            (self.current == ((APCScoring *) anObject).current) &&
+            (self.correlatedCurrent == ((APCScoring *) anObject).correlatedCurrent) &&
+            (self.numberOfDays == ((APCScoring *) anObject).numberOfDays) &&
+            (self.usesHealthKitData == ((APCScoring *) anObject).usesHealthKitData) &&
+            (self.latestOnly == ((APCScoring *) anObject).latestOnly) &&
+            (self.dataKey == ((APCScoring *) anObject).dataKey || [self.dataKey isEqualToString:((APCScoring *) anObject).dataKey]) &&
+            (self.sortKey == ((APCScoring *) anObject).sortKey || [self.sortKey isEqualToString:((APCScoring *) anObject).sortKey]);
+}
+
 @end
