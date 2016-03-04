@@ -239,4 +239,76 @@ NSString * const kAPCOnboardingStoryboardName = @"APCOnboarding";
     return changePasscodeViewController;
 }
 
+#pragma mark - handle user consent
+
+- (ORKConsentSignatureResult *)findConsentSignatureResult:(ORKTaskResult*)taskResult {
+    for (ORKStepResult *stepResult in taskResult.results) {
+        for (ORKResult *result in stepResult.results) {
+            if ([result isKindOfClass:[ORKConsentSignatureResult class]]) {
+                return (ORKConsentSignatureResult*)result;
+            }
+        }
+    }
+    return nil;
+}
+
+- (ORKConsentSharingStep *)findConsentSharingStep:(ORKTaskViewController *)taskViewController {
+    NSArray *steps = ((ORKOrderedTask*)taskViewController.task).steps;
+    for (ORKStep *step in steps) {
+        if ([step isKindOfClass:[ORKConsentSharingStep class]]) {
+            return (ORKConsentSharingStep*)step;
+        }
+    }
+    return nil;
+}
+
+- (BOOL)checkForConsentWithTaskViewController:(ORKTaskViewController *)taskViewController {
+    
+    // search for the consent signature
+    ORKConsentSignatureResult *consentResult = [self findConsentSignatureResult:taskViewController.result];
+    
+    //  if no signature (no consent result) then assume the user failed the quiz
+    if (consentResult != nil && consentResult.signature.requiresName && (consentResult.signature.givenName && consentResult.signature.familyName)) {
+        
+        // extract the user's sharing choice
+        ORKConsentSharingStep *sharingStep = [self findConsentSharingStep:taskViewController];
+        APCUserConsentSharingScope sharingScope = APCUserConsentSharingScopeNone;
+        
+        for (ORKStepResult* result in taskViewController.result.results) {
+            if ([result.identifier isEqualToString:sharingStep.identifier]) {
+                for (ORKChoiceQuestionResult *choice in result.results) {
+                    if ([choice isKindOfClass:[ORKChoiceQuestionResult class]]) {
+                        NSNumber *answer = [choice.choiceAnswers firstObject];
+                        if ([answer isKindOfClass:[NSNumber class]]) {
+                            if (0 == answer.integerValue) {
+                                sharingScope = APCUserConsentSharingScopeStudy;
+                            }
+                            else if (1 == answer.integerValue) {
+                                sharingScope = APCUserConsentSharingScopeAll;
+                            }
+                            else {
+                                APCLogDebug(@"Unknown sharing choice answer: %@", answer);
+                            }
+                        }
+                        else {
+                            APCLogDebug(@"Unknown sharing choice answer(s): %@", choice.choiceAnswers);
+                        }
+                    }
+                }
+                break;
+            }
+        }
+        
+        // User has consented - continue
+        [self userDidConsentWithResult:consentResult sharingScope:sharingScope];
+        return YES;
+        
+    } else {
+        // User declined consent - sign out
+        [self userDeclinedConsent];
+        return NO;
+    }
+}
+
+
 @end

@@ -130,6 +130,8 @@ NS_ASSUME_NONNULL_BEGIN
 /** Kept for compatibility reason; no matter the receiver's onboarding type, this will finish onboarding as a user-sign-in. */
 - (void)onboardingDidFinishAsSignIn;
 
+- (BOOL)checkForConsentWithTaskViewController:(ORKTaskViewController *)taskViewController;
+
 @end
 
 NS_ASSUME_NONNULL_END
