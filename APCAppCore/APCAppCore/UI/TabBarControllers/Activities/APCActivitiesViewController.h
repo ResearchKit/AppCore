@@ -38,4 +38,6 @@
 
 @interface APCActivitiesViewController : UIViewController
 
+- (void)showReconsentIfNecessary;
+
 @end

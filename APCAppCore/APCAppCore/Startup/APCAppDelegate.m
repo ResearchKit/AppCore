@@ -210,16 +210,40 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
     [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kAppWillEnterForegroundTimeKey];
 #ifndef DEVELOPMENT
     if (self.dataSubstrate.currentUser.signedIn) {
-        [SBBComponent(SBBAuthManager) ensureSignedInWithCompletion: ^(NSURLSessionDataTask * __unused task,
-																	  id  __unused responseObject,
-																	  NSError *error) {
-            APCLogError2 (error);
-        }];
+        if (self.dataSubstrate.currentUser.isConsented) {
+            [SBBComponent(SBBAuthManager) ensureSignedInWithCompletion: ^(NSURLSessionDataTask * __unused task,
+                                                                          id  __unused responseObject,
+                                                                          NSError *error) {
+                APCLogError2 (error);
+                
+                if (error.code == SBBErrorCodeUnsupportedAppVersion) {
+                    [self handleUnsupportedAppVersionError:error networkManager:nil];
+                }
+                else if (error.code == SBBErrorCodeServerPreconditionNotMet) {
+                    self.dataSubstrate.currentUser.userConsented = NO;
+                    self.dataSubstrate.currentUser.consented = NO;
+                    [self showReconsentIfNecessary];
+                }
+            }];
+        }
+        else {
+            [self showReconsentIfNecessary];
+        }
     }
 #endif
     
     [self hideSecureView];
     [self.dataMonitor appBecameActive];
+}
+
+- (void)showReconsentIfNecessary {
+    if (self.tabBarController == self.window.rootViewController) {
+        APCActivitiesViewController *activitiesVC = (APCActivitiesViewController *)[self.tabBarController.viewControllers firstObject];
+        if ([activitiesVC isKindOfClass:[APCActivitiesViewController class]]) {
+            [self.tabBarController setSelectedIndex:0];
+            [activitiesVC showReconsentIfNecessary];
+        }
+    }
 }
 
 - (void)application:(UIApplication *) __unused application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
@@ -686,25 +710,6 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
 - (NSURL *)appStoreLinkURL
 {
     return [[NSBundle mainBundle] appStoreLinkURL];
-}
-
-/*********************************************************************************/
-#pragma mark - Reconsent user
-/*********************************************************************************/
-
-- (BOOL)handleUserNotConsentedError:(NSError *  __unused)error sessionInfo:(id __unused)sessionInfo networkManager:(id<SBBNetworkManagerProtocol>  __unused)networkManager
-{
-    APCUser *user = self.dataSubstrate.currentUser;
-    if (user.isUserConsented && user.isConsented && user.isSignedUp && user.isSignedIn) {
-        // If the user is marked as having been fully consented, then this is a reconsent.
-        user.userConsented = NO;
-        user.consented = NO;
-        [self showAppropriateVC];
-        return YES;
-    }
-    else {
-        return NO;
-    }
 }
 
 /*********************************************************************************/
