@@ -752,7 +752,6 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
     self.dataSubstrate.currentUser.signedIn = NO;
     [APCKeychainStore removeValueForKey:kPasswordKey];
     [self.tasksReminder updateTasksReminder];
-    [self showOnBoarding];
 }
 
 - (void) withdrawStudy: (NSNotification *) __unused notification
@@ -761,7 +760,6 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
     [APCKeychainStore resetKeyChain];
     [self.dataSubstrate resetCoreData];
     [self.tasksReminder updateTasksReminder];
-    [self showOnBoarding];
 }
 
 - (void)newsFeedUpdated:(NSNotification *)__unused notification
@@ -1026,15 +1024,12 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
 {
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:viewController];
     navController.navigationBar.translucent = NO;
-    [self transitionToRootViewController:navController];
-}
 
-- (void) transitionToRootViewController:(UIViewController*) viewController {
     [UIView transitionWithView:self.window
                       duration:0.6
                        options:UIViewAnimationOptionTransitionNone
                     animations:^{
-                        self.window.rootViewController = viewController;
+                        self.window.rootViewController = navController;
                     }
                     completion:nil];
 }

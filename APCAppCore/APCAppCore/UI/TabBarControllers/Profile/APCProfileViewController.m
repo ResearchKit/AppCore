@@ -173,7 +173,14 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self refreshView];
+    
+    if (!self.user.isSignedIn) {
+        // User has logged out
+        [[APCAppDelegate sharedAppDelegate] showOnBoarding];
+    }
+    else {
+        [self refreshView];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated

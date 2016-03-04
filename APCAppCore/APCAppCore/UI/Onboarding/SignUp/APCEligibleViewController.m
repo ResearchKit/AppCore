@@ -137,67 +137,13 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
 - (void)taskViewController:(ORKTaskViewController *)taskViewController
        didFinishWithReason:(ORKTaskViewControllerFinishReason)reason
                      error:(nullable NSError *)__unused error {
+    
     if (reason == ORKTaskViewControllerFinishReasonCompleted) {
-        ORKConsentSignatureResult *consentResult =  nil;
-        
-        if ([taskViewController respondsToSelector:@selector(signatureResult)]) {
-            APCConsentTaskViewController *consentTaskViewController = (APCConsentTaskViewController *)taskViewController;
-            if (consentTaskViewController.signatureResult) {
-                consentResult = consentTaskViewController.signatureResult;
-            }
-        } else {
-            NSString *signatureResultStepIdentifier = @"reviewStep";
-            
-            for (ORKStepResult* result in taskViewController.result.results) {
-                NSLog(@"Id: %@", result.identifier);
-                if ([result.identifier isEqualToString:signatureResultStepIdentifier]) {
-                    consentResult = (ORKConsentSignatureResult*)[[result results] firstObject];
-                    break;
-                }
-            }
-        }
-        
-        //  if no signature (no consent result) then assume the user failed the quiz
-        if (consentResult != nil && consentResult.signature.requiresName && (consentResult.signature.givenName && consentResult.signature.familyName)) {
-            
-            // extract the user's sharing choice
-            APCConsentTask *task = self.consentVC.task;
-            ORKConsentSharingStep *sharingStep = task.sharingStep;
-            APCUserConsentSharingScope sharingScope = APCUserConsentSharingScopeNone;
-            
-            for (ORKStepResult* result in taskViewController.result.results) {
-                if ([result.identifier isEqualToString:sharingStep.identifier]) {
-                    for (ORKChoiceQuestionResult *choice in result.results) {
-                        if ([choice isKindOfClass:[ORKChoiceQuestionResult class]]) {
-                            NSNumber *answer = [choice.choiceAnswers firstObject];
-                            if ([answer isKindOfClass:[NSNumber class]]) {
-                                if (0 == answer.integerValue) {
-                                    sharingScope = APCUserConsentSharingScopeStudy;
-                                }
-                                else if (1 == answer.integerValue) {
-                                    sharingScope = APCUserConsentSharingScopeAll;
-                                }
-                                else {
-                                    APCLogDebug(@"Unknown sharing choice answer: %@", answer);
-                                }
-                            }
-                            else {
-                                APCLogDebug(@"Unknown sharing choice answer(s): %@", choice.choiceAnswers);
-                            }
-                        }
-                    }
-                    break;
-                }
-            }
-            
-            // signal the onboarding manager that we're done here
-            [self.onboardingManager userDidConsentWithResult:consentResult sharingScope:sharingScope];
-            
+        if ([[self onboardingManager] checkForConsentWithTaskViewController:taskViewController]) {
             [self.consentVC dismissViewControllerAnimated:YES completion:^{
                 [self startSignUp];
             }];
         } else {
-            [[self onboardingManager] userDeclinedConsent];
             [taskViewController dismissViewControllerAnimated:YES completion:nil];
         }
     } else {

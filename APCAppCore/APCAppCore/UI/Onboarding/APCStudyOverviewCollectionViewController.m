@@ -100,7 +100,8 @@ static NSString *kConsentEmailSubject = @"Consent Document";
 }
 
 - (void)goBackToSignUpJoin:(NSNotification *)__unused notification {
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    BOOL animated = (self.presentedViewController == nil);
+    [self.navigationController popToRootViewControllerAnimated:animated];
 }
 
 - (NSArray *)prepareContent
