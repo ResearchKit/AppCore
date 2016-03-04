@@ -1452,12 +1452,27 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
                                           groupBy:self.groupBy];
     }
     
+    [copy setCorrelatedScoring:self.correlatedScoring];
     [copy setCustomMaximumPoint:self.customMaximumPoint];
     [copy setCustomMinimumPoint:self.customMinimumPoint];
     [copy setCaption:self.caption];
+    [copy setCorrelatedCurrent:self.correlatedCurrent];
+    [copy setCurrent:self.current];
+    [copy setDataKey:self.dataKey];
+    [copy setDataPoints:self.dataPoints];
+    [copy setDateFormatter:self.dateFormatter];
+    [copy setGroupBy:self.groupBy];
+    [copy setLatestOnly:self.latestOnly];
+    [copy setNumberOfDays:self.numberOfDays];
     [copy setScoringDelegate:self.scoringDelegate];
+    [copy setRawDataPoints:self.rawDataPoints];
     [copy setSeries1Name:self.series1Name];
     [copy setSeries2Name:self.series2Name];
+    [copy setSortKey:self.sortKey];
+    [copy setTimeline:self.timeline];
+    [copy setUpdatedDataPoints:self.updatedDataPoints];
+    [copy setUsesHealthKitData:self.usesHealthKitData];
+    [copy setWeakParentScoring:self.weakParentScoring];
     
     return copy;
 }
