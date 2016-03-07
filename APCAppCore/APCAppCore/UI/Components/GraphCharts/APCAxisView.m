@@ -32,7 +32,7 @@
 // 
  
 #import "APCAxisView.h"
-
+#import "UIFont+APCAppearance.h"
 
 @interface APCAxisView ()
 
@@ -118,7 +118,7 @@
         
         UILabel *label = [UILabel new];
         label.text = titles[i];
-        label.font = self.isLandscapeMode ? [UIFont fontWithName:@"Helvetica-Light" size:19.0] : [UIFont fontWithName:@"Helvetica-Light" size:12.0];
+        label.font = self.isLandscapeMode ? [UIFont appLightFontWithSize:19.0f] : [UIFont appLightFontWithSize:12.0];
         label.numberOfLines = 2;
         label.textAlignment = NSTextAlignmentCenter;
         label.adjustsFontSizeToFitWidth = YES;
