@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9060" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="h61-jT-BHu">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="h61-jT-BHu">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -20,7 +20,6 @@
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="tTU-aB-ynX">
                                 <rect key="frame" x="135" y="85" width="50" height="50"/>
-                                <animations/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="bu7-m2-hee"/>
                                     <constraint firstAttribute="width" constant="50" id="edH-8S-1jl"/>
@@ -28,7 +27,6 @@
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hsa-BE-Hkq">
                                 <rect key="frame" x="16" y="146" width="288" height="70"/>
-                                <animations/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="70" id="r5d-t5-dSv"/>
                                 </constraints>
@@ -41,7 +39,6 @@ a verification email at</string>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="johnny@appleseed.com" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3xK-c0-Pah">
                                 <rect key="frame" x="16" y="217" width="288" height="28"/>
-                                <animations/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="28" id="Wan-5W-p4b"/>
                                 </constraints>
@@ -51,7 +48,6 @@ a verification email at</string>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gY2-y5-fND">
                                 <rect key="frame" x="49" y="237" width="222" height="29"/>
-                                <animations/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="222" id="0vx-Gh-BO1"/>
                                     <constraint firstAttribute="height" constant="29" id="Fb3-wS-FVI"/>
@@ -68,18 +64,16 @@ a verification email at</string>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3lp-lE-Oux">
                                 <rect key="frame" x="16" y="462" width="288" height="1"/>
-                                <animations/>
                                 <color key="backgroundColor" red="0.90980392160000001" green="0.90980392160000001" blue="0.90980392160000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="1" id="wOD-8Z-UB1"/>
                                 </constraints>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yX7-Jl-zxX">
-                                <rect key="frame" x="41" y="484" width="238" height="34"/>
-                                <animations/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="7" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yX7-Jl-zxX">
+                                <rect key="frame" x="35" y="484" width="250" height="34"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="34" id="6xz-2O-k55"/>
-                                    <constraint firstAttribute="width" constant="238" id="lvt-a2-1N3"/>
+                                    <constraint firstAttribute="width" constant="250" id="lvt-a2-1N3"/>
                                 </constraints>
                                 <string key="text">A full copy of the consent agreement
 will be sent to you for your records.</string>
@@ -89,7 +83,6 @@ will be sent to you for your records.</string>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WLq-Ms-OSK">
                                 <rect key="frame" x="135" y="85" width="50" height="50"/>
-                                <animations/>
                                 <state key="normal">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -99,7 +92,6 @@ will be sent to you for your records.</string>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cVc-Jw-LIH">
                                 <rect key="frame" x="24" y="528" width="273" height="30"/>
-                                <animations/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="emJ-QS-ca3"/>
                                     <constraint firstAttribute="width" constant="273" id="rkR-Zp-gnM"/>
@@ -114,7 +106,6 @@ will be sent to you for your records.</string>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QwO-ep-Om3" customClass="APCButton">
                                 <rect key="frame" x="81" y="305" width="159" height="44"/>
-                                <animations/>
                                 <color key="backgroundColor" red="0.81724121800000005" green="1" blue="0.97136515830000003" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="159" id="Hhm-Zd-c9j"/>
@@ -136,7 +127,6 @@ will be sent to you for your records.</string>
                             </button>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="While you wait, you can share the app by pressing the share button below" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fuD-QG-wP8">
                                 <rect key="frame" x="16" y="350" width="288" height="50"/>
-                                <animations/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="NQi-mN-NZ2"/>
                                     <constraint firstAttribute="width" constant="288" id="VGI-ER-TfW"/>
@@ -147,7 +137,6 @@ will be sent to you for your records.</string>
                             </label>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bzr-zG-t0U" customClass="APCButton">
                                 <rect key="frame" x="80" y="410" width="159" height="44"/>
-                                <animations/>
                                 <color key="backgroundColor" red="0.81724121800000005" green="1" blue="0.97136515830000003" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="J9b-jE-ocz"/>
@@ -169,7 +158,6 @@ will be sent to you for your records.</string>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Once verified, tap below" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ikM-qL-vyw">
                                 <rect key="frame" x="16" y="271" width="288" height="28"/>
-                                <animations/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="28" id="qia-eB-OXk"/>
                                 </constraints>
@@ -185,10 +173,8 @@ will be sent to you for your records.</string>
                                         <subviews>
                                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="QUz-Ib-Z8B">
                                                 <rect key="frame" x="37" y="31" width="37" height="37"/>
-                                                <animations/>
                                             </activityIndicatorView>
                                         </subviews>
-                                        <animations/>
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.71999999999999997" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="100" id="IPl-tj-qdZ"/>
@@ -203,7 +189,6 @@ will be sent to you for your records.</string>
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                 </subviews>
-                                <animations/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.14000000000000001" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstItem="QF4-Z4-QsM" firstAttribute="top" secondItem="ddi-aN-vlM" secondAttribute="top" constant="122" id="g75-Rn-xnJ"/>
@@ -211,7 +196,6 @@ will be sent to you for your records.</string>
                                 </constraints>
                             </view>
                         </subviews>
-                        <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="hsa-BE-Hkq" firstAttribute="trailing" secondItem="Kj1-kb-LF2" secondAttribute="trailingMargin" id="2zi-3Q-RSf"/>
@@ -282,7 +266,6 @@ will be sent to you for your records.</string>
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="onDrag" dataMode="static" style="plain" separatorStyle="default" rowHeight="65" sectionHeaderHeight="22" sectionFooterHeight="22" id="FHf-9J-hsG">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <animations/>
                         <color key="backgroundColor" red="0.97254901959999995" green="0.97254901959999995" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>
                         <view key="tableHeaderView" contentMode="scaleToFill" id="Myv-bm-D9z">
                             <rect key="frame" x="0.0" y="64" width="320" height="40"/>
@@ -290,13 +273,11 @@ will be sent to you for your records.</string>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter your email address " lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JFo-Ee-63n">
                                     <rect key="frame" x="15" y="8" width="290" height="24"/>
-                                    <animations/>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                     <color key="textColor" red="0.5568627451" green="0.5568627451" blue="0.5568627451" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                             </subviews>
-                            <animations/>
                             <color key="backgroundColor" red="0.97254901959999995" green="0.97254901959999995" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>
                             <constraints>
                                 <constraint firstItem="JFo-Ee-63n" firstAttribute="top" secondItem="Myv-bm-D9z" secondAttribute="top" constant="8" id="9uh-JR-At1"/>
@@ -308,7 +289,6 @@ will be sent to you for your records.</string>
                         <view key="tableFooterView" contentMode="scaleToFill" id="B7I-4h-crx">
                             <rect key="frame" x="0.0" y="169" width="320" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <animations/>
                             <color key="backgroundColor" red="0.97254901959999995" green="0.97254901959999995" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>
                         </view>
                         <sections>
@@ -318,12 +298,11 @@ will be sent to you for your records.</string>
                                         <rect key="frame" x="0.0" y="104" width="320" height="65"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Dos-aq-5vI" id="f7b-Pr-uWd">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="64.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="r2y-Sf-LKG">
                                                     <rect key="frame" x="74" y="15" width="232" height="35"/>
-                                                    <animations/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="35" id="k8X-jy-yTd"/>
                                                     </constraints>
@@ -335,7 +314,6 @@ will be sent to you for your records.</string>
                                                 </textField>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="39l-Jf-hqN">
                                                     <rect key="frame" x="16" y="23" width="50" height="21"/>
-                                                    <animations/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="50" id="uhc-5s-1bY"/>
                                                         <constraint firstAttribute="height" constant="21" id="vS5-U5-ZRg"/>
@@ -345,7 +323,6 @@ will be sent to you for your records.</string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
-                                            <animations/>
                                             <constraints>
                                                 <constraint firstAttribute="trailingMargin" secondItem="r2y-Sf-LKG" secondAttribute="trailing" constant="6" id="3EW-Do-uvI"/>
                                                 <constraint firstItem="39l-Jf-hqN" firstAttribute="leading" secondItem="f7b-Pr-uWd" secondAttribute="leadingMargin" constant="8" id="7WJ-QG-hLs"/>
@@ -354,7 +331,6 @@ will be sent to you for your records.</string>
                                                 <constraint firstAttribute="centerY" secondItem="r2y-Sf-LKG" secondAttribute="centerY" constant="-1" id="LYM-jK-Wne"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <animations/>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -394,7 +370,6 @@ will be sent to you for your records.</string>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="ENn-0d-qnr">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <animations/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
