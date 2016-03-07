@@ -1433,17 +1433,17 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
 
 #pragma mark - NSCopying
 
-- (id)copyWithZone:(nullable NSZone *) __unused zone
+- (id)copyWithZone:(nullable NSZone *) zone
 {
     id copy;
 
     if (self.usesHealthKitData) {
-        copy = [[[self class] alloc] initWithHealthKitQuantityType:self.quantityType
+        copy = [[[self class] allocWithZone:zone] initWithHealthKitQuantityType:self.quantityType
                                                               unit:self.unit
                                                       numberOfDays:self.numberOfDays
                                                            groupBy:self.groupBy];
     } else {
-        copy = [[[self class] alloc] initWithTask:self.taskId
+        copy = [[[self class] allocWithZone:zone] initWithTask:self.taskId
                                      numberOfDays:self.numberOfDays
                                          valueKey:self.valueKey
                                           dataKey:self.dataKey
