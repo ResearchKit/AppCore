@@ -189,9 +189,8 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
 
         NSMutableDictionary *results = [NSMutableDictionary new];
         NSDate *dayAfterEndDate = endDate.dayAfter.startOfDay;
-        NSDate *date = startDate.startOfDay;
 
-        for (date = startDate.startOfDay; [date isEarlierThanDate: dayAfterEndDate]; date = [date dateByAddingDays: 1])
+        for (NSDate *date = startDate.startOfDay; [date isEarlierThanDate: dayAfterEndDate]; date = [date dateByAddingDays: 1])
         {
             NSArray *taskGroups = [self taskGroupsForDayOfDate: date
                                         forTasksMatchingFilter: taskFilter];

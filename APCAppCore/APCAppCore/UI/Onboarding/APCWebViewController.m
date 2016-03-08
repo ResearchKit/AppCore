@@ -48,7 +48,7 @@
 @implementation APCWebViewController
 
 -(void)viewDidLoad{
-    
+    [super viewDidLoad];
     self.webView.delegate = self;
     self.webView.scalesPageToFit = YES;
     

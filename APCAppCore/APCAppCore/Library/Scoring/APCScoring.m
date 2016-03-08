@@ -1155,7 +1155,7 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
     
     NSArray *rangePoints = [rangeArray filteredArrayUsingPredicate:rangePredicate];
     
-    NSNumber *maxValue = @0;
+    NSNumber *maxValue;
     
     if (rangePoints.count != 0) {
         maxValue = [rangeArray valueForKeyPath:@"@max.maximumValue"];
@@ -1170,7 +1170,7 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
 {
     NSNumber *maxDataPoint = [self maximumDataPointInSeries:self.dataPoints];
     NSNumber *maxCorrelatedDataPoint = [self maximumDataPointInSeries:self.correlatedScoring.dataPoints];
-    NSNumber *max = [NSNumber new];
+    NSNumber *max;
     
     if ([maxDataPoint compare:maxCorrelatedDataPoint] == NSOrderedAscending || [maxDataPoint compare:maxCorrelatedDataPoint] == NSOrderedSame) {
         max = maxCorrelatedDataPoint;
@@ -1274,6 +1274,7 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
         numOfTitles = [self numberOfDivisionsInXAxisForDiscreteGraph:(APCDiscreteGraphView *)graphView];
     }
 
+    if (numOfTitles == 0) { return @""; }
     NSInteger actualIndex = ((self.dataPoints.count - 1)/numOfTitles + 1) * pointIndex;
     
     titleDate = [[self.dataPoints objectAtIndex:actualIndex] valueForKey:kDatasetDateKey];
@@ -1387,7 +1388,7 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
 {
     
     APCRangePoint *value;
-    NSDictionary *point = [NSDictionary new];
+    NSDictionary *point;
     
     if (plotIndex == 0) {
         point = [self.dataPoints objectAtIndex:pointIndex];

@@ -645,7 +645,7 @@ static NSString* const kTestDataGroup = @"test_user";
         }];
         [alert addAction:yesAction];
         
-        [vc presentViewController:alert animated:alert completion:nil];
+        [vc presentViewController:alert animated:YES completion:nil];
     };
     
     if (previousPresentedVc != nil)
