@@ -49,7 +49,7 @@
  
  See the .m file for technical notes on this method.
  */
-- (void) processTasks: (NSArray *) arrayOfTasks
+- (BOOL) processTasks: (NSArray *) arrayOfTasks
            fromSource: (APCTaskSource) taskSource
          usingContext: (NSManagedObjectContext *) context
        returningError: (NSError * __autoreleasing *) errorToReturn;

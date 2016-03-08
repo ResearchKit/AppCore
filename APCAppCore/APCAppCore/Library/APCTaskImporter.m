@@ -139,11 +139,12 @@ static NSArray *legalTimeSpecifierFormats = nil;
 #pragma mark - The Main Import Method
 // ---------------------------------------------------------
 
-- (void) processTasks: (NSArray *) arrayOfTasks
+- (BOOL) processTasks: (NSArray *) arrayOfTasks
            fromSource: (APCTaskSource) taskSource
          usingContext: (NSManagedObjectContext *) context
        returningError: (NSError * __autoreleasing *) errorToReturn
 {
+    BOOL success = YES;
     NSString *sourceName = NSStringFromAPCTaskSource (taskSource);
     APCLogDebug(@"Importing new batch of schedules from [%@] starting at [%@].", sourceName, [NSDate date]);
     
@@ -186,8 +187,11 @@ static NSArray *legalTimeSpecifierFormats = nil;
                                       failureReason: APCErrorSavingEverythingReason
                                  recoverySuggestion: APCErrorSavingEverythingSuggestion
                                         nestedError: savingError];
+            success = NO;
         }
     }
+    
+    return success;
 }
 
 // ---------------------------------------------------------

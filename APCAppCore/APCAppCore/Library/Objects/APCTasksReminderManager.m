@@ -509,7 +509,7 @@ NSString * gTaskReminderDelayMessage;
 {
     NSTimeInterval reminderOffset = ([[APCTasksReminderManager reminderTimesArray] indexOfObject:self.reminderTime]) * kMinutesPerHour * kSecondsPerMinute;
     
-    NSDate *dateToSet = [self now];
+    NSDate *dateToSet;
     if (self.remindersToSend.count == 0) {
         dateToSet = [[NSDate tomorrowAtMidnightFromDate:[self now]] dateByAddingTimeInterval:reminderOffset];
     }else{
