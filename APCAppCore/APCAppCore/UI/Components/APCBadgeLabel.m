@@ -92,4 +92,11 @@
     [self setNeedsDisplay];
 }
 
+- (void) setTintColor:(UIColor *)tintColor
+{
+    _tintColor = tintColor;
+    self.textColor = tintColor;
+    self.layer.borderColor  = self.tintColor.CGColor;
+}
+
 @end
