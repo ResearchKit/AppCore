@@ -1167,6 +1167,11 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
     [self showResetPasscodeAlert:nil];
 }
 
+- (UIColor*) tintColorForForgotPasscode
+{
+    return [UIColor appPrimaryColor];
+}
+
 - (void)passcodeViewControllerDidSucceed
 {
     //set the tabbar controller as the rootViewController
