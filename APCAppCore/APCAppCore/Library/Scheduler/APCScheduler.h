@@ -149,6 +149,15 @@ typedef void (^APCSchedulerCallbackForFetchingCount) (NSUInteger count, NSError 
 - (APCTask*) finishTask:(APCTask*) completedTask;
 
 /**
+ Finishes the current task which involves setting a finish date to
+ @param completionDate, and saving the finished task to CoreData, and purging
+ the TaskGroupCache so that whenever the UI is refreshed any UI changes
+ for a finished task will be visible.
+ */
+- (APCTask*) finishTask:(APCTask*) completedTask
+     withCompletionDate:(NSDate*) completionDate;
+
+/**
  Starts the current task which involves setting a start date to
  back to nil, saving the aborted task to CoreData, and purging
  the TaskGroupCache so that whenever the UI is refreshed any UI changes
