@@ -512,7 +512,18 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
 }
 
 - (APCTask*) finishTask:(APCTask*) completedTask {
-    completedTask.taskFinished = [NSDate date];
+    return [self finishTask:completedTask withCompletionDate:[NSDate date]];
+}
+
+- (APCTask*) finishTask:(APCTask*) completedTask
+     withCompletionDate:(NSDate*) completionDate
+{
+    if (completionDate == nil)
+    {
+        completionDate = [NSDate date];
+    }
+    
+    completedTask.taskFinished = completionDate;
     NSError * saveError;
     [completedTask saveToPersistentStore:&saveError];
     APCLogError2 (saveError);

@@ -51,6 +51,13 @@ static NSInteger        kDefaultSchemaRevision      = 1;
 @property (strong, nonatomic) ORKStep *step;
 @property (strong, nonatomic) NSData *localRestorationData;
 
+/*
+ * This date is updated every time a new step view controller appears
+ * It was originally created to log the correct date when a task was physically competed, 
+ * instead of when the user taps "done" on the completed screen
+ */
+@property (strong, nonatomic) NSDate* lastStepViewControllerAppearedDate;
+
 @end
 
 /**
@@ -235,7 +242,11 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
                 [self processTaskResult];
             }
             
-            [[APCScheduler defaultScheduler] finishTask:self.scheduledTask];
+            // Per BRIDGE-977, the current date at this point in the code is when the user taps "done"
+            // But, we want when the user actually finished the task, which is when the "done" screen appeared
+            [[APCScheduler defaultScheduler] finishTask:self.scheduledTask
+                                     withCompletionDate:self.lastStepViewControllerAppearedDate];
+            
             [self apiUpdateTask:self.scheduledTask];
             [[NSNotificationCenter defaultCenter]postNotificationName:APCActivityCompletionNotification object:nil];
             break;
@@ -417,7 +428,7 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
 {
     [super stepViewControllerWillAppear:viewController];
     self.localRestorationData = self.restorationData; //Cached to store during encode state
-    
+    self.lastStepViewControllerAppearedDate = [NSDate date];
 }
 
 - (void)encodeRestorableStateWithCoder:(NSCoder *)coder
