@@ -37,7 +37,10 @@
 
 extern NSString *const kDatasetDateKey;
 extern NSString *const kDatasetValueKey;
+extern NSString *const kDatasetRangeValueKey;
 extern NSString *const kDatasetRawDataKey;
+extern NSString *const kDatasetRawDataPointsKey;
+extern NSString *const kDatasetTaskResultKey;
 
 typedef NS_ENUM(NSUInteger, APHTimelineGroups)
 {
@@ -56,7 +59,7 @@ typedef NS_ENUM(NSUInteger, APHTimelineGroups)
 
 @end
 
-@interface APCScoring : NSEnumerator <APCLineGraphViewDataSource, APCDiscreteGraphViewDataSource>
+@interface APCScoring : NSEnumerator <APCLineGraphViewDataSource, APCDiscreteGraphViewDataSource, NSCopying>
 
 @property (nonatomic) CGFloat customMaximumPoint;
 @property (nonatomic) CGFloat customMinimumPoint;
