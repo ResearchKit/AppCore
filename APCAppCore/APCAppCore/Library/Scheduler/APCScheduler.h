@@ -156,6 +156,13 @@ typedef void (^APCSchedulerCallbackForFetchingCount) (NSUInteger count, NSError 
  */
 - (APCTask*) abortTask:(APCTask*) abortedTask;
 
+/**
+ * Mark the next scheduled task with taskID as having been completed.
+ */
+- (void) startAndFinishNextScheduledTaskWithID: (NSString *) taskID
+                                     startDate: (NSDate *) startDate
+                                       endDate: (NSDate *) endDate;
+
 // ---------------------------------------------------------
 #pragma mark - Debugging
 // ---------------------------------------------------------
