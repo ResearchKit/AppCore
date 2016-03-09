@@ -60,7 +60,7 @@
 
 - (void)sharedInit
 {
-    _tintColor = [UIColor appPrimaryColor];
+    self.tintColor = [UIColor appPrimaryColor];
     
     _lineWidth = 1.0f;
     
@@ -90,6 +90,12 @@
     }
     
     [self setNeedsDisplay];
+}
+
+- (void) tintColorDidChange
+{
+    self.textColor = self.tintColor;
+    self.layer.borderColor  = self.tintColor.CGColor;
 }
 
 @end

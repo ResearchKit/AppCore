@@ -142,6 +142,7 @@ NSString *NSStringShortFromAPCTaskTypeAsNumber  (NSNumber *taskTypeAsNumber);
 FOUNDATION_EXPORT NSString *const APCUserSignedUpNotification;
 FOUNDATION_EXPORT NSString *const APCUserSignedInNotification;
 FOUNDATION_EXPORT NSString *const APCUserLogOutNotification;
+FOUNDATION_EXPORT NSString *const APCUserForgotPasscodeNotification;
 FOUNDATION_EXPORT NSString *const APCUserDidWithdrawStudyNotification;
 FOUNDATION_EXPORT NSString *const APCUserDidConsentNotification;
 FOUNDATION_EXPORT NSString *const APCUserDidDeclineConsentNotification;

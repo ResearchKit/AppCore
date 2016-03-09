@@ -74,7 +74,7 @@
                                                                intendedUseDescription:nil
                                                                              duration:10
                                                                               options:0
-                                                                          handOptions:APCTapHandOptionLeft];
+                                                                          handOptions:ORKPredefinedTaskHandOptionLeft];
     // Check assumption around how many steps
     XCTAssertEqual(task.steps.count, 4);
     
@@ -112,7 +112,7 @@
                                                                intendedUseDescription:nil
                                                                              duration:10
                                                                               options:0
-                                                                          handOptions:APCTapHandOptionRight];
+                                                                          handOptions:ORKPredefinedTaskHandOptionRight];
     // Check assumption around how many steps
     XCTAssertEqual(task.steps.count, 4);
     
@@ -159,7 +159,7 @@
                                                                    intendedUseDescription:nil
                                                                                  duration:10
                                                                                   options:0
-                                                                              handOptions:APCTapHandOptionBoth];
+                                                                              handOptions:ORKPredefinedTaskHandOptionBoth];
         ORKStep * (^filteredSteps)(NSString*, NSString*) = ^(NSString *part1, NSString *part2) {
             NSString *keyValue = [NSString stringWithFormat:@"%@.%@", part1, part2];
             NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K == %@", NSStringFromSelector(@selector(identifier)), keyValue];

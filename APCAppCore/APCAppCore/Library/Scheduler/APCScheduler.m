@@ -512,7 +512,18 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
 }
 
 - (APCTask*) finishTask:(APCTask*) completedTask {
-    completedTask.taskFinished = [NSDate date];
+    return [self finishTask:completedTask withCompletionDate:[NSDate date]];
+}
+
+- (APCTask*) finishTask:(APCTask*) completedTask
+     withCompletionDate:(NSDate*) completionDate
+{
+    if (completionDate == nil)
+    {
+        completionDate = [NSDate date];
+    }
+    
+    completedTask.taskFinished = completionDate;
     NSError * saveError;
     [completedTask saveToPersistentStore:&saveError];
     APCLogError2 (saveError);
@@ -541,6 +552,43 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
     [self clearTaskGroupCache];
     
     return abortedTask;
+}
+
+- (void) startAndFinishNextScheduledTaskWithID: (NSString *) taskID
+                                     startDate: (NSDate *) startDate
+                                       endDate: (NSDate *) endDate {
+    
+    __block APCTask *startedTask = nil;
+    [self.managedObjectContext performBlock:^{
+        
+        // Get the task
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([APCTask class])];
+        request.predicate = [NSPredicate predicateWithFormat:@"%K = %@", NSStringFromSelector(@selector(taskID)), taskID];
+        request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:NSStringFromSelector(@selector(taskScheduledFor))
+                                                                  ascending:NO] ];
+        request.fetchLimit = 1;
+        NSError *error;
+        startedTask = [[self.managedObjectContext executeFetchRequest:request error:&error] firstObject];
+        APCLogError2(error);
+        
+        // update the dates
+        startedTask.taskStarted = startDate;
+        startedTask.taskFinished = endDate;
+    }];
+    
+    // Save
+    if (startedTask) {
+        NSError * saveError;
+        [startedTask saveToPersistentStore:&saveError];
+        APCLogError2 (saveError);
+    }
+    
+    /*
+     Clear the taskGroup cache, so UIs (and anything else
+     depending on the cached taskGroups) draw correctly.
+     This operation is thread-safe.
+     */
+    [self clearTaskGroupCache];
 }
 
 
