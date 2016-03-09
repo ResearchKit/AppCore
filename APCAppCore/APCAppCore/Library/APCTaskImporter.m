@@ -54,12 +54,15 @@ typedef enum : NSUInteger {
     APCErrorLoadingNativeBridgeSurveyObjectCode,
     APCErrorLoadingSurveyFileCode,
     APCErrorParsingSurveyContentCode,
-    APCErrorSavingEverythingCode
+    APCErrorSavingEverythingCode,
+    APCErrorDeletingObsoleteTasksCode,
 }   APCError;
 
 static NSString * const APCErrorDomain                                              = @"APCErrorDomainImportTasks";
 static NSString * const APCErrorSavingEverythingReason                              = @"Error Saving New Tasks";
 static NSString * const APCErrorSavingEverythingSuggestion                          = @"There was an error attempting to save the new tasks.";
+static NSString * const APCErrorDeletingObsoleteTasksReason                         = @"Error Deleting Obsolete Tasks";
+static NSString * const APCErrorDeletingObsoleteTasksSuggestion                     = @"There was an error attempting to delete the obsolete tasks.";
 static NSString * const APCErrorCouldntFindSurveyFileReason                         = @"Can't Find Survey File";
 static NSString * const APCErrorCouldntFindSurveyFileSuggestion                     = @"We couldn't find the specified survey file on the phone.  Did you misspell the filename, perhaps?";
 static NSString * const APCErrorLoadingSurveyFileReason                             = @"There was an error serializing the contents of a survey file";
@@ -187,6 +190,56 @@ static NSArray *legalTimeSpecifierFormats = nil;
                                       failureReason: APCErrorSavingEverythingReason
                                  recoverySuggestion: APCErrorSavingEverythingSuggestion
                                         nestedError: savingError];
+            success = NO;
+        }
+    }
+    
+    // -----------------------------------------------------
+    // Delete Obsolete Tasks
+    // -----------------------------------------------------
+    // Relevant tasks should have come down from bridge and then update the APCTask.updatedAt field
+    // accordingly with the exception of: completed tasks and expired tasks. Any task that wasn't updated
+    // that doesn't fall into one of those 2 categories is either no longer scheduled or at least it is
+    // no longer relevant. So lets delete those. If at some point Bridge starts returning recently completed
+    // and recently expired activities, this will either be unnecessary or be significantly simpler.
+    if (success) {
+        // Tasks saved, so now clean out the tasks that didn't come down from the server
+        NSDate *now = [NSDate date];
+        NSTimeInterval fiveMinutesAgoInterval = 60 * 5 * (-1);
+        NSDate *fiveMinutesAgo = [now dateByAddingTimeInterval:fiveMinutesAgoInterval];
+        NSDate *midnightThisMorning = now.startOfDay;
+        NSDate *midnightYesterdayMorning = [now dateByAddingDays:(-1)].startOfDay;
+        
+        
+        // TODO: This logic can be simplified once daysBehind is an option - we no longer have to worry about deleting
+        // "Yesterday" tasks.
+        // Check that the activity was not finished - if it was, we don't want to remove it (since Bridge stops returning it)
+        // Check that the activity was not a "yesterday" task, by confirming it:
+            // Had no expiration OR
+            // Expired before yesterday OR
+            // Expired today or later
+        NSPredicate *findObsoleteTasks = [NSPredicate predicateWithFormat:
+                                          @"(%K < %@) && (%K == nil) && (%K.length == 0 OR %K < %@ OR %K > %@)",
+                                          NSStringFromSelector (@selector (updatedAt)),           // -[APCTask taskScheduledFor]
+                                          fiveMinutesAgo,
+                                          NSStringFromSelector (@selector (taskFinished)),           // -[APCTask taskExpires]
+                                          NSStringFromSelector (@selector (taskExpires)),           // -[APCTask taskExpires]
+                                          NSStringFromSelector (@selector (taskExpires)),           // -[APCTask taskExpires]
+                                          midnightYesterdayMorning,
+                                          NSStringFromSelector (@selector (taskExpires)),           // -[APCTask taskFinished]
+                                          midnightThisMorning
+                                          ];
+        NSFetchRequest *obsoleteTaskRequest = [APCTask requestWithPredicate: findObsoleteTasks];
+        NSBatchDeleteRequest *deleteRequest = [[NSBatchDeleteRequest alloc] initWithFetchRequest:obsoleteTaskRequest];
+        
+        NSError *deleteError = nil;
+        [context executeRequest:deleteRequest error:&deleteError];
+        if (deleteError) {
+            *errorToReturn = [NSError errorWithCode: APCErrorDeletingObsoleteTasksCode
+                                             domain: APCErrorDomain
+                                      failureReason: APCErrorDeletingObsoleteTasksReason
+                                 recoverySuggestion: APCErrorDeletingObsoleteTasksSuggestion
+                                        nestedError: deleteError];
             success = NO;
         }
     }
