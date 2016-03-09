@@ -58,12 +58,6 @@
 
 @property (nonatomic) BOOL showConsentRow;
 
-/*
- * @param transitionToSignInOnLoad when YES will transition straight to Sign In VC from viewDidLoad
- *                                 defaults to NO
- */
-@property (nonatomic) BOOL transitionToSignInOnLoad;
-
 - (IBAction)signInTapped:(id)sender;
 - (IBAction)signUpTapped:(id)sender;
 

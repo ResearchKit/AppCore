@@ -711,8 +711,7 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
 
 - (NSURL *)appStoreLinkURL
 {
-    return [NSURL URLWithString:@""];
-//    return [[NSBundle mainBundle] appStoreLinkURL];
+    return [[NSBundle mainBundle] appStoreLinkURL];
 }
 
 /*********************************************************************************/
@@ -764,6 +763,11 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
     self.dataSubstrate.currentUser.signedIn = NO;
     [APCKeychainStore removeValueForKey:kPasswordKey];
     [self.tasksReminder updateTasksReminder];
+    [self showOnBoardingAndThenSignIn];
+}
+
+- (void) showOnBoardingAndThenSignIn
+{
     [self showOnBoarding];
 
     
@@ -772,11 +776,11 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
     UIViewController* topVc = ((UINavigationController*)self.window.rootViewController).topViewController;
     if([topVc isKindOfClass:[APCStudyOverviewCollectionViewController class]])
     {
-        ((APCStudyOverviewCollectionViewController*)topVc).transitionToSignInOnLoad = YES;
+        [(APCStudyOverviewCollectionViewController*)topVc signInTapped:self];
     }
     else
     {
-        NSLog(@"Error: We were unable to automatically transition to the sign-in screen. This is probably because the study overview screen has been replaced by your app. One way to add this feature into your app is to register for the APCUserLogOutAndGoToSignInNotification in your AppDelegate, and modify the behavior of the method showOnBoarding to transition straight to the sign-in screen");
+        NSLog(@"Error: We were unable to automatically transition to the sign-in screen. This is probably because the study overview screen has been replaced by your app. One way to add this feature into your app is to override showOnBoardingAndThenSignIn in your AppDelegate, and modify the behavior of the method showOnBoarding to transition straight to the sign-in screen");
     }
 }
 
@@ -1191,13 +1195,13 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
                                                                    message:message
                                                             preferredStyle:UIAlertControllerStyleAlert];
     
-    NSString* cancelTitle = [NSLocalizedStringWithDefaultValue(@"cancel", @"APCAppCore", APCBundle(), @"cancel", @"Action to cancel") uppercaseString];
+    NSString* cancelTitle = NSLocalizedStringWithDefaultValue(@"Cancel", @"APCAppCore", APCBundle(), @"Cancel", @"Action to cancel");
     UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:cancelTitle
-                                                           style:UIAlertActionStyleDefault
+                                                           style:UIAlertActionStyleCancel
                                                          handler:^(__unused UIAlertAction * _Nonnull action){}];
     [alert addAction:cancelAction];
     
-    NSString* logoutTitle = [NSLocalizedStringWithDefaultValue(@"log out", @"APCAppCore", APCBundle(), @"log out", @"Action to log out") uppercaseString];
+    NSString* logoutTitle = NSLocalizedStringWithDefaultValue(@"Log out", @"APCAppCore", APCBundle(), @"Log out", @"Action to log out");
     UIAlertAction* logoutAction = [UIAlertAction actionWithTitle:logoutTitle
                                                            style:UIAlertActionStyleDefault
                                                          handler:^(__unused UIAlertAction * _Nonnull action)
