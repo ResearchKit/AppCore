@@ -181,6 +181,7 @@ static NSString *kConsentEmailSubject = @"Consent Document";
     self.dateRangeLabel.textColor = [UIColor appSecondaryColor3];
     
     self.btnAlreadyParticipated.tintColor = [UIColor appPrimaryColor];
+    self.view.backgroundColor = [UIColor appPrimaryColor];
 }
 
 - (APCUser *)user

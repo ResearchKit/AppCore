@@ -35,23 +35,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-/**
- Values that identify the button that was tapped in a tapping sample.
- */
-typedef NS_OPTIONS(NSInteger, APCTapHandOption) {
-    /// Which hand to use is undefined
-    APCTapHandOptionUndefined = 0,
-    
-    /// Task should test the left hand
-    APCTapHandOptionLeft = 1 << 1,
-    
-    /// Task should test the right hand
-    APCTapHandOptionRight = 1 << 2,
-    
-    /// Task should test both hands (random order)
-    APCTapHandOptionBoth = APCTapHandOptionLeft | APCTapHandOptionRight,
-};
-
 extern NSString *const APCTapInstructionStepIdentifier;
 extern NSString *const APCTapTappingStepIdentifier;
 extern NSString *const APCRightHandIdentifier;
@@ -85,7 +68,7 @@ extern NSString *const APCLeftHandIdentifier;
                                         intendedUseDescription:(nullable NSString *)intendedUseDescription
                                                       duration:(NSTimeInterval)duration
                                                        options:(ORKPredefinedTaskOption)options
-                                                   handOptions:(APCTapHandOption)handOptions;
+                                                   handOptions:(ORKPredefinedTaskHandOption)handOptions;
 
 @end
 
