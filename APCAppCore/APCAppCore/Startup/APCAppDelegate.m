@@ -30,7 +30,8 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 // 
- 
+
+@import ResearchKit;
 #import "APCAppDelegate.h"
 #import "APCAppCore.h"
 #import "APCDebugWindow.h"
@@ -43,6 +44,7 @@
 #import "APCScene.h"
 #import "APCUtilities.h"
 #import "APCCatastrophicErrorViewController.h"
+#import "APCStudyOverviewCollectionViewController.h"
 
 #import <AVFoundation/AVFoundation.h>
 #import <AudioToolbox/AudioToolbox.h>
@@ -719,6 +721,7 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(signedUpNotification:) name:(NSString *)APCUserSignedUpNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(signedInNotification:) name:(NSString *)APCUserSignedInNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logOutNotification:) name:(NSString *)APCUserLogOutNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showResetPasscodeAlert:) name:(NSString *)APCUserForgotPasscodeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userConsented:) name:APCUserDidConsentNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(withdrawStudy:) name:APCUserDidWithdrawStudyNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(newsFeedUpdated:) name:kAPCNewsFeedUpdateNotification object:nil];
@@ -752,6 +755,33 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
     self.dataSubstrate.currentUser.signedIn = NO;
     [APCKeychainStore removeValueForKey:kPasswordKey];
     [self.tasksReminder updateTasksReminder];
+}
+
+- (void) logOutAndGoToSignIn
+{
+    self.dataSubstrate.currentUser.signedUp = NO;
+    self.dataSubstrate.currentUser.signedIn = NO;
+    [APCKeychainStore removeValueForKey:kPasswordKey];
+    [self.tasksReminder updateTasksReminder];
+    [self showOnBoardingAndThenSignIn];
+}
+
+- (void) showOnBoardingAndThenSignIn
+{
+    [self showOnBoarding];
+
+    
+    // Check if the showOnBoarding is showing the study Overview, because then we can enabled sign in to show right afterwards
+    // This will work for vanilla implementations of AppCore, but may need additional implementation in some apps
+    UIViewController* topVc = ((UINavigationController*)self.window.rootViewController).topViewController;
+    if([topVc isKindOfClass:[APCStudyOverviewCollectionViewController class]])
+    {
+        [(APCStudyOverviewCollectionViewController*)topVc signInTapped:self];
+    }
+    else
+    {
+        NSLog(@"Error: We were unable to automatically transition to the sign-in screen. This is probably because the study overview screen has been replaced by your app. One way to add this feature into your app is to override showOnBoardingAndThenSignIn in your AppDelegate, and modify the behavior of the method showOnBoarding to transition straight to the sign-in screen");
+    }
 }
 
 - (void) withdrawStudy: (NSNotification *) __unused notification
@@ -1130,6 +1160,16 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
     [self passcodeViewControllerDidFail];
 }
 
+- (void)passcodeViewControllerForgotPasscodeTapped:(UIViewController *) __unused viewController
+{
+    [self showResetPasscodeAlert:nil];
+}
+
+- (UIColor *)passcodeViewControllerTintColorForForgotPasscode:(UIViewController *) __unused viewController
+{
+    return [UIColor appPrimaryColor];
+}
+
 - (void)passcodeViewControllerDidSucceed
 {
     //set the tabbar controller as the rootViewController
@@ -1146,5 +1186,57 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
     self.isPasscodeShowing = YES;
 }
 
+- (void) showResetPasscodeAlert:(__unused NSNotification*)notification
+{
+    NSString* title = NSLocalizedStringWithDefaultValue(@"Reset Passcode", @"APCAppCore", APCBundle(), @"Enter Passcode", @"Prompt to change passcode");
+    NSString* message = NSLocalizedStringWithDefaultValue(@"In order to reset your passcode, you'll need to log out of the app completely and log back in using your email and password.", @"APCAppCore", APCBundle(), @"In order to reset your passcode, you'll need to log out of the app completely and log back in using your email and password.", @"description of what will happen next");
+    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title
+                                                                   message:message
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    
+    NSString* cancelTitle = NSLocalizedStringWithDefaultValue(@"Cancel", @"APCAppCore", APCBundle(), @"Cancel", @"Action to cancel");
+    UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:cancelTitle
+                                                           style:UIAlertActionStyleCancel
+                                                         handler:^(__unused UIAlertAction * _Nonnull action){}];
+    [alert addAction:cancelAction];
+    
+    NSString* logoutTitle = NSLocalizedStringWithDefaultValue(@"Log out", @"APCAppCore", APCBundle(), @"Log out", @"Action to log out");
+    UIAlertAction* logoutAction = [UIAlertAction actionWithTitle:logoutTitle
+                                                           style:UIAlertActionStyleDefault
+                                                         handler:^(__unused UIAlertAction * _Nonnull action)
+   {
+       [self resetAppAndProceedToSignIn];
+   }];
+    [alert addAction:logoutAction];
+    
+    UIViewController* topVc = self.window.rootViewController;
+    if ([topVc isKindOfClass:[UINavigationController class]])
+    {
+        topVc = ((UINavigationController*)topVc).topViewController;
+    }
+    [topVc presentViewController:alert animated:YES completion:nil];
+}
+
+#pragma mark - Reset Methods
+
+- (void) resetAppAndProceedToSignIn
+{
+    APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
+    UIViewController * vc =  [[UIViewController alloc] init];
+    vc.view.backgroundColor = [UIColor whiteColor];
+    appDelegate.window.rootViewController = vc;
+    
+    // Clear all user info, in case they log in or sign up as a different user afterwards
+    [appDelegate clearNSUserDefaults];
+    [APCKeychainStore resetKeyChain];
+    [appDelegate.dataSubstrate resetCoreData];
+    
+    // This is all that is needed to force the re-registration of the PIN
+    APCUser* user = [((id<APCOnboardingManagerProvider>)appDelegate) onboardingManager].user;
+    user.secondaryInfoSaved = NO;
+    
+    [self logOutAndGoToSignIn];
+}
 
 @end

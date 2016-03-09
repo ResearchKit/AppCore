@@ -121,6 +121,7 @@ NSString *NSStringShortFromAPCTaskTypeAsNumber (NSNumber *taskTypeAsNumber)
 NSString *const APCUserSignedUpNotification                     = @"APCUserSignedUpNotification";
 NSString *const APCUserSignedInNotification                     = @"APCUserSignedInNotification";
 NSString *const APCUserLogOutNotification                       = @"APCUserLogOutNotification";
+NSString *const APCUserForgotPasscodeNotification               = @"APCUserForgotPasscodeNotification";
 NSString *const APCUserDidWithdrawStudyNotification             = @"APCUserDidWithdrawStudyNotification";
 NSString *const APCUserDidConsentNotification                   = @"APCUserDidConsentNotification";
 NSString *const APCUserDidDeclineConsentNotification            = @"APCUserDidDeclineConsentNotification";
