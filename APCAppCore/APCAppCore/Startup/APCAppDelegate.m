@@ -1156,18 +1156,12 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
     [self passcodeViewControllerDidFail];
 }
 
-- (BOOL) hasForgotPasscode
-{
-    return YES;
-}
-
-- (void) forgotPasscodeTapped:(__unused UIButton *)forgotPasscodeButton
-             onViewController:(__unused UIViewController *)viewController
+- (void)passcodeViewControllerForgotPasscodeTapped:(UIViewController *) __unused viewController
 {
     [self showResetPasscodeAlert:nil];
 }
 
-- (UIColor*) tintColorForForgotPasscode
+- (UIColor *)passcodeViewControllerTintColorForForgotPasscode:(UIViewController *) __unused viewController
 {
     return [UIColor appPrimaryColor];
 }
