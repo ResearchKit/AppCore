@@ -46,13 +46,13 @@ NSString *const APCLeftHandIdentifier            = @"left";
                                         intendedUseDescription:(NSString *)intendedUseDescription
                                                       duration:(NSTimeInterval)duration
                                                        options:(ORKPredefinedTaskOption)options
-                                                   handOptions:(APCTapHandOption)handOptions
+                                                   handOptions:(ORKPredefinedTaskHandOption)handOptions
 {
     ORKOrderedTask  *orkTask = [self twoFingerTappingIntervalTaskWithIdentifier:identifier
                                                          intendedUseDescription:intendedUseDescription
                                                                        duration:duration
                                                                         options:options];
-    if (handOptions == APCTapHandOptionUndefined) {
+    if (handOptions == ORKPredefinedTaskHandOptionUndefined) {
         return orkTask;
     }
     
@@ -97,12 +97,12 @@ NSString *const APCLeftHandIdentifier            = @"left";
     
     // Setup which hand to start with and how many hands to add based on the handOptions parameter
     // Hand order is randomly determined.
-    NSUInteger handCount = ((handOptions & APCTapHandOptionBoth) == APCTapHandOptionBoth) ? 2 : 1;
+    NSUInteger handCount = ((handOptions & ORKPredefinedTaskHandOptionBoth) == ORKPredefinedTaskHandOptionBoth) ? 2 : 1;
     BOOL rightHand;
     switch (handOptions) {
-        case APCTapHandOptionLeft:
+        case ORKPredefinedTaskHandOptionLeft:
             rightHand = NO; break;
-        case APCTapHandOptionRight:
+        case ORKPredefinedTaskHandOptionRight:
             rightHand = YES; break;
         default:
             rightHand = (arc4random()%2 == 0); break;
