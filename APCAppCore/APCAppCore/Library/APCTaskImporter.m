@@ -221,13 +221,13 @@ static NSArray *legalTimeSpecifierFormats = nil;
             // %K > %@ Expired today or later
         NSPredicate *findObsoleteTasks = [NSPredicate predicateWithFormat:
                                           @"(%K < %@) && (%K == nil) && (%K.length == 0 OR %K < %@ OR %K > %@)",
-                                          NSStringFromSelector (@selector (updatedAt)),           // -[APCTask taskScheduledFor]
+                                          NSStringFromSelector (@selector (updatedAt)),           // -[APCTask updatedAt]
                                           fiveMinutesAgo,
-                                          NSStringFromSelector (@selector (taskFinished)),           // -[APCTask taskExpires]
+                                          NSStringFromSelector (@selector (taskFinished)),           // -[APCTask taskFinished]
                                           NSStringFromSelector (@selector (taskExpires)),           // -[APCTask taskExpires]
                                           NSStringFromSelector (@selector (taskExpires)),           // -[APCTask taskExpires]
                                           midnightYesterdayMorning,
-                                          NSStringFromSelector (@selector (taskExpires)),           // -[APCTask taskFinished]
+                                          NSStringFromSelector (@selector (taskExpires)),           // -[APCTask taskExpires]
                                           midnightThisMorning
                                           ];
         NSFetchRequest *obsoleteTaskRequest = [APCTask requestWithPredicate: findObsoleteTasks];
