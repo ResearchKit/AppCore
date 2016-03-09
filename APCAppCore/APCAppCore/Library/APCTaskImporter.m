@@ -213,11 +213,12 @@ static NSArray *legalTimeSpecifierFormats = nil;
         
         // TODO: This logic can be simplified once daysBehind is an option - we no longer have to worry about deleting
         // "Yesterday" tasks.
-        // Check that the activity was not finished - if it was, we don't want to remove it (since Bridge stops returning it)
+        // (%K < %@) Select this as one of the tasks that was not updated
+        // (%K == nil) Check that the activity was not finished - if it was, we don't want to remove it (since Bridge stops returning it)
         // Check that the activity was not a "yesterday" task, by confirming it:
-            // Had no expiration OR
-            // Expired before yesterday OR
-            // Expired today or later
+            // %K.length == 0 Had no expiration OR
+            // %K < %@ Expired before yesterday OR
+            // %K > %@ Expired today or later
         NSPredicate *findObsoleteTasks = [NSPredicate predicateWithFormat:
                                           @"(%K < %@) && (%K == nil) && (%K.length == 0 OR %K < %@ OR %K > %@)",
                                           NSStringFromSelector (@selector (updatedAt)),           // -[APCTask taskScheduledFor]
