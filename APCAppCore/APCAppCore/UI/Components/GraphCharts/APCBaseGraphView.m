@@ -91,6 +91,11 @@ CGFloat const kAPCPopAnimationDuration  = 0.3;
     @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"%s must be overridden in a subclass/category", __PRETTY_FUNCTION__] userInfo:nil];
 }
 
+- (CGFloat)plotPointDiameter
+{
+    return self.isLandscapeMode ? 10.0f : 8.0f;
+}
+
 - (NSInteger)numberOfPlots
 {
     [self throwOverrideException];

@@ -107,6 +107,9 @@ FOUNDATION_EXPORT CGFloat const kAPCPopAnimationDuration;
 
 - (void)animateLayer:(CAShapeLayer *)shapeLayer withAnimationType:(APCGraphAnimationType)animationType toValue:(CGFloat)toValue startDelay:(CGFloat)delay;
 
+
+- (CGFloat)plotPointDiameter;
+
 @end
 
 
