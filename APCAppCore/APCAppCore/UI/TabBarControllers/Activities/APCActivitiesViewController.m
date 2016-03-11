@@ -771,7 +771,10 @@ static CGFloat const kTableViewSectionHeaderHeight = 77;
 }
 
 - (void)handleConsentResponseWithError:(NSError *)error {
-    if (error) {
+    // 409 Conflict in this context means consent already signed, which happens if a user tries to re-sign-up
+    // with an existing email account rather than signing in with it. In any case it means they've already signed
+    // the consent so we can just mark the user as consented and move on.
+    if (error && error.code != 409) {
         APCLogError2(error);
         [self showConsentError: error];
     }
