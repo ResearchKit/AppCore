@@ -39,13 +39,14 @@ FOUNDATION_EXPORT NSString * const kAPCDiscreteGraphViewRefreshNotification;
 
 @protocol APCDiscreteGraphViewDataSource;
 @protocol APCDiscreteGraphViewDelegate;
-@class APCRangePoint;
+@class APCRangePoint, APCCircleView;
 
 @interface APCDiscreteGraphView : APCBaseGraphView
 
 @property (nonatomic, weak) IBOutlet id <APCDiscreteGraphViewDataSource> datasource;
 
 @property (nonatomic) BOOL shouldConnectRanges;
+@property (nonatomic) BOOL usesLegend;
 
 @end
 
@@ -75,7 +76,16 @@ FOUNDATION_EXPORT NSString * const kAPCDiscreteGraphViewRefreshNotification;
 /*  Range Point Interface     */
 /******************************/
 
+@interface APCDiscretePoint: NSObject
+
+@property (nonatomic) CGFloat value;
+@property (nonatomic) CGFloat legendIndex;
+
+@end
+
 @interface APCRangePoint : NSObject
+
+@property (nonatomic) NSArray <APCDiscretePoint *> *discreteValues;
 
 @property (nonatomic) CGFloat maximumValue;
 
@@ -88,4 +98,6 @@ FOUNDATION_EXPORT NSString * const kAPCDiscreteGraphViewRefreshNotification;
 - (BOOL)isRangeZero;
 
 @end
+
+
 
