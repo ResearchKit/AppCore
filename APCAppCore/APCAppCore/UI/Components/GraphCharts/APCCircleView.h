@@ -35,7 +35,7 @@
 
 @interface APCCircleView : UIView
 
-@property (nonatomic, strong) UIColor *tintColor;
+@property (nonatomic, getter=isSolidDot) BOOL solidDot;
 
 @property (nonatomic) CGFloat value;
 

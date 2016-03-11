@@ -43,6 +43,7 @@ FOUNDATION_EXPORT CGFloat const kAPCGrowAnimationDuration;
 FOUNDATION_EXPORT CGFloat const kAPCPopAnimationDuration;
 
 @protocol APCBaseGraphViewDelegate;
+@class APCCircleView;
 
 @interface APCBaseGraphView : UIView
 
@@ -110,12 +111,16 @@ FOUNDATION_EXPORT CGFloat const kAPCPopAnimationDuration;
 
 - (CGFloat)plotPointDiameter;
 
+- (APCCircleView *)createPlotPointForPlotIndex:(NSInteger)plotIndex legendIndex:(NSUInteger)legendIndex;
+
 @end
 
 
 @protocol APCBaseGraphViewDelegate <NSObject>
 
 @optional
+
+- (void)setupPlotPoint:(APCCircleView *)shape legendIndex:(NSUInteger)legendIndex tintColor:(UIColor *)tintColor;
 
 - (void)graphViewTouchesBegan:(APCBaseGraphView *)graphView;
 

@@ -548,8 +548,6 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 
 - (void)drawPointCirclesForPlotIndex:(NSInteger)plotIndex
 {
-    CGFloat pointSize = [self plotPointDiameter];
-    
     for (NSUInteger i=0 ; i<self.yAxisPoints.count; i++) {
         
         APCRangePoint *dataPointVal = (APCRangePoint *)self.dataPoints[i];
@@ -561,36 +559,42 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
             
             APCRangePoint *positionOnYAxis = (APCRangePoint *)self.yAxisPoints[i];
             
-            {
-                APCCircleView *point = [[APCCircleView alloc] initWithFrame:CGRectMake(0, 0, pointSize, pointSize)];
-                point.tintColor = (plotIndex == 0) ? self.tintColor : self.secondaryTintColor;
-                point.center = CGPointMake(positionOnXAxis, positionOnYAxis.minimumValue);
-                [self.plotsView.layer addSublayer:point.layer];
-                
-                if (self.shouldAnimate) {
-                    point.alpha = 0;
+            if (self.usesLegend && (positionOnYAxis.discreteValues.count > 0)) {
+                for (APCDiscretePoint *dataPoint in positionOnYAxis.discreteValues) {
+                    [self addDotForPlotIndex:plotIndex
+                                      center:CGPointMake(positionOnXAxis, dataPoint.value)
+                                 legendIndex:dataPoint.legendIndex];
                 }
-                
-                [self.dots addObject:point];
             }
-            
-            if (![positionOnYAxis isRangeZero]) {
+            else {
+                // Draw min point
+                [self addDotForPlotIndex:plotIndex
+                                  center:CGPointMake(positionOnXAxis, positionOnYAxis.minimumValue)
+                             legendIndex:0];
                 
-                CGFloat pointSize = self.isLandscapeMode ? 10.0f : 8.0f;
-                APCCircleView *point = [[APCCircleView alloc] initWithFrame:CGRectMake(0, 0, pointSize, pointSize)];
-                point.tintColor = (plotIndex == 0) ? self.tintColor : self.secondaryTintColor;
-                point.center = CGPointMake(positionOnXAxis, positionOnYAxis.maximumValue);
-                [self.plotsView.layer addSublayer:point.layer];
-                
-                if (self.shouldAnimate) {
-                    point.alpha = 0;
+                if (![positionOnYAxis isRangeZero]) {
+                    // Draw max
+                    [self addDotForPlotIndex:plotIndex
+                                      center:CGPointMake(positionOnXAxis, positionOnYAxis.maximumValue)
+                                 legendIndex:0];
                 }
-                
-                [self.dots addObject:point];
             }
-            
         }
     }
+}
+
+- (void)addDotForPlotIndex:(NSInteger)plotIndex center:(CGPoint)center legendIndex:(NSUInteger)legendIndex
+{
+    // Draw max point
+    APCCircleView *point = [self createPlotPointForPlotIndex:plotIndex legendIndex:legendIndex];
+    point.center = center;
+    [self.plotsView.layer addSublayer:point.layer];
+    
+    if (self.shouldAnimate) {
+        point.alpha = 0;
+    }
+    
+    [self.dots addObject:point];
 }
 
 - (void)drawLinesForPlotIndex:(NSInteger)plotIndex
@@ -717,18 +721,39 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
         APCRangePoint *normalizedRangePoint = [APCRangePoint new];
         APCRangePoint *dataPointValue = (APCRangePoint *)self.dataPoints[i];
         
+        // setup a block to calculate the normalized values
+        CGFloat (^normalizedValue)(CGFloat value);
         if (dataPointValue.isEmpty){
-            normalizedRangePoint.minimumValue = normalizedRangePoint.maximumValue = canvasSize.height;
-        } else if (self.minimumValue == self.maximumValue) {
-            normalizedRangePoint.minimumValue = normalizedRangePoint.maximumValue = canvasSize.height/2;
-        } else {
-            CGFloat range = self.maximumValue - self.minimumValue;
-            CGFloat normalizedMinValue = (dataPointValue.minimumValue - self.minimumValue)/range * canvasSize.height;
-            CGFloat normalizedMaxValue = (dataPointValue.maximumValue - self.minimumValue)/range * canvasSize.height;
-            
-            normalizedRangePoint.minimumValue = canvasSize.height - normalizedMinValue;
-            normalizedRangePoint.maximumValue = canvasSize.height - normalizedMaxValue;
+            normalizedValue = ^CGFloat(CGFloat value __unused) {
+                return canvasSize.height;
+            };
         }
+        else if (self.minimumValue == self.maximumValue) {
+            normalizedValue = ^CGFloat(CGFloat value __unused) {
+                return canvasSize.height / 2.0;
+            };
+        }
+        else {
+            CGFloat range = self.maximumValue - self.minimumValue;
+            normalizedValue = ^CGFloat(CGFloat value) {
+                CGFloat normalizedValue = (value - self.minimumValue)/range * canvasSize.height;
+                return canvasSize.height - normalizedValue;
+            };
+        }
+        
+        // Normalize the max/min and discrete points
+        normalizedRangePoint.minimumValue = normalizedValue(dataPointValue.minimumValue);
+        normalizedRangePoint.maximumValue = normalizedValue(dataPointValue.maximumValue);
+        
+        NSMutableArray *normalizedDiscretePoints = (dataPointValue.discreteValues.count > 0) ? [NSMutableArray new] : nil;
+        for (APCDiscretePoint *discretePoint in dataPointValue.discreteValues) {
+            APCDiscretePoint *normalizedDiscretePoint = [[APCDiscretePoint alloc] init];
+            normalizedDiscretePoint.legendIndex = discretePoint.legendIndex;
+            normalizedDiscretePoint.value = normalizedValue(discretePoint.value);
+            [normalizedDiscretePoints addObject:normalizedDiscretePoint];
+        }
+        normalizedRangePoint.discreteValues = [normalizedDiscretePoints copy];
+        
         [normalizedPoints addObject:normalizedRangePoint];
     }
     
@@ -1007,6 +1032,11 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 {
     return [NSString stringWithFormat:@"Min:%0.0f,Max:%0.0f", self.minimumValue, self.maximumValue];
 }
+@end
+
+
+@implementation APCDiscretePoint
+
 @end
 
 

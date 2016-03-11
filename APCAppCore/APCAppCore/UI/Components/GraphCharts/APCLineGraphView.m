@@ -573,9 +573,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
         if (dataPointVal != NSNotFound) {
             CGFloat positionOnYAxis = ((NSNumber*)self.yAxisPoints[i]).floatValue;
             
-            CGFloat pointSize = [self plotPointDiameter];
-            APCCircleView *point = [[APCCircleView alloc] initWithFrame:CGRectMake(0, 0, pointSize, pointSize)];
-            point.tintColor = (plotIndex == 0) ? self.tintColor : self.secondaryTintColor;
+            APCCircleView *point = [self createPlotPointForPlotIndex:plotIndex legendIndex:0];
             point.center = CGPointMake(positionOnXAxis, positionOnYAxis);
             [self.plotsView.layer addSublayer:point.layer];
             
