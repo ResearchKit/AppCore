@@ -716,7 +716,7 @@
 		F5F12B2B1A2F864B0015982C /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5F12B2A1A2F864B0015982C /* libz.dylib */; };
 		F5F12B2D1A2F86550015982C /* libarchive.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5F12B2C1A2F86550015982C /* libarchive.dylib */; };
 		F5F12B2F1A2F86600015982C /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5F12B2E1A2F86600015982C /* libbz2.dylib */; };
-		FB4E46631C7D8EFB00CADC1F /* APCContainerStepViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = FB4E46611C7D8EFB00CADC1F /* APCContainerStepViewController.h */; };
+		FB4E46631C7D8EFB00CADC1F /* APCContainerStepViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = FB4E46611C7D8EFB00CADC1F /* APCContainerStepViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FB4E46641C7D8EFB00CADC1F /* APCContainerStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB4E46621C7D8EFB00CADC1F /* APCContainerStepViewController.m */; };
 		FB4E468B1C7E6E0000CADC1F /* APCNavigationFooter.h in Headers */ = {isa = PBXBuildFile; fileRef = FB4E46891C7E6E0000CADC1F /* APCNavigationFooter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FB4E468C1C7E6E0000CADC1F /* APCNavigationFooter.m in Sources */ = {isa = PBXBuildFile; fileRef = FB4E468A1C7E6E0000CADC1F /* APCNavigationFooter.m */; };
