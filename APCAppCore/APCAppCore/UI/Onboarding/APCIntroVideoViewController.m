@@ -105,7 +105,7 @@ static NSString *const kVideoShownKey = @"VideoShown";
 
 - (void) dismiss {
     // reset the preferred orientation mask before dismissing
-    [[APCAppDelegate sharedAppDelegate] setPreferredOrientationMask:0];
+    [[APCAppDelegate sharedAppDelegate] resetPreferredOrientationMask];
     
     [self dismissViewControllerAnimated:YES completion:nil];
 }

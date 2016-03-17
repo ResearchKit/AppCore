@@ -141,5 +141,7 @@ extern NSString *const kNewsFeedStoryBoardKey;
 // List of the tabs to use to setup the tabbar
 - (NSMutableArray <APCScene *> *)tabBarScenes;
 
+// Reset to the default preferred orientations
+- (void)resetPreferredOrientationMask;
 
 @end

@@ -990,6 +990,11 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
     return self.preferredOrientationMask;
 }
 
+- (void)resetPreferredOrientationMask
+{
+    self.preferredOrientationMask = 0;
+}
+
 
 /*********************************************************************************/
 #pragma mark - Show Methods
