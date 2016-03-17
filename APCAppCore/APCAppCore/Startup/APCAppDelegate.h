@@ -55,6 +55,7 @@ extern NSString *const kNewsFeedStoryBoardKey;
 
 @property (nonatomic, strong) APCFitnessAllocation *sevenDayFitnessAllocationData;
 @property (strong, nonatomic) UITabBarController *tabBarController;
+@property  (nonatomic) UIInterfaceOrientationMask preferredOrientationMask;
 
 + (instancetype) sharedAppDelegate;
 
@@ -140,5 +141,7 @@ extern NSString *const kNewsFeedStoryBoardKey;
 // List of the tabs to use to setup the tabbar
 - (NSMutableArray <APCScene *> *)tabBarScenes;
 
+// Reset to the default preferred orientations
+- (void)resetPreferredOrientationMask;
 
 @end
