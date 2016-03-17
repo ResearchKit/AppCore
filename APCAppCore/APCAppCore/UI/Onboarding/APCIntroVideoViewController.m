@@ -35,6 +35,7 @@
 #import "APCStudyOverviewViewController.h"
 #import "NSBundle+Helper.h"
 #import "APCAppCore.h"
+#import "APCAppDelegate.h"
 #import <AVFoundation/AVFoundation.h>
 
 static NSString *const kVideoShownKey = @"VideoShown";
@@ -67,6 +68,7 @@ static NSString *const kVideoShownKey = @"VideoShown";
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playbackDidFinish:) name:MPMoviePlayerPlaybackDidFinishNotification object:nil];
     [self.moviePlayer play];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
@@ -75,7 +77,7 @@ static NSString *const kVideoShownKey = @"VideoShown";
 
 - (void) viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    
+
     [[NSNotificationCenter defaultCenter] removeObserver:self name:MPMoviePlayerPlaybackDidFinishNotification object:nil];
     
     [self.moviePlayer pause];
@@ -102,6 +104,9 @@ static NSString *const kVideoShownKey = @"VideoShown";
 #pragma mark - Public Methods
 
 - (void) dismiss {
+    // reset the preferred orientation mask before dismissing
+    [[APCAppDelegate sharedAppDelegate] setPreferredOrientationMask:0];
+    
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 @end

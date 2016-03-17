@@ -406,6 +406,10 @@ static NSString *kConsentEmailSubject = @"Consent Document";
     
     NSURL *fileURL = [NSURL fileURLWithPath:[[APCAppDelegate sharedAppDelegate] pathForResource:studyDetails.videoName ofType:@"mp4"]];
     NSAssert(fileURL, @"Must include the consent video with filename \"%@.mp4\" in the app bundle", studyDetails.videoName);
+    
+    // Set the allowed orientation mask to allow landscape
+    [[APCAppDelegate sharedAppDelegate] setPreferredOrientationMask:UIInterfaceOrientationMaskAllButUpsideDown];
+    
     APCIntroVideoViewController *introVideoViewController = [[APCIntroVideoViewController alloc] initWithContentURL:fileURL];
     
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:introVideoViewController];

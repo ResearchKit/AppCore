@@ -1704,6 +1704,10 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         UIAlertAction *videoAction = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Watch Video", @"APCAppCore", APCBundle(), @"Watch Video", @"Watch Video") style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
             
             NSURL *fileURL = [NSURL fileURLWithPath:[appDelegate pathForResource:@"Intro" ofType:@"mp4"]];
+            
+            // Set the allowed orientation mask to allow landscape
+            [[APCAppDelegate sharedAppDelegate] setPreferredOrientationMask:UIInterfaceOrientationMaskAllButUpsideDown];
+
             APCIntroVideoViewController *introVideoViewController = [[APCIntroVideoViewController alloc] initWithContentURL:fileURL];
             
             UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:introVideoViewController];

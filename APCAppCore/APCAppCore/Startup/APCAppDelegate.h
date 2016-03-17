@@ -55,6 +55,7 @@ extern NSString *const kNewsFeedStoryBoardKey;
 
 @property (nonatomic, strong) APCFitnessAllocation *sevenDayFitnessAllocationData;
 @property (strong, nonatomic) UITabBarController *tabBarController;
+@property  (nonatomic) UIInterfaceOrientationMask preferredOrientationMask;
 
 + (instancetype) sharedAppDelegate;
 

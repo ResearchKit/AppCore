@@ -977,6 +977,20 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
     }
 }
 
+
+/*********************************************************************************/
+#pragma mark - supported orientations
+/*********************************************************************************/
+
+- (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window
+{
+    if (self.preferredOrientationMask == 0) {
+        self.preferredOrientationMask = [application supportedInterfaceOrientationsForWindow:window];
+    }
+    return self.preferredOrientationMask;
+}
+
+
 /*********************************************************************************/
 #pragma mark - Show Methods
 /*********************************************************************************/
