@@ -163,7 +163,7 @@ static NSDateFormatter* sCustomDateFormatter;
     {
         id convertedValue = [self serializableObjectFromSourceObject: value
                                                     atRecursionDepth: recursionDepth + 1];
-        
+
         if (convertedValue != nil)
         {
             [resultArray addObject: convertedValue];
