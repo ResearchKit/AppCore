@@ -103,6 +103,7 @@ static NSDateFormatter* sCustomDateFormatter;
     NSDictionary* oldDateFormatter = sDateFormattersForKeys;
     sDateFormattersForKeys = dateFormattersForKeys;
     
+    // Instead of passing around the sDateFormattersForKeys variable recursively, just simply do it static
     NSDictionary *result = [self serializableDictionaryFromSourceDictionary: sourceDictionary
                                                            atRecursionDepth: 0];
     
@@ -121,9 +122,6 @@ static NSDateFormatter* sCustomDateFormatter;
  the top level of an incoming dictionary.  Only -serializableArray...:
  and -serializableDictionary...: should modify recursionDepth; all
  other methods should pass it through as-is.
- 
- @param dateFormatter: date formatter to serialize any NSDate objects
- that we encounter, pass in nil if default ISO 8601 is desired
  
  @return If you pass a dictionary, you'll receive a dictionary;
  if you pass an array, you'll get an array.  Every other object
@@ -165,6 +163,7 @@ static NSDateFormatter* sCustomDateFormatter;
     {
         id convertedValue = [self serializableObjectFromSourceObject: value
                                                     atRecursionDepth: recursionDepth + 1];
+        
         if (convertedValue != nil)
         {
             [resultArray addObject: convertedValue];
@@ -175,10 +174,10 @@ static NSDateFormatter* sCustomDateFormatter;
 }
 
 + (NSDictionary *) serializableDictionaryFromSourceDictionary: (NSDictionary *) sourceDictionary
-                                             atRecursionDepth: (NSUInteger)     recursionDepth
+                                             atRecursionDepth: (NSUInteger) recursionDepth
 {
     NSMutableDictionary *resultDictionary = [NSMutableDictionary new];
-    
+
     for (NSString *key in sourceDictionary)
     {
         id value = sourceDictionary [key];
@@ -261,7 +260,6 @@ static NSDateFormatter* sCustomDateFormatter;
 /**
  A "simple object" is anything that's not an NSDictionary or an
  NSArray.
- * @param dateFormatter will be used if sourceObject is NSDate
  */
 + (id) serializableSimpleObjectFromSourceSimpleObject: (id) sourceObject
 {
