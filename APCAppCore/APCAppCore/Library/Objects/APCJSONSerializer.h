@@ -111,4 +111,18 @@ FOUNDATION_EXPORT NSString * const kAPCSerializedDataKey_FileInfoContentType;
  */
 + (NSDictionary *) serializableDictionaryFromSourceDictionary: (NSDictionary *) sourceDictionary;
 
+/**
+ See documentation for method above, but with additional parameter
+ 
+ @param  This gives the caller a chance to make certain keys be serialized in a dictionary with
+ a custom date formatter applied to them.
+ 
+ For example, in ORKQuestionResult, the "answer" key needs formatted to "MM-DD-YYYY"
+ The dictionary would be:
+  
+ @{ @"answer" : NSDateformatter("MM-DD-YYYY") };
+ */
++ (NSDictionary *) serializableDictionaryFromSourceDictionary: (NSDictionary *) sourceDictionary
+                                    withDateFormattersForKeys: (NSDictionary*)  keyWithDateFormatter;
+
 @end

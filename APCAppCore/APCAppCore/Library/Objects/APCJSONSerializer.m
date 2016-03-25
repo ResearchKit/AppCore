@@ -73,6 +73,18 @@ static NSString * const kRegularExpressionPatternMatchingUUIDs = (@"[a-fA-F0-9]{
                                                                   "[a-fA-F0-9]{4}\\-"
                                                                   "[a-fA-F0-9]{12}");
 
+/**
+ This will be set by the method serializableDictionaryFromSourceDictionary
+ And used to see if certain keys being serialized in a dictionary need
+ a custom date formatter applied to them.  
+ For example, in ORKQuestionResult, the "answer" key needs formatted to "MM-DD-YYYY"
+ So the dictionary would be @{ @"answer" : NSDateformatter("MM-DD-YYYY") };
+ */
+static NSDictionary* sDateFormattersForKeys;
+/**
+ This is the custom date formatter that will be used, per sDateFormattersForKeys value
+ */
+static NSDateFormatter* sCustomDateFormatter;
 
 @implementation APCJSONSerializer
 
@@ -81,9 +93,20 @@ static NSString * const kRegularExpressionPatternMatchingUUIDs = (@"[a-fA-F0-9]{
  */
 + (NSDictionary *) serializableDictionaryFromSourceDictionary: (NSDictionary *) sourceDictionary
 {
+    return [self serializableDictionaryFromSourceDictionary:sourceDictionary
+                                  withDateFormattersForKeys:nil];
+}
+
++ (NSDictionary *) serializableDictionaryFromSourceDictionary: (NSDictionary *) sourceDictionary
+                                    withDateFormattersForKeys: (NSDictionary*)  dateFormattersForKeys
+{
+    NSDictionary* oldDateFormatter = sDateFormattersForKeys;
+    sDateFormattersForKeys = dateFormattersForKeys;
+    
     NSDictionary *result = [self serializableDictionaryFromSourceDictionary: sourceDictionary
                                                            atRecursionDepth: 0];
-
+    
+    sDateFormattersForKeys = oldDateFormatter;
     return result;
 }
 
@@ -98,6 +121,9 @@ static NSString * const kRegularExpressionPatternMatchingUUIDs = (@"[a-fA-F0-9]{
  the top level of an incoming dictionary.  Only -serializableArray...:
  and -serializableDictionary...: should modify recursionDepth; all
  other methods should pass it through as-is.
+ 
+ @param dateFormatter: date formatter to serialize any NSDate objects
+ that we encounter, pass in nil if default ISO 8601 is desired
  
  @return If you pass a dictionary, you'll receive a dictionary;
  if you pass an array, you'll get an array.  Every other object
@@ -139,7 +165,6 @@ static NSString * const kRegularExpressionPatternMatchingUUIDs = (@"[a-fA-F0-9]{
     {
         id convertedValue = [self serializableObjectFromSourceObject: value
                                                     atRecursionDepth: recursionDepth + 1];
-
         if (convertedValue != nil)
         {
             [resultArray addObject: convertedValue];
@@ -150,10 +175,10 @@ static NSString * const kRegularExpressionPatternMatchingUUIDs = (@"[a-fA-F0-9]{
 }
 
 + (NSDictionary *) serializableDictionaryFromSourceDictionary: (NSDictionary *) sourceDictionary
-                                             atRecursionDepth: (NSUInteger) recursionDepth
+                                             atRecursionDepth: (NSUInteger)     recursionDepth
 {
     NSMutableDictionary *resultDictionary = [NSMutableDictionary new];
-
+    
     for (NSString *key in sourceDictionary)
     {
         id value = sourceDictionary [key];
@@ -210,11 +235,19 @@ static NSString * const kRegularExpressionPatternMatchingUUIDs = (@"[a-fA-F0-9]{
             {
                 // "else" nothing.  This applies to every other decision.
             }
-
+            
+            // We only want to apply the special date formatter for keys specified in sDateFormattersForKeys
+            NSDateFormatter* oldCustomDateFormatter = sCustomDateFormatter;
+            id customDateFormatter = sDateFormattersForKeys[key];
+            if (customDateFormatter != nil && [customDateFormatter isKindOfClass:[NSDateFormatter class]]) {
+                sCustomDateFormatter = customDateFormatter;
+            }
 
             convertedValue = [self serializableObjectFromSourceObject: value
                                                      atRecursionDepth: recursionDepth + 1];
-
+            
+            sCustomDateFormatter = oldCustomDateFormatter;
+            
             if (convertedValue != nil)
             {
                 resultDictionary [convertedKey] = convertedValue;
@@ -228,6 +261,7 @@ static NSString * const kRegularExpressionPatternMatchingUUIDs = (@"[a-fA-F0-9]{
 /**
  A "simple object" is anything that's not an NSDictionary or an
  NSArray.
+ * @param dateFormatter will be used if sourceObject is NSDate
  */
 + (id) serializableSimpleObjectFromSourceSimpleObject: (id) sourceObject
 {
@@ -253,6 +287,10 @@ static NSString * const kRegularExpressionPatternMatchingUUIDs = (@"[a-fA-F0-9]{
     {
         NSDate *theDate = (NSDate *) sourceObject;
         NSString *sageFriendlyDate = theDate.toStringInISO8601Format;
+        // In some instances, we need to override the date formatting
+        if (sCustomDateFormatter != nil) {
+            sageFriendlyDate = [sCustomDateFormatter stringFromDate:theDate];
+        }
         result = sageFriendlyDate;
     }
     
