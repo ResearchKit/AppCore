@@ -87,6 +87,17 @@ FOUNDATION_EXPORT NSString * const kAPCSerializedDataKey_FileInfoContentType;
 @interface APCJSONSerializer : NSObject
 
 /**
+ @param  This gives the caller a chance to make certain keys be serialized in a dictionary with
+ a custom date formatter applied to them.
+ 
+ For example, in ORKQuestionResult, the "answer" key needs formatted to "MM-DD-YYYY"
+ The dictionary would be:
+ 
+ @{ @"answer" : NSDateformatter("MM-DD-YYYY") };
+ */
+- (instancetype) initWithDateFormatterForKeys: (NSDictionary*) dateFormatterForKeys;
+
+/**
  Converts a dictionary, and all its contents, into data we
  can serialize into JSON using NSJSONSerializer.  Does its
  work using verrrrry specific rules, according to the needs
@@ -109,20 +120,13 @@ FOUNDATION_EXPORT NSString * const kAPCSerializedDataKey_FileInfoContentType;
  object and its contents as it uses when serializing the top-
  level objects.
  */
-+ (NSDictionary *) serializableDictionaryFromSourceDictionary: (NSDictionary *) sourceDictionary;
+- (NSDictionary *) serializableDictionaryFromSourceDictionary: (NSDictionary *) sourceDictionary;
 
-/**
- See documentation for method above, but with additional parameter
- 
- @param  This gives the caller a chance to make certain keys be serialized in a dictionary with
- a custom date formatter applied to them.
- 
- For example, in ORKQuestionResult, the "answer" key needs formatted to "MM-DD-YYYY"
- The dictionary would be:
-  
- @{ @"answer" : NSDateformatter("MM-DD-YYYY") };
+/*
+ Class helper method with same functionality as one above
+ Use if you need to just serialize a dictionary and do not need
+ to use the date formatter keys property
  */
-+ (NSDictionary *) serializableDictionaryFromSourceDictionary: (NSDictionary *) sourceDictionary
-                                    withDateFormattersForKeys: (NSDictionary*)  keyWithDateFormatter;
++ (NSDictionary *) serializableDictionaryFromSourceDictionary: (NSDictionary *) sourceDictionary;
 
 @end

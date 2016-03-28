@@ -386,7 +386,8 @@ static  NSString  *const  kSpatialSpanMemoryTouchSampleIsCorrectKey     = @"Memo
     }
     
     NSDictionary *propertiesToSave = [result dictionaryWithValuesForKeys: propertyNames];
-    NSDictionary *serializableDictionary = [APCJSONSerializer serializableDictionaryFromSourceDictionary: propertiesToSave withDateFormattersForKeys:dateFormatterForKeys];
+    APCJSONSerializer* jsonSerializer = [[APCJSONSerializer alloc] initWithDateFormatterForKeys:dateFormatterForKeys];
+    NSDictionary *serializableDictionary = [jsonSerializer serializableDictionaryFromSourceDictionary:propertiesToSave];
     
     APCLogDebug(@"%@", serializableDictionary);
     
