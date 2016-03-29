@@ -52,6 +52,7 @@ static NSString * const kIdentifierKey              = @"identifier";
 static NSString * const kStartDateKey               = @"startDate";
 static NSString * const kEndDateKey                 = @"endDate";
 static NSString * const kUserInfoKey                = @"userInfo";
+static NSString * const kAnswerKey                  = @"answer";
 
 //
 //    General-Use Dictionary Keys
@@ -376,8 +377,17 @@ static  NSString  *const  kSpatialSpanMemoryTouchSampleIsCorrectKey     = @"Memo
         }
     }
     
+    // Almost all of the time we want dates to be serialized as ISO 8601 per sage bridge request
+    // However, in the instance of question result with ORKQuestionTypeDate type, we want to use
+    // a specific date format per sage bridge documentation
+    NSDictionary* dateFormatterForKeys = nil;
+    if (result.questionType == ORKQuestionTypeDate) {
+        dateFormatterForKeys = @{ kAnswerKey: ORKResultDateFormatter() };
+    }
+    
     NSDictionary *propertiesToSave = [result dictionaryWithValuesForKeys: propertyNames];
-    NSDictionary *serializableDictionary = [APCJSONSerializer serializableDictionaryFromSourceDictionary: propertiesToSave];
+    APCJSONSerializer* jsonSerializer = [[APCJSONSerializer alloc] initWithDateFormatterForKeys:dateFormatterForKeys];
+    NSDictionary *serializableDictionary = [jsonSerializer serializableDictionaryFromSourceDictionary:propertiesToSave];
     
     APCLogDebug(@"%@", serializableDictionary);
     
