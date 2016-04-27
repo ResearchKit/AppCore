@@ -371,7 +371,7 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
              back to our thread a while later.
              */
             [SBBComponent (SBBActivityManager) getScheduledActivitiesForDaysAhead:4
-                                          withCompletion:^(SBBResourceList *tasksList,
+                                          withCompletion:^(NSArray *tasksList,
                                                            NSError *errorFetchingTasks)
              {
                  /*
@@ -412,7 +412,7 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
  By the time we get here, we're safely on our private thread
  (a private serial queue).
  */
-- (void) handleSuccessfullyFetchedTasksFromServer: (SBBResourceList *) tasks
+- (void) handleSuccessfullyFetchedTasksFromServer: (NSArray *) tasks
      givenThisPossibleErrorFromTheDownloadProcess: (NSError *) errorFetchingtasks
                               andThenUseThisQueue: (NSOperationQueue *) queue
                                          toDoThis: (APCSchedulerCallbackForFetchAndLoadOperations) callbackBlock
@@ -432,9 +432,8 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
         if (!errorFetchingtasks)
         {
             jsonCopyOfSageTasks = [NSMutableArray new];
-            NSArray *sageTasks = tasks.items;
             
-            for (SBBScheduledActivity *sageTask in sageTasks)
+            for (SBBScheduledActivity *sageTask in tasks)
             {
                 NSDictionary *sageTaskData = [importEngine extractJsonDataFromIncomingSageTask:sageTask];
                 
