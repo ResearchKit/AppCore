@@ -159,7 +159,6 @@ static NSString* const kTestDataGroup = @"test_user";
     {
         SBBUserProfile *profile = [SBBUserProfile new];
         profile.email = self.email;
-        profile.username = self.email;
         
         profile.firstName = self.name;
         
@@ -189,7 +188,6 @@ static NSString* const kTestDataGroup = @"test_user";
     else
     {
         profile.email     = self.email;
-        profile.username  = self.email;
         profile.firstName = self.name;
         
         [SBBComponent(SBBUserManager) updateUserProfileWithProfile: profile
