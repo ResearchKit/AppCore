@@ -351,11 +351,11 @@ static NSString* const kTestDataGroup = @"test_user";
     else
     {
         NSParameterAssert(self.password);
-        [SBBComponent(SBBAuthManager) signInWithUsername: self.email
-                                                password: self.password
-                                              completion: ^(NSURLSessionDataTask * __unused task,
-                                                            id responseObject,
-                                                            NSError *signInError)
+        [SBBComponent(SBBAuthManager) signInWithEmail: self.email
+                                             password: self.password
+                                           completion: ^(NSURLSessionDataTask * __unused task,
+                                                         id responseObject,
+                                                         NSError *signInError)
          {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (!signInError || signInError.code == SBBErrorCodeServerPreconditionNotMet) {
@@ -673,7 +673,7 @@ static NSString* const kTestDataGroup = @"test_user";
     self.sessionToken = sessionToken;
 }
 
-- (NSString *)usernameForAuthManager:(id<SBBAuthManagerProtocol>) __unused authManager
+- (NSString *)emailForAuthManager:(id<SBBAuthManagerProtocol>) __unused authManager
 {
     return self.email;
 }
