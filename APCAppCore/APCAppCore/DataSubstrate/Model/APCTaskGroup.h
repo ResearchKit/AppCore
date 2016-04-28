@@ -109,7 +109,7 @@
  
  @see allCompletedTasks
  */
-@property (readonly) APCScheduledTask *latestCompletedTask;
+@property (readonly) APCTask *latestCompletedTask;
 
 /**
  YES if there are any completed tasks in this TaskGroup
@@ -117,14 +117,6 @@
  NO otherwise.
  */
 @property (readonly) BOOL hasAnyCompletedTasks;
-
-/**
- A sample PotentialTask you can use to create new
- ScheduledTasks, and open the matching ViewController.
- Use this if there are no more requiredRemainingTasks,
- but the user still needs/wants to do one.
- */
-@property (nonatomic, strong) APCPotentialTask *samplePotentialTask;
 
 /**
  An integer reporting how many instances of this task were
@@ -179,30 +171,6 @@
 @property (nonatomic, strong) NSDate *expirationDate;
 
 /**
- Returns YES if this is the expiration date for this task appearance.
-
- For example, if a schedule says a task will be visible throughout the year
- 2015, is only visible once a month, and is visible for 3 days at a time before
- it vanishes, like this:
-
- @code
- startsOn:  2015-01-01
- endsOn:    2015-12-31
- interval:  P1M
- expires:   P3D    <----
- @endcode
-
- ...then -expiresToday will be YES if -date is the last of those 3 days.  If
- the user doesn't do it by that third day, it's considered "not completed" or
- "skipped."  For each day through that third day, the task will appear in the
- user's list of "Today" activities.  On the 4th day, the task will appear in
- the user's list of "Incomplete from Yesterday" activities.
- 
- @see lastLegalDate
- */
-@property (nonatomic, assign) BOOL expiresToday;
-
-/**
  Returns YES if -requiredCompletedTasks.count is greater
  than -countOfRequiredTasksForThisTimeRange.
  */
@@ -217,15 +185,10 @@
 
 - (NSComparisonResult) compareWithTaskGroup: (APCTaskGroup *) otherTaskGroup;
 
-- (instancetype)       initWithTask: (APCTask *) task
-                           schedule: (APCSchedule *) schedule
-    requiredRemainingPotentialTasks: (NSArray *) requiredRemainingTasks
-             requiredCompletedTasks: (NSArray *) requiredCompletedTasks
-           gratuitousCompletedTasks: (NSArray *) gratuitousCompletedTasks
-                samplePotentialTask: (APCPotentialTask *) samplePotentialTask
-                 totalRequiredTasks: (NSUInteger) countOfRequiredTasks
-                   forScheduledDate: (NSDate *) scheduledDate
-                     appearanceDate: (NSDate *) appearanceDate
-                     expirationDate: (NSDate *) expirationDate;
+- (instancetype)       initWithTasks: (NSArray *) tasks
+                    forScheduledDate: (NSDate *) scheduledDate;
+
+
+- (BOOL) expiresOnOrBeforeDate:(NSDate *) date;
 
 @end

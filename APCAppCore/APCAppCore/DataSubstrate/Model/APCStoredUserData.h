@@ -44,6 +44,8 @@
 @property (nonatomic, retain) NSDate * consentSignatureDate;
 @property (nonatomic, retain) NSData * consentSignatureImage;
 @property (nonatomic, retain) NSString * consentSignatureName;
+@property (nonatomic, retain) NSDate * downloadDataStartDate;
+@property (nonatomic, retain) NSDate * downloadDataEndDate;
 @property (nonatomic, retain) NSString * customSurveyQuestion;
 @property (nonatomic, retain) NSNumber * dailyScalesCompletionCounter;
 @property (nonatomic, retain) NSString * ethnicity;

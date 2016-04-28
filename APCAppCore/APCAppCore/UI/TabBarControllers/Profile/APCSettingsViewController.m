@@ -39,6 +39,7 @@
 #import "APCTaskReminder.h"
 #import "APCAppDelegate.h"
 #import "APCLog.h"
+#import "APCLocalization.h"
 
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
@@ -82,8 +83,8 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         
         {
             APCTableViewSwitchItem *field = [APCTableViewSwitchItem new];
-            field.caption = NSLocalizedString(@"Enable Reminders", nil);
-            field.identifier = kAPCSwitchCellIdentifier;
+            field.caption = NSLocalizedStringWithDefaultValue(@"Enable Reminders", @"APCAppCore", APCBundle(), @"Enable Reminders", nil);
+            field.reuseIdentifier = kAPCSwitchCellIdentifier;
             field.editable = NO;
             
             field.on = reminderOnState;
@@ -96,10 +97,10 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         
 
             APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
-            field.caption = NSLocalizedString(@"Time", nil);
+            field.caption = NSLocalizedStringWithDefaultValue(@"Time", @"APCAppCore", APCBundle(), @"Time", nil);
             field.pickerData = @[[APCTasksReminderManager reminderTimesArray]];
             field.textAlignnment = NSTextAlignmentRight;
-            field.identifier = kAPCDefaultTableViewCellIdentifier;
+            field.reuseIdentifier = kAPCDefaultTableViewCellIdentifier;
             field.selectedRowIndices = @[@([[APCTasksReminderManager reminderTimesArray] indexOfObject:appDelegate.tasksReminder.reminderTime])];
 
             APCTableViewRow *row = [APCTableViewRow new];
@@ -109,7 +110,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         
      
         APCTableViewSection *section = [APCTableViewSection new];
-        section.sectionTitle = NSLocalizedString(@"", nil);
+        section.sectionTitle = @"";
         section.rows = [NSArray arrayWithArray:rowItems];
         [items addObject:section];
     }
@@ -122,8 +123,8 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         for (APCTaskReminder *reminder in appDelegate.tasksReminder.reminders) {
             
             APCTableViewSwitchItem *field = [APCTableViewSwitchItem new];
-            field.caption = NSLocalizedString(reminder.reminderBody, nil);
-            field.identifier = kAPCSwitchCellIdentifier;
+            field.caption = reminder.reminderBody;
+            field.reuseIdentifier = kAPCSwitchCellIdentifier;
             field.editable = NO;
             
             field.on = [[NSUserDefaults standardUserDefaults]objectForKey:reminder.reminderIdentifier] ? YES : NO;
@@ -151,10 +152,10 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
     switch (section) {
         case 0:
-            headerView.textLabel.text = NSLocalizedString(@"Settings", nil) ;
+            headerView.textLabel.text = NSLocalizedStringWithDefaultValue(@"Settings", @"APCAppCore", APCBundle(), @"Settings", nil) ;
             break;
         case 1:
-            headerView.textLabel.text = NSLocalizedString(@"Tasks", nil);
+            headerView.textLabel.text = NSLocalizedStringWithDefaultValue(@"Tasks", @"APCAppCore", APCBundle(), @"Tasks", nil);
             break;
         default:
             break;
@@ -180,14 +181,15 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     
     if (section == 1 && hasresultsSummaryKey) {
         footerView = [[UITableViewHeaderFooterView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(tableView.frame), tableView.sectionHeaderHeight)];
-        NSString *footerText = [NSString stringWithFormat:@"%@ reminder will be sent 2 hours later.", subtaskTitle];
+        NSString *footerFormat = NSLocalizedStringWithDefaultValue(@"%@ reminder will be sent 2 hours later.", @"APCAppCore", APCBundle(), @"%@ reminder will be sent 2 hours later.", @"Format string for Activity Reminders view Tasks section footer describing when reminder will be sent, to be filled in with the reminder body text.");
+        NSString *footerText = [NSString stringWithFormat:footerFormat, subtaskTitle];
         
         CGRect labelFrame = CGRectMake(20, 0, CGRectGetWidth(footerView.frame)-40, 50);
         footerView.textLabel.frame = labelFrame;
         
         UILabel *reminderLabel = [[UILabel alloc]initWithFrame:labelFrame];
         reminderLabel.numberOfLines = 2;
-        reminderLabel.text = NSLocalizedString(footerText, nil);
+        reminderLabel.text = footerText;
         reminderLabel.textColor = [UIColor grayColor];
         reminderLabel.font = [UIFont appMediumFontWithSize:14.0];
         [footerView.contentView addSubview:reminderLabel];
@@ -218,7 +220,8 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     switch (itemType) {
         case kAPCSettingsItemTypePasscode:
         {
-            APCChangePasscodeViewController *changePasscodeViewController = [[UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"ChangePasscodeVC"];
+            APCOnboardingManager *manager = [(id<APCOnboardingManagerProvider>)[[UIApplication sharedApplication] delegate] onboardingManager];
+            UIViewController *changePasscodeViewController = [manager instantiateChangePasscodeViewController];
             [self.navigationController presentViewController:changePasscodeViewController animated:YES completion:nil];
         }
             break;
@@ -356,11 +359,11 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
 - (void)presentSettingsAlert:(NSError *)error
 {
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Permissions Denied", @"") message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *dismiss = [UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction *__unused action) {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedStringWithDefaultValue(@"Permissions Denied", @"APCAppCore", APCBundle(), @"Permissions Denied", @"") message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *dismiss = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Dismiss", @"APCAppCore", APCBundle(), @"Dismiss", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction *__unused action) {
     }];
     [alertController addAction:dismiss];
-    UIAlertAction *settings = [UIAlertAction actionWithTitle:NSLocalizedString(@"Settings", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
+    UIAlertAction *settings = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Settings", @"APCAppCore", APCBundle(), @"Settings", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
     }];
     [alertController addAction:settings];

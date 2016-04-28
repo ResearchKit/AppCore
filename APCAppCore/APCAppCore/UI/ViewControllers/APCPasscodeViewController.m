@@ -32,10 +32,16 @@
 // 
  
 #import "APCPasscodeViewController.h"
+#import "APCSignInViewController.h"
+#import "APCOnboardingManager.h"
+#import "NSBundle+Helper.h"
 #import <LocalAuthentication/LocalAuthentication.h>
 #import "UIAlertController+Helper.h"
 #import "APCPasscodeView.h"
 #import "APCLog.h"
+#import "APCLocalization.h"
+#import "APCConstants.h"
+#import "APCAppDelegate.h"
 
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
@@ -52,6 +58,8 @@
 @property (weak, nonatomic) IBOutlet UIImageView *logoImageView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *touchIdButtonBottomConstraint;
 @property (nonatomic) NSInteger wrongAttemptsCount;
+
+- (IBAction)forgotPasscodeButtonTapped:(__unused id)sender;
 
 @end
 
@@ -76,10 +84,10 @@
         self.passcodeView.alpha = 0;
         self.titleLabel.alpha = 0;
         self.touchIdButton.alpha = 0;
-        self.titleLabel.text = NSLocalizedString(@"Touch ID or Enter Passcode", nil);
+        self.titleLabel.text = NSLocalizedStringWithDefaultValue(@"Touch ID or Enter Passcode", @"APCAppCore", APCBundle(), @"Touch ID or Enter Passcode", nil);
     } else {
         self.touchIdButton.hidden = YES;
-        self.titleLabel.text = NSLocalizedString(@"Enter Passcode", nil);
+        self.titleLabel.text = NSLocalizedStringWithDefaultValue(@"Enter Passcode", @"APCAppCore", APCBundle(), @"Enter Passcode", nil);
     }
 }
 
@@ -155,7 +163,7 @@
                 self.wrongAttemptsCount++;
                 
             } else {
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Wrong Passcode", nil) message:NSLocalizedString(@"Please enter again.", nil) preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedStringWithDefaultValue(@"Wrong Passcode", @"APCAppCore", APCBundle(), @"Wrong Passcode", nil) message:NSLocalizedStringWithDefaultValue(@"Please enter again.", @"APCAppCore", APCBundle(), @"Please enter again.", nil) preferredStyle:UIAlertControllerStyleAlert];
                 UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
                     [self.passcodeView reset];
                     [self makePasscodeViewBecomeFirstResponder];
@@ -180,9 +188,9 @@
     NSError *error = nil;
     self.touchContext = [LAContext new];
     if ([self.touchContext canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error]) {
-        self.touchContext.localizedFallbackTitle = NSLocalizedString(@"Enter Passcode", @"");
+        self.touchContext.localizedFallbackTitle = NSLocalizedStringWithDefaultValue(@"Enter Passcode", @"APCAppCore", APCBundle(), @"Enter Passcode", @"");
         
-        NSString *localizedReason = NSLocalizedString(@"Please authenticate with Touch ID", @"");
+        NSString *localizedReason = NSLocalizedStringWithDefaultValue(@"Please authenticate with Touch ID", @"APCAppCore", APCBundle(), @"Please authenticate with Touch ID", @"");
         
         [self.touchContext evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics
                           localizedReason:localizedReason
@@ -211,6 +219,11 @@
     }
 }
 
+- (IBAction)forgotPasscodeButtonTapped:(__unused id)sender
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:APCUserForgotPasscodeNotification object:nil];
+}
+
 #pragma mark - Keyboard Notifications
 
 - (void)keyboardWillShow:(NSNotification *)notifcation
@@ -221,8 +234,7 @@
     
     [UIView animateWithDuration:animationDuration animations:^{
         self.touchIdButtonBottomConstraint.constant = keyboardHeight + 15;
-    }];
-    
+    }];    
 }
 
 #pragma mark - Application Notifications

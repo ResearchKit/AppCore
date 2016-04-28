@@ -50,4 +50,23 @@
     return image;
 }
 
+- (UIImage *)flippedImage:(UIImageOrientation)orientation
+{
+    if (self.images.count > 0)
+    {
+        NSMutableArray <UIImage *> *images = [self.images mutableCopy];
+        [images enumerateObjectsUsingBlock:^(UIImage * _Nonnull image, NSUInteger idx, BOOL * _Nonnull stop __unused) {
+            [images replaceObjectAtIndex:idx
+                              withObject:[image flippedImage:orientation]];
+        }];
+        return [UIImage animatedImageWithImages:images duration:self.duration];
+    }
+    else
+    {
+        return [UIImage imageWithCGImage:self.CGImage
+                                   scale:self.scale
+                             orientation:orientation];
+    }
+}
+
 @end

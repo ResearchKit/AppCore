@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9060" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="APCMedicationTrackerCalendarViewController">
@@ -23,6 +24,7 @@
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HNJ-T2-NQa" userLabel="Week Container">
                     <rect key="frame" x="0.0" y="0.0" width="600" height="72"/>
+                    <animations/>
                     <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="72" id="hyv-1e-e2f"/>
@@ -30,12 +32,14 @@
                 </view>
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KL7-BS-XTd">
                     <rect key="frame" x="0.0" y="72" width="600" height="318"/>
+                    <animations/>
                 </scrollView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jK1-nf-DCv" userLabel="Tap Items View">
                     <rect key="frame" x="0.0" y="390" width="600" height="18"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="t3b-cR-MNm" userLabel="Top Line">
                             <rect key="frame" x="0.0" y="0.0" width="600" height="1"/>
+                            <animations/>
                             <color key="backgroundColor" white="0.89718293795620441" alpha="1" colorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="600" id="jM5-DU-rhG"/>
@@ -43,17 +47,20 @@
                         </view>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap on above items to log intake" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vMQ-ee-Tsy" userLabel="Tap Items">
                             <rect key="frame" x="0.0" y="0.0" width="600" height="18"/>
+                            <animations/>
                             <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
-                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LjJ-jh-YLu" userLabel="Bottom Line">
                             <rect key="frame" x="0.0" y="17" width="600" height="1"/>
+                            <animations/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="600" id="YEn-Td-YgJ"/>
                             </constraints>
                         </view>
                     </subviews>
+                    <animations/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstItem="t3b-cR-MNm" firstAttribute="leading" secondItem="jK1-nf-DCv" secondAttribute="leading" id="ALw-En-dBB"/>
@@ -75,18 +82,21 @@
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PhK-O4-B3t" userLabel="Top Line">
                             <rect key="frame" x="0.0" y="0.0" width="600" height="1"/>
+                            <animations/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="600" id="rD5-yE-mpL"/>
                             </constraints>
                         </view>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your Prescriptions" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G6p-QE-uyF">
                             <rect key="frame" x="0.0" y="0.0" width="600" height="18"/>
+                            <animations/>
                             <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
-                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LWt-EN-lEN" userLabel="Bottom Line">
                             <rect key="frame" x="0.0" y="17" width="600" height="1"/>
+                            <animations/>
                             <color key="backgroundColor" white="0.8936473540145986" alpha="1" colorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="600" id="ask-IO-8OL"/>
@@ -94,6 +104,7 @@
                         </view>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GSJ-dT-HRL">
                             <rect key="frame" x="535" y="-7" width="62" height="30"/>
+                            <animations/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="30" id="KGy-qF-4oh"/>
                                 <constraint firstAttribute="width" constant="62" id="ne0-yo-KTZ"/>
@@ -108,6 +119,7 @@
                             </connections>
                         </button>
                     </subviews>
+                    <animations/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="bottom" secondItem="G6p-QE-uyF" secondAttribute="bottom" id="141-ZQ-jnZ"/>
@@ -129,6 +141,7 @@
                 </view>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="bka-yN-34d">
                     <rect key="frame" x="0.0" y="434" width="600" height="166"/>
+                    <animations/>
                     <constraints>
                         <constraint firstAttribute="height" constant="166" id="VJQ-Zm-1sb"/>
                     </constraints>
@@ -138,6 +151,7 @@
                     </connections>
                 </tableView>
             </subviews>
+            <animations/>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>

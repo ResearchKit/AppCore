@@ -55,6 +55,7 @@ NSString *const kConstraintsKey   = @"constraints";
 NSString *const kUiHintKey   = @"uihint";
 NSString *const kSliderValue   = @"slider";
 
+static BOOL sAPCSmartSurveyEnableOtherAutoCapitalization = NO;
 
 @class APCDummyObject;
 static APCDummyObject * _dummyObject;
@@ -100,6 +101,13 @@ static APCDummyObject * _dummyObject;
         NSArray * elements = survey.elements;
         
         [elements enumerateObjectsUsingBlock:^(id object, NSUInteger __unused idx, BOOL * __unused stop) {
+            if ([object isKindOfClass:[SBBSurveyInfoScreen class]]) {
+                SBBSurveyInfoScreen *screen = (SBBSurveyInfoScreen*) object;
+                self.rkSteps[screen.identifier] = [APCSmartSurveyTask rkStepFromSBBSurveyInfoScreen:screen];
+                
+                [self.staticStepIdentifiers addObject:screen.identifier];
+                [self.setOfIdentifiers addObject:screen.identifier];
+            }
             if ([object isKindOfClass:[SBBSurveyQuestion class]]) {
                 SBBSurveyQuestion * obj = (SBBSurveyQuestion*) object;
                 self.rkSteps[obj.identifier] = [APCSmartSurveyTask rkStepFromSBBSurveyQuestion:obj];
@@ -435,6 +443,18 @@ static APCDummyObject * _dummyObject;
     NSAssert(answerFormatClass[SBBClassName], @"SBBClass Not Defined");
     return answerFormatClass[SBBClassName];
 }
+         
++ (ORKInstructionStep*) rkStepFromSBBSurveyInfoScreen:(SBBSurveyInfoScreen*)screen
+{
+    ORKInstructionStep *returnStep = [[ORKInstructionStep alloc] initWithIdentifier:screen.identifier];
+    if (screen.prompt.length > 0) {
+        returnStep.title = screen.prompt;
+    }
+    if (screen.promptDetail.length > 0) {
+        returnStep.text = screen.promptDetail;
+    }
+    return returnStep;
+}
 
 + (ORKQuestionStep*) rkStepFromSBBSurveyQuestion: (SBBSurveyQuestion*) question
 {
@@ -512,6 +532,12 @@ static APCDummyObject * _dummyObject;
     }
     return copy;
 }
+
++ (void) setAPCSmartSurveyAutoCapitalization:(BOOL)autoCapitalization
+{
+    sAPCSmartSurveyEnableOtherAutoCapitalization = autoCapitalization;
+}
+
 @end
 
 @implementation APCDummyObject
@@ -549,14 +575,35 @@ static APCDummyObject * _dummyObject;
     NSMutableArray * options = [NSMutableArray array];
     [localConstraints.enumeration enumerateObjectsUsingBlock:^(SBBSurveyQuestionOption* option, NSUInteger __unused idx, BOOL * __unused stop) {
         NSString * detailText = option.detail.length > 0 ? option.detail : nil;
-        ORKTextChoice * choice = [ORKTextChoice choiceWithText:option.label detailText:detailText value:option.value];
+        ORKTextChoice * choice = [ORKTextChoice choiceWithText:option.label detailText:detailText value:option.value exclusive:!localConstraints.allowMultipleValue];
         [options addObject: choice];
     }];
-    if (localConstraints.allowOtherValue) {
-        [options addObject:NSLocalizedString(@"Other", @"Spinner Option")];
+    if (localConstraints.allowOtherValue)
+    {
+        NSString* otherStr = NSLocalizedStringWithDefaultValue(@"Other", @"APCAppCore", APCBundle(), @"Other", @"Spinner Option");
+        // Smart capitalization will lowercase the "Other" option if all the other answers are lowercase
+        if (sAPCSmartSurveyEnableOtherAutoCapitalization &&
+            [self allLowercaseOptions:localConstraints])
+        {
+            otherStr = [otherStr lowercaseString];
+        }
+        [options addObject:otherStr];
     }
     retAnswer = [ORKAnswerFormat choiceAnswerFormatWithStyle:localConstraints.allowMultipleValue ? ORKChoiceAnswerStyleMultipleChoice : ORKChoiceAnswerStyleSingleChoice textChoices:options];
     return retAnswer;
+}
+
+- (BOOL) allLowercaseOptions:(SBBMultiValueConstraints*)options
+{
+    for(SBBSurveyQuestionOption* option in options.enumeration)
+    {
+        if (option.label != nil &&
+            ![option.label isEqualToString:[option.label lowercaseString]])
+        {
+            return NO;
+        }
+    }
+    return YES;
 }
 
 - (ORKAnswerFormat *)rkNumericAnswerFormat:(NSDictionary *)objectDictionary

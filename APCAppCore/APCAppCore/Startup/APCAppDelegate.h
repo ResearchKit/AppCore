@@ -42,12 +42,20 @@
 extern NSUInteger   const kTheEntireDataModelOfTheApp;
 static NSString*    const kDatabaseName                     = @"db.sqlite";
 
-@class APCDataSubstrate, APCDataMonitor, APCScheduler, APCPasscodeViewController, APCTasksReminderManager, APCPassiveDataCollector, APCFitnessAllocation;
+// Default tab controller tab keys
+extern NSString *const kDashBoardStoryBoardKey;
+extern NSString *const kLearnStoryBoardKey;
+extern NSString *const kActivitiesStoryBoardKey;
+extern NSString *const kHealthProfileStoryBoardKey;
+extern NSString *const kNewsFeedStoryBoardKey;
 
-@interface APCAppDelegate : UIResponder <UIApplicationDelegate, APCOnboardingManagerProvider, APCPasscodeViewControllerDelegate>
+@class APCDataSubstrate, APCDataMonitor, APCScheduler, APCPasscodeViewController, APCTasksReminderManager, APCPassiveDataCollector, APCFitnessAllocation, APCDataGroupsManager;
+
+@interface APCAppDelegate : UIResponder <UIApplicationDelegate, APCOnboardingManagerProvider, APCPasscodeViewControllerDelegate, SBBBridgeAppDelegate>
 
 @property (nonatomic, strong) APCFitnessAllocation *sevenDayFitnessAllocationData;
 @property (strong, nonatomic) UITabBarController *tabBarController;
+@property  (nonatomic) UIInterfaceOrientationMask preferredOrientationMask;
 
 + (instancetype) sharedAppDelegate;
 
@@ -79,6 +87,11 @@ static NSString*    const kDatabaseName                     = @"db.sqlite";
 
 - (NSString*) certificateFileName;
 
+/**
+ * link for opening the app store. AppDelegate implementations can override.
+ */
+- (NSURL *)appStoreLinkURL;
+
 //Show Methods
 - (void) showTabBar;
 - (void) showOnBoarding;
@@ -90,6 +103,10 @@ static NSString*    const kDatabaseName                     = @"db.sqlite";
 - (void)performMigrationAfterDataSubstrateFrom:(NSInteger)previousVersion currentVersion:(NSInteger)currentVersion;
 - (NSString *) applicationDocumentsDirectory;
 - (NSUInteger)obtainPreviousVersion;
+
+//Default bundle for resources and storyboards
+- (NSBundle*)resourceBundle;
+- (NSString*)pathForResource:(NSString*)resourceName ofType:(NSString*)resourceType;
 
 //SetupMethods
 - (void) setUpInitializationOptions;
@@ -120,5 +137,11 @@ static NSString*    const kDatabaseName                     = @"db.sqlite";
 - (NSDate*)applicationBecameActiveDate;
 
 - (void)updateNewsFeedBadgeCount;
+
+// List of the tabs to use to setup the tabbar
+- (NSMutableArray <APCScene *> *)tabBarScenes;
+
+// Reset to the default preferred orientations
+- (void)resetPreferredOrientationMask;
 
 @end

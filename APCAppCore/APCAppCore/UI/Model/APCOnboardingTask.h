@@ -44,6 +44,7 @@ typedef NS_ENUM(NSUInteger, APCOnboardingTaskType) {
 FOUNDATION_EXPORT NSString *const kAPCSignUpInclusionCriteriaStepIdentifier;
 FOUNDATION_EXPORT NSString *const kAPCSignUpEligibleStepIdentifier;
 FOUNDATION_EXPORT NSString *const kAPCSignUpIneligibleStepIdentifier;
+FOUNDATION_EXPORT NSString *const kAPCSignUpDataGroupsStepIdentifier;
 FOUNDATION_EXPORT NSString *const kAPCSignUpGeneralInfoStepIdentifier;
 FOUNDATION_EXPORT NSString *const kAPCSignUpMedicalInfoStepIdentifier;
 FOUNDATION_EXPORT NSString *const kAPCSignUpCustomInfoStepIdentifier;
@@ -52,6 +53,7 @@ FOUNDATION_EXPORT NSString *const kAPCSignUpPermissionsStepIdentifier;
 FOUNDATION_EXPORT NSString *const kAPCSignUpThankYouStepIdentifier;
 FOUNDATION_EXPORT NSString *const kAPCSignInStepIdentifier;
 FOUNDATION_EXPORT NSString *const kAPCSignUpPermissionsPrimingStepIdentifier;
+FOUNDATION_EXPORT NSString *const kAPCSignUpShareAppStepIdentifier;
 
 @protocol APCOnboardingTaskDelegate;
 
@@ -80,6 +82,8 @@ FOUNDATION_EXPORT NSString *const kAPCSignUpPermissionsPrimingStepIdentifier;
 
 @property (nonatomic, strong) ORKStep *permissionsPrimingStep;
 
+@property (nonatomic, strong) ORKStep *dataGroupsStep;
+
 @property (nonatomic, strong) ORKStep *generalInfoStep;
 
 @property (nonatomic, strong) ORKStep *medicalInfoStep;
@@ -93,6 +97,8 @@ FOUNDATION_EXPORT NSString *const kAPCSignUpPermissionsPrimingStepIdentifier;
 @property (nonatomic, strong) ORKStep *thankyouStep;
 
 @property (nonatomic, strong) ORKStep *signInStep;
+
+@property (nonatomic, strong) ORKStep *shareAppStep;
 
 @end
 

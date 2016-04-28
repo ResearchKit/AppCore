@@ -42,7 +42,6 @@ typedef NS_ENUM(NSInteger, APCUserConsentSharingScope) {
     APCUserConsentSharingScopeAll,
 };
 
-
 @interface APCUser : NSObject
 
 /*********************************************************************************/
@@ -62,6 +61,7 @@ typedef NS_ENUM(NSInteger, APCUserConsentSharingScope) {
 @property (nonatomic, strong) NSString * email;
 @property (nonatomic, strong) NSString * password;
 @property (nonatomic, strong) NSString * sessionToken;
+@property (nonatomic) NSString * subpopulationGuid;
 
 /*********************************************************************************/
 #pragma mark - Stored Properties in Core Data
@@ -96,6 +96,9 @@ typedef NS_ENUM(NSInteger, APCUserConsentSharingScope) {
 @property (nonatomic, strong) NSDate *consentSignatureDate;
 @property (nonatomic, strong) NSData *consentSignatureImage;
 
+@property (nonatomic, strong) NSDate *downloadDataStartDate; // NOT stored in CoreData
+@property (nonatomic, strong) NSDate *downloadDataEndDate; // NOT stored in CoreData
+
 @property (nonatomic, getter=isSecondaryInfoSaved) BOOL secondaryInfoSaved;
 
 /*********************************************************************************/
@@ -115,6 +118,8 @@ typedef NS_ENUM(NSInteger, APCUserConsentSharingScope) {
 /*********************************************************************************/
 @property (nonatomic, getter=isSignedUp) BOOL signedUp;
 @property (nonatomic, getter=isSignedIn) BOOL signedIn;
+@property (nonatomic) NSNumber * savedSharingScope;
+@property (nonatomic) NSArray * dataGroups;
 
 - (BOOL) isLoggedOut;
 

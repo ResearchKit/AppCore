@@ -37,35 +37,26 @@
 #import "APCDataVerificationClient.h"
 #import "APCDataVerificationServerAccessControl.h"
 #import "APCDataUploader.h"
+#import "APCTaskResultArchiver.h"
 
-#import <objc/runtime.h>
+
 #import <ResearchKit/ResearchKit.h>
 
-static NSString * const kQuestionTypeKey            = @"questionType";
-static NSString * const kQuestionTypeNameKey        = @"questionTypeName";
-static NSString * const kTaskRunKey                 = @"taskRun";
-static NSString * const kItemKey                    = @"item";
-static NSString * const kAppNameKey                 = @"appName";
-static NSString * const kAppVersionKey              = @"appVersion";
-static NSString * const kPhoneInfoKey               = @"phoneInfo";
-static NSString * const kUploadTimeKey              = @"uploadTime";
-static NSString * const kFilesKey                   = @"files";
-static NSString * const kFileInfoNameKey            = @"filename";
-static NSString * const kFileInfoTimeStampKey       = @"timestamp";
-static NSString * const kFileInfoContentTypeKey     = @"contentType";
-
-//    ORK Result Base Class property keys
-//
-static NSString * const kIdentifierKey              = @"identifier";
-static NSString * const kStartDateKey               = @"startDate";
-static NSString * const kEndDateKey                 = @"endDate";
-static NSString * const kUserInfoKey                = @"userInfo";
+// Upload constants
+static NSInteger        kDefaultSchemaRevision      = 1;
 
 @interface APCBaseTaskViewController () <UIViewControllerRestoration>
 
 @property (strong, nonatomic) ORKStepViewController *stepVC;
 @property (strong, nonatomic) ORKStep *step;
 @property (strong, nonatomic) NSData *localRestorationData;
+
+/*
+ * This date is updated every time a new step view controller appears
+ * It was originally created to log the correct date when a task was physically competed, 
+ * instead of when the user taps "done" on the completed screen
+ */
+@property (strong, nonatomic) NSDate* lastStepViewControllerAppearedDate;
 
 @end
 
@@ -117,54 +108,46 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
     return result;
 }
 
-
-
-
 @implementation APCBaseTaskViewController
 
 #pragma  mark  -  Instance Initialisation
-+ (instancetype)customTaskViewController: (APCScheduledTask*) scheduledTask
++ (instancetype)customTaskViewController: (APCTask*) scheduledTask
 {
     [[UIView appearance] setTintColor:[UIColor appPrimaryColor]];
     
-    id<ORKTask> task = [self createTask: scheduledTask];
+    id<ORKTask> orkTask = [self createOrkTask: scheduledTask];
     
     NSUUID * taskRunUUID = [NSUUID UUID];
     
-    APCBaseTaskViewController * controller = task ? [[self alloc] initWithTask:task taskRunUUID:taskRunUUID] : nil;
+    APCBaseTaskViewController * controller = orkTask ? [[self alloc] initWithTask:orkTask taskRunUUID:taskRunUUID] : nil;
     controller.scheduledTask = scheduledTask;
     controller.delegate = controller;
+    [controller updateSchemaRevision];
+    [[APCScheduler defaultScheduler] startTask:scheduledTask];
     
     return  controller;
 }
 
 + (instancetype)configureTaskViewController:(APCTaskGroup *)taskGroup
 {
-    APCPotentialTask *potentialTask             = taskGroup.requiredRemainingTasks.firstObject;
+    APCTask *nextTask = nil;
     APCBaseTaskViewController *viewController   = nil;
     
-    /*
-     It's a fundamental business requirement that our users
-     can do *more* than the required number of tasks.  This
-     object lets us do that, if they've gone through all
-     the actually- required tasks for this date.
-     */
-    if (potentialTask == nil)
-    {
-        potentialTask = taskGroup.samplePotentialTask;
+    if (taskGroup.requiredRemainingTasks.count > 0) {
+        nextTask = [taskGroup.requiredRemainingTasks firstObject];
+    } else if (taskGroup.requiredCompletedTasks.count > 0) {
+        // Allow the user to complete a required task again, essentially a gratuitous task
+        nextTask = [taskGroup.requiredCompletedTasks lastObject];
+    } else {
+        nextTask = taskGroup.task;
     }
     
-    if (potentialTask != nil) {
-        APCScheduledTask *scheduledTask = [[APCScheduler defaultScheduler] createScheduledTaskFromPotentialTask:potentialTask];
-        
-        viewController = [self customTaskViewController:scheduledTask];
-    }
-    
+    viewController = [self customTaskViewController:nextTask];
     
     return viewController;
 }
 
-+ (id<ORKTask>)createTask: (APCScheduledTask*) __unused scheduledTask
++ (id<ORKTask>)createOrkTask: (APCTask*) __unused scheduledTask
 {
     //To be overridden by child classes
     return  nil;
@@ -174,6 +157,14 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
 {
     //To be overridden by child classes
     return nil;
+}
+
+- (void) updateSchemaRevision
+{
+    // To be overridden by child classes for non default schema revision #s
+    if (self.scheduledTask) {
+        self.scheduledTask.taskSchemaRevision = [NSNumber numberWithInteger:kDefaultSchemaRevision];
+    }
 }
 
 - (void)viewDidLoad
@@ -193,7 +184,7 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
     APCLogViewControllerAppeared();
     APCLogEventWithData(kTaskEvent, (@{
                                        @"task_status":@"Started",
-                                       @"task_title": (self.scheduledTask.task.taskTitle == nil) ? @"No Title Provided": self.scheduledTask.task.taskTitle,
+                                       @"task_title": (self.scheduledTask.taskTitle == nil) ? @"No Title Provided": self.scheduledTask.taskTitle,
                                        @"task_view_controller":NSStringFromClass([self class])
                                        }));
 }
@@ -201,6 +192,14 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
 - (APCAppDelegate *) appDelegate
 {
     return [APCAppDelegate sharedAppDelegate];
+}
+
+- (APCTaskResultArchiver *)taskResultArchiver
+{
+    if (_taskResultArchiver == nil) {
+        _taskResultArchiver = [[APCTaskResultArchiver alloc] init];
+    }
+    return _taskResultArchiver;
 }
 
 
@@ -213,7 +212,7 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
                       error: (nullable NSError *) error
 {
     NSString *currentStepIdentifier = self.currentStepViewController.step.identifier;
-    NSString *taskTitle = self.scheduledTask.task.taskTitle;
+    NSString *taskTitle = self.scheduledTask.taskTitle;
     BOOL shouldLogError = YES;
 
     if (currentStepIdentifier == nil)
@@ -243,7 +242,12 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
                 [self processTaskResult];
             }
             
-            [self.scheduledTask completeScheduledTask];
+            // Per BRIDGE-977, the current date at this point in the code is when the user taps "done"
+            // But, we want when the user actually finished the task, which is when the "done" screen appeared
+            [[APCScheduler defaultScheduler] finishTask:self.scheduledTask
+                                     withCompletionDate:self.lastStepViewControllerAppearedDate];
+            
+            [self apiUpdateTask:self.scheduledTask];
             [[NSNotificationCenter defaultCenter]postNotificationName:APCActivityCompletionNotification object:nil];
             break;
 
@@ -269,26 +273,12 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
             break;
 
         case ORKTaskViewControllerFinishReasonDiscarded:
-            /*
-             The user cancelled the operation.  Delete the ScheduledTask.
-
-             In our new world, the theory is:  ScheduledTasks are only created
-             in the database when the user actually chooses to save them.
-             Unfortunately, a lot of existing code depends on ScheduledTasks
-             already having been created before a view appears.  So we'll run
-             with that:  save the task while the views are using it, but then
-             destroy it if the user cancels.
-
-             This should be asynchronous.  For now, it's not, so I can
-             figure out what threads this class (the one you're reading
-             now) is reliably using.  Then I'll fix it to be wholly-
-             asynchronous.
-             */
-            [self.appDelegate.scheduler deleteScheduledTask: self.scheduledTask];
+            [[APCScheduler defaultScheduler] abortTask:self.scheduledTask];
             break;
 
         case ORKTaskViewControllerFinishReasonSaved:
-            // Nothing special to do.
+            [[APCScheduler defaultScheduler] startTask:self.scheduledTask];
+            [self apiUpdateTask:self.scheduledTask];
             break;
 
         default:
@@ -353,75 +343,15 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
  **/
 - (void) archiveResults
 {
-    //get a fresh archive
-    self.archive = [[APCDataArchive alloc]initWithReference:self.task.identifier];
-    
-    __weak typeof(self) weakSelf = self;
-    //add dictionaries or json data to the archive, calling completeArchive when done
-    [self.result.results enumerateObjectsUsingBlock:^(ORKStepResult *stepResult, NSUInteger __unused idx, BOOL * __unused stop) {
-        [stepResult.results enumerateObjectsUsingBlock:^(ORKResult *result, NSUInteger __unused idx, BOOL *__unused stop) {
-            __strong typeof(self) strongSelf = weakSelf;
-            //Update date if needed
-            if (!result.startDate) {
-                result.startDate = stepResult.startDate;
-                result.endDate = stepResult.endDate;
-            }
-            
-            //this is used in BreastCancer
-            if ([result isKindOfClass:[APCDataResult class]])
-            {
-                APCDataResult * dataResult = (APCDataResult*) result;
-                dataResult.identifier = dataResult.identifier ? : (stepResult.identifier ? : [NSUUID UUID].UUIDString);
-                NSString *fileName = [dataResult.identifier stringByAppendingString:@"_data"];
-                [strongSelf.archive insertJSONDataIntoArchive:dataResult.data filename:fileName];
-            }
-            
-            else if ([result isKindOfClass:[ORKFileResult class]])
-            {
-                ORKFileResult * fileResult = (ORKFileResult*) result;
-                NSString *translatedFilename = [ORKFileResult filenameForFileResultIdentifier:fileResult.identifier stepIdentifier:stepResult.identifier];
-                if (fileResult.fileURL) {
-                    [strongSelf.archive insertDataAtURLIntoArchive:fileResult.fileURL fileName:translatedFilename];
-                }
-            }
-            
-            else if ([result isKindOfClass:[ORKTappingIntervalResult class]])
-            {
-                ORKTappingIntervalResult  *tappingResult = (ORKTappingIntervalResult *)result;
-                [self addTappingResultsToArchive:tappingResult];
-            }
-            
-            else if ([result isKindOfClass:[ORKSpatialSpanMemoryResult class]])
-            {
-                ORKSpatialSpanMemoryResult  *spatialSpanMemoryResult = (ORKSpatialSpanMemoryResult *)result;
-                [self addSpatialSpanMemoryResultsToArchive:spatialSpanMemoryResult];
-            }
-            
-            
-            else if ([result isKindOfClass:[ORKQuestionResult class]])
-            {
-                [self addResultToArchive:result];
-            }
-            else
-            {
-                APCLogError(@"Result not processed for : %@", result.identifier);
-            }
-        }];
-    }];
+    // get a fresh archive
+    // Note: by current design this is UI blocking if run on main thread. TODO: move off main thread? syoung 12/11/2015
+    self.archive = [[APCDataArchive alloc] initWithReference:self.task.identifier task:self.scheduledTask];
+    [self.taskResultArchiver appendArchive:self.archive withTaskResult:self.result];
 }
 
-/**
- Subclasses should override these methods
- */
-
-- (void)addSpatialSpanMemoryResultsToArchive:(ORKSpatialSpanMemoryResult *) __unused result
+- (APCSignUpPermissionsType)requiredPermission
 {
-    
-}
-
-- (void)addTappingResultsToArchive:(ORKTappingIntervalResult *)__unused result
-{
-    
+    return kAPCSignUpPermissionsTypeNone;
 }
 
 #pragma mark - Upload
@@ -435,7 +365,7 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
     [archiveUploader encryptAndUploadArchive:self.archive withCompletion:^(NSError *error) {
         __strong typeof(self) strongSelf = weakSelf;
         if (! error) {
-            if (resultSummary != nil) {
+            if (resultSummary != nil || self.createResultSummaryBlock) {
                 [strongSelf storeInCoreDataWithFileName:self.archive.unencryptedURL.absoluteString.lastPathComponent resultSummary:resultSummary];
             }
         }else{
@@ -458,12 +388,12 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
                         usingContext: (NSManagedObjectContext *) context
 {
     NSManagedObjectID * objectID = [APCResult storeTaskResult:self.result inContext:context];
-    APCScheduledTask *localContextScheduledTask = (APCScheduledTask *)[context objectWithID:self.scheduledTask.objectID];
+    APCTask *localContextScheduledTask = (APCTask *)[context objectWithID:self.scheduledTask.objectID];
     
     APCResult * result = (APCResult*)[context objectWithID:objectID];
     result.archiveFilename = fileName;
     result.resultSummary = resultSummary;
-    result.scheduledTask = localContextScheduledTask;
+    result.task = localContextScheduledTask;
     
     NSError * resultSaveError = nil;
     BOOL saveSuccess = [result saveToPersistentStore:&resultSaveError];
@@ -482,6 +412,14 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
     }
 }
 
+- (void) apiUpdateTask: (APCTask *) task {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        [task updateTaskOnCompletion: ^(NSError *error) {
+            APCLogError2 (error);
+        }];
+    });
+}
+
 /*********************************************************************************/
 #pragma mark - State Restoration
 /*********************************************************************************/
@@ -490,7 +428,7 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
 {
     [super stepViewControllerWillAppear:viewController];
     self.localRestorationData = self.restorationData; //Cached to store during encode state
-    
+    self.lastStepViewControllerAppearedDate = [NSDate date];
 }
 
 - (void)encodeRestorableStateWithCoder:(NSCoder *)coder
@@ -508,10 +446,11 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
     NSString * scheduledTaskID = [coder decodeObjectForKey:@"scheduledTask"];
     APCAppDelegate *appDelegate = [APCAppDelegate sharedAppDelegate];
     NSManagedObjectID * objID = [appDelegate.dataSubstrate.persistentStoreCoordinator managedObjectIDForURIRepresentation:[NSURL URLWithString:scheduledTaskID]];
-    APCScheduledTask * scheduledTask = (APCScheduledTask*)[appDelegate.dataSubstrate.mainContext objectWithID:objID];
+    APCTask * scheduledTask = (APCTask*)[appDelegate.dataSubstrate.mainContext objectWithID:objID];
     id localRestorationData = [coder decodeObjectForKey:@"restorationData"];
     if (scheduledTask) {
-        APCBaseTaskViewController * tvc =[[self alloc] initWithTask:task restorationData:localRestorationData];
+        APCBaseTaskViewController * tvc =[[self alloc] initWithTask:task restorationData:localRestorationData delegate:nil];
+        tvc.delegate = tvc;
         tvc.scheduledTask = scheduledTask;
         tvc.restorationIdentifier = [task identifier];
         tvc.restorationClass = self;
@@ -524,64 +463,8 @@ NSString * NSStringFromORKTaskViewControllerFinishReason (ORKTaskViewControllerF
 
 #pragma mark - Utilities
 
-- (void) addResultToArchive: (ORKResult*) result
-{
-    NSMutableArray * propertyNames = [NSMutableArray array];
-    
-    /*
-     Get the names of all properties of our result's class
-     and all its superclasses.  Stop when we hit ORKResult.
-     */
-    Class klass = result.class;
-    BOOL done = NO;
-    NSArray *propertyNamesForOneClass = nil;
-    
-    while (klass != nil && ! done)
-    {
-        propertyNamesForOneClass = [self classPropsFor: klass];
-        
-        [propertyNames addObjectsFromArray: propertyNamesForOneClass];
-        
-        if (klass == [ORKResult class])
-        {
-            done = YES;
-        }
-        else
-        {
-            klass = [klass superclass];
-        }
-    }
-    
-    NSDictionary *propertiesToSave = [result dictionaryWithValuesForKeys: propertyNames];
-    NSDictionary *serializableData = [APCJSONSerializer serializableDictionaryFromSourceDictionary: propertiesToSave];
-    
-    APCLogDebug(@"%@", serializableData);
-    
-    NSString *filename = [result.identifier stringByAppendingString:@".json"];
-    [self.archive insertIntoArchive:serializableData filename:filename];
-}
 
-- (NSArray *)classPropsFor:(Class)klass
-{
-    if (klass == NULL) {
-        return nil;
-    }
-    
-    NSMutableArray *results = [NSMutableArray array];
-    
-    unsigned int outCount, i;
-    objc_property_t *properties = class_copyPropertyList(klass, &outCount);
-    for (i = 0; i < outCount; i++) {
-        objc_property_t property = properties[i];
-        const char *propName = property_getName(property);
-        if(propName) {
-            NSString *propertyName = [NSString stringWithUTF8String:propName];
-            [results addObject:propertyName];
-        }
-    }
-    free(properties);
-    
-    return [NSArray arrayWithArray:results];
-}
+
+
 
 @end

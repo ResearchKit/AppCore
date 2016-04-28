@@ -33,22 +33,37 @@
  
 #import "NSError+APCAdditions.h"
 #import "APCLog.h"
+#import "APCLocalization.h"
 
-NSString * const kAPCServerBusyErrorMessage                     = @"Thank you for your interest in this study. We are working hard to process the large volume of interest, and should be back up momentarily. Please try again soon.";
-NSString * const kAPCUnexpectedConditionErrorMessage            = @"An unexpected network condition has occurred. Please try again soon.";
-NSString * const kAPCNotConnectedErrorMessage                   = @"You are currently not connected to the Internet. Please try again when you are connected to a network.";
-NSString * const kAPCServerUnderMaintanenceErrorMessage         = @"The study server is currently undergoing maintanence. Please try again soon.";
-NSString * const kAPCAccountAlreadyExistsErrorMessage           = @"An account has already been created for this email address. Please use a different email address, or sign in using the \"already participating\" link at the bottom of the Welcome page.";
-NSString * const kAPCAccountDoesNotExistErrorMessage            = @"There is no account registered for this email address.";
-NSString * const kAPCBadEmailAddressErrorMessage                = @"The email address submitted is not a valid email address. Please correct the email address and try again.";
-NSString * const kAPCBadPasswordErrorMessage                    = @"The password you have entered is not a valid password.  Please try again.";
-NSString * const kAPCNotReachableErrorMessage                   = @"We are currently not able to reach the study server. Please retry in a few moments.";
-NSString * const kAPCInvalidEmailAddressOrPasswordErrorMessage  = @"Entered email address or password is not valid. Please correct the email address or password and try again.";
+NSString * kAPCServerBusyErrorMessage;
+NSString * kAPCUnexpectedConditionErrorMessage;
+NSString * kAPCNotConnectedErrorMessage;
+NSString * kAPCServerUnderMaintanenceErrorMessage;
+NSString * kAPCAccountAlreadyExistsErrorMessage;
+NSString * kAPCAccountDoesNotExistErrorMessage;
+NSString * kAPCBadEmailAddressErrorMessage;
+NSString * kAPCBadPasswordErrorMessage;
+NSString * kAPCNotReachableErrorMessage;
+NSString * kAPCInvalidEmailAddressOrPasswordErrorMessage;
 
 static NSString * const oneTab = @"    ";
 
 
 @implementation NSError (APCAdditions)
+
++ (void)initialize
+{
+    kAPCServerBusyErrorMessage                     = NSLocalizedStringWithDefaultValue(@"Thank you for your interest in this study. We are working hard to process the large volume of interest, and should be back up momentarily. Please try again soon.", @"APCAppCore", APCBundle(), @"Thank you for your interest in this study. We are working hard to process the large volume of interest, and should be back up momentarily. Please try again soon.", @"Error message when server is too busy to respond");
+    kAPCUnexpectedConditionErrorMessage            = NSLocalizedStringWithDefaultValue(@"An unexpected network condition has occurred. Please try again soon.", @"APCAppCore", APCBundle(), @"An unexpected network condition has occurred. Please try again soon.", @"Error message indicating unexpected network problem");
+    kAPCNotConnectedErrorMessage                   = NSLocalizedStringWithDefaultValue(@"You are currently not connected to the Internet. Please try again when you are connected to a network.", @"APCAppCore", APCBundle(), @"You are currently not connected to the Internet. Please try again when you are connected to a network.", @"Error message when no network connection found");
+    kAPCServerUnderMaintanenceErrorMessage         = NSLocalizedStringWithDefaultValue(@"The study server is currently undergoing maintanence. Please try again soon.", @"APCAppCore", APCBundle(), @"The study server is currently undergoing maintanence. Please try again soon.", @"Error message when server is undergoing maintenance and temporarily unavailable");
+    kAPCAccountAlreadyExistsErrorMessage           = NSLocalizedStringWithDefaultValue(@"An account has already been created for this email address. Please use a different email address, or sign in using the \"already participating\" link at the bottom of the Welcome page.", @"APCAppCore", APCBundle(), @"An account has already been created for this email address. Please use a different email address, or sign in using the \"already participating\" link at the bottom of the Welcome page.", @"Error message when participant attempts to sign up for a new account using an email address already associated with an account in this study");
+    kAPCAccountDoesNotExistErrorMessage            = NSLocalizedStringWithDefaultValue(@"There is no account registered for this email address and password combination.", @"APCAppCore", APCBundle(), @"There is no account registered for this email address and password combination.", @"Error message when participant attempts to sign in to an existing account with an incorrect email address or password");
+    kAPCBadEmailAddressErrorMessage                = NSLocalizedStringWithDefaultValue(@"The email address submitted is not a valid email address. Please correct the email address and try again.", @"APCAppCore", APCBundle(), @"The email address submitted is not a valid email address. Please correct the email address and try again.", @"Error message when participant attempts to sign up using a non-valid email address");
+    kAPCBadPasswordErrorMessage                    = NSLocalizedStringWithDefaultValue(@"The password you have entered is not a valid password.  Please try again.", @"APCAppCore", APCBundle(), @"The password you have entered is not a valid password.  Please try again.", @"Error message when participant attempts to sign up with a non-valid password");
+    kAPCNotReachableErrorMessage                   = NSLocalizedStringWithDefaultValue(@"We are currently not able to reach the study server. Please retry in a few moments.", @"APCAppCore", APCBundle(), @"We are currently not able to reach the study server. Please retry in a few moments.", @"Error message when the app is unable to reach the Bridge server");
+    kAPCInvalidEmailAddressOrPasswordErrorMessage  = NSLocalizedStringWithDefaultValue(@"Entered email address or password is not valid. Please correct the email address or password and try again.", @"APCAppCore", APCBundle(), @"Entered email address or password is not valid. Please correct the email address or password and try again.", @"Error message when participant attempts to sign up with a non-valid email address or password");
+}
 
 - (NSString*)checkMessageForNonUserTerms:(NSString*)message
 {
@@ -56,7 +71,7 @@ static NSString * const oneTab = @"    ";
         [message containsString:@"NSURLError"] ||
         [message rangeOfString:@"contact somebody" options:NSCaseInsensitiveSearch].location != NSNotFound)
     {
-        return NSLocalizedString(@"An unknown error occurred", nil);
+        return NSLocalizedStringWithDefaultValue(@"An unknown error occurred", @"APCAppCore", APCBundle(), @"An unknown error occurred", nil);
     }
     return message;
 }
@@ -78,19 +93,19 @@ static NSString * const oneTab = @"    ";
     NSString *message;
     
     if (self.code == 409) {
-        message = NSLocalizedString(kAPCAccountAlreadyExistsErrorMessage, nil);
+        message = kAPCAccountAlreadyExistsErrorMessage;
     }
     else if (self.code == 404) {
-        message = NSLocalizedString(kAPCAccountDoesNotExistErrorMessage, nil);
+        message = kAPCAccountDoesNotExistErrorMessage;
     }
     else if (self.code >= 500 && self.code < 600) {
-        message = NSLocalizedString(kAPCServerBusyErrorMessage, nil);
+        message = kAPCServerBusyErrorMessage;
     }
     else if (self.code == kCFURLErrorDNSLookupFailed || self.code == kCFURLErrorInternationalRoamingOff) {
-        message = NSLocalizedString(kAPCNotConnectedErrorMessage, nil);
+        message = kAPCNotConnectedErrorMessage;
     }
     else {
-        message = NSLocalizedString(kAPCUnexpectedConditionErrorMessage, nil);
+        message = kAPCUnexpectedConditionErrorMessage;
     }
     
     return message;

@@ -7,9 +7,9 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
-#import "APCScheduleExpression.h"
-#import "NSDateComponents+Helper.h"
-#import "NSDate+Helper.h"
+#import <APCAppCore/APCScheduleExpression.h>
+#import <APCAppCore/NSDateComponents+Helper.h>
+#import <APCAppCore/NSDate+Helper.h>
 
 
 /**

@@ -38,6 +38,7 @@
 
 @class APCOnboardingManager;
 @class APCPermissionsManager;
+@class APCDataGroupsManager;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -51,6 +52,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (APCOnboardingManager *)onboardingManager;
 /** The permissions manager for the app. */
 - (APCPermissionsManager *)permissionsManager;
+/** The data groups manager for the app. */
+- (APCDataGroupsManager *)dataGroupsManagerForUser:(APCUser * _Nullable)user;
 @optional
 /**
  *  Kept for backwards compatibility: return the inclusion criteria scene.
@@ -61,6 +64,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  Kept for backwards compatibility: return a custom info scene.
  */
 - (nullable APCScene *)customInfoSceneForOnboarding:(APCOnboarding *)onboarding;
+
+/**
+ * Allow for a custom handling of onboarding
+ */
+- (BOOL)didHandleSignupFromViewController:(UIViewController*)viewController;
+
+/**
+ * Allow for a custom handling of onboarding
+ */
+- (BOOL)didHandleSignInFromViewController:(UIViewController*)viewController;
 
 @end
 
@@ -82,8 +95,14 @@ NS_ASSUME_NONNULL_BEGIN
 /// The permissions manager defining and requesting needed permissions.
 @property (strong, nonatomic, readonly) APCPermissionsManager *permissionsManager;
 
+/// The data groups manager defining data groups mapping
+@property (strong, nonatomic, readonly) APCDataGroupsManager *dataGroupsManager;
+
 /// Whether a sign-in action, to resume a study previously enrolled in, is supported. Defaults to YES.
 @property (nonatomic, getter=isSignInSupported) BOOL signInSupported;
+
+/// Whether the app should display 'share this app' options in onboarding. Defaults to NO.
+@property (nonatomic) BOOL showShareAppInOnboarding;
 
 + (instancetype)managerWithProvider:(id<APCOnboardingManagerProvider>)provider user:(APCUser * __nonnull)user;
 
@@ -91,6 +110,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithProvider:(id<APCOnboardingManagerProvider>)provider user:(APCUser * __nonnull)user;
 
 - (void)instantiateOnboardingForType:(APCOnboardingTaskType)type;
+
+- (BOOL)hasPasscode;
+- (UIViewController*)instantiatePasscodeViewControllerWithDelegate:(id)delegate;
+- (UIViewController*)instantiateChangePasscodeViewController;
+
 
 #pragma mark Onboarding
 
@@ -105,6 +129,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 /** Kept for compatibility reason; no matter the receiver's onboarding type, this will finish onboarding as a user-sign-in. */
 - (void)onboardingDidFinishAsSignIn;
+
+- (BOOL)checkForConsentWithTaskViewController:(ORKTaskViewController *)taskViewController;
 
 @end
 

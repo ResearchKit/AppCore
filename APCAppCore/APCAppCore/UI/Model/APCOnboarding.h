@@ -66,6 +66,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)isSignInSupported;
 
+- (BOOL)hasNextStep:(ORKStep *)step;
+- (BOOL)hasPreviousStep:(ORKStep *)step;
+
 @end
 
 
@@ -78,27 +81,17 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (nullable APCScene *)onboarding:(APCOnboarding *)onboarding sceneOfType:(NSString *)type;
 
-@end
-
+@optional
 
 /**
- *  Simple container to hold on to a specific view controller in a storyboard.
+ * Called whenever the step result changes for a given step
  */
-@interface APCScene : NSObject
+- (void)onboarding:(APCOnboarding *)onboarding didFinishStepWithResult:(ORKStepResult*)stepResult;
 
-/** Refers to StoryboardID. */
-@property (nonatomic, strong) NSString *name;
-
-/** The name of the storyboard. */
-@property (nonatomic, strong) NSString *storyboardName;
-
-/** Defaults to the bundle this class resides in. */
-@property (nonatomic, strong) NSBundle *bundle;
-
-- (instancetype)initWithName:(NSString *)name inStoryboard:(NSString *)storyboardName;
-
-/** Instantiates the view controller as defined by this scene. */
-- (nullable UIViewController *)instantiateViewController;
+/**
+ * Called when finished
+ */
+- (void)onboardingDidFinish;
 
 @end
 

@@ -36,6 +36,11 @@
 extern NSString * const NSDateDefaultDateFormat;
 extern NSString * const DateFormatISO8601DateOnly;
 
+/*
+ * Seems self-explanitory, but adding as a constant anyways
+ */
+static NSUInteger const kDateHelperDaysInAWeek = 7;
+
 @interface NSDate (Helper)
 
 /**
@@ -53,6 +58,7 @@ extern NSString * const DateFormatISO8601DateOnly;
  Got the rules from http://en.wikipedia.org/wiki/ISO_8601
  */
 - (NSString *) toStringInISO8601Format;
+
 
 /**
  Tries to interpret the specified string with any of
@@ -74,19 +80,29 @@ extern NSString * const DateFormatISO8601DateOnly;
 + (NSUInteger)ageFromDateOfBirth:(NSDate *)dateOfBirth;
 + (instancetype) startOfDay: (NSDate*) date;
 + (instancetype) endOfDay: (NSDate*) date;
+- (instancetype) startOfWeekGregorian;
++ (instancetype) startOfWeekGregorian: (NSDate*) date;
 + (instancetype) startOfTomorrow: (NSDate*) date;
++ (instancetype) startOfYear: (NSDate*) date;
 
 - (instancetype) startOfDay;
 - (instancetype) endOfDay;
+- (instancetype) startOfYear;
 
 - (instancetype) dayBefore;
 - (instancetype) dayAfter;
 
 +(instancetype) todayAtMidnight;
 +(instancetype) tomorrowAtMidnight;
++(instancetype)todayAtMidnightFromDate:(NSDate*)date;
++(instancetype)tomorrowAtMidnightFromDate:(NSDate*)date;
 +(instancetype) yesterdayAtMidnight;
 +(instancetype) weekAgoAtMidnight;
+
 +(instancetype) priorSundayAtMidnightFromDate:(NSDate *)date;
++(instancetype) nextSundayAtMidnightFromDate:(NSDate *)date;
+
++ (instancetype) dateWithYear:(NSInteger)year month:(NSInteger)month day:(NSInteger)day;
 
 - (BOOL) isEarlierThanDate: (NSDate*) otherDate;
 - (BOOL) isLaterThanDate: (NSDate*) otherDate;

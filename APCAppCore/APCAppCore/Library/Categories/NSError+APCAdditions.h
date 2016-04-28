@@ -33,16 +33,16 @@
  
 #import <Foundation/Foundation.h>
 
-FOUNDATION_EXPORT NSString * const kAPCServerBusyErrorMessage;
-FOUNDATION_EXPORT NSString * const kAPCUnexpectedConditionErrorMessage;
-FOUNDATION_EXPORT NSString * const kAPCNotConnectedErrorMessage;
-FOUNDATION_EXPORT NSString * const kAPCServerUnderMaintanenceErrorMessage;
-FOUNDATION_EXPORT NSString * const kAPCAccountAlreadyExistsErrorMessage;
-FOUNDATION_EXPORT NSString * const kAPCAccountDoesNotExistErrorMessage;
-FOUNDATION_EXPORT NSString * const kAPCBadEmailAddressErrorMessage;
-FOUNDATION_EXPORT NSString * const kAPCBadPasswordErrorMessage;
-FOUNDATION_EXPORT NSString * const kAPCNotReachableErrorMessage;
-FOUNDATION_EXPORT NSString * const kAPCInvalidEmailAddressOrPasswordErrorMessage;
+FOUNDATION_EXPORT NSString * kAPCServerBusyErrorMessage;
+FOUNDATION_EXPORT NSString * kAPCUnexpectedConditionErrorMessage;
+FOUNDATION_EXPORT NSString * kAPCNotConnectedErrorMessage;
+FOUNDATION_EXPORT NSString * kAPCServerUnderMaintanenceErrorMessage;
+FOUNDATION_EXPORT NSString * kAPCAccountAlreadyExistsErrorMessage;
+FOUNDATION_EXPORT NSString * kAPCAccountDoesNotExistErrorMessage;
+FOUNDATION_EXPORT NSString * kAPCBadEmailAddressErrorMessage;
+FOUNDATION_EXPORT NSString * kAPCBadPasswordErrorMessage;
+FOUNDATION_EXPORT NSString * kAPCNotReachableErrorMessage;
+FOUNDATION_EXPORT NSString * kAPCInvalidEmailAddressOrPasswordErrorMessage;
 
 @interface NSError (APCAdditions)
 

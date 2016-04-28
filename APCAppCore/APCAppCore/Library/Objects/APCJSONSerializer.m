@@ -35,6 +35,7 @@
 #import "ORKAnswerFormat+Helper.h"
 #import "NSDate+Helper.h"
 #import <CoreData/CoreData.h>
+#import "NSDateComponents+helper.h"
 
 
 
@@ -71,18 +72,49 @@ static NSString * const kRegularExpressionPatternMatchingUUIDs = (@"[a-fA-F0-9]{
                                                                   "[a-fA-F0-9]{4}\\-"
                                                                   "[a-fA-F0-9]{4}\\-"
                                                                   "[a-fA-F0-9]{12}");
+@interface APCJSONSerializer ()
 
+/**
+ This will be set by the method serializableDictionaryFromSourceDictionary
+ And used to see if certain keys being serialized in a dictionary need
+ a custom date formatter applied to them.
+ For example, in ORKQuestionResult, the "answer" key needs formatted to "MM-DD-YYYY"
+ So the dictionary would be @{ @"answer" : NSDateformatter("MM-DD-YYYY") };
+ */
+@property (nonatomic, strong) NSDictionary* dateFormattersForKeys;
+/**
+ This is the custom date formatter that will be used, per sDateFormattersForKeys value
+ */
+@property (nonatomic, strong) NSDateFormatter* customDateFormatter;
+
+@end
 
 @implementation APCJSONSerializer
+
+- (instancetype) initWithDateFormatterForKeys: (NSDictionary*) dateFormatterForKeys
+{
+    if (self = [super init])
+    {
+        _dateFormattersForKeys = dateFormatterForKeys;
+    }
+    return self;
+}
+
+- (NSDictionary *) serializableDictionaryFromSourceDictionary: (NSDictionary *) sourceDictionary
+{
+    NSDictionary *result = [self serializableDictionaryFromSourceDictionary: sourceDictionary
+                                                           atRecursionDepth: 0];
+    return result;
+}
 
 /**
  The public API.  See comments in the header file.
  */
 + (NSDictionary *) serializableDictionaryFromSourceDictionary: (NSDictionary *) sourceDictionary
 {
-    NSDictionary *result = [self serializableDictionaryFromSourceDictionary: sourceDictionary
-                                                           atRecursionDepth: 0];
-
+    APCJSONSerializer* instance = [APCJSONSerializer new];
+    NSDictionary *result = [instance serializableDictionaryFromSourceDictionary: sourceDictionary
+                                                               atRecursionDepth: 0];
     return result;
 }
 
@@ -104,7 +136,7 @@ static NSString * const kRegularExpressionPatternMatchingUUIDs = (@"[a-fA-F0-9]{
  pass in -- e.g., NSDates get converted to a precisely-formatted
  NSString.
  */
-+ (id) serializableObjectFromSourceObject: (id) sourceObject
+- (id) serializableObjectFromSourceObject: (id) sourceObject
                          atRecursionDepth: (NSUInteger) recursionDepth
 {
     id result = nil;
@@ -129,7 +161,7 @@ static NSString * const kRegularExpressionPatternMatchingUUIDs = (@"[a-fA-F0-9]{
     return result;
 }
 
-+ (NSArray *) serializableArrayFromSourceArray: (NSArray *) sourceArray
+- (NSArray *) serializableArrayFromSourceArray: (NSArray *) sourceArray
                               atRecursionDepth: (NSUInteger) recursionDepth
 {
     NSMutableArray *resultArray = [NSMutableArray new];
@@ -148,7 +180,7 @@ static NSString * const kRegularExpressionPatternMatchingUUIDs = (@"[a-fA-F0-9]{
     return resultArray;
 }
 
-+ (NSDictionary *) serializableDictionaryFromSourceDictionary: (NSDictionary *) sourceDictionary
+- (NSDictionary *) serializableDictionaryFromSourceDictionary: (NSDictionary *) sourceDictionary
                                              atRecursionDepth: (NSUInteger) recursionDepth
 {
     NSMutableDictionary *resultDictionary = [NSMutableDictionary new];
@@ -209,11 +241,19 @@ static NSString * const kRegularExpressionPatternMatchingUUIDs = (@"[a-fA-F0-9]{
             {
                 // "else" nothing.  This applies to every other decision.
             }
-
+            
+            // We only want to apply the special date formatter for keys specified in sDateFormattersForKeys
+            NSDateFormatter* oldCustomDateFormatter = self.customDateFormatter;
+            id customDateFormatter = self.dateFormattersForKeys[key];
+            if (customDateFormatter != nil && [customDateFormatter isKindOfClass:[NSDateFormatter class]]) {
+                self.customDateFormatter = customDateFormatter;
+            }
 
             convertedValue = [self serializableObjectFromSourceObject: value
                                                      atRecursionDepth: recursionDepth + 1];
-
+            
+            self.customDateFormatter = oldCustomDateFormatter;
+            
             if (convertedValue != nil)
             {
                 resultDictionary [convertedKey] = convertedValue;
@@ -228,7 +268,7 @@ static NSString * const kRegularExpressionPatternMatchingUUIDs = (@"[a-fA-F0-9]{
  A "simple object" is anything that's not an NSDictionary or an
  NSArray.
  */
-+ (id) serializableSimpleObjectFromSourceSimpleObject: (id) sourceObject
+- (id) serializableSimpleObjectFromSourceSimpleObject: (id) sourceObject
 {
     id result = nil;
 
@@ -252,7 +292,22 @@ static NSString * const kRegularExpressionPatternMatchingUUIDs = (@"[a-fA-F0-9]{
     {
         NSDate *theDate = (NSDate *) sourceObject;
         NSString *sageFriendlyDate = theDate.toStringInISO8601Format;
+        // In some instances, we need to override the date formatting
+        if (self.customDateFormatter != nil) {
+            sageFriendlyDate = [self.customDateFormatter stringFromDate:theDate];
+        }
         result = sageFriendlyDate;
+    }
+    
+    /*
+     RK returns a DateComponents object when a specific time is selected. We
+     need to convert that to a Joda parseable time like hh:mm:ss for Bridge.
+     */
+    else if ([sourceObject isKindOfClass: [NSDateComponents class]])
+    {
+        NSDateComponents *theDateComponents = (NSDateComponents *) sourceObject;
+        NSString *timeString = [theDateComponents toJodaReadableTimeString];
+        result = timeString;
     }
 
     /*
@@ -335,7 +390,7 @@ static NSString * const kRegularExpressionPatternMatchingUUIDs = (@"[a-fA-F0-9]{
  Try to convert the specified item to an NSNumber, specifically
  if it's a String that looks like a Boolean or an intenger.
  */
-+ (NSNumber *) extractIntOrBoolFromString: (NSString *) itemAsString
+- (NSNumber *) extractIntOrBoolFromString: (NSString *) itemAsString
 {
     NSNumber *result = nil;
 
@@ -380,7 +435,7 @@ static NSString * const kRegularExpressionPatternMatchingUUIDs = (@"[a-fA-F0-9]{
 /**
  Try to convert the specified Number to an RKQuestionType.
  */
-+ (NSNumber *) extractRKQuestionTypeFromNSNumber: (NSNumber *) item
+- (NSNumber *) extractRKQuestionTypeFromNSNumber: (NSNumber *) item
 {
     NSNumber* result = nil;
 
@@ -415,7 +470,7 @@ static NSString * const kRegularExpressionPatternMatchingUUIDs = (@"[a-fA-F0-9]{
  Details:
  https://developer.apple.com/library/ios/documentation/Foundation/Reference/NSJSONSerialization_Class/
  */
-+ (id) safeSerializableItemFromItem: (id) item
+- (id) safeSerializableItemFromItem: (id) item
 {
     id result = nil;
 

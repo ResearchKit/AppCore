@@ -33,16 +33,17 @@
  
 #import <Foundation/Foundation.h>
 #import <ResearchKit/ResearchKit.h>
-#import "APCScheduledTask.h"
 #import "APCTaskGroup.h"
 #import "ORKFileResult+Filename.h"
+#import "APCConstants.h"
 
 @class APCAppDelegate;
 @class APCDataArchive;
+@class APCTaskResultArchiver;
 
 @interface APCBaseTaskViewController : ORKTaskViewController <ORKTaskViewControllerDelegate, ORKStepViewControllerDelegate>
 
-@property  (nonatomic, strong)  APCScheduledTask  *scheduledTask;
+@property (nonatomic, strong) APCTask *scheduledTask;
 @property (nonatomic, copy) void (^createResultSummaryBlock) (NSManagedObjectContext* context);
 @property (readonly) APCAppDelegate *appDelegate;
 @property (nonatomic) BOOL canGenerateResult;
@@ -50,12 +51,14 @@
 //exposed for subclasses
 @property (strong, nonatomic) APCDataArchive *archive;
 
+@property (strong, nonatomic) APCTaskResultArchiver *taskResultArchiver;
+
 /**
  Older, default version of an initialization method.  Initializes
  your subclass of this ViewController with a ScheduledTask.  Compare
  with +configureTaskViewController:.
  */
-+ (instancetype)customTaskViewController: (APCScheduledTask*) scheduledTask;
++ (instancetype)customTaskViewController: (APCTask*) scheduledTask;
 
 /**
  Initializes an instance of this class with the task
@@ -72,12 +75,13 @@
                        resultSummary: (NSString *) resultSummary
                         usingContext: (NSManagedObjectContext *) context;
 
+- (void) archiveResults;
+- (void) uploadResultSummary: (NSString *)resultSummary;
+
 /**
  Subclasses should override these methods
  */
-- (void)addSpatialSpanMemoryResultsToArchive:(ORKSpatialSpanMemoryResult *) __unused result;
-- (void)addTappingResultsToArchive:(ORKTappingIntervalResult *)__unused result;
-
-- (void) archiveResults;
+- (APCSignUpPermissionsType)requiredPermission;
+- (void) updateSchemaRevision;
 
 @end

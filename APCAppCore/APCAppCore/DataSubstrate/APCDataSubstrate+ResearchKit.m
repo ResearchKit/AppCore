@@ -81,12 +81,19 @@
 
         APCLogFilenameBeingUploaded (url.absoluteString);
 
-        [SBBComponent(SBBUploadManager) uploadFileToBridge:url contentType:@"application/zip" completion:^(NSError *error) {
-            APCLogError2 (error);
+        BOOL sharingData = (self.currentUser.sharingScope != APCUserConsentSharingScopeNone);
+        if (sharingData) {
+            [SBBComponent(SBBUploadManager) uploadFileToBridge:url contentType:@"application/zip" completion:^(NSError *error) {
+                APCLogError2 (error);
+                if (completionBlock) {
+                    completionBlock(error);
+                }
+            }];
+        } else {
             if (completionBlock) {
-                completionBlock(error);
+                completionBlock(nil);
             }
-        }];
+        }
     }
     
 }

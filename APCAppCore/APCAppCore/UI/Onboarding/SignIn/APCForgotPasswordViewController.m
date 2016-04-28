@@ -99,7 +99,7 @@
     BOOL isContentValid = NO;
     
     if (self.emailTextField.text.length == 0) {
-        *errorMessage = NSLocalizedString(@"Please enter your email address.", @"");
+        *errorMessage = NSLocalizedStringWithDefaultValue(@"Please enter your email address.", @"APCAppCore", APCBundle(), @"Please enter your email address.", @"");
         isContentValid = NO;
     }
     else {
@@ -138,7 +138,7 @@
 
 							if (error)
 							{
-								NSString *errorTitle = NSLocalizedString (@"Forgot Password", @"This is the title for the message that appears when the user asked for a 'reset password,' and that 'resetting' process failed.");
+                                NSString *errorTitle = NSLocalizedStringWithDefaultValue(@"Forgot Password", @"APCAppCore", APCBundle(), @"Forgot Password", @"This is the title for the message that appears when the user asked for a 'reset password,' and that 'resetting' process failed.");
                                 
                                 UIAlertController *alert = [UIAlertController simpleAlertWithTitle: errorTitle
                                                                                            message: error.message];
@@ -148,7 +148,7 @@
 							else
 							{
 								[UIView animateWithDuration:0.2 animations:^{
-									weakSelf.emailMessageLabel.text = NSLocalizedString(@"An email has been sent.", @"");
+									weakSelf.emailMessageLabel.text = NSLocalizedStringWithDefaultValue(@"An email has been sent.", @"APCAppCore", APCBundle(), @"An email has been sent.", @"");
 									weakSelf.emailMessageLabel.alpha = 1;
                                     weakSelf.resetButton.alpha = 0;
 								} completion:^(BOOL __unused finished) {
@@ -162,7 +162,7 @@
         }
         else {
             [UIView animateWithDuration:0.2 animations:^{
-                self.emailMessageLabel.text = NSLocalizedString(@"Please enter a valid email address", @"");
+                self.emailMessageLabel.text = NSLocalizedStringWithDefaultValue(@"Please enter a valid email address", @"APCAppCore", APCBundle(), @"Please enter a valid email address", @"");
                 self.emailMessageLabel.alpha = 1;
             }];
         }

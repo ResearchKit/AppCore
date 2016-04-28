@@ -40,10 +40,7 @@
 #import "NSBundle+Helper.h"
 
 #import "APCLog.h"
-
-static  NSString  *kViewControllerName       = @"Medication Label Color";
-
-static  NSString  *kSectionHeaderTitle       = @"Select a Label Color for Your Medication";
+#import "APCLocalization.h"
 
 static  NSString  *kColorSwatchTableCellName = @"APCColorSwatchTableViewCell";
 
@@ -106,7 +103,6 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
     APCMedTrackerPrescriptionColor  *schedulColor = self.colorsList[indexPath.row];
     
     NSString  *colorname = schedulColor.name;
-    colorname = NSLocalizedString(colorname, nil);
     cell.colorNameLabel.text = colorname;
     
     if (self.selectedIndex != nil) {
@@ -183,7 +179,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
         label.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0];
         label.textColor = [UIColor blackColor];
         label.textAlignment = NSTextAlignmentCenter;
-        label.text = NSLocalizedString(kSectionHeaderTitle, nil);
+        label.text = NSLocalizedStringWithDefaultValue(@"APC_MEDICATION_COLOR_PROMPT", @"APCAppCore", APCBundle(), @"Select a Label Color for Your Medication", @"Prompt to select color of medication label");
         [view addSubview:label];
     }
     return  view;
@@ -205,7 +201,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
 
 - (NSString *)title
 {
-    return  kViewControllerName;
+    return  NSLocalizedStringWithDefaultValue(@"APC_MEDICATION_COLOR_TITLE", @"APCAppCore", APCBundle(), @"Medication Label Color", @"Title for view shown to select color of medication label");
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -227,7 +223,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
 
     self.tabulator.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
-    UIBarButtonItem  *donester = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Done", @"Done") style:UIBarButtonItemStyleDone target:self action:@selector(doneButtonTapped:)];
+    UIBarButtonItem  *donester = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Done", @"APCAppCore", APCBundle(), @"Done", @"Done") style:UIBarButtonItemStyleDone target:self action:@selector(doneButtonTapped:)];
     self.navigationItem.rightBarButtonItem = donester;
     
     UINib  *colorSwatchTableCellNib = [UINib nibWithNibName:kColorSwatchTableCellName bundle:[NSBundle appleCoreBundle]];

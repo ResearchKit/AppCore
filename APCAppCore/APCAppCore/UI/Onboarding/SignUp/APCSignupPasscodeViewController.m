@@ -37,6 +37,7 @@
 #import "APCDataSubstrate.h"
 #import "APCConstants.h"
 #import "APCLog.h"
+#import "APCLocalization.h"
 
 #import "APCPasscodeView.h"
 #import "APCCustomBackButton.h"
@@ -72,7 +73,7 @@
 {
     [super viewDidLoad];
     
-    self.titleLabel.text = NSLocalizedString(@"Select a 4-digit passcode. Setting up a passcode will help provide quick and secure access to this application.", @"");
+    self.titleLabel.text = NSLocalizedStringWithDefaultValue(@"Select a 4-digit passcode. Setting up a passcode will help provide quick and secure access to this application.", @"APCAppCore", APCBundle(), @"Select a 4-digit passcode. Setting up a passcode will help provide quick and secure access to this application.", @"");
     
     self.passcodeView.delegate = self;
     self.retryPasscodeView.delegate = self;
@@ -133,7 +134,7 @@
             [self savePasscode];
         }
         else {
-            UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Identification", @"") message:NSLocalizedString(@"Your passcodes are not identical. Please enter it again.", @"")];
+            UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedStringWithDefaultValue(@"Identification", @"APCAppCore", APCBundle(), @"Identification", @"") message:NSLocalizedStringWithDefaultValue(@"Your passcodes are not identical. Please enter it again.", @"APCAppCore", APCBundle(), @"Your passcodes are not identical. Please enter it again.", @"")];
             __weak typeof(self) weakSelf = self;
             [self presentViewController:alert animated:YES completion:^{[weakSelf showFirstTry];}];
         }
@@ -156,7 +157,7 @@
     self.passcodeView.hidden = NO;
     self.retryPasscodeView.hidden = YES;
     
-    self.titleLabel.text = NSLocalizedString(@"Select a 4-digit passcode. Setting up a passcode will help provide quick and secure access to this application.", @"");
+    self.titleLabel.text = NSLocalizedStringWithDefaultValue(@"Select a 4-digit passcode. Setting up a passcode will help provide quick and secure access to this application.", @"APCAppCore", APCBundle(), @"Select a 4-digit passcode. Setting up a passcode will help provide quick and secure access to this application.", @"");
     
     [self.passcodeView becomeFirstResponder];
     [self.passcodeView reset];
@@ -167,7 +168,7 @@
     self.passcodeView.hidden = YES;
     self.retryPasscodeView.hidden = NO;
     
-    self.titleLabel.text = NSLocalizedString(@"Re-enter your passcode", @"");
+    self.titleLabel.text = NSLocalizedStringWithDefaultValue(@"Re-enter your passcode", @"APCAppCore", APCBundle(), @"Re-enter your passcode", @"");
     
     [self.retryPasscodeView becomeFirstResponder];
     [self.retryPasscodeView reset];

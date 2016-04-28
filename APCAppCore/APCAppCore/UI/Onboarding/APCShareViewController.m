@@ -77,7 +77,7 @@
     NSDictionary *initialOptions = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).initializationOptions;
     self.shareMessage = initialOptions[kShareMessageKey];
     
-    self.title = NSLocalizedString(@"Spread the Word", nil);
+    self.title = NSLocalizedStringWithDefaultValue(@"Spread the Word", @"APCAppCore", APCBundle(), @"Spread the Word", nil);
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -123,25 +123,25 @@
     switch (indexPath.row) {
         case kAPCShareTypeTwitter:
         {
-            cell.textLabel.text = NSLocalizedString(@"Share on Twitter", nil);
+            cell.textLabel.text = NSLocalizedStringWithDefaultValue(@"Share on Twitter", @"APCAppCore", APCBundle(), @"Share on Twitter", nil);
             cell.imageView.image = [[UIImage imageNamed:@"twitter_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         }
             break;
         case kAPCShareTypeFacebook:
         {
-            cell.textLabel.text = NSLocalizedString(@"Share on Facebook", nil);
+            cell.textLabel.text = NSLocalizedStringWithDefaultValue(@"Share on Facebook", @"APCAppCore", APCBundle(), @"Share on Facebook", nil);
             cell.imageView.image = [[UIImage imageNamed:@"facebook_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         }
             break;
         case kAPCShareTypeEmail:
         {
-            cell.textLabel.text = NSLocalizedString(@"Share via Email", nil);
+            cell.textLabel.text = NSLocalizedStringWithDefaultValue(@"Share via Email", @"APCAppCore", APCBundle(), @"Share via Email", nil);
             cell.imageView.image = [[UIImage imageNamed:@"email_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         }
             break;
         case kAPCShareTypeSMS:
         {
-            cell.textLabel.text = NSLocalizedString(@"Share via SMS", nil);
+            cell.textLabel.text = NSLocalizedStringWithDefaultValue(@"Share via SMS", @"APCAppCore", APCBundle(), @"Share via SMS", nil);
             cell.imageView.image = [[UIImage imageNamed:@"sms_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         }
             break;
@@ -179,12 +179,17 @@
                 
                 [mailComposeVC setMessageBody:self.shareMessage isHTML:NO];
                 
+                if (self.shareEmailSubject != nil)
+                {
+                    [mailComposeVC setSubject:self.shareEmailSubject];
+                }
+                
                 [self presentViewController:mailComposeVC animated:YES completion:NULL];
             } else {
-                NSString *message = NSLocalizedString(@"Looks like you don't have Mail app setup. Please configure to share via email.", nil);
+                NSString *message = NSLocalizedStringWithDefaultValue(@"Looks like you don't have Mail app setup. Please configure to share via email.", @"APCAppCore", APCBundle(), @"Looks like you don't have Mail app setup. Please configure to share via email.", nil);
                 
-                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Email", nil) message:message preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *dismiss = [UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", nil) style:UIAlertActionStyleDefault handler:nil];
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedStringWithDefaultValue(@"Email", @"APCAppCore", APCBundle(), @"Email", nil) message:message preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *dismiss = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Dismiss", @"APCAppCore", APCBundle(), @"Dismiss", nil) style:UIAlertActionStyleDefault handler:nil];
                 [alertController addAction:dismiss];
                 [self presentViewController:alertController animated:YES completion:nil];
             }
@@ -196,13 +201,25 @@
                 MFMessageComposeViewController *messageComposer = [[MFMessageComposeViewController alloc] init];
                 messageComposer.messageComposeDelegate = self;
                 messageComposer.body = self.shareMessage;
+
+                if (self.textMessageNavTintColor != nil)
+                {
+                    messageComposer.navigationBar.tintColor = self.textMessageNavTintColor;
+                }
                 
-                [self presentViewController:messageComposer animated:YES completion:nil];
+                [self presentViewController:messageComposer animated:YES completion:^
+                {
+                    if (self.textMessageStatusBarStyleLight)
+                    {
+                        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+                    }
+                }];
+                
             } else {
-                NSString *message = NSLocalizedString(@"Looks like you don't have Messages app setup. Please configure to share via SMS.", nil);
+                NSString *message = NSLocalizedStringWithDefaultValue(@"Looks like you don't have Messages app setup. Please configure to share via SMS.", @"APCAppCore", APCBundle(), @"Looks like you don't have Messages app setup. Please configure to share via SMS.", nil);
                 
-                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Messages", nil) message:message preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *dismiss = [UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", nil) style:UIAlertActionStyleDefault handler:nil];
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedStringWithDefaultValue(@"Messages", @"APCAppCore", APCBundle(), @"Messages", nil) message:message preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *dismiss = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Dismiss", @"APCAppCore", APCBundle(), @"Dismiss", nil) style:UIAlertActionStyleDefault handler:nil];
                 [alertController addAction:dismiss];
                 [self presentViewController:alertController animated:YES completion:nil];
             }
@@ -227,8 +244,8 @@
         [composeViewController setInitialText:self.shareMessage];
         [self presentViewController:composeViewController animated:YES completion:nil];
     } else {
-        NSString *updateTwitterClientMessage = NSLocalizedString(@"Your Twitter client does not support sharing from other apps. Please update your Twitter client.", nil);
-        UIAlertController *alertView = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Update Twitter Client", nil)
+        NSString *updateTwitterClientMessage = NSLocalizedStringWithDefaultValue(@"Your Twitter client does not support sharing from other apps. Please update your Twitter client.", @"APCAppCore", APCBundle(), @"Your Twitter client does not support sharing from other apps. Please update your Twitter client.", nil);
+        UIAlertController *alertView = [UIAlertController alertControllerWithTitle:NSLocalizedStringWithDefaultValue(@"Update Twitter Client", @"APCAppCore", APCBundle(), @"Update Twitter Client", nil)
                                                                            message:updateTwitterClientMessage
                                                                     preferredStyle:UIAlertControllerStyleAlert];
         
@@ -238,6 +255,11 @@
         [alertView addAction:defaultAction];
         [self presentViewController:alertView animated:YES completion:nil];
     }
+}
+
+- (APCOnboarding *)onboarding
+{
+    return [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager].onboarding;
 }
 
 #pragma mark - MFMailComposeViewControllerDelegate method
@@ -285,12 +307,21 @@
 
 - (IBAction) okayTapped: (id) __unused sender
 {
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    if (self.taskViewController != nil) {
+        // If this is a step view controller then dismiss
+        [self goForward];
+    }
+    else if (self.goBackIfUserHitsOkay) {
+        [self back];
+    } else {
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    }
 }
 
 - (void)back
 {
     [self.navigationController popViewControllerAnimated:YES];
+    [[self onboarding] popScene];
 }
 
 @end

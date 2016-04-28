@@ -90,7 +90,7 @@ static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminate
         
         [self.healthStore requestAuthorizationToShareTypes:nil
                                                  readTypes:readTypes
-                                                completion:nil];
+                                                completion:^(BOOL success __unused, NSError * _Nullable error __unused) {}];
     }
 }
 

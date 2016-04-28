@@ -69,11 +69,16 @@
 - (void)setupAppearance {
     self.label.font = [UIFont appRegularFontWithSize:19.0f];
     self.label.textColor = [UIColor appSecondaryColor1];
+    
+    if ([((id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate).onboardingManager showShareAppInOnboarding]) {
+        self.shareButton.hidden = NO;
+        self.shareLabel.hidden = NO;
+    }
 }
 
-- (void)setupNavAppearance {
-    UIBarButtonItem  *backster = [APCCustomBackButton customBackBarButtonItemWithTarget:self action:@selector(back) tintColor:[UIColor appPrimaryColor]];
-    [self.navigationItem setLeftBarButtonItem:backster];
+- (void)setupNavAppearance
+{
+    self.navigationItem.hidesBackButton = YES;
 }
 
 - (APCOnboarding *)onboarding {
@@ -87,7 +92,14 @@
     [[self onboarding] popScene];
 }
 
-- (IBAction)next:(id) __unused sender {
+
+- (IBAction)showShare:(id) __unused sender {
+    UIViewController *viewController = [[self onboarding] nextScene];
+    [self.navigationController pushViewController:viewController animated:YES];
+}
+
+- (IBAction)next:(id) __unused sender
+{
     APCShareViewController *shareViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"ShareVC"];
     [self.navigationController pushViewController:shareViewController animated:YES];
 }

@@ -1,4 +1,4 @@
-// 
+//
 //  APCEmailVerifyViewController.h 
 //  APCAppCore 
 // 
@@ -31,9 +31,10 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 // 
  
-#import <UIKit/UIKit.h>
+#import <ResearchKit/ResearchKit.h>
+#import "APCOptionalStepViewController.h"
 
-@interface APCEmailVerifyViewController : UIViewController
+@interface APCEmailVerifyViewController : APCOptionalStepViewController
 
 
 @property (weak, nonatomic) IBOutlet UIImageView *logoImageView;
@@ -49,7 +50,10 @@
 @property (weak, nonatomic) IBOutlet UIButton *changeEmailButton;
 
 @property (weak, nonatomic) IBOutlet UIButton *resendEmailButton;
+@property (weak, nonatomic) IBOutlet UILabel *shareMessageLabel;
+@property (weak, nonatomic) IBOutlet UIButton *shareMessageButton;
 
 - (IBAction)changeEmailAddress:(id)sender;
+- (IBAction)showShare:(id)sender;
 
 @end

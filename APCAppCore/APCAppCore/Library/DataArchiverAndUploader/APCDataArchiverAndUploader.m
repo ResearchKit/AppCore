@@ -1831,32 +1831,37 @@ static NSString *folderPathForUploadOperations = nil;
      and we need to write code to handle that response,
      somewhere in AppDelegate.  (...TBD?)
      */
-    [SBBComponent(SBBUploadManager) uploadFileToBridge: self.encryptedZipURL
-                                           contentType: kAPCContentType_JSON
-                                            completion: ^(NSError *uploadError)
-     {
-         NSError * localError = nil;
-
-        /*
-         TESTING
-
-         Please leave this block of test code here.  It helps
-         verify that we're handling each possible error correctly.
-
-                 uploadError = [NSError errorWithDomain: @"fake underlying error uploading file to the server" code: 12 userInfo: nil];
-         */
-
-         if (uploadError != nil)
+    BOOL sharingData = (((APCAppDelegate*)[UIApplication sharedApplication].delegate).dataSubstrate.currentUser.sharingScope != APCUserConsentSharingScopeNone);
+    if (sharingData) {
+        [SBBComponent(SBBUploadManager) uploadFileToBridge: self.encryptedZipURL
+                                               contentType: kAPCContentType_JSON
+                                                completion: ^(NSError *uploadError)
          {
-             localError = [NSError errorWithCode: kErrorUploadFailed_Code
-                                          domain: kArchiveAndUploadErrorDomain
-                                   failureReason: kErrorUploadFailed_Reason
-                              recoverySuggestion: kErrorUploadFailed_Suggestion
-                                     nestedError: uploadError];
-         }
-
-         [self finalCleanupHandlingError: localError];
-     }];
+             NSError * localError = nil;
+             
+             /*
+              TESTING
+              
+              Please leave this block of test code here.  It helps
+              verify that we're handling each possible error correctly.
+              
+              uploadError = [NSError errorWithDomain: @"fake underlying error uploading file to the server" code: 12 userInfo: nil];
+              */
+             
+             if (uploadError != nil)
+             {
+                 localError = [NSError errorWithCode: kErrorUploadFailed_Code
+                                              domain: kArchiveAndUploadErrorDomain
+                                       failureReason: kErrorUploadFailed_Reason
+                                  recoverySuggestion: kErrorUploadFailed_Suggestion
+                                         nestedError: uploadError];
+             }
+             
+             [self finalCleanupHandlingError: localError];
+         }];
+    } else {
+        [self finalCleanupHandlingError: nil];
+    }
 }
 
 

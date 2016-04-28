@@ -44,8 +44,8 @@ NSString *const kFirstTimeRefreshToday = @"FirstTimeRefreshToday";
     {
         __weak typeof(self) weakSelf = self;
 
-        [[APCScheduler defaultScheduler] fetchTasksAndSchedulesFromServerAndThenUseThisQueue: [NSOperationQueue mainQueue]
-                                                                            toDoThisWhenDone: ^(NSError *errorFromServerFetch)
+        [[APCScheduler defaultScheduler] fetchTasksFromServerAndThenUseThisQueue: [NSOperationQueue mainQueue]
+                                                                toDoThisWhenDone: ^(NSError *errorFromServerFetch)
          {
              if (errorFromServerFetch)
              {
@@ -112,14 +112,19 @@ NSString *const kFirstTimeRefreshToday = @"FirstTimeRefreshToday";
 
     APCLogFilenameBeingUploaded (path);
 
-    [SBBComponent(SBBUploadManager) uploadFileToBridge:[NSURL fileURLWithPath:path] contentType:@"application/zip" completion:^(NSError *error) {
-        if (!error) {
-            APCLogEventWithData(kNetworkEvent, (@{@"event_detail":[NSString stringWithFormat:@"Uploaded Passive Collector File: %@", path.lastPathComponent]}));
-        }
-        if (completionBlock) {
-            completionBlock(error);
-        }
-    }];
+    BOOL sharingData = (self.dataSubstrate.currentUser.sharingScope != APCUserConsentSharingScopeNone);
+    if (sharingData) {
+        [SBBComponent(SBBUploadManager) uploadFileToBridge:[NSURL fileURLWithPath:path] contentType:@"application/zip" completion:^(NSError *error) {
+            if (!error) {
+                APCLogEventWithData(kNetworkEvent, (@{@"event_detail":[NSString stringWithFormat:@"Uploaded Passive Collector File: %@", path.lastPathComponent]}));
+            }
+            if (completionBlock) {
+                completionBlock(error);
+            }
+        }];
+    } else {
+        
+    }
     
 }
 

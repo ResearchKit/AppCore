@@ -55,6 +55,7 @@
 #import "UIFont+APCAppearance.h"
 #import "NSDate+Helper.h"
 #import "APCLog.h"
+#import "APCLocalization.h"
 
 typedef  enum  _PlacementOfNewPages
 {
@@ -193,10 +194,10 @@ static  CGFloat    kAPCMedicationRowHeight = 64.0;
 - (void)tableView:(UITableView *) __unused tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        UIAlertController  *alerter = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Please Confirm Removal", nil)
-                                       message:NSLocalizedString(@"This Action Cannot Be Undone", nil)
+        UIAlertController  *alerter = [UIAlertController alertControllerWithTitle:NSLocalizedStringWithDefaultValue(@"Please Confirm Removal", @"APCAppCore", APCBundle(), @"Please Confirm Removal", nil)
+                                       message:NSLocalizedStringWithDefaultValue(@"This Action Cannot Be Undone", @"APCAppCore", APCBundle(), @"This Action Cannot Be Undone", nil)
                                 preferredStyle:UIAlertControllerStyleActionSheet];
-        UIAlertAction  *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel
+        UIAlertAction  *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Cancel", @"APCAppCore", APCBundle(), @"Cancel", nil) style:UIAlertActionStyleCancel
                                                                handler:^(UIAlertAction  __unused *action)
         {
             if (self.tableViewEditingModeIsExplicit == NO) {
@@ -204,7 +205,7 @@ static  CGFloat    kAPCMedicationRowHeight = 64.0;
             }
         }];
         [alerter addAction:cancelAction];
-        UIAlertAction  *deleteAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Delete", nil) style:UIAlertActionStyleDestructive
+        UIAlertAction  *deleteAction = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Delete", @"APCAppCore", APCBundle(), @"Delete", nil) style:UIAlertActionStyleDestructive
                                                                handler:^(UIAlertAction  __unused *action)
         {
             [self deleteRowFromTable:indexPath];
@@ -507,11 +508,11 @@ static  CGFloat    kAPCMedicationRowHeight = 64.0;
     if (self.tabulator.isEditing == NO) {
         [self.tabulator setEditing:YES animated:YES];
         self.tableViewEditingModeIsExplicit = YES;
-        title = NSLocalizedString(@"Done", nil);
+        title = NSLocalizedStringWithDefaultValue(@"Done", @"APCAppCore", APCBundle(), @"Done", nil);
         self.navigationItem.rightBarButtonItem.enabled = NO;
     } else {
         [self.tabulator setEditing:NO animated:YES];
-        title = NSLocalizedString(@"Edit", nil);
+        title = NSLocalizedStringWithDefaultValue(@"Edit", @"APCAppCore", APCBundle(), @"Edit", nil);
         self.tableViewEditingModeIsExplicit = NO;
         self.navigationItem.rightBarButtonItem.enabled = YES;
     }
@@ -555,11 +556,11 @@ static  CGFloat    kAPCMedicationRowHeight = 64.0;
     self.exScrollibur.hidden     = NO;
     self.weekContainer.hidden    = NO;
     if ([self.prescriptions count] == 0) {
-        self.tapItemsLabel.text = NSLocalizedString(@"Tap the “+” Sign to Create Prescriptions", nil);
+        self.tapItemsLabel.text = NSLocalizedStringWithDefaultValue(@"Tap the “+” Sign to Create Prescriptions", @"APCAppCore", APCBundle(), @"Tap the “+” Sign to Create Prescriptions", nil);
         self.yourPrescriptionsView.hidden = YES;
         self.editButton.hidden = YES;
     } else {
-        self.tapItemsLabel.text = NSLocalizedString(@"Tap on Items Above to Log Intake", nil);
+        self.tapItemsLabel.text = NSLocalizedStringWithDefaultValue(@"Tap on Items Above to Log Intake", @"APCAppCore", APCBundle(), @"Tap on Items Above to Log Intake", nil);
         self.yourPrescriptionsView.hidden = NO;
         self.editButton.hidden = NO;
     }

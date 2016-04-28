@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="yja-Bm-gxs">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9059" systemVersion="14F1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="yja-Bm-gxs">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -17,27 +18,59 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="logo_disease_large" translatesAutoresizingMaskIntoConstraints="NO" id="Y2i-gN-3s8">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_disease_large" translatesAutoresizingMaskIntoConstraints="NO" id="Y2i-gN-3s8">
                                 <rect key="frame" x="270" y="39" width="61" height="57"/>
+                                <animations/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DZ6-lI-FWU">
-                                <rect key="frame" x="16" y="104" width="568" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DZ6-lI-FWU">
+                                <rect key="frame" x="20" y="104" width="560" height="20.5"/>
+                                <animations/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QhP-HV-IHQ">
+                                <rect key="frame" x="160" y="248" width="280" height="103.5"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" priority="800" constant="280" id="KrH-S9-Rc0"/>
+                                </constraints>
+                                <string key="text">Optional Error Message: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur blandit odio vel felis facilisis imperdiet. Mauris aliquam tempor ex ac.</string>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jYX-V4-Uu8">
+                                <rect key="frame" x="274.5" y="369.5" width="51" height="32"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <action selector="buttonTapped:" destination="yja-Bm-gxs" eventType="touchUpInside" id="bXn-CM-IDh"/>
+                                </connections>
+                            </button>
                         </subviews>
+                        <animations/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="DZ6-lI-FWU" firstAttribute="leading" secondItem="QnL-3e-ykA" secondAttribute="leadingMargin" id="6b2-m9-hGJ"/>
+                            <constraint firstItem="QhP-HV-IHQ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="QnL-3e-ykA" secondAttribute="leadingMargin" constant="8" id="AJ1-zH-1fC"/>
                             <constraint firstAttribute="centerX" secondItem="Y2i-gN-3s8" secondAttribute="centerX" id="Fkt-Ky-GdA"/>
+                            <constraint firstItem="jYX-V4-Uu8" firstAttribute="centerX" secondItem="QnL-3e-ykA" secondAttribute="centerX" id="NwT-eU-yLs"/>
+                            <constraint firstItem="bJ4-mh-qzW" firstAttribute="top" relation="greaterThanOrEqual" secondItem="QhP-HV-IHQ" secondAttribute="bottom" constant="8" id="PYW-Q5-fTm"/>
+                            <constraint firstItem="jYX-V4-Uu8" firstAttribute="top" secondItem="QhP-HV-IHQ" secondAttribute="bottom" constant="18" id="Wkp-Zo-eyv"/>
+                            <constraint firstItem="QhP-HV-IHQ" firstAttribute="top" relation="greaterThanOrEqual" secondItem="DZ6-lI-FWU" secondAttribute="bottom" constant="16" id="Zdo-BQ-2el"/>
                             <constraint firstItem="DZ6-lI-FWU" firstAttribute="trailing" secondItem="QnL-3e-ykA" secondAttribute="trailingMargin" id="ZzB-ys-no3"/>
+                            <constraint firstItem="QhP-HV-IHQ" firstAttribute="centerY" secondItem="QnL-3e-ykA" secondAttribute="centerY" priority="750" id="cWR-ZQ-yLs"/>
+                            <constraint firstItem="bJ4-mh-qzW" firstAttribute="top" relation="greaterThanOrEqual" secondItem="jYX-V4-Uu8" secondAttribute="bottom" constant="16" id="cib-XY-cLb"/>
                             <constraint firstItem="Y2i-gN-3s8" firstAttribute="top" secondItem="Iwy-1O-5KB" secondAttribute="bottom" constant="19" id="dxT-vr-XbX"/>
+                            <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="QhP-HV-IHQ" secondAttribute="trailing" constant="8" id="gT2-wY-r3u"/>
                             <constraint firstItem="DZ6-lI-FWU" firstAttribute="top" secondItem="Y2i-gN-3s8" secondAttribute="bottom" constant="8" id="geZ-PB-QJw"/>
+                            <constraint firstItem="QhP-HV-IHQ" firstAttribute="centerX" secondItem="QnL-3e-ykA" secondAttribute="centerX" id="j4T-VZ-ryG"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="appNameLabel" destination="DZ6-lI-FWU" id="I3e-dv-tr5"/>
+                        <outlet property="optionalActionButton" destination="jYX-V4-Uu8" id="pzf-h0-Bp6"/>
+                        <outlet property="optionalMessageLabel" destination="QhP-HV-IHQ" id="4RO-OV-IGE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="M2r-8I-gl1" userLabel="First Responder" sceneMemberID="firstResponder"/>

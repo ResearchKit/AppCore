@@ -32,6 +32,7 @@
 // 
  
 #import "APCSignUpPermissionsViewController.h"
+#import "APCContainerStepViewController.h"
 #import "APCOnboardingManager.h"
 #import "APCPermissionsManager.h"
 #import "APCDataSubstrate.h"
@@ -40,6 +41,8 @@
 #import "APCPermissionsCell.h"
 #import "APCStepProgressBar.h"
 #import "APCCustomBackButton.h"
+#import "APCLocalization.h"
+#import "APCNavigationFooter.h"
 
 #import "UIColor+APCAppearance.h"
 #import "NSBundle+Helper.h"
@@ -50,7 +53,7 @@
 
 static CGFloat const kTableViewRowHeight                 = 200.0f;
 
-@interface APCSignUpPermissionsViewController () <UITableViewDelegate, UITableViewDataSource, APCPermissionCellDelegate>
+@interface APCSignUpPermissionsViewController () <UITableViewDelegate, UITableViewDataSource, APCPermissionCellDelegate, APCNavigationFooterDelegate>
 
 @property (nonatomic, strong) APCPermissionsManager *permissionsManager;
 
@@ -93,6 +96,11 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
     self.permissions = [self prepareData].mutableCopy;
     [self setupNavAppearance];
     
+    // Remove the navigation footer if unused
+    if ([self parentStepViewController] == nil) {
+        self.tableView.tableFooterView = nil;
+    }
+    
 }
 
 - (void) viewDidAppear:(BOOL)animated {
@@ -131,7 +139,7 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
                 APCTableViewPermissionsItem *item = [APCTableViewPermissionsItem new];
                 item.permissionType = kAPCSignUpPermissionsTypeHealthKit;
                 item.permissionGranted = [self.permissionsManager isPermissionsGrantedForType:item.permissionType];
-                item.caption = NSLocalizedString(@"Health Kit", @"");
+                item.caption = NSLocalizedStringWithDefaultValue(@"Health Kit", @"APCAppCore", APCBundle(), @"Health Kit", @"");
                 item.detailText = [_permissionsManager permissionDescriptionForType:kAPCSignUpPermissionsTypeHealthKit];
                 [items addObject:item];
             }
@@ -141,7 +149,7 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
                 APCTableViewPermissionsItem *item = [APCTableViewPermissionsItem new];
                 item.permissionType = kAPCSignUpPermissionsTypeLocation;
                 item.permissionGranted = [self.permissionsManager isPermissionsGrantedForType:item.permissionType];
-                item.caption = NSLocalizedString(@"Location Services", @"");
+                item.caption = NSLocalizedStringWithDefaultValue(@"Location Services", @"APCAppCore", APCBundle(), @"Location Services", @"");
                 item.detailText = [_permissionsManager permissionDescriptionForType:kAPCSignUpPermissionsTypeLocation];
                 [items addObject:item];
             }
@@ -152,7 +160,7 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
                     APCTableViewPermissionsItem *item = [APCTableViewPermissionsItem new];
                     item.permissionType = kAPCSignUpPermissionsTypeCoremotion;
                     item.permissionGranted = [self.permissionsManager isPermissionsGrantedForType:item.permissionType];
-                    item.caption = NSLocalizedString(@"Motion Activity", @"");
+                    item.caption = NSLocalizedStringWithDefaultValue(@"Motion Activity", @"APCAppCore", APCBundle(), @"Motion Activity", @"");
                     item.detailText = [_permissionsManager permissionDescriptionForType:kAPCSignUpPermissionsTypeCoremotion];
                     [items addObject:item];
                 }
@@ -163,7 +171,7 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
                 APCTableViewPermissionsItem *item = [APCTableViewPermissionsItem new];
                 item.permissionType = kAPCSignUpPermissionsTypeLocalNotifications;
                 item.permissionGranted = [self.permissionsManager isPermissionsGrantedForType:item.permissionType];
-                item.caption = NSLocalizedString(@"Notifications", @"");
+                item.caption = NSLocalizedStringWithDefaultValue(@"Notifications", @"APCAppCore", APCBundle(), @"Notifications", @"");
                 item.detailText = [_permissionsManager permissionDescriptionForType:kAPCSignUpPermissionsTypeLocalNotifications];
                 [items addObject:item];
             }
@@ -173,7 +181,7 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
                 APCTableViewPermissionsItem *item = [APCTableViewPermissionsItem new];
                 item.permissionType = kAPCSignUpPermissionsTypeMicrophone;
                 item.permissionGranted = [self.permissionsManager isPermissionsGrantedForType:item.permissionType];
-                item.caption = NSLocalizedString(@"Microphone", @"");
+                item.caption = NSLocalizedStringWithDefaultValue(@"Microphone", @"APCAppCore", APCBundle(), @"Microphone", @"");
                 item.detailText = [_permissionsManager permissionDescriptionForType:kAPCSignUpPermissionsTypeMicrophone];
                 [items addObject:item];
             }
@@ -266,12 +274,12 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
 
 - (void)presentSettingsAlert:(NSError *)error
 {
-    UIAlertController *alertContorller = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Permissions Denied", @"") message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *dismiss = [UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction *__unused action) {
+    UIAlertController *alertContorller = [UIAlertController alertControllerWithTitle:NSLocalizedStringWithDefaultValue(@"Permissions Denied", @"APCAppCore", APCBundle(), @"Permissions Denied", @"") message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *dismiss = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Dismiss", @"APCAppCore", APCBundle(), @"Dismiss", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction *__unused action) {
         
     }];
     [alertContorller addAction:dismiss];
-    UIAlertAction *settings = [UIAlertAction actionWithTitle:NSLocalizedString(@"Settings", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
+    UIAlertAction *settings = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Settings", @"APCAppCore", APCBundle(), @"Settings", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
     }];
     [alertContorller addAction:settings];
@@ -308,6 +316,17 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
 
 #pragma mark - Permissions
 
+- (ORKStepViewController *)parentStepViewController {
+    if ([self.parentViewController isKindOfClass:[APCContainerStepViewController class]]) {
+        return (APCContainerStepViewController*)self.parentViewController;
+    }
+    return nil;
+}
+
+- (void)goForward {
+    [self next:nil];
+}
+
 - (IBAction) next: (id) __unused sender
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -315,7 +334,11 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
     if (self.onboarding.taskType == kAPCOnboardingTaskTypeSignIn) {
         UIViewController *viewController = [[self onboarding] nextScene];
         [self.navigationController pushViewController:viewController animated:YES];
-    } else {
+    }
+    else if (self.parentStepViewController != nil) {
+        [self.parentStepViewController goForward];
+    }
+    else {
         [self finishOnboarding];
     }
 }

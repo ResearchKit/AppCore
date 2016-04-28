@@ -35,6 +35,7 @@
 #import "APCUserInfoConstants.h"
 #import "APCTasksReminderManager.h"
 #import "APCAppDelegate.h"
+#import "APCLocalization.h"
 
 #import <UIKit/UIKit.h>
 #import <CoreMotion/CoreMotion.h>
@@ -50,12 +51,17 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
     kPermissionsErrorAccessDenied = -100,
 };
 
+/*
+ * APCPermissionsManager should probably be a singleton itself, but to minimize changes
+ * and work with priorities, we are only making coreMotionPermissionStatus be static
+ * This solves the bug with it being reset to undetermined everytime a new instance is made
+ */
+static APCPermissionStatus coreMotionPermissionStatus = kPermissionStatusNotDetermined;
+
 @interface APCPermissionsManager () <CLLocationManagerDelegate>
 
 @property (nonatomic, strong) CMMotionActivityManager *motionActivityManager;
 @property (nonatomic, strong) CLLocationManager *locationManager;
-
-@property (nonatomic) APCPermissionStatus coreMotionPermissionStatus;
 
 @property (nonatomic, copy) APCPermissionsBlock completionBlock;
 
@@ -77,10 +83,7 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
         _locationManager = [[CLLocationManager alloc] init];
         _locationManager.delegate = self;
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidRegisterForRemoteNotifications:) name:APCAppDidRegisterUserNotification object:nil];
-
-        _coreMotionPermissionStatus = kPermissionStatusNotDetermined;
-                
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidRegisterForRemoteNotifications:) name:APCAppDidRegisterUserNotification object:nil];        
     }
     return self;
 }
@@ -114,6 +117,9 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
     BOOL isGranted = NO;
     [[NSUserDefaults standardUserDefaults]synchronize];
     switch (type) {
+        case kAPCSignUpPermissionsTypeNone:
+            isGranted = YES;
+            break;
         case kAPCSignUpPermissionsTypeHealthKit:
         {
             HKCharacteristicType *dateOfBirth = [HKCharacteristicType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierDateOfBirth];
@@ -149,7 +155,7 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
 #if TARGET_IPHONE_SIMULATOR
             isGranted = YES;
 #else
-            isGranted = self.coreMotionPermissionStatus == kPermissionStatusAuthorized;
+            isGranted = coreMotionPermissionStatus == kPermissionStatusAuthorized;
 #endif
         }
             break;
@@ -191,7 +197,6 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
                      withCompletion:(APCPermissionsBlock)completion
 {
     
-    self.completionBlock = completion;
     __weak typeof(self) weakSelf = self;
     switch (type) {
         case kAPCSignUpPermissionsTypeHealthKit:
@@ -252,13 +257,14 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
             
             if (status == kCLAuthorizationStatusNotDetermined) {
+                weakSelf.completionBlock = completion;
+
                 [self.locationManager requestAlwaysAuthorization];
                 [self.locationManager requestWhenInUseAuthorization];
                 
             } else{
-                if (weakSelf.completionBlock) {
-                    weakSelf.completionBlock(NO, [self permissionDeniedErrorForType:kAPCSignUpPermissionsTypeLocation]);
-                    weakSelf.completionBlock = nil;
+                if (completion) {
+                    completion(NO, [self permissionDeniedErrorForType:kAPCSignUpPermissionsTypeLocation]);
                 }
             }
         }
@@ -266,6 +272,8 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
         case kAPCSignUpPermissionsTypeLocalNotifications:
         {
             if ([[UIApplication sharedApplication] currentUserNotificationSettings].types == UIUserNotificationTypeNone) {
+                weakSelf.completionBlock = completion;
+                
                 UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert
                                                                                                      |UIUserNotificationTypeBadge
                                                                                                      |UIUserNotificationTypeSound)
@@ -280,28 +288,22 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             break;
         case kAPCSignUpPermissionsTypeCoremotion:
         {
-            
-            
-            [self.motionActivityManager queryActivityStartingFromDate:[NSDate date] toDate:[NSDate date] toQueue:[NSOperationQueue new] withHandler:^(NSArray * __unused activities, NSError *error) {
+            // Usually this method is called on another thread, but since we are searching
+            // within same date to same date, it will return immediately, so put it on the main thread
+            [self.motionActivityManager queryActivityStartingFromDate:[NSDate date] toDate:[NSDate date] toQueue:[NSOperationQueue mainQueue] withHandler:^(NSArray * __unused activities, NSError *error) {
                 if (!error) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                    weakSelf.coreMotionPermissionStatus = kPermissionStatusAuthorized;
-                    weakSelf.completionBlock(YES, nil);
-                    weakSelf.completionBlock = nil;
-                    });
-                } else if (error != nil && error.code == CMErrorMotionActivityNotAuthorized) {
-                    weakSelf.coreMotionPermissionStatus = kPermissionStatusDenied;
-                    
-                    if (weakSelf.completionBlock) {
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                        weakSelf.completionBlock(NO, [self permissionDeniedErrorForType:kAPCSignUpPermissionsTypeCoremotion]);
-                        weakSelf.completionBlock = nil;
-                        });
+                    coreMotionPermissionStatus = kPermissionStatusAuthorized;
+                    if (completion) {
+                        completion(YES, nil);
                     }
+                } else if (error != nil && error.code == CMErrorMotionActivityNotAuthorized) {
+                    coreMotionPermissionStatus = kPermissionStatusDenied;
                     
+                    if (completion) {
+                        completion(NO, [self permissionDeniedErrorForType:kAPCSignUpPermissionsTypeCoremotion]);
+                    }
                 }
             }];
-            
         }
             break;
         case kAPCSignUpPermissionsTypeMicrophone:
@@ -309,12 +311,12 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             
             [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
                 if (granted) {
-                    weakSelf.completionBlock(YES, nil);
-                    weakSelf.completionBlock = nil;
+                    if (completion) {
+                        completion(YES, nil);
+                    }
                 } else {
-                    if (weakSelf.completionBlock) {
-                        weakSelf.completionBlock(NO, [self permissionDeniedErrorForType:kAPCSignUpPermissionsTypeMicrophone]);
-                        weakSelf.completionBlock = nil;
+                    if (completion) {
+                        completion(NO, [self permissionDeniedErrorForType:kAPCSignUpPermissionsTypeMicrophone]);
                     }
                 }
             }];
@@ -325,12 +327,12 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             
             [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
                 if(granted){
-                    weakSelf.completionBlock(YES, nil);
-                    weakSelf.completionBlock = nil;
+                    if (completion) {
+                        completion(YES, nil);
+                    }
                 } else {
-                    if (weakSelf.completionBlock) {
-                        weakSelf.completionBlock(NO, [self permissionDeniedErrorForType:kAPCSignUpPermissionsTypeCamera]);
-                        weakSelf.completionBlock = nil;
+                    if (completion) {
+                        completion(NO, [self permissionDeniedErrorForType:kAPCSignUpPermissionsTypeCamera]);
                     }
                 }
             }];
@@ -344,15 +346,15 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             [lib enumerateGroupsWithTypes:ALAssetsGroupSavedPhotos usingBlock:^(ALAssetsGroup *group, BOOL * __unused stop) {
                 if (group == nil) {
                     // end of enumeration
-                    weakSelf.completionBlock(YES, nil);
-                    weakSelf.completionBlock = nil;
+                    if (completion) {
+                        completion(YES, nil);
+                    }
                 }
                 
             } failureBlock:^(NSError *error) {
                 if (error.code == ALAssetsLibraryAccessUserDeniedError) {
-                    if (weakSelf.completionBlock) {
-                        weakSelf.completionBlock(NO, [self permissionDeniedErrorForType:kAPCSignUpPermissionsTypePhotoLibrary]);
-                        weakSelf.completionBlock = nil;
+                    if (completion) {
+                        completion(NO, [self permissionDeniedErrorForType:kAPCSignUpPermissionsTypePhotoLibrary]);
                     }
                 }
             }];
@@ -390,15 +392,15 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
 - (NSString *)permissionDescriptionForType:(APCSignUpPermissionsType)type {
     switch (type) {
         case kAPCSignUpPermissionsTypeHealthKit:
-            return NSLocalizedString(@"Press “Allow” to individually specify which general health information the app may read from and write to HealthKit", @"");
+            return NSLocalizedStringWithDefaultValue(@"Press “Allow” to individually specify which general health information the app may read from and write to HealthKit", @"APCAppCore", APCBundle(), @"Press “Allow” to individually specify which general health information the app may read from and write to HealthKit", @"");
         case kAPCSignUpPermissionsTypeLocalNotifications:
-            return NSLocalizedString(@"Allowing notifications enables the app to show you reminders.", @"");
+            return NSLocalizedStringWithDefaultValue(@"Allowing notifications enables the app to show you reminders.", @"APCAppCore", APCBundle(), @"Allowing notifications enables the app to show you reminders.", @"");
         case kAPCSignUpPermissionsTypeLocation:
-            return NSLocalizedString(@"Using your GPS enables the app to accurately determine distances travelled. Your actual location will never be shared.", @"");
+            return NSLocalizedStringWithDefaultValue(@"Using your GPS enables the app to accurately determine distances travelled. Your actual location will never be shared.", @"APCAppCore", APCBundle(), @"Using your GPS enables the app to accurately determine distances travelled. Your actual location will never be shared.", @"");
         case kAPCSignUpPermissionsTypeCoremotion:
-            return NSLocalizedString(@"Using the motion co-processor allows the app to determine your activity, helping the study better understand how activity level may influence disease.", @"");
+            return NSLocalizedStringWithDefaultValue(@"Using the motion co-processor allows the app to determine your activity, helping the study better understand how activity level may influence disease.", @"APCAppCore", APCBundle(), @"Using the motion co-processor allows the app to determine your activity, helping the study better understand how activity level may influence disease.", @"");
         case kAPCSignUpPermissionsTypeMicrophone:
-            return NSLocalizedString(@"Access to microphone is required for your Voice Recording Activity.", @"");
+            return NSLocalizedStringWithDefaultValue(@"Access to microphone is required for your Voice Recording Activity.", @"APCAppCore", APCBundle(), @"Access to microphone is required for your Voice Recording Activity.", @"");
         case kAPCSignUpPermissionsTypeCamera:
         case kAPCSignUpPermissionsTypePhotoLibrary:
         default:
@@ -413,25 +415,25 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
     
     switch (type) {
         case kAPCSignUpPermissionsTypeHealthKit:
-            message = [NSString localizedStringWithFormat:NSLocalizedString(@"Please go to Settings -> Privacy -> Health -> %@ to re-enable.", nil), appName];
+            message = [NSString localizedStringWithFormat:NSLocalizedStringWithDefaultValue(@"Please go to Settings -> Privacy -> Health -> %@ to re-enable.", @"APCAppCore", APCBundle(), @"Please go to Settings -> Privacy -> Health -> %@ to re-enable.", nil), appName];
             break;
         case kAPCSignUpPermissionsTypeLocalNotifications:
-            message = [NSString localizedStringWithFormat:NSLocalizedString(@"Tap on Settings -> Notifications and enable 'Allow Notifications'", nil), appName];
+            message = [NSString localizedStringWithFormat:NSLocalizedStringWithDefaultValue(@"Tap on Settings -> Notifications and enable 'Allow Notifications'", @"APCAppCore", APCBundle(), @"Tap on Settings -> Notifications and enable 'Allow Notifications'", nil), appName];
             break;
         case kAPCSignUpPermissionsTypeLocation:
-            message = [NSString localizedStringWithFormat:NSLocalizedString(@"Tap on Settings -> Location and check 'Always'", nil), appName];
+            message = [NSString localizedStringWithFormat:NSLocalizedStringWithDefaultValue(@"Tap on Settings -> Location and check 'Always'", @"APCAppCore", APCBundle(), @"Tap on Settings -> Location and check 'Always'", nil), appName];
             break;
         case kAPCSignUpPermissionsTypeCoremotion:
-            message = [NSString localizedStringWithFormat:NSLocalizedString(@"Tap on Settings and enable Motion Activity.", nil), appName];
+            message = [NSString localizedStringWithFormat:NSLocalizedStringWithDefaultValue(@"Tap on Settings and enable Motion Activity.", @"APCAppCore", APCBundle(), @"Tap on Settings and enable Motion Activity.", nil), appName];
             break;
         case kAPCSignUpPermissionsTypeMicrophone:
-            message = [NSString localizedStringWithFormat:NSLocalizedString(@"Tap on Settings and enable Microphone", nil), appName];
+            message = [NSString localizedStringWithFormat:NSLocalizedStringWithDefaultValue(@"Tap on Settings and enable Microphone", @"APCAppCore", APCBundle(), @"Tap on Settings and enable Microphone", nil), appName];
             break;
         case kAPCSignUpPermissionsTypeCamera:
-            message = [NSString localizedStringWithFormat:NSLocalizedString(@"Tap on Settings and enable Camera", nil), appName];
+            message = [NSString localizedStringWithFormat:NSLocalizedStringWithDefaultValue(@"Tap on Settings and enable Camera", @"APCAppCore", APCBundle(), @"Tap on Settings and enable Camera", nil), appName];
             break;
         case kAPCSignUpPermissionsTypePhotoLibrary:
-            message = [NSString localizedStringWithFormat:NSLocalizedString(@"Tap on Settings and enable Photos", nil), appName];
+            message = [NSString localizedStringWithFormat:NSLocalizedStringWithDefaultValue(@"Tap on Settings and enable Photos", @"APCAppCore", APCBundle(), @"Tap on Settings and enable Photos", nil), appName];
             break;
         default:
             message = @"";

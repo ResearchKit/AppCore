@@ -36,6 +36,7 @@
 #import "APCEmailVerifyViewController.h"
 #import "APCOnboardingManager.h"
 #import "APCLog.h"
+#import "APCContainerStepViewController.h"
 
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
@@ -45,6 +46,8 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
 
 @interface APCSignInViewController () <ORKTaskViewControllerDelegate>
 
+@property (nonatomic, readonly) APCContainerStepViewController *parentStepViewController;
+
 @end
 
 @implementation APCSignInViewController
@@ -52,6 +55,13 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
 - (void)dealloc {
     _userHandleTextField.delegate = nil;
     _passwordTextField.delegate = nil;
+}
+
+- (APCContainerStepViewController *)parentStepViewController {
+    if ([self.parentViewController isKindOfClass:[APCContainerStepViewController class]]) {
+        return (APCContainerStepViewController*)self.parentViewController;
+    }
+    return nil;
 }
 
 #pragma mark - Life Cycle
@@ -142,8 +152,12 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
     return [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager].user;
 }
 
+- (APCOnboardingManager *)onboardingManager {
+    return [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager];
+}
+
 - (APCOnboarding *)onboarding {
-    return [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager].onboarding;
+    return [self onboardingManager].onboarding;
 }
 
 - (void)back
@@ -172,15 +186,15 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
                     if (error) {
                         APCLogError2 (error);
                     
-                        if (error.code == kSBBServerPreconditionNotMet) {
+                        if (error.code == SBBErrorCodeServerPreconditionNotMet) {
                             [self showConsent];
                         } else {
                             NSString *errorMessage = [error message];
                             errorMessage = [errorMessage isEqualToString:kServerInvalidEmailErrorString] ?
-                                NSLocalizedString(@"Invalid email or password.\n\nIn case you have not verified your account, please do so by clicking the link in the email we have sent you.", nil) :
+                                NSLocalizedStringWithDefaultValue(@"Invalid email or password.\n\nIn case you have not verified your account, please do so by clicking the link in the email we have sent you.", @"APCAppCore", APCBundle(), @"Invalid email or password.\n\nIn case you have not verified your account, please do so by clicking the link in the email we have sent you.", nil) :
                             errorMessage;
                             
-                            UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Sign In", @"") message:errorMessage];
+                            UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedStringWithDefaultValue(@"Sign In", @"APCAppCore", APCBundle(), @"Sign In", @"") message:errorMessage];
                             [self presentViewController:alert animated:YES completion:nil];
                             
                         }
@@ -193,10 +207,10 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
                         if (error) {
                             APCLogError2 (error);
                             
-                            if (error.code == kSBBServerPreconditionNotMet) {
+                            if (error.code == SBBErrorCodeServerPreconditionNotMet) {
                                 [self showConsent];
                             } else {
-                                UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Sign In", @"") message:error.message];
+                                UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedStringWithDefaultValue(@"Sign In", @"APCAppCore", APCBundle(), @"Sign In", @"") message:error.message];
                                 [self presentViewController:alert animated:YES completion:nil];
                             }
                             
@@ -210,7 +224,7 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
             }
         }];
     } else {
-        UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Sign In", @"") message:errorMessage];
+        UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedStringWithDefaultValue(@"Sign In", @"APCAppCore", APCBundle(), @"Sign In", @"") message:errorMessage];
         [self presentViewController:alert animated:YES completion:nil];
     }
 }
@@ -225,10 +239,14 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
         APCLogError2 (error);
     }];
     
-    if (user.isSecondaryInfoSaved) {
+    if (self.parentStepViewController != nil) {
+        [self.parentStepViewController goForward];
+    }
+    else if (user.isSecondaryInfoSaved) {
         user.signedIn = YES;
         [[NSNotificationCenter defaultCenter] postNotificationName:APCUserSignedInNotification object:self];
-    } else{
+    }
+    else {
         UIViewController *viewController = [[self onboarding] nextScene];
         [self.navigationController pushViewController:viewController animated:YES];
     }
@@ -240,11 +258,11 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
     ORKTaskViewController *consentViewController = [((APCAppDelegate*)[UIApplication sharedApplication].delegate) consentViewController];
     consentViewController.delegate = self;
     
-    NSUInteger subviewsCount = consentViewController.view.subviews.count;
-    UILabel *watermarkLabel = [APCExampleLabel watermarkInRect:consentViewController.view.bounds
-                                                    withCenter:consentViewController.view.center];
-    
-    [consentViewController.view insertSubview:watermarkLabel atIndex:subviewsCount];
+//    NSUInteger subviewsCount = consentViewController.view.subviews.count;
+//    UILabel *watermarkLabel = [APCExampleLabel watermarkInRect:consentViewController.view.bounds
+//                                                    withCenter:consentViewController.view.center];
+//    
+//    [consentViewController.view insertSubview:watermarkLabel atIndex:subviewsCount];
     
     [self.navigationController presentViewController:consentViewController animated:YES completion:nil];
 }
@@ -274,13 +292,13 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
 
 - (void)handleConsentConflict
 {
-    UIAlertController *alertContorller = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Sign In", @"") message:NSLocalizedString(@"You have previously withdrawn from this Study. Do you wish to rejoin?", nil) preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *yesAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Rejoin", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
+    UIAlertController *alertContorller = [UIAlertController alertControllerWithTitle:NSLocalizedStringWithDefaultValue(@"Sign In", @"APCAppCore", APCBundle(), @"Sign In", @"") message:NSLocalizedStringWithDefaultValue(@"You have previously withdrawn from this Study. Do you wish to rejoin?", @"APCAppCore", APCBundle(), @"You have previously withdrawn from this Study. Do you wish to rejoin?", nil) preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *yesAction = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Rejoin", @"APCAppCore", APCBundle(), @"Rejoin", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
         [self rejoinStudy];
     }];
     [alertContorller addAction:yesAction];
     
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Cancel", @"APCAppCore", APCBundle(), @"Cancel", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
         
     }];
     [alertContorller addAction:cancelAction];
@@ -296,7 +314,7 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
         if (error) {
             APCLogError2 (error);
             
-            UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Sign In", @"") message:error.message];
+            UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedStringWithDefaultValue(@"Sign In", @"APCAppCore", APCBundle(), @"Sign In", @"") message:error.message];
             [self presentViewController:alert animated:YES completion:nil];
         } else {
             user.consented = YES;
@@ -329,55 +347,14 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
 
 - (void)taskViewControllerDidComplete: (ORKTaskViewController *)taskViewController
 {
-    ORKConsentSignatureResult *consentResult =  nil;
-    
-    if ([taskViewController respondsToSelector:@selector(signatureResult)])
-    {
-        APCConsentTaskViewController *consentTaskViewController = (APCConsentTaskViewController *)taskViewController;
-        if (consentTaskViewController.signatureResult)
-        {
-            consentResult = consentTaskViewController.signatureResult;
-        }
-    }
-    else
-    {
-        NSString*   signatureResultStepIdentifier = @"reviewStep";
-        
-        for (ORKStepResult* result in taskViewController.result.results)
-        {
-            if ([result.identifier isEqualToString:signatureResultStepIdentifier])
-            {
-                consentResult = (ORKConsentSignatureResult*)[[result results] firstObject];
-                break;
-            }
-        }
-        
-        NSAssert(consentResult != nil, @"Unable to find consent result with signature (identifier == \"%@\"", signatureResultStepIdentifier);
-    }
-    
-    if (consentResult.signature.requiresName && (consentResult.signature.givenName && consentResult.signature.familyName))
-    {
-        APCUser *user = [self user];
-        user.consentSignatureName = [consentResult.signature.givenName stringByAppendingFormat:@" %@",consentResult.signature.familyName];
-        user.consentSignatureImage = UIImagePNGRepresentation(consentResult.signature.signatureImage);
-        
-        NSDateFormatter *dateFormatter = [NSDateFormatter new];
-        dateFormatter.dateFormat = consentResult.signature.signatureDateFormatString;
-        user.consentSignatureDate = [dateFormatter dateFromString:consentResult.signature.signatureDate];
-        
-        [self dismissViewControllerAnimated:YES completion:^
-         {
-             [((APCAppDelegate*)[UIApplication sharedApplication].delegate) dataSubstrate].currentUser.userConsented = YES;
-             
+    if ([[self onboardingManager] checkForConsentWithTaskViewController:taskViewController]) {
+        [self dismissViewControllerAnimated:YES completion:^{
              [self sendConsent];
          }];
     }
     else
     {
-        [taskViewController dismissViewControllerAnimated:YES completion:^
-         {
-             [[NSNotificationCenter defaultCenter] postNotificationName:APCUserDidDeclineConsentNotification object:nil];
-         }];
+        [taskViewController dismissViewControllerAnimated:YES completion:nil];
     }
 }
 
@@ -388,11 +365,11 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
     BOOL isContentValid = NO;
     
     if (self.userHandleTextField.text.length == 0) {
-        *errorMessage = NSLocalizedString(@"Please enter your email", @"");
+        *errorMessage = NSLocalizedStringWithDefaultValue(@"Please enter your email", @"APCAppCore", APCBundle(), @"Please enter your email", @"");
         isContentValid = NO;
     }
     else if (self.passwordTextField.text.length == 0) {
-        *errorMessage = NSLocalizedString(@"Please enter your password", @"");
+        *errorMessage = NSLocalizedStringWithDefaultValue(@"Please enter your password", @"APCAppCore", APCBundle(), @"Please enter your password", @"");
         isContentValid = NO;
     }
     else {

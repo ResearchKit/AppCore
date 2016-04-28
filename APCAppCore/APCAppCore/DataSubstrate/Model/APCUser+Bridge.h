@@ -36,17 +36,38 @@
 
 @interface APCUser (Bridge) <SBBAuthManagerDelegateProtocol>
 
+/*
+ * @param shouldPerform YES if you want to perform test user check when calling sign up with view controller paramater
+ *                      NO if you do not want it to perform this test
+ */
++ (void) setShouldPerformTestUserEmailCheckOnSignup:(BOOL)shouldPerform;
+
 - (void) signUpOnCompletion:(void (^)(NSError * error))completionBlock;
+- (void) signUpWithDataGroups:(NSArray<NSString *> *)dataGroups onCompletion:(void (^)(NSError *))completionBlock;
+
+/*
+ * @param vc -  a view controller that will be used to perform the test user check and display loading spinner
+ *              and also the prompt to the user to make sure they want to be test users
+ *              if kAPCUserBridgePerformTestUserEmailCheck is NO, method skips any testing
+ */
+- (void) signUpWithDataGroups:(NSArray<NSString *> *)dataGroups
+         withTestUserPromptVc:(__weak UIViewController*)vc
+                 onCompletion:(void (^)(NSError *))completionBlock;
+
 - (void) signInOnCompletion:(void (^)(NSError * error))completionBlock;
 - (void) signOutOnCompletion:(void (^)(NSError * error))completionBlock;
+- (void) updateDataGroups:(NSArray<NSString *> *)dataGroups onCompletion:(void (^)(NSError * error))completionBlock;
 - (void) updateProfileOnCompletion:(void (^)(NSError * error))completionBlock;
 - (void) updateCustomProfile:(SBBUserProfile*)profile onCompletion:(void (^)(NSError * error))completionBlock;
 - (void) getProfileOnCompletion:(void (^)(NSError *error))completionBlock;
 - (void) sendUserConsentedToBridgeOnCompletion: (void (^)(NSError * error))completionBlock;
 - (void) retrieveConsentOnCompletion:(void (^)(NSError *error))completionBlock;
-- (void) withdrawStudyOnCompletion:(void (^)(NSError *error))completionBlock;
+- (void) withdrawStudyWithReason:(NSString*)reason onCompletion:(void (^)(NSError *error))completionBlock;
 - (void) resumeStudyOnCompletion:(void (^)(NSError *error))completionBlock;
+- (void) pauseSharingOnCompletion:(void (^)(NSError *error))completionBlock;
+- (void) resumeSharingOnCompletion:(void (^)(NSError *error))completionBlock;
 - (void) resendEmailVerificationOnCompletion:(void (^)(NSError *))completionBlock;
 - (void) changeDataSharingTypeOnCompletion:(void (^)(NSError *))completionBlock;
+- (void) sendDownloadDataOnCompletion:(void (^)(NSError *))completionBlock;
 
 @end

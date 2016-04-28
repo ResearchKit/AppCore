@@ -33,11 +33,14 @@
  
 #import <UIKit/UIKit.h>
 
+static NSString* const kAPCAppearanceSystemFont = @"kAPCAppearanceSystemFont";
+
 @interface UIFont (APCAppearance)
 
 + (UIFont*) appRegularFontWithSize: (CGFloat) size;
 + (UIFont*) appMediumFontWithSize: (CGFloat) size;
 + (UIFont*) appLightFontWithSize: (CGFloat) size;
++ (UIFont*) appThinFontWithSize: (CGFloat) size;
 + (UIFont*) appNavBarTitleFont;
 + (UIFont*) appQuestionLabelFont;
 + (UIFont*) appQuestionOptionFont;

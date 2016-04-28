@@ -34,6 +34,7 @@
 #import "NSDate+Helper.h"
 #import "APCConstants.h"
 #import "NSDateComponents+Helper.h"
+#import "APCLocalization.h"
 
 
 NSString * const NSDateDefaultDateFormat   = @"MMM dd, yyyy";
@@ -66,8 +67,6 @@ typedef enum : NSUInteger {
     APCDateDirectionForwards,
     APCDateDirectionBackwards,
 }   APCDateDirection;
-
-
 
 @implementation NSDate (Helper)
 
@@ -120,13 +119,7 @@ typedef enum : NSUInteger {
 
 - (NSDate *)dateByAddingDays:(NSInteger)inDays
 {
-    static NSCalendar *cal;
-    static dispatch_once_t once;
-    dispatch_once(&once, ^
-                  {
-                      cal = [NSCalendar currentCalendar];
-                  });
-    
+    NSCalendar* cal = [NSCalendar currentCalendar];
     NSDateComponents *components = [cal components:(NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear) fromDate:self];
     [components setDay:[components day] + inDays];
     return [cal dateFromComponents:components];
@@ -146,11 +139,11 @@ typedef enum : NSUInteger {
     NSString * retValue;
     if([date isEqual:today])
     {
-        retValue = NSLocalizedString(@"Today", nil);
+        retValue = NSLocalizedStringWithDefaultValue(@"Today", @"APCAppCore", APCBundle(), @"Today", nil);
     }
     else if([date isEqual:yesterday])
     {
-        retValue = NSLocalizedString(@"Yesterday", nil);
+        retValue = NSLocalizedStringWithDefaultValue(@"Yesterday", @"APCAppCore", APCBundle(), @"Yesterday", nil);
     }
     else if(([date laterDate:oneWeekAgo] == date) && ([date laterDate:tomorrow] == tomorrow))
     {
@@ -258,6 +251,33 @@ typedef enum : NSUInteger {
     return [cal dateFromComponents:components];
 }
 
++ (instancetype) startOfYear: (NSDate*) date
+{
+    return [date startOfYear];
+}
+
+- (instancetype) startOfYear
+{
+    // Get current calendar
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *components = [calendar components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear
+                                               fromDate:self];
+    components.month = 1;
+    components.day = 1;
+    
+    return [calendar dateFromComponents:components];
+}
+
++ (instancetype) dateWithYear:(NSInteger)year month:(NSInteger)month day:(NSInteger)day
+{
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *components = [[NSDateComponents alloc] init];
+    [components setYear:year];
+    [components setMonth:month];
+    [components setDay:day];
+    return [calendar dateFromComponents:components];
+}
+
 - (instancetype) dayBefore
 {
     return [self dateByAddingDays: -1];
@@ -268,7 +288,34 @@ typedef enum : NSUInteger {
     return [self dateByAddingDays: 1];
 }
 
+- (instancetype) startOfWeekGregorian
+{
+    NSCalendar *cal = [NSCalendar currentCalendar];
+    NSDateComponents *components = [cal components:(NSCalendarUnitDay | NSCalendarUnitWeekday | NSCalendarUnitMonth | NSCalendarUnitYear) fromDate:self];
+    int daysSinceStartOfWeek = (components.weekday - cal.firstWeekday) % 7;
+    [components setDay:[components day] - daysSinceStartOfWeek];
+    return [cal dateFromComponents:components];
+}
+
++ (instancetype) startOfWeekGregorian: (NSDate*) date
+{
+    return [date startOfWeekGregorian];
+}
+
 + (instancetype) startOfTomorrow: (NSDate*) date
+{
+    NSCalendar *cal = [NSCalendar currentCalendar];
+    NSDateComponents *components = [cal components:(NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear) fromDate:date];
+    [components setDay:[components day] + 1];
+    return [cal dateFromComponents:components];
+}
+
++(instancetype)todayAtMidnightFromDate:(NSDate*)date
+{
+    return [self startOfDay:date];
+}
+
++(instancetype)tomorrowAtMidnightFromDate:(NSDate*)date
 {
     NSCalendar *cal = [NSCalendar currentCalendar];
     NSDateComponents *components = [cal components:(NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear) fromDate:date];
@@ -278,17 +325,12 @@ typedef enum : NSUInteger {
 
 +(instancetype)todayAtMidnight
 {
-    NSDate *today = [NSDate date];
-    return [self startOfDay:today];
+    return [self todayAtMidnightFromDate:[NSDate date]];
 }
 
 +(instancetype)tomorrowAtMidnight
 {
-    NSDate *today = [NSDate date];
-    NSCalendar *cal = [NSCalendar currentCalendar];
-    NSDateComponents *components = [cal components:(NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear) fromDate:today];
-    [components setDay:[components day] + 1];
-    return [cal dateFromComponents:components];
+    return [self tomorrowAtMidnightFromDate:[NSDate date]];
 }
 
 +(instancetype)yesterdayAtMidnight
@@ -315,6 +357,12 @@ typedef enum : NSUInteger {
     NSDateComponents *components = [cal components:(NSCalendarUnitWeekOfYear | NSCalendarUnitMonth | NSCalendarUnitYear) fromDate:date];
     [components setWeekday:1];//Sunday
     return [cal dateFromComponents:components];
+}
+
++(instancetype)nextSundayAtMidnightFromDate:(NSDate *)date
+{
+    NSDate* priorSunday = [self priorSundayAtMidnightFromDate:date];
+    return [priorSunday dateByAddingDays:kDateHelperDaysInAWeek];
 }
 
 - (BOOL) isEarlierThanDate: (NSDate*) otherDate

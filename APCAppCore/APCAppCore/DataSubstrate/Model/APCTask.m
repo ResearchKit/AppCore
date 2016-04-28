@@ -32,8 +32,7 @@
 //
 
 #import "APCTask.h"
-#import "APCSchedule.h"
-#import "APCScheduledTask.h"
+#import "APCResult.h"
 
 
 @implementation APCTask
@@ -44,13 +43,20 @@
 @dynamic taskCompletionTimeString;
 @dynamic taskContentFileName;
 @dynamic taskDescription;
+@dynamic taskExpires;
+@dynamic taskFinished;
+@dynamic taskGuid;
 @dynamic taskHRef;
 @dynamic taskID;
 @dynamic taskIsOptional;
+@dynamic taskScheduledFor;
+@dynamic taskSchemaRevision;
+@dynamic taskStarted;
 @dynamic taskTitle;
-@dynamic taskVersionNumber;
+@dynamic taskType;
+@dynamic taskVersionDate;
+@dynamic taskVersionName;
 @dynamic updatedAt;
-@dynamic scheduledTasks;
-@dynamic schedules;
+@dynamic results;
 
 @end

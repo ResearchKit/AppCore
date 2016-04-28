@@ -35,6 +35,7 @@
 #import "APCUserInfoConstants.h"
 #import "APCPasscodeView.h"
 #import "APCLog.h"
+#import "APCLocalization.h"
 
 #import "APCKeychainStore+Passcode.h"
 #import "UIColor+APCAppearance.h"
@@ -64,7 +65,7 @@ typedef NS_ENUM(NSUInteger, APCPasscodeEntryType) {
     self.passcodeView.delegate = self;
     
     [self setupAppearance];
-    self.textLabel.text = NSLocalizedString(@"Enter your old passcode", nil);
+    self.textLabel.text = NSLocalizedStringWithDefaultValue(@"Enter your old passcode", @"APCAppCore", APCBundle(), @"Enter your old passcode", nil);
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -90,14 +91,14 @@ typedef NS_ENUM(NSUInteger, APCPasscodeEntryType) {
         case kAPCPasscodeEntryTypeOld:
         {
             if ([passcodeView.code isEqualToString:[APCKeychainStore passcode]]) {
-                self.textLabel.text = NSLocalizedString(@"Enter your new passcode", nil);
+                self.textLabel.text = NSLocalizedStringWithDefaultValue(@"Enter your new passcode", @"APCAppCore", APCBundle(), @"Enter your new passcode", nil);
                 [passcodeView reset];
                 [passcodeView becomeFirstResponder];
                 self.entryType = kAPCPasscodeEntryTypeNew;
             } else {
-                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Wrong Passcode", nil) message:NSLocalizedString(@"Please enter again.", nil) preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedStringWithDefaultValue(@"Wrong Passcode", @"APCAppCore", APCBundle(), @"Wrong Passcode", nil) message:NSLocalizedStringWithDefaultValue(@"Please enter again.", @"APCAppCore", APCBundle(), @"Please enter again.", nil) preferredStyle:UIAlertControllerStyleAlert];
                 
-                UIAlertAction *okayAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
+                UIAlertAction *okayAction = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"OK", @"APCAppCore", APCBundle(), @"OK", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
                     [passcodeView reset];
                     [passcodeView becomeFirstResponder];
                 }];
@@ -109,7 +110,7 @@ typedef NS_ENUM(NSUInteger, APCPasscodeEntryType) {
             break;
         case kAPCPasscodeEntryTypeNew:
         {
-            self.textLabel.text = NSLocalizedString(@"Re-enter your new passcode", nil);
+            self.textLabel.text = NSLocalizedStringWithDefaultValue(@"Re-enter your new passcode", @"APCAppCore", APCBundle(), @"Re-enter your new passcode", nil);
             self.passcode = passcodeView.code;
             [passcodeView reset];
             [passcodeView becomeFirstResponder];
@@ -126,7 +127,7 @@ typedef NS_ENUM(NSUInteger, APCPasscodeEntryType) {
                 [passcodeView becomeFirstResponder];
                 self.entryType = kAPCPasscodeEntryTypeReEnter;
                 
-                UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Wrong Passcode", nil) message:NSLocalizedString(@"The passcode you entered did not match your new passcode. Please enter again.", nil)];
+                UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedStringWithDefaultValue(@"Wrong Passcode", @"APCAppCore", APCBundle(), @"Wrong Passcode", nil) message:NSLocalizedStringWithDefaultValue(@"The passcode you entered did not match your new passcode. Please enter again.", @"APCAppCore", APCBundle(), @"The passcode you entered did not match your new passcode. Please enter again.", nil)];
                 [self presentViewController:alert animated:YES completion:nil];
                 
             }

@@ -38,12 +38,15 @@
 #import "APCPermissionButton.h"
 #import "APCPermissionsManager.h"
 #import "APCLog.h"
+#import "APCLocalization.h"
+#import "APCContainerStepViewController.h"
+#import "APCNavigationFooter.h"
 
 #import "UIAlertController+Helper.h"
 #import "APCUser+Bridge.h"
 
 
-@interface APCSignUpMedicalInfoViewController ()
+@interface APCSignUpMedicalInfoViewController () <APCNavigationFooterDelegate>
 
 @property (nonatomic, strong) APCPermissionsManager *permissionsManager;
 @property (nonatomic) BOOL permissionGranted;
@@ -79,7 +82,11 @@
         }];
     }
     
-    self.title = NSLocalizedString(@"Additional Information", @"Additional Information");
+    if (self.parentStepViewController == nil) {
+        self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 44)];
+    }
+    
+    self.title = NSLocalizedStringWithDefaultValue(@"Additional Information", @"APCAppCore", APCBundle(), @"Additional Information", @"Additional Information");
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -101,8 +108,8 @@
             case kAPCUserInfoItemTypeBloodType:
             {
                 APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
-                field.caption = NSLocalizedString(@"Blood Type", @"");
-                field.identifier = kAPCDefaultTableViewCellIdentifier;
+                field.caption = NSLocalizedStringWithDefaultValue(@"Blood Type", @"APCAppCore", APCBundle(), @"Blood Type", @"");
+                field.reuseIdentifier = kAPCDefaultTableViewCellIdentifier;
                 field.selectionStyle = UITableViewCellSelectionStyleGray;
                 field.detailDiscloserStyle = YES;
                 
@@ -125,8 +132,8 @@
             case kAPCUserInfoItemTypeMedicalCondition:
             {
                 APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
-                field.caption = NSLocalizedString(@"Medical Conditions", @"");
-                field.identifier = kAPCDefaultTableViewCellIdentifier;
+                field.caption = NSLocalizedStringWithDefaultValue(@"Medical Conditions", @"APCAppCore", APCBundle(), @"Medical Conditions", @"");
+                field.reuseIdentifier = kAPCDefaultTableViewCellIdentifier;
                 field.selectionStyle = UITableViewCellSelectionStyleGray;
                 field.detailDiscloserStyle = YES;
                 field.pickerData = @[ [APCUser medicalConditions] ];
@@ -148,8 +155,8 @@
             case kAPCUserInfoItemTypeMedication:
             {
                 APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
-                field.caption = NSLocalizedString(@"Medications", @"");
-                field.identifier = kAPCDefaultTableViewCellIdentifier;
+                field.caption = NSLocalizedStringWithDefaultValue(@"Medications", @"APCAppCore", APCBundle(), @"Medications", @"");
+                field.reuseIdentifier = kAPCDefaultTableViewCellIdentifier;
                 field.selectionStyle = UITableViewCellSelectionStyleGray;
                 field.detailDiscloserStyle = YES;
                 field.textAlignnment = NSTextAlignmentRight;
@@ -172,8 +179,8 @@
             case kAPCUserInfoItemTypeHeight:
             {
                 APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
-                field.caption = NSLocalizedString(@"Height", @"");
-                field.identifier = kAPCDefaultTableViewCellIdentifier;
+                field.caption = NSLocalizedStringWithDefaultValue(@"Height", @"APCAppCore", APCBundle(), @"Height", @"");
+                field.reuseIdentifier = kAPCDefaultTableViewCellIdentifier;
                 field.selectionStyle = UITableViewCellSelectionStyleGray;
                 field.detailDiscloserStyle = YES;
                 field.textAlignnment = NSTextAlignmentRight;
@@ -216,10 +223,10 @@
             case kAPCUserInfoItemTypeWeight:
             {
                 APCTableViewTextFieldItem *field = [APCTableViewTextFieldItem new];
-                field.caption = NSLocalizedString(@"Weight", @"");
-                field.placeholder = NSLocalizedString(@"add weight (lb)", @"");
+                field.caption = NSLocalizedStringWithDefaultValue(@"Weight", @"APCAppCore", APCBundle(), @"Weight", @"");
+                field.placeholder = NSLocalizedStringWithDefaultValue(@"add weight (lb)", @"APCAppCore", APCBundle(), @"add weight (lb)", @"");
                 field.style = UITableViewCellStyleValue1;
-                field.identifier = kAPCTextFieldTableViewCellIdentifier;
+                field.reuseIdentifier = kAPCTextFieldTableViewCellIdentifier;
                 field.regularExpression = kAPCMedicalInfoItemWeightRegEx;
                 field.keyboardType = UIKeyboardTypeDecimalPad;
                 field.textAlignnment = NSTextAlignmentRight;
@@ -238,9 +245,9 @@
             case kAPCUserInfoItemTypeWakeUpTime:
             {
                 APCTableViewDatePickerItem *field = [APCTableViewDatePickerItem new];
-                field.caption = NSLocalizedString(@"What time do you generally wake up?", @"");
+                field.caption = NSLocalizedStringWithDefaultValue(@"What time do you generally wake up?", @"APCAppCore", APCBundle(), @"What time do you generally wake up?", @"");
                 field.placeholder = @"07:00 AM";
-                field.identifier = kAPCDefaultTableViewCellIdentifier;
+                field.reuseIdentifier = kAPCDefaultTableViewCellIdentifier;
                 field.selectionStyle = UITableViewCellSelectionStyleGray;
                 field.datePickerMode = UIDatePickerModeTime;
                 field.dateFormat = kAPCMedicalInfoItemSleepTimeFormat;
@@ -267,10 +274,10 @@
             case kAPCUserInfoItemTypeSleepTime:
             {
                 APCTableViewDatePickerItem *field = [APCTableViewDatePickerItem new];
-                field.caption = NSLocalizedString(@"What time do you generally go to sleep?", @"");
+                field.caption = NSLocalizedStringWithDefaultValue(@"What time do you generally go to sleep?", @"APCAppCore", APCBundle(), @"What time do you generally go to sleep?", @"");
                 field.placeholder = @"09:30 PM";
                 field.style = UITableViewCellStyleValue1;
-                field.identifier = kAPCDefaultTableViewCellIdentifier;
+                field.reuseIdentifier = kAPCDefaultTableViewCellIdentifier;
                 field.selectionStyle = UITableViewCellSelectionStyleGray;
                 field.datePickerMode = UIDatePickerModeTime;
                 field.dateFormat = kAPCMedicalInfoItemSleepTimeFormat;
@@ -389,11 +396,22 @@
     
 }
 
+- (void)goForward {
+    [self next];
+}
+
 - (IBAction) next {
     [self loadProfileValuesInModel];
     
-    UIViewController *viewController = [[self onboarding] nextScene];
-    [self.navigationController pushViewController:viewController animated:YES];
+    if (self.parentStepViewController != nil) {
+        // If this has a step view controller parent then call goForward on the parent
+        [self.parentStepViewController goForward];
+    }
+    else {
+        // Otherwise, this uses APCOnboarding to handle navigation
+        UIViewController *viewController = [[self onboarding] nextScene];
+        [self.navigationController pushViewController:viewController animated:YES];
+    }
 }
 
 @end

@@ -96,7 +96,7 @@ static NSString *kInternetNotAvailableErrorMessage2 = @"BackendServer Not Reacha
     BOOL isContentValid = NO;
     
     if (self.emailTextField.text.length == 0) {
-        *errorMessage = NSLocalizedString(@"Please enter your email address.", @"");
+        *errorMessage = NSLocalizedStringWithDefaultValue(@"Please enter your email address.", @"APCAppCore", APCBundle(), @"Please enter your email address.", @"");
         isContentValid = NO;
     }
     else {
@@ -126,14 +126,14 @@ static NSString *kInternetNotAvailableErrorMessage2 = @"BackendServer Not Reacha
             user.email = self.emailTextField.text;
             
             typeof(self) __weak weakSelf = self;
-            [user signUpOnCompletion:^(NSError *error) {
+            [user signUpWithDataGroups:user.dataGroups withTestUserPromptVc:self onCompletion:^(NSError *error) {
                 if (error) {
                     
                     APCLogError2 (error);
                     
                     [spinnerController dismissViewControllerAnimated:NO completion:^{
                         
-                        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", @"Dismiss") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
+                        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Dismiss", @"APCAppCore", APCBundle(), @"Dismiss", @"Dismiss") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
                             
                         }];
                         
@@ -154,11 +154,11 @@ static NSString *kInternetNotAvailableErrorMessage2 = @"BackendServer Not Reacha
             
         }
         else {
-            UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Change Email", @"") message:NSLocalizedString(@"Please enter a valid email address", @"")];
+            UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedStringWithDefaultValue(@"Change Email", @"APCAppCore", APCBundle(), @"Change Email", @"") message:NSLocalizedStringWithDefaultValue(@"Please enter a valid email address", @"APCAppCore", APCBundle(), @"Please enter a valid email address", @"")];
             [self presentViewController:alert animated:YES completion:nil];
         }
     } else{
-        UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Change Email", @"") message:error];
+        UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedStringWithDefaultValue(@"Change Email", @"APCAppCore", APCBundle(), @"Change Email", @"") message:error];
         [self presentViewController:alert animated:YES completion:nil];
     }
 }

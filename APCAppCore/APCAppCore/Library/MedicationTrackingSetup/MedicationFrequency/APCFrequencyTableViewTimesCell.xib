@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9060" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
@@ -11,11 +12,12 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="56"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="55"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <button opaque="NO" tag="1001" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1ku-Jd-x2J">
                         <rect key="frame" x="18" y="7" width="44" height="44"/>
+                        <animations/>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="44" id="Msw-3U-dNX"/>
@@ -27,6 +29,7 @@
                     </button>
                     <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dDd-QJ-byd">
                         <rect key="frame" x="62" y="6" width="16" height="44"/>
+                        <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="44" id="mkg-J0-wA7"/>
@@ -34,6 +37,7 @@
                     </view>
                     <button opaque="NO" tag="1002" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ndu-bH-Ybq">
                         <rect key="frame" x="78" y="7" width="44" height="44"/>
+                        <animations/>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="44" id="JC9-VS-xyl"/>
@@ -45,6 +49,7 @@
                     </button>
                     <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="n8B-OI-6kA">
                         <rect key="frame" x="122" y="6" width="16" height="44"/>
+                        <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="44" id="dw5-LT-cg0"/>
@@ -52,6 +57,7 @@
                     </view>
                     <button opaque="NO" tag="1003" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oCR-jT-ZC5">
                         <rect key="frame" x="138" y="7" width="44" height="44"/>
+                        <animations/>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="44" id="pvQ-J9-NfZ"/>
@@ -63,6 +69,7 @@
                     </button>
                     <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="N90-wr-6Mg">
                         <rect key="frame" x="180" y="6" width="16" height="44"/>
+                        <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="44" id="cu1-KZ-kJ7"/>
@@ -70,6 +77,7 @@
                     </view>
                     <button opaque="NO" tag="1004" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kzz-zD-ZA8">
                         <rect key="frame" x="198" y="7" width="44" height="44"/>
+                        <animations/>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="44" id="KVn-v3-9iT"/>
@@ -81,6 +89,7 @@
                     </button>
                     <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fpf-nJ-vak">
                         <rect key="frame" x="243" y="6" width="16" height="44"/>
+                        <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="44" id="pkR-Nr-ks4"/>
@@ -88,6 +97,7 @@
                     </view>
                     <button opaque="NO" tag="1005" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ltf-Zb-WRg">
                         <rect key="frame" x="258" y="7" width="44" height="44"/>
+                        <animations/>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="6e0-ug-ZCw"/>
@@ -110,6 +120,7 @@
                         </variation>
                     </button>
                 </subviews>
+                <animations/>
                 <constraints>
                     <constraint firstItem="Kzz-zD-ZA8" firstAttribute="leading" secondItem="N90-wr-6Mg" secondAttribute="trailing" constant="2" id="1T4-Im-dRW"/>
                     <constraint firstAttribute="centerY" secondItem="1ku-Jd-x2J" secondAttribute="centerY" constant="-1" id="4Bm-fA-JE4"/>
@@ -144,6 +155,7 @@
                     </mask>
                 </variation>
             </tableViewCellContentView>
+            <animations/>
             <point key="canvasLocation" x="284" y="275"/>
         </tableViewCell>
     </objects>

@@ -58,7 +58,7 @@
     self.dateFormatter = [NSDateFormatter new];
     self.dateFormatter.dateFormat = @"MM/dd/yy";
     
-    self.title = NSLocalizedString(@"News Feed", nil);
+    self.title = NSLocalizedStringWithDefaultValue(@"News Feed", @"APCAppCore", APCBundle(), @"News Feed", nil);
     
     [self setupAppearance];
 }
@@ -86,7 +86,7 @@
     self.emptyLabel = [UILabel new];
     self.emptyLabel.frame = self.tableView.bounds;
     
-    self.emptyLabel.text = NSLocalizedString(@"There's nothing here yet.", nil);
+    self.emptyLabel.text = NSLocalizedStringWithDefaultValue(@"There's nothing here yet.", @"APCAppCore", APCBundle(), @"There's nothing here yet.", nil);
     self.emptyLabel.textColor = [UIColor appSecondaryColor3];
     self.emptyLabel.textAlignment = NSTextAlignmentCenter;
     self.emptyLabel.font = [UIFont appMediumFontWithSize:22];
@@ -116,7 +116,18 @@
     APCFeedItem *item = self.posts[indexPath.row];
     
     cell.titleLabel.text = item.title;
-    cell.descriptionLabel.text = item.itemDescription;
+    
+    // strip HTML tags from itemDescription before displaying.
+    NSError *error = nil;
+    NSAttributedString *attributedDescription = [[NSAttributedString alloc] initWithData:[item.itemDescription dataUsingEncoding:NSUTF8StringEncoding] options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType} documentAttributes:nil error:&error];
+    if (error) {
+#if DEBUG
+        NSLog(@"Problem creating attributed string from HTML:\n%@\nError:\n%@", item.description, error);
+#endif
+        cell.descriptionLabel.text = item.itemDescription;
+    } else {
+        cell.descriptionLabel.text = [attributedDescription string];
+    }
     cell.dateLabel.text = [self.dateFormatter stringFromDate:item.pubDate];
     
     BOOL read = [[self newsFeedManager] hasUserReadPostWithURL:item.link];
@@ -155,7 +166,7 @@
         if (!error) {
             strongSelf.posts = posts;
         } else {
-            UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Fetch Error",nil) message:NSLocalizedString(@"An error occured while fetching news feed.",nil)];
+            UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedStringWithDefaultValue(@"Fetch Error", @"APCAppCore", APCBundle(), @"Fetch Error", nil) message:NSLocalizedStringWithDefaultValue(@"An error occured while fetching news feed.", @"APCAppCore", APCBundle(), @"An error occured while fetching news feed.", nil)];
             [strongSelf presentViewController:alert animated:YES completion:nil];
         }
         

@@ -62,46 +62,77 @@ typedef NS_ENUM(NSUInteger, APCDashboardGraphType) {
 };
 
 /**
- Indicates where we're getting each batch of schedules and
- tasks:  from the server, from disk, or from various
+ Indicates where we're getting each batch of tasks:  
+ from the server, from disk, or from various
  application-specific areas.
-
+ 
  Please feel free to add your own sources, here.  If you
  do, please respect the following:
-
+ 
  -  Make them bitmask-friendly, using the examples below.
-
+ 
  -  Do NOT change the values of the existing items. Those
-    are values in our users' current databases.
-
+ are values in our users' current databases.
+ 
  -  Add your enum name to the switch() statement in the
-    function NSStringFromAPCScheduleSource(), inside
-    APCConstants.m.
+ function NSStringFromAPCTaskSource(), inside
+ APCConstants.m.
  */
 typedef enum : NSUInteger {
-    APCScheduleSourceAll                = 0,
-    APCScheduleSourceLocalDisk          = 1 << 0,   // 0000 0000 0000 0001
-    APCScheduleSourceServer             = 1 << 1,   // 0000 0000 0000 0010
-    APCScheduleSourceGlucoseLog         = 1 << 2,   // 0000 0000 0000 0100
-    APCScheduleSourceMedicationTracker  = 1 << 3,   // 0000 0000 0000 1000
-}   APCScheduleSource;
+    APCTaskSourceAll                = 0,
+    APCTaskSourceLocalDisk          = 1 << 0,   // 0000 0000 0000 0001
+    APCTaskSourceServer             = 1 << 1,   // 0000 0000 0000 0010
+    APCTaskSourceGlucoseLog         = 1 << 2,   // 0000 0000 0000 0100
+    APCTaskSourceMedicationTracker  = 1 << 3,   // 0000 0000 0000 1000
+}   APCTaskSource;
 
-
+/**
+ Indicates the type of task to be done. A Survey is typically a
+ question and answer format while activities will involve doing
+ somethiing like tapping or speaking into the phone
+ 
+ Please feel free to add your own sources, here.  If you
+ do, please respect the following:
+ 
+ -  Make them bitmask-friendly, using the examples below.
+ 
+ -  Do NOT change the values of the existing items. Those
+ are values in our users' current databases.
+ 
+ -  Add your enum name to the switch() statement in the
+ function NSStringFromAPCTaskType(), inside
+ APCConstants.m.
+ */
+typedef enum : NSInteger {
+    APCTaskTypeSurveyTask                   = 0,
+    APCTaskTypeActivityTask                 = 1 << 0,   // 0000 0000 0000 0001
+    APCTaskTypeSurveyAndActivityTask        = 1 << 1,   // 0000 0000 0000 0010
+}   APCTaskType;
 
 // ---------------------------------------------------------
 #pragma mark - Enum Translation Functions
 // ---------------------------------------------------------
 
-/*
- Converts an APCScheduleSource object or value to a string.
- 
- @see APCScheduleSource
- */
-NSString *NSStringFromAPCScheduleSource              (APCScheduleSource scheduleSource);
-NSString *NSStringFromAPCScheduleSourceAsNumber      (NSNumber *scheduleSourceAsNumber);
-NSString *NSStringShortFromAPCScheduleSource         (APCScheduleSource scheduleSource);
-NSString *NSStringShortFromAPCScheduleSourceAsNumber (NSNumber *scheduleSourceAsNumber);
 
+/*
+ Converts an APCTaskSource object or value to a string.
+ 
+ @see APCTaskSource
+ */
+NSString *NSStringFromAPCTaskSource              (APCTaskSource taskSource);
+NSString *NSStringFromAPCTaskSourceAsNumber      (NSNumber *taskSourceAsNumber);
+NSString *NSStringShortFromAPCTaskSource         (APCTaskSource taskSource);
+NSString *NSStringShortFromAPCTaskSourceAsNumber (NSNumber *taskSourceAsNumber);
+
+/*
+ Converts an APCTaskSource object or value to a string.
+ 
+ @see APCTaskType
+ */
+NSString *NSStringFromAPCTaskType               (APCTaskType taskType);
+NSString *NSStringFromAPCTaskTypeAsNumber       (NSNumber *taskTypeAsNumber);
+NSString *NSStringShortFromAPCTaskType          (APCTaskType taskType);
+NSString *NSStringShortFromAPCTaskTypeAsNumber  (NSNumber *taskTypeAsNumber);
 
 
 // ---------------------------------------------------------
@@ -111,6 +142,7 @@ NSString *NSStringShortFromAPCScheduleSourceAsNumber (NSNumber *scheduleSourceAs
 FOUNDATION_EXPORT NSString *const APCUserSignedUpNotification;
 FOUNDATION_EXPORT NSString *const APCUserSignedInNotification;
 FOUNDATION_EXPORT NSString *const APCUserLogOutNotification;
+FOUNDATION_EXPORT NSString *const APCUserForgotPasscodeNotification;
 FOUNDATION_EXPORT NSString *const APCUserDidWithdrawStudyNotification;
 FOUNDATION_EXPORT NSString *const APCUserDidConsentNotification;
 FOUNDATION_EXPORT NSString *const APCUserDidDeclineConsentNotification;
@@ -171,8 +203,9 @@ FOUNDATION_EXPORT NSString *const kHKWorkoutTypeKey;
 FOUNDATION_EXPORT NSString * const kPasswordKey;
 FOUNDATION_EXPORT NSString * const kNumberOfMinutesForPasscodeKey;
 
-FOUNDATION_EXPORT NSUInteger     const kAPCActivitiesTabIndex;
-FOUNDATION_EXPORT NSUInteger     const kAPCNewsFeedTabIndex;
+FOUNDATION_EXPORT NSInteger     const kAPCActivitiesTabTag;
+FOUNDATION_EXPORT NSInteger     const kAPCNewsFeedTabTag;
+FOUNDATION_EXPORT NSInteger     const kAPCProfileTabTag;
 
 FOUNDATION_EXPORT NSInteger      const kAPCSigninErrorCode_NotSignedIn;
 FOUNDATION_EXPORT NSUInteger     const kAPCSigninNumRetriesBeforePause;
@@ -205,6 +238,7 @@ FOUNDATION_EXPORT NSString *const kTertiaryPurpleColorKey;
 FOUNDATION_EXPORT NSString *const kTertiaryGrayColorKey;
 
 FOUNDATION_EXPORT NSString *const kBorderLineColor;
+FOUNDATION_EXPORT NSString *const kPrimaryNavBarColorKey;
 
 FOUNDATION_EXPORT NSString *const kTasksReminderDefaultsOnOffKey;
 FOUNDATION_EXPORT NSString *const kTasksReminderDefaultsTimeKey;

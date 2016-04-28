@@ -34,10 +34,12 @@
 #import "APCScoring.h"
 #import "APCAppCore.h"
 
-NSString *const kDatasetDateKey        = @"datasetDateKey";
-NSString *const kDatasetValueKey       = @"datasetValueKey";
-NSString *const kDatasetRangeValueKey  = @"datasetRangeValueKey";
-NSString *const kDatasetRawDataKey     = @"datasetRawData";
+NSString *const kDatasetDateKey          = @"datasetDateKey";
+NSString *const kDatasetValueKey         = @"datasetValueKey";
+NSString *const kDatasetRangeValueKey    = @"datasetRangeValueKey";
+NSString *const kDatasetRawDataKey       = @"datasetRawData";
+NSString *const kDatasetRawDataPointsKey = @"datasetRawDataPoints";
+NSString *const kDatasetTaskResultKey    = @"datasetTaskResult";
 
 static NSString *const kDatasetSortKey        = @"datasetSortKey";
 static NSString *const kDatasetValueKindKey   = @"datasetValueKindKey";
@@ -57,6 +59,7 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
 @property (nonatomic, strong) APCScoring *correlatedScoring;
 @property (nonatomic, weak) APCScoring *weakParentScoring;
 @property (nonatomic, strong) NSMutableArray *dataPoints;
+@property (nonatomic, strong) NSMutableArray *rawDataPoints;
 @property (nonatomic, strong) NSMutableArray *updatedDataPoints;
 
 @property (nonatomic, strong) NSArray *timeline;
@@ -235,6 +238,7 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
         }
         
         self.dataPoints = [self dataPointsArrayForDays:_numberOfDays groupBy:_groupBy];
+        self.rawDataPoints = [self dataPointsArrayForDays:_numberOfDays groupBy:_groupBy];
         
         [self queryTaskId:taskId
                   forDays:numberOfDays
@@ -422,7 +426,7 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
     }
     
     //check they are now even
-    NSAssert(self.dataPoints.count == self.correlatedScoring.dataPoints.count, @"Arrays are not of equal length. dataPoints.count = %li, correlatedScoring.dataPoints.count = %li", self.dataPoints.count, self.correlatedScoring.dataPoints.count);
+    NSAssert(self.dataPoints.count == self.correlatedScoring.dataPoints.count, @"Arrays are not of equal length. dataPoints.count = %@, correlatedScoring.dataPoints.count = %@", @(self.dataPoints.count), @(self.correlatedScoring.dataPoints.count));
     
     //Arrays are not guaranteed to have non-NSNotFound data beginning at the same index
     NSUInteger dataPointsIndex = [self.dataPoints indexOfObjectPassingTest:^BOOL(id obj, NSUInteger __unused idx, BOOL *stop) {
@@ -607,10 +611,10 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
 {
     APCAppDelegate *appDelegate = (APCAppDelegate *)[[UIApplication sharedApplication] delegate];
     
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"startOn"
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"taskStarted"
                                                                    ascending:YES];
     
-    NSFetchRequest *request = [APCScheduledTask request];
+    NSFetchRequest *request = [APCTask request];
     
     NSDate *startDate = [[NSCalendar currentCalendar] dateBySettingHour:0
                                                                  minute:0
@@ -624,7 +628,7 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
                                                                ofDate:[NSDate date]
                                                               options:0];
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(task.taskID == %@) AND (startOn >= %@) AND (startOn <= %@)",
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(taskID == %@) AND (taskStarted >= %@) AND (taskFinished <= %@)",
                               taskId, startDate, endDate];
     
     request.predicate = predicate;
@@ -637,8 +641,8 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
     
     NSArray *tasks = [localContext executeFetchRequest:request error:&error];
     
-    for (APCScheduledTask *task in tasks) {
-        if ([task.completed boolValue]) {
+    for (APCTask *task in tasks) {
+        if (task.taskFinished != nil && task.results.count > 0) {
             NSArray *taskResults = [self retrieveResultSummaryFromResults:task.results latestOnly:latestOnly];
             
             for (NSDictionary *taskResult in taskResults) {
@@ -646,7 +650,7 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
                     NSDate *pointDate = [[NSCalendar currentCalendar] dateBySettingHour:0
                                                                                  minute:0
                                                                                  second:0
-                                                                                 ofDate:task.startOn
+                                                                                 ofDate:task.taskStarted
                                                                                 options:0];
                     
                     id taskResultValue = [taskResult valueForKey:valueKey];
@@ -661,7 +665,7 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
                     NSMutableDictionary *dataPoint = nil;
                     
                     if (groupBy == APHTimelineGroupForInsights) {
-                        dataPoint = [[self generateDataPointForDate:task.createdAt
+                        dataPoint = [[self generateDataPointForDate:task.taskStarted
                                                           withValue:taskValue
                                                         noDataValue:YES] mutableCopy];
                         dataPoint[kDatasetRawDataKey] = taskResult;
@@ -683,7 +687,11 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
                             }
                         }
                     }
+                    
+                    dataPoint[kDatasetTaskResultKey] = taskResult;
+                    
                     [self.dataPoints addObject:dataPoint];
+                    [self.rawDataPoints addObject:dataPoint];
                 }
             }
         }
@@ -1149,7 +1157,7 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
     
     NSArray *rangePoints = [rangeArray filteredArrayUsingPredicate:rangePredicate];
     
-    NSNumber *maxValue = @0;
+    NSNumber *maxValue;
     
     if (rangePoints.count != 0) {
         maxValue = [rangeArray valueForKeyPath:@"@max.maximumValue"];
@@ -1164,7 +1172,7 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
 {
     NSNumber *maxDataPoint = [self maximumDataPointInSeries:self.dataPoints];
     NSNumber *maxCorrelatedDataPoint = [self maximumDataPointInSeries:self.correlatedScoring.dataPoints];
-    NSNumber *max = [NSNumber new];
+    NSNumber *max;
     
     if ([maxDataPoint compare:maxCorrelatedDataPoint] == NSOrderedAscending || [maxDataPoint compare:maxCorrelatedDataPoint] == NSOrderedSame) {
         max = maxCorrelatedDataPoint;
@@ -1268,6 +1276,7 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
         numOfTitles = [self numberOfDivisionsInXAxisForDiscreteGraph:(APCDiscreteGraphView *)graphView];
     }
 
+    if (numOfTitles == 0) { return @""; }
     NSInteger actualIndex = ((self.dataPoints.count - 1)/numOfTitles + 1) * pointIndex;
     
     titleDate = [[self.dataPoints objectAtIndex:actualIndex] valueForKey:kDatasetDateKey];
@@ -1381,7 +1390,7 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
 {
     
     APCRangePoint *value;
-    NSDictionary *point = [NSDictionary new];
+    NSDictionary *point;
     
     if (plotIndex == 0) {
         point = [self.dataPoints objectAtIndex:pointIndex];
@@ -1420,6 +1429,89 @@ static NSInteger const          kNumberOfDaysInYear    = 365;
 - (CGFloat)maximumValueForDiscreteGraph:(APCDiscreteGraphView *) __unused graphView
 {
     return (self.customMaximumPoint == CGFLOAT_MAX) ? [[self maximumDataPoint] doubleValue] : self.customMaximumPoint;
+}
+
+
+#pragma mark - NSCopying
+
+- (id)copyWithZone:(nullable NSZone *) zone
+{
+    id copy;
+
+    if (self.usesHealthKitData) {
+        copy = [[[self class] allocWithZone:zone] initWithHealthKitQuantityType:self.quantityType
+                                                              unit:self.unit
+                                                      numberOfDays:self.numberOfDays
+                                                           groupBy:self.groupBy];
+    } else {
+        copy = [[[self class] allocWithZone:zone] initWithTask:self.taskId
+                                     numberOfDays:self.numberOfDays
+                                         valueKey:self.valueKey
+                                          dataKey:self.dataKey
+                                          sortKey:self.sortKey
+                                       latestOnly:self.latestOnly
+                                          groupBy:self.groupBy];
+    }
+    
+    [copy setCorrelatedScoring:self.correlatedScoring];
+    [copy setCustomMaximumPoint:self.customMaximumPoint];
+    [copy setCustomMinimumPoint:self.customMinimumPoint];
+    [copy setCaption:self.caption];
+    [copy setCorrelatedCurrent:self.correlatedCurrent];
+    [copy setCurrent:self.current];
+    [copy setDataKey:self.dataKey];
+    [copy setDataPoints:self.dataPoints];
+    [copy setDateFormatter:self.dateFormatter];
+    [copy setGroupBy:self.groupBy];
+    [copy setLatestOnly:self.latestOnly];
+    [copy setNumberOfDays:self.numberOfDays];
+    [copy setScoringDelegate:self.scoringDelegate];
+    [copy setRawDataPoints:self.rawDataPoints];
+    [copy setSeries1Name:self.series1Name];
+    [copy setSeries2Name:self.series2Name];
+    [copy setSortKey:self.sortKey];
+    [copy setTimeline:self.timeline];
+    [copy setUpdatedDataPoints:self.updatedDataPoints];
+    [copy setUsesHealthKitData:self.usesHealthKitData];
+    [copy setWeakParentScoring:self.weakParentScoring];
+    
+    return copy;
+}
+
+- (BOOL)isEqual:(id)anObject {
+    return
+        [anObject isKindOfClass:[APCScoring class]] &&
+            (self.customMaximumPoint == ((APCScoring *) anObject).customMaximumPoint) &&
+            (self.customMinimumPoint == ((APCScoring *) anObject).customMinimumPoint) &&
+            (self.caption == ((APCScoring *) anObject).caption || [self.caption isEqualToString:((APCScoring *) anObject).caption]) &&
+            (self.series1Name == ((APCScoring *) anObject).series1Name || [self.series1Name isEqualToString:((APCScoring *) anObject).series1Name]) &&
+            (self.series2Name == ((APCScoring *) anObject).series2Name || [self.series2Name isEqualToString:((APCScoring *) anObject).series2Name]) &&
+            (self.taskId == ((APCScoring *) anObject).taskId || [self.taskId isEqualToString:((APCScoring *) anObject).taskId]) &&
+            (self.valueKey == ((APCScoring *) anObject).valueKey || [self.valueKey isEqualToString:((APCScoring *) anObject).valueKey]) &&
+            (self.quantityType == ((APCScoring *) anObject).quantityType || [self.quantityType isEqual:((APCScoring *) anObject).quantityType]) &&
+            (self.unit == ((APCScoring *) anObject).unit || [self.unit isEqual:((APCScoring *) anObject).unit]) &&
+
+            (self.correlatedScoring == ((APCScoring *) anObject).correlatedScoring || [self.correlatedScoring isEqual:((APCScoring *) anObject).correlatedScoring]) &&
+            (self.weakParentScoring == ((APCScoring *) anObject).weakParentScoring || [self.weakParentScoring isEqual:((APCScoring *) anObject).weakParentScoring]) && 
+            (self.dataPoints == ((APCScoring *) anObject).dataPoints || [self.dataPoints isEqual:((APCScoring *) anObject).dataPoints]) &&
+            (self.rawDataPoints == ((APCScoring *) anObject).rawDataPoints || [self.rawDataPoints isEqual:((APCScoring *) anObject).rawDataPoints]) &&
+            (self.updatedDataPoints == ((APCScoring *) anObject).updatedDataPoints || [self.updatedDataPoints isEqual:((APCScoring *) anObject).updatedDataPoints]) &&
+            (self.timeline == ((APCScoring *) anObject).timeline || [self.timeline isEqual:((APCScoring *) anObject).timeline]) &&
+            (self.groupBy == ((APCScoring *) anObject).groupBy) &&
+            (self.current == ((APCScoring *) anObject).current) &&
+            (self.correlatedCurrent == ((APCScoring *) anObject).correlatedCurrent) &&
+            (self.numberOfDays == ((APCScoring *) anObject).numberOfDays) &&
+            (self.usesHealthKitData == ((APCScoring *) anObject).usesHealthKitData) &&
+            (self.latestOnly == ((APCScoring *) anObject).latestOnly) &&
+            (self.dataKey == ((APCScoring *) anObject).dataKey || [self.dataKey isEqualToString:((APCScoring *) anObject).dataKey]) &&
+            (self.sortKey == ((APCScoring *) anObject).sortKey || [self.sortKey isEqualToString:((APCScoring *) anObject).sortKey]);
+}
+
+
+- (NSUInteger)hash
+{
+    NSUInteger dataHash = [[self.taskId dataUsingEncoding:NSUTF8StringEncoding] hash];
+    return (((NSUInteger)dataHash) << (CHAR_BIT * sizeof(NSUInteger)) / 2) | (((NSUInteger)dataHash) >> ((CHAR_BIT * sizeof(NSUInteger) - (CHAR_BIT * sizeof(NSUInteger)) / 2))) ^ [self.valueKey hash];
 }
 
 @end

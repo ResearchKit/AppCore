@@ -39,8 +39,6 @@
 
 #import "NSDate+Helper.h"
 #import "APCTask+AddOn.h"
-#import "APCSchedule+AddOn.h"
-#import "APCScheduledTask+AddOn.h"
 #import "NSError+APCAdditions.h"
 #import "APCScheduler.h"
 
@@ -276,59 +274,15 @@ static NSString * const kAPCJSONFileKeyTasks     = @"tasks";
     [self.mainContext reset];
     [self.persistentContext reset];
     NSError * error;
-    NSPersistentStore * persistenStore = [self.persistentStoreCoordinator persistentStores] [0];
-    [self.persistentStoreCoordinator removePersistentStore:persistenStore error:&error];
+    NSPersistentStore * persistentStore = [self.persistentStoreCoordinator persistentStores] [0];
+    [self.persistentStoreCoordinator removePersistentStore:persistentStore error:&error];
     APCLogError2 (error);
     [self removeSqliteStore];
     [self setUpPersistentStore];
-    APCAppDelegate * appDelegate = [APCAppDelegate sharedAppDelegate];
-    [appDelegate.scheduler loadTasksAndSchedulesFromDiskAndThenUseThisQueue: nil toDoThisWhenDone: nil];
 }
 
 
 #pragma mark - Core Data Helpers - ONLY RETURNS in NSManagedObjects in mainContext
-
-- (NSFetchRequest*)requestForScheduledTasksDueFrom:(NSDate *)fromDate toDate:(NSDate *)toDate sortDescriptors:(NSArray *)sortDescriptors
-{
-    NSFetchRequest *request = [APCScheduledTask request];
-    request.predicate = [NSPredicate predicateWithFormat:@"dueOn >= %@ and dueOn < %@", fromDate, toDate];
-    request.sortDescriptors = sortDescriptors;
-    return request;
-}
-
-- (NSArray *)scheduledTasksDueFrom:(NSDate *)fromDate toDate:(NSDate *)toDate sortDescriptors:(NSArray *)sortDescriptors
-{
-    NSError*error;
-    NSArray *res = [self.mainContext executeFetchRequest:[self requestForScheduledTasksDueFrom:fromDate toDate:toDate sortDescriptors:sortDescriptors]
-                                                   error:&error];
-    if (res) {
-        return res;
-    }
-    
-    APCLogError(@"Failed to search for due tasks: %@", error.localizedDescription);
-    return nil;
-}
-
-- (NSFetchRequest*)requestForScheduledTasksForPredicate:(NSPredicate *)predicate sortDescriptors:(NSArray *)sortDescriptors
-{
-    NSFetchRequest *request = [APCScheduledTask request];
-    request.predicate = predicate;
-    request.sortDescriptors = sortDescriptors;
-    return request;
-}
-
-- (NSArray *)scheduledTasksForPredicate:(NSPredicate *)predicate sortDescriptors:(NSArray *)sortDescriptors
-{
-    NSError *error;
-    NSArray *res = [self.mainContext executeFetchRequest:[self requestForScheduledTasksForPredicate:predicate sortDescriptors:sortDescriptors]
-                                                   error:&error];
-    if (res) {
-        return res;
-    }
-    
-    APCLogError(@"Failed to search for scheduled tasks: %@", error.localizedDescription);
-    return nil;
-}
 
 - (void) updateCountOfTotalRequiredTasksForToday: (NSUInteger) countOfRequiredTasks
                      andTotalCompletedTasksToday: (NSUInteger) countOfCompletedTasks

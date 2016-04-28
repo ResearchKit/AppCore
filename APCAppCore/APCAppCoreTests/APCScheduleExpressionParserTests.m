@@ -7,7 +7,7 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
-#import "APCScheduleExpressionParser.h"
+#import <APCAppCore/APCScheduleExpressionParser.h>
 
 @interface APCScheduleExpressionParserTests : XCTestCase
 

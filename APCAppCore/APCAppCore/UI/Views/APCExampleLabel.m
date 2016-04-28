@@ -50,7 +50,7 @@
         double hypotenuse = hypotf(width, height);
         double rotationAngle = asin(height/hypotenuse);
         
-        watermarkLabel.text = NSLocalizedString(@"EXAMPLE", nil);
+        watermarkLabel.text = NSLocalizedStringWithDefaultValue(@"EXAMPLE", @"APCAppCore", APCBundle(), @"EXAMPLE", nil);
         watermarkLabel.font = [UIFont systemFontOfSize:72.0];
         watermarkLabel.textColor = [UIColor colorWithWhite:0 alpha:0.05];
         watermarkLabel.textAlignment = NSTextAlignmentCenter;

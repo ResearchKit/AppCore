@@ -38,13 +38,11 @@
 /**
  Translates the fileResult identifier and stepIdentifier via concatenation in the following scheme:
  fileResultIdentifier_stepIdentifer.
- Looks up the concatenated identifiers in FilenameTranslation.json.
- If the file exists and the string exists in the file, returns the value for the key in the json file.
  
  @param     fileResultIdentifier        ORKResult identifier
  @param     stepIdentifier              ORKStep identifier
- @return    filename                    translated filename if exists in FilenameTranslation.json, else the concatenated string fileResultIdentifier_stepIdentifer.
+ @return    filename                    the concatenated string fileResultIdentifier_stepIdentifer.
  */
-+ (NSString *)filenameForFileResultIdentifier: (NSString *)fileResultIdentifier stepIdentifier: (NSString *)stepIdentifier;
++ (NSString *)rawFilenameForFileResultIdentifier: (NSString *)fileResultIdentifier stepIdentifier: (NSString *)stepIdentifier;
 
 @end

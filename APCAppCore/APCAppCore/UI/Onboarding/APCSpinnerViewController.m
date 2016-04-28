@@ -85,7 +85,7 @@
     return !self.landscape;
 }
 
-- (NSUInteger)supportedInterfaceOrientations
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
 {
     return self.landscape ? UIInterfaceOrientationMaskLandscape : UIInterfaceOrientationMaskPortrait;
 }

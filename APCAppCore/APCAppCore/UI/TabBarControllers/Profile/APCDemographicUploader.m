@@ -39,7 +39,7 @@
 #import "APCAppDelegate.h"
 
 static  NSString  *kTaskIdentifierKey              = @"NonIdentifiableDemographicsTask";
-static  NSString  *kFileIdentifierKey              = @"NonIdentifiableDemographics";
+static  NSString  *kFileIdentifierKey              = @"NonIdentifiableDemographics.json";
 static  NSString  *kPatientInformationKey          = @"item";
 static  NSString  *kPatientCurrentAgeKey           = @"patientCurrentAge";
 static  NSString  *kPatientBiologicalSexKey        = @"patientBiologicalSex";
@@ -111,7 +111,7 @@ static  NSString  *kPatientGoSleepTimeKey          = @"patientGoSleepTime";
     //Archive and upload
     dispatch_async(dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0), ^{
         APCDataArchive *archive = [[APCDataArchive alloc] initWithReference:kTaskIdentifierKey];
-        [archive insertIntoArchive:demographics filename:kFileIdentifierKey];
+        [archive insertDictionaryIntoArchive:demographics filename:kFileIdentifierKey];
         
         APCDataArchiveUploader *archiveUploader = [[APCDataArchiveUploader alloc] init];
         

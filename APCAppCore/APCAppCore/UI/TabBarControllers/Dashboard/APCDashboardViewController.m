@@ -100,7 +100,7 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
 }
 
 -(void)setUpAppearance{
-    [self.navigationController.navigationBar setBarTintColor:[UIColor whiteColor]];
+    [self.navigationController.navigationBar setBarTintColor:[UIColor appPrimaryNavBarColor]];
     self.navigationController.navigationBar.translucent = NO;
 }
 
@@ -140,7 +140,7 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
 {
     APCTableViewItem *dashboardItem = [self itemForIndexPath:indexPath];
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:dashboardItem.identifier];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:dashboardItem.reuseIdentifier];
 
     if ([dashboardItem isKindOfClass:[APCTableViewDashboardProgressItem class]]) {
         
@@ -148,10 +148,10 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
         APCDashboardProgressTableViewCell *progressCell = (APCDashboardProgressTableViewCell *)cell;
         
         progressCell.progressView.progress = progressItem.progress;
-        progressCell.title = NSLocalizedString(@"Activity Completion", @"Activity Completion");
+        progressCell.title = NSLocalizedStringWithDefaultValue(@"Activity Completion", @"APCAppCore", APCBundle(), @"Activity Completion", @"Activity Completion");
         [self.dateFormatter setDateFormat:@"MMMM d"];
         
-        progressCell.subTitleLabel.text = [NSString stringWithFormat:@"%@, %@", NSLocalizedString(@"Today",@"Today"), [self.dateFormatter stringFromDate:[NSDate date]]];
+        progressCell.subTitleLabel.text = [NSString stringWithFormat:@"%@, %@", NSLocalizedStringWithDefaultValue(@"Today", @"APCAppCore", APCBundle(), @"Today", @"Today"), [self.dateFormatter stringFromDate:[NSDate date]]];
         
         progressCell.delegate = self;
         
@@ -165,15 +165,15 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
             graphView = (APCLineGraphView *)graphCell.lineGraphView;
             graphCell.lineGraphView.datasource = graphItem.graphData;
             [graphCell.legendButton setAttributedTitle:graphItem.legend forState:UIControlStateNormal];
-            graphCell.discreteGraphView.hidden = YES;
             graphCell.lineGraphView.hidden = NO;
+            graphCell.discreteGraphView.hidden = YES;
             
         } else if (graphItem.graphType == kAPCDashboardGraphTypeDiscrete) {
             graphView = (APCDiscreteGraphView *)graphCell.discreteGraphView;
             graphCell.discreteGraphView.datasource = graphItem.graphData;
             [graphCell.legendButton setAttributedTitle:graphItem.legend forState:UIControlStateNormal];
-            graphCell.lineGraphView.hidden = YES;
             graphCell.discreteGraphView.hidden = NO;
+            graphCell.lineGraphView.hidden = YES;
         }
         
         [graphCell.legendButton setUserInteractionEnabled:graphItem.legend ? YES : NO];

@@ -93,7 +93,7 @@ static  NSString* const kLon                                    = @"lon";
     }
     else
     {
-        speed = NSLocalizedString(@"invalid speed", nil);
+        speed = NSLocalizedStringWithDefaultValue(@"invalid speed", @"APCAppCore", APCBundle(), @"invalid speed", nil);
     }
 
     NSString*   speedUnit               = @"meters/second"; //Not a user facing constant
@@ -102,7 +102,7 @@ static  NSString* const kLon                                    = @"lon";
     //  A nil value of manager.location.floor indicates that this info is unavailable.
     if (manager.location.floor == nil)
     {
-        floor = NSLocalizedString(@"not available", nil);
+        floor = NSLocalizedStringWithDefaultValue(@"not available", @"APCAppCore", APCBundle(), @"not available", nil);
     }
     else
     {

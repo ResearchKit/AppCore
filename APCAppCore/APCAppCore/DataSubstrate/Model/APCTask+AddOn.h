@@ -61,18 +61,20 @@
                           usingContext: (NSManagedObjectContext *) context;
 
 /**
+ Returns all *saved* tasks whose task guid is in the specified set of task guids.
+ Meaning:  tasks that are in the process of being inserted into CoreData are
+ skipped.  Uses the specified context to run the query.  This query runs on the
+ calling method's thread.  Returns nil on error.
+ */
++ (NSSet *) querySavedTasksWithTaskGuids: (NSSet *) setOfTaskGuids
+                            usingContext: (NSManagedObjectContext *) context;
+
+/**
  Stores and retrieves the binary, encoded content of the
  survey itself represented by this task.
  
  The data is stored in CoreData as an NSData blob.
  */
 @property (nonatomic, strong) id<ORKTask> rkTask;
-
-/**
- Sorts my schedules by their -startsOn field, and returns the first
- resulting object.  Ignores temporary schedules (i.e., schedules in
- the process of being imported).
- */
-@property (readonly) APCSchedule *mostRecentSchedule;
 
 @end

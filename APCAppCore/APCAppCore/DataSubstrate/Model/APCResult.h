@@ -34,7 +34,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class APCScheduledTask;
+@class APCTask;
 
 @interface APCResult : NSManagedObject
 
@@ -48,6 +48,6 @@
 @property (nonatomic, retain) NSString * taskRunID;
 @property (nonatomic, retain) NSDate * updatedAt;
 @property (nonatomic, retain) NSNumber * uploaded;
-@property (nonatomic, retain) APCScheduledTask *scheduledTask;
+@property (nonatomic, retain) APCTask *task;
 
 @end

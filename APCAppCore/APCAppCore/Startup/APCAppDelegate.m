@@ -30,7 +30,8 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 // 
- 
+
+@import ResearchKit;
 #import "APCAppDelegate.h"
 #import "APCAppCore.h"
 #import "APCDebugWindow.h"
@@ -40,7 +41,10 @@
 #import "UIAlertController+Helper.h"
 #import "APCDemographicUploader.h"
 #import "APCConstants.h"
+#import "APCScene.h"
 #import "APCUtilities.h"
+#import "APCCatastrophicErrorViewController.h"
+#import "APCStudyOverviewCollectionViewController.h"
 
 #import <AVFoundation/AVFoundation.h>
 #import <AudioToolbox/AudioToolbox.h>
@@ -62,11 +66,11 @@ static NSString*    const kDBStatusCurrentVersion           = @"v1.0";
 /*********************************************************************************/
 #pragma mark - Tab bar Constants
 /*********************************************************************************/
-static NSString *const kDashBoardStoryBoardKey     = @"APHDashboard";
-static NSString *const kLearnStoryBoardKey         = @"APCLearn";
-static NSString *const kActivitiesStoryBoardKey    = @"APCActivities";
-static NSString *const kHealthProfileStoryBoardKey = @"APCProfile";
-static NSString *const kNewsFeedStoryBoardKey      = @"APCNewsFeed";
+NSString *const kDashBoardStoryBoardKey     = @"APCDashboard";
+NSString *const kLearnStoryBoardKey         = @"APCLearn";
+NSString *const kActivitiesStoryBoardKey    = @"APCActivities";
+NSString *const kHealthProfileStoryBoardKey = @"APCProfile";
+NSString *const kNewsFeedStoryBoardKey      = @"APCNewsFeed";
 
 /*********************************************************************************/
 #pragma mark - User Defaults Keys
@@ -75,16 +79,15 @@ static NSString *const kNewsFeedStoryBoardKey      = @"APCNewsFeed";
 static NSString*    const kDemographicDataWasUploadedKey    = @"kDemographicDataWasUploadedKey";
 static NSString*    const kLastUsedTimeKey                  = @"APHLastUsedTime";
 static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterForegroundTime";
-static NSUInteger   const kIndexOfProfileTab                = 3;
 
-@interface APCAppDelegate  ( )  <UITabBarControllerDelegate>
+@interface APCAppDelegate  ( )  <UITabBarControllerDelegate, ORKPasscodeDelegate>
 
 @property (nonatomic) BOOL isPasscodeShowing;
 @property (nonatomic, strong) UIView *secureView;
 @property (nonatomic, strong) NSError *catastrophicStartupError;
 @property (nonatomic, strong) NSOperationQueue *healthKitCollectorQueue;
 @property (nonatomic, strong) APCDemographicUploader  *demographicUploader;
-@property (nonatomic, strong) APCPasscodeViewController *passcodeViewController;
+@property (nonatomic, strong) UIViewController *passcodeViewController;
 
 @property (nonatomic, strong, readwrite) APCOnboardingManager *onboardingManager;
 
@@ -98,6 +101,19 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     return appDelegate;
 }
 
+/*********************************************************************************/
+#pragma mark - Resource handling
+/*********************************************************************************/
+
+- (NSBundle*)resourceBundle
+{
+    return [NSBundle mainBundle];
+}
+
+- (NSString*)pathForResource:(NSString*)resourceName ofType:(NSString*)resourceType
+{
+    return [[self resourceBundle] pathForResource:resourceName ofType:resourceType];
+}
 
 /*********************************************************************************/
 #pragma mark - App Delegate Methods
@@ -116,15 +132,6 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     [self doGeneralInitialization];
     [self initializeBridgeServerConnection];
     [self initializeAppleCoreStack];
-
-    [self.scheduler loadTasksAndSchedulesFromDiskAndThenUseThisQueue:[NSOperationQueue mainQueue]
-                                                    toDoThisWhenDone:^(NSError* errorFetchingOrLoading)
-    {
-        if(!errorFetchingOrLoading)
-        {
-            [self performMigrationAfterFirstImport];
-        }
-    }];
 
     [self registerNotifications];
     [self setUpAppAppearance];
@@ -155,7 +162,7 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
         //    indicating that this is an update to a previously installed version of the application
         //
     APCUser  *user = self.dataSubstrate.currentUser;
-    if (user.isConsented) {
+    if (user.isConsented && user.sharingScope != APCUserConsentSharingScopeNone) {
         BOOL  demographicDataWasUploaded = [defaults boolForKey:kDemographicDataWasUploadedKey];
         if (demographicDataWasUploaded == NO) {
             self.demographicUploader = [[APCDemographicUploader alloc] initWithUser:user];
@@ -205,16 +212,40 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kAppWillEnterForegroundTimeKey];
 #ifndef DEVELOPMENT
     if (self.dataSubstrate.currentUser.signedIn) {
-        [SBBComponent(SBBAuthManager) ensureSignedInWithCompletion: ^(NSURLSessionDataTask * __unused task,
-																	  id  __unused responseObject,
-																	  NSError *error) {
-            APCLogError2 (error);
-        }];
+        if (self.dataSubstrate.currentUser.isConsented) {
+            [SBBComponent(SBBAuthManager) ensureSignedInWithCompletion: ^(NSURLSessionDataTask * __unused task,
+                                                                          id  __unused responseObject,
+                                                                          NSError *error) {
+                APCLogError2 (error);
+                
+                if (error.code == SBBErrorCodeUnsupportedAppVersion) {
+                    [self handleUnsupportedAppVersionError:error networkManager:nil];
+                }
+                else if (error.code == SBBErrorCodeServerPreconditionNotMet) {
+                    self.dataSubstrate.currentUser.userConsented = NO;
+                    self.dataSubstrate.currentUser.consented = NO;
+                    [self showReconsentIfNecessary];
+                }
+            }];
+        }
+        else {
+            [self showReconsentIfNecessary];
+        }
     }
 #endif
     
     [self hideSecureView];
     [self.dataMonitor appBecameActive];
+}
+
+- (void)showReconsentIfNecessary {
+    if (self.tabBarController == self.window.rootViewController) {
+        APCActivitiesViewController *activitiesVC = (APCActivitiesViewController *)[self.tabBarController.viewControllers firstObject];
+        if ([activitiesVC isKindOfClass:[APCActivitiesViewController class]]) {
+            [self.tabBarController setSelectedIndex:0];
+            [activitiesVC showReconsentIfNecessary];
+        }
+    }
 }
 
 - (void)application:(UIApplication *) __unused application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
@@ -224,7 +255,7 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 
 - (void)applicationWillTerminate:(UIApplication *) __unused application
 {
-    if (self.dataSubstrate.currentUser.signedIn && !self.isPasscodeShowing) {
+    if (self.onboardingManager.hasPasscode && !self.isPasscodeShowing) {
         [[NSUserDefaults standardUserDefaults] setObject: [NSNumber numberWithLong:uptime()] forKey:kLastUsedTimeKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
@@ -238,7 +269,7 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 
 - (void)applicationDidEnterBackground:(UIApplication *) __unused application
 {
-    if (self.dataSubstrate.currentUser.signedIn && !self.isPasscodeShowing) {
+    if (self.onboardingManager.hasPasscode && !self.isPasscodeShowing) {
         [[NSUserDefaults standardUserDefaults] setObject: [NSNumber numberWithLong:uptime()] forKey:kLastUsedTimeKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
@@ -420,7 +451,7 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     NSString*   kSectionImage           = @"sectionImage";
     NSString*   kSectionAnimationUrl    = @"sectionAnimationUrl";
     
-    NSString*       resource = [[NSBundle mainBundle] pathForResource:self.initializationOptions[kConsentSectionFileNameKey] ofType:@"json"];
+    NSString*       resource = [self pathForResource:self.initializationOptions[kConsentSectionFileNameKey] ofType:@"json"];
     NSAssert(resource != nil, @"Unable to location file with Consent Section in main bundle");
     
     NSData*         consentSectionData = [NSData dataWithContentsOfFile:resource];
@@ -435,7 +466,7 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     
     if (documentHtmlContent != nil && htmlContent != nil)
     {
-        NSString*   path    = [[NSBundle mainBundle] pathForResource:documentHtmlContent ofType:@"html" inDirectory:@"HTMLContent"];
+        NSString*   path    = [self pathForResource:documentHtmlContent ofType:@"html"];
         NSAssert(path != nil, @"Unable to locate HTML file: %@", documentHtmlContent);
         
         NSError*    error   = nil;
@@ -502,7 +533,7 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
         
         if (htmlContent != nil)
         {
-            NSString*   path    = [[NSBundle mainBundle] pathForResource:htmlContent ofType:@"html" inDirectory:@"HTMLContent"];
+            NSString*   path    = [self pathForResource:htmlContent ofType:@"html"];
             NSAssert(path != nil, @"Unable to locate HTML file: %@", htmlContent);
             
             NSError*    error   = nil;
@@ -527,7 +558,7 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
             } else {
                 nameWithScaleFactor = [nameWithScaleFactor stringByAppendingString:@"@2x"];
             }
-            NSURL*      url   = [[NSBundle mainBundle] URLForResource:nameWithScaleFactor withExtension:@"m4v"];
+            NSURL*      url   = [[self resourceBundle] URLForResource:nameWithScaleFactor withExtension:@"m4v"];
             NSError*    error = nil;
             
             NSAssert([url checkResourceIsReachableAndReturnError:&error], @"Animation file--%@--not reachable: %@", animationUrl, error);
@@ -629,23 +660,58 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 
 - (void) showCatastrophicStartupError
 {
+    [self showCatastrophicStartupErrorWithMessage:nil buttonTitle:nil action:nil];
+}
+
+- (void) showCatastrophicStartupErrorWithMessage:(NSString *)message
+                                     buttonTitle:(NSString *)buttonTitle
+                                          action:(void(^)(void))action
+{
     UIStoryboard *storyBoard = [UIStoryboard storyboardWithName: @"CatastrophicError"
                                                          bundle: [NSBundle appleCoreBundle]];
 
-    UIViewController *errorViewController = [storyBoard instantiateInitialViewController];
+    APCCatastrophicErrorViewController *errorViewController = (APCCatastrophicErrorViewController*)[storyBoard instantiateInitialViewController];
+    
+    errorViewController.message = message;
+    errorViewController.buttonTitle = buttonTitle;
+    errorViewController.buttonAction = action;
 
     self.window.rootViewController = errorViewController;
-    NSError *error = self.catastrophicStartupError;
+    
+    if (message.length == 0) {
+        
+        NSError *error = self.catastrophicStartupError;
+        __block APCAppDelegate *blockSafeSelf = self;
 
-    __block APCAppDelegate *blockSafeSelf = self;
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
 
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            UIAlertController *alert = [UIAlertController simpleAlertWithTitle: error.userInfo [NSLocalizedFailureReasonErrorKey]
+                                                                       message: error.userInfo [NSLocalizedRecoverySuggestionErrorKey]];
 
-        UIAlertController *alert = [UIAlertController simpleAlertWithTitle: error.userInfo [NSLocalizedFailureReasonErrorKey]
-                                                                   message: error.userInfo [NSLocalizedRecoverySuggestionErrorKey]];
+            [blockSafeSelf.window.rootViewController presentViewController: alert animated: YES completion: nil];
+        }];
+    }
+}
 
-        [blockSafeSelf.window.rootViewController presentViewController: alert animated: YES completion: nil];
-    }];
+/*********************************************************************************/
+#pragma mark - Unsupported App Version
+/*********************************************************************************/
+- (BOOL)handleUnsupportedAppVersionError:(NSError*)error networkManager:(id __unused)networkManager
+{
+    NSString *localizedButtonTitle = NSLocalizedStringWithDefaultValue(@"APC_BUTTON_TITLE_GOTO_APP_STORE", @"APCAppCore", APCBundle(), @"Open App Store", @"Button title: Open App Store");
+    self.catastrophicStartupError = error;
+    
+    [self showCatastrophicStartupErrorWithMessage:[error localizedDescription]
+                                      buttonTitle:localizedButtonTitle
+                                           action:^{
+                                               [[UIApplication sharedApplication] openURL:[self appStoreLinkURL]];
+                                           }];
+    return YES;
+}
+
+- (NSURL *)appStoreLinkURL
+{
+    return [[NSBundle mainBundle] appStoreLinkURL];
 }
 
 /*********************************************************************************/
@@ -655,6 +721,7 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(signedUpNotification:) name:(NSString *)APCUserSignedUpNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(signedInNotification:) name:(NSString *)APCUserSignedInNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logOutNotification:) name:(NSString *)APCUserLogOutNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showResetPasscodeAlert:) name:(NSString *)APCUserForgotPasscodeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userConsented:) name:APCUserDidConsentNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(withdrawStudy:) name:APCUserDidWithdrawStudyNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(newsFeedUpdated:) name:kAPCNewsFeedUpdateNotification object:nil];
@@ -688,7 +755,33 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     self.dataSubstrate.currentUser.signedIn = NO;
     [APCKeychainStore removeValueForKey:kPasswordKey];
     [self.tasksReminder updateTasksReminder];
+}
+
+- (void) logOutAndGoToSignIn
+{
+    self.dataSubstrate.currentUser.signedUp = NO;
+    self.dataSubstrate.currentUser.signedIn = NO;
+    [APCKeychainStore removeValueForKey:kPasswordKey];
+    [self.tasksReminder updateTasksReminder];
+    [self showOnBoardingAndThenSignIn];
+}
+
+- (void) showOnBoardingAndThenSignIn
+{
     [self showOnBoarding];
+
+    
+    // Check if the showOnBoarding is showing the study Overview, because then we can enabled sign in to show right afterwards
+    // This will work for vanilla implementations of AppCore, but may need additional implementation in some apps
+    UIViewController* topVc = ((UINavigationController*)self.window.rootViewController).topViewController;
+    if([topVc isKindOfClass:[APCStudyOverviewCollectionViewController class]])
+    {
+        [(APCStudyOverviewCollectionViewController*)topVc signInTapped:self];
+    }
+    else
+    {
+        NSLog(@"Error: We were unable to automatically transition to the sign-in screen. This is probably because the study overview screen has been replaced by your app. One way to add this feature into your app is to override showOnBoardingAndThenSignIn in your AppDelegate, and modify the behavior of the method showOnBoarding to transition straight to the sign-in screen");
+    }
 }
 
 - (void) withdrawStudy: (NSNotification *) __unused notification
@@ -697,29 +790,12 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     [APCKeychainStore resetKeyChain];
     [self.dataSubstrate resetCoreData];
     [self.tasksReminder updateTasksReminder];
-    [self showOnBoarding];
 }
 
 - (void)newsFeedUpdated:(NSNotification *)__unused notification
 {
     if ([self.window.rootViewController isKindOfClass:[UITabBarController class]]) {
-        UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
-        
-        BOOL newsFeedTab = [self.initializationOptions[kNewsFeedTabKey] boolValue];
-        
-        NSArray *items = tabBarController.tabBar.items;
-        UITabBarItem *item = items[kAPCNewsFeedTabIndex];
-        
-        if (newsFeedTab){
-            NSUInteger unreadPostsCount = [self.dataSubstrate.newsFeedManager unreadPostsCount];
-            NSNumber *unreadValue = @(unreadPostsCount);
-            
-            if (unreadPostsCount != 0) {
-                item.badgeValue = [unreadValue stringValue];
-            } else {
-                item.badgeValue = nil;
-            }
-        }
+        [self updateNewsFeedBadgeCount];
     }
 }
 
@@ -728,8 +804,6 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 {
     return ([self.initializationOptions[kBridgeEnvironmentKey] integerValue] == SBBEnvironmentStaging) ? [self.initializationOptions[kAppPrefixKey] stringByAppendingString:@"-staging"] :self.initializationOptions[kAppPrefixKey];
 }
-
-
 
 #pragma mark - Other Abstract Implmentations
 - (void) setUpInitializationOptions {/*Abstract Implementation*/}
@@ -774,91 +848,87 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 #pragma mark - Tab Bar Stuff
 /*********************************************************************************/
 
+- (BOOL)shouldIncludeNewsFeedTab
+{
+    return [self.initializationOptions[kNewsFeedTabKey] boolValue];
+}
+
+- (UITabBarItem * _Nullable)newsFeedTabBarItem
+{
+    NSString *key = NSStringFromSelector(@selector(tag));
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K == %@", key, @(kAPCNewsFeedTabTag)];
+    return [[self.tabBarController.tabBar.items filteredArrayUsingPredicate:predicate] firstObject];
+}
+
+
+- (NSMutableArray <APCScene *> *)tabBarScenes
+{
+    NSMutableArray *scenes = [NSMutableArray array];
+
+    // Add the activities scene
+    APCScene *activities = [[APCScene alloc] init];
+    activities.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Activities", @"APCAppCore", APCBundle(), @"Activities", nil) image:[UIImage imageNamed:@"tab_activities"] selectedImage:[UIImage imageNamed:@"tab_activities_selected"]];
+    activities.tabBarItem.tag = kAPCActivitiesTabTag;
+    activities.storyboardName = kActivitiesStoryBoardKey;
+    activities.bundle = [NSBundle appleCoreBundle];
+    [scenes addObject:activities];
+    
+    // Add the dashboard scene
+    APCScene *dashboard = [[APCScene alloc] init];
+    dashboard.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Dashboard", @"APCAppCore", APCBundle(), @"Dashboard", nil) image:[UIImage imageNamed:@"tab_dashboard"] selectedImage:[UIImage imageNamed:@"tab_dashboard_selected"]];
+    dashboard.storyboardName = kDashBoardStoryBoardKey;
+    dashboard.bundle = [NSBundle appleCoreBundle];
+    [scenes addObject:dashboard];
+
+    // Add news tab if there is news
+    if ([self shouldIncludeNewsFeedTab]) {
+        APCScene *news = [[APCScene alloc] init];
+        news.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"News Feed", @"APCAppCore", APCBundle(), @"News Feed", nil) image:[UIImage imageNamed:@"tab_newsfeed"] selectedImage:[UIImage imageNamed:@"tab_newsfeed_selected"]];
+        news.tabBarItem.tag = kAPCNewsFeedTabTag;
+        news.storyboardName = kNewsFeedStoryBoardKey;
+        news.bundle = [NSBundle appleCoreBundle];
+        [scenes addObject:news];
+    }
+    
+    // Add learn tab
+    APCScene *learn = [[APCScene alloc] init];
+    learn.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Learn", @"APCAppCore", APCBundle(), @"Learn", nil) image:[UIImage imageNamed:@"tab_learn"] selectedImage:[UIImage imageNamed:@"tab_learn_selected"]];
+    learn.storyboardName = kLearnStoryBoardKey;
+    learn.bundle = [NSBundle appleCoreBundle];
+    [scenes addObject:learn];
+    
+    //Profile Tab
+    APCScene *profile = [[APCScene alloc] init];
+    profile.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Profile", @"APCAppCore", APCBundle(), @"Profile", nil) image:[UIImage imageNamed:@"tab_profile"] selectedImage:[UIImage imageNamed:@"tab_profile_selected"]];
+    profile.tabBarItem.tag = kAPCProfileTabTag;
+    profile.storyboardName = kHealthProfileStoryBoardKey;
+    profile.bundle = [NSBundle appleCoreBundle];
+    [scenes addObject:profile];
+    
+    return scenes;
+}
+
 - (void)showTabBar
 {
     self.tabBarController = [[UITabBarController alloc] init];
-    NSUInteger selectedItemIndex = kAPCActivitiesTabIndex;
+    NSUInteger selectedItemIndex = 0;
     
-    NSMutableArray *tabBarItems = [NSMutableArray new];
+    // Set the view controllers
     NSMutableArray *viewControllers = [NSMutableArray new];
-    
-    {
-        //Activities Tab
-        UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Activities", nil) image:[UIImage imageNamed:@"tab_activities"] selectedImage:[UIImage imageNamed:@"tab_activities_selected"]];
-        [tabBarItems addObject:item];
-        
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:kActivitiesStoryBoardKey bundle:[NSBundle appleCoreBundle]];
-        UIViewController *viewController = [storyboard instantiateInitialViewController];
-        [viewControllers addObject:viewController];
+    for (APCScene *scene in [self tabBarScenes]) {
+        UIViewController *vc = [scene instantiateViewController];
+        [viewControllers addObject:vc];
     }
-    
-    {
-        //Dashboard Tab
-        UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Dashboard", nil) image:[UIImage imageNamed:@"tab_dashboard"] selectedImage:[UIImage imageNamed:@"tab_dashboard_selected"]];
-        [tabBarItems addObject:item];
-        
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:kDashBoardStoryBoardKey bundle:[NSBundle mainBundle]];
-        UIViewController *viewController = [storyboard instantiateInitialViewController];
-        [viewControllers addObject:viewController];
-    }
-    
-    BOOL newsFeedTab = [self.initializationOptions[kNewsFeedTabKey] boolValue];
-    if (newsFeedTab) {
-        UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"News Feed", nil) image:[UIImage imageNamed:@"tab_newsfeed"] selectedImage:[UIImage imageNamed:@"tab_newsfeed_selected"]];
-        [tabBarItems addObject:item];
-        
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:kNewsFeedStoryBoardKey bundle:[NSBundle appleCoreBundle]];
-        UIViewController *viewController = [storyboard instantiateInitialViewController];
-        [viewControllers addObject:viewController];
-    }
-    
-    {
-        //Learn Tab
-        UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Learn", nil) image:[UIImage imageNamed:@"tab_learn"] selectedImage:[UIImage imageNamed:@"tab_learn_selected"]];
-        [tabBarItems addObject:item];
-        
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:kLearnStoryBoardKey bundle:[NSBundle appleCoreBundle]];
-        UIViewController *viewController = [storyboard instantiateInitialViewController];
-        [viewControllers addObject:viewController];
-    }
-    
-    {
-        //Profile Tab
-        UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Profile", nil) image:[UIImage imageNamed:@"tab_profile"] selectedImage:[UIImage imageNamed:@"tab_profile_selected"]];
-        [tabBarItems addObject:item];
-        
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:kHealthProfileStoryBoardKey bundle:[NSBundle appleCoreBundle]];
-        UIViewController *viewController = [storyboard instantiateInitialViewController];
-        [viewControllers addObject:viewController];
-    }
-    
     [self.tabBarController setViewControllers:[NSArray arrayWithArray:viewControllers]];
-    
-    NSArray *items = self.tabBarController.tabBar.items;
-    
-    for (NSUInteger i=0; i<items.count; i++) {
-        UITabBarItem *item = items[i];
-        UITabBarItem *tabBarItem = tabBarItems[i];
-        
-        item.image = tabBarItem.image;
-        item.selectedImage = tabBarItem.selectedImage;
-        item.title = tabBarItem.title;
-        item.tag = i;
-        
-        if (i == kAPCNewsFeedTabIndex && newsFeedTab){
-            [self updateNewsFeedBadgeCount];
-        }
+
+    // The tab bar icons take the default tint color from UIView Appearance tintin iOS8. In order to fix this for we are selecting each of the tabs.
+    for (NSUInteger ii = 0; ii < self.tabBarController.viewControllers.count; ii++){
+        [self.tabBarController setSelectedIndex:ii];
     }
     
-    //The tab bar icons take the default tint color from UIView Appearance tintin iOS8. In order to fix this for we are selecting each of the tabs.
-    {
-        [self.tabBarController setSelectedIndex:0];
-        [self.tabBarController setSelectedIndex:1];
-        [self.tabBarController setSelectedIndex:2];
-        [self.tabBarController setSelectedIndex:3];
-        if (newsFeedTab) {
-            [self.tabBarController setSelectedIndex:4];
-        }
+    // Update the news feed badge
+    if ([self shouldIncludeNewsFeedTab]) {
+        [self updateNewsFeedBadgeCount];
     }
     
     [self.tabBarController setSelectedIndex:selectedItemIndex];
@@ -873,10 +943,9 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
         
         NSUInteger  controllerIndex = [tabBarController.viewControllers indexOfObject:viewController];
         
-        BOOL newsFeedTab = [self.initializationOptions[kNewsFeedTabKey] boolValue];
-        NSUInteger indexOfProfileTab = newsFeedTab ? 4 : 3;
+        UITabBarItem *item = self.tabBarController.tabBar.items[controllerIndex];
         
-        if (controllerIndex == indexOfProfileTab)
+        if (item.tag == kAPCProfileTabTag)
         {
             UINavigationController * profileNavigationController = (UINavigationController *) viewController;
             
@@ -887,8 +956,8 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
                 self.profileViewController.delegate = [self profileExtenderDelegate];
             }
         }
-        
-        if(controllerIndex == kAPCNewsFeedTabIndex && newsFeedTab){
+        else if (item.tag == kAPCNewsFeedTabTag)
+        {
             [self updateNewsFeedBadgeCount];
         }
     }
@@ -899,7 +968,7 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     NSUInteger unreadPostsCount = [self.dataSubstrate.newsFeedManager unreadPostsCount];
     NSNumber *unreadValue = @(unreadPostsCount);
     
-    UITabBarItem *item = self.tabBarController.tabBar.items[kAPCNewsFeedTabIndex];
+    UITabBarItem *item = [self newsFeedTabBarItem];
     
     if (unreadPostsCount != 0) {
         item.badgeValue = [unreadValue stringValue];
@@ -908,9 +977,30 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     }
 }
 
+
+/*********************************************************************************/
+#pragma mark - supported orientations
+/*********************************************************************************/
+
+- (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window
+{
+    if (self.preferredOrientationMask == 0) {
+        self.preferredOrientationMask = [application supportedInterfaceOrientationsForWindow:window];
+    }
+    return self.preferredOrientationMask;
+}
+
+- (void)resetPreferredOrientationMask
+{
+    self.preferredOrientationMask = 0;
+}
+
+
 /*********************************************************************************/
 #pragma mark - Show Methods
 /*********************************************************************************/
+
+
 - (void) showAppropriateVC
 {
     if (self.hadCatastrophicStartupError)
@@ -923,7 +1013,12 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     }
     else if (self.dataSubstrate.currentUser.isSignedUp)
     {
-        [self showNeedsEmailVerification];
+        if (self.onboardingManager.hasPasscode) {
+            [self showPasscodeViewController];
+        }
+        else {
+            [self showNeedsEmailVerification];
+        }
     }
     else
     {
@@ -931,9 +1026,21 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     }
 }
 
+- (void)showAppropriateVCFollowingPasscodeEntry
+{
+    if (self.dataSubstrate.currentUser.isSignedIn)
+    {
+        [self showTabBar];
+    }
+    else
+    {
+        [self showNeedsEmailVerification];
+    }
+}
+
 - (void)showPasscodeIfNecessary
 {
-    if (self.dataSubstrate.currentUser.isSignedIn && !self.isPasscodeShowing) {
+    if (self.onboardingManager.hasPasscode && !self.isPasscodeShowing) {
         NSInteger numberOfMinutes = [self.dataSubstrate.parameters integerForKey:kNumberOfMinutesForPasscodeKey];
         NSNumber *lastPasscodeSuccessTime = [[NSUserDefaults standardUserDefaults] objectForKey:kLastUsedTimeKey];
         long timeDifference = uptime() - lastPasscodeSuccessTime.longValue;
@@ -946,8 +1053,7 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 - (void)showPasscodeViewController
 {
     if (!self.passcodeViewController) {
-        self.passcodeViewController = [[UIStoryboard storyboardWithName:@"APCPasscode" bundle:[NSBundle appleCoreBundle]] instantiateInitialViewController];
-        self.passcodeViewController.passcodeViewControllerDelegate = self;
+        self.passcodeViewController = [self.onboardingManager instantiatePasscodeViewControllerWithDelegate:self];
     }
     
     self.window.rootViewController = self.passcodeViewController;
@@ -967,7 +1073,7 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 {
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:viewController];
     navController.navigationBar.translucent = NO;
-    
+
     [UIView transitionWithView:self.window
                       duration:0.6
                        options:UIViewAnimationOptionTransitionNone
@@ -984,6 +1090,13 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
         self.onboardingManager = [APCOnboardingManager managerWithProvider:self user:self.dataSubstrate.currentUser];
     }
     return _onboardingManager;
+}
+
+- (APCDataGroupsManager *)dataGroupsManagerForUser:(APCUser*)user {
+    if (user == nil) {
+        user = self.dataSubstrate.currentUser;
+    }
+    return [[APCDataGroupsManager alloc] initWithDataGroups:user.dataGroups mapping:nil];
 }
 
 - (APCPermissionsManager *)permissionsManager {
@@ -1022,7 +1135,7 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
         self.secureView = [[UIView alloc] initWithFrame:self.window.rootViewController.view.bounds];
         
         UIImage *blurredImage = [viewForSnapshot blurredSnapshot];
-        UIImage *appIcon = [UIImage imageNamed:@"logo_disease_large" inBundle:[NSBundle mainBundle] compatibleWithTraitCollection:nil];
+        UIImage *appIcon = [UIImage imageNamed:@"logo_disease_large" inBundle:[self resourceBundle] compatibleWithTraitCollection:nil];
         UIImageView *blurredImageView = [[UIImageView alloc] initWithImage:blurredImage];
         UIImageView *appIconImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0,0, 180, 180)];
         
@@ -1050,18 +1163,99 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 
 - (void)passcodeViewControllerDidSucceed:(APCPasscodeViewController *)__unused viewController
 {
+    [self passcodeViewControllerDidSucceed];
+}
+
+- (void)passcodeViewControllerDidFail:(APCPasscodeViewController *) __unused viewController
+{
+    [self passcodeViewControllerDidFail];
+}
+
+- (void)passcodeViewControllerDidFinishWithSuccess:(UIViewController *) __unused viewController {
+    [self passcodeViewControllerDidSucceed];
+}
+
+- (void)passcodeViewControllerDidFailAuthentication:(UIViewController *) __unused viewController {
+    [self passcodeViewControllerDidFail];
+}
+
+- (void)passcodeViewControllerForgotPasscodeTapped:(UIViewController *) __unused viewController
+{
+    [self showResetPasscodeAlert:nil];
+}
+
+- (UIColor *)passcodeViewControllerTintColorForForgotPasscode:(UIViewController *) __unused viewController
+{
+    return [UIColor appPrimaryColor];
+}
+
+- (void)passcodeViewControllerDidSucceed
+{
     //set the tabbar controller as the rootViewController
-    [self showTabBar];
+    [self showAppropriateVCFollowingPasscodeEntry];
     self.isPasscodeShowing = NO;
     self.passcodeViewController = nil;
     [[NSUserDefaults standardUserDefaults] setObject: [NSNumber numberWithLong:uptime()] forKey:kLastUsedTimeKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-- (void)passcodeViewControllerDidFail:(APCPasscodeViewController *) __unused viewController
+- (void)passcodeViewControllerDidFail
 {
     //retain the passcodeViewController as the Root View Controller and do not reset timeout
     self.isPasscodeShowing = YES;
+}
+
+- (void) showResetPasscodeAlert:(__unused NSNotification*)notification
+{
+    NSString* title = NSLocalizedStringWithDefaultValue(@"Reset Passcode", @"APCAppCore", APCBundle(), @"Enter Passcode", @"Prompt to change passcode");
+    NSString* message = NSLocalizedStringWithDefaultValue(@"In order to reset your passcode, you'll need to log out of the app completely and log back in using your email and password.", @"APCAppCore", APCBundle(), @"In order to reset your passcode, you'll need to log out of the app completely and log back in using your email and password.", @"description of what will happen next");
+    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title
+                                                                   message:message
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    
+    NSString* cancelTitle = NSLocalizedStringWithDefaultValue(@"Cancel", @"APCAppCore", APCBundle(), @"Cancel", @"Action to cancel");
+    UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:cancelTitle
+                                                           style:UIAlertActionStyleCancel
+                                                         handler:^(__unused UIAlertAction * _Nonnull action){}];
+    [alert addAction:cancelAction];
+    
+    NSString* logoutTitle = NSLocalizedStringWithDefaultValue(@"Log out", @"APCAppCore", APCBundle(), @"Log out", @"Action to log out");
+    UIAlertAction* logoutAction = [UIAlertAction actionWithTitle:logoutTitle
+                                                           style:UIAlertActionStyleDefault
+                                                         handler:^(__unused UIAlertAction * _Nonnull action)
+   {
+       [self resetAppAndProceedToSignIn];
+   }];
+    [alert addAction:logoutAction];
+    
+    UIViewController* topVc = self.window.rootViewController;
+    if ([topVc isKindOfClass:[UINavigationController class]])
+    {
+        topVc = ((UINavigationController*)topVc).topViewController;
+    }
+    [topVc presentViewController:alert animated:YES completion:nil];
+}
+
+#pragma mark - Reset Methods
+
+- (void) resetAppAndProceedToSignIn
+{
+    APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
+    UIViewController * vc =  [[UIViewController alloc] init];
+    vc.view.backgroundColor = [UIColor whiteColor];
+    appDelegate.window.rootViewController = vc;
+    
+    // Clear all user info, in case they log in or sign up as a different user afterwards
+    [appDelegate clearNSUserDefaults];
+    [APCKeychainStore resetKeyChain];
+    [appDelegate.dataSubstrate resetCoreData];
+    
+    // This is all that is needed to force the re-registration of the PIN
+    APCUser* user = [((id<APCOnboardingManagerProvider>)appDelegate) onboardingManager].user;
+    user.secondaryInfoSaved = NO;
+    
+    [self logOutAndGoToSignIn];
 }
 
 @end

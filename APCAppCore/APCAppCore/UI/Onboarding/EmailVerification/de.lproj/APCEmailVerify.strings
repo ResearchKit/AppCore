@@ -1,0 +1,36 @@
+
+/* Class = "UILabel"; text = "Email"; ObjectID = "39l-Jf-hqN"; */
+"39l-Jf-hqN.text" = "Email";
+
+/* Class = "UILabel"; text = "johnny@appleseed.com"; ObjectID = "3xK-c0-Pah"; */
+"3xK-c0-Pah.text" = "johnny@appleseed.com";
+
+/* Class = "UIButton"; normalTitle = "Share"; ObjectID = "Bzr-zG-t0U"; */
+"Bzr-zG-t0U.normalTitle" = "Share";
+
+/* Class = "UILabel"; text = "Enter your email address "; ObjectID = "JFo-Ee-63n"; */
+"JFo-Ee-63n.text" = "Enter your email address ";
+
+/* Class = "UIButton"; normalTitle = "Continue"; ObjectID = "QwO-ep-Om3"; */
+"QwO-ep-Om3.normalTitle" = "Continue";
+
+/* Class = "UINavigationItem"; title = "Change Email"; ObjectID = "bLv-ce-Rcj"; */
+"bLv-ce-Rcj.title" = "Change Email";
+
+/* Class = "UIButton"; normalTitle = "Resend Verification Email"; ObjectID = "cVc-Jw-LIH"; */
+"cVc-Jw-LIH.normalTitle" = "Resend Verification Email";
+
+/* Class = "UILabel"; text = "While you wait, you can share the app by pressing the share button below"; ObjectID = "fuD-QG-wP8"; */
+"fuD-QG-wP8.text" = "While you wait, you can share the app by pressing the share button below";
+
+/* Class = "UIButton"; normalTitle = "Wrong email address? Tap here."; ObjectID = "gY2-y5-fND"; */
+"gY2-y5-fND.normalTitle" = "Wrong email address? Tap here.";
+
+/* Class = "UILabel"; text = "$appName$\nhas sent you\na verification email at"; ObjectID = "hsa-BE-Hkq"; */
+"hsa-BE-Hkq.text" = "$appName$\nhas sent you\na verification email at";
+
+/* Class = "UILabel"; text = "Once verified, tap below"; ObjectID = "ikM-qL-vyw"; */
+"ikM-qL-vyw.text" = "Once verified, tap below";
+
+/* Class = "UILabel"; text = "A full copy of the consent agreement\nwill be sent to you for your records."; ObjectID = "yX7-Jl-zxX"; */
+"yX7-Jl-zxX.text" = "A full copy of the consent agreement\nwill be sent to you for your records.";

@@ -7,7 +7,7 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
-#import "NSDateComponents+Helper.h"
+#import <APCAppCore/NSDateComponents+Helper.h>
 
 
 @interface NSDateComponentsHelperTests : XCTestCase

@@ -39,17 +39,20 @@
 #import "APCConstants.h"
 #import "APCDataMonitor+Bridge.h"
 #import "APCLog.h"
+#import "APCPermissionsManager.h"
 #import "APCScheduler.h"
 #import "APCSpinnerViewController.h"
 #import "APCTask.h"
 #import "APCTaskGroup.h"
 #import "APCTasksReminderManager.h"
 #import "APCUtilities.h"
+#import "APCUser+Bridge.h"
 #import "NSBundle+Helper.h"
 #import "NSDate+Helper.h"
 #import "UIAlertController+Helper.h"
 #import "UIColor+APCAppearance.h"
 #import "NSDictionary+APCAdditions.h"
+#import "APCLocalization.h"
 
 
 static CGFloat const kTintedCellHeight             = 65;
@@ -74,6 +77,12 @@ static CGFloat const kTableViewSectionHeaderHeight = 77;
 @property (nonatomic, assign) BOOL                  isFetchingFromCoreDataRightNow;
 @property (nonatomic, strong) UIRefreshControl      *refreshControl;
 
+@property (nonatomic, readonly) APCUser *user;
+@property (nonatomic, getter=isShowingConsentFlow) BOOL showingConsentFlow;
+@property (nonatomic, getter=isAttemptingReconsent) BOOL attemptingReconsent;
+
+@property (strong, nonatomic) APCPermissionsManager *permissionManager;
+
 @property (readonly) NSDate *dateWeAreUsingForToday;
 
 @end
@@ -88,7 +97,7 @@ static CGFloat const kTableViewSectionHeaderHeight = 77;
 {
     [super viewDidLoad];
 
-    self.navigationItem.title = NSLocalizedString(@"Activities", @"Activities");
+    self.navigationItem.title = NSLocalizedStringWithDefaultValue(@"Activities", @"APCAppCore", APCBundle(), @"Activities", @"Activities");
     self.tableView.backgroundColor = [UIColor appSecondaryColor4];
 
     NSString *headerViewNibName = NSStringFromClass ([APCActivitiesSectionHeaderView class]);
@@ -98,20 +107,34 @@ static CGFloat const kTableViewSectionHeaderHeight = 77;
     self.dateFormatter = [NSDateFormatter new];
     [self configureRefreshControl];
     self.lastKnownSystemDate = nil;
+    
+    self.permissionManager = [[APCPermissionsManager alloc] init];
+
+    // make sure we know the state of CoreMotion permissions so it's available when we need it
+    [self.permissionManager requestForPermissionForType:kAPCSignUpPermissionsTypeCoremotion withCompletion:nil];
 }
 
 - (void) viewWillAppear: (BOOL) animated
 {
     [super viewWillAppear: animated];
-
-    [self setupNotifications];
-    [self setUpNavigationBarAppearance];
-
     
+    if (!self.user.isConsented) {
+        self.showingConsentFlow = NO;
+        [self showReconsentIfNecessary];
+    }
+    else {
+        [self reloadData];
+    }
+    
+    [self setUpNavigationBarAppearance];
+    
+    APCLogViewControllerAppeared();
+}
+
+- (void) reloadData {
+    [self setupNotifications];
     [self reloadTasksFromCoreData];
     [self checkForAndMaybeRespondToSystemDateChange];
-
-    APCLogViewControllerAppeared();
 }
 
 - (void) viewDidDisappear: (BOOL) animated
@@ -165,7 +188,7 @@ static CGFloat const kTableViewSectionHeaderHeight = 77;
 
 - (void) setUpNavigationBarAppearance
 {
-    [self.navigationController.navigationBar setBarTintColor: [UIColor whiteColor]];
+    [self.navigationController.navigationBar setBarTintColor: [UIColor appPrimaryNavBarColor]];
 
     self.navigationController.navigationBar.translucent = NO;
 }
@@ -282,14 +305,35 @@ static CGFloat const kTableViewSectionHeaderHeight = 77;
 
         if (viewControllerToShowNext != nil)
         {
-            [self presentViewController: viewControllerToShowNext
-                               animated: YES
-                             completion: nil];
+            if ([self.permissionManager isPermissionsGrantedForType:viewControllerToShowNext.requiredPermission])
+            {
+                [self presentViewController: viewControllerToShowNext
+                                   animated: YES
+                                 completion: nil];
+            } else
+            {
+                NSError *permissionsError = [self.permissionManager permissionDeniedErrorForType:viewControllerToShowNext.requiredPermission];
+                [self presentSettingsAlert:permissionsError];
+                APCLogError2(permissionsError);
+            }
         }
     }
 }
 
-
+- (void)presentSettingsAlert:(NSError *)error
+{
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedStringWithDefaultValue(@"Permissions Denied", @"APCAppCore", APCBundle(), @"Permissions Denied", @"") message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *dismiss = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Dismiss", @"APCAppCore", APCBundle(), @"Dismiss", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction *__unused action) {
+    }];
+    [alertController addAction:dismiss];
+    UIAlertAction *settings = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Settings", @"APCAppCore", APCBundle(), @"Settings", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
+        // Common misconception, this takes user to our app's settings page, not general settings page
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+    }];
+    [alertController addAction:settings];
+    
+    [self.navigationController presentViewController:alertController animated:YES completion:nil];
+}
 
 // ---------------------------------------------------------
 #pragma mark - The *real* data-source methods
@@ -536,7 +580,6 @@ static CGFloat const kTableViewSectionHeaderHeight = 77;
     BOOL sortNewestToOldest = YES;
 
     __weak typeof(self) weakSelf = self;
-    
     [[APCScheduler defaultScheduler] fetchTaskGroupsFromDate: yesterday
                                                       toDate: today
                                       forTasksMatchingFilter: filterForRequiredTasks
@@ -571,7 +614,7 @@ static CGFloat const kTableViewSectionHeaderHeight = 77;
              }
              else if (section.isYesterdaySection)
              {
-                 [section reduceToIncompleteTasksOnTheirLastLegalDay];
+                 [section reduceToIncompleteExpiredTasks];
              }
              
              if (section.taskGroups.count)
@@ -676,7 +719,7 @@ static CGFloat const kTableViewSectionHeaderHeight = 77;
 
     for (UITabBarItem *item in tabBar.items)
     {
-        if (item.tag == (NSInteger) kAPCActivitiesTabIndex)
+        if (item.tag == (NSInteger) kAPCActivitiesTabTag)
         {
             activitiesTab = item;
             break;
@@ -684,6 +727,69 @@ static CGFloat const kTableViewSectionHeaderHeight = 77;
     }
 
     return activitiesTab;
+}
+
+#pragma mark - Reconsent
+
+- (APCUser *)user {
+    return [[APCAppDelegate sharedAppDelegate] dataSubstrate].currentUser;
+}
+
+- (void)showReconsentIfNecessary {
+    if (!self.user.userConsented) {
+        if (!self.isShowingConsentFlow) {
+            self.showingConsentFlow = YES;
+            UIViewController *vc = [[APCAppDelegate sharedAppDelegate] consentViewController];
+            [self presentViewController:vc animated:YES completion:nil];
+        }
+    }
+    else if (!self.isAttemptingReconsent) {
+        self.attemptingReconsent = YES;
+        [self sendReconsentToServer];
+    }
+}
+
+- (void)sendReconsentToServer {
+    // If this is a reconsent, then send the reconsent
+    __weak typeof(self) weakSelf = self;
+    [self.user signInOnCompletion: ^(NSError *error) {
+        [weakSelf handleSigninResponseWithError: error];
+    }];
+}
+
+- (void)handleSigninResponseWithError:(NSError *)error {
+    if ((error != nil) && (error.code != SBBErrorCodeServerPreconditionNotMet)) {
+        APCLogError2(error);
+        [self showConsentError: error];
+    }
+    else {
+        __weak typeof(self) weakSelf = self;
+        [self.user sendUserConsentedToBridgeOnCompletion: ^(NSError *error) {
+            [weakSelf handleConsentResponseWithError: error];
+        }];
+    }
+}
+
+- (void)handleConsentResponseWithError:(NSError *)error {
+    // 409 Conflict in this context means consent already signed, which happens if a user tries to re-sign-up
+    // with an existing email account rather than signing in with it. In any case it means they've already signed
+    // the consent so we can just mark the user as consented and move on.
+    if (error && error.code != 409) {
+        APCLogError2(error);
+        [self showConsentError: error];
+    }
+    else {
+        self.attemptingReconsent = NO;
+        self.user.consented = YES;
+        [[NSNotificationCenter defaultCenter] postNotificationName:APCUserDidConsentNotification object:nil];
+        [self reloadData];
+    }
+}
+
+- (void)showConsentError:(NSError *)error {
+    self.attemptingReconsent = NO;
+    UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedStringWithDefaultValue(@"User Consent Error", @"APCAppCore", APCBundle(), @"User Consent Error", @"") message:error.localizedDescription];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 @end

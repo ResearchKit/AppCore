@@ -34,15 +34,20 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+@class APCSegmentedButton;
+
 @protocol APCSegmentedButtonDelegate <NSObject>
 
-@required
+@optional
+
 - (void) segmentedButtonPressed:(UIButton*) button selectedIndex: (NSInteger) selectedIndex;
+- (void) segmentedButton:(APCSegmentedButton*)segmentedButton didSelectIndex: (NSInteger) selectedIndex;
 
 @end
 
 @interface APCSegmentedButton : NSObject
 
+@property (nonatomic) NSString *questionIdentifier;
 @property (nonatomic, weak) id<APCSegmentedButtonDelegate> delegate;
 @property (nonatomic) NSInteger selectedIndex;
 

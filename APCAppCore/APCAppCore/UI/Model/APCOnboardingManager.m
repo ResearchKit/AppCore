@@ -33,9 +33,14 @@
 //
 
 #import "APCOnboardingManager.h"
+#import "APCDataGroupsManager.h"
 #import "APCPermissionsManager.h"
 #import "APCUserInfoConstants.h"
 #import "APCLog.h"
+#import "APCScene.h"
+#import "APCPasscodeViewController.h"
+#import "APCChangePasscodeViewController.h"
+#import "NSBundle+Helper.h"
 
 #import <HealthKit/HealthKit.h>
 
@@ -50,6 +55,8 @@ NSString * const kAPCOnboardingStoryboardName = @"APCOnboarding";
 @property (strong, nonatomic, readwrite) APCUser *user;
 
 @property (strong, nonatomic, readwrite) APCPermissionsManager *permissionsManager;
+
+@property (strong, nonatomic, readwrite) APCDataGroupsManager *dataGroupsManager;
 
 @end
 
@@ -127,6 +134,13 @@ NSString * const kAPCOnboardingStoryboardName = @"APCOnboarding";
     return _permissionsManager;
 }
 
+- (APCDataGroupsManager *)dataGroupsManager {
+    if (!_dataGroupsManager) {
+        _dataGroupsManager = [self.provider dataGroupsManagerForUser:self.user];
+    }
+    return _dataGroupsManager;
+}
+
 #pragma mark - APCOnboardingDelegate
 
 - (APCScene *)onboarding:(APCOnboarding * __nonnull)onboarding sceneOfType:(NSString * __nonnull)type {
@@ -149,6 +163,15 @@ NSString * const kAPCOnboardingStoryboardName = @"APCOnboarding";
     if ([type isEqualToString:kAPCSignUpPermissionsPrimingStepIdentifier]) {
         return [[APCScene alloc] initWithName:@"APCPermissionPrimingViewController" inStoryboard:kAPCOnboardingStoryboardName];     // "What to Expect" screen
     }
+    if ([type isEqualToString:kAPCSignUpDataGroupsStepIdentifier]) {
+        if ([self.dataGroupsManager needsUserInfoDataGroups]) {
+            ORKStep *step = [self.dataGroupsManager surveyStep];
+            if (step != nil) {
+                return [[APCScene alloc] initWithStep:step];
+            }            
+        }
+        return nil;
+    }
     if ([type isEqualToString:kAPCSignUpGeneralInfoStepIdentifier]) {
         return [[APCScene alloc] initWithName:@"APCSignUpGeneralInfoViewController" inStoryboard:kAPCOnboardingStoryboardName];
     }
@@ -156,6 +179,7 @@ NSString * const kAPCOnboardingStoryboardName = @"APCOnboarding";
         return [[APCScene alloc] initWithName:@"APCSignUpMedicalInfoViewController" inStoryboard:kAPCOnboardingStoryboardName];
     }
     if ([type isEqualToString:kAPCSignUpCustomInfoStepIdentifier]) {
+        // Check if there is a custom step
         if ([_provider respondsToSelector:@selector(customInfoSceneForOnboarding:)]) {
             return [_provider performSelector:@selector(customInfoSceneForOnboarding:) withObject:onboarding];
         }
@@ -169,6 +193,9 @@ NSString * const kAPCOnboardingStoryboardName = @"APCOnboarding";
     }
     if ([type isEqualToString:kAPCSignUpThankYouStepIdentifier]) {
         return [[APCScene alloc] initWithName:@"APCThankYouViewController" inStoryboard:kAPCOnboardingStoryboardName];
+    }
+    if ([type isEqualToString:kAPCSignUpShareAppStepIdentifier]) {
+        return [[APCScene alloc] initWithName:@"APCShareViewController" inStoryboard:kAPCOnboardingStoryboardName];
     }
     
     // Sign In
@@ -187,5 +214,101 @@ NSString * const kAPCOnboardingStoryboardName = @"APCOnboarding";
 - (NSInteger)numberOfServicesInPermissionsListForOnboardingTask:(APCOnboardingTask *)__unused task {
     return [self.permissionsManager.signUpPermissionTypes count];
 }
+
+- (void)onboarding:(APCOnboarding * __unused)onboarding didFinishStepWithResult:(ORKStepResult*)stepResult {
+    if ([stepResult.identifier isEqualToString:APCDataGroupsStepIdentifier]) {
+        [self.dataGroupsManager setSurveyAnswerWithStepResult:stepResult];
+        self.user.dataGroups = self.dataGroupsManager.dataGroups;
+    }
+}
+
+#pragma mark - passcode
+
+- (BOOL)hasPasscode {
+    return self.user.isSignedIn;
+}
+
+- (UIViewController*)instantiatePasscodeViewControllerWithDelegate:(id)delegate {
+    APCPasscodeViewController *passcodeVC = [[UIStoryboard storyboardWithName:@"APCPasscode" bundle:[NSBundle appleCoreBundle]] instantiateInitialViewController];
+    passcodeVC.passcodeViewControllerDelegate = delegate;
+    return passcodeVC;
+}
+
+- (UIViewController*)instantiateChangePasscodeViewController {
+    APCChangePasscodeViewController *changePasscodeViewController = [[UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"ChangePasscodeVC"];
+    return changePasscodeViewController;
+}
+
+#pragma mark - handle user consent
+
+- (ORKConsentSignatureResult *)findConsentSignatureResult:(ORKTaskResult*)taskResult {
+    for (ORKStepResult *stepResult in taskResult.results) {
+        for (ORKResult *result in stepResult.results) {
+            if ([result isKindOfClass:[ORKConsentSignatureResult class]]) {
+                return (ORKConsentSignatureResult*)result;
+            }
+        }
+    }
+    return nil;
+}
+
+- (ORKConsentSharingStep *)findConsentSharingStep:(ORKTaskViewController *)taskViewController {
+    NSArray *steps = ((ORKOrderedTask*)taskViewController.task).steps;
+    for (ORKStep *step in steps) {
+        if ([step isKindOfClass:[ORKConsentSharingStep class]]) {
+            return (ORKConsentSharingStep*)step;
+        }
+    }
+    return nil;
+}
+
+- (BOOL)checkForConsentWithTaskViewController:(ORKTaskViewController *)taskViewController {
+    
+    // search for the consent signature
+    ORKConsentSignatureResult *consentResult = [self findConsentSignatureResult:taskViewController.result];
+    
+    //  if no signature (no consent result) then assume the user failed the quiz
+    if (consentResult != nil && consentResult.signature.requiresName && (consentResult.signature.givenName && consentResult.signature.familyName)) {
+        
+        // extract the user's sharing choice
+        ORKConsentSharingStep *sharingStep = [self findConsentSharingStep:taskViewController];
+        APCUserConsentSharingScope sharingScope = APCUserConsentSharingScopeNone;
+        
+        for (ORKStepResult* result in taskViewController.result.results) {
+            if ([result.identifier isEqualToString:sharingStep.identifier]) {
+                for (ORKChoiceQuestionResult *choice in result.results) {
+                    if ([choice isKindOfClass:[ORKChoiceQuestionResult class]]) {
+                        NSNumber *answer = [choice.choiceAnswers firstObject];
+                        if ([answer isKindOfClass:[NSNumber class]]) {
+                            if (0 == answer.integerValue) {
+                                sharingScope = APCUserConsentSharingScopeStudy;
+                            }
+                            else if (1 == answer.integerValue) {
+                                sharingScope = APCUserConsentSharingScopeAll;
+                            }
+                            else {
+                                APCLogDebug(@"Unknown sharing choice answer: %@", answer);
+                            }
+                        }
+                        else {
+                            APCLogDebug(@"Unknown sharing choice answer(s): %@", choice.choiceAnswers);
+                        }
+                    }
+                }
+                break;
+            }
+        }
+        
+        // User has consented - continue
+        [self userDidConsentWithResult:consentResult sharingScope:sharingScope];
+        return YES;
+        
+    } else {
+        // User declined consent - sign out
+        [self userDeclinedConsent];
+        return NO;
+    }
+}
+
 
 @end

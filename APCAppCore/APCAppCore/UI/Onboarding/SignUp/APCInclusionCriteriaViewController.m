@@ -36,6 +36,7 @@
 #import "APCLog.h"
 #import "APCOnboarding.h"
 #import "APCCustomBackButton.h"
+#import "APCLocalization.h"
 
 #import "UIColor+APCAppearance.h"
 
@@ -57,9 +58,9 @@
 
 - (void)setupNavAppearance
 {
-    self.title = NSLocalizedString(@"Eligibility", @"");
+    self.title = NSLocalizedStringWithDefaultValue(@"Eligibility", @"APCAppCore", APCBundle(), @"Eligibility", @"");
     
-    UIBarButtonItem *nextBarButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Next", @"") style:UIBarButtonItemStylePlain target:self action:@selector(next)];
+    UIBarButtonItem *nextBarButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Next", @"APCAppCore", APCBundle(), @"Next", @"") style:UIBarButtonItemStylePlain target:self action:@selector(next)];
     nextBarButton.enabled = [self isContentValid];
     self.navigationItem.rightBarButtonItem = nextBarButton;
     

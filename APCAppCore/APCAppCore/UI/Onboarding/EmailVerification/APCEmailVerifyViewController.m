@@ -97,7 +97,7 @@ static NSString * const kAPCPleaseCheckEmailAlertOkButton = @"OK";
 
     [self setupAppearance];
 
-    self.title = NSLocalizedString(@"Email Verification", nil);
+    self.title = NSLocalizedStringWithDefaultValue(@"Email Verification", @"APCAppCore", APCBundle(), @"Email Verification", nil);
     self.pleaseCheckEmailAlert = nil;
 
     // Hide the "johnny appleseed@..."
@@ -150,6 +150,15 @@ static NSString * const kAPCPleaseCheckEmailAlertOkButton = @"OK";
     
     [self.resendEmailButton.titleLabel setFont:[UIFont appRegularFontWithSize:16.0f]];
     [self.resendEmailButton setTitleColor:[UIColor appPrimaryColor] forState:UIControlStateNormal];
+    
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    if (([((id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate).onboardingManager showShareAppInOnboarding]) &&
+        screenRect.size.height > 500) {
+        // There's not enough room to show everything in the 3.5 phones without scrolling, so only show this
+        // if not height constrained
+        self.shareMessageLabel.hidden = NO;
+        self.shareMessageButton.hidden = NO;
+    }
 }
 
 
@@ -184,7 +193,7 @@ static NSString * const kAPCPleaseCheckEmailAlertOkButton = @"OK";
 {
     if (error)
     {
-        if (error.code == kSBBServerPreconditionNotMet)
+        if (error.code == SBBErrorCodeServerPreconditionNotMet)
         {
             [self getServerConsent];
         }
@@ -327,7 +336,7 @@ static NSString * const kAPCPleaseCheckEmailAlertOkButton = @"OK";
 
     [self hideSpinnerUsingAnimation: YES andThenDoThis:^{
 
-        UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"User Consent Error", @"") message:error.localizedDescription];
+        UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedStringWithDefaultValue(@"User Consent Error", @"APCAppCore", APCBundle(), @"User Consent Error", @"") message:error.localizedDescription];
 
         [self presentViewController:alert animated:YES completion:nil];
 
@@ -340,7 +349,7 @@ static NSString * const kAPCPleaseCheckEmailAlertOkButton = @"OK";
 
     [self hideSpinnerUsingAnimation: YES andThenDoThis:^{
 
-        UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"User Sign In Error", @"") message:error.localizedDescription];
+        UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedStringWithDefaultValue(@"User Sign In Error", @"APCAppCore", APCBundle(), @"User Sign In Error", @"") message:error.localizedDescription];
 
         [self presentViewController:alert animated:YES completion:nil];
 
@@ -350,18 +359,24 @@ static NSString * const kAPCPleaseCheckEmailAlertOkButton = @"OK";
 - (void) showThankYouPage
 {
     [self hideSpinnerUsingAnimation: YES andThenDoThis:^{
+        
+        if (self.taskViewController != nil) {
+            // If this has a step then it is part of a taskViewController
+            [self goForward];
+        }
+        else {
 
-        // load the thank you view controller
-        UIStoryboard *sbOnboarding = [UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]];
-        APCThankYouViewController *allSetVC = (APCThankYouViewController *)[sbOnboarding instantiateViewControllerWithIdentifier:@"APCThankYouViewController"];
+            // load the thank you view controller
+            UIStoryboard *sbOnboarding = [UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]];
+            APCThankYouViewController *allSetVC = (APCThankYouViewController *)[sbOnboarding instantiateViewControllerWithIdentifier:@"APCThankYouViewController"];
 
-        allSetVC.emailVerified = YES;
+            allSetVC.emailVerified = YES;
 
-        [self presentViewController:allSetVC animated:YES completion:nil];
+            [self presentViewController:allSetVC animated:YES completion:nil];
+        }
 
     }];
 }
-
 
 
 // ---------------------------------------------------------
@@ -428,6 +443,16 @@ static NSString * const kAPCPleaseCheckEmailAlertOkButton = @"OK";
 - (IBAction) changeEmailAddress: (id) __unused sender
 {
     
+}
+
+- (IBAction)showShare:(id) __unused sender {
+    // load the share view controller, push it onto stack so the user can come back here when finished
+    UIStoryboard *sbOnboarding = [UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]];
+    APCShareViewController *shareVC = (APCShareViewController *)[sbOnboarding instantiateViewControllerWithIdentifier:@"APCShareViewController"];
+    
+    shareVC.goBackIfUserHitsOkay = YES;
+    
+    [self.navigationController pushViewController:shareVC animated:YES];
 }
 
 - (IBAction) secretButton: (id) __unused sender

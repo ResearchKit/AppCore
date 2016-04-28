@@ -33,9 +33,9 @@
  
 #import "APCCircleView.h"
 
-@implementation APCCircleView
+#define kBorderWidth 2.0f
 
-@synthesize tintColor = _tintColor;
+@implementation APCCircleView
 
 #pragma mark - Init
 
@@ -48,13 +48,18 @@
     return self;
 }
 
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    if (self = [super initWithCoder:aDecoder]) {
+        // Initialization code
+        [self setupCircle];
+    }
+    return self;
+}
+
 - (void)setupCircle
 {
+    self.shapeLayer.borderWidth = 2.0f;
     self.backgroundColor = [UIColor clearColor];
-    self.layer.borderWidth = 2.0f;
-    
-    self.shapeLayer.cornerRadius = self.frame.size.width / 2.0f;
-    self.shapeLayer.path = [self layoutPath].CGPath;
 }
 
 - (UIBezierPath *)layoutPath
@@ -77,18 +82,28 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     
+    self.shapeLayer.borderColor = self.tintColor.CGColor;
+    self.shapeLayer.fillColor = self.isSolidDot ? self.tintColor.CGColor : [UIColor whiteColor].CGColor;
     self.shapeLayer.cornerRadius = self.frame.size.width / 2.0f;
     self.shapeLayer.path = [self layoutPath].CGPath;
 }
 
 #pragma mark - Setter methods
 
-- (void)setTintColor:(UIColor *)tintColor
+- (void)tintColorDidChange
 {
-    _tintColor = tintColor;
+    [super tintColorDidChange];
     
-    self.shapeLayer.fillColor = [UIColor whiteColor].CGColor;
-    self.shapeLayer.borderColor = _tintColor.CGColor;
+    [self setNeedsLayout];
+    [self layoutIfNeeded];
+}
+
+- (void)setSolidDot:(BOOL)solidDot
+{
+    _solidDot = solidDot;
+    
+    [self setNeedsLayout];
+    [self layoutIfNeeded];
 }
 
 @end

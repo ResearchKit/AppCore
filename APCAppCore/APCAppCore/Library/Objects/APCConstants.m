@@ -39,17 +39,20 @@
 #pragma mark - Enum Translation Functions
 // ---------------------------------------------------------
 
-NSString *NSStringFromAPCScheduleSource (APCScheduleSource scheduleSource)
+/**
+ APCTaskSource Methods
+ */
+NSString *NSStringFromAPCTaskSource (APCTaskSource taskSource)
 {
     NSString *result = nil;
 
-    switch (scheduleSource)
+    switch (taskSource)
     {
-        case APCScheduleSourceAll:                  result = @"APCScheduleSourceAll";               break;
-        case APCScheduleSourceLocalDisk:            result = @"APCScheduleSourceLocalDisk";         break;
-        case APCScheduleSourceServer:               result = @"APCScheduleSourceServer";            break;
-        case APCScheduleSourceGlucoseLog:           result = @"APCScheduleSourceGlucoseLog";        break;
-        case APCScheduleSourceMedicationTracker:    result = @"APCScheduleSourceMedicationTracker"; break;
+        case APCTaskSourceAll:                  result = @"APCTaskSourceAll";               break;
+        case APCTaskSourceLocalDisk:            result = @"APCTaskSourceLocalDisk";         break;
+        case APCTaskSourceServer:               result = @"APCTaskSourceServer";            break;
+        case APCTaskSourceGlucoseLog:           result = @"APCTaskSourceGlucoseLog";        break;
+        case APCTaskSourceMedicationTracker:    result = @"APCTaskSourceMedicationTracker"; break;
 
         default: result = @"Unknown"; break;
     }
@@ -57,23 +60,58 @@ NSString *NSStringFromAPCScheduleSource (APCScheduleSource scheduleSource)
     return result;
 }
 
-NSString *NSStringFromAPCScheduleSourceAsNumber (NSNumber *scheduleSourceAsNumber)
+NSString *NSStringFromAPCTaskSourceAsNumber (NSNumber *taskSourceAsNumber)
 {
-    return NSStringFromAPCScheduleSource (scheduleSourceAsNumber.integerValue);
+    return NSStringFromAPCTaskSource (taskSourceAsNumber.integerValue);
 }
 
-NSString *NSStringShortFromAPCScheduleSource (APCScheduleSource scheduleSource)
+NSString *NSStringShortFromAPCTaskSource (APCTaskSource taskSource)
 {
-    NSString *result = NSStringFromAPCScheduleSource (scheduleSource);
-    result = [result substringFromIndex: @"APCScheduleSource".length];
+    NSString *result = NSStringFromAPCTaskSource (taskSource);
+    result = [result substringFromIndex: @"APCTaskSource".length];
     return result;
 }
 
-NSString *NSStringShortFromAPCScheduleSourceAsNumber (NSNumber *scheduleSourceAsNumber)
+NSString *NSStringShortFromAPCTaskSourceAsNumber (NSNumber *taskSourceAsNumber)
 {
-    return NSStringShortFromAPCScheduleSource (scheduleSourceAsNumber.integerValue);
+    return NSStringShortFromAPCTaskSource (taskSourceAsNumber.integerValue);
 }
 
+/**
+ APCTaskType Methods
+ */
+NSString *NSStringFromAPCTaskType (APCTaskType taskType)
+{
+    NSString *result = nil;
+    
+    switch (taskType)
+    {
+        case APCTaskTypeSurveyTask:                 result = @"APCTaskTypeSurveyTask";              break;
+        case APCTaskTypeActivityTask:               result = @"APCTaskTypeActivityTask";            break;
+        case APCTaskTypeSurveyAndActivityTask:      result = @"APCTaskTypeSurveyAndActivityTask";   break;
+            
+        default: result = @"Unknown"; break;
+    }
+    
+    return result;
+}
+
+NSString *NSStringFromAPCTaskTypeAsNumber (NSNumber *taskTypeAsNumber)
+{
+    return NSStringFromAPCTaskType (taskTypeAsNumber.integerValue);
+}
+
+NSString *NSStringShortFromAPCTaskType (APCTaskType taskType)
+{
+    NSString *result = NSStringFromAPCTaskType (taskType);
+    result = [result substringFromIndex: @"APCTaskType".length];
+    return result;
+}
+
+NSString *NSStringShortFromAPCTaskTypeAsNumber (NSNumber *taskTypeAsNumber)
+{
+    return NSStringShortFromAPCTaskType (taskTypeAsNumber.integerValue);
+}
 
 
 // ---------------------------------------------------------
@@ -83,6 +121,7 @@ NSString *NSStringShortFromAPCScheduleSourceAsNumber (NSNumber *scheduleSourceAs
 NSString *const APCUserSignedUpNotification                     = @"APCUserSignedUpNotification";
 NSString *const APCUserSignedInNotification                     = @"APCUserSignedInNotification";
 NSString *const APCUserLogOutNotification                       = @"APCUserLogOutNotification";
+NSString *const APCUserForgotPasscodeNotification               = @"APCUserForgotPasscodeNotification";
 NSString *const APCUserDidWithdrawStudyNotification             = @"APCUserDidWithdrawStudyNotification";
 NSString *const APCUserDidConsentNotification                   = @"APCUserDidConsentNotification";
 NSString *const APCUserDidDeclineConsentNotification            = @"APCUserDidDeclineConsentNotification";
@@ -147,8 +186,9 @@ NSString *const kHKWorkoutTypeKey       = @"HKWorkoutType";
 NSString * const kPasswordKey                    = @"Password";
 NSString * const kNumberOfMinutesForPasscodeKey  = @"NumberOfMinutesForPasscodeKey";
 
-NSUInteger     const kAPCActivitiesTabIndex                                 = 0;
-NSUInteger     const kAPCNewsFeedTabIndex                                   = 2;
+NSInteger     const kAPCActivitiesTabTag                                   = 100;
+NSInteger     const kAPCNewsFeedTabTag                                     = 102;
+NSInteger     const kAPCProfileTabTag                                      = 103;
 
 NSInteger      const kAPCSigninErrorCode_NotSignedIn                        = 404;
 NSUInteger     const kAPCSigninNumRetriesBeforePause                        = 10;
@@ -180,6 +220,7 @@ NSString *const kTertiaryYellowColorKey = @"TertiaryYellowColorKey";
 NSString *const kTertiaryPurpleColorKey = @"TertiaryPurpleColorKey";
 NSString *const kTertiaryGrayColorKey   = @"TertiaryGrayColorKey";
 NSString *const kBorderLineColor        = @"LightGrayBorderColorKey";
+NSString *const kPrimaryNavBarColorKey  = @"PrimaryNavBarColorKey";
 
 NSString *const kTasksReminderDefaultsOnOffKey = @"TasksReminderDefaultsOnOffKey";
 NSString *const kTasksReminderDefaultsTimeKey = @"TasksReminderDefaultsTimeKey";

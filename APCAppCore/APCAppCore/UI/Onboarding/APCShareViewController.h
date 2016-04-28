@@ -32,6 +32,8 @@
 // 
  
 #import <UIKit/UIKit.h>
+#import <ResearchKit/ResearchKit.h>
+#import "APCOptionalStepViewController.h"
 
 typedef NS_ENUM(NSUInteger, APCShareType) {
     kAPCShareTypeTwitter,
@@ -40,8 +42,20 @@ typedef NS_ENUM(NSUInteger, APCShareType) {
     kAPCShareTypeSMS
 };
 
-@interface APCShareViewController : UIViewController
+@interface APCShareViewController : APCOptionalStepViewController
 
+@property (nonatomic) BOOL goBackIfUserHitsOkay;
 @property (nonatomic) BOOL hidesOkayButton;
+
+/*
+ * These colors only apply when adjusting the send a text message view controller
+ */
+@property (nonatomic, strong) UIColor* textMessageNavTintColor;
+@property (nonatomic) BOOL textMessageStatusBarStyleLight;
+
+/*
+ * The subject of the share email template, if nil, none will be provided
+ */
+@property (nonatomic, strong) NSString* shareEmailSubject;
 
 @end

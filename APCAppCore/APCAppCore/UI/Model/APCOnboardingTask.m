@@ -36,6 +36,7 @@
 NSString *const kAPCSignUpInclusionCriteriaStepIdentifier   = @"InclusionCriteria";
 NSString *const kAPCSignUpEligibleStepIdentifier            = @"Eligible";
 NSString *const kAPCSignUpIneligibleStepIdentifier          = @"Ineligible";
+NSString *const kAPCSignUpDataGroupsStepIdentifier          = @"DataGroups";
 NSString *const kAPCSignUpGeneralInfoStepIdentifier         = @"GeneralInfo";
 NSString *const kAPCSignUpMedicalInfoStepIdentifier         = @"MedicalInfo";
 NSString *const kAPCSignUpCustomInfoStepIdentifier          = @"CustomInfo";
@@ -44,6 +45,7 @@ NSString *const kAPCSignUpPermissionsStepIdentifier         = @"Permissions";
 NSString *const kAPCSignUpThankYouStepIdentifier            = @"ThankYou";
 NSString *const kAPCSignInStepIdentifier                    = @"SignIn";
 NSString *const kAPCSignUpPermissionsPrimingStepIdentifier  = @"PermissionsPriming";
+NSString *const kAPCSignUpShareAppStepIdentifier            = @"ShareApp";
 
 @implementation APCOnboardingTask
 
@@ -129,6 +131,13 @@ NSString *const kAPCSignUpPermissionsPrimingStepIdentifier  = @"PermissionsPrimi
     return _ineligibleStep;
 }
 
+- (ORKStep *)dataGroupsStep {
+    if (!_dataGroupsStep) {
+        _dataGroupsStep = [[ORKStep alloc] initWithIdentifier:kAPCSignUpDataGroupsStepIdentifier];
+    }
+    return _dataGroupsStep;
+}
+
 - (ORKStep *)permissionsPrimingStep
 {
     if (!_permissionsPrimingStep) {
@@ -199,6 +208,15 @@ NSString *const kAPCSignUpPermissionsPrimingStepIdentifier  = @"PermissionsPrimi
     }
     
     return _signInStep;
+}
+
+- (ORKStep *)shareAppStep
+{
+    if (!_shareAppStep) {
+        _shareAppStep = [[ORKStep alloc] initWithIdentifier:kAPCSignUpShareAppStepIdentifier];
+    }
+    
+    return _shareAppStep;
 }
 
 

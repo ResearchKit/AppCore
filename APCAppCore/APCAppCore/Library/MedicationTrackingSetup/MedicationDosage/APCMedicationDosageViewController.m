@@ -37,6 +37,7 @@
 #import "APCMedTrackerPossibleDosage+Helper.h"
 
 #import "APCLog.h"
+#import "APCLocalization.h"
 
 static  NSString  *kViewControllerName       = @"Medication Dosage";
 
@@ -187,7 +188,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
         label.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0];
         label.textColor = [UIColor blackColor];
         label.textAlignment = NSTextAlignmentCenter;
-        label.text = NSLocalizedString(@"Select Your Medication's Single Dose Amount", nil);
+        label.text = NSLocalizedStringWithDefaultValue(@"Select Your Medication's Single Dose Amount", @"APCAppCore", APCBundle(), @"Select Your Medication's Single Dose Amount", nil);
         [view addSubview:label];
     }
     return  view;
@@ -231,7 +232,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
     
     self.tabulator.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
-    UIBarButtonItem  *donester = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Done", @"Done") style:UIBarButtonItemStyleDone target:self action:@selector(doneButtonTapped:)];
+    UIBarButtonItem  *donester = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Done", @"APCAppCore", APCBundle(), @"Done", @"Done") style:UIBarButtonItemStyleDone target:self action:@selector(doneButtonTapped:)];
     self.navigationItem.rightBarButtonItem = donester;
     
     self.dosageAmounts = [NSArray array];

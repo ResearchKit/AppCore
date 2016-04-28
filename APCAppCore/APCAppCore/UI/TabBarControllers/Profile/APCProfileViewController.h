@@ -59,16 +59,24 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *signOutButton;
 
+@property (weak, nonatomic) IBOutlet UILabel *applicationNameLabel;
+
+@property (weak, nonatomic) IBOutlet UILabel *participationLabel;
+
 @property (weak, nonatomic) IBOutlet UIButton *leaveStudyButton;
+
+@property (weak, nonatomic) IBOutlet UIButton *pauseResumeStudyButton;
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *rightBarButton;
 
-@property (assign) id <APCProfileViewControllerDelegate> delegate;
+@property (nonatomic, weak) id <APCProfileViewControllerDelegate> delegate;
 
 @property (nonatomic, strong) UIImage *profileImage;
 
 
 - (IBAction)leaveStudy:(id)sender;
+
+- (IBAction)pauseStudy:(id)sender;
 
 - (IBAction)changeProfileImage:(id)sender;
 

@@ -120,7 +120,10 @@ static  CGFloat    kAPCMedicationRowHeight       = 64.0;
     
     cell.medicationName.text = [self extractMedicationNamePrefix:self.lozenge.prescription.medication.name];
     
-    NSString  *doseNumberString = [NSString stringWithFormat:@"Dose %ld", (indexPath.row + 1)];
+    NSString *doseFormat = NSLocalizedStringWithDefaultValue(@"Dose Quantity", @"APCAppCore", APCBundle(), @"Dose %@",
+                                                             @"Title for a list item with a medical dose of %@ amount.");
+    NSString *doseQtyFormat = [NSNumberFormatter localizedStringFromNumber:@(indexPath.row + 1) numberStyle:NSNumberFormatterNoStyle];
+    NSString  *doseNumberString = [NSString stringWithFormat:doseFormat, doseQtyFormat];
     cell.doseNumber.text = doseNumberString;
     
     cell.doseAmount.text = self.lozenge.prescription.dosage.name;
@@ -206,7 +209,7 @@ static  CGFloat    kAPCMedicationRowHeight       = 64.0;
         label.numberOfLines = 0;
         label.font = [UIFont appRegularFontWithSize:kPointSizeForDosesTakenHeader];
         label.textColor = [UIColor blackColor];
-        label.text = NSLocalizedString(@"Log Your Medications", nil);
+        label.text = NSLocalizedStringWithDefaultValue(@"Log Your Medications", @"APCAppCore", APCBundle(), @"Log Your Medications", nil);
         label.textAlignment = NSTextAlignmentCenter;
         label.lineBreakMode = NSLineBreakByWordWrapping;
         [container addSubview:label];
@@ -267,7 +270,7 @@ static  CGFloat    kAPCMedicationRowHeight       = 64.0;
     
     self.tabulator.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
-    UIBarButtonItem  *donester = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Done", @"Done") style:UIBarButtonItemStyleDone target:self action:@selector(doneButtonWasTapped:)];
+    UIBarButtonItem  *donester = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Done", @"APCAppCore", APCBundle(), @"Done", @"Done") style:UIBarButtonItemStyleDone target:self action:@selector(doneButtonWasTapped:)];
     self.donester = donester;
     self.navigationItem.rightBarButtonItem = self.donester;
     self.donester.enabled = YES;

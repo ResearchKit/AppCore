@@ -34,6 +34,7 @@
 #import "APCCorrelationsSelectorViewController.h"
 #import "APCScoring.h"
 #import "UIColor+APCAppearance.h"
+#import "APCLocalization.h"
 
 @interface APCCorrelationsSelectorViewController ()
 @property (strong, nonatomic) APCScoring *scoring;
@@ -66,6 +67,7 @@
 
 - (void) viewWillAppear:(BOOL)__unused animated
 {
+    [super viewWillAppear:animated];
     [self.tableView reloadData];
 }
 
@@ -91,11 +93,11 @@
     
     if (section == 0) {
         headerView = [[UITableViewHeaderFooterView alloc]init];
-        headerView.textLabel.text = NSLocalizedString(@"Select Series 1", nil);
+        headerView.textLabel.text = NSLocalizedStringWithDefaultValue(@"Select Series 1", @"APCAppCore", APCBundle(), @"Select Series 1", nil);
     }else{
         if (self.section0Selected) {
             headerView = [[UITableViewHeaderFooterView alloc]init];
-            headerView.textLabel.text = NSLocalizedString(@"Select Series 2", nil);
+            headerView.textLabel.text = NSLocalizedStringWithDefaultValue(@"Select Series 2", @"APCAppCore", APCBundle(), @"Select Series 2", nil);
         }
     }
     

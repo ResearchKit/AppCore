@@ -29,8 +29,9 @@
 // CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, 
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
-// 
- 
+//
+
+@import BridgeSDK;
 #import "APCDataArchive.h"
 #import "zipzap.h"
 #import <objc/runtime.h>
@@ -40,12 +41,16 @@
 #import "NSDate+Helper.h"
 #import "APCJSONSerializer.h"
 #import "NSError+APCAdditions.h"
+#import "APCConstants.h"
 
 static NSString * kFileInfoNameKey                  = @"filename";
 static NSString * kUnencryptedArchiveFilename       = @"unencrypted.zip";
 static NSString * kFileInfoTimeStampKey             = @"timestamp";
 static NSString * kFileInfoContentTypeKey           = @"contentType";
 static NSString * kTaskRunKey                       = @"taskRun";
+static NSString * kSurveyCreatedOnKey               = @"surveyCreatedOn";
+static NSString * kSurveyGuidKey                    = @"surveyGuid";
+static NSString * kSchemaRevisionKey                = @"schemaRevision";
 static NSString * kFilesKey                         = @"files";
 static NSString * kAppNameKey                       = @"appName";
 static NSString * kAppVersionKey                    = @"appVersion";
@@ -57,6 +62,8 @@ static NSString * kJsonInfoFilename                 = @"info.json";
 @interface APCDataArchive ()
 
 @property (nonatomic, strong) NSString *reference;
+@property (nonatomic, strong) APCTask *task;
+@property (nonatomic, strong) NSNumber *schemaRevision;
 @property (nonatomic, strong) ZZArchive *zipArchive;
 @property (nonatomic, strong) NSMutableArray *zipEntries;
 @property (nonatomic, strong) NSMutableArray *filesList;
@@ -72,6 +79,32 @@ static NSString * kJsonInfoFilename                 = @"info.json";
     self = [super init];
     if (self) {
         _reference = reference;
+        [self createArchive];
+    }
+    
+    return self;
+}
+
+// designated initializer
+- (id)initWithReference: (NSString *)reference task:(APCTask *)task
+{
+    self = [super init];
+    if (self) {
+        _reference = reference;
+        _task = task;
+        _schemaRevision = task.taskSchemaRevision;
+        [self createArchive];
+    }
+    
+    return self;
+}
+
+- (id)initWithReference: (NSString *)reference schemaRevision:(NSNumber *)schemaRevision
+{
+    self = [super init];
+    if (self) {
+        _reference = reference;
+        _schemaRevision = schemaRevision;
         [self createArchive];
     }
     
@@ -131,7 +164,12 @@ static NSString * kJsonInfoFilename                 = @"info.json";
 // Converts the dictionary into json and inserts into the archive using the given filename
 - (void)insertIntoArchive:(NSDictionary *)dictionary filename: (NSString *)filename
 {
-    
+    [self insertDictionaryIntoArchive:dictionary filename:filename];
+}
+
+- (void)insertDictionaryIntoArchive:(NSDictionary *)dictionary filename: (NSString *)filename
+{
+
     NSError * serializationError;
     NSData * jsonData;
     
@@ -180,8 +218,17 @@ static NSString * kJsonInfoFilename                 = @"info.json";
         [self.infoDict setObject:[APCUtilities phoneInfo] forKey:kPhoneInfoKey];
         [self.infoDict setObject:[NSUUID new].UUIDString forKey:kTaskRunKey];
         [self.infoDict setObject:self.reference forKey:kItemKey];
+        if (self.schemaRevision) {
+            [self.infoDict setObject:self.schemaRevision forKey:kSchemaRevisionKey];
+        }
+        if ([self.task.taskType isEqualToNumber:@(APCTaskTypeSurveyTask)]) {
+            // Survey schema is better matched by created date and survey guid
+            [self.infoDict setObject:self.task.taskVersionName forKey:kSurveyGuidKey];
+            NSString *isoCreatedString = [self.task.taskVersionDate ISO8601String];
+            [self.infoDict setObject:isoCreatedString forKey:kSurveyCreatedOnKey];
+        }
         
-        [self insertIntoArchive:self.infoDict filename:kJsonInfoFilename];
+        [self insertDictionaryIntoArchive:self.infoDict filename:kJsonInfoFilename];
         
         NSError * error;
         if (![self.zipArchive updateEntries:self.zipEntries error:&error]) {

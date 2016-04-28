@@ -33,6 +33,7 @@
  
 #import "APCConsentTask.h"
 #import "APCLog.h"
+#import "APCLocalization.h"
 #import "APCConsentQuestion.h"
 #import "APCConsentBooleanQuestion.h"
 #import "APCConsentInstructionQuestion.h"
@@ -45,6 +46,7 @@
 static NSString*    kDocumentHtmlTag                    = @"htmlDocument";
 static NSString*    kInvestigatorShortDescriptionTag    = @"investigatorShortDescription";
 static NSString*    kInvestigatorLongDescriptionTag     = @"investigatorLongDescription";
+static NSString*    kHideSharingStepTag                 = @"hideSharingStep";
 static NSString*    kHtmlContentTag                     = @"htmlContent";
 static NSString*    kIdentifierTag                      = @"identifier";
 static NSString*    kPromptTag                          = @"prompt";
@@ -100,6 +102,7 @@ static NSString*    kStepIdentifierSuffixStart          = @"+X";
 @property (nonatomic, strong) NSArray*          documentSections;
 
 //  Sharing
+@property (nonatomic, assign) BOOL              hideSharingStep;
 @property (nonatomic, copy)   NSString*         investigatorShortDescription;
 @property (nonatomic, copy)   NSString*         investigatorLongDescription;
 @property (nonatomic, copy)   NSString*         sharingHtmlLearnMoreContent;
@@ -172,9 +175,9 @@ static NSString*    kStepIdentifierSuffixStart          = @"+X";
                                                                               identifier:@"participant"];
     ORKConsentDocument*     document  = [[ORKConsentDocument alloc] init];
     
-    document.title                = NSLocalizedString(@"Consent", nil);
-    document.signaturePageTitle   = NSLocalizedString(@"Consent", nil);
-    document.signaturePageContent = NSLocalizedString(@"By agreeing you confirm that you read the consent and that you wish to take part in this research study.", nil);
+    document.title                = NSLocalizedStringWithDefaultValue(@"Consent", @"APCAppCore", APCBundle(), @"Consent", nil);
+    document.signaturePageTitle   = NSLocalizedStringWithDefaultValue(@"Consent", @"APCAppCore", APCBundle(), @"Consent", nil);
+    document.signaturePageContent = NSLocalizedStringWithDefaultValue(@"By agreeing you confirm that you read the consent and that you wish to take part in this research study.", @"APCAppCore", APCBundle(), @"By agreeing you confirm that you read the consent and that you wish to take part in this research study.", nil);
     document.sections             = self.documentSections;
     document.htmlReviewContent    = self.documentHtmlContent;
     
@@ -185,10 +188,7 @@ static NSString*    kStepIdentifierSuffixStart          = @"+X";
     
     _visualStep  = [[ORKVisualConsentStep alloc] initWithIdentifier:@"visual"
                                                            document:_consentDocument];
-    _sharingStep = [[ORKConsentSharingStep alloc] initWithIdentifier:kSharingTag
-                                        investigatorShortDescription:self.investigatorShortDescription
-                                         investigatorLongDescription:self.investigatorLongDescription
-                                       localizedLearnMoreHTMLContent:self.sharingHtmlLearnMoreContent];
+
     
     APCAppDelegate* delegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
     BOOL disableSignatureInConsent = delegate.disableSignatureInConsent;
@@ -205,7 +205,14 @@ static NSString*    kStepIdentifierSuffixStart          = @"+X";
     
     NSMutableArray* consentSteps = [[NSMutableArray alloc] init];
     [consentSteps addObject:_visualStep];
-    [consentSteps addObject:_sharingStep];
+    
+    if (!self.hideSharingStep) {
+        _sharingStep = [[ORKConsentSharingStep alloc] initWithIdentifier:kSharingTag
+                                            investigatorShortDescription:self.investigatorShortDescription
+                                             investigatorLongDescription:self.investigatorLongDescription
+                                           localizedLearnMoreHTMLContent:self.sharingHtmlLearnMoreContent];
+        [consentSteps addObject:_sharingStep];
+    }
     
     _indexOfFirstCustomStep = consentSteps.count;
     [consentSteps addObjectsFromArray:customSteps];
@@ -380,7 +387,7 @@ static NSString*    kStepIdentifierSuffixStart          = @"+X";
         else
         {
             self.currentQuestionStepSuffixValue = self.currentQuestionStepSuffixValue + 1;
-            self.currentQuestionStepSuffix = [NSString stringWithFormat:@"%@%04lu", kStepIdentifierSuffixStart, self.currentQuestionStepSuffixValue];
+            self.currentQuestionStepSuffix = [NSString stringWithFormat:@"%@%04lu", kStepIdentifierSuffixStart, (unsigned long)self.currentQuestionStepSuffixValue];
             
             NSMutableArray  *replacer = [NSMutableArray array];
             
@@ -456,7 +463,9 @@ static NSString*    kStepIdentifierSuffixStart          = @"+X";
 
 - (void)loadFromJson:(NSString*)fileName
 {
-    NSString*       filePath = [[NSBundle mainBundle] pathForResource:fileName ofType:@"json"];
+    APCAppDelegate *appDelegate = [APCAppDelegate sharedAppDelegate];
+    
+    NSString*       filePath = [appDelegate pathForResource:fileName ofType:@"json"];
     NSAssert(filePath != nil, @"Unable to location file with Consent Section in main bundle");
     
     NSData*         fileContent = [NSData dataWithContentsOfFile:filePath];
@@ -487,12 +496,14 @@ static NSString*    kStepIdentifierSuffixStart          = @"+X";
 
 - (void)loadDocumentProperties:(NSDictionary*)properties
 {
+    APCAppDelegate *appDelegate = [APCAppDelegate sharedAppDelegate];
+    
     NSString*   documentHtmlContent = [properties objectForKey:kDocumentHtmlTag];
     NSAssert(documentHtmlContent == nil || documentHtmlContent != nil && [documentHtmlContent isKindOfClass:[NSString class]], @"Improper Document HTML Content type");
     
     if (documentHtmlContent != nil)
     {
-        NSString*   path    = [[NSBundle mainBundle] pathForResource:documentHtmlContent ofType:@"html" inDirectory:@"HTMLContent"];
+        NSString*   path    = [appDelegate pathForResource:documentHtmlContent ofType:@"html"];
         NSAssert(path != nil, @"Unable to locate HTML file: %@", documentHtmlContent);
         
         if (path != nil)
@@ -512,11 +523,15 @@ static NSString*    kStepIdentifierSuffixStart          = @"+X";
     
     self.investigatorLongDescription = [properties objectForKey:kInvestigatorLongDescriptionTag];
     NSAssert(self.investigatorLongDescription != nil && [self.investigatorLongDescription isKindOfClass:[NSString class]], @"Improper type for Investigator Long Description");
+    
+    if ([properties valueForKey:kHideSharingStepTag] != nil) {
+        self.hideSharingStep = [[properties valueForKey:kHideSharingStepTag] boolValue];
+    }
 
     NSString*   htmlContent = [properties objectForKey:kHtmlContentTag];
     if (htmlContent != nil)
     {
-        NSString*   path    = [[NSBundle mainBundle] pathForResource:htmlContent ofType:@"html" inDirectory:@"HTMLContent"];
+        NSString*   path    = [appDelegate pathForResource:htmlContent ofType:@"html"];
         NSAssert(path != nil, @"Unable to locate HTML file: %@", htmlContent);
         
         NSError*    error   = nil;
@@ -727,6 +742,7 @@ static NSString*    kStepIdentifierSuffixStart          = @"+X";
     static NSString*   kSectionAnimationUrl    = @"sectionAnimationUrl";
     
     NSMutableArray* consentSections = [NSMutableArray arrayWithCapacity:properties.count];
+    APCAppDelegate *appDelegate = [APCAppDelegate sharedAppDelegate];
     
     for (NSDictionary* section in properties)
     {
@@ -779,7 +795,8 @@ static NSString*    kStepIdentifierSuffixStart          = @"+X";
         
         if (htmlContent != nil)
         {
-            NSString*   path    = [[NSBundle mainBundle] pathForResource:htmlContent ofType:@"html" inDirectory:@"HTMLContent"];
+            
+            NSString*   path    = [appDelegate pathForResource:htmlContent ofType:@"html"];
             NSAssert(path != nil, @"Unable to locate HTML file: %@", htmlContent);
             
             NSError*    error   = nil;
@@ -807,7 +824,7 @@ static NSString*    kStepIdentifierSuffixStart          = @"+X";
             {
                 nameWithScaleFactor = [nameWithScaleFactor stringByAppendingString:@"@2x"];
             }
-            NSURL*      url   = [[NSBundle mainBundle] URLForResource:nameWithScaleFactor withExtension:@"m4v"];
+            NSURL*      url   = [[appDelegate resourceBundle] URLForResource:nameWithScaleFactor withExtension:@"m4v"];
             NSError*    error = nil;
             
             NSAssert([url checkResourceIsReachableAndReturnError:&error], @"Animation file--%@--not reachable: %@", animationUrl, error);

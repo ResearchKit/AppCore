@@ -188,17 +188,17 @@ static NSString * const kAPCSectionHeaderDateFormatToday        = @"eeee, MMMM d
  */
 - (void) removeFullyCompletedTasks
 {
-    [self reduceToIncompleteTasksOnTheirLastLegalDay];
+    [self reduceToIncompleteExpiredTasks];
 }
 
-- (void) reduceToIncompleteTasksOnTheirLastLegalDay
+- (void) reduceToIncompleteExpiredTasks
 {
     NSIndexSet *indexesOfTaskGroupsWeWant = [self.taskGroups indexesOfObjectsPassingTest: ^BOOL (APCTaskGroup *taskGroup,
                                                                                                  NSUInteger __unused taskGroupIndex,
                                                                                                  BOOL __unused *stopIterating) {
         BOOL keepThisOne = NO;
         
-        if (! taskGroup.isFullyCompleted && taskGroup.expiresToday)
+        if (! taskGroup.isFullyCompleted && [taskGroup expiresOnOrBeforeDate:self.today])
         {
             keepThisOne = YES;
         }

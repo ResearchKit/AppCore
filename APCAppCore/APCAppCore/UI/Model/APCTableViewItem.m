@@ -34,6 +34,8 @@
 #import "APCTableViewItem.h"
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
+#import "APCLocalization.h"
+#import "APCDefaultTableViewCell.h"
 
 @implementation APCTableViewItem
 
@@ -44,8 +46,17 @@
         _style = UITableViewCellStyleValue1;
         _selectionStyle = UITableViewCellSelectionStyleGray;
         _editable = YES;
+        _reuseIdentifier = kAPCDefaultTableViewCellIdentifier;
     }
     return self;
+}
+
+- (NSString *)identifier {
+    return _reuseIdentifier;
+}
+
+- (void)setIdentifier:(NSString *)identifier {
+    _reuseIdentifier = [identifier copy];
 }
 
 @end
@@ -164,10 +175,10 @@
     UIColor *orange = [UIColor appTertiaryYellowColor];
     UIColor *darkGray = [UIColor darkGrayColor];
     
-    NSAttributedString *indexOf = [[NSAttributedString alloc]initWithString:NSLocalizedString(@"Index of", nil) attributes:@{NSFontAttributeName : font, NSForegroundColorAttributeName : darkGray }];
+    NSAttributedString *indexOf = [[NSAttributedString alloc]initWithString:NSLocalizedStringWithDefaultValue(@"Index of", @"APCAppCore", APCBundle(), @"Index of", nil) attributes:@{NSFontAttributeName : font, NSForegroundColorAttributeName : darkGray }];
     NSAttributedString *s1 = [[NSMutableAttributedString alloc]initWithString:series1 attributes:@{NSFontAttributeName : font, NSForegroundColorAttributeName : orange, NSUnderlineStyleAttributeName : @1 }];
     NSAttributedString *space = [[NSAttributedString alloc]initWithString:@" "];
-    NSAttributedString *versus = [[NSAttributedString alloc]initWithString:NSLocalizedString(@"vs", nil) attributes:@{NSFontAttributeName : font, NSForegroundColorAttributeName : darkGray }];
+    NSAttributedString *versus = [[NSAttributedString alloc]initWithString:NSLocalizedStringWithDefaultValue(@"vs", @"APCAppCore", APCBundle(), @"vs", nil) attributes:@{NSFontAttributeName : font, NSForegroundColorAttributeName : darkGray }];
     
     NSMutableAttributedString *legend = [[NSMutableAttributedString alloc]initWithAttributedString:indexOf];
     [legend appendAttributedString:space];
@@ -208,7 +219,7 @@
 {
     HKUnit *unit = self.graphData.unit;
     NSString *unitString = (self.hidesUnitString || !unit) ? @"" : unit.unitString;
-    return [NSString stringWithFormat:NSLocalizedString(@"%0.0f %@", nil), value, unitString];
+    return [NSString stringWithFormat:NSLocalizedStringWithDefaultValue(@"%0.0f %@", @"APCAppCore", APCBundle(), @"%0.0f %@", nil), value, unitString];
 }
 
 @end

@@ -33,15 +33,16 @@
  
 #import "APCAppCore.h"
 #import "APCSharingOptionsViewController.h"
+#import "APCWithdrawDescriptionViewController.h"
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
 #import "APCAppDelegate.h"
 #import "APCUser+Bridge.h"
 #import "APCSpinnerViewController.h"
 #import "UIAlertController+Helper.h"
+#import "APCLocalization.h"
 
 static NSString * const kSharingOptionsTableViewCellIdentifier = @"SharingOptionsTableViewCell";
-static NSInteger kNumberOfRows = 2;
 
 @interface APCSharingOptionsViewController()
 
@@ -69,28 +70,30 @@ static NSInteger kNumberOfRows = 2;
     
     [self.tableView reloadData];
     
-    self.title = NSLocalizedString(@"Sharing Options", @"Sharing Options");
+    self.title = NSLocalizedStringWithDefaultValue(@"Sharing Options", @"APCAppCore", APCBundle(), @"Sharing Options", @"Sharing Options");
 }
 
 - (void)prepareData
 {
     [self setupDataFromJSON:@"APHConsentSection"];
     
-    self.titleLabel.text = NSLocalizedString(@"Sharing Options", @"Sharing Options");
+    self.titleLabel.text = NSLocalizedStringWithDefaultValue(@"Sharing Options", @"APCAppCore", APCBundle(), @"Sharing Options", @"Sharing Options");
+    NSString *messageFormat = NSLocalizedStringWithDefaultValue(@"%@ will receive your study data from your participation in this study.\n\nSharing your coded study data more broadly (without information such as your name) may benefit this and future research.", @"APCAppCore", APCBundle(), @"%@ will receive your study data from your participation in this study.\n\nSharing your coded study data more broadly (without information such as your name) may benefit this and future research.", @"Format for string explaining data sharing during initial consent process, to be filled in with the (long form) name of the institution running the study.");
     
-    NSString *messageText = [NSString stringWithFormat:@"%@ will receive your study data from your participation in this study.\n\nSharing your coded study data more broadly (without information such as your name) may benefit this and future research.", self.instituteLongName];
-    self.messageLabel.text = NSLocalizedString(messageText, @"");
+    self.messageLabel.text = [NSString stringWithFormat:messageFormat, self.instituteLongName];
     
     
     NSMutableArray *options = [NSMutableArray new];
     
     {
-        NSString *option = [NSString stringWithFormat:@"Share my data with %@ and qualified researchers worldwide", self.instituteShortName];
+        NSString *optionFormat = NSLocalizedStringWithDefaultValue(@"Share my data with %@ and qualified researchers worldwide", @"APCAppCore", APCBundle(), @"Share my data with %@ and qualified researchers worldwide", @"Format string for Profile tab option to share data broadly, to be filled in with the short name of the institution sponsoring the study");
+        NSString *option = [NSString stringWithFormat:optionFormat, self.instituteShortName];
         [options addObject:option];
     }
     
     {
-        NSString *option = [NSString stringWithFormat:@"Only share my data with %@", self.instituteLongName];
+        NSString *optionFormat = NSLocalizedStringWithDefaultValue(@"Only share my data with %@", @"APCAppCore", APCBundle(), @"Only share my data with %@", @"Format string for Profile tab option to share data narrowly, to be filled in with the long name of the institution sponsoring the study");
+        NSString *option = [NSString stringWithFormat:optionFormat, self.instituteLongName];
         [options addObject:option];
     }
     
@@ -99,7 +102,7 @@ static NSInteger kNumberOfRows = 2;
 
 - (void)setupDataFromJSON:(NSString *)jsonFileName
 {
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:jsonFileName ofType:@"json"];
+    NSString *filePath = [[APCAppDelegate sharedAppDelegate] pathForResource:jsonFileName ofType:@"json"];
     NSString *JSONString = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:NULL];
     
     NSError *parseError;
@@ -134,7 +137,7 @@ static NSInteger kNumberOfRows = 2;
 
 - (NSInteger)tableView:(UITableView *)__unused tableView numberOfRowsInSection:(NSInteger)__unused section
 {
-    return kNumberOfRows;
+    return self.options.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -146,9 +149,9 @@ static NSInteger kNumberOfRows = 2;
     cell.textLabel.font = [UIFont appMediumFontWithSize:16.0f];
     cell.textLabel.textColor = [UIColor appSecondaryColor1];
     
-    if (indexPath.row == 0 && self.user.sharingScope == APCUserConsentSharingScopeAll) {
+    if (indexPath.row == 0 && self.user.sharedOptionSelection.integerValue == APCUserConsentSharingScopeAll) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
-    } else if (indexPath.row == 1 && self.user.sharingScope == APCUserConsentSharingScopeStudy) {
+    } else if (indexPath.row == 1 && self.user.sharedOptionSelection.integerValue == APCUserConsentSharingScopeStudy) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
     } else {
         cell.accessoryType = UITableViewCellAccessoryNone;
@@ -161,10 +164,16 @@ static NSInteger kNumberOfRows = 2;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.row == 3) {
+        // push to withdraw view controller
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        return;
+    }
+    
     if (indexPath.row == 0) {
-        self.user.sharingScope = APCUserConsentSharingScopeAll;
+        self.user.sharedOptionSelection = @(APCUserConsentSharingScopeAll);
     } else if (indexPath.row == 1) {
-        self.user.sharingScope = APCUserConsentSharingScopeStudy;
+        self.user.sharedOptionSelection = @(APCUserConsentSharingScopeStudy);
     }
     
     APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
@@ -178,7 +187,7 @@ static NSInteger kNumberOfRows = 2;
             if (error) {
                 APCLogError2 (error);
                 
-                UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Sharing Options", @"") message:error.message];
+                UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedStringWithDefaultValue(@"Sharing Options", @"APCAppCore", APCBundle(), @"Sharing Options", @"") message:error.message];
                 [weakSelf presentViewController:alert animated:YES completion:nil];
                 
             } else {
@@ -193,4 +202,5 @@ static NSInteger kNumberOfRows = 2;
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
+
 @end

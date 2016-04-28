@@ -33,36 +33,24 @@
 
 #import "ORKFileResult+Filename.h"
 
-static NSString *kJSONExtension = @"json";
-static NSString *kTranslationFilename = @"FilenameTranslation";
-
 @implementation ORKFileResult (Filename)
 
-+ (NSString *)filenameForFileResultIdentifier: (NSString *)fileResultIdentifier stepIdentifier: (NSString *)stepIdentifier
++ (NSString *)rawFilenameForFileResultIdentifier: (NSString *)fileResultIdentifier stepIdentifier: (NSString *)stepIdentifier
 {
-    if (! fileResultIdentifier) {
-        fileResultIdentifier = @"";
-    }else{
-        fileResultIdentifier = [fileResultIdentifier stringByAppendingString:@"_"];
+    NSMutableString *result = [[NSMutableString alloc] init];
+    
+    if (fileResultIdentifier != nil) {
+        [result appendString:fileResultIdentifier];
     }
     
-    if (! stepIdentifier) {
-        stepIdentifier = @"";
+    if (stepIdentifier != nil) {
+        if (result.length > 0) {
+            [result appendString:@"_"];
+        }
+        [result appendString:stepIdentifier];
     }
     
-    fileResultIdentifier = [fileResultIdentifier stringByAppendingString:stepIdentifier];
-    
-    NSString *translatedFilename;
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:kTranslationFilename ofType:kJSONExtension];
-    
-    NSString *JSONString = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:NULL];
-    NSError *parseError;
-    
-    NSDictionary *translationDictionary = [NSJSONSerialization JSONObjectWithData:[JSONString dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:&parseError];
-    
-    translatedFilename = [translationDictionary objectForKey:fileResultIdentifier] ? : fileResultIdentifier;
-    
-    return translatedFilename;
+    return [result copy];
 }
 
 @end

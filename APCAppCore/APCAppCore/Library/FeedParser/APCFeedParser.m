@@ -251,7 +251,7 @@ static NSString * const kAPCFeedDateFormat               = @"EEE, dd MMM yyyy HH
         [regex enumerateMatchesInString:htmlstr
                                 options:0
                                   range:NSMakeRange(0, htmlstr.length)
-                             usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+                             usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags __unused flags, __unused BOOL *stop) {
                                  [imagesURLStringArray addObject:[htmlstr substringWithRange:result.range]];
                              }];
     }

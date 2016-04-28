@@ -33,6 +33,8 @@
  
 #import "APCBaseGraphView.h"
 #import "UIColor+APCAppearance.h"
+#import "APCLocalization.h"
+#import "APCCircleView.h"
 
 static NSString * const kFadeAnimationKey = @"LayerFadeAnimation";
 static NSString * const kGrowAnimationKey = @"LayerGrowAnimation";
@@ -81,13 +83,36 @@ CGFloat const kAPCPopAnimationDuration  = 0.3;
     _hidesYAxis = NO;
     _shouldHighlightXaxisLastTitle = YES;
     
-    _emptyText = NSLocalizedString(@"No Data", @"No Data");
+    _emptyText = NSLocalizedStringWithDefaultValue(@"No Data", @"APCAppCore", APCBundle(), @"No Data", @"No Data");
     
 }
 
 - (void)throwOverrideException
 {
     @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"%s must be overridden in a subclass/category", __PRETTY_FUNCTION__] userInfo:nil];
+}
+
+- (CGFloat)plotPointDiameter
+{
+    return self.isLandscapeMode ? 10.0f : 8.0f;
+}
+
+- (APCCircleView *)createPlotPointForPlotIndex:(NSInteger)plotIndex legendIndex:(NSUInteger)legendIndex
+{
+    CGFloat pointSize = [self plotPointDiameter];
+    APCCircleView *point = [[APCCircleView alloc] initWithFrame:CGRectMake(0, 0, pointSize, pointSize)];
+    UIColor *tintColor = (plotIndex == 0) ? self.tintColor : self.secondaryTintColor;
+    if ([self.delegate respondsToSelector:@selector(setupPlotPoint:legendIndex:tintColor:)]) {
+        if (legendIndex != 0) {
+            NSLog(@"%@", self);
+        }
+        
+        [self.delegate setupPlotPoint:point legendIndex:legendIndex tintColor:tintColor];
+    }
+    else {
+        point.tintColor = tintColor;
+    }
+    return point;
 }
 
 - (NSInteger)numberOfPlots

@@ -32,9 +32,11 @@
 // 
  
 #import <UIKit/UIKit.h>
+#import <ResearchKit/ResearchKit.h>
 #import "APCSignUpProgressing.h"
+#import "APCOptionalStepViewController.h"
 
-@interface APCThankYouViewController : UIViewController <APCSignUpProgressing>
+@interface APCThankYouViewController : APCOptionalStepViewController <APCSignUpProgressing>
 
 @property (nonatomic) BOOL emailVerified;
 

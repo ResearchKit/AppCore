@@ -47,6 +47,9 @@
 #import "APCSpinnerViewController.h"
 #import "APCUser+Bridge.h"
 #import "NSError+APCAdditions.h"
+#import "APCLocalization.h"
+#import "APCContainerStepViewController.h"
+#import "APCNavigationFooter.h"
 
 static NSString *kInternetNotAvailableErrorMessage1 = @"Internet Not Connected";
 static NSString *kInternetNotAvailableErrorMessage2 = @"BackendServer Not Reachable";
@@ -54,7 +57,7 @@ static NSString * const kInternalMaxParticipantsMessage = @"has reached the limi
 
 static CGFloat kHeaderHeight = 157.0f;
 
-@interface APCSignUpGeneralInfoViewController () <APCTermsAndConditionsViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, APCFormTextFieldDelegate>
+@interface APCSignUpGeneralInfoViewController () <APCTermsAndConditionsViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, APCFormTextFieldDelegate, APCNavigationFooterDelegate>
 
 @property (nonatomic, strong) APCPermissionsManager *permissionsManager;
 @property (nonatomic) BOOL permissionGranted;
@@ -70,6 +73,14 @@ static CGFloat kHeaderHeight = 157.0f;
 
 @implementation APCSignUpGeneralInfoViewController
 
+- (UIBarButtonItem *)nextBarButton {
+    UIBarButtonItem *overrideBtn = self.parentStepViewController.cancelButtonItem;
+    if (overrideBtn != nil) {
+        return overrideBtn;
+    }
+    return _nextBarButton;
+}
+
 #pragma mark - View Life Cycle
 
 - (void) viewDidLoad {
@@ -79,23 +90,27 @@ static CGFloat kHeaderHeight = 157.0f;
     
     self.items = [self prepareContent];
     
-    self.permissionButton.unconfirmedTitle = NSLocalizedString(@"Enter the study and contribute your data", @"");
-    self.permissionButton.confirmedTitle = NSLocalizedString(@"Enter the study and contribute your data", @"");
+    self.permissionButton.unconfirmedTitle = NSLocalizedStringWithDefaultValue(@"Enter the study and contribute your data", @"APCAppCore", APCBundle(), @"Enter the study and contribute your data", @"");
+    self.permissionButton.confirmedTitle = NSLocalizedStringWithDefaultValue(@"Enter the study and contribute your data", @"APCAppCore", APCBundle(), @"Enter the study and contribute your data", @"");
     self.permissionButton.attributed = NO;
     self.permissionButton.alignment = kAPCPermissionButtonAlignmentLeft;
     
-    self.permissionsManager = [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager].permissionsManager;
-    
-    __weak typeof(self) weakSelf = self;
-    [self.permissionsManager requestForPermissionForType:kAPCSignUpPermissionsTypeHealthKit withCompletion:^(BOOL granted, NSError * __unused error) {
-        if (granted) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                weakSelf.permissionGranted = YES;
-                weakSelf.items = [self prepareContent];
-                [weakSelf.tableView reloadData];
-            });
-        }
-    }];
+    // Do NOT use info from HealthKit if there is a step associated with this
+    // view controller. In that case, permissions will be asked for later.
+    if (self.parentStepViewController == nil) {
+        self.permissionsManager = [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager].permissionsManager;
+        
+        __weak typeof(self) weakSelf = self;
+        [self.permissionsManager requestForPermissionForType:kAPCSignUpPermissionsTypeHealthKit withCompletion:^(BOOL granted, NSError * __unused error) {
+            if (granted) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    weakSelf.permissionGranted = YES;
+                    weakSelf.items = [self prepareContent];
+                    [weakSelf.tableView reloadData];
+                });
+            }
+        }];
+    }
     
     //Set Default Values
     [self.profileImageButton setImage:[UIImage imageNamed:@"profilePlaceholder"] forState:UIControlStateNormal];
@@ -111,9 +126,9 @@ static CGFloat kHeaderHeight = 157.0f;
     [self.emailTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (void)viewDidLayoutSubviews
 {
-    [super viewWillAppear:animated];
+    [super viewDidLayoutSubviews];
     
     UIEdgeInsets inset = self.tableView.contentInset;
     self.tableView.contentInset = inset;
@@ -141,17 +156,24 @@ static CGFloat kHeaderHeight = 157.0f;
     [super setupAppearance];
     
     self.footerLabel.font = [UIFont appRegularFontWithSize:16.0f];
-    self.footerLabel.text = NSLocalizedString(@"Sage Bionetworks, a non-profit biomedical research institute, is helping to collect data for this study and distribute it to the study investigators and other researchers. Please provide a unique email address and password to create a secure account.", @"");
+    self.footerLabel.text = NSLocalizedStringWithDefaultValue(@"Sage Bionetworks, a non-profit biomedical research institute, is helping to collect data for this study and distribute it to the study investigators and other researchers. Please provide a unique email address and password to create a secure account.", @"APCAppCore", APCBundle(), @"Sage Bionetworks, a non-profit biomedical research institute, is helping to collect data for this study and distribute it to the study investigators and other researchers. Please provide a unique email address and password to create a secure account.", @"");
     self.footerLabel.textColor = [UIColor appSecondaryColor2];
     
 }
 
 - (void)setupNavAppearance
 {
-    UIBarButtonItem *backBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
-                                                                                   target:self
-                                                                                   action:@selector(back)];
-    [self.navigationItem setLeftBarButtonItem:backBarButton];
+    if (self.parentStepViewController != nil) {
+        NSString *nextTitle = NSLocalizedStringWithDefaultValue(@"APC_NEXT_TITLE", nil, APCBundle(), @"Next", @"Title of the 'Next' button");
+        self.parentStepViewController.cancelButtonItem = [[UIBarButtonItem alloc]initWithTitle:nextTitle style:UIBarButtonItemStylePlain target:self action:@selector(next)];
+    }
+    else {
+        UIBarButtonItem *backBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+                                                                                       target:self
+                                                                                       action:@selector(back)];
+        [self.navigationItem setLeftBarButtonItem:backBarButton];
+    }
+    
     
     self.nextBarButton.enabled = NO;
 }
@@ -191,11 +213,11 @@ static CGFloat kHeaderHeight = 157.0f;
 
     {
         APCTableViewTextFieldItem *field = [APCTableViewTextFieldItem new];
-        field.caption = NSLocalizedString(@"Password", @"");
-        field.placeholder = NSLocalizedString(@"add password", @"");
+        field.caption = NSLocalizedStringWithDefaultValue(@"Password", @"APCAppCore", APCBundle(), @"Password", @"");
+        field.placeholder = NSLocalizedStringWithDefaultValue(@"add password", @"APCAppCore", APCBundle(), @"add password", @"");
         field.keyboardType = UIKeyboardTypeASCIICapable;
         field.returnKeyType = UIReturnKeyNext;
-        field.identifier = kAPCTextFieldTableViewCellIdentifier;
+        field.reuseIdentifier = kAPCTextFieldTableViewCellIdentifier;
         field.style = UITableViewCellStyleValue1;
         
         APCTableViewRow *row = [APCTableViewRow new];
@@ -212,12 +234,12 @@ static CGFloat kHeaderHeight = 157.0f;
             case kAPCUserInfoItemTypeDateOfBirth:
             {
                 APCTableViewDatePickerItem *field = [APCTableViewDatePickerItem new];
-                field.caption = NSLocalizedString(@"Birthdate", @"");
-                field.placeholder = NSLocalizedString(@"add birthdate", @"");
+                field.caption = NSLocalizedStringWithDefaultValue(@"Birthdate", @"APCAppCore", APCBundle(), @"Birthdate", @"");
+                field.placeholder = NSLocalizedStringWithDefaultValue(@"add birthdate", @"APCAppCore", APCBundle(), @"add birthdate", @"");
                 field.datePickerMode = UIDatePickerModeDate;
                 field.style = UITableViewCellStyleValue1;
                 field.selectionStyle = UITableViewCellSelectionStyleGray;
-                field.identifier = kAPCDefaultTableViewCellIdentifier;
+                field.reuseIdentifier = kAPCDefaultTableViewCellIdentifier;
                 
                 NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier: NSCalendarIdentifierGregorian];
                 NSDate *currentDate = [[NSDate date] startOfDay];
@@ -246,7 +268,7 @@ static CGFloat kHeaderHeight = 157.0f;
                 APCTableViewSegmentItem *field = [APCTableViewSegmentItem new];
                 field.style = UITableViewCellStyleValue1;
                 field.segments = [APCUser sexTypesInStringValue];
-                field.identifier = kAPCSegmentedTableViewCellIdentifier;
+                field.reuseIdentifier = kAPCSegmentedTableViewCellIdentifier;
                 
                 if (self.permissionGranted && self.user.biologicalSex) {
                     field.selectedIndex = [APCUser stringIndexFromSexType:self.user.biologicalSex];
@@ -455,7 +477,7 @@ static CGFloat kHeaderHeight = 157.0f;
                         isContentValid = [[(APCTableViewTextFieldItem *)item value] isValidForRegex:kAPCGeneralInfoItemEmailRegEx];
                         
                         if (errorMessage) {
-                            *errorMessage = NSLocalizedString(@"Please enter a valid email address.", @"");
+                            *errorMessage = NSLocalizedStringWithDefaultValue(@"Please enter a valid email address.", @"APCAppCore", APCBundle(), @"Please enter a valid email address.", @"");
                         }
                     }
                         break;
@@ -466,14 +488,14 @@ static CGFloat kHeaderHeight = 157.0f;
                             isContentValid = NO;
                             
                             if (errorMessage) {
-                                *errorMessage = NSLocalizedString(@"Please enter a Password.", @"");
+                                *errorMessage = NSLocalizedStringWithDefaultValue(@"Please enter a Password.", @"APCAppCore", APCBundle(), @"Please enter a Password.", @"");
                             }
                         }
                         else if ([[(APCTableViewTextFieldItem *)item value] length] < kAPCPasswordMinimumLength) {
                             isContentValid = NO;
                             
                             if (errorMessage) {
-                                *errorMessage = [NSString stringWithFormat:NSLocalizedString(@"Password should be at least %d characters", ), kAPCPasswordMinimumLength];
+                                *errorMessage = [NSString stringWithFormat:NSLocalizedStringWithDefaultValue(@"Password should be at least %d characters", @"APCAppCore", APCBundle(), @"Password should be at least %d characters", @"Description of password requirements, to be filled in with the minimum password length"), kAPCPasswordMinimumLength];
                             }
                         }
                     }
@@ -513,11 +535,11 @@ static CGFloat kHeaderHeight = 157.0f;
             fieldValid = [self.emailTextField.text isValidForRegex:kAPCGeneralInfoItemEmailRegEx];
             
             if (errorMessage && !fieldValid) {
-                *errorMessage = NSLocalizedString(@"Please enter a valid email address.", @"");
+                *errorMessage = NSLocalizedStringWithDefaultValue(@"Please enter a valid email address.", @"APCAppCore", APCBundle(), @"Please enter a valid email address.", @"");
             }
         } else {
             if (errorMessage && !fieldValid) {
-                *errorMessage = NSLocalizedString(@"Email address cannot be left empty.", @"");
+                *errorMessage = NSLocalizedStringWithDefaultValue(@"Email address cannot be left empty.", @"APCAppCore", APCBundle(), @"Email address cannot be left empty.", @"");
             }
         }
         
@@ -525,7 +547,7 @@ static CGFloat kHeaderHeight = 157.0f;
         
         if (self.nameTextField.text.length == 0) {
             if (errorMessage && !fieldValid) {
-                *errorMessage = NSLocalizedString(@"Name cannot be left empty.", @"");
+                *errorMessage = NSLocalizedStringWithDefaultValue(@"Name cannot be left empty.", @"APCAppCore", APCBundle(), @"Name cannot be left empty.", @"");
             }
         } else {
             fieldValid = YES;
@@ -536,12 +558,12 @@ static CGFloat kHeaderHeight = 157.0f;
                 if ([[item value] length] == 0) {
                     
                     if (errorMessage) {
-                        *errorMessage = NSLocalizedString(@"Please enter a Password.", @"");
+                        *errorMessage = NSLocalizedStringWithDefaultValue(@"Please enter a Password.", @"APCAppCore", APCBundle(), @"Please enter a Password.", @"");
                     }
                 } else if ([[item value] length] < kAPCPasswordMinimumLength) {
                     
                     if (errorMessage) {
-                        *errorMessage = [NSString stringWithFormat:NSLocalizedString(@"Password should be at least %d characters", ), kAPCPasswordMinimumLength];
+                        *errorMessage = [NSString stringWithFormat:NSLocalizedStringWithDefaultValue(@"Password should be at least %d characters", @"APCAppCore", APCBundle(), @"Password should be at least %d characters", @"Description of password requirements, to be filled in with the minimum password length"), kAPCPasswordMinimumLength];
                     }
                 } else {
                     fieldValid = YES;
@@ -611,9 +633,75 @@ static CGFloat kHeaderHeight = 157.0f;
         [self next];
     }
     else {
-        UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"General Information", @"") message:message];
+        UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedStringWithDefaultValue(@"General Information", @"APCAppCore", APCBundle(), @"General Information", @"") message:message];
         [self presentViewController:alert animated:YES completion:nil];
     }
+}
+
+- (void) signUp {
+    APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
+    [self presentViewController:spinnerController animated:YES completion:nil];
+    
+    typeof(self) __weak weakSelf = self;
+    [self.user signUpWithDataGroups:self.user.dataGroups withTestUserPromptVc:self onCompletion:^(NSError *error) {
+        if (error) {
+            
+            APCLogError2 (error);
+            
+            if (error.code == SBBErrorCodeInternetNotConnected || error.code == SBBErrorCodeServerNotReachable || error.code == SBBErrorCodeServerUnderMaintenance) {
+                [spinnerController dismissViewControllerAnimated:NO completion:^{
+                    
+                    UIAlertController *alertView = [UIAlertController alertControllerWithTitle:NSLocalizedStringWithDefaultValue(@"Sign Up", @"APCAppCore", APCBundle(), @"Sign Up", @"")
+                                                                                       message:error.localizedDescription
+                                                                                preferredStyle:UIAlertControllerStyleAlert];
+                    
+                    UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+                                                                          handler:^(UIAlertAction * __unused action) {}];
+                    
+                    [alertView addAction:defaultAction];
+                    [self presentViewController:alertView animated:YES completion:nil];
+                }];
+            } else {
+                [spinnerController dismissViewControllerAnimated:NO completion:^{
+                    
+                    UIAlertController *alertView = [UIAlertController alertControllerWithTitle:NSLocalizedStringWithDefaultValue(@"Sign Up", @"APCAppCore", APCBundle(), @"Sign Up", @"")
+                                                                                       message:error.message
+                                                                                preferredStyle:UIAlertControllerStyleAlert];
+                    
+                    UIAlertAction* okAction = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Change Details", @"APCAppCore", APCBundle(), @"Change Details", @"") style:UIAlertActionStyleDefault
+                                                                     handler:^(UIAlertAction * __unused action) {}];
+                    
+                    UIAlertAction* changeAction = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Send Again", @"APCAppCore", APCBundle(), @"Send Again", nil) style:UIAlertActionStyleDefault
+                                                                         handler:^(UIAlertAction * __unused action) {[self next];}];
+                    
+                    
+                    [alertView addAction:okAction];
+                    [alertView addAction:changeAction];
+                    [self presentViewController:alertView animated:YES completion:nil];
+                    
+                }];
+            }
+        }
+        else
+        {
+            [spinnerController dismissViewControllerAnimated:NO completion:^{
+                
+                if (self.parentStepViewController != nil) {
+                    
+                    // hack-around to set the signup flag
+                    self.user.signedUp = YES;
+                    
+                    // If this has a step view controller parent then call goForward on the parent
+                    [self.parentStepViewController goForward];
+                }
+                else {
+                    // Otherwise, this uses APCOnboarding to handle navigation
+                    UIViewController *viewController = [[self onboarding] nextScene];
+                    [weakSelf.navigationController pushViewController:viewController animated:YES];
+                }
+            }];
+        }
+    }];
 }
 
 #pragma mark - APCTermsAndConditionsViewControllerDelegate methods
@@ -669,6 +757,10 @@ static CGFloat kHeaderHeight = 157.0f;
     return;
 }
 
+- (void)goForward {
+    [self next];
+}
+
 - (IBAction)next
 {
     NSString *errorMessage = @"";
@@ -678,58 +770,7 @@ static CGFloat kHeaderHeight = 157.0f;
         
         [self loadProfileValuesInModel];
         
-        APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
-        [self presentViewController:spinnerController animated:YES completion:nil];
-        
-        typeof(self) __weak weakSelf = self;
-        [self.user signUpOnCompletion:^(NSError *error) {
-            if (error) {
-                
-                APCLogError2 (error);
-            
-                if (error.code == kSBBInternetNotConnected || error.code == kSBBServerNotReachable || error.code == kSBBServerUnderMaintenance) {
-                    [spinnerController dismissViewControllerAnimated:NO completion:^{
-                    
-                        UIAlertController *alertView = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Sign Up", @"")
-                                                                                            message:error.localizedDescription
-                                                                                     preferredStyle:UIAlertControllerStyleAlert];
-
-                        UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
-                                                                              handler:^(UIAlertAction * __unused action) {}];
-                        
-                        [alertView addAction:defaultAction];
-                        [self presentViewController:alertView animated:YES completion:nil];
-                    }];
-                } else {
-                    [spinnerController dismissViewControllerAnimated:NO completion:^{
-                        
-                        UIAlertController *alertView = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Sign Up", @"")
-                                                                                           message:error.message
-                                                                                    preferredStyle:UIAlertControllerStyleAlert];
-                        
-                        UIAlertAction* okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Change Details", @"") style:UIAlertActionStyleDefault
-                                                                              handler:^(UIAlertAction * __unused action) {}];
-                        
-                        UIAlertAction* changeAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Send Again", nil) style:UIAlertActionStyleDefault
-                                                                             handler:^(UIAlertAction * __unused action) {[self next];}];
-                        
-                        
-                        [alertView addAction:okAction];
-                        [alertView addAction:changeAction];
-                        [self presentViewController:alertView animated:YES completion:nil];
-                        
-                    }];
-                }
-            }
-            else
-            {
-                [spinnerController dismissViewControllerAnimated:NO completion:^{
-                    
-                    UIViewController *viewController = [[self onboarding] nextScene];
-                    [weakSelf.navigationController pushViewController:viewController animated:YES];
-                }];
-            }
-        }];
+        [self signUp];
     }
 }
 
@@ -747,7 +788,7 @@ static CGFloat kHeaderHeight = 157.0f;
     __weak typeof(self) weakSelf = self;
     
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-    UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Take Photo", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
+    UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Take Photo", @"APCAppCore", APCBundle(), @"Take Photo", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
         
         [self.permissionsManager requestForPermissionForType:kAPCSignUpPermissionsTypeCamera withCompletion:^(BOOL granted, NSError *error) {
             if (granted) {
@@ -765,7 +806,7 @@ static CGFloat kHeaderHeight = 157.0f;
         [alertController addAction:cameraAction];
     }
     
-    UIAlertAction *libraryAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Choose from Library", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
+    UIAlertAction *libraryAction = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Choose from Library", @"APCAppCore", APCBundle(), @"Choose from Library", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
         [self.permissionsManager requestForPermissionForType:kAPCSignUpPermissionsTypePhotoLibrary withCompletion:^(BOOL granted, NSError *error) {
             if (granted) {
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -780,7 +821,7 @@ static CGFloat kHeaderHeight = 157.0f;
     }];
     [alertController addAction:libraryAction];
     
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Cancel", @"APCAppCore", APCBundle(), @"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
         
     }];
     [alertController addAction:cancelAction];
@@ -810,12 +851,12 @@ static CGFloat kHeaderHeight = 157.0f;
 
 - (void)presentSettingsAlert:(NSError *)error
 {
-    UIAlertController *alertContorller = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Permissions Denied", @"") message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *dismiss = [UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
+    UIAlertController *alertContorller = [UIAlertController alertControllerWithTitle:NSLocalizedStringWithDefaultValue(@"Permissions Denied", @"APCAppCore", APCBundle(), @"Permissions Denied", @"") message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *dismiss = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Dismiss", @"APCAppCore", APCBundle(), @"Dismiss", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
         
     }];
     [alertContorller addAction:dismiss];
-    UIAlertAction *settings = [UIAlertAction actionWithTitle:NSLocalizedString(@"Settings", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
+    UIAlertAction *settings = [UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"Settings", @"APCAppCore", APCBundle(), @"Settings", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
     }];
     [alertContorller addAction:settings];

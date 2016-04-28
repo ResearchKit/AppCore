@@ -34,6 +34,7 @@
 #import "APCDashboardMessageTableViewCell.h"
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
+#import "APCLocalization.h"
 
 NSString * const kAPCDashboardMessageTableViewCellIdentifier = @"APCDashboardMessageTableViewCell";
 
@@ -67,12 +68,12 @@ NSString * const kAPCDashboardMessageTableViewCellIdentifier = @"APCDashboardMes
     switch (type) {
         case kAPCDashboardMessageTypeAlert:
         {
-            self.titleLabel.text = NSLocalizedString(@"Alert",nil);
+            self.titleLabel.text = NSLocalizedStringWithDefaultValue(@"Alert", @"APCAppCore", APCBundle(), @"Alert", nil);
         }
             break;
         case kAPCDashboardMessageTypeInsight:
         {
-            self.titleLabel.text = NSLocalizedString(@"Insight", nil);
+            self.titleLabel.text = NSLocalizedStringWithDefaultValue(@"Insight", @"APCAppCore", APCBundle(), @"Insight", nil);
         }
             break;
         default:{
