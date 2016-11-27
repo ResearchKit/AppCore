@@ -150,6 +150,15 @@ static NSString * const kAPCPleaseCheckEmailAlertOkButton = @"OK";
     
     [self.resendEmailButton.titleLabel setFont:[UIFont appRegularFontWithSize:16.0f]];
     [self.resendEmailButton setTitleColor:[UIColor appPrimaryColor] forState:UIControlStateNormal];
+    
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    if (([((id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate).onboardingManager showShareAppInOnboarding]) &&
+        screenRect.size.height > 500) {
+        // There's not enough room to show everything in the 3.5 phones without scrolling, so only show this
+        // if not height constrained
+        self.shareMessageLabel.hidden = NO;
+        self.shareMessageButton.hidden = NO;
+    }
 }
 
 
@@ -363,7 +372,6 @@ static NSString * const kAPCPleaseCheckEmailAlertOkButton = @"OK";
 }
 
 
-
 // ---------------------------------------------------------
 #pragma mark - The "please click that link" alert
 // ---------------------------------------------------------
@@ -428,6 +436,16 @@ static NSString * const kAPCPleaseCheckEmailAlertOkButton = @"OK";
 - (IBAction) changeEmailAddress: (id) __unused sender
 {
     
+}
+
+- (IBAction)showShare:(id) __unused sender {
+    // load the share view controller, push it onto stack so the user can come back here when finished
+    UIStoryboard *sbOnboarding = [UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]];
+    APCShareViewController *shareVC = (APCShareViewController *)[sbOnboarding instantiateViewControllerWithIdentifier:@"APCShareViewController"];
+    
+    shareVC.goBackIfUserHitsOkay = YES;
+    
+    [self.navigationController pushViewController:shareVC animated:YES];
 }
 
 - (IBAction) secretButton: (id) __unused sender

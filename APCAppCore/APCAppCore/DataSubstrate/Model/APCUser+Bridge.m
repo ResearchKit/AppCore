@@ -91,7 +91,7 @@
         
         profile.firstName = self.name;
         
-        [SBBComponent(SBBProfileManager) updateUserProfileWithProfile: profile
+        [SBBComponent(SBBUserManager) updateUserProfileWithProfile: profile
 														   completion: ^(id __unused responseObject,
 																		 NSError *error)
 		 {
@@ -120,8 +120,8 @@
         profile.username  = self.email;
         profile.firstName = self.name;
         
-        [SBBComponent(SBBProfileManager) updateUserProfileWithProfile: profile
-                                                           completion: ^(id __unused responseObject,
+        [SBBComponent(SBBUserManager) updateUserProfileWithProfile: profile
+                                                        completion: ^(id __unused responseObject,
                                                                          NSError *error)
          {
              dispatch_async(dispatch_get_main_queue(), ^{
@@ -145,7 +145,7 @@
     }
     else
     {
-        [SBBComponent(SBBProfileManager) getUserProfileWithCompletion:^(id userProfile, NSError *error) {
+        [SBBComponent(SBBUserManager) getUserProfileWithCompletion:^(id userProfile, NSError *error) {
             SBBUserProfile *profile = (SBBUserProfile *)userProfile;
             self.email = profile.email;
             self.name = profile.firstName;
@@ -171,7 +171,7 @@
     }
     else
     {
-        [SBBComponent(SBBConsentManager) dataSharing:SBBConsentShareScopeNone completion:^(id __unused responseObject, NSError * __unused error) {
+        [SBBComponent(SBBUserManager) dataSharing:SBBUserDataSharingScopeNone completion:^(id __unused responseObject, NSError * __unused error) {
             [self signOutOnCompletion:^(NSError *error) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if(!error) {
@@ -199,7 +199,7 @@
         APCAppDelegate *delegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
         NSNumber *selected = delegate.dataSubstrate.currentUser.sharedOptionSelection;
         
-        [SBBComponent(SBBConsentManager) dataSharing:[selected integerValue] completion:^(id __unused responseObject, NSError *error) {
+        [SBBComponent(SBBUserManager) dataSharing:[selected integerValue] completion:^(id __unused responseObject, NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (!error) {
                     APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Resumed Consent"}));
@@ -238,12 +238,12 @@
                         if (dataSharing.integerValue == 1) {
                             NSString *scope = responseDictionary[@"sharingScope"];
                             if ([scope isEqualToString:@"sponsors_and_partners"]) {
-                                self.sharedOptionSelection = @(SBBConsentShareScopeStudy);
+                                self.sharedOptionSelection = @(SBBUserDataSharingScopeStudy);
                             } else if ([scope isEqualToString:@"all_qualified_researchers"]) {
-                                self.sharedOptionSelection = @(SBBConsentShareScopeAll);
+                                self.sharedOptionSelection = @(SBBUserDataSharingScopeAll);
                             }
                         } else if (dataSharing.integerValue == 0) {
-                            self.sharedOptionSelection = @(SBBConsentShareScopeNone);
+                            self.sharedOptionSelection = @(SBBUserDataSharingScopeNone);
                         }
                     }
                     APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Signed In"}));
@@ -388,7 +388,7 @@
 {
     NSNumber *selected = self.sharedOptionSelection;
     
-    [SBBComponent(SBBConsentManager) dataSharing:[selected integerValue] completion:^(id __unused responseObject, NSError *error) {
+    [SBBComponent(SBBUserManager) dataSharing:[selected integerValue] completion:^(id __unused responseObject, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (!error) {
                 switch (selected.integerValue) {

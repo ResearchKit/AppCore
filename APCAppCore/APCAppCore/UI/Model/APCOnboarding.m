@@ -136,6 +136,11 @@
         scenes[kAPCSignInStepIdentifier] = signIn;
     }
     
+    APCScene *shareApp = [self.delegate onboarding:self sceneOfType:kAPCSignUpShareAppStepIdentifier];
+    if (shareApp) {
+        scenes[kAPCSignUpShareAppStepIdentifier] = shareApp;
+    }
+    
     return scenes;
 }
 

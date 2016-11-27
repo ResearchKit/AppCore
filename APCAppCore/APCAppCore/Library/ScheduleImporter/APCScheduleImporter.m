@@ -94,6 +94,10 @@ static NSString * const APCErrorParsingSurveyContentSuggestion                  
 static NSString * const APCErrorSavingEverythingReason                              = @"Error Saving New Schedules";
 static NSString * const APCErrorSavingEverythingSuggestion                          = @"There was an error attempting to save the new schedules.";
 
+/**
+ JSON Mapping files
+ */
+static NSString * const kTaskIdToViewControllerMappingJSON                      = @"APHTaskIdToViewControllerMapping";
 
 /**
  Keys and special values in the JSON dictionaries representing
@@ -976,27 +980,65 @@ static NSArray *legalTimeSpecifierFormats = nil;
     scheduleData [kScheduleIntervalKey]             = null; // [self nullIfNil: sageSchedule.interval];
     scheduleData [kScheduleTimesOfDayKey]           = null; // [self nullIfNil: sageSchedule.times];
     scheduleData [kScheduleMaxCountKey]             = null; // [self nullIfNil: sageSchedule.maxCount];
-
+    
+    // Set up TaskId->TaskViewController dictionary
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:kTaskIdToViewControllerMappingJSON ofType:@"json"];
+    NSString *JSONString = [[NSString alloc] initWithContentsOfFile:filePath
+                                                           encoding:NSUTF8StringEncoding
+                                                              error:NULL];
+    
+    NSError *parseError;
+    NSDictionary *mappingDictionary = [NSJSONSerialization JSONObjectWithData:[JSONString dataUsingEncoding:NSUTF8StringEncoding]
+                                                                      options:NSJSONReadingMutableContainers
+                                                                        error:&parseError];
+    NSAssert(mappingDictionary != nil, @"ERROR trouble parsing taskId -> view controller mapping file", parseError);
 
     for (SBBActivity *activity in sageSchedule.activities)
     {
-        NSMutableDictionary *activityData = [NSMutableDictionary new];
+        if (activity.survey) {
+            NSMutableDictionary *activityData = [NSMutableDictionary new];
 
-        activityData [kTaskTitleKey]            = [self nullIfNil: activity.label];
-        activityData [kTaskTypeKey]             = [self nullIfNil: activity.activityType];
-        activityData [kTaskIDKey]               = [self nullIfNil: activity.survey.guid];
-        activityData [kTaskVersionNumberKey]    = [self nullIfNil: activity.survey.version];
-        activityData [kTaskUrlKey]              = [self nullIfNil: activity.ref];
-        activityData [kTaskClassNameKey]        = NSStringFromClass ([APCGenericSurveyTaskViewController class]);
+            activityData [kTaskTitleKey]                = [self nullIfNil: activity.label];
+            activityData [kTaskCompletionTimeStringKey] = [self nullIfNil: activity.labelDetail];
+            activityData [kTaskTypeKey]                 = [self nullIfNil: activity.activityType];
+            activityData [kTaskIDKey]                   = [self nullIfNil: activity.survey.identifier];
+            activityData [kTaskVersionNumberKey]        = [self nullIfNil: activity.survey.createdOn.toStringInISO8601Format];
+            activityData [kTaskUrlKey]                  = [self nullIfNil: activity.survey.href];
+            activityData [kTaskClassNameKey]            = NSStringFromClass ([APCGenericSurveyTaskViewController class]);
+            
+            // When we start getting these from Sage, we'll use them.
+            // In the mean time, noting them here, because we're using
+            // them from our local disk files.
+            
+            activityData [kTaskFileNameKey]             = null;
+            activityData [kTaskSortStringKey]           = null;
 
-        // When we start getting these from Sage, we'll use them.
-        // In the mean time, noting them here, because we're using
-        // them from our local disk files.
-        activityData [kTaskCompletionTimeStringKey] = null;
-        activityData [kTaskFileNameKey]             = null;
-        activityData [kTaskSortStringKey]           = null;
-
-        [activities addObject: activityData];
+            [activities addObject: activityData];
+        } else if (activity.task) {
+            NSMutableDictionary *activityData = [NSMutableDictionary new];
+            
+            // ignore unrecognized tasks (probably added in a later app version)
+            NSString *taskClassName = mappingDictionary[activity.task.identifier];
+            if (taskClassName.length) {
+                activityData [kTaskTitleKey]                = [self nullIfNil: activity.label];
+                activityData [kTaskCompletionTimeStringKey] = [self nullIfNil: activity.labelDetail];
+                activityData [kTaskTypeKey]                 = [self nullIfNil: activity.activityType];
+                activityData [kTaskIDKey]                   = [self nullIfNil: activity.task.identifier];
+                activityData [kTaskClassNameKey]            = taskClassName;
+                
+                // Not available for non survey tasks
+                activityData [kTaskVersionNumberKey]    = null;
+                activityData [kTaskUrlKey]              = null;
+                
+                // When we start getting these from Sage, we'll use them.
+                // In the mean time, noting them here, because we're using
+                // them from our local disk files.
+                activityData [kTaskFileNameKey]             = null;
+                activityData [kTaskSortStringKey]           = null;
+                
+                [activities addObject: activityData];
+            }
+        }
     }
     
     return scheduleData;

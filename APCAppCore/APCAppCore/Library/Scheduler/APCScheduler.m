@@ -1297,19 +1297,6 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
             else
             {
                 schedulesArray = maybeSchedulesArray;
-
-                if (schedulesArray.count == 0)
-                {
-                    // This may not be an error, but it probably is.
-                    errorToReport = [NSError errorWithCode: APCErrorJSONTasksAndSchedulesIsEmptyCode
-                                                    domain: APCErrorDomainLoadingTasksAndSchedules
-                                             failureReason: APCErrorJSONTasksAndSchedulesIsEmptyReason
-                                        recoverySuggestion: APCErrorJSONTasksAndSchedulesIsEmptySuggestion];
-                }
-                else
-                {
-                    // Whew.  Looks like we got real data.  Ready to process.
-                }
             }
         }
 
