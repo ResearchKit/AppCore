@@ -403,7 +403,7 @@ static APCDummyObject * _dummyObject;
     }
     
     //Less Than or EqualTo
-    if ([operator isEqualToString:kOperatorGreaterThanEqual]) {
+    if ([operator isEqualToString:kOperatorLessThanEqual]) {
         if (answerNumber && valueNumber) {
             if ((answerDouble - valueDouble) < DBL_EPSILON) {
                 retValue = skipToValue;
